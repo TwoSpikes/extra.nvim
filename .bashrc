@@ -10,7 +10,7 @@ al .fr='~/.fr.sh';
 al .fE='clear;cargo build --release &> .lol;errorcode=$?;grep "\-->" .lol;rm .lol;echo $errorcode';
 clear;
 
-function set_orange() {
+function set_number_color() {
 	# 1 + because both \033[30m and \033[40m are black and we do not need black because our terminal background is black
 	foreground_color=$((1 + $RANDOM%9));
 	background_color=$(($RANDOM%9));
@@ -24,33 +24,34 @@ function set_orange() {
 		;;
 		esac;
 	fi;
-	ORANGE="\033[0;9${foreground_color};4${background_color}m";
+	NUMBER_COLOR="\033[0;9${foreground_color};4${background_color}m";
 }
 
 RESET="\033[0m";
 
-function ask_action() {
+function tsch() {
 	clear;
-set_orange;
-		echo 'then where?';
-set_orange;
-		echo -e "${ORANGE}0${RESET}. Fplus edit";
-set_orange;
-		echo -e "${ORANGE}1${RESET}. fplus Run";
-set_orange;
-		echo -e "${ORANGE}2${RESET}. text editor Edit";
-set_orange;
-		echo -e "${ORANGE}3${RESET}. Text editor run";
-set_orange;
-		echo -e "${ORANGE}4${RESET}. pkg Upgrade";
-set_orange;
-		echo -e "${ORANGE}5${RESET}. pkg upgrade && eXit";
-set_orange;
-		echo -e "${ORANGE}6${RESET}. edit toDo";
-set_orange;
-		echo -e "${ORANGE}7${RESET}. Ald";
-set_orange;
-		echo -e "${ORANGE}Enter${RESET}. another";
+set_number_color;
+		echo 'TwoSpikes ChooseHub';
+set_number_color;
+		echo -e "${NUMBER_COLOR}0${RESET}. Fplus edit";
+set_number_color;
+		echo -e "${NUMBER_COLOR}1${RESET}. fplus Run";
+set_number_color;
+		echo -e "${NUMBER_COLOR}2${RESET}. text editor Edit";
+set_number_color;
+		echo -e "${NUMBER_COLOR}3${RESET}. Text editor run";
+set_number_color;
+		echo -e "${NUMBER_COLOR}4${RESET}. pkg Upgrade";
+set_number_color;
+		echo -e "${NUMBER_COLOR}5${RESET}. pkg upgrade && eXit";
+set_number_color;
+		echo -e "${NUMBER_COLOR}6${RESET}. edit toDo";
+set_number_color;
+		echo -e "${NUMBER_COLOR}7${RESET}. Ald";
+set_number_color;
+		echo -e "${NUMBER_COLOR}8${RESET}. reload Colors";
+		echo -e "\033[91mEnter${RESET}. another";
 	read answer;
 	clear;
 	case ${answer} in
@@ -85,12 +86,12 @@ set_orange;
 	'7'|'a'|'A')
 		ald;
 		echo 'wanna load ~/.bashrc?';
-set_orange;
-		echo -e "${ORANGE}0${RESET}. No, back to menu";
-set_orange;
-		echo -e "${ORANGE}1${RESET}. Yes, restart";
-set_orange;
-		echo -e "${ORANGE}2${RESET}. no, Exit from menu";
+set_number_color;
+		echo -e "${NUMBER_COLOR}0${RESET}. No, back to menu";
+set_number_color;
+		echo -e "${NUMBER_COLOR}1${RESET}. Yes, restart";
+set_number_color;
+		echo -e "${NUMBER_COLOR}2${RESET}. no, Exit from menu";
 		read answer2;
 		case $answer2 in
 		'0'|'n'|'N')
@@ -104,15 +105,17 @@ set_orange;
 		;;
 		esac;
 	;;
+	'8'|'c'|'C')
+	;;
 	*)
 		to_exit='true';
 	;;
 	esac;
 	if [[ $to_exit != 'true' ]]; then
-		ask_action;
+		tsch;
 	else
 		clear;
 	fi;
 };
 
-ask_action;
+tsch;
