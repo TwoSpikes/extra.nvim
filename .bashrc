@@ -34,53 +34,55 @@ function ask_action() {
 set_orange;
 		echo 'then where?';
 set_orange;
-		echo -e "${ORANGE}0${RESET}. fplus edit";
+		echo -e "${ORANGE}0${RESET}. Fplus edit";
 set_orange;
-		echo -e "${ORANGE}1${RESET}. fplus run";
+		echo -e "${ORANGE}1${RESET}. fplus Run";
 set_orange;
-		echo -e "${ORANGE}2${RESET}. text editor edit";
+		echo -e "${ORANGE}2${RESET}. text editor Edit";
 set_orange;
-		echo -e "${ORANGE}3${RESET}. text editor run";
+		echo -e "${ORANGE}3${RESET}. Text editor run";
 set_orange;
-		echo -e "${ORANGE}4${RESET}. pkg upgrade";
+		echo -e "${ORANGE}4${RESET}. pkg Upgrade";
 set_orange;
-		echo -e "${ORANGE}5${RESET}. pkg upgrade && exit";
+		echo -e "${ORANGE}5${RESET}. pkg upgrade && eXit";
 set_orange;
-		echo -e "${ORANGE}6${RESET}. edit todo";
+		echo -e "${ORANGE}6${RESET}. edit toDo";
 set_orange;
-		echo -e "${ORANGE}7${RESET}. ald";
+		echo -e "${ORANGE}7${RESET}. Ald";
 set_orange;
 		echo -e "${ORANGE}Enter${RESET}. another";
 	read answer;
 	clear;
 	case ${answer} in
-	'0'|'f'|'fe'|'fE'|'.fe'|'.fE'|'edit')
+	'0'|'f'|'F')
 		cd ~/fplus;
 		${EDITOR} ./main.rs;
 	;;
-	'1'|'r'|'fr'|'fR'|'.fr'|'.fR'|'run'|'зап'|'F+r'|'fplusr'|'f+r'|'frun')
+	'1'|'r'|'R')
 		cd ~/fplus;
 		.fr --no-ls sim ./examples/pointers.tspl;
 	;;
-	'2'|'ee'|'E'|'.e'|'.E'|'.ee'|'.eE'|'.Ee'|'.EE')
+	'2'|'e'|'E')
 		cd ~/te;
 		${EDITOR} ./main.c;
 	;;
-	'3'|'er'|'R'|'.r'|'.R'|'.er'|'.re'|'.eR'|'.rE'|'.Er'|'.Re'|'.RE')
+	'3'|'t'|'T')
 		cd ~/te;
 		make&&tste;
+		echo -n "[On pause (code: $?, press ENTER)]: ";
+		read;
 	;;
-	'4'|'p'|'P'|'pkg'|'pkG'|'pKg'|'pKG'|'Pkg'|'PkG'|'PKg'|'PKG')
+	'4'|'p'|'P')
 		pkg upgrade;
 	;;
-	'5'|'pe'|'.pe'|'ep'|'.ep')
+	'5'|'x'|'X')
 		pkg upgrade;
 		exit 0;
 	;;
-	'6'|'t'|'todo'|'et'|'.et'|'eT'|'.eT'|'Et'|'.Et'|'ET'|'.ET')
+	'6'|'d'|'D')
 		${EDITOR} ~/todo;
 	;;
-	'7'|'a'|'A'|'.a'|'.A'|'ald'|'.ald'|'ALD'|'.ALD')
+	'7'|'a'|'A')
 		ald;
 		echo 'wanna load ~/.bashrc?';
 set_orange;
