@@ -34,23 +34,27 @@ function tsch() {
 set_number_color;
 		echo 'TwoSpikes ChooseHub';
 set_number_color;
-		echo -e "${NUMBER_COLOR}0${RESET}. Fplus edit";
+		echo -e "${NUMBER_COLOR}0${RESET}. \033[1mf\033[22mplus edit";
 set_number_color;
-		echo -e "${NUMBER_COLOR}1${RESET}. fplus Run";
+		echo -e "${NUMBER_COLOR}1${RESET}. fplus \033[1mr\033[22mun";
 set_number_color;
-		echo -e "${NUMBER_COLOR}2${RESET}. text editor Edit";
+		echo -e "${NUMBER_COLOR}2${RESET}. text editor \033[1me\033[22mdit";
 set_number_color;
-		echo -e "${NUMBER_COLOR}3${RESET}. Text editor run";
+		echo -e "${NUMBER_COLOR}3${RESET}. \033[1mt\033[22mext editor run";
 set_number_color;
-		echo -e "${NUMBER_COLOR}4${RESET}. pkg Upgrade";
+		echo -e "${NUMBER_COLOR}4${RESET}. pkg \033[1mu\033[22mpgrade";
 set_number_color;
-		echo -e "${NUMBER_COLOR}5${RESET}. pkg upgrade && eXit";
+		echo -e "${NUMBER_COLOR}5${RESET}. pkg upgrade && e\033[1mx\033[22mit";
 set_number_color;
-		echo -e "${NUMBER_COLOR}6${RESET}. edit toDo";
+		echo -e "${NUMBER_COLOR}6${RESET}. edit to\033[1md\033[22mo";
 set_number_color;
-		echo -e "${NUMBER_COLOR}7${RESET}. Ald";
+		echo -e "${NUMBER_COLOR}7${RESET}. \033[1ma\033[22mld";
 set_number_color;
-		echo -e "${NUMBER_COLOR}8${RESET}. reload Colors";
+		echo -e "${NUMBER_COLOR}8${RESET}. reload \033[1mc\033[22molors";
+set_number_color;
+		echo -e "${NUMBER_COLOR}9${RESET}. ca\033[1ml\033[22m";
+set_number_color;
+		echo -e "${NUMBER_COLOR}10${RESET}. cal -\033[1my\033[22m";
 		echo -e "\033[91mEnter${RESET}. another";
 	read answer;
 	clear;
@@ -106,6 +110,14 @@ set_number_color;
 		esac;
 	;;
 	'8'|'c'|'C')
+	;;
+	'9'|'l'|'L')
+		cal;
+		read;
+	;;
+	'10'|'y'|'Y')
+		cal -y;
+		read;
 	;;
 	*)
 		to_exit='true';
