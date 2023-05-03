@@ -70,7 +70,16 @@ set_number_color;
 	;;
 	'1'|'r'|'R')
 		cd ~/fplus;
-		.fr --no-ls sim ./examples/pointers.tspl;
+		FPLUS_FLAGS='';
+		echo -n 'sim debug?: ';
+		read sim_debug;
+		clear;
+		if [[ ${sim_debug} == 'y' ]]; then
+			FPLUS_FLAGS="${FPLUS_FLAGS} --sim-debug";
+		fi;
+		.fr --no-ls sim ./examples/pointers.tspl ${FPLUS_FLAGS};
+		echo -n "[On pause (code: ${?}, press RETURN)]: ";
+		read;
 	;;
 	'2'|'e'|'E')
 		cd ~/te;
@@ -93,13 +102,13 @@ set_number_color;
 
 		"${MAKE_PROGRAM}" install;
 		errorcode="${?}";
-		echo -n "[On pause (code: ${errorcode}, press ENTER)]: ";
+		echo -n "[On pause (code: ${errorcode}, press RETURN)]: ";
 		read;
 
 		if [[ "${errorcode}" == 0 ]]; then
 			tste "${actual_file}";
 			echo '';
-			echo -n "[On pause (code: ${?}, press ENTER)]: ";
+			echo -n "[On pause (code: ${?}, press RETURN)]: ";
 		fi;
 		read;
 	;;
