@@ -1,13 +1,18 @@
 export EDITOR='nvim';
 export JOURNAL='~/.journal';
+export PKG_MANAGER='pkg';
+export BASHRC_NAME='.bashrc';
+export MAKE_PROGRAM='make';
+export RUST_COMPILER='cargo';
+export GREP_PROGRAM='grep';
 
 alias al='alias';
-al q='exit 0 ';
-al ald='$EDITOR $HOME/.bashrc';
+al q='exit 0';
+al ald='${EDITOR} ${HOME}/${BASHRC_NAME}';
 al .f='cd ~/fplus';
-al .fe='.f;$EDITOR main.rs';
+al .fe='.f;${EDITOR} main.rs';
 al .fr='~/.fr.sh';
-al .fE='clear;cargo build --release &> .lol;errorcode=$?;grep "\-->" .lol;rm .lol;echo $errorcode';
+al .fE='clear;${RUST_COMPILER} build --release &> .lol;errorcode=$?;${GREP_PROGRAM} "\-->" .lol;rm .lol;echo $errorcode';
 clear;
 
 function set_number_color() {
@@ -32,7 +37,7 @@ RESET="\033[0m";
 function tsch() {
 	clear;
 set_number_color;
-		echo 'TwoSpikes ChooseHub';
+		echo 'TwoSpikes ChooseHub (2023-2023)';
 set_number_color;
 		echo -e "${NUMBER_COLOR}0${RESET}. \033[1mf\033[22mplus edit";
 set_number_color;
@@ -42,13 +47,13 @@ set_number_color;
 set_number_color;
 		echo -e "${NUMBER_COLOR}3${RESET}. \033[1mt\033[22mext editor run";
 set_number_color;
-		echo -e "${NUMBER_COLOR}4${RESET}. pkg \033[1mu\033[22mpgrade";
+		echo -e "${NUMBER_COLOR}4${RESET}. ${PKG_MANAGER} \033[1mu\033[22mpgrade";
 set_number_color;
-		echo -e "${NUMBER_COLOR}5${RESET}. pkg upgrade && e\033[1mx\033[22mit";
+		echo -e "${NUMBER_COLOR}5${RESET}. ${PKG_MANAGER} upgrade && e\033[1mx\033[22mit";
 set_number_color;
 		echo -e "${NUMBER_COLOR}6${RESET}. edit to\033[1md\033[22mo";
 set_number_color;
-		echo -e "${NUMBER_COLOR}7${RESET}. \033[1ma\033[22mld";
+		echo -e "${NUMBER_COLOR}7${RESET}. edit b\033[1ma\033[22mshrc";
 set_number_color;
 		echo -e "${NUMBER_COLOR}8${RESET}. reload \033[1mc\033[22molors";
 set_number_color;
@@ -72,30 +77,51 @@ set_number_color;
 		${EDITOR} ./main.c;
 	;;
 	'3'|'t'|'T')
+		default_file='lol';
+		echo -en "On what file? (default='${default_file}'): ";
+		read file;
+		case "${file}" in
+		'')
+			actual_file="${default_file}";
+		;;
+		*)
+			actual_file="${file}";
+		;;
+		esac;
+
 		cd ~/te;
-		make&&tste;
-		echo -n "[On pause (code: $?, press ENTER)]: ";
+
+		"${MAKE_PROGRAM}" install;
+		errorcode="${?}";
+		echo -n "[On pause (code: ${errorcode}, press ENTER)]: ";
+		read;
+
+		if [[ "${errorcode}" == 0 ]]; then
+			tste "${actual_file}";
+			echo '';
+			echo -n "[On pause (code: ${?}, press ENTER)]: ";
+		fi;
 		read;
 	;;
 	'4'|'p'|'P')
-		pkg upgrade;
+		"${PKG_MANAGER}" upgrade;
 	;;
 	'5'|'x'|'X')
-		pkg upgrade;
+		"${PKG_MANAGER}" upgrade;
 		exit 0;
 	;;
 	'6'|'d'|'D')
-		${EDITOR} ~/todo;
+		"${EDITOR}" ~/todo;
 	;;
 	'7'|'a'|'A')
 		ald;
-		echo 'wanna load ~/.bashrc?';
+		echo "wanna load ~/${BASHRC_NAME}?";
 set_number_color;
 		echo -e "${NUMBER_COLOR}0${RESET}. No, back to menu";
 set_number_color;
 		echo -e "${NUMBER_COLOR}1${RESET}. Yes, restart";
 set_number_color;
-		echo -e "${NUMBER_COLOR}2${RESET}. no, Exit from menu";
+		echo -e "${NUMBER_COLOR}2${RESET}. no, Exit from start menu";
 		read answer2;
 		case $answer2 in
 		'0'|'n'|'N')
