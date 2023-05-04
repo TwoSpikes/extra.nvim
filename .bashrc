@@ -35,6 +35,51 @@ function set_number_color() {
 RESET="\033[0m";
 
 function tsch() {
+	function tsch_fplus_run() {
+		cd ~/fplus;
+		FPLUS_FLAGS='';
+		echo 'flags:';
+set_number_color;
+		echo -e "${NUMBER_COLOR}0${RESET}. --sim-debug";
+set_number_color;
+		echo -e "${NUMBER_COLOR}1${RESET}. --parse-debug";
+set_number_color;
+		echo -e "${NUMBER_COLOR}2${RESET}. --sim-debug --parse-debug";
+set_number_color;
+		echo -e "${NUMBER_COLOR}3${RESET}. reload colors";
+set_number_color;
+		echo -e "${NUMBER_COLOR}x${RESET}. back to menu";
+		echo -e "\033[91mEnter${RESET}. [no flags]";
+		read input_fplus_flags;
+		case ${input_fplus_flags} in
+		'0')
+			FPLUS_FLAGS='--sim-debug';
+		;;
+		'1')
+			FPLUS_FLAGS='--parse-debug';
+		;;
+		'2')
+			FPLUS_FLAGS='--sim-debug --parse-debug';
+		;;
+		'3')
+			clear;
+			tsch_fplus_run;
+			return;
+		;;
+	 	'x')
+			return;
+		;;
+		*)
+			FPLUS_FLAGS='';
+		;;
+		esac;
+		clear;
+		.fr --no-ls sim ./examples/pointers.tspl ${FPLUS_FLAGS};
+		echo -n "[On pause (code: ${?}, press RETURN)]: ";
+		read;
+		clear;
+		tsch_fplus_run;
+	}
 	clear;
 set_number_color;
 		echo 'TwoSpikes ChooseHub (2023-2023)';
@@ -69,17 +114,7 @@ set_number_color;
 		${EDITOR} ./main.rs;
 	;;
 	'1'|'r'|'R')
-		cd ~/fplus;
-		FPLUS_FLAGS='';
-		echo -n 'sim debug?: ';
-		read sim_debug;
-		clear;
-		if [[ ${sim_debug} == 'y' ]]; then
-			FPLUS_FLAGS="${FPLUS_FLAGS} --sim-debug";
-		fi;
-		.fr --no-ls sim ./examples/pointers.tspl ${FPLUS_FLAGS};
-		echo -n "[On pause (code: ${?}, press RETURN)]: ";
-		read;
+		tsch_fplus_run;
 	;;
 	'2'|'e'|'E')
 		cd ~/te;
