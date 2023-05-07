@@ -18,6 +18,9 @@ noremap h <bs>
 noremap <right> <space>
 noremap <left> <bs>
 
+noremap L $
+noremap H ^
+
 noremap <leader>vet :tabe ~/.nvimrc<CR>
 noremap <leader>veb :e ~/.nvimrc<CR>
 noremap <leader>veh :split ~/.nvimrc<CR>
@@ -32,5 +35,9 @@ nnoremap <leader>" viw<esc>a"<esc>bi"<esc>
 nnoremap <leader>' viw<esc>a'<esc>bi'<esc>
 vnoremap <leader>" iw<esc>a"<esc>bi"<esc>v
 vnoremap <leader>' iw<esc>a'<esc>bi'<esc>v
+
+noremap q <esc>:wq<CR>
+noremap Q <esc>:q!<CR>
+noremap W <esc>:w<CR>
 
 echom 'config: ok'
