@@ -9,8 +9,9 @@ noremap + yyp
 noremap <c-d> dd
 inoremap <c-d> <esc>ddi
 
-noremap <c-u> bveUe<space>
-inoremap <c-u> <esc>bveUe<space>i
+nnoremap <c-u> viwU<space><esc>
+vnoremap <c-u> iwU<space>
+inoremap <c-u> <esc>viwU<esc>i
 
 noremap l <space>
 noremap h <bs>
@@ -26,5 +27,10 @@ noremap <leader>vs :source ~/.nvimrc<CR>
 noremap ; :
 noremap = :tabe 
 noremap _ :e 
+
+nnoremap <leader>" viw<esc>a"<esc>bi"<esc>
+nnoremap <leader>' viw<esc>a'<esc>bi'<esc>
+vnoremap <leader>" iw<esc>a"<esc>bi"<esc>v
+vnoremap <leader>' iw<esc>a'<esc>bi'<esc>v
 
 echom 'config: ok'
