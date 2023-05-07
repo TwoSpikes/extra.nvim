@@ -106,7 +106,7 @@ set_number_color;
 set_number_color;
 		echo -e "${NUMBER_COLOR}7${RESET}. edit b\033[1ma\033[22mshrc";
 set_number_color;
-		echo -e "${NUMBER_COLOR}8${RESET}. edit n\033[1mv\033[22imshrc";
+		echo -e "${NUMBER_COLOR}8${RESET}. edit n\033[1mv\033[22mimrc";
 set_number_color;
 		echo -e "${NUMBER_COLOR}9${RESET}. reload \033[1mc\033[22molors";
 set_number_color;
@@ -165,10 +165,7 @@ set_number_color;
 	'6'|'d'|'D')
 		"${EDITOR}" ~/todo;
 	;;
-	'7'|'v'|'V')
-		"${EDITOR}" "${HOME}"/"${NVIMRC_NAME}";
-	;;
-	'8'|'a'|'A')
+	'7'|'a'|'A')
 		ald;
 		echo "wanna load ~/${BASHRC_NAME}?";
 set_number_color;
@@ -189,6 +186,9 @@ set_number_color;
 			to_exit='true';
 		;;
 		esac;
+	;;
+	'8'|'v'|'V')
+		"${EDITOR}" "${HOME}"/"${NVIMRC_NAME}";
 	;;
 	'9'|'c'|'C')
 	;;
