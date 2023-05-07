@@ -40,4 +40,6 @@ noremap q <esc>:wq<CR>
 noremap Q <esc>:q!<CR>
 noremap W <esc>:w<CR>
 
+inoremap jk <esc>
+
 echom 'config: ok'
