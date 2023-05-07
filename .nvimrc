@@ -17,7 +17,10 @@ noremap h <bs>
 noremap <right> <space>
 noremap <left> <bs>
 
-noremap <leader>v :tabe ~/.nvimrc<CR>
-noremap <leader>V :vsplit ~/.nvimrc<CR>
+noremap <leader>ev :tabe ~/.nvimrc<CR>
+noremap <leader>bv :e ~/.nvimrc<CR>
+noremap <leader>hv :split ~/.nvimrc<CR>
+noremap <leader>vv :vsplit ~/.nvimrc<CR>
+noremap <leader>sv :source ~/.nvimrc<CR>
 
 echom 'config: ok'
