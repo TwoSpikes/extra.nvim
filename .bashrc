@@ -2,17 +2,18 @@ export EDITOR='nvim';
 export JOURNAL='~/.journal';
 export PKG_MANAGER='pkg';
 export BASHRC_NAME='.bashrc';
+export NVIMRC_NAME='.nvimrc';
 export MAKE_PROGRAM='make';
 export RUST_COMPILER='cargo';
 export GREP_PROGRAM='grep';
 
 alias al='alias';
-al q='exit 0';
-al ald='${EDITOR} ${HOME}/${BASHRC_NAME}';
-al .f='cd ~/fplus';
-al .fe='.f;${EDITOR} main.rs';
-al .fr='~/.fr.sh';
-al .fE='clear;${RUST_COMPILER} build --release &> .lol;errorcode=$?;${GREP_PROGRAM} "\-->" .lol;rm .lol;echo $errorcode';
+alias q='exit 0';
+alias ald='${EDITOR} ${HOME}/${BASHRC_NAME}';
+alias .f='cd ~/fplus';
+alias .fe='.f;${EDITOR} main.rs';
+alias .fr='~/.fr.sh';
+alias .fE='clear;${RUST_COMPILER} build --release &> .lol;errorcode=$?;${GREP_PROGRAM} "\-->" .lol;rm .lol;echo $errorcode';
 clear;
 
 function set_number_color() {
@@ -34,52 +35,57 @@ function set_number_color() {
 
 RESET="\033[0m";
 
-function tsch() {
-	function tsch_fplus_run() {
-		cd ~/fplus;
-		FPLUS_FLAGS='';
-		echo 'flags:';
+function tsch_fplus_run() {
+	cd ~/fplus;
+	FPLUS_FLAGS='';
+	echo 'flags:';
 set_number_color;
-		echo -e "${NUMBER_COLOR}0${RESET}. --sim-debug";
+	echo -e "${NUMBER_COLOR}0${RESET}. --sim-debug";
 set_number_color;
-		echo -e "${NUMBER_COLOR}1${RESET}. --parse-debug";
+	echo -e "${NUMBER_COLOR}1${RESET}. --parse-debug";
 set_number_color;
-		echo -e "${NUMBER_COLOR}2${RESET}. --sim-debug --parse-debug";
+	echo -e "${NUMBER_COLOR}2${RESET}. --sim-debug --parse-debug";
 set_number_color;
-		echo -e "${NUMBER_COLOR}3${RESET}. reload colors";
+	echo -e "${NUMBER_COLOR}3${RESET}. --only-link --link-debug";
+	echo -e "${NUMBER_COLOR}c${RESET}. reload colors";
 set_number_color;
-		echo -e "${NUMBER_COLOR}x${RESET}. back to menu";
-		echo -e "\033[91mEnter${RESET}. [no flags]";
-		read input_fplus_flags;
-		case ${input_fplus_flags} in
-		'0')
-			FPLUS_FLAGS='--sim-debug';
-		;;
-		'1')
-			FPLUS_FLAGS='--parse-debug';
-		;;
-		'2')
-			FPLUS_FLAGS='--sim-debug --parse-debug';
-		;;
-		'3')
-			clear;
-			tsch_fplus_run;
-			return;
-		;;
-	 	'x')
-			return;
-		;;
-		*)
-			FPLUS_FLAGS='';
-		;;
-		esac;
-		clear;
-		.fr --no-ls sim ./examples/pointers.tspl ${FPLUS_FLAGS};
-		echo -n "[On pause (code: ${?}, press RETURN)]: ";
-		read;
+	echo -e "${NUMBER_COLOR}x${RESET}. back to menu";
+	echo -e "\033[91mEnter${RESET}. [no flags]";
+	read input_fplus_flags;
+	case ${input_fplus_flags} in
+	'0')
+		FPLUS_FLAGS='--sim-debug';
+	;;
+	'1')
+		FPLUS_FLAGS='--parse-debug';
+	;;
+	'2')
+		FPLUS_FLAGS='--sim-debug --parse-debug';
+	;;
+	'3')
+		FPLUS_FLAGS='--only-link --link-debug';
+	;;
+	'c')
 		clear;
 		tsch_fplus_run;
-	}
+		return;
+	;;
+	'x')
+		return;
+	;;
+	*)
+		FPLUS_FLAGS='';
+	;;
+	esac;
+	clear;
+	.fr --no-ls sim ./examples/pointers.tspl ${FPLUS_FLAGS};
+	echo -n "[On pause (code: ${?}, press RETURN)]: ";
+	read;
+	clear;
+	tsch_fplus_run;
+}
+
+function tsch() {
 	clear;
 set_number_color;
 		echo 'TwoSpikes ChooseHub (2023-2023)';
@@ -100,11 +106,13 @@ set_number_color;
 set_number_color;
 		echo -e "${NUMBER_COLOR}7${RESET}. edit b\033[1ma\033[22mshrc";
 set_number_color;
-		echo -e "${NUMBER_COLOR}8${RESET}. reload \033[1mc\033[22molors";
+		echo -e "${NUMBER_COLOR}8${RESET}. edit n\033[1mv\033[22imshrc";
 set_number_color;
-		echo -e "${NUMBER_COLOR}9${RESET}. ca\033[1ml\033[22m";
+		echo -e "${NUMBER_COLOR}9${RESET}. reload \033[1mc\033[22molors";
 set_number_color;
-		echo -e "${NUMBER_COLOR}10${RESET}. cal -\033[1my\033[22m";
+		echo -e "${NUMBER_COLOR}10${RESET}. ca\033[1ml\033[22m";
+set_number_color;
+		echo -e "${NUMBER_COLOR}11${RESET}. cal -\033[1my\033[22m";
 		echo -e "\033[91mEnter${RESET}. another";
 	read answer;
 	clear;
@@ -157,7 +165,10 @@ set_number_color;
 	'6'|'d'|'D')
 		"${EDITOR}" ~/todo;
 	;;
-	'7'|'a'|'A')
+	'7'|'v'|'V')
+		"${EDITOR}" "${HOME}"/"${NVIMRC_NAME}";
+	;;
+	'8'|'a'|'A')
 		ald;
 		echo "wanna load ~/${BASHRC_NAME}?";
 set_number_color;
@@ -179,13 +190,13 @@ set_number_color;
 		;;
 		esac;
 	;;
-	'8'|'c'|'C')
+	'9'|'c'|'C')
 	;;
-	'9'|'l'|'L')
+	'10'|'l'|'L')
 		cal;
 		read;
 	;;
-	'10'|'y'|'Y')
+	'11'|'y'|'Y')
 		cal -y;
 		read;
 	;;
