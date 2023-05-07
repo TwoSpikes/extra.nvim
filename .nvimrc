@@ -18,5 +18,6 @@ noremap <right> <space>
 noremap <left> <bs>
 
 noremap <leader>v :tabe ~/.nvimrc<CR>
+noremap <leader>V :vsplit ~/.nvimrc<CR>
 
 echom 'config: ok'
