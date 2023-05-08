@@ -14,7 +14,8 @@ alias .f='cd ~/fplus';
 alias .fe='.f;${EDITOR} main.rs';
 alias .fr='~/.fr.sh';
 alias .fE='clear;${RUST_COMPILER} build --release &> .lol;errorcode=$?;${GREP_PROGRAM} "\-->" .lol;rm .lol;echo $errorcode';
-clear;
+alias .df_c="clear;cd ~/dotfiles;cp ~/${BASHRC_NAME} ~/${NVIMRC_NAME} ~/dotfiles;git commit -a";
+clear
 
 function set_number_color() {
 	# 1 + because both \033[30m and \033[40m are black and we do not need black because our terminal background is black

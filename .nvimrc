@@ -9,9 +9,9 @@ noremap + yyp
 noremap <c-d> dd
 inoremap <c-d> <esc>ddi
 
-nnoremap <c-u> viwU<space><esc>
-vnoremap <c-u> iwU<space>
-inoremap <c-u> <esc>viwU<esc>i
+nnoremap <c-u> viwUe<space><esc>
+vnoremap <c-u> iwUe<space>
+inoremap <c-u> <esc>viwUe<space><esc>i
 
 noremap l <space>
 noremap h <bs>
@@ -41,5 +41,7 @@ noremap Q <esc>:q!<CR>
 noremap W <esc>:w<CR>
 
 inoremap jk <esc>
+
+noremap : <nop>
 
 echom 'config: ok'
