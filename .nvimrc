@@ -43,5 +43,11 @@ noremap W <esc>:w<CR>
 inoremap jk <esc>
 
 noremap : <nop>
+inoremap <esc> <nop>
 
-echom 'config: ok'
+autocmd!
+" this file is about 2300 lines of code so i do not want to see line numbers
+autocmd BufRead main.rs :set nonu nornu
+autocmd InsertLeave * :write
+
+echom 'config: loaded'
