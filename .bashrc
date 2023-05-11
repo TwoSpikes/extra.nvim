@@ -15,7 +15,18 @@ alias .fe='.f;${EDITOR} main.rs';
 alias .fr='~/.fr.sh';
 alias .fE='clear;${RUST_COMPILER} build --release &> .lol;errorcode=$?;${GREP_PROGRAM} "\-->" .lol;rm .lol;echo $errorcode';
 alias .df_c="clear;cd ~/dotfiles;cp ~/${BASHRC_NAME} ~/${NVIMRC_NAME} ~/dotfiles;git commit -a";
-clear
+clear;
+
+esc=$(printf '\033');
+
+function option() {
+	text=$1;
+	character=$2;
+	actual_text=$(echo "${text}" | sed "s/${character}/${esc}[1m&${esc}[22m/";)
+set_number_color;
+	echo -e "${NUMBER_COLOR}${iota}${RESET}. ${actual_text}";
+	((iota++));
+}
 
 function set_number_color() {
 	# 1 + because both \033[30m and \033[40m are black and we do not need black because our terminal background is black
@@ -90,20 +101,14 @@ function tsch() {
 	clear;
 set_number_color;
 		echo 'TwoSpikes ChooseHub (2023-2023)';
-set_number_color;
-		echo -e "${NUMBER_COLOR}0${RESET}. \033[1mf\033[22mplus edit";
-set_number_color;
-		echo -e "${NUMBER_COLOR}1${RESET}. fplus \033[1mr\033[22mun";
-set_number_color;
-		echo -e "${NUMBER_COLOR}2${RESET}. text editor \033[1me\033[22mdit";
-set_number_color;
-		echo -e "${NUMBER_COLOR}3${RESET}. \033[1mt\033[22mext editor run";
-set_number_color;
-		echo -e "${NUMBER_COLOR}4${RESET}. ${PKG_MANAGER} \033[1mu\033[22mpgrade";
-set_number_color;
-		echo -e "${NUMBER_COLOR}5${RESET}. ${PKG_MANAGER} upgrade && e\033[1mx\033[22mit";
-set_number_color;
-		echo -e "${NUMBER_COLOR}6${RESET}. edit to\033[1md\033[22mo";
+		iota=0;
+		option 'fplus edit' 'f';
+		option 'fplus run' 'r';
+		option 'text editor edit' 'e';
+		option 'text editor run' 't';
+		option 'upgrade packages' 'u';
+		option 'upgrade && exit' 'x';
+		option 'edit todo' 'd';
 set_number_color;
 		echo -e "${NUMBER_COLOR}7${RESET}. edit b\033[1ma\033[22mshrc";
 set_number_color;
@@ -114,22 +119,24 @@ set_number_color;
 		echo -e "${NUMBER_COLOR}10${RESET}. ca\033[1ml\033[22m";
 set_number_color;
 		echo -e "${NUMBER_COLOR}11${RESET}. cal -\033[1my\033[22m";
+set_number_color;
+		echo -e "${NUMBER_COLOR}12${RESET}. \033[1mw\033[22meb edit";
 		echo -e "\033[91mEnter${RESET}. another";
 	read answer;
 	clear;
-	case ${answer} in
-	'0'|'f'|'F')
+	case ${answer,,} in
+	'0'|'f')
 		cd ~/fplus;
 		${EDITOR} ./main.rs;
 	;;
-	'1'|'r'|'R')
+	'1'|'r')
 		tsch_fplus_run;
 	;;
-	'2'|'e'|'E')
+	'2'|'e')
 		cd ~/te;
 		${EDITOR} ./main.c;
 	;;
-	'3'|'t'|'T')
+	'3'|'t')
 		default_file='lol';
 		echo -en "On what file? (default='${default_file}'): ";
 		read file;
@@ -156,17 +163,17 @@ set_number_color;
 		fi;
 		read;
 	;;
-	'4'|'p'|'P')
+	'4'|'p')
 		"${PKG_MANAGER}" upgrade;
 	;;
-	'5'|'x'|'X')
+	'5'|'x')
 		"${PKG_MANAGER}" upgrade;
 		exit 0;
 	;;
-	'6'|'d'|'D')
+	'6'|'d')
 		"${EDITOR}" ~/todo;
 	;;
-	'7'|'a'|'A')
+	'7'|'a')
 		ald;
 		echo "wanna load ~/${BASHRC_NAME}?";
 set_number_color;
@@ -176,30 +183,34 @@ set_number_color;
 set_number_color;
 		echo -e "${NUMBER_COLOR}2${RESET}. no, Exit from start menu";
 		read answer2;
-		case $answer2 in
-		'0'|'n'|'N')
+		case ${answer2,,} in
+		'0'|'n')
 			
 		;;
-		'1'|'y'|'Y'|'r'|'R')
+		'1'|'y'|'r')
 			exit 0;
 		;;
-		'2'|'e'|'E')
+		'2'|'e')
 			to_exit='true';
 		;;
 		esac;
 	;;
-	'8'|'v'|'V')
+	'8'|'v')
 		"${EDITOR}" "${HOME}"/"${NVIMRC_NAME}";
 	;;
-	'9'|'c'|'C')
+	'9'|'c')
 	;;
-	'10'|'l'|'L')
+	'10'|'l')
 		cal;
 		read;
 	;;
-	'11'|'y'|'Y')
+	'11'|'y')
 		cal -y;
 		read;
+	;;
+	'12'|'w')
+		cd ~/web;
+		${EDITOR} -o ./index.html ./style.css ./main.js;
 	;;
 	*)
 		to_exit='true';

@@ -44,6 +44,7 @@ inoremap jk <esc>
 
 noremap : <nop>
 inoremap <esc> <nop>
+nnoremap dd <nop>
 
 autocmd!
 " this file is about 2300 lines of code so i do not want to see line numbers
