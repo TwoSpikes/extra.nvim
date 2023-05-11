@@ -1,20 +1,55 @@
 export EDITOR='nvim';
 export JOURNAL='~/.journal';
 export PKG_MANAGER='pkg';
-export BASHRC_NAME='.bashrc';
-export NVIMRC_NAME='.nvimrc';
 export MAKE_PROGRAM='make';
 export RUST_COMPILER='cargo';
 export GREP_PROGRAM='grep';
+export GIT_PROGRAM='git';
 
-alias al='alias';
-alias q='exit 0';
-alias ald='${EDITOR} ${HOME}/${BASHRC_NAME}';
-alias .f='cd ~/fplus';
-alias .fe='.f;${EDITOR} main.rs';
-alias .fr='~/.fr.sh';
-alias .fE='clear;${RUST_COMPILER} build --release &> .lol;errorcode=$?;${GREP_PROGRAM} "\-->" .lol;rm .lol;echo $errorcode';
-alias .df_c="clear;cd ~/dotfiles;cp ~/${BASHRC_NAME} ~/${NVIMRC_NAME} ~/dotfiles;git commit -a";
+export BASHRC_NAME='.bashrc';
+export NVIMRC_NAME='.nvimrc';
+export FR_SH_NAME='.fr.sh';
+
+function al() {
+	alias;
+}
+function q() {
+	exitcode=$1;
+	actual_exitcode='';
+	if [[ -z ${exitcode} ]]; then
+		actual_exitcode=0;
+	else
+		actual_exitcode=${exitcode};
+	fi;
+	exit ${actual_exitcode};
+}
+function ald() {
+	${EDITOR} ${HOME}/${BASHRC_NAME};
+}
+function .f() {
+	cd ~/fplus;
+}
+function .fe() {
+	.f;
+	${EDITOR} ./main.rs;
+}
+function .fr() {
+	~/.fr.sh ${@:1};
+}
+function .fE() {
+	clear;
+	${RUST_COMPILER} build --release &> temp_file;
+	errorcode=${?};
+	${GREP_PROGRAM} "\-->" temp_file;
+	rm temp_file;
+	echo ".fE was finished with exit code ${errorcode}";
+}
+function .df_c() {
+	clear;
+	cd ~/dotfiles;
+	cp ~/${BASHRC_NAME} ~/${NVIMRC_NAME} ~/${FR_SH_NAME} ~/dotfiles;
+	${GIT_PROGRAM} commit -a;
+}
 clear;
 
 esc=$(printf '\033');
