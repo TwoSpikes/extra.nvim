@@ -10,6 +10,25 @@ export BASHRC_NAME='.bashrc';
 export NVIMRC_NAME='.nvimrc';
 export FR_SH_NAME='.fr.sh';
 
+# colors
+RESET_COLOR='\033[0m';
+GRAY_COLOR='\033[90m';
+RED_COLOR='\033[91m';
+GREEN_COLOR='\033[92m';
+YELLOW_COLOR='\033[93m';
+BLUE_COLOR='\033[94m';
+VIOLET_COLOR='\033[95m';
+LIGHT_BLUE_COLOR='\033[96m';
+WHITE_COLOR='\033[97m';
+GRAY_BACK_COLOR='\033[100m';
+RED_BACK_COLOR='\033[101m';
+GREEN_BACK_COLOR='\033[102m';
+YELLOW_BACK_COLOR='\033[103m';
+BLUE_BACK_COLOR='\033[104m';
+VIOLET_BACK_COLOR='\033[105m';
+LIGHT_BLUE_BACK_COLOR='\033[106m';
+WHITE_BACK_COLOR='\033[107m';
+
 function al() {
 	alias;
 }
@@ -61,6 +80,9 @@ function option() {
 set_number_color;
 	echo -e "${NUMBER_COLOR}${iota}${RESET}. ${actual_text}";
 	((iota++));
+}
+function on_pause() {
+	echo -en "${GRAY_COLOR}[on pause (code: ${YELLOW_COLOR}${?}${GRAY_COLOR}, press ${BOLD_COLOR}${WHITE_COLOR}RETURN${NON_BOLD_COLOR}${GRAY_COLOR})]${RESET_COLOR}: ";
 }
 
 function set_number_color() {
@@ -126,7 +148,7 @@ set_number_color;
 	esac;
 	clear;
 	.fr --no-ls sim ./examples/pointers.tspl ${FPLUS_FLAGS};
-	echo -n "[On pause (code: ${?}, press RETURN)]: ";
+	on_pause;
 	read;
 	clear;
 	tsch_fplus_run;
@@ -188,13 +210,13 @@ set_number_color;
 
 		"${MAKE_PROGRAM}" install;
 		errorcode="${?}";
-		echo -n "[On pause (code: ${errorcode}, press RETURN)]: ";
+		on_pause;
 		read;
 
 		if [[ "${errorcode}" == 0 ]]; then
 			tste "${actual_file}";
 			echo '';
-			echo -n "[On pause (code: ${?}, press RETURN)]: ";
+			on_pause;
 		fi;
 		read;
 	;;
