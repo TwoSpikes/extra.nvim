@@ -281,3 +281,4 @@ set_number_color;
 };
 
 tsch;
+. "$HOME/.cargo/env"

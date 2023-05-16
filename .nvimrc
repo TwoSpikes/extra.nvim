@@ -21,11 +21,11 @@ noremap <left> <bs>
 noremap L $
 noremap H ^
 
-noremap <leader>vet :tabe ~/.nvimrc<CR>
-noremap <leader>veb :e ~/.nvimrc<CR>
-noremap <leader>veh :split ~/.nvimrc<CR>
-noremap <leader>vev :vsplit ~/.nvimrc<CR>
-noremap <leader>vs :source ~/.nvimrc<CR>
+noremap <leader>vet <esc>:tabe ~/.nvimrc<CR>
+noremap <leader>veb <esc>:e ~/.nvimrc<CR>
+noremap <leader>veh <esc>:split ~/.nvimrc<CR>
+noremap <leader>vev <esc>:vsplit ~/.nvimrc<CR>
+noremap <leader>vs <esc>:source ~/.nvimrc<CR>
 
 noremap ; :
 noremap = :tabe 
@@ -36,9 +36,15 @@ nnoremap <leader>' viw<esc>a'<esc>bi'<esc>
 vnoremap <leader>" iw<esc>a"<esc>bi"<esc>v
 vnoremap <leader>' iw<esc>a'<esc>bi'<esc>v
 
-noremap q <esc>:wq<CR>
+nnoremap ci_ yiwct_
+
+vnoremap <c-/> <esc>v:q:s/.*/# \0
+vnoremap <c-?> <esc>:s/.*/\/\/ \0
+
+noremap q <esc>:q<CR>
 noremap Q <esc>:q!<CR>
 noremap W <esc>:w<CR>
+noremap <c-w> <esc>:wq<CR>
 
 inoremap jk <esc>
 
