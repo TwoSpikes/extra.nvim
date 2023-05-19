@@ -1,12 +1,8 @@
-set nu
-set rnu
-
 let mapleader = ","
 
 noremap - dd
 noremap + yyp
 
-noremap <c-d> dd
 inoremap <c-d> <esc>ddi
 
 nnoremap <c-u> viwUe<space><esc>
@@ -21,6 +17,12 @@ noremap <left> <bs>
 noremap L $
 noremap H ^
 
+set nowrap
+noremap <C-l> 5zl
+noremap <C-h> 5zh
+noremap <C-e> 5<C-e>
+noremap <C-y> 5<C-y>
+
 noremap <leader>vet <esc>:tabe ~/.nvimrc<CR>
 noremap <leader>veb <esc>:e ~/.nvimrc<CR>
 noremap <leader>veh <esc>:split ~/.nvimrc<CR>
@@ -30,6 +32,7 @@ noremap <leader>vs <esc>:source ~/.nvimrc<CR>
 noremap ; :
 noremap = :tabe 
 noremap _ :e 
+noremap ! :!
 
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>
 nnoremap <leader>' viw<esc>a'<esc>bi'<esc>
@@ -53,8 +56,6 @@ inoremap <esc> <nop>
 nnoremap dd <nop>
 
 autocmd!
-" this file is about 2300 lines of code so i do not want to see line numbers
-autocmd BufRead main.rs :set nonu nornu
 autocmd InsertLeave * :write
 
 echom 'config: loaded'
