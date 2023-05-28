@@ -1,5 +1,8 @@
 let mapleader = ","
 
+set hidden
+set nonu nornu
+
 noremap - dd
 noremap + yyp
 
@@ -14,12 +17,12 @@ noremap h <bs>
 noremap <right> <space>
 noremap <left> <bs>
 
-noremap L $
-noremap H ^
+noremap L 50<up>zz
+noremap H 50<down>zz
 
-set nowrap
-noremap <C-l> 5zl
-noremap <C-h> 5zh
+set wrap
+noremap <C-l> 20zl
+noremap <C-h> 20zh
 noremap <C-e> 5<C-e>
 noremap <C-y> 5<C-y>
 
@@ -28,6 +31,13 @@ noremap <leader>veb <esc>:e ~/.nvimrc<CR>
 noremap <leader>veh <esc>:split ~/.nvimrc<CR>
 noremap <leader>vev <esc>:vsplit ~/.nvimrc<CR>
 noremap <leader>vs <esc>:source ~/.nvimrc<CR>
+noremap <leader>ve? <esc>:echo "V_HELP:
+\\n  vet - Open in a new tab
+\\n  veb - Open in a new buffer
+\\n  veh - Open in a new horizontal window (-)
+\\n  vev - Open in a new vertical window   (\|)
+\\n  vs  - Source it
+\\n  ve? - Show this help message"<CR>
 
 noremap ; :
 noremap = :tabe 
