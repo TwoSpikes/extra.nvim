@@ -23,8 +23,8 @@ noremap H 50<down>zz
 set wrap
 noremap <C-l> 20zl
 noremap <C-h> 20zh
-noremap <C-e> 5<C-e>
-noremap <C-y> 5<C-y>
+noremap <C-e> 3<C-e>
+noremap <C-y> 4<C-y>
 
 noremap <leader>vet <esc>:tabe ~/.nvimrc<CR>
 noremap <leader>veb <esc>:e ~/.nvimrc<CR>
@@ -48,6 +48,7 @@ nnoremap <leader>" viw<esc>a"<esc>bi"<esc>
 nnoremap <leader>' viw<esc>a'<esc>bi'<esc>
 vnoremap <leader>" iw<esc>a"<esc>bi"<esc>v
 vnoremap <leader>' iw<esc>a'<esc>bi'<esc>v
+noremap <leader>t :tabnew<CR>:terminal<CR>i
 
 nnoremap ci_ yiwct_
 
@@ -60,10 +61,6 @@ noremap W <esc>:w<CR>
 noremap <c-w> <esc>:wq<CR>
 
 inoremap jk <esc>
-
-noremap : <nop>
-inoremap <esc> <nop>
-nnoremap dd <nop>
 
 autocmd!
 autocmd InsertLeave * :write
