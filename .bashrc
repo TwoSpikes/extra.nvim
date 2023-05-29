@@ -113,7 +113,4 @@ RESET="\033[0m";
 
 . ${HOME}/.cargo/env;
 
-date;
-if [[ `pwd` == "$HOME" ]]; then
-	cat todo;
-fi;
+

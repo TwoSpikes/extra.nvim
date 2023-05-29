@@ -5,8 +5,8 @@ let mapleader = ","
 set hidden
 set nonu nornu
 
-noremap - dd
-noremap + yyp
+noremap - ddk
+noremap + myyyp`yj
 
 inoremap <c-d> <esc>ddi
 
