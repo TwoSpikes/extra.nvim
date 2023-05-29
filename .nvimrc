@@ -48,7 +48,10 @@ nnoremap <leader>" viw<esc>a"<esc>bi"<esc>
 nnoremap <leader>' viw<esc>a'<esc>bi'<esc>
 vnoremap <leader>" iw<esc>a"<esc>bi"<esc>v
 vnoremap <leader>' iw<esc>a'<esc>bi'<esc>v
-noremap <leader>t :tabnew<CR>:terminal<CR>i
+noremap <leader>tt :tabnew<CR>:terminal<CR>i
+noremap <leader>tb :e<CR>   :terminal<CR>i
+noremap <leader>th :split<CR> :terminal<CR>i
+noremap <leader>tv :vsplit<CR>:terminal<CR>i
 
 nnoremap ci_ yiwct_
 
