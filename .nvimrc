@@ -1,3 +1,5 @@
+#!/bin/env nvim
+
 let mapleader = ","
 
 set hidden
@@ -31,13 +33,25 @@ noremap <leader>veb <esc>:e ~/.nvimrc<CR>
 noremap <leader>veh <esc>:split ~/.nvimrc<CR>
 noremap <leader>vev <esc>:vsplit ~/.nvimrc<CR>
 noremap <leader>vs <esc>:source ~/.nvimrc<CR>
-noremap <leader>ve? <esc>:echo "V_HELP:
-\\n  vet - Open in a new tab
-\\n  veb - Open in a new buffer
-\\n  veh - Open in a new horizontal window (-)
-\\n  vev - Open in a new vertical window   (\|)
-\\n  vs  - Source it
-\\n  ve? - Show this help message"<CR>
+noremap <leader>? <esc>:echo "
+\MY .nvimrc HELP:
+\\n  GLOBAL_HELP:
+\\n    ? - Show this help message
+\\n  NVIMRC:
+\\n    vet - Open in a new tab
+\\n    veb - Open in a new buffer
+\\n    veh - Open in a new horizontal window (-)
+\\n    vev - Open in a new vertical window (\|)
+\\n    vs  - Source it
+\\n  TERMINAL:
+\\n    tt - Open in a new tab
+\\n    tb - Open in a new buffer
+\\n    th - Open in a new horizontal window (-)
+\\n    tv - Open in a new vertical window (\|)
+\\n  AUTHOR:
+\\n    Name: TwoSpikes (2023 - 2023)
+\\n    Github: https://github.com/TwoSpikes/dotfiles
+\"<CR>
 
 noremap ; :
 noremap = :tabe 
@@ -48,6 +62,7 @@ nnoremap <leader>" viw<esc>a"<esc>bi"<esc>
 nnoremap <leader>' viw<esc>a'<esc>bi'<esc>
 vnoremap <leader>" iw<esc>a"<esc>bi"<esc>v
 vnoremap <leader>' iw<esc>a'<esc>bi'<esc>v
+
 noremap <leader>tt :tabnew<CR>:terminal<CR>i
 noremap <leader>tb :e<CR>   :terminal<CR>i
 noremap <leader>th :split<CR> :terminal<CR>i
