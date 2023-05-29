@@ -8,6 +8,8 @@ export RUST_COMPILER='cargo';
 export GREP_PROGRAM='grep';
 export GIT_PROGRAM='git';
 
+export DISPLAY=':1';
+
 BASHRC_NAME='.bashrc';
 NVIMRC_NAME='.nvimrc';
 FR_SH_NAME='.fr.sh';
