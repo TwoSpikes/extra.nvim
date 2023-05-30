@@ -2,6 +2,8 @@
 
 let mapleader = ","
 
+colorscheme murphy
+
 set hidden
 set nonu nornu
 
@@ -14,10 +16,12 @@ nnoremap <c-u> viwUe<space><esc>
 vnoremap <c-u> iwUe<space>
 inoremap <c-u> <esc>viwUe<space><esc>i
 
-noremap l <space>
-noremap h <bs>
-noremap <right> <space>
-noremap <left> <bs>
+if !$disable_autowrapping
+ noremap l <space>
+ noremap h <bs>
+ noremap <right> <space>
+ noremap <left> <bs>
+endif
 
 noremap L 50<up>zz
 noremap H 50<down>zz
@@ -34,53 +38,94 @@ noremap <leader>veh <esc>:split ~/.nvimrc<CR>
 noremap <leader>vev <esc>:vsplit ~/.nvimrc<CR>
 noremap <leader>vs <esc>:source ~/.nvimrc<CR>
 noremap <leader>? <esc>:echo "
-\MY .nvimrc HELP:
-\\n  GLOBAL_HELP:
-\\n    ? - Show this help message
-\\n  NVIMRC:
-\\n    vet - Open in a new tab
-\\n    veb - Open in a new buffer
-\\n    veh - Open in a new horizontal window (-)
-\\n    vev - Open in a new vertical window (\|)
-\\n    vs  - Source it
+  \MY .nvimrc HELP:
+\\n  GLOBAL HELP:
+\\n    ,? - Show this help message
+\\n  NVIMRC FILE:
+\\n    ,vet - Open in a new tab
+\\n    ,veb - Open in a new buffer
+\\n    ,veh - Open in a new horizontal window (-)
+\\n    ,vev - Open in a new vertical window (\|)
+\\n    ,vs  - Source it
+\\n  EDITING:
+\\n    MOVING:
+\\n      You can press `l`, `h`, `right` and `left` at the end of the line and it will go to the beginning of the next line (in Normal mode). To disable this feature, run this command in bash:
+ \\n        /--------------------------\\
+\\n        \| $ disable_autowrapping=1 \|
+\\n        \\--------------------------/
+\\n    FAST COMMANDS:
+\\n      ; - Switch to command mode (:)
+\\n      = - Open file in a new tab (:tabe)
+\\n      _ - Open file in a new buffer (:e)
+\\n      ! - Run environment command
+\\n    QUOTES AROUND:
+\\n      ,\" - Put \'\"\' around word
+\\n      ,\' - Put \"\'\" around word
+\\n    SPECIAL:
+\\n      ci_ - Edit word from start to first _
 \\n  TERMINAL:
-\\n    tt - Open in a new tab
-\\n    tb - Open in a new buffer
-\\n    th - Open in a new horizontal window (-)
-\\n    tv - Open in a new vertical window (\|)
+\\n    ,tt - Open in a new tab
+\\n    ,tb - Open in a new buffer
+\\n    ,th - Open in a new horizontal window (-)
+\\n    ,tv - Open in a new vertical window (\|)
+\\n  COLORSCHEME:
+\\n    ,cet - Open schemes in a new tab
+\\n    ,ceb - Open schemes in a new buffer
+\\n    ,ceh - Open schemes in a new horizontal window (-)
+\\n    ,cev - Open schemes in a new vertical window (\|)
+\\n    ,cs  - Set colorscheme (:colo)
+\\n    ,cy  - Copy colorscheme name from current buffer and set it
+\\n  SPECIAL:
+\\n    You can replace `,` with other symbol. To do this, run this command in Vim/Neovim:
+ \\n        /---------------------------\\
+\\n        \| :let mapleader = \"symbol\" \|
+\\n        \\---------------------------/
+\\n        Where symbol is your symbol (type quotes literally)
 \\n  AUTHOR:
 \\n    Name: TwoSpikes (2023 - 2023)
 \\n    Github: https://github.com/TwoSpikes/dotfiles
 \"<CR>
 
+" FAST COMMANDS
 noremap ; :
 noremap = :tabe 
 noremap _ :e 
 noremap ! :!
 
+" QUOTES AROUND
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>
 nnoremap <leader>' viw<esc>a'<esc>bi'<esc>
 vnoremap <leader>" iw<esc>a"<esc>bi"<esc>v
 vnoremap <leader>' iw<esc>a'<esc>bi'<esc>v
 
+" SPECIAL
+nnoremap ci_ yiwct_
+
+" TERMINAL
 noremap <leader>tt :tabnew<CR>:terminal<CR>i
 noremap <leader>tb :e<CR>   :terminal<CR>i
 noremap <leader>th :split<CR> :terminal<CR>i
 noremap <leader>tv :vsplit<CR>:terminal<CR>i
 
-nnoremap ci_ yiwct_
+" COLORSCHEME
+noremap <leader>cet :tabe $VIMRUNTIME/colors/<CR>
+noremap <leader>ceb :e $VIMRUNTIME/colors/<CR>
+noremap <leader>ceh :split $VIMRUNTIME/colors/<CR>
+noremap <leader>cev :vsplit $VIMRUNTIME/colors/<CR>
+noremap <leader>cs :colo 
+noremap <leader>cy yw:colo <c-R>+<CR>
 
-vnoremap <c-/> <esc>v:q:s/.*/# \0
-vnoremap <c-?> <esc>:s/.*/\/\/ \0
+" vnoremap <c-/> <esc>v:q:s/.*/# \0
+" vnoremap <c-?> <esc>:s/.*/\/\/ \0
 
 noremap q <esc>:q<CR>
 noremap Q <esc>:q!<CR>
 noremap W <esc>:w<CR>
 noremap <c-w> <esc>:wq<CR>
 
-inoremap jk <esc>
+inoremap jk <esc>:w<CR>
+inoremap jK <esc>
 
 autocmd!
-autocmd InsertLeave * :write
 
 echom 'config: loaded'
