@@ -32,11 +32,11 @@ noremap <C-h> 20zh
 noremap <C-e> 3<C-e>
 noremap <C-y> 4<C-y>
 
-noremap <leader>vet <esc>:tabe ~/.nvimrc<CR>
-noremap <leader>veb <esc>:e ~/.nvimrc<CR>
-noremap <leader>veh <esc>:split ~/.nvimrc<CR>
-noremap <leader>vev <esc>:vsplit ~/.nvimrc<CR>
-noremap <leader>vs <esc>:source ~/.nvimrc<CR>
+noremap <leader>vet <esc>:tabe ~/.nvimrc<cr>
+noremap <leader>veb <esc>:e ~/.nvimrc<cr>
+noremap <leader>veh <esc>:split ~/.nvimrc<cr>
+noremap <leader>vev <esc>:vsplit ~/.nvimrc<cr>
+noremap <leader>vs <esc>:source ~/.nvimrc<cr>
 noremap <leader>? <esc>:echo "
   \MY .nvimrc HELP:
 \\n  GLOBAL HELP:
@@ -89,7 +89,7 @@ noremap <leader>? <esc>:echo "
 \\n  AUTHOR:
 \\n    Name: TwoSpikes (2023 - 2023)
 \\n    Github: https://github.com/TwoSpikes/dotfiles
-\"<CR>
+\"<cr>
 
 " FAST COMMANDS
 noremap ; :
@@ -107,34 +107,34 @@ vnoremap <leader>' iw<esc>a'<esc>bi'<esc>v
 nnoremap ci_ yiwct_
 
 " TERMINAL
-noremap <leader>tt :tabnew<CR>:terminal<CR>i
-noremap <leader>tb :e<CR>   :terminal<CR>i
-noremap <leader>th :split<CR> :terminal<CR>i
-noremap <leader>tv :vsplit<CR>:terminal<CR>i
+noremap <leader>tt :tabnew<cr>:terminal<cr>i
+noremap <leader>tb :e<cr>   :terminal<cr>i
+noremap <leader>th :split<cr> :terminal<cr>i
+noremap <leader>tv :vsplit<cr>:terminal<cr>i
 
 " COLORSCHEME
-noremap <leader>cet :tabe $VIMRUNTIME/colors/<CR>
-noremap <leader>ceb :e $VIMRUNTIME/colors/<CR>
-noremap <leader>ceh :split $VIMRUNTIME/colors/<CR>
-noremap <leader>cev :vsplit $VIMRUNTIME/colors/<CR>
+noremap <leader>cet :tabe $VIMRUNTIME/colors/<cr>
+noremap <leader>ceb :e $VIMRUNTIME/colors/<cr>
+noremap <leader>ceh :split $VIMRUNTIME/colors/<cr>
+noremap <leader>cev :vsplit $VIMRUNTIME/colors/<cr>
 noremap <leader>cs :colo 
-noremap <leader>cy yiw:colo <c-R>+<CR>
+noremap <leader>cy yiw:colo <c-R>+<cr>
 
 " TELESCOPE
-nnoremap <leader>ff <cmd>Telescope find_files<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
-nnoremap <leader>fb <cmd>Telescope buffers<cr>
-nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap <leader>ff :lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
+nnoremap <leader>fg :lua require'telescope.builtin'.live_grep(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
+nnoremap <leader>fb :lua require'telescope.builtin'.buffers(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
+nnoremap <leader>fh :lua require'telescope.builtin'.help_tags(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
 
 " vnoremap <c-/> <esc>v:q:s/.*/# \0
 " vnoremap <c-?> <esc>:s/.*/\/\/ \0
 
-noremap q <esc>:q<CR>
-noremap Q <esc>:q!<CR>
-noremap W <esc>:w<CR>
-noremap <c-w> <esc>:wq<CR>
+noremap q <esc>:q<cr>
+noremap Q <esc>:q!<cr>
+noremap W <esc>:w<cr>
+noremap <c-w> <esc>:wq<cr>
 
-inoremap jk <esc>:w<CR>
+inoremap jk <esc>:w<cr>
 inoremap jK <esc>
 
 autocmd!
