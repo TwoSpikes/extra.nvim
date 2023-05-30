@@ -2,7 +2,7 @@
 
 let mapleader = ","
 
-colorscheme murphy
+colorscheme industry
 
 set hidden
 set nonu nornu
@@ -75,6 +75,11 @@ noremap <leader>? <esc>:echo "
 \\n    ,cev - Open schemes in a new vertical window (\|)
 \\n    ,cs  - Set colorscheme (:colo)
 \\n    ,cy  - Copy colorscheme name from current buffer and set it
+\\n  TELESCOPE (Plugin):
+\\n    ,ff - Find files
+\\n    ,fg - Live grep
+\\n    ,fb - Buffers
+\\n    ,fh - Help tags
 \\n  SPECIAL:
 \\n    You can replace `,` with other symbol. To do this, run this command in Vim/Neovim:
  \\n        /---------------------------\\
@@ -113,7 +118,13 @@ noremap <leader>ceb :e $VIMRUNTIME/colors/<CR>
 noremap <leader>ceh :split $VIMRUNTIME/colors/<CR>
 noremap <leader>cev :vsplit $VIMRUNTIME/colors/<CR>
 noremap <leader>cs :colo 
-noremap <leader>cy yw:colo <c-R>+<CR>
+noremap <leader>cy yiw:colo <c-R>+<CR>
+
+" TELESCOPE
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 " vnoremap <c-/> <esc>v:q:s/.*/# \0
 " vnoremap <c-?> <esc>:s/.*/\/\/ \0
@@ -128,4 +139,27 @@ inoremap jK <esc>
 
 autocmd!
 
-echom 'config: loaded'
+echom 'config: default: loaded'
+
+let s:dein_base = '/data/data/com.termux/files/home/.local/share/dein'
+let s:dein_src = '/data/data/com.termux/files/home/.local/share/dein/repos/github.com/Shougo/dein.vim'
+execute 'set runtimepath+=' . s:dein_src
+call dein#begin(s:dein_base)
+call dein#add(s:dein_src)
+
+echom 'config: dein: loaded'
+
+call dein#add('nvim-lua/plenary.nvim')
+
+echom 'config: plenary.nvim: loaded'
+
+call dein#add('nvim-telescope/telescope.nvim', { 'rev': '0.1.1' })
+
+echom 'config: telescope.nvim: loaded'
+
+call dein#end()
+if dein#check_install()
+	call dein#install()
+endif
+
+echom 'config: all: loaded'
