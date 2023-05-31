@@ -2,13 +2,14 @@
 
 let mapleader = ","
 
-colorscheme industry
+colorscheme lunaperche
 
 set hidden
 set nonu nornu
 
 noremap - ddk
-noremap + myyyp`yj
+noremap + zyyp`zj
+noremap J mzJ`z
 
 inoremap <c-d> <esc>ddi
 
@@ -118,7 +119,7 @@ noremap <leader>ceb :e $VIMRUNTIME/colors/<cr>
 noremap <leader>ceh :split $VIMRUNTIME/colors/<cr>
 noremap <leader>cev :vsplit $VIMRUNTIME/colors/<cr>
 noremap <leader>cs :colo 
-noremap <leader>cy yiw:colo <c-R>+<cr>
+noremap <leader>cy yiw:colo <c-R>+<cr>j
 
 " TELESCOPE
 nnoremap <leader>ff :lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
