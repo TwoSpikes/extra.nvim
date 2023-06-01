@@ -7,7 +7,8 @@ colorscheme lunaperche
 set hidden
 set nonu nornu
 
-noremap - ddk
+noremap - dd
+noremap dd ddk
 noremap + zyyp`zj
 noremap J mzJ`z
 
@@ -26,9 +27,6 @@ if !$disable_autowrapping
  noremap <right> <space>
  noremap <left> <bs>
 endif
-
-noremap L Lzz
-noremap H Hzz
 
 set wrap
 noremap <C-l> 20zl
@@ -129,7 +127,7 @@ noremap <c-]> <c-\><esc>
 
 " TERMINAL
 noremap <leader>tt :tabnew<cr>:terminal<cr>i
-noremap <leader>tb :e<cr>     :terminal<cr>i
+noremap <leader>tb :terminal<cr>i
 noremap <leader>th :split<cr> :terminal<cr>i
 noremap <leader>tv :vsplit<cr>:terminal<cr>i
 noremap <leader>tct <c-\><c-n>:q\|tabnew\|ter<cr>a
@@ -164,27 +162,19 @@ tnoremap jK <c-\><c-n>:bd!\|tabnew\|ter<cr>a
 
 autocmd!
 
-echom 'config: default: loaded'
-
 let s:dein_base = '/data/data/com.termux/files/home/.local/share/dein'
 let s:dein_src = '/data/data/com.termux/files/home/.local/share/dein/repos/github.com/Shougo/dein.vim'
 execute 'set runtimepath+=' . s:dein_src
 call dein#begin(s:dein_base)
 call dein#add(s:dein_src)
 
-echom 'config: dein: loaded'
-
 call dein#add('nvim-lua/plenary.nvim')
 
-echom 'config: plenary.nvim: loaded'
-
 call dein#add('nvim-telescope/telescope.nvim', { 'rev': '0.1.1' })
-
-echom 'config: telescope.nvim: loaded'
 
 call dein#end()
 if dein#check_install()
 	call dein#install()
 endif
 
-echom 'config: all: loaded'
+echom 'config: loaded'
