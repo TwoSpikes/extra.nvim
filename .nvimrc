@@ -35,20 +35,20 @@ noremap <C-e> 3<C-e>
 noremap <C-y> 4<C-y>
 
 " NVIMRC FILE
-noremap <leader>vet <esc>:tabe ~/.nvimrc<cr>
-noremap <leader>veb <esc>:e ~/.nvimrc<cr>
-noremap <leader>veh <esc>:sp ~/.nvimrc<cr>
-noremap <leader>vev <esc>:vsp ~/.nvimrc<cr>
-noremap <leader>vs <esc>:so ~/.nvimrc<cr>
+noremap <silent> <leader>vet <esc>:tabe ~/.nvimrc<cr>
+noremap <silent> <leader>veb <esc>:e ~/.nvimrc<cr>
+noremap <silent> <leader>veh <esc>:sp ~/.nvimrc<cr>
+noremap <silent> <leader>vev <esc>:vsp ~/.nvimrc<cr>
+noremap <silent> <leader>vs <esc>:so ~/.nvimrc<cr>
 
 " BASHRC FILE
-noremap <leader>bt <esc>:tabe ~/.bashrc<cr>
-noremap <leader>bb <esc>:e ~/.bashrc<cr>
-noremap <leader>bh <esc>:sp ~/.bashrc<cr>
-noremap <leader>bv <esc>:vsp ~/.bashrc<cr>
+noremap <silent> <leader>bt <esc>:tabe ~/.bashrc<cr>
+noremap <silent> <leader>bb <esc>:e ~/.bashrc<cr>
+noremap <silent> <leader>bh <esc>:sp ~/.bashrc<cr>
+noremap <silent> <leader>bv <esc>:vsp ~/.bashrc<cr>
 
 " MY .nvimrc HELP
-noremap <leader>? <esc>:echo "
+noremap <silent> <leader>? <esc>:echo "
   \MY .nvimrc HELP:
 \\n  GLOBAL HELP:
 \\n    <leader>? - Show this help message
@@ -126,39 +126,39 @@ noremap <leader>d <esc>:noh<cr>
 noremap <c-]> <c-\><esc>
 
 " TERMINAL
-noremap <leader>tt :tabnew<cr>:terminal<cr>i
-noremap <leader>tb :terminal<cr>i
-noremap <leader>th :split<cr> :terminal<cr>i
-noremap <leader>tv :vsplit<cr>:terminal<cr>i
-noremap <leader>tct <c-\><c-n>:q\|tabnew\|ter<cr>a
+noremap <silent> <leader>tt :tabnew<cr>:terminal<cr>i
+noremap <silent> <leader>tb :terminal<cr>i
+noremap <silent> <leader>th :split<cr> :terminal<cr>i
+noremap <silent> <leader>tv :vsplit<cr>:terminal<cr>i
+noremap <silent> <leader>tct <c-\><c-n>:q\|tabnew\|ter<cr>a
 
 " COLORSCHEME
-noremap <leader>cet :tabe $VIMRUNTIME/colors/<cr>
-noremap <leader>ceb :e $VIMRUNTIME/colors/<cr>
-noremap <leader>ceh :split $VIMRUNTIME/colors/<cr>
-noremap <leader>cev :vsplit $VIMRUNTIME/colors/<cr>
-noremap <leader>cs :colo 
-noremap <leader>cy yiw:colo <c-R>+<cr>j
+noremap <silent> <leader>cet :tabe $VIMRUNTIME/colors/<cr>
+noremap <silent> <leader>ceb :e $VIMRUNTIME/colors/<cr>
+noremap <silent> <leader>ceh :split $VIMRUNTIME/colors/<cr>
+noremap <silent> <leader>cev :vsplit $VIMRUNTIME/colors/<cr>
+noremap <silent> <leader>cs :colo 
+noremap <silent> <leader>cy yiw:colo <c-R>+<cr>j
 
 " TELESCOPE
-nnoremap <leader>ff :lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
-nnoremap <leader>fg :lua require'telescope.builtin'.live_grep(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
-nnoremap <leader>fb :lua require'telescope.builtin'.buffers(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
-nnoremap <leader>fh :lua require'telescope.builtin'.help_tags(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
+nnoremap <silent> <leader>ff :lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
+nnoremap <silent> <leader>fg :lua require'telescope.builtin'.live_grep(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
+nnoremap <silent> <leader>fb :lua require'telescope.builtin'.buffers(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
+nnoremap <silent> <leader>fh :lua require'telescope.builtin'.help_tags(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
 
 " vnoremap <c-/> <esc>v:q:s/.*/# \0
 " vnoremap <c-?> <esc>:s/.*/\/\/ \0
 
 " Tab closers
-noremap q <esc>:q<cr>
-noremap Q <esc>:q!<cr>
-noremap W <esc>:w<cr>
-noremap <c-w> <esc>:wq<cr>
+noremap <silent> q <esc>:q<cr>
+noremap <silent> Q <esc>:q!<cr>
+noremap <silent> W <esc>:w<cr>
+noremap <silent> <c-w> <esc>:wq<cr>
 
-inoremap jk <esc>:w<cr>
-inoremap jK <esc>
-tnoremap jk <c-\><c-n>
-tnoremap jK <c-\><c-n>:bd!\|tabnew\|ter<cr>a
+inoremap <silent> jk <esc>:w<cr>
+inoremap <silent> jK <esc>
+tnoremap <silent> jk <c-\><c-n>
+tnoremap <silent> jK <c-\><c-n>:bd!\|tabnew\|ter<cr>a
 
 autocmd!
 
@@ -167,14 +167,13 @@ let s:dein_src = '/data/data/com.termux/files/home/.local/share/dein/repos/githu
 execute 'set runtimepath+=' . s:dein_src
 call dein#begin(s:dein_base)
 call dein#add(s:dein_src)
-
 call dein#add('nvim-lua/plenary.nvim')
-
 call dein#add('nvim-telescope/telescope.nvim', { 'rev': '0.1.1' })
-
 call dein#end()
 if dein#check_install()
 	call dein#install()
 endif
+
+so ~/xterm-color-table.vim
 
 echom 'config: loaded'
