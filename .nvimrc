@@ -2,7 +2,7 @@
 
 let mapleader = " "
 
-colorscheme lunaperche
+colorscheme blueorange
 
 set hidden
 set nonu nornu

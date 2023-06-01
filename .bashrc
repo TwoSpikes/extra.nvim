@@ -59,7 +59,7 @@ function .fE() {
 function .df-c() {
 	clear
 	cd ~/dotfiles
-	cp ~/.bashrc ~/.nvimrc ~/.fr.sh ~/tsch.sh ~/xterm-color-table.vim ~/dotfiles
+	cp ~/.bashrc ~/.nvimrc ~/.fr.sh ~/tsch.sh ~/xterm-color-table.vim $PREFIX/share/nvim/runtime/colors/blueorange.vim ~/dotfiles
 	${GIT_PROGRAM} commit -a
 }
 clear
