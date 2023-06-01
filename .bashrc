@@ -68,7 +68,7 @@ function .fE() {
 	rm temp_file;
 	echo ".fE was finished with exit code ${errorcode}";
 }
-function .df_c() {
+function .df-c() {
 	clear;
 	cd ~/dotfiles;
 	cp ~/${BASHRC_NAME} ~/${NVIMRC_NAME} ~/${FR_SH_NAME} ~/${TSCH_NAME} ~/dotfiles;
