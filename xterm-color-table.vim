@@ -57,7 +57,7 @@ function! g:ColorTable()
     call add(rows, s:ColorRow(1, 4))
     call add(rows, s:ColorRow(5, 8))
     call add(rows, s:ColorRow(9, 12))
-    call add(rows, s:ColorRow(13, 15))
+    call add(rows, s:ColorRow(13, 14))
     for lnum in range(16, 250, 6)
         call add(rows, s:ColorRow(lnum, lnum + 5))
         if lnum == 226
