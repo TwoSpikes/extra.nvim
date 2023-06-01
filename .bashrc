@@ -109,7 +109,7 @@ function set_number_color() {
 
 RESET="\033[0m";
 
-. ./tsch.sh;
+. ~/$TSCH_NAME;
 
 . ${HOME}/.cargo/env;
 

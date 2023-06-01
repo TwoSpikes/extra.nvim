@@ -1,6 +1,6 @@
 #!/bin/env nvim
 
-let mapleader = ","
+let mapleader = " "
 
 colorscheme lunaperche
 
@@ -16,6 +16,9 @@ inoremap <c-d> <esc>ddi
 nnoremap <c-u> viwUe<space><esc>
 vnoremap <c-u> iwUe<space>
 inoremap <c-u> <esc>viwUe<space><esc>i
+
+noremap <c-p> :tabp<cr>
+noremap <c-n> :tabn<cr>
 
 if !$disable_autowrapping
  noremap l <space>
@@ -33,11 +36,20 @@ noremap <C-h> 20zh
 noremap <C-e> 3<C-e>
 noremap <C-y> 4<C-y>
 
+" NVIMRC FILE
 noremap <leader>vet <esc>:tabe ~/.nvimrc<cr>
 noremap <leader>veb <esc>:e ~/.nvimrc<cr>
-noremap <leader>veh <esc>:split ~/.nvimrc<cr>
-noremap <leader>vev <esc>:vsplit ~/.nvimrc<cr>
-noremap <leader>vs <esc>:source ~/.nvimrc<cr>
+noremap <leader>veh <esc>:sp ~/.nvimrc<cr>
+noremap <leader>vev <esc>:vsp ~/.nvimrc<cr>
+noremap <leader>vs <esc>:so ~/.nvimrc<cr>
+
+" BASHRC FILE
+noremap <leader>bt <esc>:tabe ~/.bashrc<cr>
+noremap <leader>bb <esc>:e ~/.bashrc<cr>
+noremap <leader>bh <esc>:sp ~/.bashrc<cr>
+noremap <leader>bv <esc>:vsp ~/.bashrc<cr>
+
+" MY .nvimrc HELP
 noremap <leader>? <esc>:echo "
   \MY .nvimrc HELP:
 \\n  GLOBAL HELP:
@@ -48,12 +60,17 @@ noremap <leader>? <esc>:echo "
 \\n    ,veh - Open in a new horizontal window (-)
 \\n    ,vev - Open in a new vertical window (\|)
 \\n    ,vs  - Source it
+\\n  BASHRC FILE:
+\\n    ,bt - Open in a new tab
+\\n    ,bb - Open in a new buffer
+\\n    ,bh - Open in a new horizontal window (-)
+\\n    ,bv - Open in a new vertical window (\|)
 \\n  EDITING:
 \\n    MOVING:
 \\n      You can press `l`, `h`, `right` and `left` at the end of the line and it will go to the beginning of the next line (in Normal mode). To disable this feature, run this command in bash:
- \\n        /--------------------------\\
-\\n        \| $ disable_autowrapping=1 \|
-\\n        \\--------------------------/
+\\n        ╭──────────────────────────╮
+\\n        │ $ disable_autowrapping=1 │
+\\n        ╰──────────────────────────╯
 \\n    FAST COMMANDS:
 \\n      ; - Switch to command mode (:)
 \\n      = - Open file in a new tab (:tabe)
@@ -64,6 +81,7 @@ noremap <leader>? <esc>:echo "
 \\n      ,\' - Put \"\'\" around word
 \\n    SPECIAL:
 \\n      ci_ - Edit word from start to first _
+\\n      ,d  - Remove search highlightings
 \\n  TERMINAL:
 \\n    ,tt - Open in a new tab
 \\n    ,tb - Open in a new buffer
@@ -83,9 +101,9 @@ noremap <leader>? <esc>:echo "
 \\n    ,fh - Help tags
 \\n  SPECIAL:
 \\n    You can replace `,` with other symbol. To do this, run this command in Vim/Neovim:
- \\n        /---------------------------\\
-\\n        \| :let mapleader = \"symbol\" \|
-\\n        \\---------------------------/
+\\n        ╭───────────────────────────╮
+\\n        │ :let mapleader = \"symbol\" │
+\\n        ╰───────────────────────────╯
 \\n        Where symbol is your symbol (type quotes literally)
 \\n  AUTHOR:
 \\n    Name: TwoSpikes (2023 - 2023)
@@ -106,12 +124,15 @@ vnoremap <leader>' iw<esc>a'<esc>bi'<esc>v
 
 " SPECIAL
 nnoremap ci_ yiwct_
+noremap <leader>d <esc>:noh<cr>
+noremap <c-]> <c-\><esc>
 
 " TERMINAL
 noremap <leader>tt :tabnew<cr>:terminal<cr>i
-noremap <leader>tb :e<cr>   :terminal<cr>i
+noremap <leader>tb :e<cr>     :terminal<cr>i
 noremap <leader>th :split<cr> :terminal<cr>i
 noremap <leader>tv :vsplit<cr>:terminal<cr>i
+noremap <leader>tct <c-\><c-n>:q\|tabnew\|ter<cr>a
 
 " COLORSCHEME
 noremap <leader>cet :tabe $VIMRUNTIME/colors/<cr>
@@ -130,6 +151,7 @@ nnoremap <leader>fh :lua require'telescope.builtin'.help_tags(require('telescope
 " vnoremap <c-/> <esc>v:q:s/.*/# \0
 " vnoremap <c-?> <esc>:s/.*/\/\/ \0
 
+" Tab closers
 noremap q <esc>:q<cr>
 noremap Q <esc>:q!<cr>
 noremap W <esc>:w<cr>
@@ -137,6 +159,8 @@ noremap <c-w> <esc>:wq<cr>
 
 inoremap jk <esc>:w<cr>
 inoremap jK <esc>
+tnoremap jk <c-\><c-n>
+tnoremap jK <c-\><c-n>:bd!\|tabnew\|ter<cr>a
 
 autocmd!
 
