@@ -33,7 +33,7 @@ command! Exct call s:XtermColorTable('edit')
 command! Oxct call s:XtermColorTable('edit') | only
 augroup XtermColorTable
     autocmd!
-    exe 'autocmd BufNewFile ' . g:XCT_BUF_NAME . ' call s:ColorTable()'
+    exe 'autocmd BufNewFile ' . g:XCT_BUF_NAME . ' call g:ColorTable()'
     autocmd ColorScheme * silent! doautoall XtermColorTableBuffer ColorScheme
 augroup END
 function! s:XtermColorTable(...)
@@ -51,7 +51,7 @@ function! s:XtermColorTable(...)
     " Open extant buffer
     execute open . ' +buffer' . bufid
 endfunction
-function! s:ColorTable()
+function! g:ColorTable()
     let rows = []
     call add(rows, s:ColorCell(0) . ' ' . s:ColorCell(15))
     call add(rows, s:ColorRow(1, 4))
@@ -115,8 +115,8 @@ function! s:SetBufferOptions()
     let b:XtermColorTableRgbVisible = 0
     let b:XtermColorTableBGF = -2
     nmap <silent><buffer> # yiw:echo 'yanked: ' . @"<cr>
-    nmap <silent><buffer> t :call s:ToggleRgbVisibility()<cr>
-    nmap <silent><buffer> f :call s:SetRgbForeground(expand('<cword>'))<cr>
+    nmap <silent><buffer> t :call <SID>ToggleRgbVisibility()<cr>
+    nmap <silent><buffer> f :call <SID>SetRgbForeground(expand('<cword>'))<cr>
     " Colorschemes often call `highlight clear';
     " register a handler to deal with this
     augroup XtermColorTableBuffer
