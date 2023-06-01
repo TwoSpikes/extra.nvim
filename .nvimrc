@@ -110,9 +110,9 @@ noremap <silent> <leader>? <esc>:echo "
 
 " FAST COMMANDS
 noremap ; :
-noremap = :tabe 
-noremap _ :e 
-noremap ! :!
+noremap <leader>= :tabe 
+noremap <leader>- :e 
+noremap <leader>1 :!
 
 " QUOTES AROUND
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>
@@ -122,7 +122,7 @@ vnoremap <leader>' iw<esc>a'<esc>bi'<esc>v
 
 " SPECIAL
 nnoremap ci_ yiwct_
-noremap <leader>d <esc>:noh<cr>
+noremap <silent> <leader>d <esc>:noh<cr>
 noremap <c-]> <c-\><esc>
 
 " TERMINAL
@@ -175,5 +175,17 @@ if dein#check_install()
 endif
 
 so ~/xterm-color-table.vim
+
+function! SwapHiGroup(group)
+    let id = synIDtrans(hlID(a:group))
+    for mode in ['cterm', 'gui']
+        for g in ['fg', 'bg']
+            exe 'let '. mode.g. "=  synIDattr(id, '".
+                        \ g."#', '". mode. "')"
+            exe "let ". mode.g. " = empty(". mode.g. ") ? 'NONE' : ". mode.g
+        endfor
+    endfor
+    exe printf('hi %s ctermfg=%s ctermbg=%s guifg=%s guibg=%s', a:group, ctermbg, ctermfg, guibg, guifg)
+endfunc
 
 echom 'config: loaded'

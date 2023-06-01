@@ -10,11 +10,6 @@ export GIT_PROGRAM='git';
 
 export DISPLAY=':1';
 
-BASHRC_NAME='.bashrc';
-NVIMRC_NAME='.nvimrc';
-FR_SH_NAME='.fr.sh';
-TSCH_NAME='tsch.sh';
-
 # colors
 RESET_COLOR='\033[0m';
 GRAY_COLOR='\033[90m';
@@ -34,9 +29,7 @@ VIOLET_BACK_COLOR='\033[105m';
 LIGHT_BLUE_BACK_COLOR='\033[106m';
 WHITE_BACK_COLOR='\033[107m';
 
-function al() {
-	alias;
-}
+function al() { alias; }
 function q() {
 	exitcode=$1;
 	actual_exitcode='';
@@ -47,19 +40,10 @@ function q() {
 	fi;
 	exit ${actual_exitcode};
 }
-function ald() {
-	${EDITOR} ${HOME}/${BASHRC_NAME};
-}
-function .f() {
-	cd ~/fplus;
-}
-function .fe() {
-	.f;
-	${EDITOR} ./main.rs;
-}
-function .fr() {
-	~/.fr.sh ${@:1};
-}
+function ald() { ${EDITOR} ~/.bashrc; }
+function .f() { cd ~/fplus; }
+function .fe() { .f; ${EDITOR} ./main.rs; }
+function .fr() { ~/.fr.sh ${@:1}; }
 function .fE() {
 	clear;
 	${RUST_COMPILER} build --release &> temp_file;
@@ -71,7 +55,7 @@ function .fE() {
 function .df-c() {
 	clear;
 	cd ~/dotfiles;
-	cp ~/${BASHRC_NAME} ~/${NVIMRC_NAME} ~/${FR_SH_NAME} ~/${TSCH_NAME} ~/dotfiles;
+	cp ~/.bashrc ~/.nvimrc ~/.fr.sh ~/tsch.sh ~/xterm-color-table.vim ~/dotfiles;
 	${GIT_PROGRAM} commit -a;
 }
 clear;
@@ -109,9 +93,9 @@ function set_number_color() {
 
 RESET="\033[0m";
 
-. ~/$TSCH_NAME;
+. ~/tsch.sh;
 
-. ${HOME}/.cargo/env;
+. ~/.cargo/env;
 
 
 
