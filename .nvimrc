@@ -101,9 +101,9 @@ noremap <leader>? <esc>:echo "
 \\n    ,fh - Help tags
 \\n  SPECIAL:
 \\n    You can replace `,` with other symbol. To do this, run this command in Vim/Neovim:
-\\n        ╭───────────────────────────╮
-\\n        │ :let mapleader = \"symbol\" │
-\\n        ╰───────────────────────────╯
+\\n       ╭───────────────────────────╮
+\\n       │ :let mapleader = \"symbol\" │
+\\n       ╰───────────────────────────╯
 \\n        Where symbol is your symbol (type quotes literally)
 \\n  AUTHOR:
 \\n    Name: TwoSpikes (2023 - 2023)
