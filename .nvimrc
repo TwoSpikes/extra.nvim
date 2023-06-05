@@ -3,13 +3,16 @@
 let mapleader = " "
 
 colorscheme blueorange
-
 set hidden
 set nonu nornu
+set wrap
+set tabstop=4
+set shiftwidth=4
+let g:loaded_perl_provider = 0
 
 noremap - dd
 noremap dd ddk
-noremap + zyyp`zj
+noremap + mzyyp`zj
 noremap J mzJ`z
 
 inoremap <c-d> <esc>ddi
@@ -28,9 +31,13 @@ if !$disable_autowrapping
  noremap <left> <bs>
 endif
 
-set wrap
+nnoremap <silent> * *:noh<cr>
+nnoremap <silent> <c-w> *
+
 noremap <C-l> 20zl
 noremap <C-h> 20zh
+inoremap <C-l> <esc>20zla
+inoremap <C-h> <esc>20zha
 noremap <C-e> 3<C-e>
 noremap <C-y> 4<C-y>
 
@@ -51,18 +58,18 @@ noremap <silent> <leader>bv <esc>:vsp ~/.bashrc<cr>
 noremap <silent> <leader>? <esc>:echo "
   \MY .nvimrc HELP:
 \\n  GLOBAL HELP:
-\\n    <leader>? - Show this help message
+\\n    \<leader\>? - Show this help message
 \\n  NVIMRC FILE:
-\\n    <leader>vet - Open in a new tab
-\\n    <leader>veb - Open in a new buffer
-\\n    <leader>veh - Open in a new horizontal window (-)
-\\n    <leader>vev - Open in a new vertical window (\|)
-\\n    <leader>vs  - Source it
+\\n    \<leader\>vet - Open in a new tab
+\\n    \<leader\>veb - Open in a new buffer
+\\n    \<leader\>veh - Open in a new horizontal window (-)
+\\n    \<leader\>vev - Open in a new vertical window (\|)
+\\n    \<leader\>vs  - Source it
 \\n  BASHRC FILE:
-\\n    <leader>bt - Open in a new tab
-\\n    <leader>bb - Open in a new buffer
-\\n    <leader>bh - Open in a new horizontal window (-)
-\\n    <leader>bv - Open in a new vertical window (\|)
+\\n    \<leader\>bt - Open in a new tab
+\\n    \<leader\>bb - Open in a new buffer
+\\n    \<leader\>bh - Open in a new horizontal window (-)
+\\n    \<leader\>bv - Open in a new vertical window (\|)
 \\n  EDITING:
 \\n    MOVING:
 \\n      You can press `l`, `h`, `right` and `left` at the end of the line and it will go to the beginning of the next line (in Normal mode). To disable this feature, run this command in bash:
@@ -75,30 +82,34 @@ noremap <silent> <leader>? <esc>:echo "
 \\n      _ - Open file in a new buffer (:e)
 \\n      ! - Run environment command
 \\n    QUOTES AROUND:
-\\n      <leader>\" - Put \'\"\' around word
-\\n      <leader>\' - Put \"\'\" around word
+\\n      \<leader\>\" - Put \'\"\' around word
+\\n      \<leader\>\' - Put \"\'\" around word
 \\n    SPECIAL:
 \\n      ci_ - Edit word from start to first _
-\\n      <leader>d  - Remove search highlightings
+\\n      \<leader\>d  - Remove search highlightings
 \\n  TERMINAL:
-\\n    <leader>tt - Open in a new tab
-\\n    <leader>tb - Open in a new buffer
-\\n    <leader>th - Open in a new horizontal window (-)
-\\n    <leader>tv - Open in a new vertical window (\|)
+\\n    \<leader\>tt - Open in a new tab
+\\n    \<leader\>tb - Open in a new buffer
+\\n    \<leader\>th - Open in a new horizontal window (-)
+\\n    \<leader\>tv - Open in a new vertical window (\|)
 \\n  COLORSCHEME:
-\\n    <leader>cet - Open schemes in a new tab
-\\n    <leader>ceb - Open schemes in a new buffer
-\\n    <leader>ceh - Open schemes in a new horizontal window (-)
-\\n    <leader>cev - Open schemes in a new vertical window (\|)
-\\n    <leader>cs  - Set colorscheme (:colo)
-\\n    <leader>cy  - Copy colorscheme name from current buffer and set it
+\\n    \<leader\>cet - Open schemes in a new tab
+\\n    \<leader\>ceb - Open schemes in a new buffer
+\\n    \<leader\>ceh - Open schemes in a new horizontal window (-)
+\\n    \<leader\>cev - Open schemes in a new vertical window (\|)
+\\n    \<leader\>cs  - Set colorscheme (:colo)
+\\n    \<leader\>cy  - Copy colorscheme name from current buffer and set it
 \\n  TELESCOPE (Plugin):
-\\n    <leader>ff - Find files
-\\n    <leader>fg - Live grep
-\\n    <leader>fb - Buffers
-\\n    <leader>fh - Help tags
+\\n    \<leader\>ff - Find files
+\\n    \<leader\>fg - Live grep
+\\n    \<leader\>fb - Buffers
+\\n    \<leader\>fh - Help tags
+\\n  LSP:
+\\n    \<leader\>slv - Start vim-language-server
+\\n    \<leader\>slb - Start bash-language-server
+\\n    \<leader\>sld - Dump active clients
 \\n  SPECIAL:
-\\n     By default, <leader> is space symbol. You can change it typing this command in Vim/Neovim:
+\\n     By default, \<leader\> is space symbol. You can change it typing this command in Vim/Neovim:
 \\n     ╭───────────────────────────╮
 \\n     │ :let mapleader = \"symbol\" │
 \\n     ╰───────────────────────────╯
@@ -167,14 +178,52 @@ let s:dein_src = '/data/data/com.termux/files/home/.local/share/dein/repos/githu
 execute 'set runtimepath+=' . s:dein_src
 call dein#begin(s:dein_base)
 call dein#add(s:dein_src)
+call dein#add('wsdjeg/dein-ui.vim')
 call dein#add('nvim-lua/plenary.nvim')
 call dein#add('nvim-telescope/telescope.nvim', { 'rev': '0.1.1' })
+call dein#add('nvim-treesitter/nvim-treesitter', { 'do': 'TSUpdate' })
+call dein#add('williamboman/mason.nvim')
 call dein#end()
 if dein#check_install()
 	call dein#install()
 endif
 
 so ~/xterm-color-table.vim
+
+call dein#add('williamboman/nvim-lsp-installer')
+call dein#add('neovim/nvim-lspconfig')
+
+lua M = {}
+lua servers = { gopls = {}, html = {}, jsonls = {}, pyright = {}, rust_analyzer = {}, sumneko_lua = {}, tsserver = {}, vimls = {}, }
+lua on_attach = function(client, bufnr) vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc") vim.api.nvim_buf_set_option(0, "formatexpr", "v:lua.vim.lsp.formatexpr()") require("config.lsp.keymaps").setup(client, bufnr) end
+lua opts = { on_attach = on_attach, flags = { debounce_text_changes = 150, }, }
+lua setup = function() require("config.lsp.installer").setup(servers, opts) end
+
+" LSP
+noremap <silent> <leader>slv :lua vim.lsp.start({
+\   name = 'lspserv',
+\   cmd = {'vim-language-server'},
+\   root_dir = vim.fs.dirname(vim.fs.find({'pyproject.toml', 'setup.py'}, { upward = true })[1]),
+\})<cr>
+noremap <silent> <leader>slb :lua vim.lsp.start({
+\   name = 'lspserv',
+\   cmd = {'bash-language-server'},
+\   root_dir = vim.fs.dirname(vim.fs.find({'pyproject.toml', 'setup.py'}, { upward = true })[1]),
+\})<cr>
+noremap <silent> <leader>sld :lua print(table_dump(vim.lsp.get_active_clients()))<cr>
+
+lua table_dump = function(table)
+\   if type(table) == 'table' then
+\      local s = '{ '
+\      for k,v in pairs(table) do
+\         if type(k) ~= 'number' then k = '"'..k..'"' end
+\         s = s .. '['..k..'] = ' .. table_dump(v) .. ','
+\      end
+\      return s .. '} '
+\   else
+\      return tostring(table)
+\   end
+\ end
 
 function! SwapHiGroup(group)
     let id = synIDtrans(hlID(a:group))

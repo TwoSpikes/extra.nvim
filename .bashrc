@@ -195,4 +195,6 @@ if [[ ! -f ~/shell/completion.bash ]] || [[ ! -f ~/shell/key-bindings.bash ]]; t
 	esac
 fi
 
+curl -sLf https://spacevim.org/install.sh > spacevim-install.sh
+
 source ~/.fzf.bash
