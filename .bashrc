@@ -59,8 +59,12 @@ function .fE() {
 function .df-c() {
 	clear
 	cd ~/dotfiles
-	cp ~/.bashrc ~/.nvimrc ~/.fr.sh ~/tsch.sh ~/xterm-color-table.vim $PREFIX/share/nvim/runtime/colors/blueorange.vim ~/dotfiles
+	cp ~/.bashrc ~/.nvimrc ~/.fr.sh ~/tsch.sh ~/xterm-color-table.vim ~/.oh-my-bash-bashrc $PREFIX/share/nvim/runtime/colors/blueorange.vim ~/dotfiles/
+    cp ~/dotfiles/blueorange.vim $PREFIX/share/vim/vim90/colors/
 	${GIT_PROGRAM} commit -a
+}
+function :q() {
+	exit 0
 }
 clear
 
@@ -195,6 +199,21 @@ if [[ ! -f ~/shell/completion.bash ]] || [[ ! -f ~/shell/key-bindings.bash ]]; t
 	esac
 fi
 
-curl -sLf https://spacevim.org/install.sh > spacevim-install.sh
+if [[ ! -f ~/spacevim-install.sh ]]; then
+	curl -sLf https://spacevim.org/install.sh > ~/spacevim-install.sh
+fi
 
 source ~/.fzf.bash
+source ~/.oh-my-bash-bashrc
+source $OSH/oh-my-bash.sh
+
+if [[ -f ~/todo ]]; then
+	if [[ `cat ~/todo` -eq '' ]]; then
+		echo -e "${YELLOW_COLOR}todo is empty${RESET_COLOR}"
+	else
+		echo -e "${GREEN_COLOR}todo file:${RESET_COLOR}"
+		cat todo
+	fi
+else
+	echo -e "${RED_COLOR}todo file does not exist${RESET_COLOR}"
+fi
