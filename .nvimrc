@@ -149,7 +149,7 @@ noremap <silent> <leader>ceb :e $VIMRUNTIME/colors/<cr>
 noremap <silent> <leader>ceh :split $VIMRUNTIME/colors/<cr>
 noremap <silent> <leader>cev :vsplit $VIMRUNTIME/colors/<cr>
 noremap <silent> <leader>cs :colo 
-noremap <silent> <leader>cy yiw:colo <c-R>+<cr>j
+noremap <silent> <leader>cy yiw:colo <c-r>"<cr>j
 
 " TELESCOPE
 nnoremap <silent> <leader>ff :lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
@@ -166,6 +166,11 @@ noremap <silent> Q <esc>:q!<cr>
 noremap <silent> W <esc>:w<cr>
 noremap <silent> <c-w> <esc>:wq<cr>
 
+noremap <leader>q q
+noremap <leader>Q Q
+noremap <leader>W W
+
+" Insert leavers
 inoremap <silent> jk <esc>:w<cr>
 inoremap <silent> jK <esc>
 tnoremap <silent> jk <c-\><c-n>
@@ -193,11 +198,13 @@ so ~/xterm-color-table.vim
 call dein#add('williamboman/nvim-lsp-installer')
 call dein#add('neovim/nvim-lspconfig')
 
-lua M = {}
-lua servers = { gopls = {}, html = {}, jsonls = {}, pyright = {}, rust_analyzer = {}, sumneko_lua = {}, tsserver = {}, vimls = {}, }
-lua on_attach = function(client, bufnr) vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc") vim.api.nvim_buf_set_option(0, "formatexpr", "v:lua.vim.lsp.formatexpr()") require("config.lsp.keymaps").setup(client, bufnr) end
-lua opts = { on_attach = on_attach, flags = { debounce_text_changes = 150, }, }
-lua setup = function() require("config.lsp.installer").setup(servers, opts) end
+if has('nvim')
+	lua M = {}
+	lua servers = { gopls = {}, html = {}, jsonls = {}, pyright = {}, rust_analyzer = {}, sumneko_lua = {}, tsserver = {}, vimls = {}, }
+	lua on_attach = function(client, bufnr) vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc") vim.api.nvim_buf_set_option(0, "formatexpr", "v:lua.vim.lsp.formatexpr()") require("config.lsp.keymaps").setup(client, bufnr) end
+	lua opts = { on_attach = on_attach, flags = { debounce_text_changes = 150, }, }
+	lua setup = function() require("config.lsp.installer").setup(servers, opts) end
+endif
 
 " LSP
 noremap <silent> <leader>slv :lua vim.lsp.start({
