@@ -10,6 +10,11 @@ set tabstop=4
 set shiftwidth=4
 let g:loaded_perl_provider = 0
 
+if v:version >= 700
+  au BufLeave * let b:winview = winsaveview()
+  au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
+endif
+
 noremap - dd
 noremap dd ddk
 noremap + mzyyp`zj
@@ -151,6 +156,17 @@ noremap <silent> <leader>cev :vsplit $VIMRUNTIME/colors/<cr>
 noremap <silent> <leader>cs :colo 
 noremap <silent> <leader>cy yiw:colo <c-r>"<cr>j
 
+augroup cpp
+	au! * <buffer>
+	au filetype cpp noremap <silent> <buffer> <leader>n viwo<esc>i::<esc>hi
+	au filetype cpp noremap <silent> <buffer> <leader>/d mz0i//<esc>`zll
+	au filetype cpp noremap <silent> <buffer> <leader>/u mz:s:^//<cr>`zhh
+augroup END
+augroup syn
+	au! * <buffer>
+	au BufEnter .oh-my-bash-bashrc set filetype=bash
+augroup END
+
 " TELESCOPE
 nnoremap <silent> <leader>ff :lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
 nnoremap <silent> <leader>fg :lua require'telescope.builtin'.live_grep(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
@@ -175,8 +191,6 @@ inoremap <silent> jk <esc>:w<cr>
 inoremap <silent> jK <esc>
 tnoremap <silent> jk <c-\><c-n>
 tnoremap <silent> jK <c-\><c-n>:bd!\|tabnew\|ter<cr>a
-
-autocmd!
 
 let s:dein_base = '/data/data/com.termux/files/home/.local/share/dein'
 let s:dein_src = '/data/data/com.termux/files/home/.local/share/dein/repos/github.com/Shougo/dein.vim'

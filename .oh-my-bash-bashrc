@@ -1,0 +1,29 @@
+export OSH='/data/data/com.termux/files/home/.oh-my-bash'
+
+OSH_THEME=font
+OMB_CASE_SENSITIVE=true
+DISABLE_AUTO_UPDATE=true
+COMPLETION_WAITING_DOTS=true
+OMB_DEFAULT_ALIASES=check
+OMB_USE_SUDO=true
+
+# To enable/disable display of Python virtualenv and condaenv
+# OMB_PROMPT_SHOW_PYTHON_VENV=true
+# OMB_PROMPT_SHOW_PYTHON_VENV=false
+
+# Which completions would you like to load? (completions can be found in ~/.oh-my-bash/completions/*)
+# Custom completions may be added to ~/.oh-my-bash/custom/completions/
+# Example format: completions=(ssh git bundler gem pip pip3)
+completions=(
+  git
+  composer
+  ssh
+)
+
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-bash/plugins/*)
+# Custom plugins may be added to ~/.oh-my-bash/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+plugins=(
+  git
+  bashmarks
+)

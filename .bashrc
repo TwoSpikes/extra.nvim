@@ -33,9 +33,9 @@ VIOLET_BACK_COLOR='\033[105m'
 LIGHT_BLUE_BACK_COLOR='\033[106m'
 WHITE_BACK_COLOR='\033[107m'
 
-function al() { alias; }
-function q() {
-	exitcode=$1
+al() { alias; }
+q() {
+	exitcode=${1}
 	actual_exitcode=''
 	if [[ -z ${exitcode} ]]; then
 		actual_exitcode=0
@@ -44,11 +44,11 @@ function q() {
 	fi
 	exit ${actual_exitcode}
 }
-function ald() { ${EDITOR} ~/.bashrc; }
-function .f() { cd ~/fplus; }
-function .fe() { .f; ${EDITOR} ./main.rs; }
-function .fr() { ~/.fr.sh ${@:1}; }
-function .fE() {
+ald() { ${EDITOR} ~/.bashrc; }
+_f() { cd ~/fplus; }
+_fe() { .f; ${EDITOR} ./main.rs; }
+_fr() { ~/.fr.sh ${@:1}; }
+_fE() {
 	clear
 	${RUST_COMPILER} build --release &> temp_file
 	errorcode=${?}
@@ -56,21 +56,23 @@ function .fE() {
 	rm temp_file
 	echo ".fE was finished with exit code ${errorcode}"
 }
-function .df-c() {
+_df_c() {
 	clear
 	cd ~/dotfiles
 	cp ~/.bashrc ~/.nvimrc ~/.fr.sh ~/tsch.sh ~/xterm-color-table.vim ~/.oh-my-bash-bashrc $PREFIX/share/nvim/runtime/colors/blueorange.vim ~/dotfiles/
-    cp ~/dotfiles/blueorange.vim $PREFIX/share/vim/vim90/colors/
+    cp ~/dotfiles/blueorange.vim ${PREFIX}/share/vim/vim90/colors/
 	${GIT_PROGRAM} commit -a
 }
-function :q() {
-	exit 0
-}
-clear
+exp() { nvim ./; }
+hxp() { nvim ~/; }
+
+if [[ -f $PREFIX/etc/motd ]]; then
+	rm $PREFIX/etc/motd
+fi
 
 esc=$(printf '\033')
 
-function option() {
+option() {
 	text=$1
 	character=$2
 	actual_text=$(echo "${text}" | sed "s/${character}/${esc}[1m&${esc}[22m/";)
@@ -78,11 +80,11 @@ set_number_color
 	echo -e "${NUMBER_COLOR}${iota}${RESET}. ${actual_text}"
 	((iota++))
 }
-function on_pause() {
+on_pause() {
 	echo -en "${GRAY_COLOR}[on pause (code: ${YELLOW_COLOR}${?}${GRAY_COLOR}, press ${BOLD_COLOR}${WHITE_COLOR}RETURN${NON_BOLD_COLOR}${GRAY_COLOR})]${RESET_COLOR}: "
 }
 
-function set_number_color() {
+set_number_color() {
 	# 1 + because both \033[30m and \033[40m are black and we do not need black because our terminal background is black
 	foreground_color=$((1 + $RANDOM%9))
 	background_color=$(($RANDOM%9))
@@ -103,38 +105,38 @@ RESET="\033[0m"
 
 . ~/tsch.sh
 
-function try_install() {
-	program=$1
-	case $2 in
+try_install() {
+	program=${1}
+	case ${2} in
 		'')
 			bad_errorcode=127
 		;;
 		*)
-			bad_errorcode=$2
+			bad_errorcode=${2}
 		;;
 	esac
-	case $3 in
+	case ${3} in
 		'')
-			max_attempt=$MAX_INSTALL_ATTEMPT
+			max_attempt=${MAX_INSTALL_ATTEMPT}
 		;;
 		*)
-			max_attempt=$3
+			max_attempt=${3}
 		;;
 	esac
-	case $4 in
+	case ${4} in
 		'')
-			installer=$PKG_MANAGER
+			installer=${PKG_MANAGER}
 		;;
 		*)
-			installer=$4
+			installer=${4}
 		;;
 	esac
-	case $5 in
+	case ${5} in
 		'')
-			install_command=$DEFAULT_INSTALL_COMMAND
+			install_command=${DEFAULT_INSTALL_COMMAND}
 		;;
 		*)
-			install_command=$5
+			install_command=${5}
 		;;
 	esac
 	attempt=1
@@ -161,51 +163,53 @@ function try_install() {
 	return -1
 }
 
-if [[ ! -f ~/shell/completion.bash ]]; then
-	echo -e "${YELLOW_COLOR}completion.bash file was not found${RESET_COLOR}"
-	wget https://github.com/junegunn/fzf/raw/master/shell/completion.bash
-	errorcode=$?
-	case $errorcode in
-		127)
-			errorcode=`try_install wget 100 MAX_WGET_INSTALL_ATTEMPT`
-			case ${errorcode} in
-				0)
-					wget https://github.com/junegunn/fzf/raw/master/shell/completion.bash
-				;;
-				*)
-					echo 'we cannot install wget (we tried)'
-					exit -1
-				;;
-			esac
-		;;
-		*)
-		;;
-	esac
-fi
-if [[ ! -f ~/shell/key-bindings.bash ]]; then
-	echo -e "${YELLOW_COLOR}key-bindings.bash file was not found${RESET_COLOR}"
-	wget https://github.com/junegunn/fzf/raw/master/shell/key-bindings.bash
-fi
-if [[ ! -f ~/shell/completion.bash ]] || [[ ! -f ~/shell/key-bindings.bash ]]; then
-	mv ~/completion.bash ~/key-bindings.bash ~/shell/
-	errorcode=${?}
-	case ${errorcode} in
-		127)
-			mkdir shell
-			mv ~/completion.bash ~/key-bindings.bash ~/shell/
-		;;
-		*)
-		;;
-	esac
+if [[ ${0##*/} == 'bash' ]]; then
+	if [[ ! -f ~/shell/completion.bash ]]; then
+		echo -e "${YELLOW_COLOR}completion.bash file was not found${RESET_COLOR}"
+		wget https://github.com/junegunn/fzf/raw/master/shell/completion.bash
+		errorcode=${?}
+		case ${errorcode} in
+			127)
+				errorcode=`try_install wget 100 MAX_WGET_INSTALL_ATTEMPT`
+				case ${errorcode} in
+					0)
+						wget https://github.com/junegunn/fzf/raw/master/shell/completion.bash
+					;;
+					*)
+						echo 'we cannot install wget (we tried)'
+						exit -1
+					;;
+				esac
+			;;
+			*)
+			;;
+		esac
+	fi
+	if [[ ! -f ~/shell/key-bindings.bash ]]; then
+		echo -e "${YELLOW_COLOR}key-bindings.bash file was not found${RESET_COLOR}"
+		wget https://github.com/junegunn/fzf/raw/master/shell/key-bindings.bash
+	fi
+	if [[ ! -f ~/shell/completion.bash ]] || [[ ! -f ~/shell/key-bindings.bash ]]; then
+		mv ~/completion.bash ~/key-bindings.bash ~/shell/
+		errorcode=${?}
+		case ${errorcode} in
+			127)
+				mkdir shell
+				mv ~/completion.bash ~/key-bindings.bash ~/shell/
+			;;
+			*)
+			;;
+		esac
+	fi
+
+	source ~/.fzf.bash
+	source ~/.oh-my-bash-bashrc
+	source $OSH/oh-my-bash.sh
 fi
 
 if [[ ! -f ~/spacevim-install.sh ]]; then
 	curl -sLf https://spacevim.org/install.sh > ~/spacevim-install.sh
 fi
-
-source ~/.fzf.bash
-source ~/.oh-my-bash-bashrc
-source $OSH/oh-my-bash.sh
 
 if [[ -f ~/todo ]]; then
 	if [[ `cat ~/todo` -eq '' ]]; then
