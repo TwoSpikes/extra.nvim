@@ -1,6 +1,6 @@
 export OSH='/data/data/com.termux/files/home/.oh-my-bash'
 
-OSH_THEME=font
+OSH_THEME=tstheme
 OMB_CASE_SENSITIVE=true
 DISABLE_AUTO_UPDATE=true
 COMPLETION_WAITING_DOTS=true

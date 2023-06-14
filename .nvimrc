@@ -37,7 +37,9 @@ if !$disable_autowrapping
 endif
 
 nnoremap <silent> * *:noh<cr>
-nnoremap <silent> <c-w> *
+nnoremap <silent> <c-*> *
+nnoremap <silent> # #:noh<cr>
+nnoremap <silent> <c-#> #
 
 noremap <C-l> 20zl
 noremap <C-h> 20zh
@@ -180,7 +182,8 @@ nnoremap <silent> <leader>fh :lua require'telescope.builtin'.help_tags(require('
 noremap <silent> q <esc>:q<cr>
 noremap <silent> Q <esc>:q!<cr>
 noremap <silent> W <esc>:w<cr>
-noremap <silent> <c-w> <esc>:wq<cr>
+noremap <silent> <C-w> <esc>:wq<cr>
+noremap <silent> <C-W> <C-W>
 
 noremap <leader>q q
 noremap <leader>Q Q
