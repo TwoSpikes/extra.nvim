@@ -8,6 +8,8 @@ set nonu nornu
 set wrap
 set tabstop=4
 set shiftwidth=4
+set smartindent
+set expandtab
 let g:loaded_perl_provider = 0
 
 if v:version >= 700
@@ -159,14 +161,20 @@ noremap <silent> <leader>cs :colo
 noremap <silent> <leader>cy yiw:colo <c-r>"<cr>j
 
 augroup cpp
-	au! * <buffer>
 	au filetype cpp noremap <silent> <buffer> <leader>n viwo<esc>i::<esc>hi
 	au filetype cpp noremap <silent> <buffer> <leader>/d mz0i//<esc>`zll
-	au filetype cpp noremap <silent> <buffer> <leader>/u mz:s:^//<cr>`zhh
+	au filetype cpp noremap <silent> <buffer> <leader>/u mz:s:^//<cr>`zhh:noh<cr>
 augroup END
 augroup syn
-	au! * <buffer>
 	au BufEnter .oh-my-bash-bashrc set filetype=bash
+augroup END
+augroup vim
+	au filetype vim noremap <silent> <buffer> <leader>/d mz0i"<esc>`zl
+	au filetype vim noremap <silent> <buffer> <leader>/u mz:s/^"<cr>`zh:noh<cr>
+augroup END
+augroup googol
+	au syntax googol noremap <silent> <buffer> <leader>/d mz0i//<esc>`zll
+	au syntax googol noremap <silent> <buffer> <leader>/u mz:s:^//<cr>`zhh:noh<cr>
 augroup END
 
 " TELESCOPE
@@ -205,6 +213,8 @@ call dein#add('nvim-lua/plenary.nvim')
 call dein#add('nvim-telescope/telescope.nvim', { 'rev': '0.1.1' })
 call dein#add('nvim-treesitter/nvim-treesitter', { 'do': 'TSUpdate' })
 call dein#add('williamboman/mason.nvim')
+call dein#add('HampusHauffman/block.nvim')
+" lua require('block').setup({})
 call dein#end()
 if dein#check_install()
 	call dein#install()
