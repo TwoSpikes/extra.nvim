@@ -39,7 +39,7 @@ hi! link colortemplateKey Statement
 hi! link xmlTagName Statement
 hi! link javaScriptFunction Statement
 hi! link javaScriptIdentifier Statement
-hi! link sqlKeyword Statement
+hi! link sqlKeyword Keyword
 hi! link yamlBlockMappingKey Statement
 hi! link rubyMacro Statement
 hi! link rubyDefine Statement
@@ -51,8 +51,8 @@ hi! link vimParenSep Normal
 hi! link vimOption Normal
 hi! link vimCommentString Comment
 hi! link pythonInclude Statement
-hi! link elixirOperator Statement
-hi! link elixirKeyword Statement
+hi! link elixirOperator Operator
+hi! link elixirKeyword Keyword
 hi! link elixirBlockDefinition Statement
 hi! link elixirDefine Statement
 hi! link elixirPrivateDefine Statement
@@ -78,7 +78,7 @@ hi! link elixirDocTest String
 hi! link shQuote Constant
 hi! link shNoQuote Normal
 hi! link shTestOpr Normal
-hi! link shOperator Normal
+hi! link shOperator Operator
 hi! link shSetOption Normal
 hi! link shOption Normal
 hi! link shCommandSub Normal
@@ -91,7 +91,7 @@ hi! link phpDefine Statement
 hi! link phpSpecialFunction Normal
 hi! link phpParent Normal
 hi! link phpComparison Normal
-hi! link phpOperator Normal
+hi! link phpOperator Operator
 hi! link phpVarSelector Special
 hi! link phpMemberSelector Special
 hi! link phpDocCustomTags phpDocTags
@@ -325,7 +325,7 @@ if s:t_Co >= 256
   hi! link xmlTagName Statement
   hi! link javaScriptFunction Statement
   hi! link javaScriptIdentifier Statement
-  hi! link sqlKeyword Statement
+  hi! link sqlKeyword Keyword
   hi! link yamlBlockMappingKey Statement
   hi! link rubyMacro Statement
   hi! link rubyDefine Statement
@@ -337,8 +337,8 @@ if s:t_Co >= 256
   hi! link vimOption Normal
   hi! link vimCommentString Comment
   hi! link pythonInclude Statement
-  hi! link elixirOperator Statement
-  hi! link elixirKeyword Statement
+  hi! link elixirOperator Operator
+  hi! link elixirKeyword Keyword
   hi! link elixirBlockDefinition Statement
   hi! link elixirDefine Statement
   hi! link elixirPrivateDefine Statement
@@ -364,7 +364,7 @@ if s:t_Co >= 256
   hi! link shQuote Constant
   hi! link shNoQuote Normal
   hi! link shTestOpr Normal
-  hi! link shOperator Normal
+  hi! link shOperator Operator
   hi! link shSetOption Normal
   hi! link shOption Normal
   hi! link shCommandSub Normal
@@ -377,7 +377,7 @@ if s:t_Co >= 256
   hi! link phpSpecialFunction Normal
   hi! link phpParent Normal
   hi! link phpComparison Normal
-  hi! link phpOperator Normal
+  hi! link phpOperator Operator
   hi! link phpVarSelector Special
   hi! link phpMemberSelector Special
   hi! link phpDocCustomTags phpDocTags
@@ -404,6 +404,8 @@ if s:t_Co >= 256
   hi! link PopupNotification Todo
   if &background ==# 'dark'
     hi Normal ctermfg=15 ctermbg=16 cterm=NONE
+    hi Operator ctermfg=223 ctermbg=16 cterm=NONE
+    hi SpecialChar ctermfg=41 ctermbg=16 cterm=NONE
     hi Statusline ctermfg=18 ctermbg=195 cterm=bold,reverse
     hi StatuslineNC ctermfg=17 ctermbg=208 cterm=bold,reverse
     hi VertSplit ctermfg=159 ctermbg=17 cterm=NONE
@@ -453,7 +455,8 @@ if s:t_Co >= 256
     hi String ctermfg=222 ctermbg=NONE cterm=NONE
     hi Identifier ctermfg=NONE ctermbg=NONE cterm=NONE
     hi Statement ctermfg=254 ctermbg=NONE cterm=bold
-    hi Type ctermfg=77 ctermbg=NONE cterm=NONE
+    hi Keyword ctermfg=227 ctermbg=NONE cterm=NONE
+    hi Type ctermfg=77 ctermbg=NONE cterm=italic
     hi PreProc ctermfg=116 ctermbg=NONE cterm=NONE
     hi Special ctermfg=73 ctermbg=NONE cterm=NONE
     hi Underlined ctermfg=NONE ctermbg=NONE cterm=underline
