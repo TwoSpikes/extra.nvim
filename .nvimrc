@@ -30,6 +30,8 @@ inoremap <c-u> <esc>viwUe<space><esc>i
 
 noremap <c-p> :tabp<cr>
 noremap <c-n> :tabn<cr>
+nnoremap <leader>lC :tabnew<Bar>ter<Bar><cr>a./build.sh
+nnoremap <leader>lc :tabnext<Bar><c-\><c-n>:bd!<Bar>tabnew<Bar>ter<cr>a!!<cr>
 
 if !$disable_autowrapping
  noremap l <space>
@@ -164,6 +166,7 @@ augroup cpp
 	au filetype cpp noremap <silent> <buffer> <leader>n viwo<esc>i::<esc>hi
 	au filetype cpp noremap <silent> <buffer> <leader>/d mz0i//<esc>`zll
 	au filetype cpp noremap <silent> <buffer> <leader>/u mz:s:^//<cr>`zhh:noh<cr>
+    au filetype cpp noremap <silent> <buffer> <leader>! :e ~/.config/tsvimconf/cpp/example.cpp<cr>ggvGy:bd<cr>pgg
 augroup END
 augroup syn
 	au BufEnter .oh-my-bash-bashrc set filetype=bash
@@ -201,7 +204,7 @@ noremap <leader>W W
 inoremap <silent> jk <esc>:w<cr>
 inoremap <silent> jK <esc>
 tnoremap <silent> jk <c-\><c-n>
-tnoremap <silent> jK <c-\><c-n>:bd!\|tabnew\|ter<cr>a
+tnoremap <silent> jK <c-\><c-n>:bd!<Bar>tabnew<Bar>ter<cr>a
 
 let s:dein_base = '/data/data/com.termux/files/home/.local/share/dein'
 let s:dein_src = '/data/data/com.termux/files/home/.local/share/dein/repos/github.com/Shougo/dein.vim'
@@ -272,3 +275,5 @@ function! SwapHiGroup(group)
 endfunc
 
 echom 'config: loaded'
+
+" vim:syn=vim

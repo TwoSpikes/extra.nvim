@@ -404,7 +404,7 @@ if s:t_Co >= 256
   hi! link PopupNotification Todo
   if &background ==# 'dark'
     hi Normal ctermfg=15 ctermbg=16 cterm=NONE
-    hi Operator ctermfg=220 ctermbg=NONE cterm=bold
+    hi Operator ctermfg=220 ctermbg=NONE cterm=NONE
     hi SpecialChar ctermfg=41 ctermbg=16 cterm=NONE
     hi Statusline ctermfg=18 ctermbg=195 cterm=bold,reverse
     hi StatuslineNC ctermfg=17 ctermbg=208 cterm=bold,reverse
@@ -455,7 +455,7 @@ if s:t_Co >= 256
     hi String ctermfg=222 ctermbg=NONE cterm=NONE
     hi Identifier ctermfg=NONE ctermbg=NONE cterm=NONE
     hi Statement ctermfg=254 ctermbg=NONE cterm=bold
-    hi Keyword ctermfg=227 ctermbg=NONE cterm=NONE
+    hi Keyword ctermfg=220 ctermbg=NONE cterm=italic
     hi Type ctermfg=77 ctermbg=NONE cterm=italic
     hi PreProc ctermfg=116 ctermbg=NONE cterm=NONE
     hi Special ctermfg=105 ctermbg=NONE cterm=bold
