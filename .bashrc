@@ -62,13 +62,13 @@ _df_c() {
 	cp ~/.bashrc ~/.nvimrc ~/.fr.sh ~/tsch.sh ~/xterm-color-table.vim ~/.oh-my-bash-bashrc ${PREFIX}/share/nvim/runtime/colors/blueorange.vim $PREFIX/share/nvim/runtime/syntax/book.vim ~/.oh-my-bash/custom/themes/tstheme/tstheme.theme.sh ~/dotfiles/
     cp ~/dotfiles/blueorange.vim ${PREFIX}/share/vim/vim90/colors/
     cp ~/dotfiles/book.vim ${PREFIX}/share/vim/vim90/syntax/
-	${GIT_PROGRAM} commit -a
+	${GIT_PROGRAM} commit --all --verbose
 }
 _tsns_c() {
     clear
     cd ~/tsns
     cp ${PREFIX}/share/nvim/runtime/syntax/googol.vim ~/tsns/editor/
-	${GIT_PROGRAM} commit -a
+	${GIT_PROGRAM} commit --all --verbose
 }
 exp() { nvim ./; }
 hxp() { nvim ~/; }
