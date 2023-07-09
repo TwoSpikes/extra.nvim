@@ -2,7 +2,7 @@
 
 let mapleader = " "
 
-colorscheme blueorange
+colorscheme evening
 set hidden
 set nonu nornu
 set wrap
@@ -11,22 +11,36 @@ set shiftwidth=4
 set smartindent
 set expandtab
 let g:loaded_perl_provider = 0
+set nolist
+
+com! SWrap se wrap linebreak nolist
 
 if v:version >= 700
   au BufLeave * let b:winview = winsaveview()
   au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 endif
 
-noremap - dd
-noremap dd ddk
-noremap + mzyyp`zj
-noremap J mzJ`z
+noremap <silent> - dd
+noremap <silent> dd ddk
+noremap <silent> + mzyyp`zj
+noremap <silent> J mzJ`z
+
+noremap <silent> j gj
+noremap <silent> k gk
+noremap <silent> <down> gj
+noremap <silent> <up> gk
+noremap <silent> 0 g0
+noremap <silent> $ g$
+noremap <silent> I g0i
+noremap <silent> A g$a
+
+noremap <c-a> mzggVG`z
 
 inoremap <c-d> <esc>ddi
 
 nnoremap <c-u> viwUe<space><esc>
 vnoremap <c-u> iwUe<space>
-inoremap <c-u> <esc>viwUe<space><esc>i
+inoremap <c-u> <esc>viwUe<esc>a
 
 noremap <c-p> :tabp<cr>
 noremap <c-n> :tabn<cr>
@@ -50,7 +64,7 @@ noremap <C-h> 20zh
 inoremap <C-l> <esc>20zla
 inoremap <C-h> <esc>20zha
 noremap <C-e> 3<C-e>
-noremap <C-y> 4<C-y>
+noremap <C-y> 2<C-y>
 
 " NVIMRC FILE
 noremap <silent> <leader>vet <esc>:tabe ~/.nvimrc<cr>
@@ -192,13 +206,11 @@ nnoremap <silent> <leader>fh :lua require'telescope.builtin'.help_tags(require('
 " Tab closers
 noremap <silent> q <esc>:q<cr>
 noremap <silent> Q <esc>:q!<cr>
-noremap <silent> W <esc>:w<cr>
 noremap <silent> <C-w> <esc>:wq<cr>
 noremap <silent> <C-W> <C-W>
 
 noremap <leader>q q
 noremap <leader>Q Q
-noremap <leader>W W
 
 " Insert leavers
 inoremap <silent> jk <esc>:w<cr>
@@ -236,31 +248,33 @@ if has('nvim')
 	lua setup = function() require("config.lsp.installer").setup(servers, opts) end
 endif
 
-" LSP
-noremap <silent> <leader>slv :lua vim.lsp.start({
-\   name = 'lspserv',
-\   cmd = {'vim-language-server'},
-\   root_dir = vim.fs.dirname(vim.fs.find({'pyproject.toml', 'setup.py'}, { upward = true })[1]),
-\})<cr>
-noremap <silent> <leader>slb :lua vim.lsp.start({
-\   name = 'lspserv',
-\   cmd = {'bash-language-server'},
-\   root_dir = vim.fs.dirname(vim.fs.find({'pyproject.toml', 'setup.py'}, { upward = true })[1]),
-\})<cr>
-noremap <silent> <leader>sld :lua print(table_dump(vim.lsp.get_active_clients()))<cr>
+" " LSP
+" noremap <silent> <leader>slv :lua vim.lsp.start({
+" \   name = 'lspserv',
+" \   cmd = {'vim-language-server'},
+" \   root_dir = vim.fs.dirname(vim.fs.find({'pyproject.toml', 'se" tup.py'}, { upward = true })[1]),
+""  \})<cr>
+" noremap <silent> <leader>slb :lua vim.lsp.start({
+" \   name = 'lspserv',
+" \   cmd = {'bash-language-server'},
+" \   root_dir = vim.fs.dirname(vim.fs.find({'pyproject.toml', 'se" tup.py'}, { upward = true })[1]),
+" \})<cr>
+" noremap <silent> <leader>sld :lua print(table_dump(vim.lsp.get_a" ctive_clients()))<cr>
+"
+" lua table_dump = function(table)
+" \   if type(table) == 'table' then
+" \      local s = '{ '
+" \      for k,v in pairs(table) do
+" \         if type(k) ~= 'number' then k = '"'..k..'"' end
+" \         s = s .. '['..k..'] = ' .. table_dump(v) .. ','
+" \      end
+" \      return s .. '} '
+" \   else
+" \      return tostring(table)
+" \   end
+" \ end
 
-lua table_dump = function(table)
-\   if type(table) == 'table' then
-\      local s = '{ '
-\      for k,v in pairs(table) do
-\         if type(k) ~= 'number' then k = '"'..k..'"' end
-\         s = s .. '['..k..'] = ' .. table_dump(v) .. ','
-\      end
-\      return s .. '} '
-\   else
-\      return tostring(table)
-\   end
-\ end
+noremap <leader>s :let &scrolloff = 999 - &scrolloff<cr>
 
 function! SwapHiGroup(group)
     let id = synIDtrans(hlID(a:group))

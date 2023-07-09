@@ -59,8 +59,9 @@ _fE() {
 _df_c() {
 	clear
 	cd ~/dotfiles
-	cp ~/.bashrc ~/.nvimrc ~/.fr.sh ~/tsch.sh ~/xterm-color-table.vim ~/.oh-my-bash-bashrc ${PREFIX}/share/nvim/runtime/colors/blueorange.vim ~/.oh-my-bash/custom/themes/tstheme/tstheme.theme.sh ~/dotfiles/
+	cp ~/.bashrc ~/.nvimrc ~/.fr.sh ~/tsch.sh ~/xterm-color-table.vim ~/.oh-my-bash-bashrc ${PREFIX}/share/nvim/runtime/colors/blueorange.vim $PREFIX/share/nvim/runtime/syntax/book.vim ~/.oh-my-bash/custom/themes/tstheme/tstheme.theme.sh ~/dotfiles/
     cp ~/dotfiles/blueorange.vim ${PREFIX}/share/vim/vim90/colors/
+    cp ~/dotfiles/book.vim ${PREFIX}/share/vim/vim90/syntax/
 	${GIT_PROGRAM} commit -a
 }
 _tsns_c() {
@@ -227,3 +228,5 @@ if [[ -f ~/todo ]]; then
 else
 	echo -e "${RED_COLOR}todo file does not exist${RESET_COLOR}"
 fi
+
+export SSPYPL_PATH=~/sspypl
