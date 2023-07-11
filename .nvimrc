@@ -13,7 +13,7 @@ set expandtab
 let g:loaded_perl_provider = 0
 set nolist
 
-com! SWrap se wrap linebreak nolist
+com! SWrap setl wrap linebreak nolist
 
 if v:version >= 700
   au BufLeave * let b:winview = winsaveview()

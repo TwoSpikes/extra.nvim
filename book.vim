@@ -6,8 +6,8 @@ syn clear
 let g:markdown_minlines = 1
 
 syn match bookOperator "[.\^\-+\*=«»…]"
-syn match bookSpecialChar "[\[\]()\.,:;{}!?—]"
-syn match bookOperator "^ *—"
+syn match bookSpecialChar "[\[\]()\.,:;{}!?–—]"
+syn match bookOperator "^ *[—–-]"
 
 hi def link bookOperator Operator
 hi def link bookSpecialChar Special
