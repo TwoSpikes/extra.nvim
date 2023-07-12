@@ -10,6 +10,7 @@ set tabstop=4
 set shiftwidth=4
 set smartindent
 set expandtab
+set termguicolors
 let g:loaded_perl_provider = 0
 set nolist
 
@@ -38,9 +39,9 @@ noremap <c-a> mzggVG`z
 
 inoremap <c-d> <esc>ddi
 
-nnoremap <c-u> viwUe<space><esc>
-vnoremap <c-u> iwUe<space>
-inoremap <c-u> <esc>viwUe<esc>a
+nnoremap <c-j> viwUe<space><esc>
+vnoremap <c-j> iwUe<space>
+inoremap <c-j> <esc>viwUe<esc>a
 
 noremap <c-p> :tabp<cr>
 noremap <c-n> :tabn<cr>
@@ -63,7 +64,7 @@ noremap <C-l> 20zl
 noremap <C-h> 20zh
 inoremap <C-l> <esc>20zla
 inoremap <C-h> <esc>20zha
-noremap <C-e> 3<C-e>
+noremap <C-e> 2<C-e>
 noremap <C-y> 2<C-y>
 
 " NVIMRC FILE
