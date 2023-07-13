@@ -13,6 +13,7 @@ set expandtab
 set termguicolors
 let g:loaded_perl_provider = 0
 set nolist
+set display=lastline
 
 com! SWrap setl wrap linebreak nolist
 
@@ -30,10 +31,10 @@ noremap <silent> j gj
 noremap <silent> k gk
 noremap <silent> <down> gj
 noremap <silent> <up> gk
-noremap <silent> 0 g0
-noremap <silent> $ g$
-noremap <silent> I g0i
-noremap <silent> A g$a
+" noremap <silent> 0 g0
+" noremap <silent> $ g$
+" noremap <silent> I g0i
+" noremap <silent> A g$a
 
 noremap <c-a> mzggVG`z
 
@@ -68,11 +69,20 @@ noremap <C-e> 2<C-e>
 noremap <C-y> 2<C-y>
 
 " NVIMRC FILE
-noremap <silent> <leader>vet <esc>:tabe ~/.nvimrc<cr>
-noremap <silent> <leader>veb <esc>:e ~/.nvimrc<cr>
-noremap <silent> <leader>veh <esc>:sp ~/.nvimrc<cr>
-noremap <silent> <leader>vev <esc>:vsp ~/.nvimrc<cr>
-noremap <silent> <leader>vs <esc>:so ~/.nvimrc<cr>
+let s:INIT_FILE_PATH = '~/.config/nvim/init.vim'
+let s:PLUGINS_INIT_FILE_PATH = '~/.config/nvim/plugins/plugins.lua'
+
+exec printf("noremap <silent> <leader>vet <esc>:tabe %s<cr>", s:INIT_FILE_PATH)
+exec printf("noremap <silent> <leader>veb <esc>:e %s<cr>", s:INIT_FILE_PATH)
+exec printf("noremap <silent> <leader>veh <esc>:sp %s<cr>", s:INIT_FILE_PATH)
+exec printf("noremap <silent> <leader>vev <esc>:vsp %s<cr>", s:INIT_FILE_PATH)
+exec printf("noremap <silent> <leader>ves <esc>:so %s<cr>", s:INIT_FILE_PATH)
+
+exec printf("noremap <silent> <leader>vlt <esc>:tabe %s<cr>", s:PLUGINS_INIT_FILE_PATH)
+exec printf("noremap <silent> <leader>vlb <esc>:e %s<cr>", s:PLUGINS_INIT_FILE_PATH)
+exec printf("noremap <silent> <leader>vlh <esc>:sp %s<cr>", s:PLUGINS_INIT_FILE_PATH)
+exec printf("noremap <silent> <leader>vlv <esc>:vsp %s<cr>", s:PLUGINS_INIT_FILE_PATH)
+exec printf("noremap <silent> <leader>vls <esc>:so %s<cr>", s:PLUGINS_INIT_FILE_PATH)
 
 " BASHRC FILE
 noremap <silent> <leader>bt <esc>:tabe ~/.bashrc<cr>
@@ -219,27 +229,9 @@ inoremap <silent> jK <esc>
 tnoremap <silent> jk <c-\><c-n>
 tnoremap <silent> jK <c-\><c-n>:bd!<Bar>tabnew<Bar>ter<cr>a
 
-let s:dein_base = '/data/data/com.termux/files/home/.local/share/dein'
-let s:dein_src = '/data/data/com.termux/files/home/.local/share/dein/repos/github.com/Shougo/dein.vim'
-execute 'set runtimepath+=' . s:dein_src
-call dein#begin(s:dein_base)
-call dein#add(s:dein_src)
-call dein#add('wsdjeg/dein-ui.vim')
-call dein#add('nvim-lua/plenary.nvim')
-call dein#add('nvim-telescope/telescope.nvim', { 'rev': '0.1.1' })
-call dein#add('nvim-treesitter/nvim-treesitter', { 'do': 'TSUpdate' })
-call dein#add('williamboman/mason.nvim')
-call dein#add('HampusHauffman/block.nvim')
-" lua require('block').setup({})
-call dein#end()
-if dein#check_install()
-	call dein#install()
-endif
+exec printf("luafile %s", s:PLUGINS_INIT_FILE_PATH)
 
 so ~/xterm-color-table.vim
-
-call dein#add('williamboman/nvim-lsp-installer')
-call dein#add('neovim/nvim-lspconfig')
 
 if has('nvim')
 	lua M = {}
@@ -249,33 +241,33 @@ if has('nvim')
 	lua setup = function() require("config.lsp.installer").setup(servers, opts) end
 endif
 
-" " LSP
-" noremap <silent> <leader>slv :lua vim.lsp.start({
-" \   name = 'lspserv',
-" \   cmd = {'vim-language-server'},
-" \   root_dir = vim.fs.dirname(vim.fs.find({'pyproject.toml', 'se" tup.py'}, { upward = true })[1]),
-""  \})<cr>
-" noremap <silent> <leader>slb :lua vim.lsp.start({
-" \   name = 'lspserv',
-" \   cmd = {'bash-language-server'},
-" \   root_dir = vim.fs.dirname(vim.fs.find({'pyproject.toml', 'se" tup.py'}, { upward = true })[1]),
-" \})<cr>
-" noremap <silent> <leader>sld :lua print(table_dump(vim.lsp.get_a" ctive_clients()))<cr>
-"
-" lua table_dump = function(table)
-" \   if type(table) == 'table' then
-" \      local s = '{ '
-" \      for k,v in pairs(table) do
-" \         if type(k) ~= 'number' then k = '"'..k..'"' end
-" \         s = s .. '['..k..'] = ' .. table_dump(v) .. ','
-" \      end
-" \      return s .. '} '
-" \   else
-" \      return tostring(table)
-" \   end
-" \ end
+" LSP
+noremap <silent> <leader>slv :lua vim.lsp.start({
+\   name = 'vimls',
+\   cmd = {'vim-language-server', '--stdin'},
+  \})<cr>
+noremap <silent> <leader>slb :lua vim.lsp.start({
+\   name = 'lspserv',
+\   cmd = {'bash-language-server'},
+\   root_dir = vim.fs.dirname(vim.fs.find({'pyproject.toml', 'se" tup.py'}, { upward = true })[1]),
+\})<cr>
+noremap <silent> <leader>sld :lua print(table_dump(vim.lsp.get_a" ctive_clients()))<cr>
+"\   root_dir = vim.fs.dirname(vim.fs.find({'pyproject.toml', 'se" tup.py'}, { upward = true })[1]),
 
-noremap <leader>s :let &scrolloff = 999 - &scrolloff<cr>
+lua table_dump = function(table)
+\   if type(table) == 'table' then
+\      local s = '{ '
+\      for k,v in pairs(table) do
+\         if type(k) ~= 'number' then k = '"'..k..'"' end
+\         s = s .. '['..k..'] = ' .. table_dump(v) .. ','
+\      end
+\      return s .. '} '
+\   else
+\      return tostring(table)
+\   end
+\ end
+
+"noremap <silent> <leader>s :let &scrolloff = 999 - &scrolloff<cr>
 
 function! SwapHiGroup(group)
     let id = synIDtrans(hlID(a:group))
@@ -291,4 +283,4 @@ endfunc
 
 echom 'config: loaded'
 
-" vim:syn=vim
+" vim:syn=vim:nowrap
