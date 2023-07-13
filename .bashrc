@@ -59,9 +59,11 @@ _fE() {
 _df_c() {
 	clear
 	cd ~/dotfiles
-	cp ~/.bashrc ~/.nvimrc ~/.fr.sh ~/tsch.sh ~/xterm-color-table.vim ~/.oh-my-bash-bashrc ${PREFIX}/share/nvim/runtime/colors/blueorange.vim $PREFIX/share/nvim/runtime/syntax/book.vim ~/.oh-my-bash/custom/themes/tstheme/tstheme.theme.sh ~/dotfiles/
+	cp ~/.bashrc ~/.fr.sh ~/tsch.sh ~/xterm-color-table.vim ~/.oh-my-bash-bashrc ${PREFIX}/share/nvim/runtime/colors/blueorange.vim $PREFIX/share/nvim/runtime/syntax/book.vim ~/.oh-my-bash/custom/themes/tstheme/tstheme.theme.sh ~/dotfiles/
     cp ~/dotfiles/blueorange.vim ${PREFIX}/share/vim/vim90/colors/
     cp ~/dotfiles/book.vim ${PREFIX}/share/vim/vim90/syntax/
+    cp ~/.config/nvim/init.vim ~/dotfiles/.config/nvim
+    cp ~/.config/nvim/plugins/plugins.lua ~/dotfiles/.config/nvim/plugins/
 	${GIT_PROGRAM} commit --all --verbose
 }
 _tsns_c() {
