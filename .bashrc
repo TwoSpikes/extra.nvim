@@ -1,12 +1,20 @@
 #!/bin/env bash
 
 export EDITOR='nvim'
-export JOURNAL='~/.journal'
-export PKG_MANAGER='pkg'
+
 export MAKE_PROGRAM='make'
 export RUST_COMPILER='cargo'
-export GREP_PROGRAM='grep'
+
+export PKG_MANAGER='pkg'
 export GIT_PROGRAM='git'
+export WGET_PROGRAM='wget'
+export GREP_PROGRAM='grep'
+
+export CD_PROGRAM='cd'
+export ECHO_PROGRAM='echo'
+export ALIAS_PROGRAM='alias'
+export SOURCE_PROGRAM='.'
+export CLEAR_PROGRAM='clear'
 
 export DISPLAY=':1'
 
@@ -33,7 +41,7 @@ VIOLET_BACK_COLOR='\033[105m'
 LIGHT_BLUE_BACK_COLOR='\033[106m'
 WHITE_BACK_COLOR='\033[107m'
 
-al() { alias; }
+al() { "${ALIAS_PROGRAM}"; }
 q() {
 	exitcode=${1}
 	actual_exitcode=''
@@ -45,35 +53,35 @@ q() {
 	exit ${actual_exitcode}
 }
 ald() { ${EDITOR} ~/.bashrc; }
-_f() { cd ~/fplus; }
+_f() { "${CD_PROGRAM}" ~/fplus; }
 _fe() { .f; ${EDITOR} ./main.rs; }
 _fr() { ~/.fr.sh ${@:1}; }
 _fE() {
-	clear
+    "${CLEAR_PROGRAM}"
 	${RUST_COMPILER} build --release &> temp_file
 	errorcode=${?}
 	${GREP_PROGRAM} "\-->" temp_file
 	rm temp_file
-	echo ".fE was finished with exit code ${errorcode}"
+	"${ECHO_PROGRAM}" ".fE was finished with exit code ${errorcode}"
 }
 _df_c() {
-	clear
-	cd ~/dotfiles
+    "${CLEAR_PROGRAM}"
+	"${CD_PROGRAM}" ~/dotfiles
 	cp ~/.bashrc ~/.fr.sh ~/tsch.sh ~/xterm-color-table.vim ~/.oh-my-bash-bashrc ${PREFIX}/share/nvim/runtime/colors/blueorange.vim $PREFIX/share/nvim/runtime/syntax/book.vim ~/.oh-my-bash/custom/themes/tstheme/tstheme.theme.sh ~/dotfiles/
     cp ~/dotfiles/blueorange.vim ${PREFIX}/share/vim/vim90/colors/
     cp ~/dotfiles/book.vim ${PREFIX}/share/vim/vim90/syntax/
-    cp ~/.config/nvim/init.vim ~/dotfiles/.config/nvim
-    cp ~/.config/nvim/plugins/plugins.lua ~/dotfiles/.config/nvim/plugins/
+    cp ~/.config/nvim/init.vim ~/dotfiles/.config/nvim/
+    cp -r ~/.config/nvim/lua/ ~/dotfiles/.config/nvim/lua/
 	${GIT_PROGRAM} commit --all --verbose
 }
 _tsns_c() {
-    clear
-    cd ~/tsns
+    "${CLEAR_PROGRAM}"
+    "${CD_PROGRAM}" ~/tsns
     cp ${PREFIX}/share/nvim/runtime/syntax/googol.vim ~/tsns/editor/
 	${GIT_PROGRAM} commit --all --verbose
 }
-exp() { nvim ./; }
-hxp() { nvim ~/; }
+exp() { "${EDITOR}" ./; }
+hxp() { "${EDITOR}" ~/; }
 
 if [[ -f $PREFIX/etc/motd ]]; then
 	rm $PREFIX/etc/motd
@@ -84,13 +92,13 @@ esc=$(printf '\033')
 option() {
 	text=$1
 	character=$2
-	actual_text=$(echo "${text}" | sed "s/${character}/${esc}[1m&${esc}[22m/";)
+	actual_text=$("${ECHO_PROGRAM}" "${text}" | sed "s/${character}/${esc}[1m&${esc}[22m/";)
 set_number_color
-	echo -e "${NUMBER_COLOR}${iota}${RESET}. ${actual_text}"
+	"${ECHO_PROGRAM}" -e "${NUMBER_COLOR}${iota}${RESET}. ${actual_text}"
 	((iota++))
 }
 on_pause() {
-	echo -en "${GRAY_COLOR}[on pause (code: ${YELLOW_COLOR}${?}${GRAY_COLOR}, press ${BOLD_COLOR}${WHITE_COLOR}RETURN${NON_BOLD_COLOR}${GRAY_COLOR})]${RESET_COLOR}: "
+	"${ECHO_PROGRAM}" -en "${GRAY_COLOR}[on pause (code: ${YELLOW_COLOR}${?}${GRAY_COLOR}, press ${BOLD_COLOR}${WHITE_COLOR}RETURN${NON_BOLD_COLOR}${GRAY_COLOR})]${RESET_COLOR}: "
 }
 
 set_number_color() {
@@ -112,7 +120,7 @@ set_number_color() {
 
 RESET="\033[0m"
 
-. ~/tsch.sh
+"${SOURCE_PROGRAM}" ~/tsch.sh
 
 try_install() {
 	program=${1}
@@ -156,10 +164,10 @@ try_install() {
 			${bad_errorcode})
 				case ${attempt} in
 					1)
-						echo "trying to install ${program} again..."
+						"${ECHO_PROGRAM}" "trying to install ${program} again..."
 					;;
 					*)
-						echo "wtf? I am trying to install ${program} for ${attempt} time"
+						"${ECHO_PROGRAM}" "wtf? I am trying to install ${program} for ${attempt} time"
 					;;
 				esac
 			;;
@@ -174,8 +182,8 @@ try_install() {
 
 if [[ ${0##*/} == 'bash' ]]; then
 	if [[ ! -f ~/shell/completion.bash ]]; then
-		echo -e "${YELLOW_COLOR}completion.bash file was not found${RESET_COLOR}"
-		wget https://github.com/junegunn/fzf/raw/master/shell/completion.bash
+		"${ECHO_PROGRAM}" -e "${YELLOW_COLOR}completion.bash file was not found${RESET_COLOR}"
+		"${WGET_PROGRAM}" https://github.com/junegunn/fzf/raw/master/shell/completion.bash
 		errorcode=${?}
 		case ${errorcode} in
 			127)
@@ -185,7 +193,7 @@ if [[ ${0##*/} == 'bash' ]]; then
 						wget https://github.com/junegunn/fzf/raw/master/shell/completion.bash
 					;;
 					*)
-						echo 'we cannot install wget (we tried)'
+						"${ECHO_PROGRAM}" 'we cannot install wget (we tried)'
 						exit -1
 					;;
 				esac
@@ -195,7 +203,7 @@ if [[ ${0##*/} == 'bash' ]]; then
 		esac
 	fi
 	if [[ ! -f ~/shell/key-bindings.bash ]]; then
-		echo -e "${YELLOW_COLOR}key-bindings.bash file was not found${RESET_COLOR}"
+		"${ECHO_PROGRAM}" -e "${YELLOW_COLOR}key-bindings.bash file was not found${RESET_COLOR}"
 		wget https://github.com/junegunn/fzf/raw/master/shell/key-bindings.bash
 	fi
 	if [[ ! -f ~/shell/completion.bash ]] || [[ ! -f ~/shell/key-bindings.bash ]]; then
@@ -222,13 +230,13 @@ fi
 
 if [[ -f ~/todo ]]; then
 	if [[ `cat ~/todo` -eq '' ]]; then
-		echo -e "${YELLOW_COLOR}todo is empty${RESET_COLOR}"
+		"${ECHO_PROGRAM}" -e "${YELLOW_COLOR}todo is empty${RESET_COLOR}"
 	else
-		echo -e "${GREEN_COLOR}todo file:${RESET_COLOR}"
+		"${ECHO_PROGRAM}" -e "${GREEN_COLOR}todo file:${RESET_COLOR}"
 		cat todo
 	fi
 else
-	echo -e "${RED_COLOR}todo file does not exist${RESET_COLOR}"
+	"${ECHO_PROGRAM}" -e "${RED_COLOR}todo file does not exist${RESET_COLOR}"
 fi
 
 export SSPYPL_PATH=~/sspypl
