@@ -21,8 +21,8 @@ set nonu
 set nornu
 let &stc = '%=%{v:relnum?v:relnum:v:lnum} '
 call timer_start(500, {-> execute('let &stc=&stc')}, {'repeat': -1})
-let &stl='%t %m%r%h%w%=%l/%L %c%V%=%{strftime("%d%b%H:%M:%S")}%=#%n %p%%'
-call timer_start(2000, {-> execute(':let &stl=&stl')}, {'repeat': -1})
+let &stl='%t %m%r%h%w%=%{strftime("%d%b%H:%M:%S")}%=%l/%L,%c%V%=#%n %p%%'
+call timer_start(4000, {-> execute(':let &stl=&stl')}, {'repeat': -1})
 
 set hidden
 set wrap

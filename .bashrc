@@ -11,6 +11,13 @@ export WGET_PROGRAM='wget'
 export GREP_PROGRAM='grep'
 
 export CD_PROGRAM='cd'
+export CP_PROGRAM='cp'
+export MV_PROGRAM='mv'
+export RM_PROGRAM='rm'
+export MKDIR_PROGRAM='mkdir'
+export CURL_PROGRAM='curl'
+export CAT_PROGRAM='cat'
+export EXIT_PROGRAM='exit'
 export ECHO_PROGRAM='echo'
 export ALIAS_PROGRAM='alias'
 export SOURCE_PROGRAM='.'
@@ -50,7 +57,7 @@ q() {
 	else
 		actual_exitcode=${exitcode}
 	fi
-	exit ${actual_exitcode}
+	"${EXIT_PROGRAM}" ${actual_exitcode}
 }
 ald() { ${EDITOR} ~/.bashrc; }
 _f() { "${CD_PROGRAM}" ~/fplus; }
@@ -61,30 +68,31 @@ _fE() {
 	${RUST_COMPILER} build --release &> temp_file
 	errorcode=${?}
 	${GREP_PROGRAM} "\-->" temp_file
-	rm temp_file
+	"${RM_PROGRAM}" temp_file
 	"${ECHO_PROGRAM}" ".fE was finished with exit code ${errorcode}"
 }
 _df_c() {
     "${CLEAR_PROGRAM}"
 	"${CD_PROGRAM}" ~/dotfiles
-	cp ~/.bashrc ~/.fr.sh ~/tsch.sh ~/xterm-color-table.vim ~/.oh-my-bash-bashrc ${PREFIX}/share/nvim/runtime/colors/blueorange.vim $PREFIX/share/nvim/runtime/syntax/book.vim ~/.oh-my-bash/custom/themes/tstheme/tstheme.theme.sh ~/dotfiles/
-    cp ~/dotfiles/blueorange.vim ${PREFIX}/share/vim/vim90/colors/
-    cp ~/dotfiles/book.vim ${PREFIX}/share/vim/vim90/syntax/
-    cp ~/.config/nvim/init.vim ~/dotfiles/.config/nvim/
-    cp -r ~/.config/nvim/lua/ ~/dotfiles/.config/nvim/lua/
-	${GIT_PROGRAM} commit --all --verbose
+	"${CP_PROGRAM}" ~/.bashrc ~/.fr.sh ~/tsch.sh ~/xterm-color-table.vim ~/.oh-my-bash-bashrc ${PREFIX}/share/nvim/runtime/colors/blueorange.vim $PREFIX/share/nvim/runtime/syntax/book.vim ~/.oh-my-bash/custom/themes/tstheme/tstheme.theme.sh ~/dotfiles/
+    "${CP_PROGRAM}" ~/dotfiles/blueorange.vim ${PREFIX}/share/vim/vim90/colors/
+    "${CP_PROGRAM}" ~/dotfiles/book.vim ${PREFIX}/share/vim/vim90/syntax/
+    "${CP_PROGRAM}" ~/.config/nvim/init.vim ~/dotfiles/.config/nvim/
+    "${CP_PROGRAM}" -r ~/.config/nvim/lua/ ~/dotfiles/.config/nvim/lua/
+	"${CP_PROGRAM}" ~/.tmux.conf ~/dotfiles/
+	"${GIT_PROGRAM}" commit --all --verbose
 }
 _tsns_c() {
     "${CLEAR_PROGRAM}"
     "${CD_PROGRAM}" ~/tsns
-    cp ${PREFIX}/share/nvim/runtime/syntax/googol.vim ~/tsns/editor/
-	${GIT_PROGRAM} commit --all --verbose
+    "${CP_PROGRAM}" ${PREFIX}/share/nvim/runtime/syntax/googol.vim ~/tsns/editor/
+	"${GIT_PROGRAM}" commit --all --verbose
 }
 exp() { "${EDITOR}" ./; }
 hxp() { "${EDITOR}" ~/; }
 
 if [[ -f $PREFIX/etc/motd ]]; then
-	rm $PREFIX/etc/motd
+	"${RM_PROGRAM}" "$PREFIX"/etc/motd
 fi
 
 esc=$(printf '\033')
@@ -158,7 +166,7 @@ try_install() {
 	esac
 	attempt=1
 	while [[ ${attempt} -lt ${max_attempt} ]]; do
-		${installer} ${install_command} ${program}
+		"${installer}" "${install_command}" "${program}"
 		errorcode=${?}
 		case ${errorcode} in
 			${bad_errorcode})
@@ -187,14 +195,14 @@ if [[ ${0##*/} == 'bash' ]]; then
 		errorcode=${?}
 		case ${errorcode} in
 			127)
-				errorcode=`try_install wget 100 MAX_WGET_INSTALL_ATTEMPT`
+				errorcode=`try_install "${WGET_PROGRAM}" 100 MAX_WGET_INSTALL_ATTEMPT`
 				case ${errorcode} in
 					0)
-						wget https://github.com/junegunn/fzf/raw/master/shell/completion.bash
+						"${WGET_PROGRAM}" https://github.com/junegunn/fzf/raw/master/shell/completion.bash
 					;;
 					*)
-						"${ECHO_PROGRAM}" 'we cannot install wget (we tried)'
-						exit -1
+						"${ECHO_PROGRAM}" "we cannot install ${WGET_PROGRAM} (we tried)"
+						"${EXIT_PROGRAM}" -1
 					;;
 				esac
 			;;
@@ -204,36 +212,36 @@ if [[ ${0##*/} == 'bash' ]]; then
 	fi
 	if [[ ! -f ~/shell/key-bindings.bash ]]; then
 		"${ECHO_PROGRAM}" -e "${YELLOW_COLOR}key-bindings.bash file was not found${RESET_COLOR}"
-		wget https://github.com/junegunn/fzf/raw/master/shell/key-bindings.bash
+		"${WGET_PROGRAM}" https://github.com/junegunn/fzf/raw/master/shell/key-bindings.bash
 	fi
 	if [[ ! -f ~/shell/completion.bash ]] || [[ ! -f ~/shell/key-bindings.bash ]]; then
-		mv ~/completion.bash ~/key-bindings.bash ~/shell/
+		"${MV_PROGRAM}" ~/completion.bash ~/key-bindings.bash ~/shell/
 		errorcode=${?}
 		case ${errorcode} in
 			127)
-				mkdir shell
-				mv ~/completion.bash ~/key-bindings.bash ~/shell/
+				"${MKDIR_PROGRAM}" shell
+				"${MV_PROGRAM}" ~/completion.bash ~/key-bindings.bash ~/shell/
 			;;
 			*)
 			;;
 		esac
 	fi
 
-	source ~/.fzf.bash
-	source ~/.oh-my-bash-bashrc
-	source $OSH/oh-my-bash.sh
+	"${SOURCE_PROGRAM}" ~/.fzf.bash
+	"${SOURCE_PROGRAM}" ~/.oh-my-bash-bashrc
+	"${SOURCE_PROGRAM}" $OSH/oh-my-bash.sh
 fi
 
 if [[ ! -f ~/spacevim-install.sh ]]; then
-	curl -sLf https://spacevim.org/install.sh > ~/spacevim-install.sh
+	"${CURL_PROGRAM}" -sLf https://spacevim.org/install.sh > ~/spacevim-install.sh
 fi
 
 if [[ -f ~/todo ]]; then
-	if [[ `cat ~/todo` -eq '' ]]; then
+	if [[ `"${CAT_PROGRAM}" ~/todo` -eq '' ]]; then
 		"${ECHO_PROGRAM}" -e "${YELLOW_COLOR}todo is empty${RESET_COLOR}"
 	else
 		"${ECHO_PROGRAM}" -e "${GREEN_COLOR}todo file:${RESET_COLOR}"
-		cat todo
+		"${CAT_PROGRAM}" todo
 	fi
 else
 	"${ECHO_PROGRAM}" -e "${RED_COLOR}todo file does not exist${RESET_COLOR}"
