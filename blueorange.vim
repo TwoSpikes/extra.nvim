@@ -11,7 +11,6 @@
 hi clear
 let g:colors_name = 'blueorange'
 
-let s:t_Co = &t_Co
 
 hi! link helpVim Title
 hi! link helpHeader Title
@@ -135,7 +134,7 @@ if &background ==# 'dark'
   hi ToolbarButton guifg=#000000 guibg=#ffffff gui=NONE cterm=NONE
   hi QuickFixLine guifg=#000000 guibg=#5fafff gui=NONE cterm=NONE
   hi CursorLineNr guifg=#ffffff guibg=NONE gui=bold cterm=bold
-  hi LineNr guifg=#585858 guibg=NONE gui=NONE cterm=NONE
+  hi LineNr ctermfg=251 ctermbg=NONE cterm=bold
   hi NonText guifg=#585858 guibg=NONE gui=NONE cterm=NONE
   hi FoldColumn guifg=#585858 guibg=NONE gui=NONE cterm=NONE
   hi EndOfBuffer guifg=#585858 guibg=NONE gui=NONE cterm=NONE
@@ -298,7 +297,7 @@ else
   hi CocSearch guifg=#af0000 guibg=NONE gui=NONE cterm=NONE
 endif
 
-if s:t_Co >= 256
+if &t_Co >= 256
   hi! link helpVim Title
   hi! link helpHeader Title
   hi! link helpHyperTextJump Underlined
@@ -403,9 +402,9 @@ if s:t_Co >= 256
   hi! link MessageWindow PMenu
   hi! link PopupNotification Todo
   if &background ==# 'dark'
-    hi Normal ctermfg=15 ctermbg=16 cterm=NONE
+    hi Normal ctermfg=15 ctermbg=NONE cterm=NONE
     hi Operator ctermfg=220 ctermbg=NONE cterm=NONE
-    hi SpecialChar ctermfg=41 ctermbg=16 cterm=NONE
+    hi SpecialChar ctermfg=41 ctermbg=NONE cterm=NONE
     hi Statusline ctermfg=18 ctermbg=195 cterm=bold,reverse
     hi StatuslineNC ctermfg=17 ctermbg=208 cterm=bold,reverse
     hi VertSplit ctermfg=159 ctermbg=17 cterm=NONE
@@ -415,8 +414,8 @@ if s:t_Co >= 256
     hi ToolbarLine ctermfg=NONE ctermbg=NONE cterm=NONE
     hi ToolbarButton ctermfg=16 ctermbg=231 cterm=NONE
     hi QuickFixLine ctermfg=16 ctermbg=75 cterm=NONE
-    hi CursorLineNr ctermfg=231 ctermbg=NONE cterm=bold
-    hi LineNr ctermfg=240 ctermbg=NONE cterm=NONE
+    hi CursorLineNr ctermfg=220 ctermbg=17 cterm=bold
+    hi LineNr ctermfg=220 ctermbg=234 cterm=NONE
     hi NonText ctermfg=240 ctermbg=NONE cterm=NONE
     hi FoldColumn ctermfg=240 ctermbg=NONE cterm=NONE
     hi EndOfBuffer ctermfg=240 ctermbg=NONE cterm=NONE
@@ -442,8 +441,8 @@ if s:t_Co >= 256
     hi Visual ctermfg=231 ctermbg=24 cterm=NONE
     hi MatchParen ctermfg=30 ctermbg=16 cterm=reverse
     hi VisualNOS ctermfg=16 ctermbg=73 cterm=NONE
-    hi CursorLine ctermfg=NONE ctermbg=235 cterm=NONE
-    hi CursorColumn ctermfg=NONE ctermbg=235 cterm=NONE
+    hi CursorLine ctermfg=NONE ctermbg=17 cterm=NONE
+    hi CursorColumn ctermfg=NONE ctermbg=NONE cterm=reverse
     hi Folded ctermfg=243 ctermbg=234 cterm=NONE
     hi ColorColumn ctermfg=NONE ctermbg=234 cterm=NONE
     hi SpellBad ctermfg=203 ctermbg=NONE cterm=underline
@@ -454,7 +453,7 @@ if s:t_Co >= 256
     hi Constant ctermfg=213 ctermbg=NONE cterm=NONE
     hi String ctermfg=222 ctermbg=NONE cterm=NONE
     hi Identifier ctermfg=NONE ctermbg=NONE cterm=NONE
-    hi Statement ctermfg=254 ctermbg=NONE cterm=bold
+    hi Statement ctermfg=228 ctermbg=NONE cterm=bold
     hi Keyword ctermfg=220 ctermbg=NONE cterm=italic
     hi Type ctermfg=77 ctermbg=NONE cterm=italic
     hi PreProc ctermfg=116 ctermbg=NONE cterm=NONE
@@ -568,7 +567,7 @@ if s:t_Co >= 256
     hi FilterMenuLineNr ctermfg=241 ctermbg=NONE cterm=NONE
     hi CocSearch ctermfg=124 ctermbg=NONE cterm=NONE
   endif
-  unlet s:t_Co
+  let &t_Co = ''
   finish
 endif
 
