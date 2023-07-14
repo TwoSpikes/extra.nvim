@@ -1,19 +1,66 @@
-#!/bin/env nvim
+#!/bin/env -S nvim -u
 
 let mapleader = " "
 
-colorscheme evening
+set notermguicolors
+set background=dark
+colorscheme blueorange
+set nolazyredraw
+
+set helpheight=25
+set splitbelow
+set splitkeep=cursor
+set nosplitright
+
+set nogdefault
+set noignorecase
+set incsearch
+set magic
+
+set nonu
+set nornu
+let &stc = '%=%{v:relnum?v:relnum:v:lnum} '
+call timer_start(500, {-> execute('let &stc=&stc')}, {'repeat': -1})
+let &stl='%t %m%r%h%w%=%l/%L %c%V%=%{strftime("%d%b%H:%M:%S")}%=#%n %p%%'
+call timer_start(2000, {-> execute(':let &stl=&stl')}, {'repeat': -1})
+
 set hidden
-set nonu nornu
 set wrap
+set nolinebreak
+let &breakat = "    !¡@*-+;:,./?¿{}[]"
+set nolist
+set display=lastline
+set fcs=lastline:>
+set shortmess=filmnrwxsWI
+
+set matchpairs=(:),{:},[:],<:>
+set noshowmatch
+set matchtime=2
+set maxfuncdepth=60
+" set maxmapdepth=2
+set maxmempattern=500
+set history=10000
+
+set cursorline
+set mouse=a
+set nomousefocus
+set nomousehide
+set mousemodel=popup_setpos
+set nomousemoveevent
+set mousescroll=ver:3,hor:6
+set mouseshape=i:beam,r:beam,s:updown,sd:cross,m:no,ml:up-arrow,v:rightup-arrow
+set mousetime=400
+set startofline
+
 set tabstop=4
 set shiftwidth=4
 set smartindent
-set expandtab
-set termguicolors
+set smarttab
+set noexpandtab
+
 let g:loaded_perl_provider = 0
-set nolist
-set display=lastline
+
+setlocal nowrap
 
 com! SWrap setl wrap linebreak nolist
 
@@ -37,7 +84,7 @@ noremap <silent> <up> gk
 " noremap <silent> A g$a
 
 noremap <c-a> mzggVG`z
-
+noremap <c-s> <c-a>
 inoremap <c-d> <esc>ddi
 
 nnoremap <c-j> viwUe<space><esc>
@@ -61,16 +108,26 @@ nnoremap <silent> <c-*> *
 nnoremap <silent> # #:noh<cr>
 nnoremap <silent> <c-#> #
 
-noremap <C-l> 20zl
-noremap <C-h> 20zh
-inoremap <C-l> <esc>20zla
-inoremap <C-h> <esc>20zha
-noremap <C-e> 2<C-e>
-noremap <C-y> 2<C-y>
+noremap <c-l> 20zl
+noremap <c-h> 20zh
+inoremap <c-l> <esc>20zla
+inoremap <c-h> <esc>20zha
+let s:SCROLL_UP_FACTOR = 2
+let s:SCROLL_DOWN_FACTOR = 3
+let s:SCROLL_C_E_FACTOR = s:SCROLL_UP_FACTOR
+let s:SCROLL_C_Y_FACTOR = s:SCROLL_DOWN_FACTOR
+let s:SCROLL_MOUSE_UP_FACTOR = s:SCROLL_UP_FACTOR
+let s:SCROLL_MOUSE_DOWN_FACTOR = s:SCROLL_DOWN_FACTOR
+exec printf("noremap <c-e> %s<c-e>", s:SCROLL_C_E_FACTOR)
+exec printf("noremap <c-y> %s<c-y>", s:SCROLL_C_Y_FACTOR)
+exec printf("noremap <ScrollWheelDown> %s<c-e>", s:SCROLL_MOUSE_DOWN_FACTOR)
+exec printf("noremap <ScrollWheelUp> %s<c-y>", s:SCROLL_MOUSE_UP_FACTOR)
 
 " NVIMRC FILE
 let s:INIT_FILE_PATH = '~/.config/nvim/init.vim'
-let s:PLUGINS_INIT_FILE_PATH = '~/.config/nvim/plugins/plugins.lua'
+let s:PLUGINS_INSTALL_FILE_PATH = '~/.config/nvim/lua/packages/plugins.lua'
+let s:PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/plugins_setup.lua'
+let s:LSP_PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/lsp/plugins.lua'
 
 exec printf("noremap <silent> <leader>vet <esc>:tabe %s<cr>", s:INIT_FILE_PATH)
 exec printf("noremap <silent> <leader>veb <esc>:e %s<cr>", s:INIT_FILE_PATH)
@@ -78,11 +135,23 @@ exec printf("noremap <silent> <leader>veh <esc>:sp %s<cr>", s:INIT_FILE_PATH)
 exec printf("noremap <silent> <leader>vev <esc>:vsp %s<cr>", s:INIT_FILE_PATH)
 exec printf("noremap <silent> <leader>ves <esc>:so %s<cr>", s:INIT_FILE_PATH)
 
-exec printf("noremap <silent> <leader>vlt <esc>:tabe %s<cr>", s:PLUGINS_INIT_FILE_PATH)
-exec printf("noremap <silent> <leader>vlb <esc>:e %s<cr>", s:PLUGINS_INIT_FILE_PATH)
-exec printf("noremap <silent> <leader>vlh <esc>:sp %s<cr>", s:PLUGINS_INIT_FILE_PATH)
-exec printf("noremap <silent> <leader>vlv <esc>:vsp %s<cr>", s:PLUGINS_INIT_FILE_PATH)
-exec printf("noremap <silent> <leader>vls <esc>:so %s<cr>", s:PLUGINS_INIT_FILE_PATH)
+exec printf("noremap <silent> <leader>vit <esc>:tabe %s<cr>", s:PLUGINS_INSTALL_FILE_PATH)
+exec printf("noremap <silent> <leader>vib <esc>:e %s<cr>", s:PLUGINS_INSTALL_FILE_PATH)
+exec printf("noremap <silent> <leader>vih <esc>:sp %s<cr>", s:PLUGINS_INSTALL_FILE_PATH)
+exec printf("noremap <silent> <leader>viv <esc>:vsp %s<cr>", s:PLUGINS_INSTALL_FILE_PATH)
+exec printf("noremap <silent> <leader>vis <esc>:so %s<cr>", s:PLUGINS_INSTALL_FILE_PATH)
+
+exec printf("noremap <silent> <leader>vst <esc>:tabe %s<cr>", s:PLUGINS_SETUP_FILE_PATH)
+exec printf("noremap <silent> <leader>vsb <esc>:e %s<cr>", s:PLUGINS_SETUP_FILE_PATH)
+exec printf("noremap <silent> <leader>vsh <esc>:sp %s<cr>", s:PLUGINS_SETUP_FILE_PATH)
+exec printf("noremap <silent> <leader>vsv <esc>:vsp %s<cr>", s:PLUGINS_SETUP_FILE_PATH)
+exec printf("noremap <silent> <leader>vss <esc>:so %s<cr>", s:PLUGINS_SETUP_FILE_PATH)
+
+exec printf("noremap <silent> <leader>vlt <esc>:tabe %s<cr>", s:LSP_PLUGINS_SETUP_FILE_PATH)
+exec printf("noremap <silent> <leader>vlb <esc>:e %s<cr>", s:LSP_PLUGINS_SETUP_FILE_PATH)
+exec printf("noremap <silent> <leader>vlh <esc>:sp %s<cr>", s:LSP_PLUGINS_SETUP_FILE_PATH)
+exec printf("noremap <silent> <leader>vlv <esc>:vsp %s<cr>", s:LSP_PLUGINS_SETUP_FILE_PATH)
+exec printf("noremap <silent> <leader>vls <esc>:so %s<cr>", s:LSP_PLUGINS_SETUP_FILE_PATH)
 
 " BASHRC FILE
 noremap <silent> <leader>bt <esc>:tabe ~/.bashrc<cr>
@@ -92,7 +161,7 @@ noremap <silent> <leader>bv <esc>:vsp ~/.bashrc<cr>
 
 " MY .nvimrc HELP
 noremap <silent> <leader>? <esc>:echo "
-  \MY .nvimrc HELP:
+  \MY .nvimrc HELP (warning: help is old):
 \\n  GLOBAL HELP:
 \\n    \<leader\>? - Show this help message
 \\n  NVIMRC FILE:
@@ -226,10 +295,14 @@ noremap <leader>Q Q
 " Insert leavers
 inoremap <silent> jk <esc>:w<cr>
 inoremap <silent> jK <esc>
+inoremap <silent> JK <esc>:w<cr>
+inoremap <silent> Jk <esc>
 tnoremap <silent> jk <c-\><c-n>
 tnoremap <silent> jK <c-\><c-n>:bd!<Bar>tabnew<Bar>ter<cr>a
 
-exec printf("luafile %s", s:PLUGINS_INIT_FILE_PATH)
+exec printf("luafile %s", s:PLUGINS_INSTALL_FILE_PATH)
+PackerInstall
+exec printf("luafile %s", s:PLUGINS_SETUP_FILE_PATH)
 
 so ~/xterm-color-table.vim
 
@@ -240,19 +313,6 @@ if has('nvim')
 	lua opts = { on_attach = on_attach, flags = { debounce_text_changes = 150, }, }
 	lua setup = function() require("config.lsp.installer").setup(servers, opts) end
 endif
-
-" LSP
-noremap <silent> <leader>slv :lua vim.lsp.start({
-\   name = 'vimls',
-\   cmd = {'vim-language-server', '--stdin'},
-  \})<cr>
-noremap <silent> <leader>slb :lua vim.lsp.start({
-\   name = 'lspserv',
-\   cmd = {'bash-language-server'},
-\   root_dir = vim.fs.dirname(vim.fs.find({'pyproject.toml', 'se" tup.py'}, { upward = true })[1]),
-\})<cr>
-noremap <silent> <leader>sld :lua print(table_dump(vim.lsp.get_a" ctive_clients()))<cr>
-"\   root_dir = vim.fs.dirname(vim.fs.find({'pyproject.toml', 'se" tup.py'}, { upward = true })[1]),
 
 lua table_dump = function(table)
 \   if type(table) == 'table' then
@@ -267,7 +327,7 @@ lua table_dump = function(table)
 \   end
 \ end
 
-"noremap <silent> <leader>s :let &scrolloff = 999 - &scrolloff<cr>
+noremap <silent> <leader>S :let &scrolloff = 999 - &scrolloff<cr>
 
 function! SwapHiGroup(group)
     let id = synIDtrans(hlID(a:group))
@@ -278,7 +338,7 @@ function! SwapHiGroup(group)
             exe "let ". mode.g. " = empty(". mode.g. ") ? 'NONE' : ". mode.g
         endfor
     endfor
-    exe printf('hi %s ctermfg=%s ctermbg=%s guifg=%s guibg=%s', a:group, ctermbg, ctermfg, guibg, guifg)
+    exec printf('hi %s ctermfg=%s ctermbg=%s guifg=%s guibg=%s', a:group, ctermbg, ctermfg, guibg, guifg)
 endfunc
 
 echom 'config: loaded'

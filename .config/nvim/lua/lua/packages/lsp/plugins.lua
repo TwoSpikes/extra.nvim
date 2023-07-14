@@ -11,6 +11,7 @@ require('mason-lspconfig').setup({
     ensure_installed = {
         'vimls',
         'bashls',
+        'pyright',
     },
 })
 
@@ -31,6 +32,13 @@ vim.api.nvim_create_user_command(
         root_dir = vim.fs.dirname(vim.fs.find({'pyproject.toml', 'setup.py'}, { upward = true })[1]),
     }) ]],
     { bang = true }
+)
+vim.api.nvim_create_user_command(
+    'Pyright',
+    [[ lua vim.lsp.start({
+        name = 'pyright',
+    }) ]],
+	{ bang = true }
 )
 vim.keymap.set('n', '<leader>sld', [[
     :lua =table_dump(vim.lsp.get_active_clients())<cr>
