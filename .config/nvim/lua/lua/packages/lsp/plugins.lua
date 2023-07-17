@@ -1,5 +1,3 @@
-print('lsp-setup')
-
 require('mason').setup({
     ui = {
         width = 1,
