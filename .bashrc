@@ -1,5 +1,17 @@
 #!/bin/env bash
 
+function timer_start() {
+	TIMER_START_MESSAGE="${1}"
+	echo -n "${TIMER_START_MESSAGE}"
+	START=$(date +%s%N)
+}
+function timer_end() {
+	END=$(date +%s%N)
+	echo " (took $(((END - START) / 1000000))ms)"
+}
+
+timer_start 'loading variables...'
+
 export EDITOR='nvim'
 
 export MAKE_PROGRAM='make'
@@ -48,6 +60,10 @@ VIOLET_BACK_COLOR='\033[105m'
 LIGHT_BLUE_BACK_COLOR='\033[106m'
 WHITE_BACK_COLOR='\033[107m'
 
+timer_end
+
+timer_start 'loading functions...'
+
 al() { "${ALIAS_PROGRAM}"; }
 q() {
 	exitcode=${1}
@@ -78,7 +94,7 @@ _df_c() {
     "${CP_PROGRAM}" ~/dotfiles/blueorange.vim ${PREFIX}/share/vim/vim90/colors/
     "${CP_PROGRAM}" ~/dotfiles/book.vim ${PREFIX}/share/vim/vim90/syntax/
     "${CP_PROGRAM}" ~/.config/nvim/init.vim ~/dotfiles/.config/nvim/
-    "${CP_PROGRAM}" -r ~/.config/nvim/lua/ ~/dotfiles/.config/nvim/lua/
+    "${CP_PROGRAM}" -r ~/.config/nvim/lua/ ~/dotfiles/.config/nvim/
 	"${CP_PROGRAM}" ~/.tmux.conf ~/dotfiles/
 	"${GIT_PROGRAM}" commit --all --verbose
 }
@@ -188,6 +204,10 @@ try_install() {
 	return -1
 }
 
+timer_end
+
+timer_start 'checking needed staff...'
+
 if [[ ${0##*/} == 'bash' ]]; then
 	if [[ ! -f ~/shell/completion.bash ]]; then
 		"${ECHO_PROGRAM}" -e "${YELLOW_COLOR}completion.bash file was not found${RESET_COLOR}"
@@ -236,6 +256,8 @@ if [[ ! -f ~/spacevim-install.sh ]]; then
 	"${CURL_PROGRAM}" -sLf https://spacevim.org/install.sh > ~/spacevim-install.sh
 fi
 
+timer_end
+
 if [[ -f ~/todo ]]; then
 	if [[ `"${CAT_PROGRAM}" ~/todo` -eq '' ]]; then
 		"${ECHO_PROGRAM}" -e "${YELLOW_COLOR}todo is empty${RESET_COLOR}"
@@ -248,3 +270,5 @@ else
 fi
 
 export SSPYPL_PATH=~/sspypl
+
+# vim:ts=4:sw=4:fdm=expr:fde=getline(v\:lnum)=~'^timer_start'?'1'\:getline(v\:lnum)=~'^timer_end$'?'1'\:'0'
