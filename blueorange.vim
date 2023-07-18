@@ -1,4 +1,4 @@
-" Name:         Perchè il sole a Milano? Portofino? Dimmi la luna perchè?
+" Name:         Perchè il sole a Milano? Portofino? Dimmi la luna perchè?  
 " Description:  White(perchè il sole)/Black(la luna perchè?) background colorscheme.
 " Author:       Maxim Kim <habamax@gmail.com>
 " Maintainer:   Maxim Kim <habamax@gmail.com>
@@ -11,6 +11,12 @@
 hi clear
 let g:colors_name = 'blueorange'
 
+hi Cursor ctermfg=NONE ctermbg=NONE cterm=bold guifg=NONE guibg=NONE gui=NONE
+set guicursor=n-v-c:block-Cursor
+set guicursor+=i:ver100-Cursor
+set guicursor+=r:hor20-Cursor
+set guicursor+=n-v-c:blinkon0
+set guicursor+=i:blinkwait10
 
 hi! link helpVim Title
 hi! link helpHeader Title
@@ -157,8 +163,6 @@ if &background ==# 'dark'
   hi WildMenu guifg=#000000 guibg=#ffd787 gui=bold cterm=bold
   hi debugPC guifg=#5f87af guibg=NONE gui=reverse cterm=reverse
   hi debugBreakpoint guifg=#5fafaf guibg=NONE gui=reverse cterm=reverse
-  hi Cursor guifg=NONE guibg=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
-  hi lCursor guifg=#ff5fff guibg=#000000 gui=reverse cterm=reverse
   hi Visual guifg=#ffffff guibg=#005f87 gui=NONE cterm=NONE
   hi MatchParen guifg=#c5e7c5 guibg=#000000 gui=reverse cterm=reverse
   hi VisualNOS guifg=#000000 guibg=#5fafaf gui=NONE cterm=NONE
@@ -247,8 +251,6 @@ else
   hi WildMenu guifg=#000000 guibg=#ffd787 gui=bold cterm=bold
   hi debugPC guifg=#005fd7 guibg=NONE gui=reverse cterm=reverse
   hi debugBreakpoint guifg=#005f5f guibg=NONE gui=reverse cterm=reverse
-  hi Cursor guifg=NONE guibg=NONE gui=reverse ctermfg=NONE ctermbg=NONE cterm=reverse
-  hi lCursor guifg=#ff00ff guibg=#000000 gui=reverse cterm=reverse
   hi Visual guifg=#ffffff guibg=#5f87af gui=NONE cterm=NONE
   hi MatchParen guifg=NONE guibg=#c5e7c5 gui=NONE cterm=NONE
   hi VisualNOS guifg=#ffffff guibg=#008787 gui=NONE cterm=NONE
@@ -403,7 +405,7 @@ if &t_Co >= 256
   if &background ==# 'dark'
     hi Normal ctermfg=15 ctermbg=NONE cterm=NONE
     hi Terminal ctermfg=251 ctermbg=NONE cterm=NONE
-    hi Operator ctermfg=220 ctermbg=NONE cterm=NONE
+    hi Operator ctermfg=220 ctermbg=NONE cterm=bold
     hi SpecialChar ctermfg=41 ctermbg=NONE cterm=NONE
     hi Statusline ctermfg=18 ctermbg=195 cterm=bold,reverse
     hi StatuslineNC ctermfg=17 ctermbg=208 cterm=bold,reverse
@@ -872,7 +874,6 @@ if s:t_Co >= 0
   hi Normal term=NONE
   hi ColorColumn term=reverse
   hi Conceal term=NONE
-  hi Cursor term=reverse
   hi CursorColumn term=NONE
   hi CursorLine term=underline
   hi CursorLineNr term=bold
