@@ -2,6 +2,9 @@
 
 let mapleader = " "
 
+set termguicolors
+colorscheme evening
+
 set notermguicolors
 set background=dark
 colorscheme blueorange
@@ -169,13 +172,15 @@ endfunction
 set hidden
 set wrap
 set nolinebreak
-let &breakat = "    !¡@*-+;:,./?¿{}[]"
-set nolist
+let &breakat = "    !¡@*-+;:,./?¿{}[]^%&"
+set list
 set display=lastline
 set fcs=lastline:>
 set shortmess=filmnrwxsWI
 set showtabline=2
 set noshowmode
+
+setlocal nowrap
 
 set matchpairs=(:),{:},[:],<:>
 set noshowmatch
@@ -184,7 +189,7 @@ set maxfuncdepth=60
 " set maxmapdepth=2
 set maxmempattern=500
 set history=10000
-set modelineexpr
+set nomodelineexpr
 
 set cursorline
 set cursorcolumn
@@ -205,8 +210,6 @@ set smarttab
 set noexpandtab
 
 let g:loaded_perl_provider = 0
-
-setlocal nowrap
 
 command! SWrap setl wrap linebreak nolist
 
@@ -235,17 +238,19 @@ noremap <silent> <leader><down> j:let &stc=&stc<cr>
 
 noremap <silent> <c-h> mzggVG`z
 noremap <silent> <c-s> <c-a>
-noremap <silent> <c-a> :normal g0<cr>
-noremap <silent> <c-e> :normal g$<cr>
+noremap <silent> <c-a> 0
+noremap <silent> <c-e> $
+inoremap <silent> <c-a> <c-o>0
+inoremap <silent> <c-e> <c-o>$
 
 nnoremap <c-j> viwUe<space><esc>
 vnoremap <c-j> iwUe<space>
 inoremap <c-j> <esc>viwUe<esc>a
 
-noremap <c-p> :tabp<cr>
-noremap <c-n> :tabn<cr>
-nnoremap <leader>lC :tabnew<Bar>ter<Bar><cr>a./build.sh
-nnoremap <leader>lc :tabnext<Bar><c-\><c-n>:bd!<Bar>tabnew<Bar>ter<cr>a!!<cr>
+noremap <silent> <c-p> :tabp<cr>
+noremap <silent> <c-n> :tabn<cr>
+"nnoremap <leader>lC :tabnew<Bar>ter<Bar><cr>a./build.sh
+"nnoremap <leader>lc :tabnext<Bar><c-\><c-n>:bd!<Bar>tabnew<Bar>ter<cr>a!!<cr>
 
 if !$disable_autowrapping
  noremap l <space>
@@ -269,7 +274,7 @@ let s:SCROLL_C_E_FACTOR = s:SCROLL_UP_FACTOR
 let s:SCROLL_C_Y_FACTOR = s:SCROLL_DOWN_FACTOR
 let s:SCROLL_MOUSE_UP_FACTOR = s:SCROLL_UP_FACTOR
 let s:SCROLL_MOUSE_DOWN_FACTOR = s:SCROLL_DOWN_FACTOR
-exec printf("noremap <c-e> %s<c-e>", s:SCROLL_C_E_FACTOR)
+exec printf("noremap <c-Y> %s<c-e>", s:SCROLL_C_E_FACTOR)
 exec printf("noremap <c-y> %s<c-y>", s:SCROLL_C_Y_FACTOR)
 exec printf("noremap <ScrollWheelDown> %s<c-e>", s:SCROLL_MOUSE_DOWN_FACTOR)
 exec printf("noremap <ScrollWheelUp> %s<c-y>", s:SCROLL_MOUSE_UP_FACTOR)
@@ -309,6 +314,11 @@ noremap <silent> <leader>bt <esc>:tabe ~/.bashrc<cr>
 noremap <silent> <leader>bb <esc>:e ~/.bashrc<cr>
 noremap <silent> <leader>bh <esc>:sp ~/.bashrc<cr>
 noremap <silent> <leader>bv <esc>:vsp ~/.bashrc<cr>
+
+autocmd BufReadPost *
+     \ if line("'\"") > 0 && line("'\"") <= line("$") |
+     \   exe "normal! g`\"" |
+     \ endif
 
 " MY .nvimrc HELP
 noremap <silent> <leader>? <esc>:echo "
@@ -390,7 +400,7 @@ vnoremap <leader>' iw<esc>a'<esc>bi'<esc>v
 " SPECIAL
 nnoremap ci_ yiwct_
 noremap <silent> <leader>d <esc>:noh<cr>
-noremap <c-]> <c-\><esc>
+tnoremap <c-]> <c-\><esc>
 
 " TERMINAL
 noremap <silent> <leader>tt :tabnew<cr>:terminal<cr>i
@@ -412,9 +422,6 @@ augroup cpp
 	au filetype cpp noremap <silent> <buffer> <leader>/d mz0i//<esc>`zll
 	au filetype cpp noremap <silent> <buffer> <leader>/u mz:s:^//<cr>`zhh:noh<cr>
     au filetype cpp noremap <silent> <buffer> <leader>! :e ~/.config/tsvimconf/cpp/example.cpp<cr>ggvGy:bd<cr>pgg
-augroup END
-augroup syn
-	au BufEnter .oh-my-bash-bashrc set filetype=bash
 augroup END
 augroup vim
 	au filetype vim noremap <silent> <buffer> <leader>/d mz0i"<esc>`zl
@@ -451,7 +458,7 @@ tnoremap <silent> jk <c-\><c-n>
 tnoremap <silent> jK <c-\><c-n>:bd!<Bar>tabnew<Bar>ter<cr>a
 command! W w
 
-inoremap <silent> jup <c-o>:normal viwUe<cr>
+inoremap <silent> ju <esc>viwUea
 
 exec printf("luafile %s", s:PLUGINS_INSTALL_FILE_PATH)
 PackerInstall
@@ -480,7 +487,7 @@ lua table_dump = function(table)
 \   end
 \ end
 
-noremap <silent> <leader>S :let s:scrolloff = 999 - s:scrolloff<cr>
+noremap <silent> <leader>S :let &scrolloff = 999 - &scrolloff<cr>
 
 function! SwapHiGroup(group)
     let id = synIDtrans(hlID(a:group))
