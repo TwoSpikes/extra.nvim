@@ -272,3 +272,5 @@ fi
 export SSPYPL_PATH=~/sspypl
 
 # vim:ts=4:sw=4:fdm=expr:fde=getline(v\:lnum)=~'^timer_start'?'1'\:getline(v\:lnum)=~'^timer_end$'?'1'\:'0'
+
+source /data/data/com.termux/files/home/.config/broot/launcher/bash/br
