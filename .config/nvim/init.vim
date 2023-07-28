@@ -17,6 +17,7 @@ set nosplitright
 
 set nogdefault
 set ignorecase
+set smartcase
 set incsearch
 set magic
 
@@ -36,6 +37,7 @@ function STCAbs()
 endfunction
 call STCAbs()
 let s:custom_mode = ''
+let s:specmode = ''
 function! Showtab()
 	let stl_name = '%t%( %M%R%H%W%)'
 	let mode = mode('lololol')
@@ -95,7 +97,11 @@ function! Showtab()
 	elseif mode == 'Rvx'
 		let strmode = '^x compl vis REPL'
 	elseif mode == 'c'
-		let strmode = 'COM '
+		if s:specmode == 'b'
+			let strmode = 'COM_BLOCK'
+		else
+			let strmode = 'COM '
+		endif
 	elseif mode == 'cv'
 		let strmode = 'EX  '
 	elseif mode == 'r'
@@ -115,8 +121,37 @@ function! Showtab()
 	let &stl = stl_name . '%=' . stl_pos . '%=' . stl_time . '%=' . strmode . (s:custom_mode ? ' ' . s:custom_mode : '') . '%=' . stl_buf
 endfunction
 command! Showtab call Showtab()
-call timer_start(500, {-> execute('Showtab')}, {'repeat': -1})
+
+let s:tabtimerid = 0
+function TabTimerHandler(id)
+	let s:tabtimerid = a:id
+	Showtab
+endfunction
+function TabTimerStart()
+	if s:tabtimerid == 0
+		call timer_start(500, 'TabTimerHandler', {'repeat': -1})
+	endif
+endfunction
+function TabTimerStop()
+	call timer_stop(s:tabtimerid)
+	let s:tabtimerid = 0
+endfunction
+call TabTimerStart()
+function Printtabtimerid()
+	echom "Timer id is: " . s:tabtimerid
+endfunction
 Showtab
+augroup tabtimer
+	autocmd!
+	autocmd CmdlineEnter * Showtab
+	autocmd CmdlineLeave * call TabTimerStart()
+	autocmd CmdwinEnter * let s:specmode = 'b' | Showtab
+	autocmd CmdwinLeave * let s:specmode = '' | Showtab
+	autocmd CursorHold * call TabTimerStop()
+	autocmd CursorMoved * call TabTimerStart()
+	autocmd CursorHoldI * call TabTimerStop()
+	autocmd CursorMovedI * call TabTimerStart()
+augroup END
 
 augroup numbertoggle
   autocmd!
@@ -124,7 +159,7 @@ augroup numbertoggle
   autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | STCRel | endif
 augroup END
 
-augroup STC_FILETYPE
+augroup STC_FIletYPE
 	au filetype help setl nonu nornu
 	" au terminalopen
 augroup END
@@ -176,7 +211,8 @@ let &breakat = "    !¡@*-+;:,./?¿{}[]^%&"
 set list
 set display=lastline
 set fcs=lastline:>
-set shortmess=filmnrwxsWI
+set listchars=tab:>\ ,trail:-,nbsp:+
+set shortmess=filmnrwxsWItcF
 set showtabline=2
 set noshowmode
 
@@ -190,8 +226,10 @@ set maxfuncdepth=60
 set maxmempattern=500
 set history=10000
 set nomodelineexpr
+set updatetime=5000
 
 set cursorline
+set cursorlineopt=screenline,number
 set cursorcolumn
 set mouse=a
 set nomousefocus
@@ -223,10 +261,10 @@ noremap <silent> dd ddk
 noremap <silent> + mzyyp`zj
 noremap <silent> J mzJ`z
 
-noremap <silent> <expr> j v:count == 0 ? 'gj' : "\<Esc>".v:count.'j' " .'let &stc=&stc'
-noremap <silent> <expr> k v:count == 0 ? 'gk' : "\<Esc>".v:count.'k' " .'let &stc=&stc'
-noremap <silent> <expr> <down> v:count == 0 ? 'gj' : "\<Esc>".v:count.'j' " .'let &stc=&stc'
-noremap <silent> <expr> <up> v:count == 0 ? 'gk' : "\<Esc>".v:count.'k' " .'let &stc=&stc'
+noremap <silent> <expr> j v:count == 0 ? 'gj' : "\<Esc>".v:count.'j' " .':let &stc=&stc'
+noremap <silent> <expr> k v:count == 0 ? 'gk' : "\<Esc>".v:count.'k' " .':let &stc=&stc'
+noremap <silent> <expr> <down> v:count == 0 ? 'gj' : "\<Esc>".v:count.'j' " .':let &stc=&stc'
+noremap <silent> <expr> <up> v:count == 0 ? 'gk' : "\<Esc>".v:count.'k' " .':let &stc=&stc'
 noremap <silent> <leader>j j:let &stc=&stc<cr>
 noremap <silent> <leader>k k:let &stc=&stc<cr>
 noremap <silent> <leader><up> k:let &stc=&stc<cr>
@@ -243,12 +281,45 @@ noremap <silent> <c-e> $
 inoremap <silent> <c-a> <c-o>0
 inoremap <silent> <c-e> <c-o>$
 
+cnoremap <silent> <c-a> <c-b>
+cnoremap <silent> <c-g> <c-e><c-u><cr>
+cnoremap <silent> jk <c-e><c-u><cr>
+cnoremap <c-u> <c-e><c-u>
+cnoremap <c-a> <c-b>
+cnoremap <c-b> <S-left>
+noremap <c-g> <cmd>echom 'Quit'<cr>
+noremap gG <c-g>
+"noremap jk <cmd>echo 'Not in Insert Mode'<cr>
+
 nnoremap <c-j> viwUe<space><esc>
 vnoremap <c-j> iwUe<space>
 inoremap <c-j> <esc>viwUe<esc>a
 
-noremap <silent> <c-p> :tabp<cr>
-noremap <silent> <c-n> :tabn<cr>
+nnoremap <bs> X
+
+noremap <silent> <c-c>n <cmd>tabn<cr>
+noremap <silent> <c-c>p <cmd>tabp<cr>
+
+function Findfile()
+	echohl Title
+	let filename = input('find file: ')
+	echohl Normal
+	if filename !=# ''
+		exec printf("tabedit %s", filename)
+	endif
+endfunction
+command! Findfile call Findfile()
+noremap <c-c>c <cmd>Findfile<cr>
+function Findfilebuffer()
+	echohl Title
+	let filename = input('find file (in buffer): ')
+	echohl Normal
+	if filename !=# ''
+		exec printf("edit %s", filename)
+	endif
+endfunction
+command! Findfilebuffer call Findfilebuffer()
+noremap <c-c>C <cmd>Findfilebuffer<cr>
 "nnoremap <leader>lC :tabnew<Bar>ter<Bar><cr>a./build.sh
 "nnoremap <leader>lc :tabnext<Bar><c-\><c-n>:bd!<Bar>tabnew<Bar>ter<cr>a!!<cr>
 
@@ -387,8 +458,10 @@ noremap <silent> <leader>? <esc>:echo "
 
 " FAST COMMANDS
 noremap ; :
-noremap <leader>= :tabe 
-noremap <leader>- :e 
+"noremap <leader>= :tabe 
+"noremap <leader>- :e 
+noremap <leader>= <cmd>echo "use \<c-c\>c"<cr>
+noremap <leader>- <cmd>echo "use \<c-c\>C"<cr>
 noremap <leader>1 :!
 
 " QUOTES AROUND
@@ -418,18 +491,25 @@ noremap <silent> <leader>cs :colo
 noremap <silent> <leader>cy yiw:colo <c-r>"<cr>j
 
 augroup cpp
-	au filetype cpp noremap <silent> <buffer> <leader>n viwo<esc>i::<esc>hi
-	au filetype cpp noremap <silent> <buffer> <leader>/d mz0i//<esc>`zll
-	au filetype cpp noremap <silent> <buffer> <leader>/u mz:s:^//<cr>`zhh:noh<cr>
-    au filetype cpp noremap <silent> <buffer> <leader>! :e ~/.config/tsvimconf/cpp/example.cpp<cr>ggvGy:bd<cr>pgg
+	au!
+	au filetype cpp noremap <silent> <buffer> <leader>ln viwo<esc>i::<esc>hi
+	au filetype cpp noremap <silent> <buffer> <leader>l/d mz0i//<esc>`zll
+	au filetype cpp noremap <silent> <buffer> <leader>l/u mz:s:^//<cr>`zhh:noh<cr>
+	au filetype cpp noremap <silent> <buffer> <leader>l! :e ~/.config/tsvimconf/cpp/example.cpp<cr>ggvGy:bd<cr>pgg
 augroup END
 augroup vim
-	au filetype vim noremap <silent> <buffer> <leader>/d mz0i"<esc>`zl
-	au filetype vim noremap <silent> <buffer> <leader>/u mz:s/^"<cr>`zh:noh<cr>
+	au!
+	au filetype vim noremap <silent> <buffer> <leader>l/d mz0i"<esc>`zl
+	au filetype vim noremap <silent> <buffer> <leader>l/u mz:s/^"<cr>`zh:noh<cr>
 augroup END
 augroup googol
-	au syntax googol noremap <silent> <buffer> <leader>/d mz0i//<esc>`zll
-	au syntax googol noremap <silent> <buffer> <leader>/u mz:s:^//<cr>`zhh:noh<cr>
+	au!
+	au syntax googol noremap <silent> <buffer> <leader>l/d mz0i//<esc>`zll
+	au syntax googol noremap <silent> <buffer> <leader>l/u mz:s:^//<cr>`zhh:noh<cr>
+augroup END
+augroup php
+	au!
+	au filetype php nnoremap <silent> <buffer> <leader>lg viwoviGLOBALS['<esc>ea']<esc>
 augroup END
 
 " TELESCOPE

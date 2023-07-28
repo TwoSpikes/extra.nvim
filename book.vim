@@ -21,7 +21,17 @@ syn match bookBigNumberline "[IVXLCDM]\+\. [A-Za-zА-Яа-я \.,:]\+$"
 syn match bookSmallNumberline "[1-9][0-9]*\. [A-Za-zА-Яа-я \.,:]\+$"
 syn match bookDotDotDot "[…]\|\(\.\{3}\)"
 syn match bookComment "//.*$" contains=bookOperator,bookSpecialChar,bookDotDotDot
-syn match bookYear "\(20[0-9][0-9]\) г\."
+syn match bookYear "\%\(\%\(1[0-9][0-9][0-9]\)\|\%\(20[0-9][0-9]\)\) году\>"
+syn match bookYear "\%\(\%\(1[0-9][0-9][0-9]\)\|\%\(20[0-9][0-9]\)\) года\>"
+syn match bookYear "\%\(\%\(1[0-9][0-9][0-9]\)\|\%\(20[0-9][0-9]\)\) г\.\>"
+syn match bookYear "\%\(\%\(1[0-9][0-9][0-9]\)\|\%\(20[0-9][0-9]\)\) год\>"
+syn match bookYear "\<один год\>"
+syn match bookYear "\<одного года\>"
+syn match bookYear "\<одним годом\>"
+syn match bookYear "\<два года\>"
+syn match bookYear "\<двумя годами\>"
+syn match bookYear "\<двух лет\>"
+syn match bookYear "\<три года\>"
 
 hi def link bookOperator Operator
 hi def link bookSpecialChar Special

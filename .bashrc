@@ -90,7 +90,7 @@ _fE() {
 _df_c() {
     "${CLEAR_PROGRAM}"
 	"${CD_PROGRAM}" ~/dotfiles
-	"${CP_PROGRAM}" ~/.bashrc ~/.fr.sh ~/tsch.sh ~/xterm-color-table.vim ~/.oh-my-bash-bashrc ${PREFIX}/share/nvim/runtime/colors/blueorange.vim $PREFIX/share/nvim/runtime/syntax/book.vim ~/.oh-my-bash/custom/themes/tstheme/tstheme.theme.sh ~/dotfiles/
+	"${CP_PROGRAM}" ~/.bashrc ~/.fr.sh ~/tsch.sh ~/xterm-color-table.vim ~/.oh-my-bash-bashrc ${PREFIX}/share/nvim/runtime/colors/blueorange.vim $PREFIX/share/nvim/runtime/syntax/book.vim ~/.oh-my-bash/custom/themes/tstheme/tstheme.theme.sh ~/inverting.sh ~/dotfiles/
     "${CP_PROGRAM}" ~/dotfiles/blueorange.vim ${PREFIX}/share/vim/vim90/colors/
     "${CP_PROGRAM}" ~/dotfiles/book.vim ${PREFIX}/share/vim/vim90/syntax/
     "${CP_PROGRAM}" ~/.config/nvim/init.vim ~/dotfiles/.config/nvim/
