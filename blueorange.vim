@@ -426,7 +426,7 @@ if &t_Co >= 256
     hi NonText ctermfg=214 ctermbg=NONE cterm=NONE
     hi FoldColumn ctermfg=240 ctermbg=NONE cterm=NONE
     hi EndOfBuffer ctermfg=214 ctermbg=NONE cterm=NONE
-    hi SpecialKey ctermfg=240 ctermbg=NONE cterm=NONE
+    hi SpecialKey ctermfg=240 ctermbg=NONE cterm=bold,italic
     hi Pmenu ctermfg=208 ctermbg=17 cterm=NONE
     hi PmenuSel ctermfg=208 ctermbg=17 cterm=bold,reverse
     hi PmenuThumb ctermfg=NONE ctermbg=251 cterm=NONE

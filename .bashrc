@@ -1,14 +1,13 @@
 #!/bin/env bash
 
-function timer_start() {
-	TIMER_START_MESSAGE="${1}"
-	echo -n "${TIMER_START_MESSAGE}"
-	START=$(date +%s%N)
-}
-function timer_end() {
-	END=$(date +%s%N)
-	echo " (took $(((END - START) / 1000000))ms)"
-}
+if [[ $TIMER_INCLUDED == '' ]]; then
+	export TIMER_INCLUDED=true
+	. ~/timer.sh
+fi
+if [[ $CHECKHEALTH_INCLUDED == '' ]]; then
+	export CHECKHEALTH_INCLUDED=true
+	. ~/checkhealth.sh
+fi
 
 timer_start 'loading variables...'
 
@@ -90,7 +89,8 @@ _fE() {
 _df_c() {
     "${CLEAR_PROGRAM}"
 	"${CD_PROGRAM}" ~/dotfiles
-	"${CP_PROGRAM}" ~/.bashrc ~/.fr.sh ~/tsch.sh ~/xterm-color-table.vim ~/.oh-my-bash-bashrc ${PREFIX}/share/nvim/runtime/colors/blueorange.vim $PREFIX/share/nvim/runtime/syntax/book.vim ~/.oh-my-bash/custom/themes/tstheme/tstheme.theme.sh ~/inverting.sh ~/dotfiles/
+	"${CP_PROGRAM}" ~/.bashrc ~/timer.sh ~/checkhealth.sh ~/.fr.sh ~/tsch.sh ~/dotfiles/
+	"${CP_PROGRAM}" ~/xterm-color-table.vim ~/.oh-my-bash-bashrc ${PREFIX}/share/nvim/runtime/colors/blueorange.vim $PREFIX/share/nvim/runtime/syntax/book.vim ~/.oh-my-bash/custom/themes/tstheme/tstheme.theme.sh ~/inverting.sh ~/dotfiles/
     "${CP_PROGRAM}" ~/dotfiles/blueorange.vim ${PREFIX}/share/vim/vim90/colors/
     "${CP_PROGRAM}" ~/dotfiles/book.vim ${PREFIX}/share/vim/vim90/syntax/
     "${CP_PROGRAM}" ~/.config/nvim/init.vim ~/dotfiles/.config/nvim/
@@ -206,71 +206,36 @@ try_install() {
 
 timer_end
 
-timer_start 'checking needed staff...'
+echo "total time: ${ALL_TIME} ms"
+export ALL_TIME=0
 
-if [[ ${0##*/} == 'bash' ]]; then
-	if [[ ! -f ~/shell/completion.bash ]]; then
-		"${ECHO_PROGRAM}" -e "${YELLOW_COLOR}completion.bash file was not found${RESET_COLOR}"
-		"${WGET_PROGRAM}" https://github.com/junegunn/fzf/raw/master/shell/completion.bash
-		errorcode=${?}
-		case ${errorcode} in
-			127)
-				errorcode=`try_install "${WGET_PROGRAM}" 100 MAX_WGET_INSTALL_ATTEMPT`
-				case ${errorcode} in
-					0)
-						"${WGET_PROGRAM}" https://github.com/junegunn/fzf/raw/master/shell/completion.bash
-					;;
-					*)
-						"${ECHO_PROGRAM}" "we cannot install ${WGET_PROGRAM} (we tried)"
-						"${EXIT_PROGRAM}" -1
-					;;
-				esac
-			;;
-			*)
-			;;
-		esac
-	fi
-	if [[ ! -f ~/shell/key-bindings.bash ]]; then
-		"${ECHO_PROGRAM}" -e "${YELLOW_COLOR}key-bindings.bash file was not found${RESET_COLOR}"
-		"${WGET_PROGRAM}" https://github.com/junegunn/fzf/raw/master/shell/key-bindings.bash
-	fi
-	if [[ ! -f ~/shell/completion.bash ]] || [[ ! -f ~/shell/key-bindings.bash ]]; then
-		"${MV_PROGRAM}" ~/completion.bash ~/key-bindings.bash ~/shell/
-		errorcode=${?}
-		case ${errorcode} in
-			127)
-				"${MKDIR_PROGRAM}" shell
-				"${MV_PROGRAM}" ~/completion.bash ~/key-bindings.bash ~/shell/
-			;;
-			*)
-			;;
-		esac
-	fi
-
-	"${SOURCE_PROGRAM}" ~/.fzf.bash
-	"${SOURCE_PROGRAM}" ~/.oh-my-bash-bashrc
-	"${SOURCE_PROGRAM}" $OSH/oh-my-bash.sh
-fi
-
-if [[ ! -f ~/spacevim-install.sh ]]; then
-	"${CURL_PROGRAM}" -sLf https://spacevim.org/install.sh > ~/spacevim-install.sh
-fi
-
-timer_end
-
-if [[ -f ~/todo ]]; then
-	if [[ `"${CAT_PROGRAM}" ~/todo` -eq '' ]]; then
-		"${ECHO_PROGRAM}" -e "${YELLOW_COLOR}todo is empty${RESET_COLOR}"
+function print_todo() {
+	if [[ -f ~/todo ]]; then
+		if [[ `"${CAT_PROGRAM}" ~/todo` -eq '' ]]; then
+			"${ECHO_PROGRAM}" -e "${YELLOW_COLOR}todo is empty${RESET_COLOR}"
+		else
+			"${ECHO_PROGRAM}" -e "${GREEN_COLOR}todo file:${RESET_COLOR}"
+			"${CAT_PROGRAM}" todo
+		fi
 	else
-		"${ECHO_PROGRAM}" -e "${GREEN_COLOR}todo file:${RESET_COLOR}"
-		"${CAT_PROGRAM}" todo
+		"${ECHO_PROGRAM}" -e "${RED_COLOR}todo file does not exist${RESET_COLOR}"
 	fi
-else
-	"${ECHO_PROGRAM}" -e "${RED_COLOR}todo file does not exist${RESET_COLOR}"
+}
+if [[ $BASHRC_ALREADY_LOADED == '' ]]; then
+	print_todo
 fi
 
 export SSPYPL_PATH=~/sspypl
 
-# vim:ts=4:sw=4:fdm=expr:fde=getline(v\:lnum)=~'^timer_start'?'1'\:getline(v\:lnum)=~'^timer_end$'?'1'\:'0'
+"${SOURCE_PROGRAM}" "${HOME}"/.config/broot/launcher/bash/br
 
-source /data/data/com.termux/files/home/.config/broot/launcher/bash/br
+"${SOURCE_PROGRAM}" ~/.fzf.bash
+"${SOURCE_PROGRAM}" ~/.oh-my-bash-bashrc
+"${SOURCE_PROGRAM}" "$OSH"/oh-my-bash.sh
+
+if [[ $BASHRC_ALREADY_LOADED == '' ]]; then
+	export BASHRC_ALREADY_LOADED=true
+fi
+
+# vim:ts=4:sw=4
+# commented: fdm=expr:fde=getline(v\:lnum)=~'^timer_start'?'1'\:getline(v\:lnum)=~'^timer_end$'?'1'\:'0'

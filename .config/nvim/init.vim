@@ -2,9 +2,6 @@
 
 let mapleader = " "
 
-set termguicolors
-colorscheme evening
-
 set notermguicolors
 set background=dark
 colorscheme blueorange
@@ -35,7 +32,11 @@ set nornu
 function STCAbs()
 	let &stc = '%=%{v:relnum?v:relnum:v:lnum} '
 endfunction
-call STCAbs()
+if has('nvim')
+	call STCAbs()
+else
+	se nu rnu
+endif
 let s:custom_mode = ''
 let s:specmode = ''
 function! Showtab()
@@ -160,7 +161,7 @@ augroup numbertoggle
 augroup END
 
 augroup STC_FIletYPE
-	au filetype help setl nonu nornu
+	au filetype help setl nonu nornu stc=
 	" au terminalopen
 augroup END
 
@@ -296,9 +297,6 @@ vnoremap <c-j> iwUe<space>
 inoremap <c-j> <esc>viwUe<esc>a
 
 nnoremap <bs> X
-
-noremap <silent> <c-c>n <cmd>tabn<cr>
-noremap <silent> <c-c>p <cmd>tabp<cr>
 
 function Findfile()
 	echohl Title
@@ -511,6 +509,10 @@ augroup php
 	au!
 	au filetype php nnoremap <silent> <buffer> <leader>lg viwoviGLOBALS['<esc>ea']<esc>
 augroup END
+augroup bash
+	au!
+	au filetype bash,sh setlocal nowrap linebreak
+augroup END
 
 " TELESCOPE
 nnoremap <silent> <leader>ff :lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
@@ -581,6 +583,10 @@ function! SwapHiGroup(group)
     exec printf('hi %s ctermfg=%s ctermbg=%s guifg=%s guibg=%s', a:group, ctermbg, ctermfg, guibg, guifg)
 endfunc
 
-echom 'config: loaded'
+echom 'type '
+echohl SpecialKey
+echon ':intro<cr>'
+echohl Normal
+echon ' to see help'
 
 " vim:syn=vim:nowrap
