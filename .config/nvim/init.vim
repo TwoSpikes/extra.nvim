@@ -48,7 +48,7 @@ function! Showtab()
 	elseif mode == 'no'
 		let strmode = 'OP_PEND'
 	elseif mode == 'nov'
-		let strmode = 'vis OP_PEND'
+		let strmode = 'visu OP_PEND'
 	elseif mode == 'noV'
 		let strmode = 'vis_line OP_PEND'
 	elseif mode == 'noCTRL-v'
@@ -64,11 +64,11 @@ function! Showtab()
 	elseif mode == 'ntT'
 		let strmode = '^\^o norm TERM'
 	elseif mode == 'v'
-		let strmode = 'VIS'
+		let strmode = 'VISU'
 	elseif mode == 'V'
 		let strmode = 'VIS_LINE'
 	elseif mode == 'vs'
-		let strmode = '^o vis SEL'
+		let strmode = '^o visu SEL'
 	elseif mode == 'CTRL-V'
 		let strmode = 'VIS_BLOCK'
 	elseif mode == 'CTRL-Vs'
@@ -92,11 +92,11 @@ function! Showtab()
 	elseif mode == 'Rx'
 		let strmode = '^x compl REPL'
 	elseif mode == 'Rv'
-		let strmode = 'vis REPL'
+		let strmode = 'visu REPL'
 	elseif mode == 'Rvc'
-		let strmode = 'compl vis REPL'
+		let strmode = 'compl visu REPL'
 	elseif mode == 'Rvx'
-		let strmode = '^x compl vis REPL'
+		let strmode = '^x compl visu REPL'
 	elseif mode == 'c'
 		if s:specmode == 'b'
 			let strmode = 'COM_BLOCK'
@@ -173,8 +173,13 @@ augroup numbertoggle
 function MyTabLabel(n)
 	let buflist = tabpagebuflist(a:n)
 	let winnr = tabpagewinnr(a:n)
-	let buf_name = bufname(buflist[winnr - 1])
-	return fnamemodify(buf_name, ':~:.')
+	let original_buf_name = bufname(buflist[winnr - 1])
+	if original_buf_name == ''
+		let buf_name = '[null]'
+	else
+		let buf_name = original_buf_name
+	endif
+	return fnamemodify(buf_name, ':~:.:gs?\([^/]\)[^/]*/?\1/?')
 	" call execute("normal :!echo '" . buf_name . "' > ~/.config/nvim/config_garbagefile.txt")
 	" redir! > ~/.config/nvim/config_garbagefile.txt
 	" 	silent echo buf_name
@@ -185,15 +190,17 @@ function MyTabLine()
   for i in range(tabpagenr('$'))
     if i + 1 == tabpagenr()
       let s ..= '%#TabLineSel#'
-    else
-      let s ..= '%#TabLine#'
+    elseif (i - tabpagenr()) % 2 == 0
+		let s ..= '%#TabLine#'
+	else
+		let s ..= '%#TabLineSec#'
     endif
 
     " set the tab page number (for mouse clicks)
     let s ..= '%' .. (i + 1) .. 'T'
 
     " the label is made by MyTabLabel()
-    let s ..= ' %{MyTabLabel(' .. (i + 1) .. ')} '
+    let s ..= '%{MyTabLabel(' .. (i + 1) .. ')}'
   endfor
 
   " after the last tab fill with TabLineFill and reset tab page nr
@@ -203,7 +210,7 @@ function MyTabLine()
 
   return s
 endfunction
-" set tabline=%!MyTabLine()
+set tabline=%!MyTabLine()
 
 set hidden
 set wrap
@@ -257,10 +264,12 @@ if v:version >= 700
   au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 endif
 
-noremap <silent> - dd
-noremap <silent> dd ddk
+noremap <silent> - ddk
+noremap <silent> dd dd
 noremap <silent> + mzyyp`zj
+
 noremap <silent> J mzJ`z
+noremap <silent> gJ mzgJ`z
 
 noremap <silent> <expr> j v:count == 0 ? 'gj' : "\<Esc>".v:count.'j' " .':let &stc=&stc'
 noremap <silent> <expr> k v:count == 0 ? 'gk' : "\<Esc>".v:count.'k' " .':let &stc=&stc'
@@ -277,9 +286,9 @@ noremap <silent> <leader><down> j:let &stc=&stc<cr>
 
 noremap <silent> <c-h> mzggVG`z
 noremap <silent> <c-s> <c-a>
-noremap <silent> <c-a> 0
-noremap <silent> <c-e> $
-inoremap <silent> <c-a> <c-o>0
+noremap <silent> <c-a> <cmd>normal _<cr>
+noremap <silent> <c-e> <cmd>normal $<cr>
+inoremap <silent> <c-a> <c-o>_
 inoremap <silent> <c-e> <c-o>$
 
 cnoremap <silent> <c-a> <c-b>
@@ -288,8 +297,6 @@ cnoremap <silent> jk <c-e><c-u><cr>
 cnoremap <c-u> <c-e><c-u>
 cnoremap <c-a> <c-b>
 cnoremap <c-b> <S-left>
-noremap <c-g> <cmd>echom 'Quit'<cr>
-noremap gG <c-g>
 "noremap jk <cmd>echo 'Not in Insert Mode'<cr>
 
 nnoremap <c-j> viwUe<space><esc>

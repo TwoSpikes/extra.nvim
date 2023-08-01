@@ -414,10 +414,11 @@ if &t_Co >= 256
     hi StatuslineNC ctermfg=17 ctermbg=208 cterm=reverse
     hi VertSplit ctermfg=159 ctermbg=17 cterm=NONE
 "    hi TabLine ctermfg=208 ctermbg=17 cterm=NONE
-    hi TabLine ctermfg=195 ctermbg=18 cterm=italic
+    hi TabLine ctermfg=195 ctermbg=18 cterm=NONE
+    hi TabLineSec ctermfg=222 ctermbg=18 cterm=NONE
     hi TabLineFill ctermfg=NONE ctermbg=237 cterm=NONE
 "    hi TabLineSel ctermfg=195 ctermbg=18 cterm=bold
-    hi TabLineSel ctermfg=195 ctermbg=18 cterm=bold,italic,reverse
+    hi TabLineSel ctermfg=195 ctermbg=18 cterm=bold,reverse
     hi ToolbarLine ctermfg=NONE ctermbg=NONE cterm=NONE
     hi ToolbarButton ctermfg=16 ctermbg=231 cterm=NONE
     hi QuickFixLine ctermfg=16 ctermbg=75 cterm=NONE
@@ -426,7 +427,7 @@ if &t_Co >= 256
     hi NonText ctermfg=214 ctermbg=NONE cterm=NONE
     hi FoldColumn ctermfg=240 ctermbg=NONE cterm=NONE
     hi EndOfBuffer ctermfg=214 ctermbg=NONE cterm=NONE
-    hi SpecialKey ctermfg=240 ctermbg=NONE cterm=bold,italic
+    hi SpecialKey ctermfg=240 ctermbg=252 cterm=bold,reverse
     hi Pmenu ctermfg=208 ctermbg=17 cterm=NONE
     hi PmenuSel ctermfg=208 ctermbg=17 cterm=bold,reverse
     hi PmenuThumb ctermfg=NONE ctermbg=251 cterm=NONE
