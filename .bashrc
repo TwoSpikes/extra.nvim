@@ -1,13 +1,7 @@
 #!/bin/env bash
 
-if [[ $TIMER_INCLUDED == '' ]]; then
-	export TIMER_INCLUDED=true
-	. ~/timer.sh
-fi
-if [[ $CHECKHEALTH_INCLUDED == '' ]]; then
-	export CHECKHEALTH_INCLUDED=true
-	. ~/checkhealth.sh
-fi
+. ~/timer.sh
+. ~/checkhealth.sh
 
 timer_start 'loading variables...'
 
@@ -211,11 +205,11 @@ export ALL_TIME=0
 
 function print_todo() {
 	if [[ -f ~/todo ]]; then
-		if [[ `"${CAT_PROGRAM}" ~/todo` -eq '' ]]; then
+		if [[ `"${CAT_PROGRAM}" ~/todo` == '' ]]; then
 			"${ECHO_PROGRAM}" -e "${YELLOW_COLOR}todo is empty${RESET_COLOR}"
 		else
 			"${ECHO_PROGRAM}" -e "${GREEN_COLOR}todo file:${RESET_COLOR}"
-			"${CAT_PROGRAM}" todo
+			"${CAT_PROGRAM}" ~/todo
 		fi
 	else
 		"${ECHO_PROGRAM}" -e "${RED_COLOR}todo file does not exist${RESET_COLOR}"

@@ -37,14 +37,21 @@ if has('nvim')
 else
 	se nu rnu
 endif
+
+set showcmd
+set showcmdloc=statusline
+
 let s:custom_mode = ''
 let s:specmode = ''
+function! SetStatusLineNc()
+	echohl StatusLineNc
+endfunction
 function! Showtab()
-	let stl_name = '%t%( %M%R%H%W%)'
+	let stl_name = '%t%<%( %#StatusLinemod#%M%R%H%W%*%)'
 	let mode = mode('lololol')
 	let strmode = ''
 	if mode == 'n'
-		let strmode = 'NORM'
+		let strmode = '%#ModeNorm#NORM'
 	elseif mode == 'no'
 		let strmode = 'OP_PEND'
 	elseif mode == 'nov'
@@ -80,13 +87,13 @@ function! Showtab()
 	elseif mode == 'CTRL-S'
 		let strmode = 'SEL_BLOCK'
 	elseif mode == 'i'
-		let strmode = 'INS '
+		let strmode = '%#ModeIns#INS '
 	elseif mode == 'ic'
 		let strmode = 'compl INS'
 	elseif mode == 'ix'
 		let strmode = '^x compl INS'
 	elseif mode == 'R'
-		let strmode = 'REPL'
+		let strmode = '%#ModeRepl#REPL'
 	elseif mode == 'Rc'
 		let strmode = 'compl REPL'
 	elseif mode == 'Rx'
@@ -101,7 +108,7 @@ function! Showtab()
 		if s:specmode == 'b'
 			let strmode = 'COM_BLOCK'
 		else
-			let strmode = 'COM '
+			let strmode = '%#ModeCom#COM '
 		endif
 	elseif mode == 'cv'
 		let strmode = 'EX  '
@@ -117,9 +124,11 @@ function! Showtab()
 		let strmode = 'TERM'
 	endif
 	let stl_time = '%{strftime("%b,%d %H:%M:%S")}'
-	let stl_pos = '%l/%L,%c%V'
+	let stl_pos = '%l/%L,%c'
+	let stl_showcmd = '%(%#Statuslinemod#%S%*%)'
 	let stl_buf = '#%n %p%%'
-	let &stl = stl_name . '%=' . stl_pos . '%=' . stl_time . '%=' . strmode . (s:custom_mode ? ' ' . s:custom_mode : '') . '%=' . stl_buf
+	let stl_mode_to_put = strmode.(s:custom_mode?' '.s:custom_mode:'').' '.'%*'
+	let &stl = stl_mode_to_put . stl_name.'%='.stl_time.'%='.stl_showcmd.'%='.stl_pos.'%='.stl_buf
 endfunction
 command! Showtab call Showtab()
 
@@ -130,6 +139,7 @@ function TabTimerHandler(id)
 endfunction
 function TabTimerStart()
 	if s:tabtimerid == 0
+		Showtab
 		call timer_start(500, 'TabTimerHandler', {'repeat': -1})
 	endif
 endfunction
@@ -152,6 +162,8 @@ augroup tabtimer
 	autocmd CursorMoved * call TabTimerStart()
 	autocmd CursorHoldI * call TabTimerStop()
 	autocmd CursorMovedI * call TabTimerStart()
+	autocmd InsertEnter * call TabTimerStart()
+	autocmd InsertLeave * call TabTimerStart()
 augroup END
 
 augroup numbertoggle
@@ -219,7 +231,7 @@ let &breakat = "    !¡@*-+;:,./?¿{}[]^%&"
 set list
 set display=lastline
 set fcs=lastline:>
-set listchars=tab:>\ ,trail:-,nbsp:+
+set listchars=tab:>\ ,trail:_,nbsp:+
 set shortmess=filmnrwxsWItcF
 set showtabline=2
 set noshowmode
@@ -264,17 +276,40 @@ if v:version >= 700
   au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 endif
 
-noremap <silent> - ddk
-noremap <silent> dd dd
+noremap <silent> dd ddk
+noremap <silent> - dd
 noremap <silent> + mzyyp`zj
 
 noremap <silent> J mzJ`z
 noremap <silent> gJ mzgJ`z
 
-noremap <silent> <expr> j v:count == 0 ? 'gj' : "\<Esc>".v:count.'j' " .':let &stc=&stc'
-noremap <silent> <expr> k v:count == 0 ? 'gk' : "\<Esc>".v:count.'k' " .':let &stc=&stc'
-noremap <silent> <expr> <down> v:count == 0 ? 'gj' : "\<Esc>".v:count.'j' " .':let &stc=&stc'
-noremap <silent> <expr> <up> v:count == 0 ? 'gk' : "\<Esc>".v:count.'k' " .':let &stc=&stc'
+function! ProcessBut(button)
+	let mode_was = mode()
+
+	let temp = "\<cmd>set noshowcmd\<cr>"
+	let temp .= a:button
+	let temp .= "\<Esc>\<cmd>set showcmd\<cr>"
+
+	if mode_was == 'v' || mode_was == 'V' || mode_was == 'CTRL-V'
+		let temp .= "gv"
+	endif
+
+	return temp
+endfunction
+function! ProcessGBut(button)
+	let temp = ''
+	if v:count == 0
+		let temp .= 'g' . a:button
+	else
+		let temp .= "\<Esc>" . v:count . a:button
+	endif
+	return temp
+endfunction
+
+noremap <silent> <expr> j ProcessBut(ProcessGBut('j'))
+noremap <silent> <expr> k ProcessBut(ProcessGBut('k'))
+noremap <silent> <expr> <down> ProcessBut(ProcessGBut('j'))
+noremap <silent> <expr> <up> ProcessBut(ProcessGBut('k'))
 noremap <silent> <leader>j j:let &stc=&stc<cr>
 noremap <silent> <leader>k k:let &stc=&stc<cr>
 noremap <silent> <leader><up> k:let &stc=&stc<cr>
@@ -283,6 +318,9 @@ noremap <silent> <leader><down> j:let &stc=&stc<cr>
 " noremap <silent> $ g$
 " noremap <silent> I g0i
 " noremap <silent> A g$a
+
+noremap <silent> <expr> l ProcessBut('l')
+noremap <silent> <expr> h ProcessBut('h')
 
 noremap <silent> <c-h> mzggVG`z
 noremap <silent> <c-s> <c-a>
@@ -305,7 +343,7 @@ inoremap <c-j> <esc>viwUe<esc>a
 
 nnoremap <bs> X
 
-function Findfile()
+function! Findfile()
 	echohl Title
 	let filename = input('find file: ')
 	echohl Normal
@@ -315,7 +353,7 @@ function Findfile()
 endfunction
 command! Findfile call Findfile()
 noremap <c-c>c <cmd>Findfile<cr>
-function Findfilebuffer()
+function! Findfilebuffer()
 	echohl Title
 	let filename = input('find file (in buffer): ')
 	echohl Normal
@@ -328,13 +366,6 @@ noremap <c-c>C <cmd>Findfilebuffer<cr>
 "nnoremap <leader>lC :tabnew<Bar>ter<Bar><cr>a./build.sh
 "nnoremap <leader>lc :tabnext<Bar><c-\><c-n>:bd!<Bar>tabnew<Bar>ter<cr>a!!<cr>
 
-if !$disable_autowrapping
- noremap l <space>
- noremap h <bs>
- noremap <right> <space>
- noremap <left> <bs>
-endif
-
 nnoremap <silent> * *:noh<cr>
 nnoremap <silent> <c-*> *
 nnoremap <silent> # #:noh<cr>
@@ -345,15 +376,15 @@ noremap <c-h> 20zh
 inoremap <c-l> <esc>20zla
 inoremap <c-h> <esc>20zha
 let s:SCROLL_UP_FACTOR = 2
-let s:SCROLL_DOWN_FACTOR = 3
+let s:SCROLL_DOWN_FACTOR = 2
 let s:SCROLL_C_E_FACTOR = s:SCROLL_UP_FACTOR
 let s:SCROLL_C_Y_FACTOR = s:SCROLL_DOWN_FACTOR
 let s:SCROLL_MOUSE_UP_FACTOR = s:SCROLL_UP_FACTOR
 let s:SCROLL_MOUSE_DOWN_FACTOR = s:SCROLL_DOWN_FACTOR
-exec printf("noremap <c-Y> %s<c-e>", s:SCROLL_C_E_FACTOR)
-exec printf("noremap <c-y> %s<c-y>", s:SCROLL_C_Y_FACTOR)
-exec printf("noremap <ScrollWheelDown> %s<c-e>", s:SCROLL_MOUSE_DOWN_FACTOR)
-exec printf("noremap <ScrollWheelUp> %s<c-y>", s:SCROLL_MOUSE_UP_FACTOR)
+exec printf("noremap <silent> <expr> <c-Y> ProcessBut(\"%s<c-e>\")", s:SCROLL_C_E_FACTOR)
+exec printf("noremap <silent> <expr> <c-y> ProcessBut(\"%s<c-y>\")", s:SCROLL_C_Y_FACTOR)
+exec printf("noremap <silent> <expr> <ScrollWheelDown> ProcessBut(\"%s<c-e>\")", s:SCROLL_MOUSE_DOWN_FACTOR)
+exec printf("noremap <silent> <expr> <ScrollWheelUp> ProcessBut(\"%s<c-y>\")", s:SCROLL_MOUSE_UP_FACTOR)
 
 " NVIMRC FILE
 let s:INIT_FILE_PATH = '~/.config/nvim/init.vim'
@@ -519,6 +550,11 @@ augroup END
 augroup bash
 	au!
 	au filetype bash,sh setlocal nowrap linebreak
+augroup END
+augroup python
+	au!
+	au filetype python nnoremap <silent> <buffer> <leader>l/d mz0i#<esc>`zl
+	au filetype python nnoremap <silent> <buffer> <leader>l/u mz:s/^#<cr>`zh:noh<cr>
 augroup END
 
 " TELESCOPE

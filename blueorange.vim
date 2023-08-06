@@ -408,6 +408,11 @@ if &t_Co >= 256
     hi Operator ctermfg=220 ctermbg=NONE cterm=bold
     hi SpecialChar ctermfg=41 ctermbg=NONE cterm=NONE
     hi Statusline ctermfg=18 ctermbg=195 cterm=bold
+    hi Statuslinemod ctermfg=57 ctermbg=155 cterm=bold,reverse
+    hi ModeNorm ctermfg=16 ctermbg=84 cterm=bold
+    hi ModeIns ctermfg=15 ctermbg=39 cterm=bold
+    hi ModeCom ctermfg=16 ctermbg=226 cterm=bold
+    hi ModeRepl ctermfg=15 ctermbg=128 cterm=bold
 "    hi Statusline ctermfg=17 ctermbg=208 cterm=bold
     hi StatuslineNC ctermfg=17 ctermbg=208 cterm=bold,reverse
 "    hi StatuslineNC ctermfg=18 ctermbg=195 cterm=reverse
@@ -448,7 +453,7 @@ if &t_Co >= 256
     hi WildMenu ctermfg=16 ctermbg=222 cterm=bold
     hi debugPC ctermfg=67 ctermbg=NONE cterm=reverse
     hi debugBreakpoint ctermfg=73 ctermbg=NONE cterm=reverse
-    hi Visual ctermfg=231 ctermbg=24 cterm=NONE
+    hi Visual ctermfg=NONE ctermbg=18 cterm=NONE
     hi MatchParen ctermfg=30 ctermbg=16 cterm=reverse
     hi VisualNOS ctermfg=16 ctermbg=73 cterm=NONE
     hi CursorLine ctermfg=NONE ctermbg=237 cterm=NONE
