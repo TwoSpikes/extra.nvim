@@ -2,7 +2,7 @@
 
 let mapleader = " "
 
-set notermguicolors
+set termguicolors
 set background=dark
 colorscheme blueorange
 set nolazyredraw

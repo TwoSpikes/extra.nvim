@@ -11,7 +11,7 @@
 hi clear
 let g:colors_name = 'blueorange'
 
-hi Cursor ctermfg=NONE ctermbg=NONE cterm=bold guifg=NONE guibg=NONE gui=NONE
+hi Cursor guifg=NONE guibg=#ffdf00 gui=NONE cterm=NONE
 set guicursor=n-v-c:block-Cursor
 set guicursor+=i:ver100-Cursor
 set guicursor+=r:hor20-Cursor
@@ -403,28 +403,27 @@ if &t_Co >= 256
   hi! link MessageWindow PMenu
   hi! link PopupNotification Todo
   if &background ==# 'dark'
-    hi Normal ctermfg=15 ctermbg=NONE cterm=NONE
+    hi Normal ctermfg=15 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=NONE gui=NONE
     hi Terminal ctermfg=251 ctermbg=NONE cterm=NONE
-    hi Operator ctermfg=220 ctermbg=NONE cterm=bold
+    hi Operator ctermfg=220 ctermbg=NONE cterm=bold guifg=#ffdf00 guibg=NONE gui=bold
     hi SpecialChar ctermfg=41 ctermbg=NONE cterm=NONE
-    hi Statusline ctermfg=18 ctermbg=195 cterm=bold
-    hi Statuslinemod ctermfg=57 ctermbg=155 cterm=bold,reverse
-    hi ModeNorm ctermfg=16 ctermbg=84 cterm=bold
-    hi ModeIns ctermfg=15 ctermbg=39 cterm=bold
-    hi ModeVisu ctermfg=15 ctermbg=18 cterm=bold
-    hi ModeCom ctermfg=16 ctermbg=226 cterm=bold
-    hi ModeRepl ctermfg=15 ctermbg=128 cterm=bold
+    hi Statusline ctermfg=18 ctermbg=194 cterm=bold guifg=#0000af guibg=#dfffdf gui=bold
+    hi Statuslinemod ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#5f00ff guibg=#afff5f gui=bold,reverse
+    hi ModeNorm ctermfg=16 ctermbg=84 cterm=bold guifg=#000000 guibg=#5fff87 gui=bold
+    hi ModeIns ctermfg=15 ctermbg=39 cterm=bold guifg=#ffffff guibg=#00afff gui=bold
+    hi ModeVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#ffffff guibg=#000087 gui=bold
+    hi ModeCom ctermfg=16 ctermbg=226 cterm=bold guifg=#000000 guibg=#ffff00 gui=bold
+    hi ModeRepl ctermfg=15 ctermbg=128 cterm=bold guifg=#ffffff guibg=#af00df gui=bold
 "    hi Statusline ctermfg=17 ctermbg=208 cterm=bold
-    hi StatuslineNC ctermfg=17 ctermbg=208 cterm=bold,reverse
 "    hi StatuslineNC ctermfg=18 ctermbg=195 cterm=reverse
-    hi StatuslineNC ctermfg=17 ctermbg=208 cterm=reverse
+    hi StatuslineNC ctermfg=17 ctermbg=208 cterm=reverse guifg=#00005f guibg=#ff8700 gui=reverse
     hi VertSplit ctermfg=159 ctermbg=17 cterm=NONE
 "    hi TabLine ctermfg=208 ctermbg=17 cterm=NONE
     hi TabLine ctermfg=195 ctermbg=18 cterm=NONE
     hi TabLineSec ctermfg=222 ctermbg=18 cterm=NONE
-    hi TabLineFill ctermfg=NONE ctermbg=237 cterm=NONE
+    hi TabLineFill ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#3a3a3a gui=NONE
 "    hi TabLineSel ctermfg=195 ctermbg=18 cterm=bold
-    hi TabLineSel ctermfg=195 ctermbg=18 cterm=bold,reverse
+    hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#dfffdf guibg=#000087 gui=bold,reverse
     hi ToolbarLine ctermfg=NONE ctermbg=NONE cterm=NONE
     hi ToolbarButton ctermfg=16 ctermbg=231 cterm=NONE
     hi QuickFixLine ctermfg=16 ctermbg=75 cterm=NONE
@@ -454,10 +453,10 @@ if &t_Co >= 256
     hi WildMenu ctermfg=16 ctermbg=222 cterm=bold
     hi debugPC ctermfg=67 ctermbg=NONE cterm=reverse
     hi debugBreakpoint ctermfg=73 ctermbg=NONE cterm=reverse
-    hi Visual ctermfg=NONE ctermbg=18 cterm=NONE
+    hi Visual ctermfg=NONE ctermbg=18 cterm=NONE guifg=NONE guibg=#000087 gui=NONE
     hi MatchParen ctermfg=30 ctermbg=16 cterm=reverse
     hi VisualNOS ctermfg=16 ctermbg=73 cterm=NONE
-    hi CursorLine ctermfg=NONE ctermbg=237 cterm=NONE
+    hi CursorLine ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#3a3a3a gui=NONE
     hi CursorColumn ctermfg=NONE ctermbg=238 cterm=NONE
     hi Folded ctermfg=15 ctermbg=234 cterm=italic
     hi ColorColumn ctermfg=NONE ctermbg=234 cterm=NONE
@@ -469,7 +468,7 @@ if &t_Co >= 256
     hi Constant ctermfg=213 ctermbg=NONE cterm=NONE
     hi String ctermfg=222 ctermbg=NONE cterm=NONE
     hi Identifier ctermfg=NONE ctermbg=NONE cterm=NONE
-    hi Statement ctermfg=228 ctermbg=NONE cterm=bold
+    hi Statement ctermfg=228 ctermbg=NONE cterm=bold guifg=#ffff87 guibg=NONE gui=bold
     hi Keyword ctermfg=220 ctermbg=NONE cterm=italic guifg=#ffdf00 guibg=NONE gui=italic
     hi Type ctermfg=77 ctermbg=NONE cterm=NONE
     hi PreProc ctermfg=116 ctermbg=NONE cterm=NONE
@@ -1024,4 +1023,4 @@ endif
 " Term colors: color00 color01 color02 color03 color04 color05 color06 color07
 " Term colors: color08 color09 color10 color11 color12 color13 color14 color15
 " Background: any
-" vim: et ts=2 sw=2
+" vim: et ts=2 sw=2 nowrap

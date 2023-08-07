@@ -68,6 +68,12 @@ function! g:ColorTable()
         call append(0, rows)
         call append(len(rows) + 1, s:HelpComment())
         call s:SetBufferOptions()
+
+		setlocal modifiable
+		norm! at — show RGB codes
+		norm! of — set fg color of all to current
+		norm! o# — yiw
+		setlocal nomodifiable
     endif
 endfunction
 function! s:ColorRow(start, end)
@@ -107,7 +113,7 @@ function! s:HighlightCell(n, bgf)
     execute 'highlight bg_' . a:n . ' ctermfg=' . bgf . ' guifg=' . s:xterm_colors[bgf]
 endfunction
 function! s:SetBufferOptions()
-    setlocal buftype=nofile bufhidden=hide buflisted
+    setlocal buftype=nofile bufhidden=wipe buflisted
     setlocal nomodified nomodifiable noswapfile readonly
     setlocal nocursorline nocursorcolumn
     setlocal iskeyword+=#
