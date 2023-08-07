@@ -47,7 +47,7 @@ function! SetStatusLineNc()
 	echohl StatusLineNc
 endfunction
 function! Showtab()
-	let stl_name = '%t%<%( %#StatusLinemod#%M%R%H%W%*%)'
+	let stl_name = '%t%<%( %#StatusLinemod#%M%R%H%W%)%*%( %#StatusLinemod#'.&syntax.'%)%*'
 	let mode = mode('lololol')
 	let strmode = ''
 	if mode == 'n'
@@ -285,9 +285,12 @@ noremap <silent> gJ mzgJ`z
 
 function! ProcessBut(button)
 	let mode_was = mode()
+	let temp = ''
 
-	let temp = "\<cmd>set noshowcmd\<cr>"
+	let temp .= "\<cmd>set noshowcmd\<cr>"
+
 	let temp .= a:button
+
 	let temp .= "\<Esc>\<cmd>set showcmd\<cr>"
 
 	if mode_was == 'v' || mode_was == 'V' || mode_was == 'CTRL-V'
