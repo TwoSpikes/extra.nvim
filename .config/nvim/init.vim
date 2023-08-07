@@ -71,7 +71,7 @@ function! Showtab()
 	elseif mode == 'ntT'
 		let strmode = '^\^o norm TERM'
 	elseif mode == 'v'
-		let strmode = 'VISU'
+		let strmode = '%#ModeVisu#VISU'
 	elseif mode == 'V'
 		let strmode = 'VIS_LINE'
 	elseif mode == 'vs'
@@ -127,7 +127,7 @@ function! Showtab()
 	let stl_pos = '%l/%L,%c'
 	let stl_showcmd = '%(%#Statuslinemod#%S%*%)'
 	let stl_buf = '#%n %p%%'
-	let stl_mode_to_put = strmode.(s:custom_mode?' '.s:custom_mode:'').' '.'%*'
+	let stl_mode_to_put = strmode.(s:custom_mode?' '.s:custom_mode:'').' %* '
 	let &stl = stl_mode_to_put . stl_name.'%='.stl_time.'%='.stl_showcmd.'%='.stl_pos.'%='.stl_buf
 endfunction
 command! Showtab call Showtab()

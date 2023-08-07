@@ -411,6 +411,7 @@ if &t_Co >= 256
     hi Statuslinemod ctermfg=57 ctermbg=155 cterm=bold,reverse
     hi ModeNorm ctermfg=16 ctermbg=84 cterm=bold
     hi ModeIns ctermfg=15 ctermbg=39 cterm=bold
+    hi ModeVisu ctermfg=15 ctermbg=18 cterm=bold
     hi ModeCom ctermfg=16 ctermbg=226 cterm=bold
     hi ModeRepl ctermfg=15 ctermbg=128 cterm=bold
 "    hi Statusline ctermfg=17 ctermbg=208 cterm=bold
