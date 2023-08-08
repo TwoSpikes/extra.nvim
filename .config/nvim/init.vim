@@ -1,11 +1,15 @@
 #!/bin/env -S nvim -u
 
+if expand("%") == ""
+	e ./
+endif
+
 let mapleader = " "
 
 set termguicolors
 set background=dark
 colorscheme blueorange
-set nolazyredraw
+set lazyredraw
 
 set helpheight=25
 set splitbelow
@@ -51,83 +55,83 @@ function! Showtab()
 	let mode = mode('lololol')
 	let strmode = ''
 	if mode == 'n'
-		let strmode = '%#ModeNorm#NORM'
+		let strmode = '%#ModeNorm#NORM '
 	elseif mode == 'no'
-		let strmode = 'OP_PEND'
+		let strmode = 'OP_PEND '
 	elseif mode == 'nov'
-		let strmode = 'visu OP_PEND'
+		let strmode = 'visu OP_PEND '
 	elseif mode == 'noV'
-		let strmode = 'vis_line OP_PEND'
+		let strmode = 'vis_line OP_PEND '
 	elseif mode == 'noCTRL-v'
-		let strmode = 'vis_block OP_PEND'
+		let strmode = 'vis_block OP_PEND '
 	elseif mode == 'niI'
-		let strmode = '^o INS'
+		let strmode = '^o INS '
 	elseif mode == 'niR'
-		let strmode = '^o REPL'
+		let strmode = '^o REPL '
 	elseif mode == 'niV'
-		let strmode = '^o VIRT_REPL'
+		let strmode = '^o visu REPL '
 	elseif mode == 'nt'
-		let strmode = 'norm TERM'
+		let strmode = '%#ModeNorm#norm%*TERM'
 	elseif mode == 'ntT'
-		let strmode = '^\^o norm TERM'
+		let strmode = '^\^o norm TERM '
 	elseif mode == 'v'
-		let strmode = '%#ModeVisu#VISU'
+		let strmode = '%#ModeVisu#VISU '
 	elseif mode == 'V'
-		let strmode = 'VIS_LINE'
+		let strmode = 'VIS_LINE '
 	elseif mode == 'vs'
-		let strmode = '^o visu SEL'
+		let strmode = '^o visu SEL '
 	elseif mode == 'CTRL-V'
-		let strmode = 'VIS_BLOCK'
+		let strmode = 'VIS_BLOCK '
 	elseif mode == 'CTRL-Vs'
-		let strmode = '^o vis_block SEL'
+		let strmode = '^o vis_block SEL '
 	elseif mode == 's'
-		let strmode = 'SEL '
+		let strmode = 'SEL  '
 	elseif mode == 'S'
-		let strmode = 'SEL_LINE'
+		let strmode = 'SEL LINE '
 	elseif mode == 'CTRL-S'
-		let strmode = 'SEL_BLOCK'
+		let strmode = 'SEL BLOCK '
 	elseif mode == 'i'
 		let strmode = '%#ModeIns#INS '
 	elseif mode == 'ic'
-		let strmode = 'compl INS'
+		let strmode = 'compl INS '
 	elseif mode == 'ix'
-		let strmode = '^x compl INS'
+		let strmode = '^x compl INS '
 	elseif mode == 'R'
-		let strmode = '%#ModeRepl#REPL'
+		let strmode = '%#ModeRepl#REPL '
 	elseif mode == 'Rc'
-		let strmode = 'compl REPL'
+		let strmode = 'compl REPL '
 	elseif mode == 'Rx'
-		let strmode = '^x compl REPL'
+		let strmode = '^x compl REPL '
 	elseif mode == 'Rv'
-		let strmode = 'visu REPL'
+		let strmode = '%#ModeIns#visu%*%#ModeRepl#REPL'
 	elseif mode == 'Rvc'
-		let strmode = 'compl visu REPL'
+		let strmode = 'compl visu REPL '
 	elseif mode == 'Rvx'
-		let strmode = '^x compl visu REPL'
+		let strmode = '^x compl visu REPL '
 	elseif mode == 'c'
 		if s:specmode == 'b'
-			let strmode = 'COM_BLOCK'
+			let strmode = 'COM_BLOCK '
 		else
-			let strmode = '%#ModeCom#COM '
+			let strmode = '%#ModeCom#COM  '
 		endif
 	elseif mode == 'cv'
-		let strmode = 'EX  '
+		let strmode = 'EX   '
 	elseif mode == 'r'
-		let strmode = 'HIT_ENTER'
+		let strmode = 'HIT_ENTER '
 	elseif mode == 'rm'
-		let strmode = 'MORE'
+		let strmode = 'MORE '
 	elseif mode == 'r?'
-		let strmode = 'CONFIRM'
+		let strmode = 'CONFIRM '
 	elseif mode == '!'
-		let strmode = 'SHELL'
+		let strmode = 'SHELL '
 	elseif mode == 't'
-		let strmode = 'TERM'
+		let strmode = 'TERM '
 	endif
 	let stl_time = '%{strftime("%b,%d %H:%M:%S")}'
 	let stl_pos = '%l/%L,%c'
 	let stl_showcmd = '%(%#Statuslinemod#%S%*%)'
 	let stl_buf = '#%n %p%%'
-	let stl_mode_to_put = strmode.(s:custom_mode?' '.s:custom_mode:'').' %* '
+	let stl_mode_to_put = strmode.(s:custom_mode?' '.s:custom_mode:'').'%* '
 	let &stl = stl_mode_to_put . stl_name.'%='.stl_time.'%='.stl_showcmd.'%='.stl_pos.'%='.stl_buf
 endfunction
 command! Showtab call Showtab()
@@ -165,6 +169,8 @@ augroup tabtimer
 	autocmd InsertEnter * call TabTimerStart()
 	autocmd InsertLeave * call TabTimerStart()
 augroup END
+
+noremap <silent> <esc> <cmd>Showtab<cr>
 
 augroup numbertoggle
   autocmd!
@@ -260,6 +266,7 @@ set mousescroll=ver:3,hor:6
 set mouseshape=i:beam,r:beam,s:updown,sd:cross,m:no,ml:up-arrow,v:rightup-arrow
 set mousetime=400
 set startofline
+se guicursor=n-v-c-sm:block-blinkwait175-blinkoff150-blinkon175-Cursor,i-ci-ve:ver50-Cursor,r-cr-o:hor50-Cursor
 
 set tabstop=4
 set shiftwidth=4
@@ -283,22 +290,22 @@ noremap <silent> + mzyyp`zj
 noremap <silent> J mzJ`z
 noremap <silent> gJ mzgJ`z
 
-function! ProcessBut(button)
-	let mode_was = mode()
-	let temp = ''
-
-	let temp .= "\<cmd>set noshowcmd\<cr>"
-
-	let temp .= a:button
-
-	let temp .= "\<Esc>\<cmd>set showcmd\<cr>"
-
-	if mode_was == 'v' || mode_was == 'V' || mode_was == 'CTRL-V'
-		let temp .= "gv"
-	endif
-
-	return temp
-endfunction
+"function! ProcessBut(button)
+"	let mode_was = mode()
+"	let temp = ''
+"
+"	let temp .= "\<cmd>set showcmdloc=last\<cr>"
+"
+"	let temp .= a:button
+"
+"	let temp .= "\<Esc>\<cmd>set showcmdloc=statusline\<cr>"
+"
+"	if mode_was == 'v' || mode_was == 'V' || mode_was == 'CTRL-V'
+"		let temp .= "gv"
+"	endif
+"
+"	return temp
+"endfunction
 function! ProcessGBut(button)
 	let temp = ''
 	if v:count == 0
@@ -309,10 +316,10 @@ function! ProcessGBut(button)
 	return temp
 endfunction
 
-noremap <silent> <expr> j ProcessBut(ProcessGBut('j'))
-noremap <silent> <expr> k ProcessBut(ProcessGBut('k'))
-noremap <silent> <expr> <down> ProcessBut(ProcessGBut('j'))
-noremap <silent> <expr> <up> ProcessBut(ProcessGBut('k'))
+noremap <silent> <expr> j ProcessGBut('j')
+noremap <silent> <expr> k ProcessGBut('k')
+noremap <silent> <expr> <down> ProcessGBut('j')
+noremap <silent> <expr> <up> ProcessGBut('k')
 noremap <silent> <leader>j j:let &stc=&stc<cr>
 noremap <silent> <leader>k k:let &stc=&stc<cr>
 noremap <silent> <leader><up> k:let &stc=&stc<cr>
@@ -321,9 +328,6 @@ noremap <silent> <leader><down> j:let &stc=&stc<cr>
 " noremap <silent> $ g$
 " noremap <silent> I g0i
 " noremap <silent> A g$a
-
-noremap <silent> <expr> l ProcessBut('l')
-noremap <silent> <expr> h ProcessBut('h')
 
 noremap <silent> <c-h> mzggVG`z
 noremap <silent> <c-s> <c-a>
@@ -384,10 +388,10 @@ let s:SCROLL_C_E_FACTOR = s:SCROLL_UP_FACTOR
 let s:SCROLL_C_Y_FACTOR = s:SCROLL_DOWN_FACTOR
 let s:SCROLL_MOUSE_UP_FACTOR = s:SCROLL_UP_FACTOR
 let s:SCROLL_MOUSE_DOWN_FACTOR = s:SCROLL_DOWN_FACTOR
-exec printf("noremap <silent> <expr> <c-Y> ProcessBut(\"%s<c-e>\")", s:SCROLL_C_E_FACTOR)
-exec printf("noremap <silent> <expr> <c-y> ProcessBut(\"%s<c-y>\")", s:SCROLL_C_Y_FACTOR)
-exec printf("noremap <silent> <expr> <ScrollWheelDown> ProcessBut(\"%s<c-e>\")", s:SCROLL_MOUSE_DOWN_FACTOR)
-exec printf("noremap <silent> <expr> <ScrollWheelUp> ProcessBut(\"%s<c-y>\")", s:SCROLL_MOUSE_UP_FACTOR)
+exec printf("noremap <silent> <expr> <c-Y> \"%s<c-e>\"", s:SCROLL_C_E_FACTOR)
+exec printf("noremap <silent> <expr> <c-y> \"%s<c-y>\"", s:SCROLL_C_Y_FACTOR)
+exec printf("noremap <silent> <expr> <ScrollWheelDown> \"%s<c-e>\"", s:SCROLL_MOUSE_DOWN_FACTOR)
+exec printf("noremap <silent> <expr> <ScrollWheelUp> \"%s<c-y>\"", s:SCROLL_MOUSE_UP_FACTOR)
 
 " NVIMRC FILE
 let s:INIT_FILE_PATH = '~/.config/nvim/init.vim'
@@ -497,6 +501,8 @@ noremap <silent> <leader>? <esc>:echo "
 
 " FAST COMMANDS
 noremap ; :
+noremap <silent> <leader>; ;
+noremap <silent> <leader>: :<c-f>a
 "noremap <leader>= :tabe 
 "noremap <leader>- :e 
 noremap <leader>= <cmd>echo "use \<c-c\>c"<cr>

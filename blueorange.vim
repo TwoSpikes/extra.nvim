@@ -11,7 +11,7 @@
 hi clear
 let g:colors_name = 'blueorange'
 
-hi Cursor guifg=NONE guibg=#ffdf00 gui=NONE cterm=NONE
+hi Cursor guifg=NONE guibg=#ffdf87 gui=NONE cterm=NONE
 set guicursor=n-v-c:block-Cursor
 set guicursor+=i:ver100-Cursor
 set guicursor+=r:hor20-Cursor
@@ -419,7 +419,7 @@ if &t_Co >= 256
     hi StatuslineNC ctermfg=17 ctermbg=208 cterm=reverse guifg=#00005f guibg=#ff8700 gui=reverse
     hi VertSplit ctermfg=159 ctermbg=17 cterm=NONE
 "    hi TabLine ctermfg=208 ctermbg=17 cterm=NONE
-    hi TabLine ctermfg=195 ctermbg=18 cterm=NONE
+    hi TabLine ctermfg=195 ctermbg=18 cterm=NONE guifg=#dfffff guibg=#000087 gui=NONE
     hi TabLineSec ctermfg=222 ctermbg=18 cterm=NONE
     hi TabLineFill ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#3a3a3a gui=NONE
 "    hi TabLineSel ctermfg=195 ctermbg=18 cterm=bold
@@ -454,7 +454,7 @@ if &t_Co >= 256
     hi debugPC ctermfg=67 ctermbg=NONE cterm=reverse
     hi debugBreakpoint ctermfg=73 ctermbg=NONE cterm=reverse
     hi Visual ctermfg=NONE ctermbg=18 cterm=NONE guifg=NONE guibg=#000087 gui=NONE
-    hi MatchParen ctermfg=30 ctermbg=16 cterm=reverse
+    hi MatchParen ctermfg=30 ctermbg=NONE cterm=reverse guifg=#008787 guibg=NONE gui=reverse
     hi VisualNOS ctermfg=16 ctermbg=73 cterm=NONE
     hi CursorLine ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#3a3a3a gui=NONE
     hi CursorColumn ctermfg=NONE ctermbg=238 cterm=NONE
