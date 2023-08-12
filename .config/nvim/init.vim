@@ -170,7 +170,7 @@ augroup tabtimer
 	autocmd InsertLeave * call TabTimerStart()
 augroup END
 
-noremap <silent> <esc> <cmd>Showtab<cr>
+"noremap <silent> <esc> <cmd>Showtab<cr>
 
 augroup numbertoggle
   autocmd!
@@ -253,6 +253,10 @@ set maxmempattern=500
 set history=10000
 set nomodelineexpr
 set updatetime=5000
+set notimeout
+set timeoutlen=0
+set nottimeout
+set ttimeoutlen=0
 
 set cursorline
 set cursorlineopt=screenline,number
@@ -329,7 +333,6 @@ noremap <silent> <leader><down> j:let &stc=&stc<cr>
 " noremap <silent> I g0i
 " noremap <silent> A g$a
 
-noremap <silent> <c-h> mzggVG`z
 noremap <silent> <c-s> <c-a>
 noremap <silent> <c-a> <cmd>normal _<cr>
 noremap <silent> <c-e> <cmd>normal $<cr>
@@ -337,7 +340,7 @@ inoremap <silent> <c-a> <c-o>_
 inoremap <silent> <c-e> <c-o>$
 
 cnoremap <silent> <c-a> <c-b>
-cnoremap <silent> <c-g> <c-e><c-u><cr>
+cnoremap <c-g> <c-e><c-u><cr>
 cnoremap <silent> jk <c-e><c-u><cr>
 cnoremap <c-u> <c-e><c-u>
 cnoremap <c-a> <c-b>
@@ -575,11 +578,63 @@ nnoremap <silent> <leader>fh :lua require'telescope.builtin'.help_tags(require('
 " vnoremap <c-/> <esc>v:q:s/.*/# \0
 " vnoremap <c-?> <esc>:s/.*/\/\/ \0
 
+function! IsYes(string)
+	return a:string ==# 'y' || a:string ==# 'Y' || a:string ==# 'yes' || a:string ==# 'Yes' || a:string ==# 'YES'
+endfunction
+function! IsNo(string)
+	return a:string ==# 'n' || a:string ==# 'N' || a:string ==# 'no' || a:string ==# 'No' || a:string ==# 'NO'
+endfunction
+
 " Tab closers
-noremap <silent> q <esc>:q<cr>
-noremap <silent> Q <esc>:q!<cr>
-noremap <silent> <C-w> <esc>:wq<cr>
+noremap <silent> q <cmd>q<cr>
+noremap <silent> Q <cmd>q!<cr>
+noremap <silent> <C-w> <cmd>wq<cr>
 noremap <silent> <C-W> <C-W>
+noremap <silent> <c-x><c-c> <cmd>qa<cr>
+noremap <silent> <c-x>s <cmd>w<cr>
+noremap <silent> <c-x><c-s> <cmd>w<cr>
+function! Killbuffer()
+	echohl Title
+	let user_input = input("do you wanna kill the buffer (Y/n): ")
+	echohl Normal
+	if user_input ==# '' || IsYes(user_input)
+		bdelete
+	elseif !IsNo(user_input)
+		echohl ErrorMsg
+		echo " "
+		echo "please answer "
+		echohl Title
+		echon "yes"
+		echohl ErrorMsg
+		echon " or "
+		echohl Title
+		echon "no"
+		echohl ErrorMsg
+		echon " or leave blank empty"
+		echohl Normal
+	endif
+endfunction
+command! Killbuffer call Killbuffer()
+noremap <silent> <c-x>k <cmd>Killbuffer<cr>
+noremap <silent> <c-x>0 <cmd>q<cr>
+noremap <silent> <c-x>1 <cmd>only<cr>
+noremap <silent> <c-x>2 <cmd>split<cr>
+noremap <silent> <c-x>3 <cmd>vsplit<cr>
+noremap <silent> <c-x>o <c-w>w
+noremap <silent> <c-x>O <c-w>W
+noremap <silent> <c-x><c-f> <cmd>Findfilebuffer<cr>
+noremap <silent> <c-x>t0 <cmd>tabclose<cr>
+noremap <silent> <c-x>t1 <cmd>tabonly<cr>
+noremap <silent> <c-x>t2 <cmd>tabnew<cr>
+noremap <silent> <c-x>to <cmd>tabnext<cr>
+noremap <silent> <c-x>tO <cmd>tabprevious<cr>
+noremap <silent> <c-x>5 <cmd>echo "Frames are only in Emacs/GNU Emacs"<cr>
+noremap <m-x> :
+noremap <silent> <c-x>h ggVG
+noremap <silent> <c-x><c-h> <cmd>h<cr>
+noremap <silent> <c-x><c-g> <cmd>echo "Quit"<cr>
+
+noremap mz <cmd>echohl ErrorMsg<cr><cmd>echom "mz is used for commands"<cr><cmd>echohl Normal<cr>
 
 noremap <leader>q q
 noremap <leader>Q Q
