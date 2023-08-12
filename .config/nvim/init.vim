@@ -588,8 +588,9 @@ endfunction
 " Tab closers
 noremap <silent> q <cmd>q<cr>
 noremap <silent> Q <cmd>q!<cr>
-noremap <silent> <C-w> <cmd>wq<cr>
-noremap <silent> <C-W> <C-W>
+noremap <c-w><c-g> <cmd>echo "Quit"<cr>
+
+" Emacs support
 noremap <silent> <c-x><c-c> <cmd>qa<cr>
 noremap <silent> <c-x>s <cmd>w<cr>
 noremap <silent> <c-x><c-s> <cmd>w<cr>
