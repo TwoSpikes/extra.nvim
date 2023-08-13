@@ -11,11 +11,3 @@ function timer_end() {
 	echo " (took ${TOOK} ms)"
 	export ALL_TIME=$((ALL_TIME + TOOK))
 }
-
-if [[ $TIMER_ALREADY_LOADED == '' ]]; then
-	export ALL_TIME=0
-fi
-
-if [[ $TIMER_ALREADY_LOADED == '' ]]; then
-	export TIMER_ALREADY_LOADED=true
-fi
