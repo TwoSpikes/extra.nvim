@@ -253,8 +253,8 @@ set maxmempattern=500
 set history=10000
 set nomodelineexpr
 set updatetime=5000
-set notimeout
-set timeoutlen=0
+set timeout
+set timeoutlen=500
 set nottimeout
 set ttimeoutlen=0
 
