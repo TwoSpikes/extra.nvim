@@ -1,5 +1,7 @@
 #!/bin/env bash
 
+HISTSIZE=256
+
 . ~/timer.sh
 . ~/checkhealth.sh
 
