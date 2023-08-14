@@ -1,6 +1,6 @@
 #!/bin/env bash
 
-HISTSIZE=256
+export HISTSIZE=0
 
 . ~/timer.sh
 . ~/checkhealth.sh
@@ -224,14 +224,6 @@ fi
 export SSPYPL_PATH=~/sspypl
 
 "${SOURCE_PROGRAM}" "${HOME}"/.config/broot/launcher/bash/br
-
-"${SOURCE_PROGRAM}" ~/.fzf.bash
-"${SOURCE_PROGRAM}" ~/.oh-my-bash-bashrc
-"${SOURCE_PROGRAM}" "$OSH"/oh-my-bash.sh
-
-if [[ $BASHRC_ALREADY_LOADED == '' ]]; then
-	export BASHRC_ALREADY_LOADED=true
-fi
 
 # vim:ts=4:sw=4
 # commented: fdm=expr:fde=getline(v\:lnum)=~'^timer_start'?'1'\:getline(v\:lnum)=~'^timer_end$'?'1'\:'0'

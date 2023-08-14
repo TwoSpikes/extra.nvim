@@ -649,6 +649,7 @@ tnoremap <silent> jK <c-\><c-n>:bd!<Bar>tabnew<Bar>ter<cr>a
 command! W w
 
 inoremap <silent> ju <esc>viwUea
+inoremap <silent> ji <esc>viwUea
 
 exec printf("luafile %s", s:PLUGINS_INSTALL_FILE_PATH)
 PackerInstall
