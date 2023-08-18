@@ -33,11 +33,11 @@ set foldnestmax=15
 
 set nonu
 set nornu
-function STCAbs()
-	let &stc = '%=%{v:relnum?v:relnum:v:lnum} '
+function STCRel()
+	let &stc = '%=%{v:relnum?v:relnum:((v:virtnum <= 0)?v:lnum:"")} '
 endfunction
 if has('nvim')
-	call STCAbs()
+	call STCRel()
 else
 	se nu rnu
 endif
@@ -91,11 +91,11 @@ function! Showtab()
 	elseif mode == 'CTRL-S'
 		let strmode = 'SEL BLOCK '
 	elseif mode == 'i'
-		let strmode = '%#ModeIns#INS '
+		let strmode = '%#ModeIns#INSE '
 	elseif mode == 'ic'
 		let strmode = 'compl INS '
 	elseif mode == 'ix'
-		let strmode = '^x compl INS '
+		let strmode = '%#ModeCom#^x compl%#ModeIns#INS'
 	elseif mode == 'R'
 		let strmode = '%#ModeRepl#REPL '
 	elseif mode == 'Rc'
@@ -112,7 +112,7 @@ function! Showtab()
 		if s:specmode == 'b'
 			let strmode = 'COM_BLOCK '
 		else
-			let strmode = '%#ModeCom#COM  '
+			let strmode = '%#ModeCom#COMM '
 		endif
 	elseif mode == 'cv'
 		let strmode = 'EX   '
@@ -126,6 +126,8 @@ function! Showtab()
 		let strmode = 'SHELL '
 	elseif mode == 't'
 		let strmode = 'TERM '
+	else
+		let strmode = '%#ModeVisu#visu%#ModeBlock#BLOCK'
 	endif
 	let stl_time = '%{strftime("%b,%d %H:%M:%S")}'
 	let stl_pos = '%l/%L,%c'
@@ -238,9 +240,10 @@ set list
 set display=lastline
 set fcs=lastline:>
 set listchars=tab:>\ ,trail:_,nbsp:+
-set shortmess=filmnrwxsWItcF
+set shortmess=filmnrxwsWItCF
 set showtabline=2
 set noshowmode
+set noconfirm
 
 setlocal nowrap
 
@@ -271,6 +274,9 @@ set mouseshape=i:beam,r:beam,s:updown,sd:cross,m:no,ml:up-arrow,v:rightup-arrow
 set mousetime=400
 set startofline
 se guicursor=n-v-c-sm:block-blinkwait175-blinkoff150-blinkon175-Cursor,i-ci-ve:ver50-Cursor,r-cr-o:hor50-Cursor
+
+set concealcursor=nc
+set conceallevel=0
 
 set tabstop=4
 set shiftwidth=4
@@ -352,6 +358,7 @@ vnoremap <c-j> iwUe<space>
 inoremap <c-j> <esc>viwUe<esc>a
 
 nnoremap <bs> X
+noremap <leader><bs> <bs>
 
 function! Findfile()
 	echohl Title
@@ -679,6 +686,23 @@ lua table_dump = function(table)
 \ end
 
 noremap <silent> <leader>S :let &scrolloff = 999 - &scrolloff<cr>
+
+" Interface
+function! ChangeVisual()
+	echo "Visual changed to "
+	echohl Visual
+	echon "blue"
+	echohl Normal
+	hi Visual ctermfg=NONE ctermbg=18 cterm=NONE guifg=NONE guibg=#000087 gui=NONE
+endfunction
+command! ChangeVisual call ChangeVisual()
+function! DeChangeVisual()
+	echo "Visual changed to reversed "
+	hi Visual ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
+endfunction
+command! DeChangeVisual call DeChangeVisual()
+noremap <leader>iv ChangeVisual
+noremap <leader>iV DeChangeVisual
 
 function! SwapHiGroup(group)
     let id = synIDtrans(hlID(a:group))

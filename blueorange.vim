@@ -412,15 +412,16 @@ if &t_Co >= 256
     hi ModeNorm ctermfg=16 ctermbg=84 cterm=bold guifg=#000000 guibg=#5fff87 gui=bold
     hi ModeIns ctermfg=15 ctermbg=39 cterm=bold guifg=#ffffff guibg=#00afff gui=bold
     hi ModeVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#ffffff guibg=#000087 gui=bold
-    hi ModeCom ctermfg=16 ctermbg=226 cterm=bold guifg=#000000 guibg=#ffff00 gui=bold
+    hi ModeCom ctermfg=16 ctermbg=220 cterm=bold guifg=#000000 guibg=#ffdf00 gui=bold
     hi ModeRepl ctermfg=15 ctermbg=128 cterm=bold guifg=#ffffff guibg=#af00df gui=bold
+    hi ModeBlock ctermfg=15 ctermbg=88 cterm=bold guifg=#ffffff guibg=#870000 gui=bold
 "    hi Statusline ctermfg=17 ctermbg=208 cterm=bold
 "    hi StatuslineNC ctermfg=18 ctermbg=195 cterm=reverse
     hi StatuslineNC ctermfg=17 ctermbg=208 cterm=reverse guifg=#00005f guibg=#ff8700 gui=reverse
     hi VertSplit ctermfg=159 ctermbg=17 cterm=NONE
 "    hi TabLine ctermfg=208 ctermbg=17 cterm=NONE
     hi TabLine ctermfg=195 ctermbg=18 cterm=NONE guifg=#dfffff guibg=#000087 gui=NONE
-    hi TabLineSec ctermfg=222 ctermbg=18 cterm=NONE
+    hi TabLineSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#ffdf87 guibg=#000087 gui=NONE
     hi TabLineFill ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#3a3a3a gui=NONE
 "    hi TabLineSel ctermfg=195 ctermbg=18 cterm=bold
     hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#dfffdf guibg=#000087 gui=bold,reverse
@@ -428,7 +429,7 @@ if &t_Co >= 256
     hi ToolbarButton ctermfg=16 ctermbg=231 cterm=NONE
     hi QuickFixLine ctermfg=16 ctermbg=75 cterm=NONE
     hi CursorLineNr ctermfg=220 ctermbg=236 cterm=bold,reverse guifg=#ffdf00 guibg=#000000 gui=bold,reverse
-    hi LineNr ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#ffdf00 guibg=#3a3a3a
+    hi LineNr ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#ffdf00 guibg=#3a3a3a gui=bold,italic
     hi NonText ctermfg=214 ctermbg=NONE cterm=NONE
     hi FoldColumn ctermfg=240 ctermbg=NONE cterm=NONE
     hi EndOfBuffer ctermfg=214 ctermbg=NONE cterm=NONE
