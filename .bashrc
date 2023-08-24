@@ -1,6 +1,7 @@
 #!/bin/env bash
 
-export HISTSIZE=0
+export HISTSIZE=5000
+export DISPLAY=":1"
 
 . ~/timer.sh
 . ~/checkhealth.sh

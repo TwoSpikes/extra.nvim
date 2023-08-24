@@ -34,7 +34,7 @@ set foldnestmax=15
 set nonu
 set nornu
 function STCRel()
-	let &stc = '%=%{v:relnum?v:relnum:((v:virtnum <= 0)?v:lnum:"")} '
+	let &stc = '%=%{v:relnum?((v:virtnum <= 0)?v:relnum:""):((v:virtnum <= 0)?v:lnum:"")} '
 endfunction
 if has('nvim')
 	call STCRel()
@@ -175,14 +175,21 @@ augroup END
 "noremap <silent> <esc> <cmd>Showtab<cr>
 
 augroup numbertoggle
-  autocmd!
-  autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | STCAbs | endif
-  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | STCRel | endif
+  au!
+  au BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | STCAbs | endif
+  au BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | STCRel | endif
 augroup END
 
 augroup STC_FIletYPE
+	au!
 	au filetype help setl nonu nornu stc=
 	" au terminalopen
+augroup END
+
+augroup strace
+	au!
+	au 
+	au filetype strace setl nomodifiable stc=
 augroup END
 
 augroup numbertoggle
@@ -340,7 +347,7 @@ noremap <silent> <leader><down> j:let &stc=&stc<cr>
 " noremap <silent> A g$a
 
 noremap <silent> <c-s> <c-a>
-noremap <silent> <c-a> <cmd>normal _<cr>
+noremap <silent> <c-a> <cmd>normal g0<cr>
 noremap <silent> <c-e> <cmd>normal $<cr>
 inoremap <silent> <c-a> <c-o>_
 inoremap <silent> <c-e> <c-o>$
