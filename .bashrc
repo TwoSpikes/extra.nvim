@@ -87,12 +87,14 @@ _df_c() {
     "${CLEAR_PROGRAM}"
 	"${CD_PROGRAM}" ~/dotfiles
 	"${CP_PROGRAM}" ~/.bashrc ~/timer.sh ~/checkhealth.sh ~/.fr.sh ~/tsch.sh ~/dotfiles/
-	"${CP_PROGRAM}" ~/xterm-color-table.vim ~/.oh-my-bash-bashrc ${PREFIX}/share/nvim/runtime/colors/blueorange.vim $PREFIX/share/nvim/runtime/syntax/book.vim ~/.oh-my-bash/custom/themes/tstheme/tstheme.theme.sh ~/inverting.sh ~/dotfiles/
+	"${CP_PROGRAM}" ~/xterm-color-table.vim ${PREFIX}/share/nvim/runtime/colors/blueorange.vim $PREFIX/share/nvim/runtime/syntax/book.vim ~/inverting.sh ~/dotfiles/
     "${CP_PROGRAM}" ~/dotfiles/blueorange.vim ${PREFIX}/share/vim/vim90/colors/
     "${CP_PROGRAM}" ~/dotfiles/book.vim ${PREFIX}/share/vim/vim90/syntax/
     "${CP_PROGRAM}" ~/.config/nvim/init.vim ~/dotfiles/.config/nvim/
     "${CP_PROGRAM}" -r ~/.config/nvim/lua/ ~/dotfiles/.config/nvim/
 	"${CP_PROGRAM}" ~/.tmux.conf ~/dotfiles/
+	"${CP_PROGRAM}" ~/.bash_history ~/dotfiles/
+	"${CP_PROGRAM}" ~/.zsh_history ~/dotfiles/
 	"${GIT_PROGRAM}" commit --all --verbose
 }
 _tsns_c() {
@@ -101,8 +103,6 @@ _tsns_c() {
     "${CP_PROGRAM}" ${PREFIX}/share/nvim/runtime/syntax/googol.vim ~/tsns/editor/
 	"${GIT_PROGRAM}" commit --all --verbose
 }
-exp() { "${EDITOR}" ./; }
-hxp() { "${EDITOR}" ~/; }
 
 if [[ -f $PREFIX/etc/motd ]]; then
 	"${RM_PROGRAM}" "$PREFIX"/etc/motd
