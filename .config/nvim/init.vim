@@ -240,7 +240,7 @@ endfunction
 set tabline=%!MyTabLine()
 
 set hidden
-set wrap
+set nowrap
 set nolinebreak
 let &breakat = "    !¡@*-+;:,./?¿{}[]^%&"
 set list
