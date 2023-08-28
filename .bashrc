@@ -16,6 +16,7 @@ export RUST_COMPILER='cargo'
 export PKG_MANAGER='pkg'
 export GIT_PROGRAM='git'
 export WGET_PROGRAM='wget'
+export CURL_PROGRAM='curl'
 export GREP_PROGRAM='grep'
 
 export CD_PROGRAM='cd'
@@ -23,19 +24,20 @@ export CP_PROGRAM='cp'
 export MV_PROGRAM='mv'
 export RM_PROGRAM='rm'
 export MKDIR_PROGRAM='mkdir'
-export CURL_PROGRAM='curl'
 export CAT_PROGRAM='cat'
 export EXIT_PROGRAM='exit'
 export ECHO_PROGRAM='echo'
 export ALIAS_PROGRAM='alias'
 export SOURCE_PROGRAM='.'
 export CLEAR_PROGRAM='clear'
+export WHICH_PROGRAM='which'
 
 export DISPLAY=':1'
 
-MAX_INSTALL_ATTEMPT=5
-MAX_WGET_INSTALL_ATTEMPT=5
+MAX_INSTALL_ATTEMPT=2
+MAX_WGET_INSTALL_ATTEMPT=2
 DEFAULT_INSTALL_COMMAND='install'
+DEFAULT_SEARCH_COMMAND='search'
 
 # colors
 RESET_COLOR='\033[0m'
@@ -145,7 +147,7 @@ try_install() {
 	program=${1}
 	case ${2} in
 		'')
-			bad_errorcode=127
+			bad_errorcode=100
 		;;
 		*)
 			bad_errorcode=${2}
@@ -177,25 +179,30 @@ try_install() {
 	esac
 	attempt=1
 	while [[ ${attempt} -lt ${max_attempt} ]]; do
+		case ${attempt} in
+			1)
+				"${ECHO_PROGRAM}" "trying to install ${program}..."
+			;;
+			2)
+				"${ECHO_PROGRAM}" "trying to install ${program} again..."
+			;;
+			*)
+				"${ECHO_PROGRAM}" "wtf? I am trying to install ${program} for ${attempt} time"
+			;;
+		esac
 		"${installer}" "${install_command}" "${program}"
 		errorcode=${?}
 		case ${errorcode} in
 			${bad_errorcode})
-				case ${attempt} in
-					1)
-						"${ECHO_PROGRAM}" "trying to install ${program} again..."
-					;;
-					*)
-						"${ECHO_PROGRAM}" "wtf? I am trying to install ${program} for ${attempt} time"
-					;;
-				esac
+
 			;;
 			*)
 				return 0
 			;;
 		esac
-		$(attempt+=1)
+		let "attempt+=1"
 	done
+	"${ECHO_PROGRAM}" "i'm done trying to install ${program}"
 	return -1
 }
 
