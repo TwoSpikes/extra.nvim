@@ -1,5 +1,4 @@
-My scripts for Termux (yes, I program in Termux)
-But I think it will work on Arch and Debian too :)
+My scripts that I made on my phone and on my PC (on archlinux)
 
 # .bashrc
 
@@ -42,6 +41,17 @@ Then you need to restart the shell
 $ tsch
 ```
 
+# .emacs.d/
+
+It is a configuration for GNU Emacs
+
+## Installation
+
+Warning: you need to be in this repository directory
+```console
+$ cp -r ./.emacs.d/ ~/
+```
+
 # xterm-color-table.vim
 
 ## Installation
@@ -54,7 +64,7 @@ Warning: you need to be in this repository directory
 $ cp ./xterm-color-table.vim ~/
 ```
 
-## Running in vim
+## Running in Vim/Neovim
 
 ```console
 $ vim
