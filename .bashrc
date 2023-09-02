@@ -106,10 +106,6 @@ _tsns_c() {
 	"${GIT_PROGRAM}" commit --all --verbose
 }
 
-if [[ -f $PREFIX/etc/motd ]]; then
-	"${RM_PROGRAM}" "$PREFIX"/etc/motd
-fi
-
 esc=$(printf '\033')
 
 option() {
