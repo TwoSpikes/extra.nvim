@@ -12,6 +12,7 @@ set_number_color;
 	echo -e "${NUMBER_COLOR}2${RESET}. --sim-debug --parse-debug";
 set_number_color;
 	echo -e "${NUMBER_COLOR}3${RESET}. --only-link --link-debug";
+set_number_color;
 	echo -e "${NUMBER_COLOR}c${RESET}. reload colors";
 set_number_color;
 	echo -e "${NUMBER_COLOR}x${RESET}. back to menu";
