@@ -77,7 +77,7 @@ set_number_color;
 		echo -e "\033[91mEnter${RESET}. another";
 	read answer;
 	clear;
-	case ${answer,,} in
+	case ${answer} in
 	'0'|'f')
 		cd ~/fplus;
 		${EDITOR} ./main.rs;
