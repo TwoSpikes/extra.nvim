@@ -75,8 +75,6 @@ function check_for() {
 
 function checkhealth() {
 	timer_start 'checking needed staff...'
-
 	check_for 'sh'
-
 	timer_end
 }
