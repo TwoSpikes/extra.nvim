@@ -1,7 +1,7 @@
 #!/bin/env bash
 
 export HISTSIZE=5000
-export DISPLAY=":1"
+export DISPLAY=":0"
 
 [[ -z "${PREFIX}" ]] && export PREFIX="/usr/"
 
