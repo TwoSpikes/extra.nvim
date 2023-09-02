@@ -2,13 +2,13 @@
 
 function tsch_fplus_run() {
 	if [[ -f ~/fplus ]]; then
-		cd ~/fplus
+		cd ~/fplus/
 	else
 		echo -n "No fplus directory, create it? (y/N/<Ctrl+C>): "
 		read answer
 		case "${answer}" in
 			'y'|'Y'|'yes'|'Yes'|'YES')
-				mkdir ~/fplus
+				mkdir ~/fplus/
 				;;
 			*)
 				echo "Aborted"
@@ -57,7 +57,7 @@ set_number_color
 	;;
 	esac
 	clear
-	.fr --no-ls sim ./examples/pointers.tspl ${FPLUS_FLAGS}
+	.fr --no-ls sim ~/fplus/examples/pointers.tspl ${FPLUS_FLAGS}
 	on_pause
 	read
 	clear
@@ -93,14 +93,14 @@ set_number_color
 	clear
 	case ${answer} in
 	'0'|'f')
-		cd ~/fplus
+		cd ~/fplus/
 		${EDITOR} ./main.rs
 	;;
 	'1'|'r')
 		tsch_fplus_run
 	;;
 	'2'|'e')
-		cd ~/te
+		cd ~/te/
 		${EDITOR} ./main.c
 	;;
 	'3'|'t')
@@ -116,7 +116,7 @@ set_number_color
 		;;
 		esac
 
-		cd ~/te
+		cd ~/te/
 
 		"${MAKE_PROGRAM}" install
 		errorcode="${?}"
@@ -176,7 +176,7 @@ set_number_color
 		read
 	;;
 	'12'|'w')
-		cd ~/web
+		cd ~/web/
 		${EDITOR} -o ./index.html ./style.css ./main.js
 	;;
 	*)
