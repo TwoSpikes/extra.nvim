@@ -8,6 +8,10 @@ function timer_start() {
 function timer_end() {
 	END=$(date +%s%N)
 	TOOK=$(((END - START) / 1000000))
-	echo " (took ${TOOK} ms)"
+	if [[ -f "${PREFIX}"/bin/busybox ]] then
+		echo " (took ${TOOK} sec)"
+	else
+		echo " (took ${TOOK} ms)"
+	fi
 	export ALL_TIME=$((ALL_TIME + TOOK))
 }
