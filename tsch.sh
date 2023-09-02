@@ -1,7 +1,20 @@
 #!/bin/env bash
 
 function tsch_fplus_run() {
-	cd ~/fplus
+	if [[ -f ~/fplus ]]; then
+		cd ~/fplus
+	else
+		echo -n "No fplus directory, create it? (y/N/<Ctrl+C>): "
+		read answer
+		case "${answer}" in
+			'y'|'Y'|'yes'|'Yes'|'YES')
+				mkdir ~/fplus
+				;;
+			*)
+				echo "Aborted"
+				;;
+		esac
+	fi
 	FPLUS_FLAGS=''
 	echo 'flags:'
 set_number_color
