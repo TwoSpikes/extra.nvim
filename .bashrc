@@ -3,6 +3,8 @@
 export HISTSIZE=5000
 export DISPLAY=":1"
 
+[[ -z "${PREFIX}" ]] && export PREFIX="/usr/"
+
 . ~/timer.sh
 . ~/checkhealth.sh
 
