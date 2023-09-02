@@ -230,4 +230,4 @@ export SSPYPL_PATH=~/sspypl
 "${SOURCE_PROGRAM}" "${HOME}"/.config/broot/launcher/bash/br
 
 # vim:ts=4:sw=4
-# commented: fdm=expr:fde=getline(v\:lnum)=~'^timer_start'?'1'\:getline(v\:lnum)=~'^timer_end$'?'1'\:'0'
+# TODO: fdm=expr:fde=getline(v\:lnum)=~'^timer_start'?'1'\:getline(v\:lnum)=~'^timer_end$'?'1'\:'0'
