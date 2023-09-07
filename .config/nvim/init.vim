@@ -538,11 +538,16 @@ noremap <silent> <leader>d <esc>:noh<cr>
 tnoremap <c-]> <c-\><esc>
 
 " TERMINAL
-noremap <silent> <leader>tt :tabnew<cr>:terminal<cr>i
-noremap <silent> <leader>tb :terminal<cr>i
-noremap <silent> <leader>th :split<cr> :terminal<cr>i
-noremap <silent> <leader>tv :vsplit<cr>:terminal<cr>i
-noremap <silent> <leader>tct <c-\><c-n>:q\|tabnew\|ter<cr>a
+function OpenTerm()
+	terminal
+	setlocal statuscolumn=
+	startinsert
+endfunction
+noremap <silent> <leader>tt <cmd>tabnew<cr><cmd>call OpenTerm()<cmd>
+noremap <silent> <leader>tb <cmd>call OpenTerm()<cr>
+noremap <silent> <leader>th <cmd>split<cr><cmd>call OpenTerm()<cr>
+noremap <silent> <leader>tv <cmd>vsplit<cr><cmd>call OpenTerm()<cr>
+" noremap <silent> <leader>tct <c-\><c-n>:q\|tabnew\|ter<cr>a
 
 " COLORSCHEME
 noremap <silent> <leader>cet :tabe $VIMRUNTIME/colors/<cr>
