@@ -543,7 +543,7 @@ function OpenTerm()
 	setlocal statuscolumn=
 	startinsert
 endfunction
-noremap <silent> <leader>tt <cmd>tabnew<cr><cmd>call OpenTerm()<cmd>
+noremap <silent> <leader>tt <cmd>tabnew<cr><cmd>call OpenTerm()<cr>
 noremap <silent> <leader>tb <cmd>call OpenTerm()<cr>
 noremap <silent> <leader>th <cmd>split<cr><cmd>call OpenTerm()<cr>
 noremap <silent> <leader>tv <cmd>vsplit<cr><cmd>call OpenTerm()<cr>
