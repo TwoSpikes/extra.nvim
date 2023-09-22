@@ -1,7 +1,7 @@
 #!/bin/env -S nvim -u
 
 if expand("%") == ""
-	e ./
+	edit ./
 endif
 
 let mapleader = " "
@@ -39,7 +39,7 @@ endfunction
 if has('nvim')
 	call STCRel()
 else
-	se nu rnu
+	set nu rnu
 endif
 
 set showcmd
@@ -193,9 +193,10 @@ augroup strace
 augroup END
 
 augroup numbertoggle
-:  autocmd!
-:  autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
-:  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | en
+   autocmd!
+   autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
+   autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | en
+augroup END
 
 function MyTabLabel(n)
 	let buflist = tabpagebuflist(a:n)
