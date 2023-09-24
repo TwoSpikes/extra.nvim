@@ -29,4 +29,5 @@ return require('packer').startup(function (use)
     }
     use 'rcarriga/nvim-notify'
     use 'nvim-treesitter/nvim-treesitter'
+	use 'weizheheng/nvim-workbench'
 end)
