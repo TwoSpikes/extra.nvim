@@ -72,13 +72,13 @@ function! Showtab()
 	elseif mode == 'niV'
 		let strmode = '^o visu REPL '
 	elseif mode == 'nt'
-		let strmode = '%#ModeNorm#norm%*TERM'
+		let strmode = '%#ModeNorm#norm%#ModeTerm#TERM'
 	elseif mode == 'ntT'
 		let strmode = '^\^o norm TERM '
 	elseif mode == 'v'
 		let strmode = '%#ModeVisu#VISU '
 	elseif mode == 'V'
-		let strmode = 'VIS_LINE '
+		let strmode = 'VIS_LINE ' lsp
 	elseif mode == 'vs'
 		let strmode = '^o visu SEL '
 	elseif mode == 'CTRL-V'
@@ -126,7 +126,7 @@ function! Showtab()
 	elseif mode == '!'
 		let strmode = 'SHELL '
 	elseif mode == 't'
-		let strmode = 'TERM '
+		let strmode = '%#ModeTerm#TERM '
 	else
 		let strmode = '%#ModeVisu#visu%#ModeBlock#BLOCK'
 	endif
