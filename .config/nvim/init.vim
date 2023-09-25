@@ -15,6 +15,7 @@ set helpheight=25
 set splitbelow
 set splitkeep=cursor
 set nosplitright
+set scrolloff=10
 
 set nogdefault
 set ignorecase
