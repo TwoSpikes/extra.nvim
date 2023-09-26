@@ -40,6 +40,15 @@ vim.api.nvim_create_user_command(
     }) ]],
 	{ bang = true }
 )
+vim.api.nvim_create_user_command(
+	'Codelldb',
+	[[ lua vim.lsp.start({
+		name = 'codelldb',
+		cmd = {'codelldb', '--stdio'},
+		root_dir = vim.fs.dirname(vim.fs.find({'pyproject.toml', 'setup.py'}, { upward = true })[1]),
+	}) ]],
+	{ bang = true }
+)
 vim.keymap.set('n', '<leader>sld', [[
     :lua =table_dump(vim.lsp.get_active_clients())
 ]])
