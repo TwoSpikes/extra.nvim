@@ -6,9 +6,15 @@ endif
 
 let mapleader = " "
 
+let g:CONFIG_PATH = "$HOME/.config/nvim/"
+
+if $PREFIX == ""
+	call setenv('PREFIX', '/usr/')
+endif
+let g:COLORSCHEME_PATH = "$PREFIX/share/nvim/runtime/colors/blueorange.vim"
 set termguicolors
 set background=dark
-colorscheme blueorange
+exec printf("so %s", g:COLORSCHEME_PATH)
 set lazyredraw
 
 set helpheight=25
@@ -259,7 +265,7 @@ setlocal nowrap
 set matchpairs=(:),{:},[:],<:>
 set noshowmatch
 set matchtime=2
-set maxfuncdepth=60
+set maxfuncdepth=50
 " set maxmapdepth=2
 set maxmempattern=500
 set history=10000
