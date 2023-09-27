@@ -1,0 +1,6 @@
+[user]
+	name = Two Spikes
+	email = twospikesfpg@gmail.com
+[init]
+	defaultBranch = master
+	autoSetupRemote = true

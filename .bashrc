@@ -95,6 +95,7 @@ _df_c() {
     "${CP_PROGRAM}" ~/.config/nvim/init.vim ~/dotfiles/.config/nvim/
     "${CP_PROGRAM}" -r ~/.config/nvim/lua/ ~/dotfiles/.config/nvim/
 	"${CP_PROGRAM}" ~/.tmux.conf ~/dotfiles/
+	"${CP_PROGRAM}" ~/.gitconfig ~/dotfiles/
 	"${GIT_PROGRAM}" commit --all --verbose
 }
 _tsns_c() {
