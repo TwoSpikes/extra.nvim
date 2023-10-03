@@ -22,7 +22,7 @@ $ cp -r ./.config/nvim/ ~/.config/
 $ echo "so ~/.config/nvim/init.vim" >> ~/.vimrc
 ```
 
-# tsch.sh (deprecated)
+# tsch.sh [deprecated]
 
 It is a script that runs tsch (`TwoSpikes ChooseHub`)\
 It is my old thing that asks for my several most used commands but no I do not use it.
