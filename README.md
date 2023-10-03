@@ -2,6 +2,8 @@ My scripts that I made on my phone and on my PC (on archlinux)
 
 # .bashrc
 
+## Installation
+
 Warning: you need to be in repositiory directory
 ```console
 $ cp ./.bashrc ~/
@@ -10,6 +12,10 @@ $ cp ./.bashrc ~/
 Then you need to restart your shell
 
 # .gitconfig-default .gitmessage
+
+## What is this?
+
+This is a basic Git configuration
 
 ## Installation
 
@@ -30,6 +36,12 @@ $ cp ./.gitmessage ~/
 
 # .config/nvim/
 
+## What is this?
+
+This is NeoVim/Vim configuration
+
+## Installation
+
 Warning: you need to be in this repository directory
 ```console
 $ cp -r ./.config/nvim/ ~/.config/
@@ -42,6 +54,8 @@ $ echo "so ~/.config/nvim/init.vim" >> ~/.vimrc
 ```
 
 # tsch.sh [deprecated]
+
+## What is this?
 
 It is a script that runs tsch (`TwoSpikes ChooseHub`)\
 It is my old thing that asks for my several most used commands but no I do not use it.
@@ -62,6 +76,8 @@ $ tsch
 
 # .emacs.d/
 
+## What is this?
+
 It is a configuration for GNU Emacs
 
 ## Installation
@@ -73,17 +89,19 @@ $ cp -r ./.emacs.d/ ~/
 
 # xterm-color-table.vim
 
-## Installation
+## What is this?
 
 It is an xterm color table (256 colors) for vim/neovim.\
 Fork from [this repository](https://github.com/guns/xterm-color-table.vim)
+
+## Installation
 
 Warning: you need to be in this repository directory
 ```console
 $ cp ./xterm-color-table.vim ~/
 ```
 
-## Running in Vim/Neovim
+## Running in Vim/NeoVim
 
 ```console
 $ vim
