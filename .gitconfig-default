@@ -1,6 +1,6 @@
 [user]
-	name = Two Spikes
-	email = twospikesfpg@gmail.com
+	#name = Your Name
+	#email = youremail@example.com
 [init]
 	defaultBranch = master
 [push]

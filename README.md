@@ -9,6 +9,25 @@ $ cp ./.bashrc ~/
 
 Then you need to restart your shell
 
+# .gitconfig-default .gitmessage
+
+## Installation
+
+Warning: you need to be in this repository directory
+```console
+$ cp ./.gitconfig-default ~/
+$ cp ~/.gitconfig-default ~/.gitconfig
+```
+Now, in file `~/.gitconfig`
+Uncomment lines `[user] name` and `[user] email`\
+Change `Your Name` to your name\
+Change `youremail@example.com` to your email
+
+Warning: you need to be in this repository directory
+```console
+$ cp ./.gitmessage ~/
+```
+
 # .config/nvim/
 
 Warning: you need to be in this repository directory
