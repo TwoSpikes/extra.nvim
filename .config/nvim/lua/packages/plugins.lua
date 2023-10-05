@@ -32,4 +32,5 @@ return require('packer').startup(function (use)
     use 'nvim-treesitter/playground'
 	use 'weizheheng/nvim-workbench'
 	use 'ap/vim-css-color'
+	use 'prichrd/netrw.nvim'
 end)
