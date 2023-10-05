@@ -28,6 +28,7 @@ return require('packer').startup(function (use)
         },
     }
     use 'rcarriga/nvim-notify'
-    use 'nvim-treesitter/nvim-treesitter'
+    use ('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
+    use 'nvim-treesitter/playground'
 	use 'weizheheng/nvim-workbench'
 end)

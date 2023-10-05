@@ -43,6 +43,9 @@ set nornu
 function STCRel()
 	let &stc = '%=%{v:relnum?((v:virtnum <= 0)?v:relnum:""):((v:virtnum <= 0)?v:lnum:"")} '
 endfunction
+function STCAbs()
+	let &stc = '%=%{(v:virtnum <= 0)?v:lnum:""} '
+endfunction
 if has('nvim')
 	call STCRel()
 else
@@ -182,9 +185,27 @@ augroup END
 "noremap <silent> <esc> <cmd>Showtab<cr>
 
 augroup numbertoggle
-  au!
-  au BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | STCAbs | endif
-  au BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | STCRel | endif
+	autocmd!
+	function Numbertoggle_stcabs()
+		if mode() != 'i'
+			if !&nu
+				call STCAbs()
+				return
+			endif
+			set nornu
+		endif
+	endfunction
+	function Numbertoggle_stcrel()
+		if mode() != 'i'
+			if !&nu
+				call STCRel()
+				return
+			endif
+			set rnu
+		endif
+	endfunction
+	autocmd BufEnter,FocusGained,InsertLeave,WinEnter * call Numbertoggle_stcrel()
+	autocmd BufLeave,FocusLost,InsertEnter,WinLeave * call Numbertoggle_stcabs()
 augroup END
 
 augroup STC_FIletYPE
@@ -195,14 +216,7 @@ augroup END
 
 augroup strace
 	au!
-	au 
 	au filetype strace setl nomodifiable stc=
-augroup END
-
-augroup numbertoggle
-   autocmd!
-   autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
-   autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | en
 augroup END
 
 function MyTabLabel(n)
