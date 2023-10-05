@@ -21,7 +21,7 @@ set helpheight=25
 set splitbelow
 set splitkeep=cursor
 set nosplitright
-set scrolloff=10
+set scrolloff=3
 
 set nogdefault
 set ignorecase
@@ -139,12 +139,12 @@ function! Showtab()
 	else
 		let strmode = '%#ModeVisu#visu%#ModeBlock#BLOCK'
 	endif
-	let stl_time = '%{strftime("%b,%d %H:%M:%S")}'
+	"let stl_time = '%{strftime("%b,%d %H:%M:%S")}'
 	let stl_pos = '%l/%L,%c'
 	let stl_showcmd = '%(%#Statuslinemod#%S%*%)'
 	let stl_buf = '#%n %p%%'
 	let stl_mode_to_put = strmode.(s:custom_mode?' '.s:custom_mode:'').'%* '
-	let &stl = stl_mode_to_put . stl_name.'%='.stl_time.'%='.stl_showcmd.'%='.stl_pos.'%='.stl_buf
+	let &stl = stl_mode_to_put . stl_name.'%='.stl_showcmd.'%='.stl_pos.'%='.stl_buf
 endfunction
 command! Showtab call Showtab()
 

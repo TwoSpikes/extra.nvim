@@ -407,8 +407,8 @@ if &t_Co >= 256
     hi Terminal ctermfg=251 ctermbg=NONE cterm=NONE
     hi Operator ctermfg=220 ctermbg=NONE cterm=bold guifg=#ffdf00 guibg=NONE gui=bold
     hi SpecialChar ctermfg=41 ctermbg=NONE cterm=NONE
-    hi Statusline ctermfg=18 ctermbg=194 cterm=bold guifg=#0000af guibg=#dfffdf gui=bold
-    hi Statuslinemod ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#5f00ff guibg=#afff5f gui=bold,reverse
+    hi Statusline ctermfg=18 ctermbg=194 cterm=bold guifg=#ffffff guibg=#0050cf gui=NONE
+    hi Statuslinemod ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#ff3070 guibg=#ffcfaf gui=reverse,bold
     hi ModeNorm ctermfg=16 ctermbg=84 cterm=bold guifg=#000000 guibg=#5fff87 gui=bold
     hi ModeIns ctermfg=15 ctermbg=39 cterm=bold guifg=#ffffff guibg=#00afff gui=bold
     hi ModeVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#ffffff guibg=#000087 gui=bold
@@ -418,14 +418,14 @@ if &t_Co >= 256
     hi ModeTerm ctermfg=47 ctermbg=52 cterm=bold guifg=#00ff5f guibg=#5f0000 gui=bold
 "    hi Statusline ctermfg=17 ctermbg=208 cterm=bold
 "    hi StatuslineNC ctermfg=18 ctermbg=195 cterm=reverse
-    hi StatuslineNC ctermfg=17 ctermbg=208 cterm=reverse guifg=#00005f guibg=#ff8700 gui=reverse
+    hi StatuslineNC ctermfg=17 ctermbg=208 cterm=reverse guifg=#00005f guibg=#f03000 gui=reverse
     hi VertSplit ctermfg=159 ctermbg=17 cterm=NONE
 "    hi TabLine ctermfg=208 ctermbg=17 cterm=NONE
-    hi TabLine ctermfg=195 ctermbg=18 cterm=NONE guifg=#dfffff guibg=#000087 gui=NONE
-    hi TabLineSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#ffdf87 guibg=#000087 gui=NONE
+    hi TabLine ctermfg=195 ctermbg=18 cterm=NONE guifg=#f03000 guibg=#00005f gui=NONE
+    hi TabLineSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#50f000 guibg=#20005f gui=NONE
     hi TabLineFill ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#3a3a3a gui=NONE
 "    hi TabLineSel ctermfg=195 ctermbg=18 cterm=bold
-    hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#dfffdf guibg=#000087 gui=bold,reverse
+    hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#0050cf guibg=#ffffff gui=reverse
     hi ToolbarLine ctermfg=NONE ctermbg=NONE cterm=NONE
     hi ToolbarButton ctermfg=16 ctermbg=231 cterm=NONE
     hi QuickFixLine ctermfg=16 ctermbg=75 cterm=NONE

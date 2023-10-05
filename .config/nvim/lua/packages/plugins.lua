@@ -31,4 +31,5 @@ return require('packer').startup(function (use)
     use ('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
     use 'nvim-treesitter/playground'
 	use 'weizheheng/nvim-workbench'
+	use 'ap/vim-css-color'
 end)
