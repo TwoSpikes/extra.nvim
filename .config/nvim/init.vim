@@ -140,13 +140,16 @@ function! Showtab()
 		let strmode = '%#ModeVisu#visu%#ModeBlock#BLOCK'
 	endif
 	"let stl_time = '%{strftime("%b,%d %H:%M:%S")}'
-	let stl_pos = '%l,%c'
+	let stl_pos = '%l:%c %LL'
 	let stl_showcmd = '%(%#Statuslinemod#%S%*%)'
 	let stl_buf = '#%n %p%%%*'
 	let stl_mode_to_put = strmode.(s:custom_mode?' '.s:custom_mode:'').'%* '
-	let &stl = stl_mode_to_put . stl_name.' '.stl_showcmd.'%='.'%#Statuslinestat1#'.' '.stl_pos.' %#Statuslinestat2# '.stl_buf
+	let &stl = stl_mode_to_put . stl_name.' '.stl_showcmd.'%='.'%#Statuslinestat1#'.' '.stl_pos.' %#Statuslinestat2# '.stl_buf.' '
 endfunction
 command! Showtab call Showtab()
+
+command! -nargs=* Git !git <args>
+command! -nargs=* Pkg !pkg <args>
 
 let s:tabtimerid = 0
 function TabTimerHandler(id)
