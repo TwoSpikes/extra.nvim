@@ -32,7 +32,6 @@ export GREP_PROGRAM='grep'
 
 export CD_PROGRAM='cd'
 export CP_PROGRAM='cp'
-export CP_PROGRAM_RECURSIVE="${CP_PROGRAM} -r"
 export MV_PROGRAM='mv'
 export RM_PROGRAM='rm'
 export MKDIR_PROGRAM='mkdir'
@@ -101,10 +100,10 @@ _df_c() {
     "${CLEAR_PROGRAM}"
 	"${CD_PROGRAM}" ~/dotfiles/
 # Bashrc script and its dependencies
-	"${CP_PROGRAM}" ~/.bashrc ~/timer.sh ~/checkhealth.sh ~/.fr.sh ~/tsch.sh ~/inverting.sh ~/dotfiles/
+	"${CP_PROGRAM}" ~/.bashrc ~/timer.sh ~/checkhealth.sh ~/.fr.sh ~/tsch.sh ~/inverting.sh ~/funcname.sh ~/dotfiles/
 ## Vim/NeoVim configs
     "${CP_PROGRAM}" ~/.config/nvim/init.vim ~/dotfiles/.config/nvim/
-    ${CP_PROGRAM_RECURSIVE} ~/.config/nvim/lua/ ~/dotfiles/.config/nvim/
+    "${CP_PROGRAM}" -r ~/.config/nvim/lua/ ~/dotfiles/.config/nvim/
 ## Vim/NeoVim themes
     "${CP_PROGRAM}" ${PREFIX}/share/nvim/runtime/colors/book.vim ~/dotfiles/
     "${CP_PROGRAM}" ${PREFIX}/share/nvim/runtime/colors/blueorange.vim ~/dotfiles/
@@ -112,7 +111,7 @@ _df_c() {
 	"${CP_PROGRAM}" ~/xterm-color-table.vim ~/dotfiles/
 ## Tmux
 	"${CP_PROGRAM}" ~/.tmux.conf ~/dotfiles/
-	# ${CP_PROGRAM_RECURSIVE} ~/.tmux/ ~/dotfiles/
+	# "${CP_PROGRAM}" -r ~/.tmux/ ~/dotfiles/
 ## Git
 	"${CP_PROGRAM}" ~/.gitconfig-default ~/.gitmessage ~/dotfiles/
 # Commit

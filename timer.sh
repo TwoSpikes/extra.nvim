@@ -1,5 +1,7 @@
 #!/bin/env bash
 
+source ~/funcname.sh
+
 to_timer_human_time() {
 	INPUT_TIME="${1}"
 
@@ -11,7 +13,7 @@ to_timer_human_time() {
 timer_start() {
 	TIMER_START_MESSAGE="${1}"
 
-	echo -n "$(basename ${0}): ${FUNCNAME[0]}: note: ${TIMER_START_MESSAGE}"
+	echo -n "$(basename ${0}): $(func_name): note: ${TIMER_START_MESSAGE}"
 	START=$(date +%s%N)
 }
 timer_end() {
@@ -22,6 +24,6 @@ timer_end() {
 	export ALL_TIME=$((ALL_TIME + TOOK))
 }
 timer_total_time() {
-	echo "$(basename ${0}): ${FUNCNAME[0]}: note: ${ALL_TIME} ms"
+	echo "$(basename ${0}): $(func_name): note: ${ALL_TIME} ms"
 	export ALL_TIME=0
 }

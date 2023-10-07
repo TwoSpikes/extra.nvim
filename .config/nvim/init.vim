@@ -87,7 +87,7 @@ function! Showtab()
 	elseif mode == 'v'
 		let strmode = '%#ModeVisu#VISU '
 	elseif mode == 'V'
-		let strmode = 'VIS_LINE ' lsp
+		let strmode = 'VIS_LINE '
 	elseif mode == 'vs'
 		let strmode = '^o visu SEL '
 	elseif mode == 'CTRL-V'
@@ -296,7 +296,7 @@ set ttimeoutlen=0
 
 set cursorline
 set cursorlineopt=screenline,number
-set cursorcolumn
+set nocursorcolumn
 set mouse=a
 set nomousefocus
 set nomousehide
