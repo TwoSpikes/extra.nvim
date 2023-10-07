@@ -11,7 +11,7 @@
 hi clear
 let g:colors_name = 'blueorange'
 
-hi Cursor guifg=NONE guibg=#ffdf87 gui=NONE cterm=NONE
+hi Cursor guifg=NONE guibg=NONE gui=NONE cterm=NONE
 set guicursor=n-v-c:block-Cursor
 set guicursor+=i:ver100-Cursor
 set guicursor+=r:hor20-Cursor
@@ -403,7 +403,7 @@ if &t_Co >= 256
   hi! link MessageWindow PMenu
   hi! link PopupNotification Todo
   if &background ==# 'dark'
-    hi Normal ctermfg=15 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=NONE gui=NONE
+    hi Normal ctermfg=15 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=#000030 gui=NONE
     hi Terminal ctermfg=251 ctermbg=NONE cterm=NONE
     hi Operator ctermfg=220 ctermbg=NONE cterm=bold guifg=#ffdf00 guibg=NONE gui=bold
     hi SpecialChar ctermfg=41 ctermbg=NONE cterm=NONE
@@ -422,7 +422,7 @@ if &t_Co >= 256
     hi ModeTerm ctermfg=47 ctermbg=52 cterm=bold guifg=#00ff5f guibg=#5f0000 gui=bold
 "    hi Statusline ctermfg=17 ctermbg=208 cterm=bold
 "    hi StatuslineNC ctermfg=18 ctermbg=195 cterm=reverse
-    hi StatuslineNC ctermfg=17 ctermbg=208 cterm=reverse guifg=#00005f guibg=#f03000 gui=reverse
+    hi StatuslineNC ctermfg=17 ctermbg=208 cterm=reverse guifg=#f03000 guibg=#0030af gui=bold
     hi VertSplit ctermfg=159 ctermbg=17 cterm=NONE
 "    hi TabLine ctermfg=208 ctermbg=17 cterm=NONE
     hi TabLine ctermfg=195 ctermbg=18 cterm=NONE guifg=#f03000 guibg=#00005f gui=NONE
@@ -459,11 +459,11 @@ if &t_Co >= 256
     hi WildMenu ctermfg=16 ctermbg=222 cterm=bold
     hi debugPC ctermfg=67 ctermbg=NONE cterm=reverse
     hi debugBreakpoint ctermfg=73 ctermbg=NONE cterm=reverse
-    hi Visual ctermfg=NONE ctermbg=18 cterm=NONE guifg=NONE guibg=#000087 gui=NONE
+    hi Visual ctermfg=NONE ctermbg=18 cterm=NONE guifg=NONE guibg=#3010a0 gui=bold
     hi MatchParen ctermfg=30 ctermbg=NONE cterm=reverse guifg=#008787 guibg=NONE gui=reverse
     hi VisualNOS ctermfg=16 ctermbg=73 cterm=NONE
-    hi CursorLine ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=NONE gui=bold
-    hi CursorColumn ctermfg=NONE ctermbg=238 cterm=NONE guifg=NONE guibg=NONE gui=bold
+    hi CursorLine ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#000000 gui=bold
+    hi CursorColumn ctermfg=NONE ctermbg=238 cterm=NONE guifg=NONE guibg=#000000 gui=bold
     hi Folded ctermfg=15 ctermbg=234 cterm=italic
     hi ColorColumn ctermfg=NONE ctermbg=234 cterm=NONE
     hi SpellBad ctermfg=203 ctermbg=NONE cterm=underline

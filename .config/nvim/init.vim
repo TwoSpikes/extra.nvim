@@ -277,6 +277,7 @@ set shortmess=filmnrxwsWItCF
 set showtabline=2
 set noshowmode
 set noconfirm
+set virtualedit=onemore
 
 setlocal nowrap
 
