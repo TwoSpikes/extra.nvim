@@ -33,4 +33,8 @@ return require('packer').startup(function (use)
 	use 'weizheheng/nvim-workbench'
 	use 'ap/vim-css-color'
 	use 'prichrd/netrw.nvim'
+	use {
+		"windwp/nvim-autopairs",
+		config = function() require("nvim-autopairs").setup {} end
+	}
 end)

@@ -462,8 +462,8 @@ if &t_Co >= 256
     hi Visual ctermfg=NONE ctermbg=18 cterm=NONE guifg=NONE guibg=#000087 gui=NONE
     hi MatchParen ctermfg=30 ctermbg=NONE cterm=reverse guifg=#008787 guibg=NONE gui=reverse
     hi VisualNOS ctermfg=16 ctermbg=73 cterm=NONE
-    hi CursorLine ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#3a3a3a gui=NONE
-    hi CursorColumn ctermfg=NONE ctermbg=238 cterm=NONE
+    hi CursorLine ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=NONE gui=bold
+    hi CursorColumn ctermfg=NONE ctermbg=238 cterm=NONE guifg=NONE guibg=NONE gui=bold
     hi Folded ctermfg=15 ctermbg=234 cterm=italic
     hi ColorColumn ctermfg=NONE ctermbg=234 cterm=NONE
     hi SpellBad ctermfg=203 ctermbg=NONE cterm=underline
