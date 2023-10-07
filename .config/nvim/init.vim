@@ -296,7 +296,7 @@ set ttimeoutlen=0
 
 set cursorline
 set cursorlineopt=screenline,number
-set nocursorcolumn
+set cursorcolumn
 set mouse=a
 set nomousefocus
 set nomousehide
