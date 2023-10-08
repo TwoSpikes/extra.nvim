@@ -434,7 +434,7 @@ if &t_Co >= 256
     hi ToolbarButton ctermfg=16 ctermbg=231 cterm=NONE
     hi QuickFixLine ctermfg=16 ctermbg=75 cterm=NONE
     hi CursorLineNr ctermfg=220 ctermbg=236 cterm=bold,reverse guifg=#ffdf00 guibg=#000000 gui=bold,reverse
-    hi LineNr ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#ffdf00 guibg=#3a3a3a gui=bold,italic
+    hi LineNr ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#ffdf00 guibg=#101050 gui=bold,italic
     hi NonText ctermfg=214 ctermbg=NONE cterm=NONE
     hi FoldColumn ctermfg=240 ctermbg=NONE cterm=NONE
     hi EndOfBuffer ctermfg=214 ctermbg=NONE cterm=NONE
