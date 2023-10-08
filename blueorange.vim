@@ -407,7 +407,7 @@ if &t_Co >= 256
     hi Terminal ctermfg=251 ctermbg=NONE cterm=NONE
     hi Operator ctermfg=220 ctermbg=NONE cterm=bold guifg=#ffdf00 guibg=NONE gui=bold
     hi SpecialChar ctermfg=41 ctermbg=NONE cterm=NONE
-    hi Statusline ctermfg=18 ctermbg=194 cterm=bold guifg=#ffffff guibg=#0050cf gui=NONE
+    hi Statusline ctermfg=18 ctermbg=194 cterm=bold guifg=#ffffff guibg=#3040f7 gui=NONE
     hi Statuslinemod ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#ff3070 guibg=#ffcfaf gui=reverse,bold
     hi Statuslinestat1 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#aff0a0 guibg=#000087 gui=NONE
     hi Statuslinestat01 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#000087 guibg=#3040f7 gui=NONE
