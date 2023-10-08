@@ -406,7 +406,7 @@ if &t_Co >= 256
     hi Normal ctermfg=15 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=#000020 gui=NONE
     hi Terminal ctermfg=251 ctermbg=NONE cterm=NONE
     hi Operator ctermfg=220 ctermbg=NONE cterm=bold guifg=#ffdf00 guibg=NONE gui=bold
-    hi SpecialChar ctermfg=41 ctermbg=NONE cterm=NONE
+    hi SpecialChar ctermfg=41 ctermbg=NONE cterm=NONE guifg=#00df5f guibg=NONE gui=NONE
     hi Statusline ctermfg=18 ctermbg=194 cterm=bold guifg=#ffffff guibg=#3040f7 gui=NONE
     hi Statuslinemod ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#ff3070 guibg=#ffcfaf gui=reverse,bold
     hi Statuslinestat1 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#aff0a0 guibg=#000087 gui=NONE
@@ -427,7 +427,7 @@ if &t_Co >= 256
 "    hi TabLine ctermfg=208 ctermbg=17 cterm=NONE
     hi TabLine ctermfg=195 ctermbg=18 cterm=NONE guifg=#f03000 guibg=#00005f gui=NONE
     hi TabLineSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#50f000 guibg=#20005f gui=NONE
-    hi TabLineFill ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#3a3a3a gui=NONE
+    hi TabLineFill ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#101050 gui=NONE
 "    hi TabLineSel ctermfg=195 ctermbg=18 cterm=bold
     hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#0050cf guibg=#ffffff gui=reverse
     hi ToolbarLine ctermfg=NONE ctermbg=NONE cterm=NONE
