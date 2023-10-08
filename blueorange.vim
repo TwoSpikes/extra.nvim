@@ -403,7 +403,7 @@ if &t_Co >= 256
   hi! link MessageWindow PMenu
   hi! link PopupNotification Todo
   if &background ==# 'dark'
-    hi Normal ctermfg=15 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=#000030 gui=NONE
+    hi Normal ctermfg=15 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=#000020 gui=NONE
     hi Terminal ctermfg=251 ctermbg=NONE cterm=NONE
     hi Operator ctermfg=220 ctermbg=NONE cterm=bold guifg=#ffdf00 guibg=NONE gui=bold
     hi SpecialChar ctermfg=41 ctermbg=NONE cterm=NONE
