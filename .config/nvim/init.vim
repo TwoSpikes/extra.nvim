@@ -713,18 +713,20 @@ if has('nvim')
 	lua setup = function() require("config.lsp.installer").setup(servers, opts) end
 endif
 
-lua table_dump = function(table)
-\   if type(table) == 'table' then
-\      local s = '{ '
-\      for k,v in pairs(table) do
-\         if type(k) ~= 'number' then k = '"'..k..'"' end
-\         s = s .. '['..k..'] = ' .. table_dump(v) .. ','
-\      end
-\      return s .. '} '
-\   else
-\      return tostring(table)
-\   end
-\ end
+if has('nvim')
+	lua table_dump = function(table)
+	\   if type(table) == 'table' then
+	\      local s = '{ '
+	\      for k,v in pairs(table) do
+	\         if type(k) ~= 'number' then k = '"'..k..'"' end
+	\         s = s .. '['..k..'] = ' .. table_dump(v) .. ','
+	\      end
+	\      return s .. '} '
+	\   else
+	\      return tostring(table)
+	\   end
+	\ end
+endif
 
 noremap <silent> <leader>S :let &scrolloff = 999 - &scrolloff<cr>
 
@@ -757,7 +759,7 @@ function! SwapHiGroup(group)
     exec printf('hi %s ctermfg=%s ctermbg=%s guifg=%s guibg=%s', a:group, ctermbg, ctermfg, guibg, guifg)
 endfunc
 
-echom 'type '
+echo 'type '
 echohl SpecialKey
 echon ':intro<cr>'
 echohl Normal
