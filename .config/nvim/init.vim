@@ -148,6 +148,7 @@ function! Showtab()
 	let &stl = stl_mode_to_put . stl_name.' '.stl_showcmd.'%='.'%#Statuslinestat01#'.''.'%#Statuslinestat1#'.' '.stl_pos.' '.'%#Statuslinestat12#'.''.'%#Statuslinestat2# '.stl_buf.' '
 endfunction
 command! Showtab call Showtab()
+Showtab
 
 command! -nargs=* Git !git <args>
 command! -nargs=* Pkg !pkg <args>
@@ -171,7 +172,6 @@ command! -nargs=* Pkg !pkg <args>
 " function Printtabtimerid()
 " 	echom "Timer id is: " . s:tabtimerid
 " endfunction
-" Showtab
 " augroup tabtimer
 " 	autocmd!
 " 	autocmd CmdlineEnter * Showtab
