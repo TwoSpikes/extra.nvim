@@ -208,8 +208,10 @@ augroup numbertoggle
 			set rnu
 		endif
 	endfunction
-	autocmd BufEnter,FocusGained,InsertLeave,WinEnter * call Numbertoggle_stcrel()
-	autocmd BufLeave,FocusLost,InsertEnter,WinLeave * call Numbertoggle_stcabs()
+	" autocmd BufEnter,FocusGained,InsertLeave,WinEnter * call Numbertoggle_stcrel()
+	" autocmd BufLeave,FocusLost,InsertEnter,WinLeave * call Numbertoggle_stcabs()
+	autocmd FocusGained,InsertLeave * call Numbertoggle_stcrel()
+	autocmd FocusLost,InsertEnter * call Numbertoggle_stcabs()
 augroup END
 
 augroup STC_FIletYPE
