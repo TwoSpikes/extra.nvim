@@ -699,9 +699,11 @@ command! W w
 inoremap <silent> ju <esc>viwUea
 inoremap <silent> ji <esc>viwUea
 
-exec printf("luafile %s", s:PLUGINS_INSTALL_FILE_PATH)
-PackerInstall
-exec printf("luafile %s", s:PLUGINS_SETUP_FILE_PATH)
+if has('nvim')
+	exec printf("luafile %s", s:PLUGINS_INSTALL_FILE_PATH)
+	PackerInstall
+	exec printf("luafile %s", s:PLUGINS_SETUP_FILE_PATH)
+endif
 
 so ~/xterm-color-table.vim
 
