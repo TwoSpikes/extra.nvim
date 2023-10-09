@@ -305,7 +305,9 @@ set nomousefocus
 set nomousehide
 set mousemodel=popup_setpos
 set nomousemoveevent
-set mousescroll=ver:3,hor:6
+if has('nvim')
+	set mousescroll=ver:3,hor:6
+endif
 set mouseshape=i:beam,r:beam,s:updown,sd:cross,m:no,ml:up-arrow,v:rightup-arrow
 set mousetime=400
 set startofline
