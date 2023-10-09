@@ -114,6 +114,8 @@ _df_c() {
 	# "${CP_PROGRAM}" -r ~/.tmux/ ~/dotfiles/
 ## Git
 	"${CP_PROGRAM}" ~/.gitconfig-default ~/.gitmessage ~/dotfiles/
+## Termux
+	"${CP_PROGRAM}" ~/.termux/colors.properties ~/dotfiles/.termux/
 # Commit
 	"${GIT_PROGRAM}" commit --all --verbose
 }
