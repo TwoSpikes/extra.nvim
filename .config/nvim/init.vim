@@ -152,41 +152,41 @@ command! Showtab call Showtab()
 command! -nargs=* Git !git <args>
 command! -nargs=* Pkg !pkg <args>
 
-let s:tabtimerid = 0
-function TabTimerHandler(id)
-	let s:tabtimerid = a:id
-	Showtab
-endfunction
-function TabTimerStart()
-	if s:tabtimerid == 0
-		Showtab
-		call timer_start(500, 'TabTimerHandler', {'repeat': -1})
-	endif
-endfunction
-function TabTimerStop()
-	call timer_stop(s:tabtimerid)
-	let s:tabtimerid = 0
-endfunction
-call TabTimerStart()
-function Printtabtimerid()
-	echom "Timer id is: " . s:tabtimerid
-endfunction
-Showtab
-augroup tabtimer
-	autocmd!
-	autocmd CmdlineEnter * Showtab
-	autocmd CmdlineLeave * call TabTimerStart()
-	autocmd CmdwinEnter * let s:specmode = 'b' | Showtab
-	autocmd CmdwinLeave * let s:specmode = '' | Showtab
-	autocmd CursorHold * call TabTimerStop()
-	autocmd CursorMoved * call TabTimerStart()
-	autocmd CursorHoldI * call TabTimerStop()
-	autocmd CursorMovedI * call TabTimerStart()
-	autocmd InsertEnter * call TabTimerStart()
-	autocmd InsertLeave * call TabTimerStart()
-augroup END
-
-"noremap <silent> <esc> <cmd>Showtab<cr>
+" let s:tabtimerid = 0
+" function TabTimerHandler(id)
+" 	let s:tabtimerid = a:id
+" 	Showtab
+" endfunction
+" function TabTimerStart()
+" 	if s:tabtimerid == 0
+" 		Showtab
+" 		call timer_start(500, 'TabTimerHandler', {'repeat': -1})
+" 	endif
+" endfunction
+" function TabTimerStop()
+" 	call timer_stop(s:tabtimerid)
+" 	let s:tabtimerid = 0
+" endfunction
+" call TabTimerStart()
+" function Printtabtimerid()
+" 	echom "Timer id is: " . s:tabtimerid
+" endfunction
+" Showtab
+" augroup tabtimer
+" 	autocmd!
+" 	autocmd CmdlineEnter * Showtab
+" 	autocmd CmdlineLeave * call TabTimerStart()
+" 	autocmd CmdwinEnter * let s:specmode = 'b' | Showtab
+" 	autocmd CmdwinLeave * let s:specmode = '' | Showtab
+" 	autocmd CursorHold * call TabTimerStop()
+" 	autocmd CursorMoved * call TabTimerStart()
+" 	autocmd CursorHoldI * call TabTimerStop()
+" 	autocmd CursorMovedI * call TabTimerStart()
+" 	autocmd InsertEnter * call TabTimerStart()
+" 	autocmd InsertLeave * call TabTimerStart()
+" augroup END
+" 
+" "noremap <silent> <esc> <cmd>Showtab<cr>
 
 augroup numbertoggle
 	autocmd!
