@@ -404,7 +404,12 @@ if &t_Co >= 256
   hi! link PopupNotification Todo
   if &background ==# 'dark'
     hi Normal ctermfg=15 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=#000020 gui=NONE
-    hi Terminal ctermfg=251 ctermbg=NONE cterm=NONE
+    hi NormalNC ctermfg=15 ctermbg=NONE cterm=NONE guifg=#ffefff guibg=#000020 gui=NONE
+    hi MsgArea ctermfg=15 ctermbg=NONE cterm=NONE guifg=#c6c6c6 guibg=#000020 gui=NONE
+    hi MsgSeparator ctermfg=NONE ctermbg=57 cterm=NONE guifg=NONE guibg=#aff0a0 gui=NONE
+    hi Terminal ctermfg=251 ctermbg=NONE cterm=NONE guifg=#c6c6c6 guibg=NONE gui=NONE
+    hi TermCursor ctermfg=57 ctermbg=NONE cterm=reverse guifg=#5fa050 guibg=NONE gui=reverse
+    hi TermCursorNC ctermfg=57 ctermbg=NONE cterm=reverse guifg=#afbf00 guibg=NONE gui=reverse
     hi Operator ctermfg=220 ctermbg=NONE cterm=bold guifg=#ffdf00 guibg=NONE gui=bold
     hi SpecialChar ctermfg=41 ctermbg=NONE cterm=NONE guifg=#00df5f guibg=NONE gui=NONE
     hi Statusline ctermfg=18 ctermbg=194 cterm=bold guifg=#ffffff guibg=#3040f7 gui=NONE
@@ -481,6 +486,7 @@ if &t_Co >= 256
     hi Special ctermfg=105 ctermbg=NONE cterm=bold
     hi Underlined ctermfg=NONE ctermbg=NONE cterm=underline
     hi Title ctermfg=228 ctermbg=NONE cterm=bold guifg=#ffff87 guibg=NONE gui=NONE
+    hi FloatTitle ctermfg=228 ctermbg=NONE cterm=bold guifg=#ffff87 guibg=NONE gui=NONE
     hi Directory ctermfg=75 ctermbg=NONE cterm=bold
     hi Conceal ctermfg=NONE ctermbg=NONE cterm=NONE
     hi Ignore ctermfg=NONE ctermbg=NONE cterm=NONE

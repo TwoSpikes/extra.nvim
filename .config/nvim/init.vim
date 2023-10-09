@@ -397,7 +397,7 @@ nnoremap <bs> X
 noremap <leader><bs> <bs>
 
 function! Findfile()
-	echohl Title
+	echohl Question
 	let filename = input('find file: ')
 	echohl Normal
 	if filename !=# ''
@@ -407,7 +407,7 @@ endfunction
 command! Findfile call Findfile()
 noremap <c-c>c <cmd>Findfile<cr>
 function! Findfilebuffer()
-	echohl Title
+	echohl Question
 	let filename = input('find file (in buffer): ')
 	echohl Normal
 	if filename !=# ''
@@ -643,7 +643,7 @@ noremap <silent> <c-x><c-c> <cmd>qa<cr>
 noremap <silent> <c-x>s <cmd>w<cr>
 noremap <silent> <c-x><c-s> <cmd>w<cr>
 function! Killbuffer()
-	echohl Title
+	echohl Question
 	let user_input = input("do you wanna kill the buffer (Y/n): ")
 	echohl Normal
 	if user_input ==# '' || IsYes(user_input)
