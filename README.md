@@ -40,6 +40,8 @@ $ cp ./.gitmessage ~/
 
 This is NeoVim/Vim configuration
 
+<img src=.github/images/Screenshot_2023-10-11-22-28-33-255_com.termux.png>
+
 ## Installation
 
 Warning: you need to be in this repository directory
