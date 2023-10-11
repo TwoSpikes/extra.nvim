@@ -61,7 +61,7 @@ function! SetStatusLineNc()
 	echohl StatusLineNc
 endfunction
 function! Showtab()
-	let stl_name = '%t%<%( %#StatusLinemod#%M%R%H%W%)%*%( %#StatusLinemod#'.&syntax.'%)%*'
+	let stl_name = '%t%<'.'%( %#StatusLinemod#%M%R%H%W%)%*'.'%( %#StatusLinemod#'.&syntax.'%)%*'.'%( %#Statuslinemod#'.'%{gitbranch#name()}'.'%)%*'
 	let mode = mode('lololol')
 	let strmode = ''
 	if mode == 'n'
