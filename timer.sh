@@ -1,13 +1,13 @@
 #!/bin/env bash
 
-[[ ! -z "${INCLUDED_TIMER}" ]] && return 0 || INCLUDED_TIMER=true
+[ ! -z "${INCLUDED_TIMER}" ] && return 0 || INCLUDED_TIMER=true
 
-source ~/funcname.sh
+. ~/funcname.sh
 
 to_timer_human_time() {
 	INPUT_TIME="${1}"
 
-	if [[ -f "${PREFIX}"/bin/busybox ]]; then
+	if [ -f "${PREFIX}"/bin/busybox ]; then
 		echo "${INPUT_TIME} sec"
 	fi
 	echo "${INPUT_TIME} ms"

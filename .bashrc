@@ -3,13 +3,13 @@
 export HISTSIZE=5000
 export DISPLAY=":0"
 
-export XDG_CONFIG_HOME="$HOME/.config/"
+export XDG_CONFIG_HOME="${HOME}/.config/"
 
-[[ -z "${PREFIX}" ]] && export PREFIX="/usr/"
+[ -z "${PREFIX}" ] && ( export PREFIX="/usr/" )
 
-source ~/funcname.sh
-source ~/timer.sh
-source ~/checkhealth.sh
+. ~/funcname.sh
+. ~/timer.sh
+. ~/checkhealth.sh
 
 timer_start 'loading variables...'
 
@@ -39,6 +39,7 @@ export MKDIR_PROGRAM='mkdir'
 export CAT_PROGRAM='cat'
 export EXIT_PROGRAM='exit'
 export ECHO_PROGRAM='echo'
+export PRINTF_PROGRAM='printf'
 export ALIAS_PROGRAM='alias'
 export SOURCE_PROGRAM='.'
 export CLEAR_PROGRAM='clear'
@@ -78,7 +79,7 @@ al() { "${ALIAS_PROGRAM}"; }
 q() {
 	exitcode=${1}
 	actual_exitcode=''
-	if [[ -z ${exitcode} ]]; then
+	if [ -z ${exitcode} ]; then
 		actual_exitcode=0
 	else
 		actual_exitcode=${exitcode}
@@ -132,25 +133,26 @@ option() {
 	character=$2
 	actual_text=$("${ECHO_PROGRAM}" "${text}" | sed "s/${character}/${esc}[1m&${esc}[22m/";)
 set_number_color
-	"${ECHO_PROGRAM}" -e "${NUMBER_COLOR}${iota}${RESET_COLOR}. ${actual_text}"
-	((iota++))
+	"${PRINTF_PROGRAM}" "${NUMBER_COLOR}${iota}${RESET_COLOR}. ${actual_text}\n"
+	iota=$((iota + 1))
 }
 on_pause() {
-	"${ECHO_PROGRAM}" -en "${GRAY_COLOR}[on pause (code: ${YELLOW_COLOR}${?}${GRAY_COLOR}, press ${BOLD_COLOR}${WHITE_COLOR}RETURN${NON_BOLD_COLOR}${GRAY_COLOR})]${RESET_COLOR}: "
+	"${PRINTF_PROGRAM}" "${GRAY_COLOR}[on pause (code: ${YELLOW_COLOR}${?}${GRAY_COLOR}, press ${BOLD_COLOR}${WHITE_COLOR}RETURN${NON_BOLD_COLOR}${GRAY_COLOR})]${RESET_COLOR}: "
 }
 
 set_number_color() {
-	# 1 + because both \033[30m and \033[40m are black and we do not need black because our terminal background is black
-	foreground_color=$((1 + $RANDOM%9))
-	background_color=$(($RANDOM%9))
-	if [[ ${background_color} == ${foreground_color} ]]; then
+	# + 1 because both \033[30m and \033[40m are black and we do not need black because our terminal background is black
+	# foreground_color=$((1 + ${RANDOM} % 9))
+	foreground_color=$(shuf -i1-9)
+	background_color=$(shuf -i0-8)
+	if [ "${background_color}" = "${foreground_color}" ]; then
 		case ${background_color} in
-		'8')
-			background_color=0
-		;;
-		*)
-			background_color=$((${foreground_color}+1))
-		;;
+			'8')
+				background_color=0
+			;;
+			*)
+				background_color=$((background_color + 1))
+			;;
 		esac
 	fi
 	NUMBER_COLOR="\033[0;9${foreground_color};4${background_color}m"
@@ -193,7 +195,7 @@ try_install() {
 		;;
 	esac
 	attempt=1
-	while [[ ${attempt} -lt ${max_attempt} ]]; do
+	while [ ${attempt} -lt ${max_attempt} ]; do
 		case ${attempt} in
 			1)
 				"${ECHO_PROGRAM}" "trying to install ${program}..."
@@ -226,18 +228,18 @@ timer_end
 timer_total_time
 
 print_todo() {
-	if [[ -f ~/todo ]]; then
-		if [[ $("${CAT_PROGRAM}" ~/todo) == '' ]]; then
-			"${ECHO_PROGRAM}" -e "$(base_program): ${RED_COLOR}error${RESET_COLOR}: ${YELLOW_COLOR}todo is empty${RESET_COLOR}"
+	if [ -f ~/todo ]; then
+		if [ $("${CAT_PROGRAM}" ~/todo)='' ]; then
+			"${PRINTF_PROGRAM}" "$(base_program): ${RED_COLOR}error${RESET_COLOR}: ${YELLOW_COLOR}todo is empty${RESET_COLOR}\n"
 		else
-			"${ECHO_PROGRAM}" -e "$(base_program): note: ${GREEN_COLOR}todo file:${RESET_COLOR}"
+			"${PRINTF_PROGRAM}" "$(base_program): note: ${GREEN_COLOR}todo file:${RESET_COLOR}\n"
 			"${CAT_PROGRAM}" ~/todo
 		fi
 	else
-		"${ECHO_PROGRAM}" -e "$(basename ${0}): ${RED_COLOR}error${RESET_COLOR}: ${RED_COLOR}todo file does not exist${RESET_COLOR}"
+		"${PRINTF_PROGRAM}" "$(basename ${0}): ${RED_COLOR}error${RESET_COLOR}: ${RED_COLOR}todo file does not exist${RESET_COLOR}\n"
 	fi
 }
-if [[ $BASHRC_ALREADY_LOADED == '' ]]; then
+if [ $BASHRC_ALREADY_LOADED='' ]; then
 	print_todo
 fi
 

@@ -1,11 +1,8 @@
 #!/bin/env bash
 
-if [[ $TIMER_INCLUDED == '' ]]; then
-	export TIMER_INCLUDED=true
-	. ~/timer.sh
-fi
+. ~/timer.sh
 
-function check_for() {
+check_for() {
 	case "${1}" in
 		'')
 			echo "No program name was found: exiting..."
@@ -73,7 +70,7 @@ function check_for() {
 	esac
 }
 
-function checkhealth() {
+checkhealth() {
 	timer_start 'checking needed staff...'
 	check_for 'sh'
 	timer_end

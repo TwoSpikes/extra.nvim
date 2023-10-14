@@ -1,7 +1,7 @@
 #!/bin/env bash
 
-function tsch_fplus_run() {
-	if [[ -f ~/fplus ]]; then
+tsch_fplus_run() {
+	if [ -f ~/fplus ]; then
 		cd ~/fplus/
 	else
 		echo -n "No fplus directory, create it? (y/N/<Ctrl+C>): "
@@ -64,7 +64,7 @@ set_number_color
 	tsch_fplus_run
 }
 
-function tsch() {
+tsch() {
 	clear
 set_number_color
 		echo 'TwoSpikes ChooseHub (2023-2023)'
@@ -77,18 +77,18 @@ set_number_color
 		option 'upgrade && exit' 'x'
 		option 'edit todo' 'd'
 set_number_color
-		echo -e "${NUMBER_COLOR}7${RESET}. edit b\033[1ma\033[22mshrc"
+		printf "${NUMBER_COLOR}7${RESET}. edit b\033[1ma\033[22mshrc\n"
 set_number_color
-		echo -e "${NUMBER_COLOR}8${RESET}. edit n\033[1mv\033[22mimrc"
+		printf "${NUMBER_COLOR}8${RESET}. edit n\033[1mv\033[22mimrc\n"
 set_number_color
-		echo -e "${NUMBER_COLOR}9${RESET}. reload \033[1mc\033[22molors"
+		printf "${NUMBER_COLOR}9${RESET}. reload \033[1mc\033[22molors\n"
 set_number_color
-		echo -e "${NUMBER_COLOR}10${RESET}. ca\033[1ml\033[22m"
+		printf "${NUMBER_COLOR}10${RESET}. ca\033[1ml\033[22m\n"
 set_number_color
-		echo -e "${NUMBER_COLOR}11${RESET}. cal -\033[1my\033[22m"
+		printf "${NUMBER_COLOR}11${RESET}. cal -\033[1my\033[22m\n"
 set_number_color
-		echo -e "${NUMBER_COLOR}12${RESET}. \033[1mw\033[22meb edit"
-		echo -e "\033[91mEnter${RESET}. another"
+		printf "${NUMBER_COLOR}12${RESET}. \033[1mw\033[22meb edit\n"
+		printf "\033[91mEnter${RESET}. another"
 	read answer
 	clear
 	case ${answer} in
@@ -123,7 +123,7 @@ set_number_color
 		on_pause
 		read
 
-		if [[ "${errorcode}" == 0 ]]; then
+		if [ "${errorcode}" -eq 0 ]; then
 			tste "${actual_file}"
 			echo ''
 			on_pause
@@ -144,13 +144,13 @@ set_number_color
 		ald
 		echo "wanna load ~/${BASHRC_NAME}?"
 set_number_color
-		echo -e "${NUMBER_COLOR}0${RESET}. No, back to menu"
+		printf "${NUMBER_COLOR}0${RESET}. No, back to menu\n"
 set_number_color
-		echo -e "${NUMBER_COLOR}1${RESET}. Yes, restart"
+		printf "${NUMBER_COLOR}1${RESET}. Yes, restart\n"
 set_number_color
-		echo -e "${NUMBER_COLOR}2${RESET}. no, Exit from start menu"
+		printf "${NUMBER_COLOR}2${RESET}. no, Exit from start menu\n"
 		read answer2
-		case ${answer2,,} in
+		case ${answer2} in
 		'0'|'n')
 			
 		;;
@@ -183,7 +183,7 @@ set_number_color
 		to_exit='true'
 	;;
 	esac
-	if [[ $to_exit != 'true' ]]; then
+	if [ $to_exit != 'true' ]; then
 		tsch
 	else
 		clear
