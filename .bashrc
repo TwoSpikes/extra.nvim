@@ -7,6 +7,7 @@ export XDG_CONFIG_HOME="$HOME/.config/"
 
 [[ -z "${PREFIX}" ]] && export PREFIX="/usr/"
 
+source ~/funcname.sh
 source ~/timer.sh
 source ~/checkhealth.sh
 
@@ -227,9 +228,9 @@ timer_total_time
 print_todo() {
 	if [[ -f ~/todo ]]; then
 		if [[ $("${CAT_PROGRAM}" ~/todo) == '' ]]; then
-			"${ECHO_PROGRAM}" -e "$(basename ${0}): ${RED_COLOR}error${RESET_COLOR}: ${YELLOW_COLOR}todo is empty${RESET_COLOR}"
+			"${ECHO_PROGRAM}" -e "$(base_program): ${RED_COLOR}error${RESET_COLOR}: ${YELLOW_COLOR}todo is empty${RESET_COLOR}"
 		else
-			"${ECHO_PROGRAM}" -e "$(basename ${0}): note: ${GREEN_COLOR}todo file:${RESET_COLOR}"
+			"${ECHO_PROGRAM}" -e "$(base_program): note: ${GREEN_COLOR}todo file:${RESET_COLOR}"
 			"${CAT_PROGRAM}" ~/todo
 		fi
 	else
