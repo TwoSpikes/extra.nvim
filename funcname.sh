@@ -1,6 +1,6 @@
 #!/bin/env bash
 
-[[ ! -z "${INCLUDED_FUNCNAME}" ]] && return 0 || export INCLUDED_FUNCNAME=true
+[[ ! -z "${INCLUDED_FUNCNAME}" ]] && return 0 || INCLUDED_FUNCNAME=true
 
 if [[ -n $BASH_VERSION ]]; then
 	func_name() {

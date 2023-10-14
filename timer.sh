@@ -1,6 +1,6 @@
 #!/bin/env bash
 
-[[ ! -z "${INCLUDED_TIMER}" ]] && return 0 || export INCLUDED_TIMER=true
+[[ ! -z "${INCLUDED_TIMER}" ]] && return 0 || INCLUDED_TIMER=true
 
 source ~/funcname.sh
 
