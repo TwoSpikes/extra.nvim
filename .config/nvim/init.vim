@@ -191,7 +191,7 @@ augroup numbertoggle
 				call STCAbs()
 				return
 			endif
-			set nornu
+			setlocal nornu
 		endif
 	endfunction
 	function Numbertoggle_stcrel()
@@ -200,13 +200,17 @@ augroup numbertoggle
 				call STCRel()
 				return
 			endif
-			set rnu
+			setlocal rnu
 		endif
+	endfunction
+	function Numbertoggle_no()
+		set stc= nonu nornu
 	endfunction
 	" autocmd BufEnter,FocusGained,InsertLeave,WinEnter * call Numbertoggle_stcrel()
 	" autocmd BufLeave,FocusLost,InsertEnter,WinLeave * call Numbertoggle_stcabs()
 	autocmd FocusGained,InsertLeave * call Numbertoggle_stcrel()
 	autocmd FocusLost,InsertEnter * call Numbertoggle_stcabs()
+	autocmd BufLeave * call Numbertoggle_no()
 augroup END
 
 function! SetSTCOrNu()
