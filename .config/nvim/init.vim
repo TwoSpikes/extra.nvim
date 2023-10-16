@@ -46,11 +46,6 @@ endfunction
 function STCAbs()
 	let &stc = '%=%{(v:virtnum <= 0)?v:lnum:""} '
 endfunction
-if has('nvim')
-	call STCRel()
-else
-	set nu rnu
-endif
 
 set showcmd
 set showcmdloc=statusline
@@ -214,18 +209,21 @@ augroup numbertoggle
 	autocmd FocusLost,InsertEnter * call Numbertoggle_stcabs()
 augroup END
 
-augroup STC_FIletYPE
-	au!
-	au filetype help setl nonu nornu stc=
-	" au terminalopen
-augroup END
+function! SetSTCOrNu()
+	if has('nvim')
+		call STCRel()
+	else
+		setlocal nu rnu stc=
+	endif
+endfunction
+function! BufModifiableHandler(id)
+	if &modifiable && mode() != 'i'
+		call SetSTCOrNu()
+	endif
+endfunction
+call timer_start(500, 'BufModifiableHandler', {'repeat': -1})
 
-augroup strace
-	au!
-	au filetype strace setl nomodifiable stc=
-augroup END
-
-function MyTabLabel(n)
+function! MyTabLabel(n)
 	let buflist = tabpagebuflist(a:n)
 	let winnr = tabpagewinnr(a:n)
 	let original_buf_name = bufname(buflist[winnr - 1])
@@ -240,7 +238,7 @@ function MyTabLabel(n)
 	" 	silent echo buf_name
 	" redir END
 endfunction
-function MyTabLine()
+function! MyTabLine()
   let s = ''
   for i in range(tabpagenr('$'))
     if i + 1 == tabpagenr()
@@ -572,6 +570,7 @@ tnoremap <c-]> <c-\><esc>
 function OpenTerm()
 	terminal
 	setlocal statuscolumn=
+	setlocal nonu nornu
 	startinsert
 endfunction
 noremap <silent> <leader>tt <cmd>tabnew<cr><cmd>call OpenTerm()<cr>
@@ -695,7 +694,7 @@ inoremap <silent> jK <esc>
 inoremap <silent> JK <esc>:w<cr>
 inoremap <silent> Jk <esc>
 tnoremap <silent> jk <c-\><c-n>
-tnoremap <silent> jK <c-\><c-n>:bd!<Bar>tabnew<Bar>ter<cr>a
+tnoremap <silent> jK <c-\><c-n>:bd!<Bar>tabnew<Bar>call OpenTerm()<cr>
 command! W w
 
 inoremap <silent> ju <esc>viwUea
