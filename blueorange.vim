@@ -513,17 +513,17 @@ if &t_Co >= 256
     hi CocSearch ctermfg=222 ctermbg=NONE cterm=NONE
   else
     " Light background
-    hi Normal ctermfg=16 ctermbg=231 cterm=NONE
-    hi MsgArea ctermfg=15 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=#505050 gui=reverse
+    hi Normal ctermfg=0 ctermbg=231 cterm=NONE guifg=#000000 guibg=#ffffff gui=NONE
+    hi MsgArea ctermfg=0 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=#505050 gui=reverse
     " hi Statusline ctermfg=231 ctermbg=16 cterm=bold
-    hi Statusline ctermfg=18 ctermbg=194 cterm=bold guifg=#ffffff guibg=#3040f7 gui=NONE
+    hi Statusline ctermfg=255 ctermbg=20 cterm=bold guifg=#ffffff guibg=#3040f7 gui=NONE
     hi Statuslinemod ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#fff070 guibg=#000000 gui=reverse
     hi Statuslinestat1 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#ffffff guibg=#f0a007 gui=bold
     hi Statuslinestat01 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#f0a007 guibg=#3040f7 gui=NONE
     hi Statuslinestat12 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#3040f7 guibg=#f0a007 gui=NONE
     hi Statuslinestat2 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#aff0a0 guibg=#3040f7 gui=NONE
     " hi StatuslineNC ctermfg=231 ctermbg=243 cterm=NONE
-    hi StatuslineNC ctermfg=17 ctermbg=208 cterm=reverse guifg=#f03000 guibg=#0030af gui=bold
+    hi StatuslineNC ctermfg=17 ctermbg=19 cterm=bold guifg=#f03000 guibg=#0030af gui=bold
     hi ModeNorm ctermfg=16 ctermbg=84 cterm=bold guifg=#000000 guibg=#5fff87 gui=bold
     hi ModeIns ctermfg=15 ctermbg=39 cterm=bold guifg=#ffffff guibg=#00afff gui=bold
     hi ModeVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#ffffff guibg=#000087 gui=bold
@@ -570,7 +570,8 @@ if &t_Co >= 256
     hi WildMenu ctermfg=16 ctermbg=222 cterm=bold
     hi debugPC ctermfg=26 ctermbg=NONE cterm=reverse
     hi debugBreakpoint ctermfg=23 ctermbg=NONE cterm=reverse
-    hi Visual ctermfg=231 ctermbg=67 cterm=NONE
+    " hi Visual ctermfg=231 ctermbg=67 cterm=NONE
+    hi Visual ctermfg=NONE ctermbg=18 cterm=NONE guifg=NONE guibg=#b0e0f0 gui=NONE
     hi MatchParen ctermfg=30 ctermbg=231 cterm=reverse
     hi VisualNOS ctermfg=231 ctermbg=30 cterm=NONE
     hi CursorLine ctermfg=NONE ctermbg=254 cterm=NONE
