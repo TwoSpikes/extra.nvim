@@ -41,6 +41,7 @@ $ cp ./.gitmessage ~/
 This is NeoVim/Vim configuration
 
 <img src=.github/images/Screenshot_2023-10-11-22-28-33-255_com.termux.png>
+<img src=.github/images/Screenshot_2023-10-16-22-05-46-797_com.termux.png>
 
 ## Installation
 
