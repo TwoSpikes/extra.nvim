@@ -418,6 +418,9 @@ if &t_Co >= 256
     hi Statuslinestat01 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#000087 guibg=#3040f7 gui=NONE
     hi Statuslinestat12 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#3040f7 guibg=#000087 gui=NONE
     hi Statuslinestat2 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#aff0a0 guibg=#3040f7 gui=NONE
+"    hi Statusline ctermfg=17 ctermbg=208 cterm=bold
+"    hi StatuslineNC ctermfg=18 ctermbg=195 cterm=reverse
+    hi StatuslineNC ctermfg=17 ctermbg=208 cterm=reverse guifg=#f03000 guibg=#0030af gui=bold
     hi ModeNorm ctermfg=16 ctermbg=84 cterm=bold guifg=#000000 guibg=#5fff87 gui=bold
     hi ModeIns ctermfg=15 ctermbg=39 cterm=bold guifg=#ffffff guibg=#00afff gui=bold
     hi ModeVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#ffffff guibg=#000087 gui=bold
@@ -425,9 +428,6 @@ if &t_Co >= 256
     hi ModeRepl ctermfg=15 ctermbg=128 cterm=bold guifg=#ffffff guibg=#af00df gui=bold
     hi ModeBlock ctermfg=15 ctermbg=88 cterm=bold guifg=#ffffff guibg=#870000 gui=bold
     hi ModeTerm ctermfg=47 ctermbg=52 cterm=bold guifg=#00ff5f guibg=#5f0000 gui=bold
-"    hi Statusline ctermfg=17 ctermbg=208 cterm=bold
-"    hi StatuslineNC ctermfg=18 ctermbg=195 cterm=reverse
-    hi StatuslineNC ctermfg=17 ctermbg=208 cterm=reverse guifg=#f03000 guibg=#0030af gui=bold
     hi VertSplit ctermfg=159 ctermbg=17 cterm=NONE
 "    hi TabLine ctermfg=208 ctermbg=17 cterm=NONE
     hi TabLine ctermfg=195 ctermbg=18 cterm=NONE guifg=#f03000 guibg=#00005f gui=NONE
@@ -514,15 +514,36 @@ if &t_Co >= 256
   else
     " Light background
     hi Normal ctermfg=16 ctermbg=231 cterm=NONE
-    hi Statusline ctermfg=231 ctermbg=16 cterm=bold
-    hi StatuslineNC ctermfg=231 ctermbg=243 cterm=NONE
+    hi MsgArea ctermfg=15 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=#505050 gui=reverse
+    " hi Statusline ctermfg=231 ctermbg=16 cterm=bold
+    hi Statusline ctermfg=18 ctermbg=194 cterm=bold guifg=#ffffff guibg=#3040f7 gui=NONE
+    hi Statuslinemod ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#fff070 guibg=#000000 gui=reverse
+    hi Statuslinestat1 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#ffffff guibg=#f0a007 gui=bold
+    hi Statuslinestat01 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#f0a007 guibg=#3040f7 gui=NONE
+    hi Statuslinestat12 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#3040f7 guibg=#f0a007 gui=NONE
+    hi Statuslinestat2 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#aff0a0 guibg=#3040f7 gui=NONE
+    " hi StatuslineNC ctermfg=231 ctermbg=243 cterm=NONE
+    hi StatuslineNC ctermfg=17 ctermbg=208 cterm=reverse guifg=#f03000 guibg=#0030af gui=bold
+    hi ModeNorm ctermfg=16 ctermbg=84 cterm=bold guifg=#000000 guibg=#5fff87 gui=bold
+    hi ModeIns ctermfg=15 ctermbg=39 cterm=bold guifg=#ffffff guibg=#00afff gui=bold
+    hi ModeVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#ffffff guibg=#000087 gui=bold
+    hi ModeCom ctermfg=16 ctermbg=220 cterm=bold guifg=#000000 guibg=#ffdf00 gui=bold
+    hi ModeRepl ctermfg=15 ctermbg=128 cterm=bold guifg=#ffffff guibg=#af00df gui=bold
+    hi ModeBlock ctermfg=15 ctermbg=88 cterm=bold guifg=#ffffff guibg=#870000 gui=bold
+    hi ModeTerm ctermfg=47 ctermbg=52 cterm=bold guifg=#00ff5f guibg=#5f0000 gui=bold
     hi VertSplit ctermfg=243 ctermbg=243 cterm=NONE
-    hi TabLine ctermfg=16 ctermbg=250 cterm=NONE
-    hi TabLineFill ctermfg=NONE ctermbg=243 cterm=NONE
-    hi TabLineSel ctermfg=231 ctermbg=16 cterm=bold,reverse
+    " hi TabLine ctermfg=16 ctermbg=250 cterm=NONE
+    " hi TabLineFill ctermfg=NONE ctermbg=243 cterm=NONE
+    " hi TabLineSel ctermfg=231 ctermbg=16 cterm=bold,reverse
+    hi TabLine ctermfg=195 ctermbg=18 cterm=NONE guifg=#f03000 guibg=#00005f gui=NONE
+    hi TabLineSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#50f000 guibg=#20005f gui=NONE
+    hi TabLineFill ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#101050 gui=NONE
+    hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#0050cf guibg=#ffffff gui=reverse
     hi ToolbarLine ctermfg=NONE ctermbg=NONE cterm=NONE
     hi ToolbarButton ctermfg=231 ctermbg=16 cterm=NONE
     hi QuickFixLine ctermfg=231 ctermbg=32 cterm=NONE
+    hi CursorLineNr ctermfg=220 ctermbg=236 cterm=bold,reverse guifg=#ffdf00 guibg=#000000 gui=bold
+    hi LineNr ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#ffffa0 guibg=#101050 gui=bold,italic,reverse
     hi CursorLineNr ctermfg=16 ctermbg=NONE cterm=bold
     hi LineNr ctermfg=247 ctermbg=NONE cterm=NONE
     hi NonText ctermfg=247 ctermbg=NONE cterm=NONE

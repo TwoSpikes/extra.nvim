@@ -13,7 +13,7 @@ if $PREFIX == ""
 endif
 let g:COLORSCHEME_PATH = "$PREFIX/share/nvim/runtime/colors/blueorange.vim"
 set termguicolors
-set background=dark
+set background=light
 exec printf("so %s", g:COLORSCHEME_PATH)
 set lazyredraw
 
