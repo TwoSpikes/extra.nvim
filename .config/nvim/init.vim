@@ -65,7 +65,12 @@ function! SetStatusLineNc()
 	echohl StatusLineNc
 endfunction
 function! SetGitBranch()
-	let s:gitbranch = split(system('git rev-parse --abbrev-ref HEAD'))[0]
+	let s:virtual_gitbranch = split(system('git rev-parse --abbrev-ref HEAD 2> /dev/null'))
+	if len(s:virtual_gitbranch) > 0
+		let s:gitbranch = s:virtual_gitbranch[0]
+	else
+		let s:gitbranch = ''
+	endif
 endfunction
 augroup gitbranch
 	autocmd!
