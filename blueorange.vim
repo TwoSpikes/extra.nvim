@@ -403,7 +403,7 @@ if &t_Co >= 256
   hi! link MessageWindow PMenu
   hi! link PopupNotification Todo
   if &background ==# 'dark'
-    hi Normal ctermfg=15 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=#000020 gui=NONE
+    hi Normal ctermfg=231 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=#000020 gui=NONE
     hi NormalNC ctermfg=15 ctermbg=NONE cterm=NONE guifg=#ffefff guibg=#000020 gui=NONE
     hi MsgArea ctermfg=15 ctermbg=NONE cterm=NONE guifg=#c6c6c6 guibg=#000020 gui=NONE
     hi MsgSeparator ctermfg=NONE ctermbg=57 cterm=NONE guifg=NONE guibg=#aff0a0 gui=NONE
@@ -541,6 +541,8 @@ if &t_Co >= 256
     hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#0050cf guibg=#ffffff gui=reverse
     hi ToolbarLine ctermfg=NONE ctermbg=NONE cterm=NONE
     hi ToolbarButton ctermfg=231 ctermbg=16 cterm=NONE
+    hi Keyword ctermfg=220 ctermbg=NONE cterm=italic guifg=#ffdf00 guibg=#000000 gui=reverse
+    hi Statement ctermfg=228 ctermbg=NONE cterm=bold guifg=#ffff87 guibg=#000000 gui=reverse
     hi QuickFixLine ctermfg=231 ctermbg=32 cterm=NONE
     hi CursorLineNr ctermfg=220 ctermbg=236 cterm=bold,reverse guifg=#ffdf00 guibg=#000000 gui=bold
     hi LineNr ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#ffffa0 guibg=#101050 gui=bold,italic,reverse
@@ -591,7 +593,7 @@ if &t_Co >= 256
     hi PreProc ctermfg=23 ctermbg=NONE cterm=NONE
     hi Special ctermfg=30 ctermbg=NONE cterm=NONE
     hi Underlined ctermfg=NONE ctermbg=NONE cterm=underline
-    hi Title ctermfg=NONE ctermbg=NONE cterm=bold
+    hi Keyword ctermfg=220 ctermbg=NONE cterm=italic guifg=#ffdf00 guibg=NONE gui=italic
     hi Directory ctermfg=26 ctermbg=NONE cterm=bold
     hi Conceal ctermfg=NONE ctermbg=NONE cterm=NONE
     hi Ignore ctermfg=NONE ctermbg=NONE cterm=NONE
