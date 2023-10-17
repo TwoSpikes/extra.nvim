@@ -41,22 +41,42 @@ set foldnestmax=15
 set nonu
 set nornu
 function STCRel()
-	let &stc = '%=%{v:relnum?((v:virtnum <= 0)?v:relnum:""):((v:virtnum <= 0)?v:lnum:"")} '
+	if has('nvim')
+		let &stc = '%=%{v:relnum?((v:virtnum <= 0)?v:relnum:""):((v:virtnum <= 0)?v:lnum:"")} '
+	else
+		set nu rnu
+	endif
 endfunction
 function STCAbs()
-	let &stc = '%=%{(v:virtnum <= 0)?v:lnum:""} '
+	if has('nvim')
+		let &stc = '%=%{(v:virtnum <= 0)?v:lnum:""} '
+	else
+		set nu nornu
+	endif
 endfunction
 
 set showcmd
 set showcmdloc=statusline
+set laststatus=2
 
 let s:custom_mode = ''
 let s:specmode = ''
 function! SetStatusLineNc()
 	echohl StatusLineNc
 endfunction
+function! SetGitBranch()
+	let s:gitbranch = split(system('git rev-parse --abbrev-ref HEAD'))[0]
+endfunction
+augroup gitbranch
+	autocmd!
+	autocmd BufEnter,BufLeave * call SetGitBranch()
+augroup END
+function! GetGitBranch()
+	return s:gitbranch
+endfunction
 function! Showtab()
-	let stl_name = '%t%<'.'%( %#StatusLinemod#%M%R%H%W%)%*'.'%( %#StatusLinemod#'.&syntax.'%)%*'.'%( %#Statuslinemod#'.'%{gitbranch#name()}'.'%)%*'
+	"let stl_name = '%t%<'.'%( %#StatusLinemod#%M%R%H%W%)%*'.'%( %#StatusLinemod#'.&syntax.'%)%*'.'%( %#Statuslinemod#'.'%{gitbranch#name()}'.'%)%*'
+	let stl_name = '%t%<'.'%( %#StatusLinemod#%M%R%H%W%)%*'.'%( %#StatusLinemod#'.&syntax.'%)%*'.'%( %#Statuslinemod#'.'%{GetGitBranch()}'.'%)%*'
 	let mode = mode('lololol')
 	let strmode = ''
 	if mode == 'n'
@@ -213,16 +233,9 @@ augroup numbertoggle
 	autocmd BufLeave * call Numbertoggle_no()
 augroup END
 
-function! SetSTCOrNu()
-	if has('nvim')
-		call STCRel()
-	else
-		setlocal nu rnu stc=
-	endif
-endfunction
 function! BufModifiableHandler(id)
 	if &modifiable && mode() != 'i'
-		call SetSTCOrNu()
+		call STCRel()
 	endif
 endfunction
 call timer_start(500, 'BufModifiableHandler', {'repeat': -1})
