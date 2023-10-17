@@ -542,10 +542,10 @@ if &t_Co >= 256
     hi ToolbarLine ctermfg=NONE ctermbg=NONE cterm=NONE
     hi ToolbarButton ctermfg=231 ctermbg=16 cterm=NONE
     hi Keyword ctermfg=220 ctermbg=NONE cterm=italic guifg=#ffdf00 guibg=#000000 gui=reverse
-    hi Statement ctermfg=228 ctermbg=NONE cterm=bold guifg=#ffff87 guibg=#000000 gui=reverse
+    hi Statement ctermfg=228 ctermbg=NONE cterm=NONE guifg=#ffff87 guibg=#000000 gui=reverse
     hi QuickFixLine ctermfg=231 ctermbg=32 cterm=NONE
-    hi CursorLineNr ctermfg=220 ctermbg=236 cterm=bold,reverse guifg=#ffdf00 guibg=#000000 gui=bold
-    hi LineNr ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#ffffa0 guibg=#101050 gui=bold,italic,reverse
+    hi CursorLineNr ctermfg=220 ctermbg=236 cterm=bold,reverse guifg=#000000 guibg=#ffaf00 gui=NONE
+    hi LineNr ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#ffffa0 guibg=#000000 gui=italic,reverse
     hi CursorLineNr ctermfg=16 ctermbg=NONE cterm=bold
     hi LineNr ctermfg=247 ctermbg=NONE cterm=NONE
     hi NonText ctermfg=247 ctermbg=NONE cterm=NONE
