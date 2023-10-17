@@ -43,6 +43,11 @@ This is NeoVim/Vim configuration
 <img src=.github/images/Screenshot_2023-10-11-22-28-33-255_com.termux.png>
 <img src=.github/images/Screenshot_2023-10-16-22-05-46-797_com.termux.png>
 
+## Note
+
+It works better in NeoVim,\
+and plugin manager does not work yet in version of Vim/NeoVim without Lua.
+
 ## Installation
 
 Warning: you need to be in this repository directory
