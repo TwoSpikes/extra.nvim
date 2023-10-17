@@ -38,6 +38,11 @@ set foldmarker={{{,}}}
 set foldmethod=marker
 set foldnestmax=15
 
+function! SynGroup()
+    let l:s = synID(line('.'), col('.'), 1)
+    echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
+endfun
+
 set nonu
 set nornu
 function STCRel()
@@ -331,7 +336,7 @@ endif
 set mouseshape=i:beam,r:beam,s:updown,sd:cross,m:no,ml:up-arrow,v:rightup-arrow
 set mousetime=400
 set startofline
-se guicursor=n-v-c-sm:block-blinkwait175-blinkoff150-blinkon175-Cursor,i-ci-ve:ver50-Cursor,r-cr-o:hor50-Cursor
+se guicursor=n-v-c-sm:block-blinkwait175-blinkoff150-blinkon175-CursorNormal,i-ci-ve:block-blinkwait175-blinkoff150-blinkon175-CursorInsert,r-cr-o:hor50-CursorNormal
 
 set concealcursor=nc
 set conceallevel=0

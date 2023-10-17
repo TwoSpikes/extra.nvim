@@ -11,7 +11,9 @@
 hi clear
 let g:colors_name = 'blueorange'
 
-hi Cursor guifg=NONE guibg=NONE gui=NONE cterm=NONE
+hi CursorNormal guifg=NONE guibg=#ffaf00 gui=NONE cterm=NONE
+hi CursorInsert guifg=NONE guibg=#00afff gui=NONE cterm=NONE
+hi Cursor guifg=NONE guibg=#ffaf00 gui=NONE cterm=NONE
 set guicursor=n-v-c:block-Cursor
 set guicursor+=i:ver100-Cursor
 set guicursor+=r:hor20-Cursor
@@ -541,7 +543,7 @@ if &t_Co >= 256
     hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#0050cf guibg=#ffffff gui=reverse
     hi ToolbarLine ctermfg=NONE ctermbg=NONE cterm=NONE
     hi ToolbarButton ctermfg=231 ctermbg=16 cterm=NONE
-    hi Keyword ctermfg=220 ctermbg=NONE cterm=italic guifg=#ffdf00 guibg=#000000 gui=reverse
+    hi Keyword ctermfg=220 ctermbg=NONE cterm=NONE guifg=#ffdf00 guibg=NONE gui=reverse
     hi Statement ctermfg=228 ctermbg=NONE cterm=NONE guifg=#ffff87 guibg=#000000 gui=reverse
     hi QuickFixLine ctermfg=231 ctermbg=32 cterm=NONE
     hi CursorLineNr ctermfg=220 ctermbg=236 cterm=bold,reverse guifg=#ffffff guibg=#ffaf00 gui=bold
@@ -558,9 +560,9 @@ if &t_Co >= 256
     hi PmenuSbar ctermfg=NONE ctermbg=NONE cterm=NONE
     hi SignColumn ctermfg=NONE ctermbg=NONE cterm=NONE
 "    hi Error ctermfg=231 ctermbg=160 cterm=NONE
-    hi Error ctermfg=NONE ctermbg=NONE cterm=strikethrough guifg=NONE guibg=NONE gui=strikethrough guisp=red
+    hi Error ctermfg=NONE ctermbg=NONE cterm=strikethrough guifg=#ffffff guibg=#ff0000 gui=strikethrough guisp=red
 "    hi ErrorMsg ctermfg=231 ctermbg=160 cterm=NONE
-    hi ErrorMsg ctermfg=NONE ctermbg=NONE cterm=strikethrough guifg=NONE guibg=NONE gui=strikethrough guisp=red
+    hi ErrorMsg ctermfg=NONE ctermbg=NONE cterm=strikethrough guifg=#ffffff guibg=#ff0000 gui=NONE guisp=red
     hi ModeMsg ctermfg=222 ctermbg=16 cterm=reverse
     hi MoreMsg ctermfg=28 ctermbg=NONE cterm=bold
     hi Question ctermfg=127 ctermbg=NONE cterm=bold
