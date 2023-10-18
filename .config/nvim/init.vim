@@ -652,7 +652,7 @@ augroup terminal
 	au termopen * setlocal nocursorline nocursorcolumn
 augroup END
 augroup visual
-	au ModeChanged * let &cursorcolumn = mode() !~# "[vV]"
+	au ModeChanged * let &cursorcolumn = mode() !~# "[vVirco]" | let &cursorline = mode() !~# "[irco]"
 augroup END
 
 " TELESCOPE
