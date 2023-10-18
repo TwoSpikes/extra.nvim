@@ -644,6 +644,10 @@ augroup python
 	au filetype python nnoremap <silent> <buffer> <leader>l/d mz0i#<esc>`zl
 	au filetype python nnoremap <silent> <buffer> <leader>l/u mz:s/^#<cr>`zh:noh<cr>
 augroup END
+augroup netrw
+	au!
+	au filetype netrw setlocal nocursorcolumn
+augroup END
 
 " TELESCOPE
 nnoremap <silent> <leader>ff :lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>

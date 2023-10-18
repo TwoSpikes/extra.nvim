@@ -470,8 +470,8 @@ if &t_Co >= 256
     hi Visual ctermfg=NONE ctermbg=18 cterm=NONE guifg=NONE guibg=#3010a0 gui=bold
     hi MatchParen ctermfg=30 ctermbg=NONE cterm=reverse guifg=#008787 guibg=NONE gui=reverse
     hi VisualNOS ctermfg=16 ctermbg=73 cterm=NONE
-    hi CursorLine ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#000000 gui=bold
-    hi CursorColumn ctermfg=NONE ctermbg=238 cterm=NONE guifg=NONE guibg=#000000 gui=bold
+    hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
+    hi CursorColumn ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
     hi Folded ctermfg=15 ctermbg=234 cterm=italic
     hi ColorColumn ctermfg=NONE ctermbg=234 cterm=NONE
     hi SpellBad ctermfg=203 ctermbg=NONE cterm=underline
@@ -549,8 +549,6 @@ if &t_Co >= 256
     hi QuickFixLine ctermfg=231 ctermbg=32 cterm=NONE
     hi CursorLineNr ctermfg=220 ctermbg=236 cterm=bold,reverse guifg=#ffffff guibg=#ffaf00 gui=bold
     hi LineNr ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#ffffa0 guibg=#000000 gui=italic,reverse
-    hi CursorLineNr ctermfg=16 ctermbg=NONE cterm=bold
-    hi LineNr ctermfg=247 ctermbg=NONE cterm=NONE
     hi NonText ctermfg=247 ctermbg=NONE cterm=NONE
     hi FoldColumn ctermfg=247 ctermbg=NONE cterm=NONE
     hi EndOfBuffer ctermfg=247 ctermbg=NONE cterm=NONE
@@ -579,8 +577,8 @@ if &t_Co >= 256
     hi Visual ctermfg=NONE ctermbg=18 cterm=NONE guifg=NONE guibg=#b0e0f0 gui=NONE
     hi MatchParen ctermfg=30 ctermbg=231 cterm=reverse
     hi VisualNOS ctermfg=231 ctermbg=30 cterm=NONE
-    hi CursorLine ctermfg=NONE ctermbg=254 cterm=NONE
-    hi CursorColumn ctermfg=NONE ctermbg=254 cterm=NONE
+    hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
+    hi CursorColumn ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
     hi Folded ctermfg=243 ctermbg=255 cterm=NONE
     hi ColorColumn ctermfg=NONE ctermbg=255 cterm=NONE
     hi SpellBad ctermfg=124 ctermbg=NONE cterm=underline
