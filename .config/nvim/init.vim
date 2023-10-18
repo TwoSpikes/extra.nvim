@@ -794,5 +794,3 @@ echohl SpecialKey
 echon ':intro<cr>'
 echohl Normal
 echon ' to see help'
-
-" vim:syn=vim:nowrap
