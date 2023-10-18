@@ -41,7 +41,7 @@ set foldnestmax=15
 function! SynGroup()
     let l:s = synID(line('.'), col('.'), 1)
     echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
-endfun
+endfunction
 
 set nonu
 set nornu
@@ -787,7 +787,7 @@ function! SwapHiGroup(group)
         endfor
     endfor
     exec printf('hi %s ctermfg=%s ctermbg=%s guifg=%s guibg=%s', a:group, ctermbg, ctermfg, guibg, guifg)
-endfunc
+endfunction
 
 echo 'type '
 echohl SpecialKey

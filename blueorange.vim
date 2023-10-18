@@ -423,10 +423,11 @@ if &t_Co >= 256
 "    hi Statusline ctermfg=17 ctermbg=208 cterm=bold
 "    hi StatuslineNC ctermfg=18 ctermbg=195 cterm=reverse
     hi StatuslineNC ctermfg=17 ctermbg=208 cterm=reverse guifg=#f03000 guibg=#0030af gui=bold
-    hi ModeNorm ctermfg=16 ctermbg=84 cterm=bold guifg=#000000 guibg=#5fff87 gui=bold
+    " hi ModeNorm ctermfg=16 ctermbg=84 cterm=bold guifg=#000000 guibg=#5fff87 gui=bold
+    hi ModeNorm ctermfg=220 ctermbg=236 cterm=bold,reverse guifg=#ffdf00 guibg=#000000 gui=bold,reverse
     hi ModeIns ctermfg=15 ctermbg=39 cterm=bold guifg=#ffffff guibg=#00afff gui=bold
     hi ModeVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#ffffff guibg=#000087 gui=bold
-    hi ModeCom ctermfg=16 ctermbg=220 cterm=bold guifg=#000000 guibg=#ffdf00 gui=bold
+    hi ModeCom ctermfg=16 ctermbg=220 cterm=bold guifg=#000000 guibg=#aaaaaa gui=bold
     hi ModeRepl ctermfg=15 ctermbg=128 cterm=bold guifg=#ffffff guibg=#af00df gui=bold
     hi ModeBlock ctermfg=15 ctermbg=88 cterm=bold guifg=#ffffff guibg=#870000 gui=bold
     hi ModeTerm ctermfg=47 ctermbg=52 cterm=bold guifg=#00ff5f guibg=#5f0000 gui=bold
@@ -526,10 +527,10 @@ if &t_Co >= 256
     hi Statuslinestat2 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#aff0a0 guibg=#3040f7 gui=NONE
     " hi StatuslineNC ctermfg=231 ctermbg=243 cterm=NONE
     hi StatuslineNC ctermfg=17 ctermbg=19 cterm=bold guifg=#f03000 guibg=#0030af gui=bold
-    hi ModeNorm ctermfg=16 ctermbg=84 cterm=bold guifg=#000000 guibg=#5fff87 gui=bold
+    hi ModeNorm ctermfg=220 ctermbg=236 cterm=bold,reverse guifg=#ffdf00 guibg=#000000 gui=bold,reverse
     hi ModeIns ctermfg=15 ctermbg=39 cterm=bold guifg=#ffffff guibg=#00afff gui=bold
     hi ModeVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#ffffff guibg=#000087 gui=bold
-    hi ModeCom ctermfg=16 ctermbg=220 cterm=bold guifg=#000000 guibg=#ffdf00 gui=bold
+    hi ModeCom ctermfg=16 ctermbg=220 cterm=bold guifg=#000000 guibg=#aaaaaa gui=bold
     hi ModeRepl ctermfg=15 ctermbg=128 cterm=bold guifg=#ffffff guibg=#af00df gui=bold
     hi ModeBlock ctermfg=15 ctermbg=88 cterm=bold guifg=#ffffff guibg=#870000 gui=bold
     hi ModeTerm ctermfg=47 ctermbg=52 cterm=bold guifg=#00ff5f guibg=#5f0000 gui=bold
