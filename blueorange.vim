@@ -13,12 +13,15 @@ let g:colors_name = 'blueorange'
 
 hi CursorNormal guifg=NONE guibg=#ffaf00 gui=NONE cterm=NONE
 hi CursorInsert guifg=NONE guibg=#00afff gui=NONE cterm=NONE
+hi CursorReplace ctermfg=15 ctermbg=128 cterm=bold guifg=#ffffff guibg=#af00df gui=bold
+hi CursorVisual ctermfg=NONE ctermbg=18 cterm=NONE guifg=NONE guibg=#8080f0 gui=bold
 hi Cursor guifg=NONE guibg=#ffaf00 gui=NONE cterm=NONE
-set guicursor=n-v-c:block-Cursor
-set guicursor+=i:ver100-Cursor
-set guicursor+=r:hor20-Cursor
-set guicursor+=n-v-c:blinkon0
-set guicursor+=i:blinkwait10
+set guicursor=n-c-sm:block-blinkwait175-blinkoff150-blinkon175-CursorNormal,v:block-blinkwait175-blinkoff150-blinkon175-CursorVisual,i-ci-ve:block-blinkwait175-blinkoff150-blinkon175-CursorInsert,r-cr:block-blinkwait175-blinkoff150-blinkon175-CursorReplace,o:hor50-CursorNormal
+" set guicursor=n-v-c:block-Cursor
+" set guicursor+=i:ver100-Cursor
+" set guicursor+=r:hor20-Cursor
+" set guicursor+=n-v-c:blinkon0
+" set guicursor+=i:blinkwait10
 
 hi! link helpVim Title
 hi! link helpHeader Title
