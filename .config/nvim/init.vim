@@ -648,6 +648,13 @@ augroup netrw
 	au!
 	au filetype netrw setlocal nocursorcolumn
 augroup END
+augroup terminal
+	au!
+	au termopen * setlocal nocursorline nocursorcolumn
+augroup END
+augroup visual
+	au ModeChanged let &cursorline = mode() !~# "[vV]"
+augroup END
 
 " TELESCOPE
 nnoremap <silent> <leader>ff :lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
