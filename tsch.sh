@@ -104,7 +104,7 @@ set_number_color
 		${EDITOR} ./main.c
 	;;
 	'3'|'t')
-		default_file='lol'
+		default_file='main.c'
 		echo -en "On what file? (default='${default_file}'): "
 		read file
 		case "${file}" in
