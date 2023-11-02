@@ -523,14 +523,14 @@ if &t_Co >= 256
     hi Normal ctermfg=0 ctermbg=231 cterm=NONE guifg=#000000 guibg=#ffffff gui=NONE
     hi MsgArea ctermfg=0 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=#505050 gui=reverse
     " hi Statusline ctermfg=231 ctermbg=16 cterm=bold
-    hi Statusline ctermfg=255 ctermbg=20 cterm=bold guifg=#ffffff guibg=#3040f7 gui=NONE
+    hi Statusline ctermfg=255 ctermbg=20 cterm=bold guifg=#ffffff guibg=#0080ff gui=NONE
     hi Statuslinemod ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#fff070 guibg=#000000 gui=reverse
     hi Statuslinestat1 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#ffffff guibg=#f0a007 gui=bold
-    hi Statuslinestat01 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#f0a007 guibg=#3040f7 gui=NONE
-    hi Statuslinestat12 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#3040f7 guibg=#f0a007 gui=NONE
-    hi Statuslinestat2 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#aff0a0 guibg=#3040f7 gui=NONE
+    hi Statuslinestat01 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#f0a007 guibg=#0080ff gui=NONE
+    hi Statuslinestat12 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#0080ff guibg=#f0a007 gui=NONE
+    hi Statuslinestat2 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#ffffff guibg=#0080ff gui=NONE
     " hi StatuslineNC ctermfg=231 ctermbg=243 cterm=NONE
-    hi StatuslineNC ctermfg=17 ctermbg=19 cterm=bold guifg=#f03000 guibg=#0030af gui=bold
+    hi StatuslineNC ctermfg=17 ctermbg=19 cterm=bold guifg=#ff0000 guibg=#0080ff gui=bold
     hi ModeNorm ctermfg=220 ctermbg=236 cterm=bold,reverse guifg=#ffdf00 guibg=#000000 gui=bold,reverse
     hi ModeIns ctermfg=15 ctermbg=39 cterm=bold guifg=#ffffff guibg=#00afff gui=bold
     hi ModeVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#ffffff guibg=#000087 gui=bold

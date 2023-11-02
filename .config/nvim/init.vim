@@ -315,7 +315,7 @@ set maxfuncdepth=50
 " set maxmapdepth=2
 set maxmempattern=500
 set history=10000
-set nomodelineexpr
+set modelineexpr
 set updatetime=5000
 set timeout
 set timeoutlen=500
