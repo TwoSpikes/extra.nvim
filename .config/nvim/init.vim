@@ -85,8 +85,7 @@ function! GetGitBranch()
 	return s:gitbranch
 endfunction
 function! Showtab()
-	"let stl_name = '%t%<'.'%( %#StatusLinemod#%M%R%H%W%)%*'.'%( %#StatusLinemod#'.&syntax.'%)%*'.'%( %#Statuslinemod#'.'%{gitbranch#name()}'.'%)%*'
-	let stl_name = '%t%<'.'%( %#StatusLinemod#%M%R%H%W%)%*'.'%( %#StatusLinemod#'.&syntax.'%)%*'.'%( %#Statuslinemod#'.'%{GetGitBranch()}'.'%)%*'
+	let stl_name = '%<%t'.'%( %#StatusLinemod#%M%R%H%W%)%*'.'%( %#StatusLinemod#'.&syntax.'%)%*'.'%( %#Statuslinemod#'.'%{GetGitBranch()}'.'%)%*'
 	let mode = mode('lololol')
 	let strmode = ''
 	if mode == 'n'
