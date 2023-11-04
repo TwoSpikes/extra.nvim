@@ -45,19 +45,23 @@ endfunction
 
 set nonu
 set nornu
-function STCRel()
+function! STCRel()
 	if has('nvim')
-		let &stc = '%=%{v:relnum?((v:virtnum <= 0)?v:relnum:""):((v:virtnum <= 0)?v:lnum:"")} '
+		let &l:stc = '%=%{v:relnum?((v:virtnum <= 0)?v:relnum:""):((v:virtnum <= 0)?v:lnum:"")} '
 	else
 		set nu rnu
 	endif
 endfunction
-function STCAbs()
+function! STCAbs()
 	if has('nvim')
 		let &stc = '%=%{(v:virtnum <= 0)?v:lnum:""} '
 	else
 		set nu nornu
 	endif
+endfunction
+function! STCNo()
+	echom "bufnr is: " . getwininfo(win_getid())[0]["bufnr"]
+	se stc= nonu nornu
 endfunction
 
 set showcmd
@@ -215,39 +219,36 @@ command! -nargs=* Pkg !pkg <args>
 augroup numbertoggle
 	autocmd!
 	function Numbertoggle_stcabs()
-		if mode() != 'i'
-			if !&nu
-				call STCAbs()
-				return
-			endif
-			setlocal nornu
+		if mode() != 'i' && &modifiable
+			call STCAbs()
+		else
+			call STCNo()
 		endif
 	endfunction
 	function Numbertoggle_stcrel()
-		if mode() != 'i'
-			if !&nu
-				call STCRel()
-				return
-			endif
-			setlocal rnu
+		if &modifiable
+			call STCRel()
+		else
+			call STCNo()
 		endif
 	endfunction
 	function Numbertoggle_no()
 		set stc= nonu nornu
 	endfunction
-	" autocmd BufEnter,FocusGained,InsertLeave,WinEnter * call Numbertoggle_stcrel()
-	" autocmd BufLeave,FocusLost,InsertEnter,WinLeave * call Numbertoggle_stcabs()
 	autocmd FocusGained,InsertLeave * call Numbertoggle_stcrel()
 	autocmd FocusLost,InsertEnter * call Numbertoggle_stcabs()
-	autocmd BufLeave * call Numbertoggle_no()
+	" autocmd BufLeave * call Numbertoggle_no()
 augroup END
 
-function! BufModifiableHandler(id)
-	if &modifiable && mode() != 'i'
+function! BufModifiableHandler()
+	if &modifiable
 		call STCRel()
+	else
+		call STCNo()
 	endif
 endfunction
-call timer_start(500, 'BufModifiableHandler', {'repeat': -1})
+autocmd BufReadPost,WinLeave,WinEnter * call BufModifiableHandler()
+" call timer_start(500, 'BufModifiableHandler', {'repeat': -1})
 
 function! MyTabLabel(n)
 	let buflist = tabpagebuflist(a:n)
