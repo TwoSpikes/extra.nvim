@@ -371,10 +371,12 @@ function! ToggleFullscreen()
 		let s:old_cursorcolumn = &cursorcolumn
 		let s:old_showtabline = &showtabline
 		let s:old_laststatus = &laststatus
+		let s:old_showcmdloc = &showcmdloc
 		set nocursorline
 		set nocursorcolumn
 		set showtabline=0
 		set laststatus=0
+		set showcmdloc=last
 		call STCAbs()
 	else
 		let s:fullscreen = v:false
@@ -382,6 +384,7 @@ function! ToggleFullscreen()
 		let &cursorcolumn = s:old_cursorcolumn
 		let &showtabline = s:old_showtabline
 		let &laststatus = s:old_laststatus
+		let &showcmdloc = s:old_showcmdloc
 		call STCRel()
 	endif
 endfunction
