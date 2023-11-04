@@ -321,7 +321,7 @@ set updatetime=5000
 set timeout
 set timeoutlen=500
 set nottimeout
-set ttimeoutlen=0
+set ttimeoutlen=500
 
 set cursorline
 set cursorlineopt=screenline,number
