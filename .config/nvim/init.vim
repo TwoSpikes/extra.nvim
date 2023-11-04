@@ -361,6 +361,36 @@ noremap <silent> + mzyyp`zj
 noremap <silent> J mzJ`z
 noremap <silent> gJ mzgJ`z
 
+let s:fullscreen = v:false
+function! ToggleFullscreen()
+	if !s:fullscreen
+		let s:fullscreen = v:true
+		let s:old_cursorline = &cursorline
+		let s:old_cursorcolumn = &cursorcolumn
+		let s:old_showtabline = &showtabline
+		let s:old_laststatus = &laststatus
+		set nocursorline
+		set nocursorcolumn
+		set showtabline=0
+		set laststatus=0
+		call STCAbs()
+	else
+		let s:fullscreen = v:false
+		let &cursorline = s:old_cursorline
+		let &cursorcolumn = s:old_cursorcolumn
+		let &showtabline = s:old_showtabline
+		let &laststatus = s:old_laststatus
+		call STCRel()
+	endif
+endfunction
+function! ToggleLocalFullscreen()
+	echom "ToggleLocalFullscreen: not implemented yet"
+endfunction
+command! ToggleFullscreen call ToggleFullscreen()
+command! ToggleLocalFullscreen call ToggleLocalFullscreen()
+noremap <leader><c-f> <cmd>ToggleFullscreen<cr>
+noremap <leader>l<c-f> <cmd>ToggleLocalFullscreen<cr>
+
 "function! ProcessBut(button)
 "	let mode_was = mode()
 "	let temp = ''
@@ -651,7 +681,7 @@ augroup terminal
 	au termopen * setlocal nocursorline nocursorcolumn
 augroup END
 augroup visual
-	au ModeChanged * if &buftype != 'terminal' | let &cursorcolumn = mode() !~# "[vVirco]" | let &cursorline = mode() !~# "[irco]"
+	au ModeChanged * if &buftype != 'terminal' | let &cursorcolumn = mode() !~# "[vVirco]" && !s:fullscreen | let &cursorline = mode() !~# "[irco]" && !s:fullscreen
 augroup END
 
 " TELESCOPE
