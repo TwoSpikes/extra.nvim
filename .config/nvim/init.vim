@@ -225,10 +225,12 @@ augroup numbertoggle
 		endif
 	endfunction
 	function Numbertoggle_stcrel()
-		if &modifiable
-			call STCRel()
-		else
-			call STCNo()
+		if !s:fullscreen
+			if &modifiable
+				call STCRel()
+			else
+				call STCNo()
+			endif
 		endif
 	endfunction
 	function Numbertoggle_no()
