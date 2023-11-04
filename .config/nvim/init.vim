@@ -60,7 +60,6 @@ function! STCAbs()
 	endif
 endfunction
 function! STCNo()
-	echom "bufnr is: " . getwininfo(win_getid())[0]["bufnr"]
 	se stc= nonu nornu
 endfunction
 
