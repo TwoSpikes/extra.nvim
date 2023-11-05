@@ -40,13 +40,26 @@ $ cp ./.gitmessage ~/
 
 This is NeoVim/Vim configuration
 
-<img src=.github/images/Screenshot_2023-10-11-22-28-33-255_com.termux.png>
-<img src=.github/images/Screenshot_2023-10-16-22-05-46-797_com.termux.png>
+<img src=.github/images/Screenshot_2023-11-05-14-45-03-516_com.termux.png>
 
-## Note
+## Note №1
 
 It works better in NeoVim,\
 and plugin manager does not work yet in version of Vim/NeoVim without Lua.
+
+## Note №2
+
+### Change to light theme
+
+```vim
+:set background=light
+```
+
+## Change to dark theme
+
+```vim
+:set background=dark
+```
 
 ## Installation
 
