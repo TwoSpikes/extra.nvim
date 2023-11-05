@@ -552,6 +552,7 @@ if &t_Co >= 256
     hi Statement ctermfg=228 ctermbg=NONE cterm=NONE guifg=#ffff87 guibg=#000000 gui=reverse
     hi QuickFixLine ctermfg=231 ctermbg=32 cterm=NONE
     hi CursorLineNr ctermfg=220 ctermbg=236 cterm=bold,reverse guifg=#ffffff guibg=#ffaf00 gui=bold
+    hi CursorLineNrIns ctermfg=15 ctermbg=39 cterm=bold guifg=#ffffff guibg=#00afff gui=bold
     hi LineNr ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#ffffa0 guibg=#000000 gui=italic,reverse
     hi NonText ctermfg=247 ctermbg=NONE cterm=NONE
     hi FoldColumn ctermfg=247 ctermbg=NONE cterm=NONE

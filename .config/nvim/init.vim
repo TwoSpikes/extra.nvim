@@ -42,25 +42,34 @@ function! SynGroup()
     let l:s = synID(line('.'), col('.'), 1)
     echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
 endfunction
+function! SynStack()
+  if !exists("*synstack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
 
 set nonu
 set nornu
 function! STCRel()
 	if has('nvim')
-		let &l:stc = '%=%{v:relnum?((v:virtnum <= 0)?v:relnum:""):((v:virtnum <= 0)?v:lnum:"")} '
+		let &l:stc = '%#CursorLineNr#%{%v:relnum?"%#LineNr#":((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:relnum:""):""} '
 	else
 		set nu rnu
 	endif
 endfunction
 function! STCAbs()
 	if has('nvim')
-		let &stc = '%=%{(v:virtnum <= 0)?v:lnum:""} '
+		let &l:stc = '%{%v:relnum?"":"%#CursorLineNrIns#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} '
 	else
 		set nu nornu
 	endif
 endfunction
 function! STCNo()
-	se stc= nonu nornu
+	setlocal stc= nonu nornu
+endfunction
+function! STCUpd()
+	let &stc = &stc
 endfunction
 
 set showcmd
@@ -425,6 +434,7 @@ function! ProcessGBut(button)
 	else
 		let temp .= "\<Esc>" . v:count . a:button
 	endif
+	call STCUpd()
 	return temp
 endfunction
 
@@ -432,6 +442,8 @@ noremap <silent> <expr> j ProcessGBut('j')
 noremap <silent> <expr> k ProcessGBut('k')
 noremap <silent> <expr> <down> ProcessGBut('j')
 noremap <silent> <expr> <up> ProcessGBut('k')
+inoremap <silent> <down> <cmd>call STCUpd()<cr><down>
+inoremap <silent> <up> <cmd>call STCUpd()<cr><up>
 noremap <silent> <leader>j j:let &stc=&stc<cr>
 noremap <silent> <leader>k k:let &stc=&stc<cr>
 noremap <silent> <leader><up> k:let &stc=&stc<cr>
