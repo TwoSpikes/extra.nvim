@@ -41,6 +41,7 @@ $ cp ./.gitmessage ~/
 This is NeoVim/Vim configuration
 
 <img src=.github/images/Screenshot_2023-11-05-14-45-03-516_com.termux.png>
+<img src=.github/images/Screenshot_2023-11-05-12-13-23-092_com.termux.png>
 
 ## Note №1
 
@@ -55,7 +56,7 @@ and plugin manager does not work yet in version of Vim/NeoVim without Lua.
 :set background=light
 ```
 
-## Change to dark theme
+### Change to dark theme
 
 ```vim
 :set background=dark
