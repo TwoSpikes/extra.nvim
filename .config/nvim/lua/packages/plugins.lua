@@ -38,12 +38,12 @@ return require('packer').startup(function (use)
 		config = function() require("nvim-autopairs").setup {} end
 	}
 	use {
-  "folke/which-key.nvim",
-	  config = function()
-		vim.o.timeout = true
-		vim.o.timeoutlen = 300
-		require("which-key").setup {
-		}
-	  end
+		"folke/which-key.nvim",
+			config = function()
+			vim.o.timeout = true
+			vim.o.timeoutlen = 300
+			require("which-key").setup {
+			}
+		end
 	}
 end)
