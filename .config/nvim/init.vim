@@ -77,7 +77,9 @@ function! STCNo()
 	setlocal stc= nonu nornu
 endfunction
 function! STCUpd()
-	let &stc = &stc
+	if has('nvim')
+		let &stc = &stc
+	endif
 endfunction
 
 set showcmd
