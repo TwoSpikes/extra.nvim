@@ -859,8 +859,9 @@ function! SwapHiGroup(group)
     exec printf('hi %s ctermfg=%s ctermbg=%s guifg=%s guibg=%s', a:group, ctermbg, ctermfg, guibg, guifg)
 endfunction
 
-echo 'type '
-echohl SpecialKey
-echon ':intro<cr>'
-echohl Normal
-echon ' to see help'
+au VimResized * call OnResized()
+function! OnResized()
+	echom "Window: ".&lines."rows, ".&columns."cols"
+endfunction
+
+au! VimEnter * echo 'type ' | echohl SpecialKey | echon ':intro<cr>' | echohl Normal | echon ' to see help'

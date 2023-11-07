@@ -40,4 +40,7 @@ return require('packer').startup(function (use)
 	use {
 		"folke/which-key.nvim",
 	}
+	use {
+		"kwkarlwang/bufresize.nvim",
+	}
 end)
