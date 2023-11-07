@@ -58,8 +58,16 @@ function! STCRel()
 		set nu rnu
 	endif
 endfunction
-function! STCAbs()
+function! STCAbs(actual_mode)
 	if has('nvim')
+		if a:actual_mode ==# ''
+			let &l:stc = '%{%v:relnum?"":"%#CursorLineNr#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} '
+			return
+		endif
+		if a:actual_mode ==# 'r'
+			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrRepl#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} '
+			return
+		endif
 		let &l:stc = '%{%v:relnum?"":"%#CursorLineNrIns#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} '
 	else
 		set nu nornu
@@ -227,8 +235,8 @@ command! -nargs=* Pkg !pkg <args>
 augroup numbertoggle
 	autocmd!
 	function Numbertoggle_stcabs()
-		if mode() != 'i' && &modifiable
-			call STCAbs()
+		if &modifiable
+			call STCAbs(v:insertmode)
 		else
 			call STCNo()
 		endif
@@ -390,7 +398,7 @@ function! ToggleFullscreen()
 		set showcmdloc=last
 		set showmode
 		set ruler
-		call STCAbs()
+		call STCAbs('')
 	else
 		let s:fullscreen = v:false
 		let &cursorline = s:old_cursorline
