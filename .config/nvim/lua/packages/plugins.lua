@@ -43,4 +43,10 @@ return require('packer').startup(function (use)
 	use {
 		"kwkarlwang/bufresize.nvim",
 	}
+	use {
+		'junegunn/goyo.vim',
+	}
+	use {
+		'junegunn/limelight.vim',
+	}
 end)
