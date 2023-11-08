@@ -107,7 +107,15 @@ function! GetGitBranch()
 	return s:gitbranch
 endfunction
 function! Showtab()
-	let stl_name = '%<%t'.'%( %#StatusLinemod#%M%R%H%W%)%*'.'%( %#StatusLinemod#'.&syntax.'%)%*'.'%( %#Statuslinemod#'.'%{GetGitBranch()}'.'%)%*'
+	let stl_name = '%<%t'
+	let stl_name .= '%( %#StatusLinemod#%M%R%H%W%)%*'
+	if &columns ># 40
+		let stl_name .= '%( %#StatusLinemod#'
+		let stl_name .= &syntax
+		let stl_name .= '%)%*'
+	endif
+	let stl_name .= '%( %#Statuslinemod#'
+	let stl_name .= '%{GetGitBranch()}'.'%)%*'
 	let mode = mode('lololol')
 	let strmode = ''
 	if mode == 'n'
@@ -191,7 +199,30 @@ function! Showtab()
 	let stl_showcmd = '%(%#Statuslinemod#%S%*%)'
 	let stl_buf = '#%n %p%%'
 	let stl_mode_to_put = strmode.(s:custom_mode?' '.s:custom_mode:'').'%* '
-	return stl_mode_to_put . stl_name.' '.stl_showcmd.'%='.'%#Statuslinestat01#'.''.'%#Statuslinestat1#'.' '.stl_pos.' '.'%#Statuslinestat12#'.''.'%#Statuslinestat2# '.stl_buf.' '
+
+	let s:result = stl_mode_to_put
+	let s:result .= stl_name
+	let s:result .= ' '
+	let s:result .= stl_showcmd
+	let s:result .= '%='
+	if &columns ># 40
+		let s:result .= '%#Statuslinestat01#'
+		let s:result .= ''
+		let s:result .= '%#Statuslinestat1#'
+		let s:result .= ' '
+	endif
+	let s:result .= stl_pos
+	let s:result .= ' '
+	if &columns ># 40
+		let s:result .= '%#Statuslinestat12#'
+		let s:result .= ''
+	endif
+	if &columns ># 35
+		let s:result .= '%#Statuslinestat2# '
+		let s:result .= stl_buf
+		let s:result .= ' '
+	endif
+	return s:result
 endfunction
 command! Showtab set stl=%{%Showtab()%}
 Showtab
