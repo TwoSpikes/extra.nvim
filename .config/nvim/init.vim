@@ -114,8 +114,11 @@ function! Showtab()
 		let stl_name .= &syntax
 		let stl_name .= '%)%*'
 	endif
-	let stl_name .= '%( %#Statuslinemod#'
-	let stl_name .= '%{GetGitBranch()}'.'%)%*'
+	if &columns ># 45
+		let stl_name .= '%( %#Statuslinemod#'
+		let stl_name .= '%{GetGitBranch()}'
+		let stl_name .= '%)%*'
+	endif
 	let mode = mode('lololol')
 	let strmode = ''
 	if mode == 'n'
@@ -202,8 +205,13 @@ function! Showtab()
 
 	let s:result = stl_mode_to_put
 	let s:result .= stl_name
-	let s:result .= ' '
-	let s:result .= stl_showcmd
+	if &columns ># 30
+		let &showcmdloc = 'statusline'
+		let s:result .= ' '
+		let s:result .= stl_showcmd
+	else
+		let &showcmdloc = 'last'
+	endif
 	let s:result .= '%='
 	if &columns ># 40
 		let s:result .= '%#Statuslinestat01#'
@@ -211,8 +219,10 @@ function! Showtab()
 		let s:result .= '%#Statuslinestat1#'
 		let s:result .= ' '
 	endif
-	let s:result .= stl_pos
-	let s:result .= ' '
+	if &columns ># 30
+		let s:result .= stl_pos
+		let s:result .= ' '
+	endif
 	if &columns ># 40
 		let s:result .= '%#Statuslinestat12#'
 		let s:result .= ''
