@@ -461,6 +461,7 @@ command! ToggleFullscreen call ToggleFullscreen()
 command! ToggleLocalFullscreen call ToggleLocalFullscreen()
 noremap <leader><c-f> <cmd>ToggleFullscreen<cr>
 noremap <leader>l<c-f> <cmd>ToggleLocalFullscreen<cr>
+noremap <c-t> <cmd>TagbarToggle<cr>
 
 "function! ProcessBut(button)
 "	let mode_was = mode()

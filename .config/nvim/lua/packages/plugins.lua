@@ -49,4 +49,10 @@ return require('packer').startup(function (use)
 	use {
 		'junegunn/limelight.vim',
 	}
+	use {
+		'rust-lang/rust.vim',
+	}
+	use {
+		'preservim/tagbar',
+	}
 end)
