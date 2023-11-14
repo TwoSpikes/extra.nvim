@@ -55,4 +55,7 @@ return require('packer').startup(function (use)
 	use {
 		'preservim/tagbar',
 	}
+	use {
+		'skywind3000/vim-quickui',
+	}
 end)

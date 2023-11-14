@@ -17,7 +17,7 @@ set background=light
 exec printf("so %s", g:COLORSCHEME_PATH)
 set lazyredraw
 
-set helpheight=25
+set helpheight=10
 set splitbelow
 set splitkeep=cursor
 set nosplitright
@@ -463,6 +463,8 @@ noremap <leader><c-f> <cmd>ToggleFullscreen<cr>
 noremap <leader>l<c-f> <cmd>ToggleLocalFullscreen<cr>
 noremap <c-t> <cmd>TagbarToggle<cr>
 
+nnoremap <leader>g :grep -R <cword> .<cr>
+
 "function! ProcessBut(button)
 "	let mode_was = mode()
 "	let temp = ''
@@ -873,6 +875,8 @@ if has('nvim')
 endif
 
 noremap <silent> <leader>S :let &scrolloff = 999 - &scrolloff<cr>
+
+noremap <silent> <f10> <cmd>call quickui#menu#open()<cr>
 
 " Interface
 function! ChangeVisual()
