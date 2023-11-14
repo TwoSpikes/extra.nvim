@@ -758,7 +758,11 @@ augroup terminal
 	au termopen * setlocal nocursorline nocursorcolumn
 augroup END
 augroup visual
-	au ModeChanged * if &buftype != 'terminal' | let &cursorcolumn = mode() !~# "[vVirco]" && !s:fullscreen | let &cursorline = mode() !~# "[irco]" && !s:fullscreen
+	function! HandleBuftype()
+		let &cursorcolumn = mode() !~# "[vVirco]" && !s:fullscreen && &filetype !=# 'netrw'
+		let &cursorline = mode() !~# "[irco]" && !s:fullscreen
+	endfunction
+	au ModeChanged,BufWinEnter * call HandleBuftype()
 augroup END
 
 " TELESCOPE
