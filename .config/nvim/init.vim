@@ -76,11 +76,27 @@ endfunction
 function! STCNo()
 	setlocal stc= nonu nornu
 endfunction
+let s:stc_shrunk = v:false
 function! STCUpd()
-	if has('nvim')
-		let &stc = &stc
+	if &columns ># 40
+		if has('nvim')
+			let &stc = &stc
+		endif
+		if s:stc_shrunk
+			let &stc = s:old_stc
+		endif
+		let s:stc_shrunk = v:false
+	else
+		if s:stc_shrunk
+			let &stc = ''
+		else
+			let s:stc_shrunk = v:true
+			let s:old_stc = &stc
+			let &stc = ''
+		endif
 	endif
 endfunction
+call STCUpd()
 
 set showcmd
 set showcmdloc=statusline
@@ -933,6 +949,7 @@ endfunction
 au VimResized * call OnResized()
 function! OnResized()
 	echom "Window: ".&lines."rows, ".&columns."cols"
+	call STCUpd()
 endfunction
 
 au! VimEnter * echo 'type ' | echohl SpecialKey | echon ':intro<cr>' | echohl Normal | echon ' to see help'
