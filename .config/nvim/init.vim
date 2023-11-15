@@ -847,6 +847,20 @@ command! W w
 inoremap <silent> ju <esc>viwUea
 inoremap <silent> ji <esc>viwUea
 
+inoremap ( ()<c-o>h
+inoremap [ []<c-o>h
+inoremap { {}<c-o>h
+function! HandleClosingBracket()
+	if getline('.')[col('.')-1] ==# ')' || getline('.')[col('.')-1] ==# ']' || getline('.')[col('.')-1] ==# '}'
+		return "\<right>"
+	else
+		return ")"
+	endif
+endfunction
+inoremap <expr> ) HandleClosingBracket()
+inoremap <expr> ] HandleClosingBracket()
+inoremap <expr> } HandleClosingBracket()
+
 if has('nvim')
 	exec printf("luafile %s", s:PLUGINS_INSTALL_FILE_PATH)
 	PackerInstall
