@@ -201,7 +201,12 @@ function! Showtab()
 " 
 	let stl_showcmd = '%(%#Statuslinemod#%S%*%)'
 	let stl_buf = '#%n %p%%'
-	let stl_mode_to_put = strmode.(s:custom_mode?' '.s:custom_mode:'').'%* '
+	let stl_mode_to_put = ''
+	if &columns ># 20
+		let stl_mode_to_put .= strmode
+		let stl_mode_to_put .= s:custom_mode?' '.s:custom_mode:''
+		let stl_mode_to_put .= '%* '
+	endif
 
 	let s:result = stl_mode_to_put
 	let s:result .= stl_name
@@ -213,7 +218,7 @@ function! Showtab()
 		let &showcmdloc = 'last'
 	endif
 	let s:result .= '%='
-	if &columns ># 40
+	if &columns ># 45
 		let s:result .= '%#Statuslinestat01#'
 		let s:result .= ''
 		let s:result .= '%#Statuslinestat1#'
@@ -223,7 +228,7 @@ function! Showtab()
 		let s:result .= stl_pos
 		let s:result .= ' '
 	endif
-	if &columns ># 40
+	if &columns ># 45
 		let s:result .= '%#Statuslinestat12#'
 		let s:result .= ''
 	endif
