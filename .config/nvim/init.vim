@@ -915,6 +915,8 @@ endif
 
 noremap <silent> <leader>S :let &scrolloff = 999 - &scrolloff<cr>
 
+nnoremap s "_d
+
 noremap <silent> <f10> <cmd>call quickui#menu#open()<cr>
 
 " Interface
