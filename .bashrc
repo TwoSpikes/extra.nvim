@@ -109,7 +109,7 @@ _df_c() {
     "${CP_PROGRAM}" ~/.config/nvim/init.vim ~/dotfiles/.config/nvim/
     "${CP_PROGRAM}" -r ~/.config/nvim/lua/ ~/dotfiles/.config/nvim/
 ## Vim/NeoVim themes
-    "${CP_PROGRAM}" ${PREFIX}/share/nvim/runtime/colors/book.vim ~/dotfiles/
+    "${CP_PROGRAM}" ${PREFIX}/share/nvim/runtime/syntax/book.vim ~/dotfiles/
     "${CP_PROGRAM}" ${PREFIX}/share/nvim/runtime/colors/blueorange.vim ~/dotfiles/
 ## Vim/NeoVim scripts
 	"${CP_PROGRAM}" ~/xterm-color-table.vim ~/dotfiles/
