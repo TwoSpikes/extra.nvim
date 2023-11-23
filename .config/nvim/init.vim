@@ -780,8 +780,8 @@ augroup terminal
 augroup END
 augroup visual
 	function! HandleBuftype()
-		let &cursorcolumn = mode() !~# "[vVirco]" && !s:fullscreen && &filetype !=# 'netrw'
-		let &cursorline = mode() !~# "[irco]" && !s:fullscreen
+		let &cursorcolumn = mode() !~# "[vVirco]" && !s:fullscreen && &filetype !=# 'netrw' && &buftype !=# 'terminal'
+		let &cursorline = mode() !~# "[irco]" && !s:fullscreen && &buftype !=# 'terminal'
 	endfunction
 	au ModeChanged,BufWinEnter * call HandleBuftype()
 augroup END
