@@ -1,3 +1,7 @@
+if vim.call('filereadable', vim.call('expand', vim.g.CONFIG_PATH..'/options/do_not_setup_lsp.null'))==1 then
+	return
+end
+
 require('mason').setup({
     ui = {
         width = 1,
