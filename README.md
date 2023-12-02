@@ -50,7 +50,7 @@ and plugin manager does not work yet in version of Vim/NeoVim without Lua.
 
 ## Note №2
 
-To prevent lsp setup, runs this command in terminal
+To prevent lsp setup, run this command in terminal
 
 ```console
 touch ~/.config/nvim/options/do_not_setup_lsp.null
