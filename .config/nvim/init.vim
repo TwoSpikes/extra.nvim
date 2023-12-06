@@ -635,7 +635,7 @@ autocmd BufReadPost *
 
 " MY .nvimrc HELP
 noremap <silent> <leader>? <esc>:echo "
-  \MY .nvimrc HELP (warning: help is old):
+  \MY .nvimrc HELP:
 \\n  GLOBAL HELP:
 \\n    \<leader\>? - Show this help message
 \\n  NVIMRC FILE:
@@ -651,31 +651,64 @@ noremap <silent> <leader>? <esc>:echo "
 \\n    \<leader\>bv - Open in a new vertical window (\|)
 \\n  EDITING:
 \\n    MOVING:
-\\n      You can press `l`, `h`, `right` and `left` at the end of the line and it will go to the beginning of the next line (in Normal mode). To disable this feature, run this command in bash:
+\\n      You can press `l`, `h`, `right` and `left` at the end of the line and it will go to the beginning of the next line (in Normal mode).
+\\n      To disable this feature, run this command in bash:
 \\n      ╭──────────────────────────╮
 \\n      │ $ disable_autowrapping=1 │
 \\n      ╰──────────────────────────╯
-\\n    FAST COMMANDS:
+\\n    SPECIAL:
 \\n      ; - Switch to command mode (:)
-\\n      = - Open file in a new tab (:tabe)
-\\n      _ - Open file in a new buffer (:e)
-\\n      ! - Run environment command
+\\n      SPC SPC - Open quickui menu
+\\n      INSERT: jk - Exit from Insert Mode
+\\n      INSERT: ju - Make current word uppercase
+\\n      CTRL-a - Move to start of line
+\\n      CTRL-e - Move to end of line
+\\n      CTRL-h - 20zh
+\\n      CTRL-l - 20zl
+\\n      CTRL-a - Increase number
+\\n      CTRL-x - Deecrease number
+\\n      ci_ - Edit word from start to first _
+\\n      \<leader\>d  - Remove search highlightings
+\\n      s - Delete (d) without copying
+\\n      q - Quit window
+\\n      Q - Quit without saving
+\\n      CTRL-c - Find file
+\\n      CTRL-C - Find file in buffer
+\\n      \<leader\>S - Toggle scrolloff (see :h 'scrolloff')
+\\n    Like in Emacs:
+\\n      ALT-x - Switch to command mode (:)
+\\n      F10 - Open quickui menu
+\\n      CTRL-x CTRL-c - Close All windows
+\\n      CTRL-x s - Save current buffer
+\\n      CTRL-x CTRL-s - See CTRL-x s
+\\n      CTRL-x k - Kill current buffer
+\\n      CTRL-x 0 - Close current window
+\\n      CTRL-x 1 - Close all but current window
+\\n      CTRL-x 2 - Split window
+\\n      CTRL-x 3 - Vertically split window
+\\n      CTRL-x o - Next tab
+\\n      CTRL-x O - Previous tab
+\\n      CTRL-x CTRL-f - See CTRL-c c
+\\n      CTRL-x t 0 - Close current tab
+\\n      CTRL-x t 1 - Close all but current tab
+\\n      CTRL-x t 2 - New tab
+\\n      CTRL-x t o - Next tab
+\\n      CTRL-x t O - Previous tab
+\\n      CTRL-x h - Select all text
+\\n      CTRL-x CTRL-h - See help (:h)
 \\n    QUOTES AROUND:
 \\n      \<leader\>\" - Put \'\"\' around word
 \\n      \<leader\>\' - Put \"\'\" around word
-\\n    SPECIAL:
-\\n      ci_ - Edit word from start to first _
-\\n      \<leader\>d  - Remove search highlightings
 \\n  TERMINAL:
 \\n    \<leader\>tt - Open in a new tab
 \\n    \<leader\>tb - Open in a new buffer
 \\n    \<leader\>th - Open in a new horizontal window (-)
 \\n    \<leader\>tv - Open in a new vertical window (\|)
 \\n  COLORSCHEME:
-\\n    \<leader\>cet - Open schemes in a new tab
-\\n    \<leader\>ceb - Open schemes in a new buffer
-\\n    \<leader\>ceh - Open schemes in a new horizontal window (-)
-\\n    \<leader\>cev - Open schemes in a new vertical window (\|)
+\\n    \<leader\>cet - Open colorschemes in a new tab
+\\n    \<leader\>ceb - Open colorschemes in a new buffer
+\\n    \<leader\>ceh - Open colorschemes in a new horizontal window (-)
+\\n    \<leader\>cev - Open colorschemes in a new vertical window (\|)
 \\n    \<leader\>cs  - Set colorscheme (:colo)
 \\n    \<leader\>cy  - Copy colorscheme name from current buffer and set it
 \\n  TELESCOPE (Plugin):
@@ -695,7 +728,7 @@ noremap <silent> <leader>? <esc>:echo "
 \\n     Where symbol is your symbol (type quotes literally)
 \\n  AUTHOR:
 \\n    Name: TwoSpikes (2023 - 2023)
-\\n    Github: https://github.com/TwoSpikes/dotfiles
+\\n    Github: https://github.com/TwoSpikes/dotfiles.git
 \"<cr>
 
 " FAST COMMANDS
