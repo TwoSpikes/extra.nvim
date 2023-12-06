@@ -871,16 +871,50 @@ inoremap <silent> ji <esc>viwUea
 inoremap ( ()<c-o>h
 inoremap [ []<c-o>h
 inoremap { {}<c-o>h
-function! HandleClosingBracket(bracket)
-	if getline('.')[col('.')-1] ==# ')' || getline('.')[col('.')-1] ==# ']' || getline('.')[col('.')-1] ==# '}'
+function! HandleKeystroke(keystroke)
+	if a:keystroke ==# "\\\<bs>"
+		if getline('.')[col('.')-2] ==# '('
+		\&& getline('.')[col('.')-1] ==# ')'
+		\|| getline('.')[col('.')-2] ==# '}'
+		\&& getline('.')[col('.')-1] ==# '}'
+		\|| getline('.')[col('.')-2] ==# '['
+		\&& getline('.')[col('.')-1] ==# ']'
+		\|| getline('.')[col('.')-2] ==# "'"
+		\&& getline('.')[col('.')-1] ==# "'"
+		\|| getline('.')[col('.')-2] ==# '"'
+		\&& getline('.')[col('.')-1] ==# '"'
+		\|| getline('.')[col('.')-2] ==# '<'
+		\&& getline('.')[col('.')-1] ==# '>'
+			return "\<del>\<bs>"
+		else
+			return "\<bs>"
+		endif
+	endif
+	if a:keystroke ==# '('
+	\&& getline('.')[col('.')-1] ==# ')'
+	\|| a:keystroke ==# '['
+	\&& getline('.')[col('.')-1] ==# ']'
+	\|| a:keystroke ==# '{'
+	\&& getline('.')[col('.')-1] ==# '}'
+	\|| a:keystroke ==# "'"
+	\&& getline('.')[col('.')-1] ==# "'"
+	\|| a:keystroke ==# '"'
+	\&& getline('.')[col('.')-1] ==# '"'
 		return "\<right>"
 	else
-		return a:bracket
+		if a:keystroke ==# '"'
+		\|| a:keystroke ==# "'"
+			return a:keystroke.a:keystroke."\<left>"
+		endif
+		return a:keystroke
 	endif
 endfunction
-inoremap <expr> ) HandleClosingBracket(')')
-inoremap <expr> ] HandleClosingBracket(']')
-inoremap <expr> } HandleClosingBracket('}')
+inoremap <expr> ) HandleKeystroke(')')
+inoremap <expr> ] HandleKeystroke(']')
+inoremap <expr> } HandleKeystroke('}')
+inoremap <expr> ' HandleKeystroke("'")
+inoremap <expr> " HandleKeystroke('"')
+inoremap <expr> <bs> HandleKeystroke('\<bs>')
 
 if has('nvim')
 	exec printf("luafile %s", s:PLUGINS_INSTALL_FILE_PATH)
