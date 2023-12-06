@@ -875,7 +875,7 @@ function! HandleKeystroke(keystroke)
 	if a:keystroke ==# "\\\<bs>"
 		if getline('.')[col('.')-2] ==# '('
 		\&& getline('.')[col('.')-1] ==# ')'
-		\|| getline('.')[col('.')-2] ==# '}'
+		\|| getline('.')[col('.')-2] ==# '{'
 		\&& getline('.')[col('.')-1] ==# '}'
 		\|| getline('.')[col('.')-2] ==# '['
 		\&& getline('.')[col('.')-1] ==# ']'

@@ -2,6 +2,9 @@
 
 export HISTSIZE=5000
 export DISPLAY=":0"
+if [ -f "/data/data/com.termux/files/usr/lib/libtermux-exec.so" ]; then
+	export LD_PRELOAD=/data/data/com.termux/files/usr/lib/libtermux-exec.so
+fi
 
 export XDG_CONFIG_HOME="${HOME}/.config/"
 
