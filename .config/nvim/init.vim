@@ -923,11 +923,11 @@ function! HandleKeystroke(keystroke)
 			return "\<bs>"
 		endif
 	endif
-	if a:keystroke ==# '('
+	if a:keystroke ==# ')'
 	\&& getline('.')[col('.')-1] ==# ')'
-	\|| a:keystroke ==# '['
+	\|| a:keystroke ==# ']'
 	\&& getline('.')[col('.')-1] ==# ']'
-	\|| a:keystroke ==# '{'
+	\|| a:keystroke ==# '}'
 	\&& getline('.')[col('.')-1] ==# '}'
 	\|| a:keystroke ==# "'"
 	\&& getline('.')[col('.')-1] ==# "'"
