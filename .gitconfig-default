@@ -1,6 +1,3 @@
-[user]
-	#name = Your Name
-	#email = youremail@example.com
 [init]
 	defaultBranch = master
 [push]
