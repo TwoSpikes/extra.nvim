@@ -104,6 +104,7 @@ _fE() {
 _df_c() {
     "${CLEAR_PROGRAM}"
 	"${CD_PROGRAM}" ~/dotfiles/
+	"${CP_PROGRAM}" ~/.dotfiles-setup.sh ~/dotfiles/
 # Bashrc script and its dependencies
 	"${CP_PROGRAM}" ~/.bashrc ~/timer.sh ~/checkhealth.sh ~/.fr.sh ~/tsch.sh ~/inverting.sh ~/funcname.sh ~/dotfiles/
 # Zsh script
