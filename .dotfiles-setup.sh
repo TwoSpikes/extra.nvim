@@ -50,7 +50,6 @@ echo ""
 
 echo "Path to dotfiles is:"
 echo "<<< ${dotfiles}"
-cd ${dotfiles}
 
 echo "Path to home is:"
 echo "<<< ${home}"
@@ -60,6 +59,7 @@ echo "<<< ${root}"
 
 echo ""
 echo "That is right? (y/N)"
+
 echo -n ">>> "
 read user_input
 case ${user_input} in
