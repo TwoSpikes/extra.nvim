@@ -1,16 +1,22 @@
 #!/bin/sh
 
+set -e
+
 subcommands() {
-	echo "${0} [OPTION]... DOTFILES_PATH"
-	echo "${0} [OPTION]... DOTFILES_PATH HOME_PATH ROOT_PATH"
+	echo "SUBCOMMANDS:"
+	echo "	${0} [OPTION]... DOTFILES_PATH"
+	echo "	${0} [OPTION]... DOTFILES_PATH HOME_PATH ROOT_PATH"
+}
+options() {
+	echo "OPTIONS:"
+	echo "	--help        display this message"
 }
 help() {
 	echo "${0} is a script to setup dotfiles"
 	echo ""
 	subcommands
 	echo ""
-	echo "Options"
-	echo "	--help        display this message"
+	options
 	exit 0
 }
 
@@ -58,9 +64,8 @@ echo "Path to / is:"
 echo "<<< ${root}"
 
 echo ""
-echo "That is right? (y/N)"
-
-echo -n ">>> "
+echo -n "That is right? (y/N): "
+user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 read user_input
 case ${user_input} in
 	"y")
@@ -96,8 +101,9 @@ if [ -d ${dotfiles} ]; then
 	echo "Dotfiles directory exists"
 else
 	echo "Dotfiles directory does not exist"
-	echo -n "Do you want to create it then (y/N): "
+	echo -n "Do you want to create it? (y/N): "
 	read user_input
+	user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 	case ${user_input} in
 		"y")
 			mkdir ${dotfiles}
@@ -119,12 +125,13 @@ if [ -f ${dotfiles}/.dotfiles-version ]; then
 	echo "Dotfiles found"
 else
 	echo "Dotfiles not found"
-	echo -n "Do you want to download them (y/N): "
+	echo -n "Do you want to download them? (y/N): "
 	read user_input
+	user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 	case ${user_input} in
 		"y")
 			if [ ! ${git_found} ]; then
-				echo "No git found. Abort"
+				echo "Abort: No Git found"
 				return 1
 			else
 				git clone --depth=1 https://github.com/TwoSpikes/dotfiles.git ${dotfiles}
@@ -139,9 +146,9 @@ fi
 
 echo "Now we are ready to start"
 
-echo "Do you want to copy .bashrc and its dependencies? (y/N/exit): "
-echo -n ">>> "
+echo -n "Do you want to copy .bashrc and its dependencies? (y/N/exit): "
 read user_input
+user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 case ${user_input} in
 	"y")
 		cp ${dotfiles}/.zshrc ${home}
@@ -151,7 +158,7 @@ case ${user_input} in
 		cp ${dotfiles}/timer.sh ${home}
 		cp ${dotfiles}/tsch.sh ${home}
 		;;
-	"exit")
+	"exit"|"x"|"e"|"q")
 		echo "Abort"
 		return 1
 		;;
@@ -216,10 +223,10 @@ clear
 echo "==== Setting config for editor: ${setting_editor_for} ===="
 echo ""
 
-echo "That is right? (y/N)"
-echo -n ">>> "
+echo -n "That is right? (y/N): "
 read user_input
-case "${user_input}" in
+user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+case ${user_input} in
 	"y")
 		echo "Ok"
 		;;
@@ -236,14 +243,12 @@ echo ""
 if [ -d ${dotfiles}/.config/nvim ]; then
 	echo "Directory exists"
 else
-	echo "Directory does not exist"
-	echo "Abort"
+	echo "Abort: Directory does not exist"
 	return 1
 fi
 
 if [ -z "$(ls ${dotfiles}/.config/nvim)" ]; then
-	echo "Directory is empty"
-	echo "Abort"
+	echo "Abort: Directory is empty"
 	return 1
 else
 	echo "Directory is not empty"
@@ -252,14 +257,13 @@ fi
 if [ -f ${dotfiles}/.config/nvim/init.vim ]; then
 	echo "Config for ${setting_editor_for} exists"
 else
-	echo "Config for ${setting_editor_for} does not exist"
-	echo "Abort"
+	echo "Abort: Config for ${setting_editor_for} does not exist"
 	return 1
 fi
 
 echo -n "Do you want to copy config for ${setting_editor_for}? (y/N): "
 read user_input
-
+user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 case ${user_input} in
 	"y")
 		clear
@@ -291,7 +295,7 @@ echo ""
 if ${neovim_found}; then
 	echo -n "Do you want to install packer.nvim to NeoVim (y/N): "
 	read user_input
-
+	user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 	case ${user_input} in
 		"y")
 			git clone --depth 1 https://github.com/wbthomason/packer.nvim\
