@@ -59,7 +59,7 @@ echo "Path to / is:"
 echo "<<< ${root}"
 
 echo ""
-echo "That is right? (y/n)"
+echo "That is right? (y/N)"
 echo -n ">>> "
 read user_input
 case ${user_input} in
@@ -96,7 +96,7 @@ if [ -d ${dotfiles} ]; then
 	echo "Dotfiles directory exists"
 else
 	echo "Dotfiles directory does not exist"
-	echo -n "Do you want to create it then (y/n): "
+	echo -n "Do you want to create it then (y/N): "
 	read user_input
 	case ${user_input} in
 		"y")
@@ -119,7 +119,7 @@ if [ -f ${dotfiles}/.dotfiles-version ]; then
 	echo "Dotfiles found"
 else
 	echo "Dotfiles not found"
-	echo -n "Do you want to download them (y/n): "
+	echo -n "Do you want to download them (y/N): "
 	read user_input
 	case ${user_input} in
 		"y")
@@ -139,7 +139,7 @@ fi
 
 echo "Now we are ready to start"
 
-echo "Do you want to copy .bashrc and its dependencies? (y/n/exit): "
+echo "Do you want to copy .bashrc and its dependencies? (y/N/exit): "
 echo -n ">>> "
 read user_input
 case ${user_input} in
@@ -216,7 +216,7 @@ clear
 echo "==== Setting config for editor: ${setting_editor_for} ===="
 echo ""
 
-echo "That is right? (y/n)"
+echo "That is right? (y/N)"
 echo -n ">>> "
 read user_input
 case "${user_input}" in
@@ -257,7 +257,7 @@ else
 	return 1
 fi
 
-echo -n "Do you want to copy config for ${setting_editor_for}? (y/n): "
+echo -n "Do you want to copy config for ${setting_editor_for}? (y/N): "
 read user_input
 
 case ${user_input} in
@@ -275,16 +275,38 @@ set -x
 			cp ${dotfiles}/blueorange.vim ${root}/usr/share/vim/vim90/colors
 		fi
 set +x
+
+		echo ""
+		echo -n "Press ENTER to continue: "
+		read user_input
+
 		;;
 	*)
 		;;
 esac
+clear
+
+echo "==== Installing packer.nvim ===="
+echo ""
+if ${neovim_found}; then
+	echo -n "Do you want to install packer.nvim to NeoVim (y/N): "
+	read user_input
+
+	case ${user_input} in
+		"y")
+			git clone --depth 1 https://github.com/wbthomason/packer.nvim\
+ ${root}/usr/share/nvim/site/pack/packer/start/packer.nvim
+			;;
+		*)
+			;;
+	esac
+else
+	echo "Cannot install packer.nvim: NeoVim not found"
+fi
 
 echo ""
 echo -n "Press ENTER to continue: "
 read user_input
-
-clear
 
 echo "Not implemented yet"
 return 0
