@@ -6,7 +6,7 @@ endif
 
 let mapleader = " "
 
-let g:CONFIG_PATH = "$HOME/.config/nvim/"
+let g:CONFIG_PATH = "$HOME/.config/nvim"
 
 if $PREFIX == ""
 	call setenv('PREFIX', '/usr/')
