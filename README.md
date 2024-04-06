@@ -4,11 +4,25 @@ My scripts and configs for Linux
 
 # Automatic installation
 
-Warning: you need to be in this repositiory directory
+## Cloning the repository
+
 ```console
 git clone https://github.com/TwoSpikes/dotfiles.git
 cd dotfiles
+```
+
+## Installation
+
+Warning: you need to be in this repositiory directory
+```console
 sh .dotfiles-setup.sh .
+```
+
+Or to install everything
+
+Warning: you need to be in this repositiory directory
+```console
+yes | sh .dotfiles-setup.sh .
 ```
 
 # Manual installation
