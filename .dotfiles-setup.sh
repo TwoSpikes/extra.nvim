@@ -9,7 +9,12 @@ subcommands() {
 }
 options() {
 	echo "OPTIONS:"
-	echo "	--help        display this message"
+	echo "	--help			display this message"
+}
+envvars() {
+	echo "ENVIRONMENT VARIABLES:"
+	echo "	DO_NOT_STOP_AT_FIRST_ERROR"
+	echo "					If not empty, set +e"
 }
 help() {
 	echo "${0} is a script to setup dotfiles"
@@ -17,6 +22,8 @@ help() {
 	subcommands
 	echo ""
 	options
+	echo ""
+	envvars
 	exit 0
 }
 
@@ -25,6 +32,10 @@ if [ "${1}" = "--help" ] \
 || [ "${3}" = "--help" ] \
 || [ "${4}" = "--help" ]; then
 	help
+fi
+
+if [ $DO_NOT_STOP_AT_FIRST_ERROR ]; then
+	set +e
 fi
 
 if [ -z ${1} ]; then
@@ -292,23 +303,62 @@ clear
 
 echo "==== Installing packer.nvim ===="
 echo ""
-if ${neovim_found}; then
-	echo -n "Do you want to install packer.nvim to NeoVim (y/N): "
-	read user_input
-	user_input=$(echo ${user_input}|awk '{print tolower($0)}')
-	case ${user_input} in
-		"y")
-			git clone --depth 1 https://github.com/wbthomason/packer.nvim\
- ${root}/usr/share/nvim/site/pack/packer/start/packer.nvim
-			;;
-		*)
-			;;
-	esac
+
+echo -n "Checking if packer.nvim is installed: "
+if [ -e ${root}/usr/share/nvim/site/pack/packer/start/packer.nvim ]; then
+	echo "YES"
 else
-	echo "Cannot install packer.nvim: NeoVim not found"
+	echo "NO"
+	if ${neovim_found}; then
+		echo -n "Do you want to install packer.nvim to NeoVim (y/N): "
+		read user_input
+		user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+		case ${user_input} in
+			"y")
+				git clone --depth 1 https://github.com/wbthomason/packer.nvim\
+	 ${root}/usr/share/nvim/site/pack/packer/start/packer.nvim
+				;;
+			*)
+				;;
+		esac
+	else
+		echo "Cannot install packer.nvim: NeoVim not found"
+	fi
 fi
 
 echo ""
+echo -n "Press ENTER to continue: "
+read user_input
+
+clear
+echo "==== Configuring NeoVim configuration"
+echo ""
+
+echo -n "Checking if directory for configuration exists: "
+if [ -d ${home}/.config/nvim/options ]; then
+	echo "YES"
+else
+	echo "NO"
+	echo -n "Making a directory for configuration: "
+	mkdir ${home}/.config/nvim/options
+	echo "OK"
+fi
+echo ""
+
+echo -n "Do you want to prevent LSP setup (useful if it does not work)? (y/N): "
+read user_input
+user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+case ${user_input} in
+	"y")
+		touch ${home}/.config/nvim/options/do_not_setup_lsp.null
+		;;
+	*)
+		if [ -e ${home}/.config/nvim/options/do_not_setup_lsp.null ]; then
+			rm ${home}/.config/nvim/options/do_not_setup_lsp.null
+		fi
+		;;
+esac
+
 echo -n "Press ENTER to continue: "
 read user_input
 
