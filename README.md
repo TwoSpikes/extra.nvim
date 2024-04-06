@@ -25,7 +25,7 @@ $ cp ./.bashrc ~/
 Then you need to restart your shell
 
 ```console
-exec $0
+$ exec $0
 ```
 
 ## .gitconfig-default .gitmessage
@@ -67,10 +67,11 @@ and plugin manager does not work yet in version of Vim/NeoVim without Lua.
 
 ### Note №2
 
-To prevent lsp setup, run this command in terminal
+To prevent lsp setup, run
 
 ```console
-touch ~/.config/nvim/options/do_not_setup_lsp.null
+$ mkdir ~/.config/nvim/options
+$ touch ~/.config/nvim/options/do_not_setup_lsp.null
 ```
 
 #### Change to light theme
@@ -154,31 +155,10 @@ $ vim
 
 Then you need to run this command
 
-For horizontal split
-```
-:Sxct
-```
-
-For vertical split
-```
-:Vxct
-```
-
-In new tab
-```
-:Txct
-```
-
-In new buffer
-```
-:Exct
-```
-
-In new buffer (fullscreen)
-```
-:Oxct
-```
-Or
-```
-:Exct|only
+```vim
+:Sxct       " In a horizontal split
+:Vxct       " In a vertical split
+:Txct       " In a new tab
+:Exct       " In a new buffer
+:Oxct       " In a fullscreen buffer
 ```
