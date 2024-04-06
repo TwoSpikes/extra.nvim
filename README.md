@@ -1,12 +1,14 @@
-My scripts that I made on my phone and on my PC
+# What is this
+
+My scripts and configs for Linux
 
 # Automatic installation
 
 Warning: you need to be in this repositiory directory
 ```console
-git clone https://TwoSpikes/dotfiles.git
+git clone https://github.com/TwoSpikes/dotfiles.git
 cd dotfiles
-sh ./.dotfiles-setup.sh ./
+sh .dotfiles-setup.sh .
 ```
 
 # Manual installation
