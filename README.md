@@ -7,22 +7,22 @@ My scripts and configs for Linux
 ## Cloning the repository
 
 ```console
-git clone https://github.com/TwoSpikes/dotfiles.git
-cd dotfiles
+$ git clone https://github.com/TwoSpikes/dotfiles.git
+$ cd dotfiles
 ```
 
 ## Installation
 
 Warning: you need to be in this repositiory directory
 ```console
-sh .dotfiles-setup.sh .
+$ sh .dotfiles-setup.sh .
 ```
 
 Or to install everything
 
 Warning: you need to be in this repositiory directory
 ```console
-yes | sh .dotfiles-setup.sh .
+$ yes | sh .dotfiles-setup.sh .
 ```
 
 # Manual installation
