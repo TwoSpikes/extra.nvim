@@ -282,12 +282,13 @@ case ${user_input} in
 		echo ""
 
 set -x
-		cp -r ${dotfiles}/.config/${setting_editor_for} ${home}/.config/${setting_editor_for}
+		cp -r ${dotfiles}/.config/nvim ${home}/.config/${setting_editor_for}
 		if [ "${setting_editor_for}" = "nvim" ]; then
 			cp ${dotfiles}/blueorange.vim ${root}/usr/share/nvim/runtime/colors
 		fi
 		if [ "${setting_editor_for}" = "vim" ]; then
 			cp ${dotfiles}/blueorange.vim ${root}/usr/share/vim/vim90/colors
+			echo 'exec printf("source %s/.config/vim/init.vim", $HOME)' > ${home}/.vimrc
 		fi
 set +x
 
@@ -304,6 +305,7 @@ clear
 echo "==== Installing packer.nvim ===="
 echo ""
 
+# FIXME: make work for Vim with Lua or change Plugin Manager
 echo -n "Checking if packer.nvim is installed: "
 if [ -e ${root}/usr/share/nvim/site/pack/packer/start/packer.nvim ]; then
 	echo "YES"
@@ -331,30 +333,30 @@ echo -n "Press ENTER to continue: "
 read user_input
 
 clear
-echo "==== Configuring NeoVim configuration"
+echo "==== Configuring ${setting_editor_for} configuration"
 echo ""
 
 echo -n "Checking if directory for configuration exists: "
-if [ -d ${home}/.config/nvim/options ]; then
+if [ -d ${home}/.config/${setting_editor_for}/options ]; then
 	echo "YES"
 else
 	echo "NO"
 	echo -n "Making a directory for configuration: "
-	mkdir ${home}/.config/nvim/options
+	mkdir ${home}/.config/${setting_editor_for}/options
 	echo "OK"
 fi
 echo ""
 
-echo -n "Do you want to prevent LSP setup (useful if it does not work)? (y/N): "
+echo -n "Do you want ${setting_editor_for} to install LSP (recommended)? (Y/n): "
 read user_input
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 case ${user_input} in
-	"y")
+	"n")
 		touch ${home}/.config/nvim/options/do_not_setup_lsp.null
 		;;
 	*)
-		if [ -e ${home}/.config/nvim/options/do_not_setup_lsp.null ]; then
-			rm ${home}/.config/nvim/options/do_not_setup_lsp.null
+		if [ -e ${home}/.config/${setting_editor_for}/options/do_not_setup_lsp.null ]; then
+			rm ${home}/.config/${setting_editor_for}/options/do_not_setup_lsp.null
 		fi
 		;;
 esac
