@@ -11,6 +11,10 @@
 hi clear
 let g:colors_name = 'blueorange'
 
+if !exists("CONFIG_PATH")
+  g:CONFIG_PATH = "$HOME/.config/nvim"
+endif
+
 hi CursorNormal guifg=NONE guibg=#ffaf00 gui=NONE cterm=NONE
 hi CursorInsert guifg=NONE guibg=#00afff gui=NONE cterm=NONE
 hi CursorReplace ctermfg=15 ctermbg=128 cterm=bold guifg=#ffffff guibg=#af00df gui=bold
@@ -523,7 +527,11 @@ if &t_Co >= 256
     hi CocSearch ctermfg=222 ctermbg=NONE cterm=NONE
   else
     " Light background
-    hi Normal ctermfg=0 ctermbg=231 cterm=NONE guifg=#000000 guibg=#ffffff gui=NONE
+    if filereadable(expand(g:CONFIG_PATH.."/options/use_transparent_bg.null"))
+      hi Normal ctermfg=0 ctermbg=231 cterm=NONE guifg=#000000 guibg=NULL gui=NONE
+    else
+      hi Normal ctermfg=0 ctermbg=231 cterm=NONE guifg=#000000 guibg=#ffffff gui=NONE
+    endif
     hi MsgArea ctermfg=0 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=#505050 gui=reverse
     " hi Statusline ctermfg=231 ctermbg=16 cterm=bold
     hi Statusline ctermfg=255 ctermbg=20 cterm=bold guifg=#ffffff guibg=#0080ff gui=NONE
