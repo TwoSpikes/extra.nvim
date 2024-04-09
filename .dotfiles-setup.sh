@@ -364,5 +364,59 @@ esac
 echo -n "Press ENTER to continue: "
 read user_input
 
-echo "Not implemented yet"
+clear
+echo "==== Miscellaneous stuff ===="
+echo ""
+
+echo -n "Do you want to copy xterm-color-table.vim (recommended)? (Y/n): "
+read user_input
+user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+case ${user_input} in
+	"n")
+		;;
+	*)
+		cp ${dotfiles}/xterm-color-table.vim ${home}
+		;;
+esac
+
+echo -n "Press ENTER to continue: "
+read user_input
+
+clear
+echo "==== Setting up git ===="
+echo ""
+
+echo -n "Checking if Git is installed: "
+if $git_found; then
+	echo "YES"
+	echo ""
+
+	echo -n "Do you want to setup Git? (Y/n): "
+	read user_input
+	user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+	case ${user_input} in
+		"n")
+			;;
+		*)
+			cp ${dotfiles}/.gitconfig-default ${home}
+			cp ${home}/.gitconfig-default ${home}/.gitconfig
+			
+			echo -n "Your Name: "
+			read user_input
+			git config --global user.name "${user_input}"
+			echo -n "Your email: "
+			read user_input
+			git config --global user.email "${user_input}"
+
+			echo "Git setup done"
+	esac
+else
+	echo "NO"
+	echo "Error: Git not found"
+fi
+
+echo -n "Press ENTER to continue: "
+read user_input
+
+echo "Dotfiles setup ended successfully"
 return 0
