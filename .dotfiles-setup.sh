@@ -92,6 +92,53 @@ clear
 echo "==== Checking misc stuff ===="
 echo ""
 
+if [ ! -z ${TERMUX_VERSION} ]; then
+	OS=Termux
+	VER=${TERMUX_VERSION}
+elif [ -f ${root}/etc/os-release ]; then
+	. ${root}/etc/os-release
+	OS=${NAME}
+	VER=${VERSION}
+else
+    OS=$(uname -s)
+    VER=$(uname -r)
+fi
+echo "Current system: ${OS}"
+echo "Current system version: ${VER}"
+
+if command -v "pkg" > /dev/null; then
+	PACKAGE_COMMAND="pkg install"
+elif command -v "apt" > /dev/null; then
+	PACKAGE_COMMAND="apt install"
+elif command -v "apt-get" > /dev/null; then
+	PACKAGE_COMMAND="apt-get install"
+elif command -v "pacman" > /dev/null; then
+	PACKAGE_COMMAND="pacman -Suy"
+elif command -v "zypper" > /dev/null; then
+	PACKAGE_COMMAND="zypper install"
+elif command -v "xbps-install" > /dev/null; then
+	PACKAGE_COMMAND="xbps-install"
+elif command -v "yum" > /dev/null; then
+	PACKAGE_COMMAND="yum install"
+elif command -v "aptitude" > /dev/null; then
+	PACKAGE_COMMAND="aptitude install"
+elif command -v "dnf" > /dev/null; then
+	PACKAGE_COMMAND="dnf install"
+elif command -v "emerge" > /dev/null; then
+	PACKAGE_COMMAND="emerge --ask --verbose"
+elif command -v "up2date" > /dev/null; then
+	PACKAGE_COMMAND="up2date"
+elif command -v "urpmi" > /dev/null; then
+	PACKAGE_COMMAND="urpmi"
+elif command -v "flatpak" > /dev/null; then
+	PACKAGE_COMMAND="flatpak install"
+elif command -v "snap" > /dev/null; then
+	PACKAGE_COMMAND="snap install"
+fi
+echo "Package command is: ${PACKAGE_COMMAND}"
+
+echo ""
+
 ping -c 1 8.8.8.8 > /dev/null
 ping_errorcode=${?}
 if [ ${ping_errorcode} -eq 0 ]; then
@@ -100,7 +147,7 @@ else
 	echo "You do not have an internet"
 fi
 
-if ! command -v "git"; then
+if ! command -v "git" > /dev/null; then
 	echo "Git not found"
 	git_found=false
 else
@@ -145,7 +192,9 @@ else
 				echo "Abort: No Git found"
 				return 1
 			else
+set -x
 				git clone --depth=1 https://github.com/TwoSpikes/dotfiles.git ${dotfiles}
+set +x
 			fi
 			;;
 		*)
@@ -157,6 +206,13 @@ fi
 
 echo "Now we are ready to start"
 
+echo ""
+echo -n "Press ENTER to continue: "
+read user_input
+
+clear
+echo "==== Setupping shell ===="
+echo ""
 echo -n "Do you want to copy .bashrc and its dependencies? (y/N/exit): "
 read user_input
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
@@ -176,6 +232,73 @@ case ${user_input} in
 	*)
 		;;
 esac
+
+echo ""
+echo -n "Press ENTER to continue: "
+read user_input
+
+clear
+echo "==== Installing Zsh ===="
+echo ""
+
+if ! command -v zsh > /dev/null; then
+	echo -n "Do you want to install Zsh? (Y/n): "
+	read user_input
+	user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+	case ${user_input} in
+		"n")
+			;;
+		*)
+			${PACKAGE_COMMAND} zsh
+			;;
+	esac
+fi
+
+echo ""
+echo -n "Press ENTER to continue: "
+read user_input
+
+clear
+echo "==== Making Zsh your default shell ===="
+echo ""
+
+echo -n "Do you want to make Zsh your default shell? (Y/n): "
+read user_input
+user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+case ${user_input} in
+	"n")
+		;;
+	*)
+		chsh
+		;;
+esac
+
+echo ""
+echo -n "Press ENTER to continue: "
+read user_input
+
+clear
+echo "==== Installing zsh4humans ===="
+echo ""
+
+echo -n "Do you want to install zsh4humans? (Y/n): "
+read user_input
+user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+case ${user_input} in
+	"n")
+		;;
+	*)
+		if command -v curl >/dev/null 2>&1; then
+			sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
+		else
+			sh -c "$(wget -O- https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
+		fi
+		;;
+esac
+
+echo ""
+echo -n "Press ENTER to continue: "
+read user_input
 
 clear
 echo "==== Checking if editors exist ===="
@@ -378,9 +501,6 @@ case ${user_input} in
 		cp ${dotfiles}/xterm-color-table.vim ${home}
 		;;
 esac
-
-echo -n "Press ENTER to continue: "
-read user_input
 
 clear
 echo "==== Setting up git ===="
