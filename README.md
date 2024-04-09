@@ -74,19 +74,10 @@ This is NeoVim/Vim configuration
 <img src=.github/images/Screenshot_2023-11-05-14-45-03-516_com.termux.png>
 <img src=.github/images/Screenshot_2023-11-05-12-13-23-092_com.termux.png>
 
-### Note №1
+### Note
 
 It works better in NeoVim,\
 and plugin manager does not work yet in version of Vim/NeoVim without Lua.
-
-### Note №2
-
-To prevent lsp setup, run
-
-```console
-$ mkdir ~/.config/nvim/options
-$ touch ~/.config/nvim/options/do_not_setup_lsp.null
-```
 
 #### Change to light theme
 
@@ -112,6 +103,34 @@ $ cp -r ./.config/nvim/ ~/.config/
 ```console
 $ echo "so ~/.config/nvim/init.vim" >> ~/.vimrc
 ```
+
+### Some options
+
+#### Make directory for options
+
+```console
+$ mkdir ~/.config/nvim/options
+```
+
+#### Prevent LSP setup
+
+Useful if you do not want to setup LSP or if it does not work
+
+```console
+$ touch ~/.config/nvim/options/do_not_setup_lsp.null
+```
+
+#### Transparent background
+
+Useful if you are using terminal with transparent background
+
+```console
+$ touch ~/.config/nvim/options/use_transparent_bg.null
+```
+
+### How to remove options
+
+Just delete files connected with them and restart Vim/NeoVim
 
 ## tsch.sh [deprecated]
 
