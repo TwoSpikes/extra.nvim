@@ -4,17 +4,17 @@ set -e
 
 subcommands() {
 	echo "SUBCOMMANDS:"
-	echo "	${0} [OPTION]... DOTFILES_PATH"
-	echo "	${0} [OPTION]... DOTFILES_PATH HOME_PATH ROOT_PATH"
+	echo "	[OPTION]... DOTFILES_PATH"
+	echo "	[OPTION]... DOTFILES_PATH HOME_PATH ROOT_PATH"
 }
 options() {
 	echo "OPTIONS:"
-	echo "	--help			display this message"
+	echo "	--help		Display this message"
 }
 envvars() {
 	echo "ENVIRONMENT VARIABLES:"
 	echo "	DO_NOT_STOP_AT_FIRST_ERROR"
-	echo "					If not empty, set +e"
+	echo "			If not empty, set +e"
 }
 help() {
 	echo "${0} is a script to setup dotfiles"
