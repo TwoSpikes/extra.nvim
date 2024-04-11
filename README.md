@@ -39,7 +39,7 @@ $ cp ./.bashrc ~/
 Then you need to restart your shell
 
 ```console
-$ exec $0
+$ exec $SHELL
 ```
 
 ## .gitconfig-default .gitmessage
