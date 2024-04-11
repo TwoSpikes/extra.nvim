@@ -26,6 +26,11 @@ help() {
 	envvars
 	exit 0
 }
+press_enter() {
+	echo ""
+	echo -n "Press ENTER to continue: "
+	read user_input
+}
 
 if [ "${1}" = "--help" ] \
 || [ "${2}" = "--help" ] \
@@ -206,9 +211,7 @@ fi
 
 echo "Now we are ready to start"
 
-echo ""
-echo -n "Press ENTER to continue: "
-read user_input
+press_enter
 
 clear
 echo "==== Setupping shell ===="
@@ -233,9 +236,7 @@ case ${user_input} in
 		;;
 esac
 
-echo ""
-echo -n "Press ENTER to continue: "
-read user_input
+press_enter
 
 clear
 echo "==== Installing Zsh ===="
@@ -254,9 +255,7 @@ if ! command -v zsh > /dev/null; then
 	esac
 fi
 
-echo ""
-echo -n "Press ENTER to continue: "
-read user_input
+press_enter
 
 clear
 echo "==== Making Zsh your default shell ===="
@@ -273,9 +272,7 @@ case ${user_input} in
 		;;
 esac
 
-echo ""
-echo -n "Press ENTER to continue: "
-read user_input
+press_enter
 
 clear
 echo "==== Installing zsh4humans ===="
@@ -288,17 +285,40 @@ case ${user_input} in
 	"n")
 		;;
 	*)
-		if command -v curl >/dev/null 2>&1; then
-			sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
-		else
-			sh -c "$(wget -O- https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
-		fi
+		#if command -v curl >/dev/null 2>&1; then
+		#	sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
+		#else
+		#	sh -c "$(wget -O- https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
+		#fi
+
+		echo -n "Fetching zsh4humans... "
+		TMPFILE_DOWNLOADED=mktemp
+		wget -O TMPFILE_DOWNLOADED https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install
+		chmod +x TMPFILE_DOWNLOADED
+		echo "OK"
+
+		echo -n "Changing zsh4humans... "
+		TMPFILE_EDITED=mktemp
+		head -n -1 TMPFILE_DOWNLOADED > TMPFILE_EDITED
+		echo "OK"
+
+		echo "Running zsh4humans..."
+		sh TMPFILE_EDITED
+		z4h_errcode=${?}
+		echo "zsh4humans: exit code: ${z4h_errcode}"
+
+		echo -n "Deleting tmp files... "
+		rm TMPFILE_EDITED
+		rm TMPFILE_DOWNLOADED
+		echo "OK"
+
+		echo -n "Adding .bashrc to .zshrc..."
+		echo ". ${home}/.bashrc" >> ${home}/.zshrc
+		echo "OK"
 		;;
 esac
 
-echo ""
-echo -n "Press ENTER to continue: "
-read user_input
+press_enter
 
 clear
 echo "==== Checking if editors exist ===="
@@ -415,9 +435,7 @@ set -x
 		fi
 set +x
 
-		echo ""
-		echo -n "Press ENTER to continue: "
-		read user_input
+	press_enter
 
 		;;
 	*)
@@ -451,9 +469,7 @@ else
 	fi
 fi
 
-echo ""
-echo -n "Press ENTER to continue: "
-read user_input
+press_enter
 
 clear
 echo "==== Configuring ${setting_editor_for} configuration"
@@ -484,8 +500,7 @@ case ${user_input} in
 		;;
 esac
 
-echo -n "Press ENTER to continue: "
-read user_input
+press_enter
 
 clear
 echo "==== Miscellaneous stuff ===="
@@ -535,8 +550,8 @@ else
 	echo "Error: Git not found"
 fi
 
-echo -n "Press ENTER to continue: "
-read user_input
+press_enter
 
 echo "Dotfiles setup ended successfully"
+echo "It is recommended to restart your shell"
 return 0
