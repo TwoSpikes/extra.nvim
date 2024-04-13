@@ -1,5 +1,7 @@
 #!/bin/env bash
 
+[ ! -z "${INCLUDED_CHECKHEALTH}" ] && return 0 || INCLUDED_CHECKHEALTH=true
+
 . ~/.shlibs/timer.sh
 
 check_for() {
