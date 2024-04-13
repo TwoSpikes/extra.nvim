@@ -73,7 +73,7 @@ check_for() {
 }
 
 checkhealth() {
-	timer_startln 'checking needed staff...'
+	timer_startln 'checking needed stuff...'
 	check_for 'sh'
 	timer_endln
 }
