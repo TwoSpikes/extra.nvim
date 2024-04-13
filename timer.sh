@@ -15,7 +15,8 @@ to_timer_human_time() {
 timer_start() {
 	TIMER_START_MESSAGE="${1}"
 
-	echo -n "$(base_program): $(func_name): note: ${TIMER_START_MESSAGE}"
+	# echo -n "$(base_program): $(func_name): note: ${TIMER_START_MESSAGE}"
+	echo -n "[INFO] ${TIMER_START_MESSAGE}"
 	START=$(date +%s%N)
 }
 timer_end() {
@@ -26,6 +27,7 @@ timer_end() {
 	export ALL_TIME=$((ALL_TIME + TOOK))
 }
 timer_total_time() {
-	echo "$(base_program): $(func_name): note: ${ALL_TIME} ms"
+	# echo "$(base_program): $(func_name): note: ${ALL_TIME} ms"
+	echo "[INFO] total time: ${ALL_TIME} ms"
 	export ALL_TIME=0
 }
