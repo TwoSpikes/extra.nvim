@@ -1,8 +1,8 @@
 #!/bin/env sh
 
-. ~/.shlibs/esc.sh
-
 [ ! -z "${INCLUDED_COLORS}" ] && return 0 || INCLUDED_COLORS=true
+
+. ~/.shlibs/esc.sh
 
 # colors
 RESET_COLOR="${esc}[0m"
