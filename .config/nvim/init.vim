@@ -488,7 +488,8 @@ endfunction
 command! ToggleFullscreen call ToggleFullscreen()
 command! ToggleLocalFullscreen call ToggleLocalFullscreen()
 noremap <leader><c-f> <cmd>ToggleFullscreen<cr>
-noremap <leader>l<c-f> <cmd>ToggleLocalFullscreen<cr>
+noremap <leader><c-l><c-f> <cmd>ToggleLocalFullscreen<cr>
+
 noremap <c-t> <cmd>TagbarToggle<cr>
 
 nnoremap <leader>g :grep -R <cword> .<cr>
@@ -584,8 +585,8 @@ nnoremap <silent> <c-*> *
 nnoremap <silent> # #:noh<cr>
 nnoremap <silent> <c-#> #
 
-noremap <c-l> 20zl
-noremap <c-h> 20zh
+noremap <leader>l 20zl
+noremap <leader>h 20zh
 inoremap <c-l> <esc>20zla
 inoremap <c-h> <esc>20zha
 let s:SCROLL_UP_FACTOR = 2
@@ -782,24 +783,24 @@ noremap <silent> <leader>cy yiw:colo <c-r>"<cr>j
 
 augroup cpp
 	au!
-	au filetype cpp noremap <silent> <buffer> <leader>ln viwo<esc>i::<esc>hi
-	au filetype cpp noremap <silent> <buffer> <leader>l/d mz0i//<esc>`zll
-	au filetype cpp noremap <silent> <buffer> <leader>l/u mz:s:^//<cr>`zhh:noh<cr>
-	au filetype cpp noremap <silent> <buffer> <leader>l! :e ~/.config/tsvimconf/cpp/example.cpp<cr>ggvGy:bd<cr>pgg
+	au filetype cpp noremap <silent> <buffer> <leader>n viwo<esc>i::<esc>hi
+	au filetype cpp noremap <silent> <buffer> <leader>/d mz0i//<esc>`zll
+	au filetype cpp noremap <silent> <buffer> <leader>/u mz:s:^//<cr>`zhh:noh<cr>
+	au filetype cpp noremap <silent> <buffer> <leader>! :e ~/.config/tsvimconf/cpp/example.cpp<cr>ggvGy:bd<cr>pgg
 augroup END
 augroup vim
 	au!
-	au filetype vim noremap <silent> <buffer> <leader>l/d mz0i"<esc>`zl
-	au filetype vim noremap <silent> <buffer> <leader>l/u mz:s/^"<cr>`zh:noh<cr>
+	au filetype vim noremap <silent> <buffer> <leader>/d mz0i"<esc>`zl
+	au filetype vim noremap <silent> <buffer> <leader>/u mz:s/^"<cr>`zh:noh<cr>
 augroup END
 augroup googol
 	au!
-	au syntax googol noremap <silent> <buffer> <leader>l/d mz0i//<esc>`zll
-	au syntax googol noremap <silent> <buffer> <leader>l/u mz:s:^//<cr>`zhh:noh<cr>
+	au syntax googol noremap <silent> <buffer> <leader>/d mz0i//<esc>`zll
+	au syntax googol noremap <silent> <buffer> <leader>/u mz:s:^//<cr>`zhh:noh<cr>
 augroup END
 augroup php
 	au!
-	au filetype php nnoremap <silent> <buffer> <leader>lg viwoviGLOBALS['<esc>ea']<esc>
+	au filetype php nnoremap <silent> <buffer> <leader>g viwoviGLOBALS['<esc>ea']<esc>
 augroup END
 augroup bash
 	au!
@@ -807,8 +808,8 @@ augroup bash
 augroup END
 augroup python
 	au!
-	au filetype python nnoremap <silent> <buffer> <leader>l/d mz0i#<esc>`zl
-	au filetype python nnoremap <silent> <buffer> <leader>l/u mz:s/^#<cr>`zh:noh<cr>
+	au filetype python nnoremap <silent> <buffer> <leader>/d mz0i#<esc>`zl
+	au filetype python nnoremap <silent> <buffer> <leader>/u mz:s/^#<cr>`zh:noh<cr>
 augroup END
 augroup netrw
 	au!
