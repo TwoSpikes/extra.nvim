@@ -530,7 +530,7 @@ if &t_Co >= 256
     if filereadable(expand(g:CONFIG_PATH.."/options/use_transparent_bg.null"))
       hi Normal ctermfg=0 ctermbg=231 cterm=NONE guifg=#000000 guibg=NULL gui=NONE
     else
-      hi Normal ctermfg=0 ctermbg=231 cterm=NONE guifg=#000000 guibg=#ffffff gui=NONE
+      hi Normal ctermfg=0 ctermbg=231 cterm=NONE guifg=#000000 guibg=#fffbf6 gui=NONE
     endif
     hi MsgArea ctermfg=0 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=#505050 gui=reverse
     " hi Statusline ctermfg=231 ctermbg=16 cterm=bold
