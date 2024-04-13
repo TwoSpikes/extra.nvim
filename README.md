@@ -71,8 +71,8 @@ $ cp ./.gitmessage ~/
 
 This is NeoVim/Vim configuration
 
-<img src=.github/images/Screenshot_2023-11-05-14-45-03-516_com.termux.png>
-<img src=.github/images/Screenshot_2023-11-05-12-13-23-092_com.termux.png>
+<img src=.github/images/Screenshot_2024-04-13-18-21-05-51_84d3000e3f4017145260f7618db1d683.jpg>
+<img src=.github/images/Screenshot_2024-04-13-18-23-57-59_84d3000e3f4017145260f7618db1d683.jpg>
 
 ### Note
 
