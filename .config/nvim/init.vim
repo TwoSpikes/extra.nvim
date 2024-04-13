@@ -213,8 +213,13 @@ function! Showtab()
 		let strmode = '%#ModeVisu#visu%#ModeBlock#BLOCK'
 	endif
 	"let stl_time = '%{strftime("%b,%d %H:%M:%S")}'
-	let stl_pos = '%l:%c %LL'
-" 
+	
+	let stl_pos = ''
+	let stl_pos .= '%l:%c'
+	if &columns ># 35
+		let stl_pos .= ' %LL'
+	endif
+
 	let stl_showcmd = '%(%#Statuslinemod#%S%*%)'
 	let stl_buf = '#%n %p%%'
 	let stl_mode_to_put = ''
@@ -242,13 +247,15 @@ function! Showtab()
 	endif
 	if &columns ># 30
 		let s:result .= stl_pos
+	endif
+	if &columns ># 45
 		let s:result .= ' '
 	endif
 	if &columns ># 45
 		let s:result .= '%#Statuslinestat12#'
 		let s:result .= ''
 	endif
-	if &columns ># 35
+	if &columns ># 30
 		let s:result .= '%#Statuslinestat2# '
 		let s:result .= stl_buf
 		let s:result .= ' '
