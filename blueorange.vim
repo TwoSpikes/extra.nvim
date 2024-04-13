@@ -553,10 +553,14 @@ if &t_Co >= 256
     " hi TabLine ctermfg=16 ctermbg=250 cterm=NONE
     " hi TabLineFill ctermfg=NONE ctermbg=243 cterm=NONE
     " hi TabLineSel ctermfg=231 ctermbg=16 cterm=bold,reverse
-    hi TabLine ctermfg=195 ctermbg=18 cterm=NONE guifg=#f03000 guibg=#00005f gui=NONE
-    hi TabLineSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#50f000 guibg=#20005f gui=NONE
-    hi TabLineFill ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#101050 gui=NONE
-    hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#0050cf guibg=#ffffff gui=reverse
+    " hi TabLine ctermfg=195 ctermbg=18 cterm=NONE guifg=#f03000 guibg=#00005f gui=NONE
+    hi TabLine ctermfg=195 ctermbg=18 cterm=NONE guifg=#f0f000 guibg=#0060bf gui=NONE
+    " hi TabLineSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#50f000 guibg=#20005f gui=NONE
+    hi TabLineSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#f0f000 guibg=#0020bf gui=NONE
+    " hi TabLineFill ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#101050 gui=NONE
+    hi TabLineFill ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#e0dcd4 gui=NONE
+    " hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#0050cf guibg=#ffffff gui=reverse
+    hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#00c0ff guibg=#f0f000 gui=reverse,bold
     hi ToolbarLine ctermfg=NONE ctermbg=NONE cterm=NONE
     hi ToolbarButton ctermfg=231 ctermbg=16 cterm=NONE
     hi Keyword ctermfg=220 ctermbg=NONE cterm=NONE guifg=#ffdf00 guibg=NONE gui=reverse
