@@ -1,6 +1,6 @@
 #!/bin/env bash
 
-. ~/timer.sh
+. ~/.shlibs/timer.sh
 
 check_for() {
 	case "${1}" in
@@ -39,11 +39,12 @@ check_for() {
 
 	"${ECHO_PROGRAM}" -n "Checking for ${PROGRAM_NAME}: "
 
-	"${WHICH_PROGRAM}" "${PROGRAM_NAME}"
+	"${WHICH_PROGRAM}" "${PROGRAM_NAME}" > /dev/null
 
 	errorcode=${?}
 	case "${errorcode}" in
 		1)
+			"${ECHO_PROGRAM}" "Error ${errorcode}"
 			try_install "${1}"
 			installation_errorcode=${?}
 			case ${installation_errorcode} in
@@ -66,12 +67,13 @@ check_for() {
 			esac
 		;;
 		*)
+			"${ECHO_PROGRAM}" "OK"
 		;;
 	esac
 }
 
 checkhealth() {
-	timer_start 'checking needed staff...'
+	timer_startln 'checking needed staff...'
 	check_for 'sh'
-	timer_end
+	timer_endln
 }
