@@ -1022,3 +1022,31 @@ function! OnResized()
 endfunction
 
 au! VimEnter * echo 'type ' | echohl SpecialKey | echon ':intro<cr>' | echohl Normal | echon ' to see help'
+
+" Russian mappings
+map й q
+map ц w
+map у e
+map к r
+map е t
+map н y
+map г u
+map ш i
+map щ o
+map з p
+map ф a
+map ы s
+map в d
+map а f
+map п g
+map р h
+map о j
+map л k
+map д l
+map я z
+map ч x
+map с c
+map м v
+map и b
+map т n
+map ь m
