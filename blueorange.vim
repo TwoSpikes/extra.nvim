@@ -428,6 +428,7 @@ if &t_Co >= 256
     hi Statuslinestat01 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#000087 guibg=#3040f7 gui=NONE
     hi Statuslinestat12 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#3040f7 guibg=#000087 gui=NONE
     hi Statuslinestat2 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#aff0a0 guibg=#3040f7 gui=NONE
+    hi StatuslinestatNormTerm ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#5f0000 guibg=#ffdf00 gui=reverse
 "    hi Statusline ctermfg=17 ctermbg=208 cterm=bold
 "    hi StatuslineNC ctermfg=18 ctermbg=195 cterm=reverse
     hi StatuslineNC ctermfg=17 ctermbg=208 cterm=reverse guifg=#f03000 guibg=#0030af gui=bold
@@ -540,6 +541,8 @@ if &t_Co >= 256
     hi Statuslinestat01 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#f0a007 guibg=#0080ff gui=NONE
     hi Statuslinestat12 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#0080ff guibg=#f0a007 gui=NONE
     hi Statuslinestat2 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#ffffff guibg=#0080ff gui=NONE
+    hi StatuslinestatNormTerm ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#5f0000 guibg=#ffdf00 gui=reverse
+    hi StatuslinestatVisuBlock ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#000087 guibg=#870000 gui=NONE
     " hi StatuslineNC ctermfg=231 ctermbg=243 cterm=NONE
     hi StatuslineNC ctermfg=17 ctermbg=19 cterm=bold guifg=#ff0000 guibg=#0080ff gui=bold
     hi ModeNorm ctermfg=220 ctermbg=236 cterm=bold,reverse guifg=#ffdf00 guibg=#000000 gui=bold,reverse

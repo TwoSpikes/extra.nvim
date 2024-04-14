@@ -138,7 +138,7 @@ function! Showtab()
 	let mode = mode('lololol')
 	let strmode = ''
 	if mode == 'n'
-		let strmode = '%#ModeNorm#NORM '
+		let strmode = '%#ModeNorm# '
 	elseif mode == 'no'
 		let strmode = 'OP_PEND '
 	elseif mode == 'nov'
@@ -154,7 +154,7 @@ function! Showtab()
 	elseif mode == 'niV'
 		let strmode = '^o visu REPL '
 	elseif mode == 'nt'
-		let strmode = '%#ModeNorm#norm%#ModeTerm#TERM'
+		let strmode = '%#ModeNorm#NORM %#StatuslinestatNormTerm#%#ModeTerm# TERM '
 	elseif mode == 'ntT'
 		let strmode = '^\^o norm TERM '
 	elseif mode == 'v'
@@ -174,13 +174,13 @@ function! Showtab()
 	elseif mode == 'CTRL-S'
 		let strmode = 'SEL BLOCK '
 	elseif mode == 'i'
-		let strmode = '%#ModeIns#INSE '
+		let strmode = '%#ModeIns# '
 	elseif mode == 'ic'
 		let strmode = 'compl INS '
 	elseif mode == 'ix'
 		let strmode = '%#ModeCom#^x compl%#ModeIns#INS'
 	elseif mode == 'R'
-		let strmode = '%#ModeRepl#REPL '
+		let strmode = '%#ModeRepl# '
 	elseif mode == 'Rc'
 		let strmode = 'compl REPL '
 	elseif mode == 'Rx'
@@ -210,7 +210,7 @@ function! Showtab()
 	elseif mode == 't'
 		let strmode = '%#ModeTerm#TERM '
 	else
-		let strmode = '%#ModeVisu#visu%#ModeBlock#BLOCK'
+		let strmode = '%#ModeVisu#visu %#StatuslinestatVisuBlock#%#ModeBlock# BLOCK '
 	endif
 	"let stl_time = '%{strftime("%b,%d %H:%M:%S")}'
 	
@@ -226,11 +226,12 @@ function! Showtab()
 	if &columns ># 20
 		let stl_mode_to_put .= strmode
 		let stl_mode_to_put .= s:custom_mode?' '.s:custom_mode:''
-		let stl_mode_to_put .= '%* '
+		let stl_mode_to_put .= ''
 	endif
 
 	let s:result = stl_mode_to_put
 	let s:result .= stl_name
+	let s:result .= ''
 	if &columns ># 30
 		let &showcmdloc = 'statusline'
 		let s:result .= ' '
