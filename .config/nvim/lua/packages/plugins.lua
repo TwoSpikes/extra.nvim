@@ -58,4 +58,8 @@ return require('packer').startup(function (use)
 	use {
 		'skywind3000/vim-quickui',
 	}
+	use {
+		'neoclide/coc.nvim',
+		branch = 'release'
+	}
 end)

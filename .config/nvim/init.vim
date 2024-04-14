@@ -58,7 +58,7 @@ endfunction
 function! STCAbs(actual_mode)
 	if has('nvim')
 		if a:actual_mode ==# ''
-			let &l:stc = '%{%v:relnum?"":"%#CursorLineNr#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} '
+			let &l:stc = '%{%v:relnum?"v:"%#CursorLineNr#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} '
 			return
 		endif
 		if a:actual_mode ==# 'r'
