@@ -566,7 +566,7 @@ if &t_Co >= 256
     hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#00c0ff guibg=#f0f000 gui=reverse,bold
     hi ToolbarLine ctermfg=NONE ctermbg=NONE cterm=NONE
     hi ToolbarButton ctermfg=231 ctermbg=16 cterm=NONE
-    hi Keyword ctermfg=220 ctermbg=NONE cterm=NONE guifg=#ffdf00 guibg=NONE gui=reverse
+    hi Keyword ctermfg=220 ctermbg=NONE cterm=NONE guifg=#000000 guibg=#ffdf00 gui=NONE
     hi Statement ctermfg=228 ctermbg=NONE cterm=NONE guifg=#ffff87 guibg=#000000 gui=reverse
     hi QuickFixLine ctermfg=231 ctermbg=32 cterm=NONE
     hi CursorLineNr ctermfg=220 ctermbg=236 cterm=bold,reverse guifg=#ffffff guibg=#ffaf00 gui=bold
@@ -619,7 +619,6 @@ if &t_Co >= 256
     hi PreProc ctermfg=23 ctermbg=NONE cterm=NONE
     hi Special ctermfg=30 ctermbg=NONE cterm=NONE
     hi Underlined ctermfg=NONE ctermbg=NONE cterm=underline
-    hi Keyword ctermfg=220 ctermbg=NONE cterm=italic guifg=#ffdf00 guibg=NONE gui=italic
     hi Directory ctermfg=26 ctermbg=NONE cterm=bold
     hi Conceal ctermfg=NONE ctermbg=NONE cterm=NONE
     hi Ignore ctermfg=NONE ctermbg=NONE cterm=NONE
