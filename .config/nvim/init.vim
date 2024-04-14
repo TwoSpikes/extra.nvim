@@ -1,9 +1,5 @@
 #!/bin/env -S nvim -u
 
-if expand("%") == ""
-	edit ./
-endif
-
 let mapleader = " "
 
 let g:CONFIG_PATH = "$HOME/.config/nvim"
@@ -15,7 +11,7 @@ let g:COLORSCHEME_PATH = "$PREFIX/share/nvim/runtime/colors/blueorange.vim"
 set termguicolors
 set background=light
 exec printf("so %s", g:COLORSCHEME_PATH)
-set lazyredraw
+set nolazyredraw
 
 set helpheight=10
 set splitbelow
@@ -54,6 +50,7 @@ set nornu
 function! STCRel()
 	if has('nvim')
 		let &l:stc = '%#CursorLineNr#%{%v:relnum?"%#LineNr#":((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:relnum:""):""} '
+		call s:SaveStc(v:false)
 	else
 		set nu rnu
 	endif
@@ -1058,21 +1055,14 @@ map и b
 map т n
 map ь m
 
-function s:PrintIntroHelp()
-	echo 'type ' | echohl SpecialKey | echon ':intro<cr>' | echohl Normal | echon ' to see help'
-endfunction
-if v:vim_did_enter
-	call s:PrintIntroHelp()
-else
-	au! SourcePost init.vim call s:PrintIntroHelp()
-endif
-
 augroup LineNrForInactive
-	function! s:SaveStc(stc_was)
-		let &l:stc = ''
-		exec printf("let g:stc_was_%d = a:stc_was", win_getid())
+	function! s:SaveStc(clear_stc)
+		exec printf("let g:stc_was_%d = &l:stc", win_getid())
+		if a:clear_stc
+			let &l:stc = ''
+		endif
 	endfunction
-	au! WinLeave * call s:SaveStc(&l:stc)
+	au! WinLeave * call s:SaveStc(v:true)
 	function! s:LoadStc()
 		if exists("g:stc_was_"..win_getid())==#1
 			let &l:stc = eval("g:stc_was_"..win_getid())
@@ -1082,3 +1072,16 @@ augroup LineNrForInactive
 	endfunction
 	au! WinEnter * call s:LoadStc()
 augroup END
+
+if expand("%") == ""
+	edit ./
+endif
+
+function s:PrintIntroHelp()
+	echo 'type ' | echohl SpecialKey | echon ':intro<cr>' | echohl Normal | echon ' to see help'
+endfunction
+if v:vim_did_enter
+	call s:PrintIntroHelp()
+else
+	au! SourcePost init.vim call s:PrintIntroHelp()
+endif
