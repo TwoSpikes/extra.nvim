@@ -305,14 +305,14 @@ command! -nargs=* Pkg !pkg <args>
 
 augroup numbertoggle
 	autocmd!
-	function Numbertoggle_stcabs()
+	function! Numbertoggle_stcabs()
 		if &modifiable
 			call STCAbs(v:insertmode)
 		else
 			call STCNo()
 		endif
 	endfunction
-	function Numbertoggle_stcrel()
+	function! Numbertoggle_stcrel()
 		if !s:fullscreen
 			if &modifiable
 				call STCRel()
@@ -321,7 +321,7 @@ augroup numbertoggle
 			endif
 		endif
 	endfunction
-	function Numbertoggle_no()
+	function! Numbertoggle_no()
 		set stc= nonu nornu
 	endfunction
 	autocmd FocusGained,InsertLeave * call Numbertoggle_stcrel()
@@ -1029,8 +1029,6 @@ function! OnResized()
 	call STCUpd()
 endfunction
 
-au! VimEnter * echo 'type ' | echohl SpecialKey | echon ':intro<cr>' | echohl Normal | echon ' to see help'
-
 " Russian mappings
 map й q
 map ц w
@@ -1058,3 +1056,12 @@ map м v
 map и b
 map т n
 map ь m
+
+function s:PrintIntroHelp()
+	echo 'type ' | echohl SpecialKey | echon ':intro<cr>' | echohl Normal | echon ' to see help'
+endfunction
+if v:vim_did_enter
+	call s:PrintIntroHelp()
+else
+	au! SourcePost init.vim call s:PrintIntroHelp()
+endif
