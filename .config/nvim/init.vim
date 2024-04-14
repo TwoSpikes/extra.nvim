@@ -1070,11 +1070,15 @@ endif
 augroup LineNrForInactive
 	function! s:SaveStc(stc_was)
 		let &l:stc = ''
-		let g:stc_was = a:stc_was
+		exec printf("let g:stc_was_%d = a:stc_was", win_getid())
 	endfunction
 	au! WinLeave * call s:SaveStc(&l:stc)
 	function! s:LoadStc()
-		let &l:stc = g:stc_was
+		if exists("g:stc_was_"..win_getid())==#1
+			let &l:stc = eval("g:stc_was_"..win_getid())
+		else
+			let &l:stc = ''
+		endif
 	endfunction
 	au! WinEnter * call s:LoadStc()
 augroup END
