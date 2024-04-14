@@ -1066,3 +1066,15 @@ if v:vim_did_enter
 else
 	au! SourcePost init.vim call s:PrintIntroHelp()
 endif
+
+augroup LineNrForInactive
+	function! s:SaveStc(stc_was)
+		let &l:stc = ''
+		let g:stc_was = a:stc_was
+	endfunction
+	au! WinLeave * call s:SaveStc(&l:stc)
+	function! s:LoadStc()
+		let &l:stc = g:stc_was
+	endfunction
+	au! WinEnter * call s:LoadStc()
+augroup END
