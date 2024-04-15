@@ -49,6 +49,10 @@ set nonu
 set nornu
 function! STCRel()
 	if has('nvim')
+		if mode() ==? 'v'
+			let &l:stc = '%#CursorLineNrVisu#%{%v:relnum?"%#LineNr#":((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:relnum:""):""} '
+			return
+		endif
 		let &l:stc = '%#CursorLineNr#%{%v:relnum?"%#LineNr#":((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:relnum:""):""} '
 		call s:SaveStc(v:false)
 	else
@@ -65,11 +69,20 @@ function! STCAbs(actual_mode)
 			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrRepl#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} '
 			return
 		endif
+		if mode() ==? 'v'
+			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrVisu#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} '
+			return
+		endif
 		let &l:stc = '%{%v:relnum?"":"%#CursorLineNrIns#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} '
 	else
 		set nu nornu
 	endif
 endfunction
+augroup Visual
+	au! ModeChanged *:[vV]* call STCRel()
+	au! ModeChanged [vV]*:* call STCRel()
+augroup END
+
 function! STCNo()
 	setlocal stc= nonu nornu
 endfunction
@@ -192,7 +205,7 @@ function! Showtab()
 		if s:specmode == 'b'
 			let strmode = 'COM_BLOCK '
 		else
-			let strmode = '%#ModeCom#COMM '
+			let strmode = '%#ModeCom# '
 		endif
 	elseif mode == 'cv'
 		let strmode = 'EX   '
