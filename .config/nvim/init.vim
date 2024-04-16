@@ -134,7 +134,7 @@ function! GetGitBranch()
 endfunction
 function! Showtab()
 	let stl_name = '%<%t'
-	let stl_name .= '%( %#StatusLinemod#%M%R%H%W%)%*'
+	let stl_name .= '%( %* %#StatusLinemod#%M%R%H%W%)%*'
 	if &columns ># 40
 		let stl_name .= '%( %#StatusLinemod#'
 		let stl_name .= &syntax
@@ -241,7 +241,6 @@ function! Showtab()
 
 	let s:result = stl_mode_to_put
 	let s:result .= stl_name
-	let s:result .= ''
 	if &columns ># 30
 		let &showcmdloc = 'statusline'
 		let s:result .= ' '
