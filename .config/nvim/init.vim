@@ -1086,6 +1086,7 @@ augroup LineNrForInactive
 augroup END
 
 let g:floaterm_width = 1.0
+noremap <leader>z <cmd>FloatermNew lazygit<cr>
 
 if expand("%") == ""
 	edit ./
