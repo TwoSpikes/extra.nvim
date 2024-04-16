@@ -1085,6 +1085,8 @@ augroup LineNrForInactive
 	au! WinEnter * call s:LoadStc()
 augroup END
 
+let g:floaterm_width = 1.0
+
 if expand("%") == ""
 	edit ./
 endif
