@@ -574,6 +574,7 @@ if &t_Co >= 256
     hi CursorLineNrRepl ctermfg=15 ctermbg=128 cterm=bold guifg=#ffffff guibg=#af00df gui=bold
     hi CursorLineNrVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#ffffff guibg=#000087 gui=bold
     hi LineNr ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#ffffa0 guibg=#000000 gui=italic,reverse
+    hi LineNrIns ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#c0ffff guibg=#000000 gui=italic,reverse
     hi NonText ctermfg=247 ctermbg=NONE cterm=NONE
     hi FoldColumn ctermfg=247 ctermbg=NONE cterm=NONE
     hi EndOfBuffer ctermfg=247 ctermbg=NONE cterm=NONE
