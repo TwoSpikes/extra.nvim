@@ -84,7 +84,7 @@ _fE() {
 _df_c() {
     "${CLEAR_PROGRAM}"
 	"${CD_PROGRAM}" ~/dotfiles/
-	"${CP_PROGRAM}" ~/.dotfiles-setup.sh ~/dotfiles/
+	"${CP_PROGRAM}" ~/.dotfiles-script.sh ~/dotfiles/
 # Bashrc script and its dependencies
 	"${CP_PROGRAM}" ~/.dotfiles-script.sh ~/dotfiles/
 	"${CP_PROGRAM}" ~/.fr.sh ~/tsch.sh ~/inverting.sh ~/dotfiles/

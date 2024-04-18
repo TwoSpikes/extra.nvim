@@ -641,10 +641,10 @@ exec printf("noremap <silent> <leader>vlv <esc>:vsp %s<cr>", s:LSP_PLUGINS_SETUP
 exec printf("noremap <silent> <leader>vls <esc>:so %s<cr>", s:LSP_PLUGINS_SETUP_FILE_PATH)
 
 " BASHRC FILE
-noremap <silent> <leader>bt <esc>:tabe ~/.bashrc<cr>
-noremap <silent> <leader>bb <esc>:e ~/.bashrc<cr>
-noremap <silent> <leader>bh <esc>:sp ~/.bashrc<cr>
-noremap <silent> <leader>bv <esc>:vsp ~/.bashrc<cr>
+noremap <silent> <leader>bt <esc>:tabe ~/.dotfiles-script.sh<cr>
+noremap <silent> <leader>bb <esc>:e ~/.dotfiles-script.sh<cr>
+noremap <silent> <leader>bh <esc>:sp ~/.dotfiles-script.sh<cr>
+noremap <silent> <leader>bv <esc>:vsp ~/.dotfiles-script.sh<cr>
 
 autocmd BufReadPost *
      \ if line("'\"") > 0 && line("'\"") <= line("$") |

@@ -222,7 +222,8 @@ user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 case ${user_input} in
 	"y")
 		cp ${dotfiles}/.zshrc ${home}
-		cp ${dotfiles}/.bashrc ${home}
+		cp ${dotfiles}/.dotfiles-script.sh ${home}
+		cp ${dotfiles}/tsch.sh ${dotfiles}/.fr.sh ${dotfiles}/inverting.sh ${home}
 		cp -r ${dotfiles}/.shlibs/ ${home}
 		echo -n "Adding .bashrc to .profile ... "
 		echo ". ~/.dotfiles-script.sh" >> ~/.profile
@@ -427,6 +428,9 @@ case ${user_input} in
 		echo ""
 
 set -x
+		if [ ! -d ${home}/.config ]; then
+			mkdir ${home}/.config
+		fi
 		cp -r ${dotfiles}/.config/nvim ${home}/.config/${setting_editor_for}
 		if [ "${setting_editor_for}" = "nvim" ]; then
 			cp ${dotfiles}/blueorange.vim ${root}/usr/share/nvim/runtime/colors
@@ -537,6 +541,7 @@ if $git_found; then
 		*)
 			cp ${dotfiles}/.gitconfig-default ${home}
 			cp ${home}/.gitconfig-default ${home}/.gitconfig
+			cp ${dotfiles}/.gitmessage ${home}
 			
 			echo -n "Your Name: "
 			read user_input
