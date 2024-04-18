@@ -47,7 +47,7 @@ export PRINTF_PROGRAM='printf'
 export ALIAS_PROGRAM='alias'
 export SOURCE_PROGRAM='.'
 export CLEAR_PROGRAM='clear'
-export WHICH_PROGRAM='which'
+export WHICH_PROGRAM='type'
 
 MAX_INSTALL_ATTEMPT=2
 MAX_WGET_INSTALL_ATTEMPT=2
