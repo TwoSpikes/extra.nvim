@@ -225,11 +225,7 @@ case ${user_input} in
 		cp ${dotfiles}/.dotfiles-script.sh ${home}
 		cp ${dotfiles}/tsch.sh ${dotfiles}/.fr.sh ${dotfiles}/inverting.sh ${home}
 		cp -r ${dotfiles}/.shlibs/ ${home}
-		echo -n "Adding .bashrc to .profile ... "
-		echo ". ~/.dotfiles-script.sh" >> ~/.profile
-		echo "export ENV=$SHELL" >> .profile
-		echo ". ~/.dotfiles-script.sh"
-		echo "OK"
+		cp ${dotfiles}/.profile ${dotfiles}/.zprofile ${home}
 		;;
 	"exit"|"x"|"e"|"q")
 		echo "Abort"
@@ -313,10 +309,6 @@ case ${user_input} in
 		echo -n "Deleting tmp files... "
 		rm TMPFILE_EDITED
 		rm TMPFILE_DOWNLOADED
-		echo "OK"
-
-		echo -n "Adding .bashrc to .zshrc..."
-		echo ". ${home}/.bashrc" >> ${home}/.zshrc
 		echo "OK"
 		;;
 esac
@@ -558,6 +550,44 @@ else
 fi
 
 press_enter
+
+if [ ${OS} = "Termux" ]; then
+clear
+echo "==== Setupping termux ===="
+echo ""
+
+echo -n "Do you want to setup Termux? (Y/n): "
+read user_input
+user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+case ${user_input} in
+	"n")
+		;;
+	*)
+		cp -r ${dotfiles}/.termux/ ${home}/
+		if [ -e ${home}/.termux/colors.properties ]; then
+			rm ${home}/.termux/colors.properties
+		fi
+		;;
+esac
+
+echo -n "Do you want to install my Termux colorscheme? (y/N): "
+read user_input
+user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+case ${user_input} in
+	"y")
+		if [ ! -d ${home}/.termux ]; then
+			mkdir ${home}/.termux
+		fi
+		cp ${dotfiles}/.termux/colors.properties ${home}/.termux/
+		;;
+	*)
+		;;
+esac
+fi
+
+echo -n "Reloading Termux settings... "
+termux-reload-settings
+echo "OK"
 
 echo "Dotfiles setup ended successfully"
 echo "It is recommended to restart your shell"
