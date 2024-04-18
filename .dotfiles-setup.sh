@@ -223,10 +223,12 @@ case ${user_input} in
 	"y")
 		cp ${dotfiles}/.zshrc ${home}
 		cp ${dotfiles}/.bashrc ${home}
-		cp ${dotfiles}/checkhealth.sh ${home}
-		cp ${dotfiles}/funcname.sh ${home}
-		cp ${dotfiles}/timer.sh ${home}
-		cp ${dotfiles}/tsch.sh ${home}
+		cp -r ${dotfiles}/.shlibs/ ${home}
+		echo -n "Adding .bashrc to .profile ... "
+		echo ". ~/.dotfiles-script.sh" >> ~/.profile
+		echo "export ENV=$SHELL" >> .profile
+		echo ". ~/.dotfiles-script.sh"
+		echo "OK"
 		;;
 	"exit"|"x"|"e"|"q")
 		echo "Abort"
