@@ -74,9 +74,8 @@ This is NeoVim/Vim configuration
 <img src=.github/images/Screenshot_2024-04-13-18-21-05-51_84d3000e3f4017145260f7618db1d683.jpg>
 <img src=.github/images/Screenshot_2024-04-13-18-23-57-59_84d3000e3f4017145260f7618db1d683.jpg>
 
-### Note
-
-It works better in NeoVim,\
+> [!Note]
+> It works better in NeoVim,\
 and plugin manager does not work yet in version of Vim/NeoVim without Lua.
 
 #### Change to light theme
