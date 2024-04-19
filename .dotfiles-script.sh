@@ -17,6 +17,7 @@ export XDG_CONFIG_HOME="${HOME}/.config/"
 
 timer_start 'loading variables...'
 
+export VISUAL="nvim"
 export EDITOR='nvim'
 export PAGER='most'
 
