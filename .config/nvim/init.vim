@@ -12,6 +12,7 @@ set termguicolors
 set background=light
 exec printf("so %s", g:COLORSCHEME_PATH)
 set nolazyredraw
+set encoding=utf-8
 
 set helpheight=10
 set splitbelow
