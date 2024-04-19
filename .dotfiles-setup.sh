@@ -431,6 +431,10 @@ set -x
 			cp ${dotfiles}/blueorange.vim ${root}/usr/share/vim/vim90/colors
 			echo 'exec printf("source %s/.config/vim/init.vim", $HOME)' > ${home}/.vimrc
 		fi
+		if [ ! -d ${home}/bin ]; then
+			mkdir ${home}/bin
+		fi
+		cp ${dotfiles}/viman ${home}/bin/
 set +x
 
 	press_enter
