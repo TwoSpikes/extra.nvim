@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/bin/env sh
 
 #pdftk "$1" output - uncompress | \
 #awk '

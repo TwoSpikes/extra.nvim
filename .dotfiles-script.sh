@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/bin/env sh
 
 export HISTSIZE=5000
 export DISPLAY=":0"

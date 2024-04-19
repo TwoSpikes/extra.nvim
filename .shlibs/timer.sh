@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/bin/env sh
 
 [ ! -z "${INCLUDED_TIMER}" ] && return 0 || INCLUDED_TIMER=true
 

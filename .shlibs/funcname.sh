@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/bin/env sh
 
 [ ! -z "${INCLUDED_FUNCNAME}" ] && return 0 || INCLUDED_FUNCNAME=true
 

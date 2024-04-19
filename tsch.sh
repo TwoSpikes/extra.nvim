@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/bin/env sh
 
 tsch_fplus_run() {
 	if [ -f ~/fplus ]; then
