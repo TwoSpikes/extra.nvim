@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -e
+set +xe
 
 subcommands() {
 	echo "SUBCOMMANDS:"
@@ -30,6 +30,23 @@ press_enter() {
 	echo ""
 	echo -n "Press ENTER to continue: "
 	read user_input
+}
+install_package() {
+	if  test -z "${PACKAGE_COMMAND}"  && test -z "${package_manager_is_winget}"; then
+		echo "Please run determine_package_manager"
+		return 1
+	fi
+	stdpkg=${1}
+	wingetpkg=${2}
+	if test -z ${stdpkg} && test -z ${wingetpkg}; then
+		echo "Too few cmdline arguments"
+		return 1
+	fi
+	if ! $package_manager_is_winget; then
+		${PACKAGE_COMMAND} ${stdpkg}
+	else
+		winget install ${wingetpkg}
+	fi
 }
 
 if [ "${1}" = "--help" ] \
@@ -111,36 +128,48 @@ fi
 echo "Current system: ${OS}"
 echo "Current system version: ${VER}"
 
-if command -v "pkg" > /dev/null; then
-	PACKAGE_COMMAND="pkg install"
-elif command -v "apt" > /dev/null; then
-	PACKAGE_COMMAND="apt install"
-elif command -v "apt-get" > /dev/null; then
-	PACKAGE_COMMAND="apt-get install"
-elif command -v "pacman" > /dev/null; then
-	PACKAGE_COMMAND="pacman -Suy"
-elif command -v "zypper" > /dev/null; then
-	PACKAGE_COMMAND="zypper install"
-elif command -v "xbps-install" > /dev/null; then
-	PACKAGE_COMMAND="xbps-install"
-elif command -v "yum" > /dev/null; then
-	PACKAGE_COMMAND="yum install"
-elif command -v "aptitude" > /dev/null; then
-	PACKAGE_COMMAND="aptitude install"
-elif command -v "dnf" > /dev/null; then
-	PACKAGE_COMMAND="dnf install"
-elif command -v "emerge" > /dev/null; then
-	PACKAGE_COMMAND="emerge --ask --verbose"
-elif command -v "up2date" > /dev/null; then
-	PACKAGE_COMMAND="up2date"
-elif command -v "urpmi" > /dev/null; then
-	PACKAGE_COMMAND="urpmi"
-elif command -v "flatpak" > /dev/null; then
-	PACKAGE_COMMAND="flatpak install"
-elif command -v "snap" > /dev/null; then
-	PACKAGE_COMMAND="snap install"
-fi
-echo "Package command is: ${PACKAGE_COMMAND}"
+determine_package_manager() {
+	package_manager_is_winget=false
+	if command -v "pkg" > /dev/null; then
+		PACKAGE_COMMAND="pkg install"
+	elif command -v "apt" > /dev/null; then
+		PACKAGE_COMMAND="apt install"
+	elif command -v "apt-get" > /dev/null; then
+		PACKAGE_COMMAND="apt-get install"
+	elif command -v "winget" > /dev/null; then
+		package_manager_is_winget=true
+	elif command -v "pacman" > /dev/null; then
+		PACKAGE_COMMAND="pacman -Suy"
+	elif command -v "zypper" > /dev/null; then
+		PACKAGE_COMMAND="zypper install"
+	elif command -v "xbps-install" > /dev/null; then
+		PACKAGE_COMMAND="xbps-install"
+	elif command -v "yum" > /dev/null; then
+		PACKAGE_COMMAND="yum install"
+	elif command -v "aptitude" > /dev/null; then
+		PACKAGE_COMMAND="aptitude install"
+	elif command -v "dnf" > /dev/null; then
+		PACKAGE_COMMAND="dnf install"
+	elif command -v "emerge" > /dev/null; then
+		PACKAGE_COMMAND="emerge --ask --verbose"
+	elif command -v "up2date" > /dev/null; then
+		PACKAGE_COMMAND="up2date"
+	elif command -v "urpmi" > /dev/null; then
+		PACKAGE_COMMAND="urpmi"
+	elif command -v "flatpak" > /dev/null; then
+		PACKAGE_COMMAND="flatpak install"
+	elif command -v "snap" > /dev/null; then
+		PACKAGE_COMMAND="snap install"
+	fi
+	if $package_manager_is_winget; then
+		echo "Package manager is winget"
+	else
+		echo "Package command is: ${PACKAGE_COMMAND}"
+	fi
+	export PACKAGE_COMMAND
+	export package_manager_is_winget
+}
+determine_package_manager
 
 echo ""
 
@@ -249,7 +278,7 @@ if ! command -v zsh > /dev/null; then
 		"n")
 			;;
 		*)
-			${PACKAGE_COMMAND} zsh
+			install_package zsh
 			;;
 	esac
 fi
@@ -372,6 +401,12 @@ clear
 echo "==== Setting config for editor: ${setting_editor_for} ===="
 echo ""
 
+if test "${setting_editor_for}" = "vim"; then
+	VIMRUNTIME=${root}/share/vim/vim*
+else
+	VIMRUNTIME=${root}/share/nvim/runtime
+fi
+
 echo -n "That is right? (y/N): "
 read user_input
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
@@ -424,11 +459,8 @@ set -x
 			mkdir ${home}/.config
 		fi
 		cp -r ${dotfiles}/.config/nvim ${home}/.config/${setting_editor_for}
-		if [ "${setting_editor_for}" = "nvim" ]; then
-			cp ${dotfiles}/blueorange.vim ${root}/usr/share/nvim/runtime/colors
-		fi
+		cp ${dotfiles}/blueorange.vim ${VIMRUNTIME}/colors
 		if [ "${setting_editor_for}" = "vim" ]; then
-			cp ${dotfiles}/blueorange.vim ${root}/usr/share/vim/vim90/colors
 			echo 'exec printf("source %s/.config/vim/init.vim", $HOME)' > ${home}/.vimrc
 		fi
 		if [ ! -d ${home}/bin ]; then
