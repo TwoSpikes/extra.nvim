@@ -151,7 +151,7 @@ determine_package_manager() {
 	elif command -v "zypper" > /dev/null; then
 		PACKAGE_COMMAND="zypper install"
 	elif command -v "xbps-install" > /dev/null; then
-		PACKAGE_COMMAND="xbps-install"
+		PACKAGE_COMMAND="xbps-install -S"
 	elif command -v "yum" > /dev/null; then
 		PACKAGE_COMMAND="yum install"
 	elif command -v "aptitude" > /dev/null; then
