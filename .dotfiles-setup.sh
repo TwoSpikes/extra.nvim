@@ -410,9 +410,9 @@ echo "==== Setting config for editor: ${setting_editor_for} ===="
 echo ""
 
 if test "${setting_editor_for}" = "vim"; then
-	VIMRUNTIME=${root}/share/vim/vim*
+	VIMRUNTIME=${root}/usr//share/vim/vim*
 else
-	VIMRUNTIME=${root}/share/nvim/runtime
+	VIMRUNTIME=${root}/usr/share/nvim/runtime
 fi
 
 echo -n "That is right? (y/N): "
