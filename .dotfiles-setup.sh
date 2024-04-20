@@ -627,11 +627,11 @@ case ${user_input} in
 	*)
 		;;
 esac
-fi
 
 echo -n "Reloading Termux settings... "
 termux-reload-settings
 echo "OK"
+fi
 
 echo "Dotfiles setup ended successfully"
 echo "It is recommended to restart your shell"
