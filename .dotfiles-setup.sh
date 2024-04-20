@@ -32,7 +32,7 @@ press_enter() {
 	read user_input
 }
 install_package() {
-	if  test -z "${PACKAGE_COMMAND}"  && test -z "${package_manager_is_winget}"; then
+	if  test -z "${PACKAGE_COMMAND}" || test -z "${package_manager_is_winget}"; then
 		echo "Please run determine_package_manager"
 		return 1
 	fi
@@ -43,8 +43,16 @@ install_package() {
 		return 1
 	fi
 	if ! $package_manager_is_winget; then
+		if test -z ${stdpkg}; then
+			echo "Package to install is not defined"
+			return 1
+		fi
 		${PACKAGE_COMMAND} ${stdpkg}
 	else
+		if test -z ${wingetpkg}; then
+			echo "Package to install with winget is not defined"
+			return 1
+		fi
 		winget install ${wingetpkg}
 	fi
 }
