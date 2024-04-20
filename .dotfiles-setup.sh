@@ -164,6 +164,8 @@ determine_package_manager() {
 		PACKAGE_COMMAND="up2date"
 	elif command -v "urpmi" > /dev/null; then
 		PACKAGE_COMMAND="urpmi"
+	elif command -v "slackpkg" > /dev/null; then
+		PACKAGE_COMMAND="slackpkg"
 	elif command -v "flatpak" > /dev/null; then
 		PACKAGE_COMMAND="flatpak install"
 	elif command -v "snap" > /dev/null; then
