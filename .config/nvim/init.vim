@@ -772,16 +772,21 @@ noremap <silent> <leader>d <esc>:noh<cr>
 tnoremap <c-]> <c-\><esc>
 
 " TERMINAL
-function OpenTerm()
-	terminal
+function! OpenTerm(cmd)
+	if a:cmd ==# ""
+		exec printf("terminal %s", $SHELL." -l")
+	else
+		exec printf("terminal %s", a:cmd)
+	endif
 	setlocal statuscolumn=
 	setlocal nonu nornu
 	startinsert
 endfunction
-noremap <silent> <leader>tt <cmd>tabnew<cr><cmd>call OpenTerm()<cr>
-noremap <silent> <leader>tb <cmd>call OpenTerm()<cr>
-noremap <silent> <leader>th <cmd>split<cr><cmd>call OpenTerm()<cr>
-noremap <silent> <leader>tv <cmd>vsplit<cr><cmd>call OpenTerm()<cr>
+noremap <silent> <leader>tt <cmd>tabnew<cr><cmd>call OpenTerm("")<cr>
+noremap <silent> <leader>tb <cmd>call OpenTerm("")<cr>
+noremap <silent> <leader>th <cmd>split<cr><cmd>call OpenTerm("")<cr>
+noremap <silent> <leader>tv <cmd>vsplit<cr><cmd>call OpenTerm("")<cr>
+exec printf("noremap <silent> <leader>tf <cmd>FloatermNew %s -l<cr>", $SHELL)
 " noremap <silent> <leader>tct <c-\><c-n>:q\|tabnew\|ter<cr>a
 
 " COLORSCHEME
@@ -914,7 +919,7 @@ inoremap <silent> jK <esc>
 inoremap <silent> JK <esc>:w<cr>
 inoremap <silent> Jk <esc>
 tnoremap <silent> jk <c-\><c-n>
-tnoremap <silent> jK <c-\><c-n>:bd!<Bar>tabnew<Bar>call OpenTerm()<cr>
+tnoremap <silent> jK <c-\><c-n>:bd!<Bar>tabnew<Bar>call OpenTerm("")<cr>
 command! W w
 
 inoremap <silent> ju <esc>viwUea
@@ -1087,7 +1092,16 @@ augroup LineNrForInactive
 augroup END
 
 let g:floaterm_width = 1.0
-noremap <leader>z <cmd>FloatermNew lazygit<cr>
+noremap <leader>zt <cmd>tabnew<cr><cmd>call OpenTerm("lazygit")<cr>
+noremap <leader>zb <cmd>call OpenTerm("lazygit")<cr>
+noremap <leader>zh <cmd>split<cr><cmd>call OpenTerm("lazygit")<cr>
+noremap <leader>zv <cmd>vsplit<cr><cmd>call OpenTerm("lazygit")<cr>
+noremap <leader>zf <cmd>FloatermNew lazygit<cr>
+noremap <leader>mt <cmd>tabnew<cr><cmd>call OpenTerm("mc")<cr>
+noremap <leader>mb <cmd>call OpenTerm("mc")<cr>
+noremap <leader>mh <cmd>split<cr><cmd>call OpenTerm("mc")<cr>
+noremap <leader>mv <cmd>vsplit<cr><cmd>call OpenTerm("mc")<cr>
+noremap <leader>mf <cmd>FloatermNew mc<cr>
 
 if expand("%") == ""
 	edit ./
