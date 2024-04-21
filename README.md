@@ -27,19 +27,19 @@ $ yes | sh .dotfiles-setup.sh .
 
 # Manual installation
 
-## .bashrc
+## .dotfiles-setup.sh
 
 ### Installation
 
 Warning: you need to be in this repositiory directory
 ```console
-$ cp ./.bashrc ~/
+$ cp ./.dotfiles-setup.sh ~/
 ```
 
 Then you need to restart your shell
 
 ```console
-$ exec $SHELL
+$ exec $SHELL -l
 ```
 
 ## .gitconfig-default .gitmessage
@@ -76,7 +76,7 @@ This is NeoVim/Vim configuration
 
 > [!Note]
 > It works better in NeoVim,\
-and plugin manager does not work yet in version of Vim/NeoVim without Lua.
+and packer.nvim does not work yet in version of Vim/NeoVim without Lua.
 
 #### Change to light theme
 
