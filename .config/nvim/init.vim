@@ -169,7 +169,7 @@ function! Showtab()
 	elseif mode == 'ntT'
 		let strmode = '^\^o norm TERM '
 	elseif mode == 'v'
-		let strmode = '%#ModeVisu#VISU '
+		let strmode = '%#ModeVisu# '
 	elseif mode == 'V'
 		let strmode = 'VIS_LINE '
 	elseif mode == 'vs'
