@@ -15,6 +15,42 @@ if !exists("CONFIG_PATH")
   g:CONFIG_PATH = "$HOME/.config/nvim"
 endif
 
+function! ReturnHighlightTerm(group, term)
+   " Store output of group to variable
+   let output = execute('hi ' . a:group)
+
+   " Find the term we're looking for
+   return matchstr(output, a:term.'=\zs\S*')
+endfunction
+
+function! CopyHighlightGroup(src, dst)
+  let ctermfg = ReturnHighlightTerm(a:src, "ctermfg")
+  if ctermfg ==# ""
+    let ctermfg = "NONE"
+  endif
+  let ctermbg = ReturnHighlightTerm(a:src, "ctermbg")
+  if ctermbg ==# ""
+    let ctermbg = "NONE"
+  endif
+  let cterm = ReturnHighlightTerm(a:src, "cterm")
+  if cterm ==# ""
+    let cterm = "NONE"
+  endif
+  let guifg = ReturnHighlightTerm(a:src, "guifg")
+  if guifg ==# ""
+    let guifg = "NONE"
+  endif
+  let guibg = ReturnHighlightTerm(a:src, "guibg")
+  if guibg ==# ""
+    let guibg = "NONE"
+  endif
+  let gui = ReturnHighlightTerm(a:src, "gui")
+  if gui ==# ""
+    let gui = "NONE"
+  endif
+  exec printf("hi %s ctermfg=%s ctermbg=%s cterm=%s guifg=%s guibg=%s gui=%s", a:dst, ctermfg, ctermbg, cterm, guifg, guibg, gui)
+endfunction
+
 hi CursorNormal guifg=NONE guibg=#ffaf00 gui=NONE cterm=NONE
 hi CursorInsert guifg=NONE guibg=#00afff gui=NONE cterm=NONE
 hi CursorReplace ctermfg=15 ctermbg=128 cterm=bold guifg=#ffffff guibg=#af00df gui=bold
@@ -567,8 +603,13 @@ if &t_Co >= 256
     hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#00c0ff guibg=#f0f000 gui=reverse,bold
     hi ToolbarLine ctermfg=NONE ctermbg=NONE cterm=NONE
     hi ToolbarButton ctermfg=231 ctermbg=16 cterm=NONE
-    hi Keyword ctermfg=220 ctermbg=NONE cterm=NONE guifg=#000000 guibg=#ffdf00 gui=NONE
-    hi Statement ctermfg=228 ctermbg=NONE cterm=NONE guifg=#ffff87 guibg=#000000 gui=reverse
+    hi KeywordNorm ctermfg=220 ctermbg=NONE cterm=NONE guifg=#000000 guibg=#ffdf00 gui=NONE
+    hi KeywordIns ctermfg=220 ctermbg=NONE cterm=NONE guifg=#000000 guibg=#c0ffff gui=NONE
+    call CopyHighlightGroup("KeywordNorm", "Keyword")
+    hi StatementNorm ctermfg=228 ctermbg=NONE cterm=NONE guifg=#ffff87 guibg=#000000 gui=reverse
+    hi StatementIns ctermfg=220 ctermbg=NONE cterm=NONE guifg=#000000 guibg=#d0efff gui=NONE
+    hi StatementVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#000000 guibg=#b0cfff gui=NONE
+    call CopyHighlightGroup("StatementNorm", "Statement")
     hi QuickFixLine ctermfg=231 ctermbg=32 cterm=NONE
     hi CursorLineNr ctermfg=220 ctermbg=236 cterm=bold,reverse guifg=#ffffff guibg=#ffaf00 gui=bold
     hi CursorLineNrIns ctermfg=15 ctermbg=39 cterm=bold guifg=#ffffff guibg=#00afff gui=bold
@@ -576,6 +617,7 @@ if &t_Co >= 256
     hi CursorLineNrVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#ffffff guibg=#000087 gui=bold
     hi LineNr ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#ffffa0 guibg=#000000 gui=italic,reverse
     hi LineNrIns ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#c0ffff guibg=#000000 gui=italic,reverse
+    hi LineNrVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#000000 guibg=#b0cfff gui=italic
     hi NonText ctermfg=247 ctermbg=NONE cterm=NONE
     hi FoldColumn ctermfg=247 ctermbg=NONE cterm=NONE
     hi EndOfBuffer ctermfg=247 ctermbg=NONE cterm=NONE
@@ -616,7 +658,6 @@ if &t_Co >= 256
     hi Constant ctermfg=127 ctermbg=NONE cterm=NONE
     hi String ctermfg=130 ctermbg=NONE cterm=NONE
     hi Identifier ctermfg=NONE ctermbg=NONE cterm=NONE
-    hi Statement ctermfg=16 ctermbg=NONE cterm=bold
     hi Type ctermfg=28 ctermbg=NONE cterm=NONE
     hi PreProc ctermfg=23 ctermbg=NONE cterm=NONE
     hi Special ctermfg=30 ctermbg=NONE cterm=NONE

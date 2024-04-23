@@ -46,15 +46,53 @@ function! SynStack()
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
 
+function! ReturnHighlightTerm(group, term)
+   " Store output of group to variable
+   let output = execute('hi ' . a:group)
+
+   " Find the term we're looking for
+   return matchstr(output, a:term.'=\zs\S*')
+endfunction
+
+function! CopyHighlightGroup(src, dst)
+	let ctermfg = ReturnHighlightTerm(a:src, "ctermfg")
+	if ctermfg ==# ""
+		let ctermfg = "NONE"
+	endif
+	let ctermbg = ReturnHighlightTerm(a:src, "ctermbg")
+	if ctermbg ==# ""
+		let ctermbg = "NONE"
+	endif
+	let cterm = ReturnHighlightTerm(a:src, "cterm")
+	if cterm ==# ""
+		let cterm = "NONE"
+	endif
+	let guifg = ReturnHighlightTerm(a:src, "guifg")
+	if guifg ==# ""
+		let guifg = "NONE"
+	endif
+	let guibg = ReturnHighlightTerm(a:src, "guibg")
+	if guibg ==# ""
+		let guibg = "NONE"
+	endif
+	let gui = ReturnHighlightTerm(a:src, "gui")
+	if gui ==# ""
+		let gui = "NONE"
+	endif
+	exec printf("hi %s ctermfg=%s ctermbg=%s cterm=%s guifg=%s guibg=%s gui=%s", a:dst, ctermfg, ctermbg, cterm, guifg, guibg, gui)
+endfunction
+
 set nonu
 set nornu
 function! STCRel()
 	if has('nvim')
 		if mode() ==? 'v'
-			let &l:stc = '%#CursorLineNrVisu#%{%v:relnum?"%#LineNr#":((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:relnum:""):""} '
+			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrVisu#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNrVisu#%=".((v:virtnum <= 0)?v:lnum:""):""%} '
+			call CopyHighlightGroup("StatementVisu", "Statement")
 			return
 		endif
 		let &l:stc = '%#CursorLineNr#%{%v:relnum?"%#LineNr#":((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:relnum:""):""} '
+		call CopyHighlightGroup("StatementNorm", "Statement")
 		call s:SaveStc(v:false)
 	else
 		set nu rnu
@@ -64,6 +102,7 @@ function! STCAbs(actual_mode)
 	if has('nvim')
 		if a:actual_mode ==# ''
 			let &l:stc = '%{%v:relnum?"v:"%#CursorLineNr#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} '
+			call CopyHighlightGroup("StatementNorm", "Statement")
 			return
 		endif
 		if a:actual_mode ==# 'r'
@@ -75,6 +114,7 @@ function! STCAbs(actual_mode)
 			return
 		endif
 		let &l:stc = '%{%v:relnum?"":"%#CursorLineNrIns#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNrIns#%=".((v:virtnum <= 0)?v:lnum:""):""%} '
+		call CopyHighlightGroup("StatementIns", "Statement")
 	else
 		set nu nornu
 	endif
