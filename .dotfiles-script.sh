@@ -71,10 +71,7 @@ q() {
 	fi
 	"${EXIT_PROGRAM}" ${actual_exitcode}
 }
-ald() { ${EDITOR} ~/.bashrc; }
-_f() { "${CD_PROGRAM}" ~/fplus; }
-_fe() { .f; ${EDITOR} ./main.rs; }
-_fr() { ~/.fr.sh ${@:1}; }
+eb() { exec bash --noprofile --init-file <(echo 'clear'); }
 _fE() {
     "${CLEAR_PROGRAM}"
 	"${RUST_BUILD_RELEASE_COMMAND}" &> temp_file
