@@ -70,7 +70,7 @@ function! STCAbs(actual_mode)
 			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrRepl#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} '
 			return
 		endif
-		if mode() ==? 'v'
+		if mode() ==? 'v' && &modifiable
 			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrVisu#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} '
 			return
 		endif
@@ -80,8 +80,8 @@ function! STCAbs(actual_mode)
 	endif
 endfunction
 augroup Visual
-	au! ModeChanged *:[vV]* call STCRel()
-	au! ModeChanged [vV]*:* call STCRel()
+	au! ModeChanged *:[vV]* call Numbertoggle_stcrel()
+	au! ModeChanged [vV]*:* call Numbertoggle_stcrel()
 augroup END
 
 function! STCNo()
