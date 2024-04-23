@@ -323,15 +323,13 @@ case ${user_input} in
 	"n")
 		;;
 	*)
-		#if command -v curl >/dev/null 2>&1; then
-		#	sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
-		#else
-		#	sh -c "$(wget -O- https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install)"
-		#fi
-
 		echo -n "Fetching zsh4humans... "
 		TMPFILE_DOWNLOADED=mktemp
-		wget -O TMPFILE_DOWNLOADED https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install
+		if command -v curl >/dev/null 2>&1; then
+			curl -fsSLo TMPFILE_DOWNLOADED https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install
+		else
+			wget -O TMPFILE_DOWNLOADED https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install
+		fi
 		chmod +x TMPFILE_DOWNLOADED
 		echo "OK"
 
@@ -348,6 +346,8 @@ case ${user_input} in
 		echo -n "Deleting tmp files... "
 		rm TMPFILE_EDITED
 		rm TMPFILE_DOWNLOADED
+		unset TMPFILE_EDITED
+		unset TMPFILE_DOWNLOADED
 		echo "OK"
 		;;
 esac
