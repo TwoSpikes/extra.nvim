@@ -89,6 +89,7 @@ _df_c() {
 	"${CP_PROGRAM}" ~/.fr.sh ~/tsch.sh ~/inverting.sh ~/dotfiles/
 	"${CP_PROGRAM}" -r ~/.shlibs/ ~/dotfiles/
 	"${CP_PROGRAM}" ~/.profile ~/.zprofile ~/dotfiles/
+	"${CP_PROGRAM}" ~/.bashrc ~/.zshrc ~/dotfiles/
 ## Vim/NeoVim configs
     "${CP_PROGRAM}" ~/.config/nvim/init.vim ~/dotfiles/.config/nvim/
     "${CP_PROGRAM}" -r ~/.config/nvim/lua/ ~/dotfiles/.config/nvim/
