@@ -15,7 +15,7 @@ export XDG_CONFIG_HOME="${HOME}/.config/"
 . ~/.shlibs/checkhealth.sh
 . ~/.shlibs/colors.sh
 
-timer_start 'loading variables...'
+timer_start_silent
 
 export VISUAL="nvim"
 export EDITOR='nvim'
@@ -55,10 +55,6 @@ MAX_INSTALL_ATTEMPT=2
 MAX_WGET_INSTALL_ATTEMPT=2
 DEFAULT_INSTALL_COMMAND='install'
 DEFAULT_SEARCH_COMMAND='search'
-
-timer_end
-
-timer_start 'loading functions...'
 
 al() { "${ALIAS_PROGRAM}"; }
 q() {
@@ -211,9 +207,9 @@ try_install() {
 	return -1
 }
 
-timer_end
+timer_end_silent
 
-timer_total_time
+timer_total_time "dotfiles loading time"
 
 print_todo() {
 	if [ -f ~/todo ]; then
@@ -224,7 +220,9 @@ print_todo() {
 			"${CAT_PROGRAM}" ~/todo
 		fi
 	else
-		"${PRINTF_PROGRAM}" "$(basename ${0}): ${RED_COLOR}error${RESET_COLOR}: ${RED_COLOR}todo file does not exist${RESET_COLOR}\n"
+		if false; then
+			"${PRINTF_PROGRAM}" "$(basename ${0}): ${RED_COLOR}error${RESET_COLOR}: ${RED_COLOR}todo file does not exist${RESET_COLOR}\n"
+		fi
 	fi
 }
 if [ $BASHRC_ALREADY_LOADED='' ]; then

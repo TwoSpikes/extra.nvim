@@ -13,23 +13,31 @@ to_timer_human_time() {
 	fi
 	echo "${INPUT_TIME} ms"
 }
+timer_start_silent() {
+	START=$(date +%s%N)
+}
 timer_start() {
 	TIMER_START_MESSAGE="${1}"
 
+	timer_start_silent
+
 	# echo -n "$(base_program): $(func_name): note: ${TIMER_START_MESSAGE}"
 	echo -n "[INFO] ${TIMER_START_MESSAGE}"
-	START=$(date +%s%N)
 }
 timer_startln() {
 	timer_start "${1}"
 	echo ""
 }
-timer_end() {
+timer_end_silent() {
 	END=$(date +%s%N)
 	TOOK=$(((END - START) / 1000000))
 	HUMAN_TOOK=$(to_timer_human_time ${TOOK})
-	printf " (took ${YELLOW_COLOR}${HUMAN_TOOK}${RESET_COLOR})\n"
 	export ALL_TIME=$((ALL_TIME + TOOK))
+}
+timer_end() {
+	timer_end_silent
+
+	printf " (took ${YELLOW_COLOR}${HUMAN_TOOK}${RESET_COLOR})\n"
 }
 timer_endln() {
 	END=$(date +%s%N)
@@ -39,7 +47,9 @@ timer_endln() {
 	export ALL_TIME=$((ALL_TIME + TOOK))
 }
 timer_total_time() {
+	MSG="${1}"
+
 	# echo "$(base_program): $(func_name): note: ${ALL_TIME} ms"
-	printf "[INFO] total time: ${YELLOW_COLOR}${ALL_TIME} ms${RESET_COLOR}\n"
+	printf "[INFO] ${MSG}: ${YELLOW_COLOR}${ALL_TIME} ms${RESET_COLOR}\n"
 	export ALL_TIME=0
 }
