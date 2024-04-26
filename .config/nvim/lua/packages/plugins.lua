@@ -59,10 +59,13 @@ return require('packer').startup(function (use)
 		'preservim/nerdtree',
 	}
 	use {
+		'Xuyuanp/nerdtree-git-plugin',
+	}
+	use {
 		'ryanoasis/vim-devicons',
 	}
 	use {
-		'Xuyuanp/nerdtree-git-plugin',
+		'PhilRunninger/nerdtree-visual-selection',
 	}
 	use {
 		'skywind3000/vim-quickui',
