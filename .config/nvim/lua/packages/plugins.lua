@@ -56,6 +56,15 @@ return require('packer').startup(function (use)
 		'preservim/tagbar',
 	}
 	use {
+		'preservim/nerdtree',
+	}
+	use {
+		'ryanoasis/vim-devicons',
+	}
+	use {
+		'Xuyuanp/nerdtree-git-plugin',
+	}
+	use {
 		'skywind3000/vim-quickui',
 	}
 	use {

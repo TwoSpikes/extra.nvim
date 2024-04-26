@@ -370,6 +370,21 @@ inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+                \ 'Modified'  :'✹',
+                \ 'Staged'    :'✚',
+                \ 'Untracked' :'✭',
+                \ 'Renamed'   :'➜',
+                \ 'Unmerged'  :'═',
+                \ 'Deleted'   :'✖',
+                \ 'Dirty'     :'✗',
+                \ 'Ignored'   :'☒',
+                \ 'Clean'     :'✔︎',
+                \ 'Unknown'   :'?',
+                \ }
+let g:NERDTreeGitStatusUseNerdFonts = 1
+let g:NERDTreeGitStatusShowIgnored = 1
+
 augroup numbertoggle
 	autocmd!
 	function! Numbertoggle_stcabs()
@@ -886,6 +901,7 @@ augroup END
 augroup netrw
 	au!
 	au filetype netrw setlocal nocursorcolumn
+	au filetype nerdtree setlocal nocursorcolumn
 augroup END
 augroup terminal
 	au!
