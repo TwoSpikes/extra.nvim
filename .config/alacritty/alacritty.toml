@@ -1,0 +1,10 @@
+import = [
+  "~/.config/alacritty/themes/themes/solarized_light.toml"
+]
+
+[font]
+normal.family = "JetBrainsMonoNL Nerd Font"
+bold.family = "JetBrainsMonoNL Nerd Font"
+italic.family = "JetBrainsMonoNL Nerd Font"
+bold_italic.family = "JetBrainsMonoNL Nerd Font"
+size = 11
