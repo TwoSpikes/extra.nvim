@@ -909,7 +909,7 @@ augroup terminal
 augroup END
 augroup visual
 	function! HandleBuftype()
-		let &cursorcolumn = mode() !~# "[vVirco]" && !s:fullscreen && &filetype !=# 'netrw' && &buftype !=# 'terminal'
+		let &cursorcolumn = mode() !~# "[vVirco]" && !s:fullscreen && &filetype !=# 'netrw' && &buftype !=# 'terminal' && &filetype !=# 'nerdtree'
 		let &cursorline = mode() !~# "[irco]" && !s:fullscreen && &buftype !=# 'terminal'
 	endfunction
 	au ModeChanged,BufWinEnter * call HandleBuftype()
