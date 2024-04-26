@@ -75,6 +75,9 @@ return require('packer').startup(function (use)
 		branch = 'release',
 	}
 	use {
+		'neoclide/vim-jsx-improve',
+	}
+	use {
 		'voldikss/vim-floaterm',
 	}
 	use {
