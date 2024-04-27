@@ -102,6 +102,7 @@ _df_c() {
 	"${CP_PROGRAM}" ~/.gitconfig-default ~/.gitmessage ~/dotfiles/
 ## Termux
 	"${CP_PROGRAM}" ~/.termux/colors.properties ~/dotfiles/.termux/
+	"${CP_PROGRAM}" ~/.termux/termux.properties ~/dotfiles/.termux/
 ## Alacritty
 	"${CP_PROGRAM}" -r ~/.config/alacritty/ ~/dotfiles/.config/
 # Commit
