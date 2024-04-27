@@ -389,6 +389,7 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ }
 let g:NERDTreeGitStatusUseNerdFonts = 1
 let g:NERDTreeGitStatusShowIgnored = 1
+noremap <c-n> <cmd>NERDTreeToggle<cr>
 
 augroup numbertoggle
 	autocmd!
