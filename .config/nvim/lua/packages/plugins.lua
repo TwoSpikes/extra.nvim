@@ -83,4 +83,7 @@ return require('packer').startup(function (use)
 	use {
 		'https://github.com/vim-utils/vim-man',
 	}
+	use {
+		'tpope/vim-surround'
+	}
 end)
