@@ -1183,7 +1183,6 @@ noremap <leader>mf <cmd>FloatermNew mc<cr>
 
 function! g:TermuxSaveCursorStyle()
 	if $TERMUX_VERSION !=# "" && filereadable(expand("~/.termux/termux.properties"))
-		set lazyredraw
 		let TMPFILE=trim(system(["mktemp", "-u"]))
 		call system(["cp", expand("~/.termux/termux.properties"), TMPFILE])
 		call system(["sed", "-i", "s/ *= */=/", TMPFILE])
