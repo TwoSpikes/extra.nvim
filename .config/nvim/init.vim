@@ -1181,6 +1181,31 @@ noremap <leader>mh <cmd>split<cr><cmd>call OpenTerm("mc")<cr>
 noremap <leader>mv <cmd>vsplit<cr><cmd>call OpenTerm("mc")<cr>
 noremap <leader>mf <cmd>FloatermNew mc<cr>
 
+function! g:TermuxSaveCursorStyle()
+	if $TERMUX_VERSION !=# "" && filereadable(expand("~/.termux/termux.properties"))
+		set lazyredraw
+		let TMPFILE=trim(system(["mktemp", "-u"]))
+		call system(["cp", expand("~/.termux/termux.properties"), TMPFILE])
+		call system(["sed", "-i", "s/ *= */=/", TMPFILE])
+		call system(["sed", "-i", "s/-/_/g", TMPFILE])
+		call writefile(["echo $terminal_cursor_style"], TMPFILE, "a")
+		let g:termux_cursor_style = trim(system(TMPFILE))
+		call system([TMPFILE])
+		call system(["rm", TMPFILE])
+	endif
+endfunction
+function! g:TermuxLoadCursorStyle()
+	if g:termux_cursor_style ==# "block"
+		let &guicursor = "a:block"
+	elseif g:termux_cursor_style ==# "bar"
+		let &guicursor = "a:ver25"
+	elseif g:termux_cursor_style ==# "underline"
+		let &guicursor = "a:hor25"
+	endif
+endfunction
+au! VimEnter * call g:TermuxSaveCursorStyle()
+au! VimLeave * call g:TermuxLoadCursorStyle()
+
 if expand("%") == ""
 	edit ./
 endif
