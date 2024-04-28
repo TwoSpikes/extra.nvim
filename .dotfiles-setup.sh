@@ -630,6 +630,20 @@ case ${user_input} in
 		;;
 esac
 
+echo -n "Do you want to install my Termux settings? (Y/n): "
+read user_input
+user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+case ${user_input} in
+	"n")
+		;;
+	*)
+		if [ ! -d ${home}/.termux ]; then
+			mkdir ${home}/.termux
+		fi
+		cp ${dotfiles}/.termux/termux.properties ${home}/.termux/
+		;;
+esac
+
 echo -n "Reloading Termux settings... "
 termux-reload-settings
 echo "OK"
