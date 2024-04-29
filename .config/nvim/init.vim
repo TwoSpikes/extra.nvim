@@ -1184,13 +1184,22 @@ noremap <leader>mf <cmd>FloatermNew mc<cr>
 
 function! g:TermuxSaveCursorStyle()
 	if $TERMUX_VERSION !=# "" && filereadable(expand("~/.termux/termux.properties"))
-		let TMPFILE=trim(system(["mktemp", "-u"]))
-		call system(["cp", expand("~/.termux/termux.properties"), TMPFILE])
-		call system(["sed", "-i", "s/ *= */=/", TMPFILE])
-		call system(["sed", "-i", "s/-/_/g", TMPFILE])
-		call writefile(["echo $terminal_cursor_style"], TMPFILE, "a")
-		let g:termux_cursor_style = trim(system(TMPFILE))
-		call system(["rm", TMPFILE])
+		if !filereadable(expand("~/.cache/dotfiles/termux/terminal_cursor_style"))
+			let TMPFILE=trim(system(["mktemp", "-u"]))
+			call system(["cp", expand("~/.termux/termux.properties"), TMPFILE])
+			call system(["sed", "-i", "s/ *= */=/", TMPFILE])
+			call system(["sed", "-i", "s/-/_/g", TMPFILE])
+			call writefile(["echo $terminal_cursor_style"], TMPFILE, "a")
+			let g:termux_cursor_style = trim(system(TMPFILE))
+			if !isdirectory(expand("~/.cache/dotfiles/nvim"))
+				call mkdir(expand("~/.cache/dotfiles/nvim"), "p", 0700)
+			endif
+			call writefile([g:termux_cursor_style], expand("~/.cache/dotfiles/nvim/terminal_cursor_style"), "")
+			call system(["rm", TMPFILE])
+		else
+			let g:termux_cursor_style = trim(readfile(expand("~/.cache/dotfiles/nvim/terminal_cursor_style"))[0])
+			echo g:termux_cursor_style
+		endif
 	endif
 endfunction
 function! g:TermuxLoadCursorStyle()
