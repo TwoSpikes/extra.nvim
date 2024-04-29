@@ -1191,24 +1191,25 @@ function! g:TermuxSaveCursorStyle()
 			call system(["sed", "-i", "s/-/_/g", TMPFILE])
 			call writefile(["echo $terminal_cursor_style"], TMPFILE, "a")
 			let g:termux_cursor_style = trim(system(TMPFILE))
-			if !isdirectory(expand("~/.cache/dotfiles/nvim"))
-				call mkdir(expand("~/.cache/dotfiles/nvim"), "p", 0700)
+			if !isdirectory(expand("~/.cache/dotfiles/termux"))
+				call mkdir(expand("~/.cache/dotfiles/termux"), "p", 0700)
 			endif
-			call writefile([g:termux_cursor_style], expand("~/.cache/dotfiles/nvim/terminal_cursor_style"), "")
+			call writefile([g:termux_cursor_style], expand("~/.cache/dotfiles/termux/terminal_cursor_style"), "")
 			call system(["rm", TMPFILE])
 		else
-			let g:termux_cursor_style = trim(readfile(expand("~/.cache/dotfiles/nvim/terminal_cursor_style"))[0])
-			echo g:termux_cursor_style
+			let g:termux_cursor_style = trim(readfile(expand("~/.cache/dotfiles/termux/terminal_cursor_style"))[0])
 		endif
 	endif
 endfunction
 function! g:TermuxLoadCursorStyle()
-	if g:termux_cursor_style ==# "block"
-		let &guicursor = "a:block"
-	elseif g:termux_cursor_style ==# "bar"
-		let &guicursor = "a:ver25"
-	elseif g:termux_cursor_style ==# "underline"
-		let &guicursor = "a:hor25"
+	if $TERMUX_VERSION !=# "" && filereadable(expand("~/.termux/termux.properties")) && exists("g:termux_cursor_style")
+		if g:termux_cursor_style ==# "block"
+			let &guicursor = "a:block"
+		elseif g:termux_cursor_style ==# "bar"
+			let &guicursor = "a:ver25"
+		elseif g:termux_cursor_style ==# "underline"
+			let &guicursor = "a:hor25"
+		endif
 	endif
 endfunction
 au! VimEnter * call g:TermuxSaveCursorStyle()
