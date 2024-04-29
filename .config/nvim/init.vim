@@ -873,7 +873,7 @@ noremap <silent> <leader>cet :tabe $VIMRUNTIME/colors/<cr>
 noremap <silent> <leader>ceb :e $VIMRUNTIME/colors/<cr>
 noremap <silent> <leader>ceh :split $VIMRUNTIME/colors/<cr>
 noremap <silent> <leader>cev :vsplit $VIMRUNTIME/colors/<cr>
-noremap <silent> <leader>cy <cmd>set lazyredraw<cr>yy:<c-f>pvf]o0"_dxicolo <esc>$x$x$x$x<cr>j<c-y><cmd>set nolazyredraw<cr>
+noremap <silent> <leader>cy <cmd>set lazyredraw<cr>yy:<c-f>pvf]o0"_dxicolo <esc>$x$x$x$x<cr>jzb<cmd>set nolazyredraw<cr>
 
 augroup cpp
 	au!
