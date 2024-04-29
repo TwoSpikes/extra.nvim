@@ -869,10 +869,11 @@ exec printf("noremap <silent> <leader>tf <cmd>FloatermNew %s -l<cr>", $SHELL)
 " noremap <silent> <leader>tct <c-\><c-n>:q\|tabnew\|ter<cr>a
 
 " COLORSCHEME
-noremap <silent> <leader>cet :tabe $VIMRUNTIME/colors/<cr>
-noremap <silent> <leader>ceb :e $VIMRUNTIME/colors/<cr>
-noremap <silent> <leader>ceh :split $VIMRUNTIME/colors/<cr>
-noremap <silent> <leader>cev :vsplit $VIMRUNTIME/colors/<cr>
+noremap <silent> <leader>ct :tabe $VIMRUNTIME/colors/<cr>
+noremap <silent> <leader>cb :e $VIMRUNTIME/colors/<cr>
+noremap <silent> <leader>ch :split $VIMRUNTIME/colors/<cr>
+noremap <silent> <leader>cv :vsplit $VIMRUNTIME/colors/<cr>
+noremap <silent> <leader>cf :FloatermNew nvim -c "ToggleFullscreen" $VIMRUNTIME/colors/<cr>
 noremap <silent> <leader>cy <cmd>set lazyredraw<cr>yy:<c-f>pvf]o0"_dxicolo <esc>$x$x$x$x<cr>jzb<cmd>set nolazyredraw<cr>
 
 augroup cpp
