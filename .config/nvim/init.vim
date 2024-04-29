@@ -687,6 +687,8 @@ exec printf("noremap <silent> <expr> <c-Y> \"%s<c-e>\"", s:SCROLL_C_E_FACTOR)
 exec printf("noremap <silent> <expr> <c-y> \"%s<c-y>\"", s:SCROLL_C_Y_FACTOR)
 exec printf("noremap <silent> <expr> <ScrollWheelDown> \"%s<c-e>\"", s:SCROLL_MOUSE_DOWN_FACTOR)
 exec printf("noremap <silent> <expr> <ScrollWheelUp> \"%s<c-y>\"", s:SCROLL_MOUSE_UP_FACTOR)
+noremap <silent> <leader><c-e> <c-e>
+noremap <silent> <leader><c-y> <c-y>
 
 " NVIMRC FILE
 let s:INIT_FILE_PATH = '~/.config/nvim/init.vim'
@@ -871,8 +873,7 @@ noremap <silent> <leader>cet :tabe $VIMRUNTIME/colors/<cr>
 noremap <silent> <leader>ceb :e $VIMRUNTIME/colors/<cr>
 noremap <silent> <leader>ceh :split $VIMRUNTIME/colors/<cr>
 noremap <silent> <leader>cev :vsplit $VIMRUNTIME/colors/<cr>
-noremap <silent> <leader>cs :colo 
-noremap <silent> <leader>cy yiw:colo <c-r>"<cr>j
+noremap <silent> <leader>cy <cmd>set lazyredraw<cr>yy:<c-f>pvf]o0"_dxicolo <esc>$x$x$x$x<cr>j<c-y><cmd>set nolazyredraw<cr>
 
 augroup cpp
 	au!
@@ -1189,7 +1190,6 @@ function! g:TermuxSaveCursorStyle()
 		call system(["sed", "-i", "s/-/_/g", TMPFILE])
 		call writefile(["echo $terminal_cursor_style"], TMPFILE, "a")
 		let g:termux_cursor_style = trim(system(TMPFILE))
-		call system([TMPFILE])
 		call system(["rm", TMPFILE])
 	endif
 endfunction
