@@ -47,13 +47,28 @@ install_package() {
 			echo "Package to install is not defined"
 			return 1
 		fi
-		${PACKAGE_COMMAND} ${stdpkg}
+		install_package_command="${PACKAGE_COMMAND} ${stdpkg}"
+		run_as_superuser_if_needed "${install_package_command}"
 	else
 		if test -z ${wingetpkg}; then
 			echo "Package to install with winget is not defined"
 			return 1
 		fi
 		winget install ${wingetpkg}
+	fi
+}
+run_as_superuser_if_needed() {
+	needed_command="${1}"
+
+	if test ${need_to_run_as_superuser} = "no"; then
+		${needed_command}
+	elif test ${need_to_run_as_superuser} = "yes"; then
+		${run_as_superuser} ${needed_command}
+	elif test ${need_to_run_as_superuser} = "not found"; then
+		echo "Error: superuser command not found"
+		return 1
+	else
+		echo "run_as_superuser_if_needed: internal error"
 	fi
 }
 
@@ -94,6 +109,24 @@ fi
 clear
 echo "==== Starting ===="
 echo ""
+if ! test $(whoami) = "root" && test -z ${TERMUX_VERSION}; then
+	if command -v "sudo" > /dev/null; then
+		run_as_superuser="sudo"
+		need_to_run_as_superuser="yes"
+	elif command -v "doas" > /dev/null; then
+		run_as_superuser="doas"
+		need_to_run_as_superuser="yes"
+	else
+		echo "Warning: sudo command not found"
+		echo ""
+		run_as_superuser=""
+		need_to_run_as_superuser="not found"
+	fi
+else
+	need_to_run_as_superuser="no"
+fi
+echo "need_to_run_as_superuser: ${need_to_run_as_superuser}"
+
 
 echo "Path to dotfiles is:"
 echo "<<< ${dotfiles}"
@@ -469,7 +502,7 @@ set -x
 			mkdir ${home}/.config
 		fi
 		cp -r ${dotfiles}/.config/nvim ${home}/.config/${setting_editor_for}
-		cp ${dotfiles}/blueorange.vim ${VIMRUNTIME}/colors
+		run_as_superuser_if_needed "cp ${dotfiles}/blueorange.vim ${VIMRUNTIME}/colors"
 		if [ "${setting_editor_for}" = "vim" ]; then
 			echo 'exec printf("source %s/.config/vim/init.vim", $HOME)' > ${home}/.vimrc
 		fi
