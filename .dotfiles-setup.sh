@@ -642,6 +642,7 @@ case ${user_input} in
 	"n")
 		;;
 	*)
+		termux-setup-storage
 		cp -r ${dotfiles}/.termux/ ${home}/
 		if [ -e ${home}/.termux/colors.properties ]; then
 			rm ${home}/.termux/colors.properties
