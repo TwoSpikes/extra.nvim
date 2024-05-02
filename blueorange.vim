@@ -603,19 +603,19 @@ if &t_Co >= 256
     hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#00c0ff guibg=#f0f000 gui=reverse,bold
     hi ToolbarLine ctermfg=NONE ctermbg=NONE cterm=NONE
     hi ToolbarButton ctermfg=231 ctermbg=16 cterm=NONE
-    hi KeywordNorm ctermfg=220 ctermbg=NONE cterm=NONE guifg=#000000 guibg=#ffdf00 gui=NONE
+    hi KeywordNorm ctermfg=220 ctermbg=NONE cterm=NONE guifg=#efaf00 guibg=NONE gui=NONE
     hi KeywordIns ctermfg=220 ctermbg=NONE cterm=NONE guifg=#000000 guibg=#c0ffff gui=NONE
     call CopyHighlightGroup("KeywordNorm", "Keyword")
-    hi StatementNorm ctermfg=228 ctermbg=NONE cterm=NONE guifg=#ffff87 guibg=#000000 gui=reverse
+    hi StatementNorm ctermfg=228 ctermbg=NONE cterm=NONE guifg=#bd6a00 guibg=NONE gui=NONE
     hi StatementIns ctermfg=220 ctermbg=NONE cterm=NONE guifg=#000000 guibg=#d0efff gui=NONE
     hi StatementVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#000000 guibg=#b0cfff gui=NONE
     call CopyHighlightGroup("StatementNorm", "Statement")
     hi QuickFixLine ctermfg=231 ctermbg=32 cterm=NONE
-    hi CursorLineNr ctermfg=220 ctermbg=236 cterm=bold,reverse guifg=#ffffff guibg=#ffaf00 gui=bold
+    hi CursorLineNr ctermfg=236 ctermbg=220 cterm=bold guifg=#ffffff guibg=#ffaf00 gui=bold
     hi CursorLineNrIns ctermfg=15 ctermbg=39 cterm=bold guifg=#ffffff guibg=#00afff gui=bold
     hi CursorLineNrRepl ctermfg=15 ctermbg=128 cterm=bold guifg=#ffffff guibg=#af00df gui=bold
     hi CursorLineNrVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#ffffff guibg=#000087 gui=bold
-    hi LineNr ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#ffffa0 guibg=#000000 gui=italic,reverse
+    hi LineNr ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#000000 guibg=#ffffa0 gui=italic
     hi LineNrIns ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#c0ffff guibg=#000000 gui=italic,reverse
     hi LineNrVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#000000 guibg=#b0cfff gui=italic
     hi NonText ctermfg=247 ctermbg=NONE cterm=NONE
