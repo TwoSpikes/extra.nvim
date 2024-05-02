@@ -916,7 +916,9 @@ augroup netrw
 augroup END
 augroup terminal
 	au!
-	au termopen * setlocal nocursorline nocursorcolumn
+	if has('nvim')
+		au termopen * setlocal nocursorline nocursorcolumn
+	endif
 augroup END
 augroup visual
 	function! HandleBuftype()
