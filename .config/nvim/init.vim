@@ -606,7 +606,7 @@ function! ProcessGBut(button)
 	if v:count == 0
 		let temp .= 'g' . a:button
 	else
-		let temp .= "\<Esc>" . v:count . a:button
+		let temp .= a:button
 	endif
 	call STCUpd()
 	return temp
