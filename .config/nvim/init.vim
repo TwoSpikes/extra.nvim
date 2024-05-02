@@ -603,12 +603,14 @@ nnoremap <leader>g :grep -R <cword> .<cr>
 "endfunction
 function! ProcessGBut(button)
 	let temp = ''
+	let temp .= "\<cmd>set lazyredraw\<cr>"
 	if v:count == 0
 		let temp .= 'g' . a:button
 	else
 		let temp .= a:button
 	endif
 	call STCUpd()
+	let temp .= "\<cmd>set nolazyredraw\<cr>"
 	return temp
 endfunction
 
@@ -622,6 +624,7 @@ noremap <silent> <leader>j j:let &stc=&stc<cr>
 noremap <silent> <leader>k k:let &stc=&stc<cr>
 noremap <silent> <leader><up> k:let &stc=&stc<cr>
 noremap <silent> <leader><down> j:let &stc=&stc<cr>
+noremap <silent> <c-e> <c-e><cmd>call STCUpd()<cr>
 " noremap <silent> 0 g0
 " noremap <silent> $ g$
 " noremap <silent> I g0i
@@ -688,8 +691,8 @@ let s:SCROLL_MOUSE_UP_FACTOR = s:SCROLL_UP_FACTOR
 let s:SCROLL_MOUSE_DOWN_FACTOR = s:SCROLL_DOWN_FACTOR
 exec printf("noremap <silent> <expr> <c-Y> \"%s<c-e>\"", s:SCROLL_C_E_FACTOR)
 exec printf("noremap <silent> <expr> <c-y> \"%s<c-y>\"", s:SCROLL_C_Y_FACTOR)
-exec printf("noremap <silent> <expr> <ScrollWheelDown> \"%s<c-e>\"", s:SCROLL_MOUSE_DOWN_FACTOR)
-exec printf("noremap <silent> <expr> <ScrollWheelUp> \"%s<c-y>\"", s:SCROLL_MOUSE_UP_FACTOR)
+exec printf("noremap <silent> <expr> <ScrollWheelDown> \"%s<c-e><cmd>call STCUpd()<cr>\"", s:SCROLL_MOUSE_DOWN_FACTOR)
+exec printf("noremap <silent> <expr> <ScrollWheelUp> \"%s<c-y><cmd>call STCUpd()<cr>\"", s:SCROLL_MOUSE_UP_FACTOR)
 noremap <silent> <leader><c-e> <c-e>
 noremap <silent> <leader><c-y> <c-y>
 
