@@ -607,7 +607,7 @@ function! ProcessGBut(button)
 	if v:count == 0
 		let temp .= 'g' . a:button
 	else
-		let temp .= a:button
+		let temp .= v:count . a:button
 	endif
 	call STCUpd()
 	let temp .= "\<cmd>set nolazyredraw\<cr>"
@@ -845,7 +845,7 @@ noremap <leader>= <cmd>echo "use \<c-c\>c"<cr>
 noremap <leader>- <cmd>echo "use \<c-c\>C"<cr>
 noremap <leader>1 :!
 
-" QUOTES AROUND
+" QUOTES AROUND DEPRECATED BECAUSE OF surround.vim
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>
 nnoremap <leader>' viw<esc>a'<esc>bi'<esc>
 vnoremap <leader>" iw<esc>a"<esc>bi"<esc>v
@@ -1112,8 +1112,8 @@ function! DeChangeVisual()
 	hi Visual ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
 endfunction
 command! DeChangeVisual call DeChangeVisual()
-noremap <leader>iv ChangeVisual
-noremap <leader>iV DeChangeVisual
+noremap <leader>iv <cmd>ChangeVisual<cr>
+noremap <leader>iV <cmd>DeChangeVisual<cr>
 
 function! SwapHiGroup(group)
     let id = synIDtrans(hlID(a:group))
