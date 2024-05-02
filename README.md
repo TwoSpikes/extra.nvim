@@ -13,14 +13,12 @@ $ cd dotfiles
 
 ## Installation
 
-Warning: you need to be in this repositiory directory
 ```console
 $ sh .dotfiles-setup.sh .
 ```
 
 Or to install everything
 
-Warning: you need to be in this repositiory directory
 ```console
 $ yes | sh .dotfiles-setup.sh .
 ```
@@ -31,7 +29,6 @@ $ yes | sh .dotfiles-setup.sh .
 
 ### Installation
 
-Warning: you need to be in this repositiory directory
 ```console
 $ cp ./.dotfiles-setup.sh ~/
 ```
@@ -50,7 +47,6 @@ This is a basic Git configuration
 
 ### Installation
 
-Warning: you need to be in this repository directory
 ```console
 $ cp ./.gitconfig-default ~/
 $ cp ~/.gitconfig-default ~/.gitconfig
@@ -60,7 +56,6 @@ Uncomment lines `[user] name` and `[user] email`\
 Change `Your Name` to your name\
 Change `youremail@example.com` to your email
 
-Warning: you need to be in this repository directory
 ```console
 $ cp ./.gitmessage ~/
 ```
@@ -74,7 +69,8 @@ This is NeoVim/Vim configuration
 <img src=.github/images/Screenshot_2024-04-13-18-21-05-51_84d3000e3f4017145260f7618db1d683.jpg>
 <img src=.github/images/Screenshot_2024-04-13-18-23-57-59_84d3000e3f4017145260f7618db1d683.jpg>
 
-> [!Note] It works better in NeoVim,\
+> [!warning]
+> It works better in NeoVim,\
 and packer.nvim does not work yet in version of Vim/NeoVim without Lua.
 
 #### Change to light theme
@@ -91,7 +87,6 @@ and packer.nvim does not work yet in version of Vim/NeoVim without Lua.
 
 ### Installation
 
-Warning: you need to be in this repository directory
 ```console
 $ cp -r ./.config/nvim/ ~/.config/
 ```
@@ -139,7 +134,6 @@ It is my old thing that asks for my several most used commands but no I do not u
 
 ### Installation
 
-Warning: you need to be in this repository directory
 ```console
 $ echo "source ./tsch.sh" >> ~/.bashrc
 ```
@@ -159,7 +153,6 @@ It is a configuration for GNU Emacs
 
 ### Installation
 
-Warning: you need to be in this repository directory
 ```console
 $ cp -r ./.emacs.d/ ~/
 ```
@@ -173,7 +166,6 @@ Fork from [this repository](https://github.com/guns/xterm-color-table.vim)
 
 ### Installation
 
-Warning: you need to be in this repository directory
 ```console
 $ cp ./xterm-color-table.vim ~/
 ```
