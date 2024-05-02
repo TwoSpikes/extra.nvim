@@ -125,7 +125,10 @@ augroup Visual
 augroup END
 
 function! STCNo()
-	setlocal stc= nonu nornu
+	if has('nvim')
+		setlocal stc=
+	endif
+	setlocal nonu nornu
 endfunction
 let s:stc_shrunk = v:false
 function! STCUpd()
