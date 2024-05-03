@@ -86,7 +86,7 @@ set nonu
 set nornu
 function! STCRel()
 	if has('nvim')
-		if mode() ==? 'v'
+		if mode() =~? 'v.*' || mode() ==# "\<c-v>"
 			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrVisu#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNrVisu#%=".((v:virtnum <= 0)?v:lnum:""):""%} '
 			call CopyHighlightGroup("StatementVisu", "Statement")
 			return
@@ -109,7 +109,7 @@ function! STCAbs(actual_mode)
 			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrRepl#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} '
 			return
 		endif
-		if mode() ==? 'v' && &modifiable
+		if mode() =~? 'v.*' && &modifiable
 			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrVisu#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} '
 			return
 		endif
@@ -121,7 +121,9 @@ function! STCAbs(actual_mode)
 endfunction
 augroup Visual
 	au! ModeChanged *:[vV]* call Numbertoggle_stcrel()
+	exec "au! ModeChanged *:\<c-v>* call Numbertoggle_stcrel()"
 	au! ModeChanged [vV]*:* call Numbertoggle_stcrel()
+	exec "au! ModeChanged \<c-v>*:* call Numbertoggle_stcrel()"
 augroup END
 
 function! STCNo()
@@ -603,14 +605,18 @@ nnoremap <leader>g :grep -R <cword> .<cr>
 "endfunction
 function! ProcessGBut(button)
 	let temp = ''
-	let temp .= "\<cmd>set lazyredraw\<cr>"
+	if &buftype !=# 'terminal'
+		let temp .= "\<cmd>set lazyredraw\<cr>"
+	endif
 	if v:count == 0
 		let temp .= 'g' . a:button
 	else
 		let temp .= v:count . a:button
 	endif
 	call STCUpd()
-	let temp .= "\<cmd>set nolazyredraw\<cr>"
+	if &buftype !=# 'terminal'
+		let temp .= "\<cmd>set nolazyredraw\<cr>"
+	endif
 	return temp
 endfunction
 
@@ -925,7 +931,7 @@ augroup terminal
 augroup END
 augroup visual
 	function! HandleBuftype()
-		let &cursorcolumn = mode() !~# "[vVirco]" && !s:fullscreen && &filetype !=# 'netrw' && &buftype !=# 'terminal' && &filetype !=# 'nerdtree'
+		let &cursorcolumn = (mode() !~# "[vVirco]" && mode() !~# "\<c-v>") && !s:fullscreen && &filetype !=# 'netrw' && &buftype !=# 'terminal' && &filetype !=# 'nerdtree'
 		let &cursorline = mode() !~# "[irco]" && !s:fullscreen && &buftype !=# 'terminal'
 	endfunction
 	au ModeChanged,BufWinEnter * call HandleBuftype()
@@ -1006,7 +1012,28 @@ inoremap <silent> jk <esc>:w<cr>
 inoremap <silent> jK <esc>
 inoremap <silent> JK <esc>:w<cr>
 inoremap <silent> Jk <esc>
-tnoremap <silent> jk <c-\><c-n>
+" FIXME: Bicycle invented, but problem not solved
+let g:term_j_was_pressed = v:false
+function! ProcessTBut_j()
+	if g:term_j_was_pressed ==# v:true
+		return "j"
+	else
+		let g:term_j_was_pressed = v:true
+		return ""
+	endif
+endfunction
+tnoremap <nowait> <expr> <silent> j ProcessTBut_j()
+function! ProcessTBut_k()
+	if g:term_j_was_pressed ==# v:true
+		let g:term_j_was_pressed = v:false
+		return "\<c-\>\<c-n>"
+	else
+		let g:term_j_was_pressed = v:false
+		return "k"
+	endif
+endfunction
+tnoremap <nowait> <expr> <silent> k ProcessTBut_k()
+"tnoremap <silent> jk <c-\><c-n>
 tnoremap <silent> jK <c-\><c-n>:bd!<Bar>tabnew<Bar>call OpenTerm("")<cr>
 command! W w
 

@@ -607,8 +607,8 @@ if &t_Co >= 256
     hi KeywordIns ctermfg=220 ctermbg=NONE cterm=NONE guifg=#000000 guibg=#c0ffff gui=NONE
     call CopyHighlightGroup("KeywordNorm", "Keyword")
     hi StatementNorm ctermfg=228 ctermbg=NONE cterm=NONE guifg=#bd6a00 guibg=NONE gui=NONE
-    hi StatementIns ctermfg=220 ctermbg=NONE cterm=NONE guifg=#000000 guibg=#d0efff gui=NONE
-    hi StatementVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#000000 guibg=#b0cfff gui=NONE
+    hi StatementIns ctermfg=220 ctermbg=NONE cterm=NONE guifg=#50bfbf guibg=NONE gui=NONE
+    hi StatementVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#608fdf guibg=NONE gui=NONE
     call CopyHighlightGroup("StatementNorm", "Statement")
     hi QuickFixLine ctermfg=231 ctermbg=32 cterm=NONE
     hi CursorLineNr ctermfg=236 ctermbg=220 cterm=bold guifg=#ffffff guibg=#ffaf00 gui=bold
