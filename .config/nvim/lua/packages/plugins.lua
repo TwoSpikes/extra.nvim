@@ -84,6 +84,15 @@ return require('packer').startup(function (use)
 		'https://github.com/vim-utils/vim-man',
 	}
 	use {
-		'tpope/vim-surround'
+		'tpope/vim-surround',
+	}
+	use {
+		'alvan/vim-closetag',
+	}
+	use {
+		'yuezk/vim-js',
+	}
+	use {
+		'maxmellon/vim-jsx-pretty',
 	}
 end)
