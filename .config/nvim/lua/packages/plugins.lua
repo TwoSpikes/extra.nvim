@@ -95,4 +95,7 @@ return require('packer').startup(function (use)
 	use {
 		'maxmellon/vim-jsx-pretty',
 	}
+	use {
+		'mattn/emmet-vim',
+	}
 end)
