@@ -406,12 +406,10 @@ augroup numbertoggle
 		endif
 	endfunction
 	function! Numbertoggle_stcrel()
-		if !s:fullscreen
-			if &modifiable
-				call STCRel()
-			else
-				call STCNo()
-			endif
+		if &modifiable
+			call STCRel()
+		else
+			call STCNo()
 		endif
 	endfunction
 	function! Numbertoggle_no()
@@ -562,7 +560,6 @@ function! ToggleFullscreen()
 		set showcmdloc=last
 		set showmode
 		set ruler
-		call STCAbs('')
 	else
 		let s:fullscreen = v:false
 		let &cursorline = s:old_cursorline
@@ -572,7 +569,6 @@ function! ToggleFullscreen()
 		let &showcmdloc = s:old_showcmdloc
 		let &showmode = s:old_showmode
 		let &ruler = s:old_ruler
-		call STCRel()
 	endif
 endfunction
 function! ToggleLocalFullscreen()
