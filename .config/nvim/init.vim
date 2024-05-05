@@ -412,22 +412,23 @@ augroup numbertoggle
 			call STCNo()
 		endif
 	endfunction
+	function! Numbertoggle()
+		if mode() =~? 'i'
+			call Numbertoggle_stcabs()
+		else
+			call Numbertoggle_stcrel()
+		endif
+	endfunction
 	function! Numbertoggle_no()
 		set stc= nonu nornu
 	endfunction
-	autocmd FocusGained,InsertLeave * call Numbertoggle_stcrel()
-	autocmd FocusLost,InsertEnter * call Numbertoggle_stcabs()
+	autocmd InsertLeave * call Numbertoggle_stcrel()
+	autocmd InsertEnter * call Numbertoggle_stcabs()
+	autocmd BufReadPost,BufLeave,BufEnter,WinEnter,WinLeave * call Numbertoggle()
 	" autocmd BufLeave * call Numbertoggle_no()
 augroup END
 
-function! BufModifiableHandler()
-	if &modifiable
-		call STCRel()
-	else
-		call STCNo()
-	endif
-endfunction
-autocmd BufReadPost,WinLeave,WinEnter * call BufModifiableHandler()
+" autocmd BufReadPost,WinLeave,WinEnter * call Numbertoggle_stcrel()
 " call timer_start(500, 'BufModifiableHandler', {'repeat': -1})
 
 function! MyTabLabel(n)
