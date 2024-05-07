@@ -276,14 +276,30 @@ else
 	echo "Directory is not empty"
 fi
 
-if [ -f ${dotfiles}/.dotfiles-version ]; then
-	echo "Dotfiles found"
-	echo -n "Dotfiles version: "
-	cat ${dotfiles}/.dotfiles-version
+TMPFILE=$(mktemp -u)
+if command -v curl >/dev/null 2>&1; then
+	curl -fsSLo "${TMPFILE}" https://raw.githubusercontent.com/TwoSpikes/dotfiles/master/.dotfiles-version
 else
-	echo "Dotfiles not found"
+	wget -O "${TMPFILE}" https://raw.githubusercontent.com/TwoSpikes/dotfiles/master/.dotfiles-version
+fi
+downloaded_dotfiles_version=$(cat "${TMPFILE}")
+echo "Latest dotfiles version: ${downloaded_dotfiles_version}"
+rm "${TMPFILE}"
+unset TMPFILE
+
+if test -f ${dotfiles}/.dotfiles-version && test $(cat ${dotfiles}/.dotfiles-version) = "${downloaded_dotfiles_version}"; then
+	echo "Dotfiles found"
+	echo -n "Local dotfiles version: "
+	cat ${dotfiles}/.dotfiles-version
+
+else
+	if ! test -f ${dotfiles}/.dotfiles-version; then
+		echo "Dotfiles not found"
+	else
+		echo "Dotfiles is old, new version if aviable"
+	fi
 	if "${have_internet}"; then
-		echo -n "Do you want to download them? (y/N): "
+		echo -n "Do you want to download it? (y/N): "
 		read user_input
 		user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 		case ${user_input} in
@@ -387,26 +403,26 @@ case ${user_input} in
 		echo -n "Fetching zsh4humans... "
 		TMPFILE_DOWNLOADED=mktemp
 		if command -v curl >/dev/null 2>&1; then
-			curl -fsSLo TMPFILE_DOWNLOADED https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install
+			curl -fsSLo "${TMPFILE_DOWNLOADED}" https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install
 		else
-			wget -O TMPFILE_DOWNLOADED https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install
+			wget -O "${TMPFILE_DOWNLOADED}" https://raw.githubusercontent.com/romkatv/zsh4humans/v5/install
 		fi
-		chmod +x TMPFILE_DOWNLOADED
+		chmod +x "${TMPFILE_DOWNLOADED}"
 		echo "OK"
 
 		echo -n "Changing zsh4humans... "
 		TMPFILE_EDITED=mktemp
-		head -n -1 TMPFILE_DOWNLOADED > TMPFILE_EDITED
+		head -n -1 "${TMPFILE_DOWNLOADED}" > "${TMPFILE_EDITED}"
 		echo "OK"
 
 		echo "Running zsh4humans..."
-		sh TMPFILE_EDITED
+		sh "${TMPFILE_EDITED}"
 		z4h_errcode=${?}
 		echo "zsh4humans: exit code: ${z4h_errcode}"
 
 		echo -n "Deleting tmp files... "
-		rm TMPFILE_EDITED
-		rm TMPFILE_DOWNLOADED
+		rm "${TMPFILE_EDITED}"
+		rm "${TMPFILE_DOWNLOADED}"
 		unset TMPFILE_EDITED
 		unset TMPFILE_DOWNLOADED
 		echo "OK"
