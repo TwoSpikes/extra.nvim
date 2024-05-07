@@ -14,7 +14,10 @@ options() {
 envvars() {
 	echo "ENVIRONMENT VARIABLES:"
 	echo "	STOP_AT_FIRST_ERROR"
-	echo "			If not empty, set +e"
+	echo "			set +e"
+	echo "	NO_INTERNET"
+	echo "			Presume you do not have internet"
+	echo "Example: ENVVAR=true ${0}"
 }
 help() {
 	echo "${0} is a script to setup dotfiles"
@@ -25,6 +28,12 @@ help() {
 	echo ""
 	envvars
 	exit 0
+}
+short_help() {
+	subcommands
+	echo ""
+	echo "To see full help, run:"
+	echo "	${0} --help"
 }
 press_enter() {
 	echo ""
@@ -79,14 +88,19 @@ if [ "${1}" = "--help" ] \
 	help
 fi
 
-if [ $STOP_AT_FIRST_ERROR ]; then
+if [ "${STOP_AT_FIRST_ERROR}" = "true" ]; then
 	set -e
+fi
+if [ "${NO_INTERNET}" = "true" ]; then
+	presume_no_internet=true
+else
+	presume_no_internet=false
 fi
 
 if [ -z ${1} ]; then
 	echo "Please provide path to dotfiles"
 	echo ""
-	subcommands
+	short_help
 	exit 1
 fi
 
@@ -216,12 +230,18 @@ determine_package_manager
 
 echo ""
 
-ping -c 1 8.8.8.8 > /dev/null
-ping_errorcode=${?}
-if [ ${ping_errorcode} -eq 0 ]; then
-	echo "You have an internet"
+if ! "${presume_no_internet}"; then
+	ping -c 1 8.8.8.8 > /dev/null
+	ping_errorcode=${?}
+	if [ ${ping_errorcode} -eq 0 ]; then
+		echo "You have an internet"
+		have_internet=true
+	else
+		echo "You do not have an internet"
+		have_internet=false
+	fi
 else
-	echo "You do not have an internet"
+	have_internet=false
 fi
 
 if ! command -v "git" > /dev/null; then
@@ -262,25 +282,31 @@ if [ -f ${dotfiles}/.dotfiles-version ]; then
 	cat ${dotfiles}/.dotfiles-version
 else
 	echo "Dotfiles not found"
-	echo -n "Do you want to download them? (y/N): "
-	read user_input
-	user_input=$(echo ${user_input}|awk '{print tolower($0)}')
-	case ${user_input} in
-		"y")
-			if [ ! ${git_found} ]; then
-				echo "Abort: No Git found"
+	if "${have_internet}"; then
+		echo -n "Do you want to download them? (y/N): "
+		read user_input
+		user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+		case ${user_input} in
+			"y")
+				if [ ! ${git_found} ]; then
+					echo "Abort: No Git found"
+					return 1
+				else
+	set -x
+					git clone --depth=1 https://github.com/TwoSpikes/dotfiles.git ${dotfiles}
+	set +x
+				fi
+				;;
+			*)
+				echo "Abort"
 				return 1
-			else
-set -x
-				git clone --depth=1 https://github.com/TwoSpikes/dotfiles.git ${dotfiles}
-set +x
-			fi
-			;;
-		*)
-			echo "Abort"
-			return 1
-			;;
-	esac
+				;;
+		esac
+	else
+		echo "fatal: you need internet to download them"
+		echo "maybe you handed the wrong path?"
+		return 1
+	fi
 fi
 
 echo "Now we are ready to start"
