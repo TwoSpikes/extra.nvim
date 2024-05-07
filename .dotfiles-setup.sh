@@ -13,7 +13,7 @@ options() {
 }
 envvars() {
 	echo "ENVIRONMENT VARIABLES:"
-	echo "	DO_NOT_STOP_AT_FIRST_ERROR"
+	echo "	STOP_AT_FIRST_ERROR"
 	echo "			If not empty, set +e"
 }
 help() {
@@ -79,8 +79,8 @@ if [ "${1}" = "--help" ] \
 	help
 fi
 
-if [ $DO_NOT_STOP_AT_FIRST_ERROR ]; then
-	set +e
+if [ $STOP_AT_FIRST_ERROR ]; then
+	set -e
 fi
 
 if [ -z ${1} ]; then
