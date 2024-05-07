@@ -105,6 +105,8 @@ _df_c() {
 	"${CP_PROGRAM}" ~/.termux/termux.properties ~/dotfiles/.termux/
 ## Alacritty
 	"${CP_PROGRAM}" -r ~/.config/alacritty/ ~/dotfiles/.config/
+## Nano
+	"${CP_PROGRAM}" ~/.nanorc ~/dotfiles/
 # Commit
 	"${GIT_PROGRAM}" commit --all --verbose
 }
