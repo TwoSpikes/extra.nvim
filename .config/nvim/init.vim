@@ -996,11 +996,12 @@ noremap <silent> <c-x>to <cmd>tabnext<cr>
 noremap <silent> <c-x>tO <cmd>tabprevious<cr>
 noremap <silent> <c-x>5 <cmd>echo "Frames are only in Emacs/GNU Emacs"<cr>
 noremap <m-x> :
-noremap <silent> <c-x>h ggVG
+noremap <silent> <c-x>h myggVG
 noremap <silent> <c-x><c-h> <cmd>h<cr>
 noremap <silent> <c-x><c-g> <cmd>echo "Quit"<cr>
 
 noremap mz <cmd>echohl ErrorMsg<cr><cmd>echom "mz is used for commands"<cr><cmd>echohl Normal<cr>
+noremap my <cmd>echohl ErrorMsg<cr><cmd>echom "my is used for commands"<cr><cmd>echohl Normal<cr>
 
 noremap <leader>q q
 noremap <leader>Q Q
