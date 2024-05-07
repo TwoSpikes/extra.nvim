@@ -258,6 +258,8 @@ fi
 
 if [ -f ${dotfiles}/.dotfiles-version ]; then
 	echo "Dotfiles found"
+	echo -n "Dotfiles version: "
+	cat ${dotfiles}/.dotfiles-version
 else
 	echo "Dotfiles not found"
 	echo -n "Do you want to download them? (y/N): "
