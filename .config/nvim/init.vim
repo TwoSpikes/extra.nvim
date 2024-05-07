@@ -694,8 +694,8 @@ let s:SCROLL_MOUSE_UP_FACTOR = s:SCROLL_UP_FACTOR
 let s:SCROLL_MOUSE_DOWN_FACTOR = s:SCROLL_DOWN_FACTOR
 exec printf("noremap <silent> <expr> <c-Y> \"%s<c-e>\"", s:SCROLL_C_E_FACTOR)
 exec printf("noremap <silent> <expr> <c-y> \"%s<c-y>\"", s:SCROLL_C_Y_FACTOR)
-exec printf("noremap <silent> <expr> <ScrollWheelDown> \"%s<c-e><cmd>call STCUpd()<cr>\"", s:SCROLL_MOUSE_DOWN_FACTOR)
-exec printf("noremap <silent> <expr> <ScrollWheelUp> \"%s<c-y><cmd>call STCUpd()<cr>\"", s:SCROLL_MOUSE_UP_FACTOR)
+exec printf("noremap <silent> <ScrollWheelDown> <cmd>set lazyredraw<cr>%s<c-e><cmd>call STCUpd()<cr><cmd>set nolazyredraw<cr>", s:SCROLL_MOUSE_DOWN_FACTOR)
+exec printf("noremap <silent> <ScrollWheelUp> <cmd>set lazyredraw<cr>%s<c-y><cmd>call STCUpd()<cr><cmd>set nolazyredraw<cr>", s:SCROLL_MOUSE_UP_FACTOR)
 noremap <silent> <leader><c-e> <c-e>
 noremap <silent> <leader><c-y> <c-y>
 
