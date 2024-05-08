@@ -424,7 +424,7 @@ augroup numbertoggle
 	endfunction
 	autocmd InsertLeave * call Numbertoggle_stcrel()
 	autocmd InsertEnter * call Numbertoggle_stcabs()
-	autocmd BufReadPost,BufLeave,BufEnter,WinEnter,WinLeave * call Numbertoggle()
+	autocmd BufReadPost,BufLeave,BufEnter,WinLeave,WinEnter * call Numbertoggle()
 	" autocmd BufLeave * call Numbertoggle_no()
 augroup END
 
@@ -866,8 +866,6 @@ function! OpenTerm(cmd)
 	else
 		exec printf("terminal %s", a:cmd)
 	endif
-	setlocal statuscolumn=
-	setlocal nonu nornu
 	startinsert
 endfunction
 noremap <silent> <leader>tt <cmd>tabnew<cr><cmd>call OpenTerm("")<cr>
@@ -923,7 +921,7 @@ augroup END
 augroup terminal
 	au!
 	if has('nvim')
-		au termopen * setlocal nocursorline nocursorcolumn
+		au termopen * setlocal nocursorline nocursorcolumn | call STCNo()
 	endif
 augroup END
 augroup visual
