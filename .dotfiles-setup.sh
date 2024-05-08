@@ -81,23 +81,23 @@ run_as_superuser_if_needed() {
 	fi
 }
 
-if [ "${1}" = "--help" ] \
-|| [ "${2}" = "--help" ] \
-|| [ "${3}" = "--help" ] \
-|| [ "${4}" = "--help" ]; then
+if test "${1}" = "--help" \
+|| test "${2}" = "--help"  \
+|| test "${3}" = "--help"  \
+|| test "${4}" = "--help" ; then
 	help
 fi
 
-if [ "${STOP_AT_FIRST_ERROR}" = "true" ]; then
+if test "${STOP_AT_FIRST_ERROR}" = "true"; then
 	set -e
 fi
-if [ "${NO_INTERNET}" = "true" ]; then
+if "${NO_INTERNET}" = "true"; then
 	presume_no_internet=true
 else
 	presume_no_internet=false
 fi
 
-if [ -z ${1} ]; then
+if test -z ${1}; then
 	echo "Please provide path to dotfiles"
 	echo ""
 	short_help
@@ -105,18 +105,18 @@ if [ -z ${1} ]; then
 fi
 
 home=${HOME}
-if [ ! -z ${2} ]; then
+if ! test -z ${2}; then
 	home=${2}
 fi
 
 dotfiles=${1}
 
-if [ -z ${PREFIX} ]; then
+if test -z ${PREFIX}; then
 	root=/
 else
 	root=${PREFIX}/..
 fi
-if [ ! -z ${3} ]; then
+if ! test -z ${3}; then
 	root=${3}
 fi
 
@@ -169,10 +169,10 @@ clear
 echo "==== Checking misc stuff ===="
 echo ""
 
-if [ ! -z ${TERMUX_VERSION} ]; then
+if ! test -z ${TERMUX_VERSION}; then
 	OS=Termux
 	VER=${TERMUX_VERSION}
-elif [ -f ${root}/etc/os-release ]; then
+elif test -f ${root}/etc/os-release; then
 	. ${root}/etc/os-release
 	OS=${NAME}
 	VER=${VERSION}
@@ -233,7 +233,7 @@ echo ""
 if ! "${presume_no_internet}"; then
 	ping -c 1 8.8.8.8 > /dev/null
 	ping_errorcode=${?}
-	if [ ${ping_errorcode} -eq 0 ]; then
+	if test ${ping_errorcode} -eq 0; then
 		echo "You have an internet"
 		have_internet=true
 	else
@@ -252,7 +252,7 @@ else
 	git_found=true
 fi
 
-if [ -d ${dotfiles} ]; then
+if test -d ${dotfiles}; then
 	echo "Dotfiles directory exists"
 else
 	echo "Dotfiles directory does not exist"
@@ -270,7 +270,7 @@ else
 	esac
 fi
 
-if [ -z "$(ls -A ${dotfiles})" ]; then
+if test -z "$(ls -A ${dotfiles})"; then
 	echo "Directory is empty"
 else
 	echo "Directory is not empty"
@@ -304,7 +304,7 @@ else
 		user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 		case ${user_input} in
 			"y")
-				if [ ! ${git_found} ]; then
+				if ! test ${git_found}; then
 					echo "Abort: No Git found"
 					return 1
 				else
@@ -511,21 +511,21 @@ clear
 echo "==== Checking if config for editor ${setting_editor_for} exists ===="
 echo ""
 
-if [ -d ${dotfiles}/.config/nvim ]; then
+if test -d ${dotfiles}/.config/nvim; then
 	echo "Directory exists"
 else
 	echo "Abort: Directory does not exist"
 	return 1
 fi
 
-if [ -z "$(ls ${dotfiles}/.config/nvim)" ]; then
+if test -z "$(ls ${dotfiles}/.config/nvim)"; then
 	echo "Abort: Directory is empty"
 	return 1
 else
 	echo "Directory is not empty"
 fi
 
-if [ -f ${dotfiles}/.config/nvim/init.vim ]; then
+if test -f ${dotfiles}/.config/nvim/init.vim; then
 	echo "Config for ${setting_editor_for} exists"
 else
 	echo "Abort: Config for ${setting_editor_for} does not exist"
@@ -542,15 +542,15 @@ case ${user_input} in
 		echo ""
 
 set -x
-		if [ ! -d ${home}/.config ]; then
+		if ! test -d ${home}/.config; then
 			mkdir ${home}/.config
 		fi
 		cp -r ${dotfiles}/.config/nvim ${home}/.config/${setting_editor_for}
 		run_as_superuser_if_needed "cp ${dotfiles}/blueorange.vim ${VIMRUNTIME}/colors"
-		if [ "${setting_editor_for}" = "vim" ]; then
+		if test "${setting_editor_for}" = "vim"; then
 			echo 'exec printf("source %s/.config/vim/init.vim", $HOME)' > ${home}/.vimrc
 		fi
-		if [ ! -d ${home}/bin ]; then
+		if ! test -d ${home}/bin; then
 			mkdir ${home}/bin
 		fi
 		cp ${dotfiles}/viman ${home}/bin/
@@ -569,7 +569,7 @@ echo ""
 
 # FIXME: make work for Vim with Lua or change Plugin Manager
 echo -n "Checking if packer.nvim is installed: "
-if [ -e ${root}/usr/share/nvim/site/pack/packer/start/packer.nvim ]; then
+if test -e ${root}/usr/share/nvim/site/pack/packer/start/packer.nvim; then
 	echo "YES"
 else
 	echo "NO"
@@ -597,7 +597,7 @@ echo "==== Configuring ${setting_editor_for} configuration"
 echo ""
 
 echo -n "Checking if directory for configuration exists: "
-if [ -d ${home}/.config/${setting_editor_for}/options ]; then
+if test -d ${home}/.config/${setting_editor_for}/options; then
 	echo "YES"
 else
 	echo "NO"
@@ -615,7 +615,7 @@ case ${user_input} in
 		touch ${home}/.config/nvim/options/do_not_setup_lsp.null
 		;;
 	*)
-		if [ -e ${home}/.config/${setting_editor_for}/options/do_not_setup_lsp.null ]; then
+		if test -e ${home}/.config/${setting_editor_for}/options/do_not_setup_lsp.null; then
 			rm ${home}/.config/${setting_editor_for}/options/do_not_setup_lsp.null
 		fi
 		;;
@@ -674,7 +674,7 @@ fi
 
 press_enter
 
-if [ ${OS} = "Termux" ]; then
+if test ${OS} = "Termux"; then
 clear
 echo "==== Setupping termux ===="
 echo ""
@@ -688,7 +688,7 @@ case ${user_input} in
 	*)
 		termux-setup-storage
 		cp -r ${dotfiles}/.termux/ ${home}/
-		if [ -e ${home}/.termux/colors.properties ]; then
+		if test -e ${home}/.termux/colors.properties; then
 			rm ${home}/.termux/colors.properties
 		fi
 		;;
@@ -699,7 +699,7 @@ read user_input
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 case ${user_input} in
 	"y")
-		if [ ! -d ${home}/.termux ]; then
+		if ! test -d ${home}/.termux ]; then
 			mkdir ${home}/.termux
 		fi
 		cp ${dotfiles}/.termux/colors.properties ${home}/.termux/
@@ -715,7 +715,7 @@ case ${user_input} in
 	"n")
 		;;
 	*)
-		if [ ! -d ${home}/.termux ]; then
+		if ! test -d ${home}/.termux; then
 			mkdir ${home}/.termux
 		fi
 		cp ${dotfiles}/.termux/termux.properties ${home}/.termux/
