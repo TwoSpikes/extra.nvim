@@ -1,5 +1,7 @@
 #!/bin/env sh
 
+export PATH="${PATH}:${HOME}/sbin"
+
 export HISTSIZE=5000
 export DISPLAY=":0"
 if [ -f "/data/data/com.termux/files/usr/lib/libtermux-exec.so" ]; then
@@ -80,6 +82,8 @@ _df_c() {
     "${CLEAR_PROGRAM}"
 	"${CD_PROGRAM}" ~/dotfiles/
 	"${CP_PROGRAM}" ~/.dotfiles-script.sh ~/dotfiles/
+# Sbin
+	"${CP_PROGRAM}" ~/sbin/viman ~/dotfiles/sbin/
 # Bashrc script and its dependencies
 	"${CP_PROGRAM}" ~/.dotfiles-script.sh ~/dotfiles/
 	"${CP_PROGRAM}" ~/.fr.sh ~/tsch.sh ~/inverting.sh ~/dotfiles/
