@@ -399,14 +399,14 @@ noremap <c-n> <cmd>NERDTreeToggle<cr>
 augroup numbertoggle
 	autocmd!
 	function! Numbertoggle_stcabs()
-		if &modifiable
+		if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree'
 			call STCAbs(v:insertmode)
 		else
 			call STCNo()
 		endif
 	endfunction
 	function! Numbertoggle_stcrel()
-		if &modifiable
+		if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree'
 			call STCRel()
 		else
 			call STCNo()
@@ -928,8 +928,8 @@ augroup terminal
 augroup END
 augroup visual
 	function! HandleBuftype()
-		let &cursorcolumn = (mode() !~# "[vVirco]" && mode() !~# "\<c-v>") && !s:fullscreen && &filetype !=# 'netrw' && &buftype !=# 'terminal' && &filetype !=# 'nerdtree'
-		let &cursorline = mode() !~# "[irco]" && !s:fullscreen && &buftype !=# 'terminal'
+		let &cursorcolumn = (mode() !~# "[vVirco]" && mode() !~# "\<c-v>") && !s:fullscreen && &filetype !=# 'netrw' && &buftype !=# 'terminal' && &filetype !=# 'nerdtree' && &buftype !=# 'nofile'
+		let &cursorline = mode() !~# "[irco]" && !s:fullscreen && &buftype !=# 'terminal' && (&buftype !=# 'nofile' || &filetype ==# 'nerdtree')
 	endfunction
 	au ModeChanged,BufWinEnter * call HandleBuftype()
 augroup END
