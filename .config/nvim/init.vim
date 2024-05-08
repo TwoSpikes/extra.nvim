@@ -11,7 +11,7 @@ let g:COLORSCHEME_PATH = "$PREFIX/share/nvim/runtime/colors/blueorange.vim"
 set termguicolors
 set background=light
 exec printf("so %s", g:COLORSCHEME_PATH)
-set nolazyredraw
+set lazyredraw
 set encoding=utf-8
 
 set helpheight=10
@@ -1247,7 +1247,7 @@ endfunction
 au! VimEnter * call g:TermuxSaveCursorStyle()
 au! VimLeave * call g:TermuxLoadCursorStyle()
 
-if expand("%") == ""
+if expand("%") == "" && !exists("g:DO_NOT_OPEN_ANYTHING")
 	edit ./
 endif
 
@@ -1259,3 +1259,5 @@ if v:vim_did_enter
 else
 	au! SourcePost init.vim call s:PrintIntroHelp()
 endif
+
+set nolazyredraw
