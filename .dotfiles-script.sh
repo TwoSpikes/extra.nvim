@@ -12,10 +12,10 @@ export XDG_CONFIG_HOME="${HOME}/.config/"
 
 [ -z "${PREFIX}" ] && ( export PREFIX="/usr/" )
 
-. ~/.shlibs/funcname.sh
-. ~/.shlibs/timer.sh
-. ~/.shlibs/checkhealth.sh
-. ~/.shlibs/colors.sh
+. ~/shlib/funcname.sh
+. ~/shlib/timer.sh
+. ~/shlib/checkhealth.sh
+. ~/shlib/colors.sh
 
 timer_start_silent
 

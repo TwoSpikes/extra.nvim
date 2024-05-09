@@ -2,7 +2,7 @@
 
 [ ! -z "${INCLUDED_CHECKHEALTH}" ] && return 0 || INCLUDED_CHECKHEALTH=true
 
-. ~/.shlibs/timer.sh
+. ~/shlib/timer.sh
 
 check_for() {
 	case "${1}" in

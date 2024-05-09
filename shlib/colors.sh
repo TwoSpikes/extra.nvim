@@ -2,7 +2,7 @@
 
 [ ! -z "${INCLUDED_COLORS}" ] && return 0 || INCLUDED_COLORS=true
 
-. ~/.shlibs/esc.sh
+. ~/shlib/esc.sh
 
 # colors
 RESET_COLOR="${esc}[0m"

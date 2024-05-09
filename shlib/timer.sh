@@ -2,8 +2,8 @@
 
 [ ! -z "${INCLUDED_TIMER}" ] && return 0 || INCLUDED_TIMER=true
 
-. ~/.shlibs/funcname.sh
-. ~/.shlibs/colors.sh
+. ~/shlib/funcname.sh
+. ~/shlib/colors.sh
 
 to_timer_human_time() {
 	INPUT_TIME="${1}"
