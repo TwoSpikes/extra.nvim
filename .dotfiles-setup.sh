@@ -392,7 +392,7 @@ case ${user_input} in
 		cp ${dotfiles}/.zshrc ${home}
 		cp ${dotfiles}/.dotfiles-script.sh ${home}
 		cp ${dotfiles}/tsch.sh ${dotfiles}/.fr.sh ${dotfiles}/inverting.sh ${home}
-		cp -r ${dotfiles}/.shlibs/ ${home}
+		cp -r ${dotfiles}/shlib/ ${home}
 		cp ${dotfiles}/.profile ${dotfiles}/.zprofile ${home}
 		;;
 	"exit"|"x"|"e"|"q")

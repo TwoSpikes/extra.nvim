@@ -87,7 +87,7 @@ _df_c() {
 # Bashrc script and its dependencies
 	"${CP_PROGRAM}" ~/.dotfiles-script.sh ~/dotfiles/
 	"${CP_PROGRAM}" ~/.fr.sh ~/tsch.sh ~/inverting.sh ~/dotfiles/
-	"${CP_PROGRAM}" -r ~/.shlibs/ ~/dotfiles/
+	"${CP_PROGRAM}" -r ~/shlib/ ~/dotfiles/
 	"${CP_PROGRAM}" ~/.profile ~/.zprofile ~/dotfiles/
 	"${CP_PROGRAM}" ~/.bashrc ~/.zshrc ~/dotfiles/
 ## Vim/NeoVim configs
