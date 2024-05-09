@@ -564,23 +564,23 @@ case ${user_input} in
 		echo "==== Copying ${setting_editor_for} config ===="
 		echo ""
 
-set -x
 		if ! test -d ${home}/.config; then
-			mkdir ${home}/.config
+			mkdir -pv ${home}/.config
 		fi
 		cp -r ${dotfiles}/.config/nvim ${home}/.config/${setting_editor_for}
-		run_as_superuser_if_needed "cp ${dotfiles}/blueorange.vim ${VIMRUNTIME}/colors"
+		run_as_superuser_if_needed "cp -v ${dotfiles}/blueorange.vim ${VIMRUNTIME}/colors"
 		if test "${setting_editor_for}" = "vim"; then
 			echo 'exec printf("source %s/.config/vim/init.vim", $HOME)' > ${home}/.vimrc
 		fi
 		if ! test -d ${home}/bin; then
-			mkdir ${home}/bin
+			mkdir -pv ${home}/bin
 		fi
-		cp ${dotfiles}/viman ${home}/bin/
-set +x
+		if ! test -d ${home}/sbin; then
+			mkdir -pv ${home}/sbin
+		fi
+		cp -v ${dotfiles}/sbin/* ${home}/sbin/
 
-	press_enter
-
+		press_enter
 		;;
 	*)
 		;;
@@ -714,41 +714,44 @@ case ${user_input} in
 		if test -e ${home}/.termux/colors.properties; then
 			rm ${home}/.termux/colors.properties
 		fi
-		;;
-esac
-
-echo -n "Do you want to install my Termux colorscheme? (y/N): "
-read user_input
-user_input=$(echo ${user_input}|awk '{print tolower($0)}')
-case ${user_input} in
-	"y")
-		if ! test -d ${home}/.termux; then
-			mkdir ${home}/.termux
+		if test -e ${home}/.termux/termux.properties; then
+			rm ${home}/.termux/termux.properties
 		fi
-		cp ${dotfiles}/.termux/colors.properties ${home}/.termux/
-		;;
-	*)
-		;;
-esac
 
-echo -n "Do you want to install my Termux settings? (Y/n): "
-read user_input
-user_input=$(echo ${user_input}|awk '{print tolower($0)}')
-case ${user_input} in
-	"n")
-		;;
-	*)
-		if ! test -d ${home}/.termux; then
-			mkdir ${home}/.termux
+		echo -n "Do you want to install my Termux colorscheme? (y/N): "
+		read user_input
+		user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+		case ${user_input} in
+			"y")
+				if ! test -d ${home}/.termux; then
+					mkdir ${home}/.termux
+				fi
+				cp ${dotfiles}/.termux/colors.properties ${home}/.termux/
+				;;
+			*)
+				;;
+		esac
+
+		echo -n "Do you want to install my Termux settings? (Y/n): "
+		read user_input
+		user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+		case ${user_input} in
+			"n")
+				;;
+			*)
+				if ! test -d ${home}/.termux; then
+					mkdir ${home}/.termux
+				fi
+				cp ${dotfiles}/.termux/termux.properties ${home}/.termux/
+				;;
+		esac
+
+		echo -n "Reloading Termux settings... "
+		termux-reload-settings
+		echo "OK"
 		fi
-		cp ${dotfiles}/.termux/termux.properties ${home}/.termux/
 		;;
 esac
-
-echo -n "Reloading Termux settings... "
-termux-reload-settings
-echo "OK"
-fi
 
 clear
 echo "==== Setting up Tmux ===="
