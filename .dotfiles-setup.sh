@@ -17,6 +17,8 @@ envvars() {
 	echo "			set +e"
 	echo "	NO_INTERNET"
 	echo "			Presume you do not have internet"
+	echo "	NO_PACKAGE_MANAGER"
+	echo "			Presume you do not have package manager"
 	echo "Example: ENVVAR=true ${0}"
 }
 help() {
@@ -51,7 +53,11 @@ install_package() {
 		echo "Too few cmdline arguments"
 		return 1
 	fi
-	if ! $package_manager_is_winget; then
+	if ${package_manager_not_found}; then
+		echo "erorr: package manager not found"
+		return 1
+	fi
+	if ! ${package_manager_is_winget}; then
 		if test -z ${stdpkg}; then
 			echo "Package to install is not defined"
 			return 1
@@ -91,10 +97,15 @@ fi
 if test "${STOP_AT_FIRST_ERROR}" = "true"; then
 	set -e
 fi
-if "${NO_INTERNET}" = "true"; then
+if test "${NO_INTERNET}" = "true"; then
 	presume_no_internet=true
 else
 	presume_no_internet=false
+fi
+if test "${NO_PACKAGE_MANAGER}" = "true"; then
+	presume_no_package_manager=true
+else
+	presume_no_package_manager=false
 fi
 
 if test -z ${1}; then
@@ -185,46 +196,58 @@ echo "Current system version: ${VER}"
 
 determine_package_manager() {
 	package_manager_is_winget=false
-	if command -v "pkg" > /dev/null 2>&1; then
-		PACKAGE_COMMAND="pkg install"
-	elif command -v "apt" > /dev/null 2>&1; then
-		PACKAGE_COMMAND="apt install"
-	elif command -v "apt-get" > /dev/null 2>&1; then
-		PACKAGE_COMMAND="apt-get install"
-	elif command -v "winget" > /dev/null 2>&1; then
-		package_manager_is_winget=true
-	elif command -v "pacman" > /dev/null 2>&1; then
-		PACKAGE_COMMAND="pacman -Suy"
-	elif command -v "zypper" > /dev/null 2>&1; then
-		PACKAGE_COMMAND="zypper install"
-	elif command -v "xbps-install" > /dev/null 2>&1; then
-		PACKAGE_COMMAND="xbps-install -S"
-	elif command -v "yum" > /dev/null 2>&1; then
-		PACKAGE_COMMAND="yum install"
-	elif command -v "aptitude" > /dev/null 2>&1; then
-		PACKAGE_COMMAND="aptitude install"
-	elif command -v "dnf" > /dev/null 2>&1; then
-		PACKAGE_COMMAND="dnf install"
-	elif command -v "emerge" > /dev/null 2>&1; then
-		PACKAGE_COMMAND="emerge --ask --verbose"
-	elif command -v "up2date" > /dev/null 2>&1; then
-		PACKAGE_COMMAND="up2date"
-	elif command -v "urpmi" > /dev/null 2>&1; then
-		PACKAGE_COMMAND="urpmi"
-	elif command -v "slackpkg" > /dev/null 2>&1; then
-		PACKAGE_COMMAND="slackpkg"
-	elif command -v "flatpak" > /dev/null 2>&1; then
-		PACKAGE_COMMAND="flatpak install"
-	elif command -v "snap" > /dev/null 2>&1; then
-		PACKAGE_COMMAND="snap install"
-	fi
-	if $package_manager_is_winget; then
-		echo "Package manager is winget"
+	package_manager_not_found=false
+	if ${presume_no_package_manager}; then
+		package_manager_not_found=true
 	else
-		echo "Package command is: ${PACKAGE_COMMAND}"
+		if command -v "pkg" > /dev/null 2>&1; then
+			PACKAGE_COMMAND="pkg install -y"
+		elif command -v "apt" > /dev/null 2>&1; then
+			PACKAGE_COMMAND="apt install -y"
+		elif command -v "apt-get" > /dev/null 2>&1; then
+			PACKAGE_COMMAND="apt-get install -y"
+		elif command -v "winget" > /dev/null 2>&1; then
+			package_manager_is_winget=true
+		elif command -v "pacman" > /dev/null 2>&1; then
+			PACKAGE_COMMAND="pacman -Suy --noconfirm"
+		elif command -v "zypper" > /dev/null 2>&1; then
+			PACKAGE_COMMAND="zypper install -y"
+		elif command -v "xbps-install" > /dev/null 2>&1; then
+			PACKAGE_COMMAND="xbps-install -Sy"
+		elif command -v "yum" > /dev/null 2>&1; then
+			PACKAGE_COMMAND="yum install -y"
+		elif command -v "aptitude" > /dev/null 2>&1; then
+			PACKAGE_COMMAND="aptitude install -y"
+		elif command -v "dnf" > /dev/null 2>&1; then
+			PACKAGE_COMMAND="dnf install -y"
+		elif command -v "emerge" > /dev/null 2>&1; then
+			PACKAGE_COMMAND="emerge --ask --verbose"
+		elif command -v "up2date" > /dev/null 2>&1; then
+			PACKAGE_COMMAND="up2date"
+		elif command -v "urpmi" > /dev/null 2>&1; then
+			PACKAGE_COMMAND="urpmi --force"
+		elif command -v "slackpkg" > /dev/null 2>&1; then
+			PACKAGE_COMMAND="slackpkg"
+		elif command -v "flatpak" > /dev/null 2>&1; then
+			PACKAGE_COMMAND="flatpak install"
+		elif command -v "snap" > /dev/null 2>&1; then
+			PACKAGE_COMMAND="snap install"
+		else
+			package_manager_not_found=true
+		fi
+	fi
+	if ! ${package_manager_not_found}; then
+		if ${package_manager_is_winget}; then
+			echo "Package manager is winget"
+		else
+			echo "Package command is: ${PACKAGE_COMMAND}"
+		fi
+	else
+		echo "Package manager not found"
 	fi
 	export PACKAGE_COMMAND
 	export package_manager_is_winget
+	export package_manager_not_found
 }
 determine_package_manager
 
