@@ -299,22 +299,47 @@ else
 	echo "Directory is not empty"
 fi
 
-TMPFILE=$(mktemp -u)
-if command -v curl >/dev/null 2>&1; then
-	curl -fsSLo "${TMPFILE}" https://raw.githubusercontent.com/TwoSpikes/dotfiles/master/.dotfiles-version
+if "${have_internet}"; then
+	TMPFILE=$(mktemp -u)
+	if command -v curl >/dev/null 2>&1; then
+		curl -fsSLo "${TMPFILE}" https://raw.githubusercontent.com/TwoSpikes/dotfiles/master/.dotfiles-version
+	else
+		wget -O "${TMPFILE}" https://raw.githubusercontent.com/TwoSpikes/dotfiles/master/.dotfiles-version
+	fi
+	latest_dotfiles_version=$(cat "${TMPFILE}")
+	echo "Latest dotfiles version: ${latest_dotfiles_version}"
+	rm "${TMPFILE}"
+	unset TMPFILE
+	latest_dotfiles_version_known=true
 else
-	wget -O "${TMPFILE}" https://raw.githubusercontent.com/TwoSpikes/dotfiles/master/.dotfiles-version
+	echo "warning: you need internet to check latest dotfiles version"
+	latest_dotfiles_version_known=false
 fi
-downloaded_dotfiles_version=$(cat "${TMPFILE}")
-echo "Latest dotfiles version: ${downloaded_dotfiles_version}"
-rm "${TMPFILE}"
-unset TMPFILE
 
-if test -f ${dotfiles}/.dotfiles-version && test $(cat ${dotfiles}/.dotfiles-version) = "${downloaded_dotfiles_version}"; then
+if test -f ${dotfiles}/.dotfiles-version; then
+	local_dotfiles_version=$(cat ${dotfiles}/.dotfiles-version)
+	have_local_dotfiles=true
+else
+	have_local_dotfiles=false
+fi
+if "${have_local_dotfiles}"; then
+	if "${latest_dotfiles_version_known}"; then
+		if test "${local_dotfiles_version}" = "${latest_dotfiles_version}"; then
+			have_latest_dotfiles=true
+		else
+			have_latest_dotfiles=false
+		fi
+	else
+		have_latest_dotfiles=true
+	fi
+else
+	have_latest_dotfiles=false
+fi
+
+if "${have_latest_dotfiles}"; then
 	echo "Dotfiles found"
 	echo -n "Local dotfiles version: "
 	cat ${dotfiles}/.dotfiles-version
-
 else
 	if ! test -f ${dotfiles}/.dotfiles-version; then
 		echo "Dotfiles not found"
@@ -337,14 +362,18 @@ else
 				fi
 				;;
 			*)
-				echo "Abort"
-				return 1
+				if ! "${have_local_dotfiles}"; then
+					echo "fatal: no dotfiles and you rejected to download them"
+					return 1
+				fi
 				;;
 		esac
 	else
-		echo "fatal: you need internet to download them"
-		echo "maybe you handed the wrong path?"
-		return 1
+		if ! "${have_local_dotfiles}"; then
+			echo "fatal: you need internet to download them"
+			echo "maybe you handed the wrong path to dotfiles?"
+			return 1
+		fi
 	fi
 fi
 
