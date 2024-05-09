@@ -124,14 +124,14 @@ clear
 echo "==== Starting ===="
 echo ""
 if ! test $(whoami) = "root" && test -z ${TERMUX_VERSION}; then
-	if command -v "sudo" > /dev/null; then
+	if command -v "sudo" > /dev/null 2>&1; then
 		run_as_superuser="sudo"
 		need_to_run_as_superuser="yes"
-	elif command -v "doas" > /dev/null; then
+	elif command -v "doas" > /dev/null 2>&1; then
 		run_as_superuser="doas"
 		need_to_run_as_superuser="yes"
 	else
-		echo "Warning: sudo command not found"
+		echo "Warning: sudo or doas command not found"
 		echo ""
 		run_as_superuser=""
 		need_to_run_as_superuser="not found"
@@ -185,37 +185,37 @@ echo "Current system version: ${VER}"
 
 determine_package_manager() {
 	package_manager_is_winget=false
-	if command -v "pkg" > /dev/null; then
+	if command -v "pkg" > /dev/null 2>&1; then
 		PACKAGE_COMMAND="pkg install"
-	elif command -v "apt" > /dev/null; then
+	elif command -v "apt" > /dev/null 2>&1; then
 		PACKAGE_COMMAND="apt install"
-	elif command -v "apt-get" > /dev/null; then
+	elif command -v "apt-get" > /dev/null 2>&1; then
 		PACKAGE_COMMAND="apt-get install"
-	elif command -v "winget" > /dev/null; then
+	elif command -v "winget" > /dev/null 2>&1; then
 		package_manager_is_winget=true
-	elif command -v "pacman" > /dev/null; then
+	elif command -v "pacman" > /dev/null 2>&1; then
 		PACKAGE_COMMAND="pacman -Suy"
-	elif command -v "zypper" > /dev/null; then
+	elif command -v "zypper" > /dev/null 2>&1; then
 		PACKAGE_COMMAND="zypper install"
-	elif command -v "xbps-install" > /dev/null; then
+	elif command -v "xbps-install" > /dev/null 2>&1; then
 		PACKAGE_COMMAND="xbps-install -S"
-	elif command -v "yum" > /dev/null; then
+	elif command -v "yum" > /dev/null 2>&1; then
 		PACKAGE_COMMAND="yum install"
-	elif command -v "aptitude" > /dev/null; then
+	elif command -v "aptitude" > /dev/null 2>&1; then
 		PACKAGE_COMMAND="aptitude install"
-	elif command -v "dnf" > /dev/null; then
+	elif command -v "dnf" > /dev/null 2>&1; then
 		PACKAGE_COMMAND="dnf install"
-	elif command -v "emerge" > /dev/null; then
+	elif command -v "emerge" > /dev/null 2>&1; then
 		PACKAGE_COMMAND="emerge --ask --verbose"
-	elif command -v "up2date" > /dev/null; then
+	elif command -v "up2date" > /dev/null 2>&1; then
 		PACKAGE_COMMAND="up2date"
-	elif command -v "urpmi" > /dev/null; then
+	elif command -v "urpmi" > /dev/null 2>&1; then
 		PACKAGE_COMMAND="urpmi"
-	elif command -v "slackpkg" > /dev/null; then
+	elif command -v "slackpkg" > /dev/null 2>&1; then
 		PACKAGE_COMMAND="slackpkg"
-	elif command -v "flatpak" > /dev/null; then
+	elif command -v "flatpak" > /dev/null 2>&1; then
 		PACKAGE_COMMAND="flatpak install"
-	elif command -v "snap" > /dev/null; then
+	elif command -v "snap" > /dev/null 2>&1; then
 		PACKAGE_COMMAND="snap install"
 	fi
 	if $package_manager_is_winget; then
@@ -244,7 +244,7 @@ else
 	have_internet=false
 fi
 
-if ! command -v "git" > /dev/null; then
+if ! command -v "git" > /dev/null 2>&1; then
 	echo "Git not found"
 	git_found=false
 else
@@ -357,7 +357,7 @@ clear
 echo "==== Installing Zsh ===="
 echo ""
 
-if ! command -v zsh > /dev/null; then
+if ! command -v zsh > /dev/null 2>&1; then
 	echo -n "Do you want to install Zsh? (Y/n): "
 	read user_input
 	user_input=$(echo ${user_input}|awk '{print tolower($0)}')
@@ -435,7 +435,7 @@ clear
 echo "==== Checking if editors exist ===="
 echo ""
 
-if ! command -v "nvim"; then
+if ! command -v "nvim" 2>&1; then
 	echo "Neovim not found"
 	neovim_found=false
 else
@@ -443,7 +443,7 @@ else
 	neovim_found=true
 fi
 
-if ! command -v "vim"; then
+if ! command -v "vim" 2>&1; then
 	echo "Vim not found"
 	vim_found=false
 else
@@ -699,7 +699,7 @@ read user_input
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 case ${user_input} in
 	"y")
-		if ! test -d ${home}/.termux ]; then
+		if ! test -d ${home}/.termux; then
 			mkdir ${home}/.termux
 		fi
 		cp ${dotfiles}/.termux/colors.properties ${home}/.termux/
@@ -726,6 +726,38 @@ echo -n "Reloading Termux settings... "
 termux-reload-settings
 echo "OK"
 fi
+
+clear
+echo "==== Setting up Tmux ===="
+echo ""
+
+echo -n "Do you want to setup Tmux? (Y/n): "
+read user_input
+user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+case "${user_input}" in
+	"n")
+		;;
+	*)
+		if ! command -v "tmux" > /dev/null 2>&1; then
+			echo "Tmux is not installed"
+			echo -n "Do you want to install it? (Y/n): "
+			read user_input
+			user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+			case "${user_input}" in
+				n)
+					;;
+				*)
+					install_package tmux
+					;;
+			esac
+		fi
+		if command -v "tmux" > /dev/null 2>&1; then
+			echo -n "Copying config for Tmux... "
+			cp ${dotfiles}/.tmux.conf ${home}/
+			echo "OK"
+		fi
+		;;
+esac
 
 echo "Dotfiles setup ended successfully"
 echo "It is recommended to restart your shell"
