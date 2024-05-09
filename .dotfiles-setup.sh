@@ -463,7 +463,7 @@ case ${user_input} in
 		echo "OK"
 
 		echo -n "Changing zsh4humans... "
-		TMPFILE_EDITED=mktemp
+		TMPFILE_EDITED=$(mktemp)
 		head -n -1 "${TMPFILE_DOWNLOADED}" > "${TMPFILE_EDITED}"
 		echo "OK"
 
@@ -814,6 +814,7 @@ case "${user_input}" in
 		fi
 		;;
 esac
+press_enter
 
 clear
 echo "==== Setting up Nano ===="
@@ -846,7 +847,9 @@ case "${user_input}" in
 		fi
 		;;
 esac
+press_enter
 
+clear
 echo "Dotfiles setup ended successfully"
 echo "It is recommended to restart your shell"
 exit 0
