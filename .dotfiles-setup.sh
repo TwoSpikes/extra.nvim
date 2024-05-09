@@ -849,4 +849,4 @@ esac
 
 echo "Dotfiles setup ended successfully"
 echo "It is recommended to restart your shell"
-return 0
+exit 0
