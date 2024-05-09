@@ -597,6 +597,9 @@ case ${user_input} in
 			mkdir -pv ${home}/.config
 		fi
 		cp -r ${dotfiles}/.config/nvim ${home}/.config/${setting_editor_for}
+		if ! test -d "${VIMRUNTIME}/colors"; then
+			mkdir -pv "${VIMRUNTIME}/colors"
+		fi
 		run_as_superuser_if_needed "cp -v ${dotfiles}/blueorange.vim ${VIMRUNTIME}/colors"
 		if test "${setting_editor_for}" = "vim"; then
 			echo 'exec printf("source %s/.config/vim/init.vim", $HOME)' > ${home}/.vimrc
