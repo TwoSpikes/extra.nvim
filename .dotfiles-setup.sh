@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/env sh
 
 set +xe
 
@@ -777,6 +777,38 @@ case "${user_input}" in
 		if command -v "tmux" > /dev/null 2>&1; then
 			echo -n "Copying config for Tmux... "
 			cp ${dotfiles}/.tmux.conf ${home}/
+			echo "OK"
+		fi
+		;;
+esac
+
+clear
+echo "==== Setting up Nano ===="
+echo ""
+
+echo -n "Do you want to setup Nano? (Y/n): "
+read user_input
+user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+case "${user_input}" in
+	"n")
+		;;
+	*)
+		if ! command -v "nano" > /dev/null 2>&1; then
+			echo "Nano is not installed"
+			echo -n "Do you want to install it? (Y/n): "
+			read user_input
+			user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+			case "${user_input}" in
+				n)
+					;;
+				*)
+					install_package nano
+					;;
+			esac
+		fi
+		if command -v "nano" > /dev/null 2>&1; then
+			echo -n "Copying config for Nano... "
+			cp ${dotfiles}/.nanorc ${home}/
 			echo "OK"
 		fi
 		;;
