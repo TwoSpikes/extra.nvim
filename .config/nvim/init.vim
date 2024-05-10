@@ -122,7 +122,7 @@ endfunction
 augroup Visual
 	au! ModeChanged *:[vV]* call Numbertoggle_stcrel()
 	exec "au! ModeChanged *:\<c-v>* call Numbertoggle_stcrel()"
-	au! ModeChanged [vV]*:* call Numbertoggle_stcrel()
+	au! ModeChanged [vV]*:* call Numbertoggle()
 	exec "au! ModeChanged \<c-v>*:* call Numbertoggle_stcrel()"
 augroup END
 
