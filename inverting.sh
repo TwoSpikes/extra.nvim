@@ -17,7 +17,7 @@
 #  { print }' | \
 #pdftk - output "${1/%.pdf/_inverted.pdf}" compress
 
-if [[ "${1}" == '--help' ]]; then
+if test "${1}" = '--help'; then
 	echo "./inverting.sh INPUT OUTPUT"
 	echo "./inverting.sh: Simple tool for convert pdf colors using ghostscript"
 	exit 0
@@ -35,8 +35,7 @@ esac
 
 case "${2}" in
 	'')
-		echo -e "\033[91mERROR\033[0m: No output"
-		exit 1
+		OUTPUT=$(echo "$(echo "${1}" | sed -e "s/\.pdf//")_inverted.pdf")
 		;;
 	*)
 		OUTPUT="${2}"
