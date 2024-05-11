@@ -673,6 +673,13 @@ function! Findfilebuffer()
 endfunction
 command! Findfilebuffer call Findfilebuffer()
 noremap <c-c>C <cmd>Findfilebuffer<cr>
+noremap <c-c>% <cmd>split<cr>
+noremap <c-c>" <cmd>vsplit<cr>
+noremap <c-c>c <cmd>tabnew<cr>
+noremap <c-c>w <cmd>quit<cr>
+for i in range(1, 9)
+	exec "noremap <c-c>".i." <cmd>tabnext ".i."<cr>"
+endfor
 "nnoremap <leader>lC :tabnew<Bar>ter<Bar><cr>a./build.sh
 "nnoremap <leader>lc :tabnext<Bar><c-\><c-n>:bd!<Bar>tabnew<Bar>ter<cr>a!!<cr>
 
