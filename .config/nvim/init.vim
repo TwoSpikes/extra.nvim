@@ -610,7 +610,6 @@ function! ProcessGBut(button)
 	else
 		let temp .= v:count . a:button
 	endif
-	call STCUpd()
 	if &buftype !=# 'terminal'
 		let temp .= "\<cmd>set nolazyredraw\<cr>"
 	endif
