@@ -75,7 +75,7 @@ install_package() {
 run_as_superuser_if_needed() {
 	needed_command="${1}"
 
-	if test ${eed_to_run_as_superuser} = "no"; then
+	if test ${need_to_run_as_superuser} = "no"; then
 		${needed_command}
 	elif test ${need_to_run_as_superuser} = "yes"; then
 		${run_as_superuser} ${needed_command}
