@@ -43,6 +43,10 @@ press_enter() {
 	read user_input
 }
 install_package() {
+	if ${package_manager_not_found}; then
+		echo "erorr: package manager not found"
+		return 1
+	fi
 	if  test -z "${PACKAGE_COMMAND}" || test -z "${package_manager_is_winget}"; then
 		echo "Please run determine_package_manager"
 		return 1
@@ -51,10 +55,6 @@ install_package() {
 	wingetpkg=${2}
 	if test -z ${stdpkg} && test -z ${wingetpkg}; then
 		echo "Too few cmdline arguments"
-		return 1
-	fi
-	if ${package_manager_not_found}; then
-		echo "erorr: package manager not found"
 		return 1
 	fi
 	if ! ${package_manager_is_winget}; then
@@ -75,7 +75,7 @@ install_package() {
 run_as_superuser_if_needed() {
 	needed_command="${1}"
 
-	if test ${need_to_run_as_superuser} = "no"; then
+	if test ${eed_to_run_as_superuser} = "no"; then
 		${needed_command}
 	elif test ${need_to_run_as_superuser} = "yes"; then
 		${run_as_superuser} ${needed_command}
@@ -84,6 +84,7 @@ run_as_superuser_if_needed() {
 		return 1
 	else
 		echo "run_as_superuser_if_needed: internal error"
+		return 1
 	fi
 }
 
@@ -150,8 +151,6 @@ if ! test $(whoami) = "root" && test -z ${TERMUX_VERSION}; then
 else
 	need_to_run_as_superuser="no"
 fi
-echo "need_to_run_as_superuser: ${need_to_run_as_superuser}"
-
 
 echo "Path to dotfiles is:"
 echo "<<< ${dotfiles}"
