@@ -731,7 +731,7 @@ press_enter
 
 if test ${OS} = "Termux"; then
 clear
-echo "==== Setupping termux ===="
+echo "==== Setting up termux ===="
 echo ""
 
 echo -n "Do you want to setup Termux? (Y/n): "
@@ -846,6 +846,39 @@ case "${user_input}" in
 		if command -v "nano" > /dev/null 2>&1; then
 			echo -n "Copying config for Nano... "
 			cp ${dotfiles}/.nanorc ${home}/
+			echo "OK"
+		fi
+		;;
+esac
+press_enter
+
+clear
+echo "==== Setting up Alacritty ===="
+echo ""
+
+echo -n "Do you want to setup Alacritty? (Y/n): "
+read user_input
+user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+case "${user_input}" in
+	"n")
+		;;
+	*)
+		if ! command -v "alacritty" > /dev/null 2>&1; then
+			echo "Alacritty is not installed"
+			echo -n "Do you want to install it? (Y/n): "
+			read user_input
+			user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+			case "${user_input}" in
+				n)
+					;;
+				*)
+					install_package alacritty
+					;;
+			esac
+		fi
+		if command -v "alacritty" > /dev/null 2>&1; then
+			echo -n "Copying config for Alacritty... "
+			cp ${dotfiles}/.config/alacritty/ ${home}/.config/
 			echo "OK"
 		fi
 		;;
