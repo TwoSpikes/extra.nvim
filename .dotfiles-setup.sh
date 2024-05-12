@@ -227,7 +227,9 @@ determine_package_manager() {
 		elif command -v "urpmi" > /dev/null 2>&1; then
 			PACKAGE_COMMAND="urpmi --force"
 		elif command -v "slackpkg" > /dev/null 2>&1; then
-			PACKAGE_COMMAND="slackpkg"
+			PACKAGE_COMMAND="slackpkg install"
+		elif command -v "apk" > /dev/null 2>&1; then
+			PACKAGE_COMMAND="apk add"
 		elif command -v "flatpak" > /dev/null 2>&1; then
 			PACKAGE_COMMAND="flatpak install"
 		elif command -v "snap" > /dev/null 2>&1; then
