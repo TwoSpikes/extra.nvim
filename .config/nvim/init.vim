@@ -570,15 +570,13 @@ function! ToggleFullscreen()
 		let &showcmdloc = s:old_showcmdloc
 		let &showmode = s:old_showmode
 		let &ruler = s:old_ruler
+		echon ''
 	endif
-endfunction
-function! ToggleLocalFullscreen()
-	echom "ToggleLocalFullscreen: not implemented yet"
 endfunction
 command! ToggleFullscreen call ToggleFullscreen()
 command! ToggleLocalFullscreen call ToggleLocalFullscreen()
 noremap <leader><c-f> <cmd>ToggleFullscreen<cr>
-noremap <leader><c-l><c-f> <cmd>ToggleLocalFullscreen<cr>
+noremap <f3> <cmd>ToggleFullscreen<cr>
 
 noremap <c-t> <cmd>TagbarToggle<cr>
 
@@ -609,6 +607,9 @@ function! ProcessGBut(button)
 		let temp .= 'g' . a:button
 	else
 		let temp .= v:count . a:button
+	endif
+	if s:fullscreen
+		call STCUpd()
 	endif
 	if &buftype !=# 'terminal'
 		let temp .= "\<cmd>set nolazyredraw\<cr>"
