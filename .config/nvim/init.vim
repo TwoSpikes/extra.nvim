@@ -9,7 +9,7 @@ if $PREFIX == ""
 endif
 let g:COLORSCHEME_PATH = "$PREFIX/share/nvim/runtime/colors/blueorange.vim"
 set termguicolors
-set background=light
+set background=dark
 exec printf("so %s", g:COLORSCHEME_PATH)
 set lazyredraw
 set encoding=utf-8
@@ -1146,21 +1146,21 @@ nnoremap s "_d
 noremap <silent> <f10> <cmd>call quickui#menu#open()<cr>
 
 " Interface
-function! ChangeVisual()
+function! ChangeVisualBlue()
 	echo "Visual changed to "
 	echohl Visual
 	echon "blue"
 	echohl Normal
-	hi Visual ctermfg=NONE ctermbg=18 cterm=NONE guifg=NONE guibg=#000087 gui=NONE
+	call CopyHighlightGroup("VisualBlue", "Visual")
 endfunction
-command! ChangeVisual call ChangeVisual()
-function! DeChangeVisual()
+command! ChangeVisualBlue call ChangeVisualBlue()
+function! ChangeVisualReversed()
 	echo "Visual changed to reversed "
-	hi Visual ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
+	call CopyHighlightGroup("VisualReversed", "Visual")
 endfunction
-command! DeChangeVisual call DeChangeVisual()
-noremap <leader>iv <cmd>ChangeVisual<cr>
-noremap <leader>iV <cmd>DeChangeVisual<cr>
+command! ChangeVisualReversed call ChangeVisualReversed()
+noremap <leader>iv <cmd>ChangeVisualBlue<cr>
+noremap <leader>iV <cmd>ChangeVisualReversed<cr>
 
 function! SwapHiGroup(group)
     let id = synIDtrans(hlID(a:group))

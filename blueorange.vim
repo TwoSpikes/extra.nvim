@@ -521,7 +521,9 @@ if &t_Co >= 256
     hi WildMenu ctermfg=16 ctermbg=222 cterm=bold
     hi debugPC ctermfg=67 ctermbg=NONE cterm=reverse
     hi debugBreakpoint ctermfg=73 ctermbg=NONE cterm=reverse
-    hi Visual ctermfg=NONE ctermbg=18 cterm=NONE guifg=NONE guibg=#3010a0 gui=bold
+    hi VisualBlue ctermfg=NONE ctermbg=18 cterm=NONE guifg=NONE guibg=#3010a0 gui=bold
+    hi VisualReversed ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
+    call CopyHighlightGroup("VisualBlue", "Visual")
     hi MatchParen ctermfg=30 ctermbg=NONE cterm=reverse guifg=#008787 guibg=NONE gui=reverse
     hi VisualNOS ctermfg=16 ctermbg=73 cterm=NONE
     hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
@@ -652,7 +654,9 @@ if &t_Co >= 256
     hi debugPC ctermfg=26 ctermbg=NONE cterm=reverse
     hi debugBreakpoint ctermfg=23 ctermbg=NONE cterm=reverse
     " hi Visual ctermfg=231 ctermbg=67 cterm=NONE
-    hi Visual ctermfg=NONE ctermbg=18 cterm=NONE guifg=NONE guibg=#b0e0f0 gui=NONE
+    hi VisualBlue ctermfg=NONE ctermbg=18 cterm=NONE guifg=NONE guibg=#b0e0f0 gui=NONE
+    hi VisualReversed ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
+    call CopyHighlightGroup("VisualBlue", "Visual")
     hi MatchParen ctermfg=30 ctermbg=231 cterm=reverse
     hi VisualNOS ctermfg=231 ctermbg=30 cterm=NONE
     hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
