@@ -426,7 +426,7 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ }
 let g:NERDTreeGitStatusUseNerdFonts = 1
 let g:NERDTreeGitStatusShowIgnored = 1
-noremap <c-n> <cmd>NERDTreeToggle<cr><cmd>call Numbertoggle()<cr>
+noremap <c-n> <cmd>NERDTreeToggle<cr>
 
 " autocmd BufReadPost,WinLeave,WinEnter * call Numbertoggle_stcrel()
 " call timer_start(500, 'BufModifiableHandler', {'repeat': -1})
@@ -933,12 +933,12 @@ augroup rust
 augroup END
 augroup netrw
 	au!
-	au filetype netrw setlocal nocursorcolumn
+	au filetype netrw setlocal nocursorcolumn | call Numbertoggle()
 	au filetype netrw nnoremap <silent> <buffer> <leader>/d <cmd>echohl ErrorMsg<cr><cmd>echo "Comments are not available in netrw"<cr>
 	au filetype netrw nnoremap <silent> <buffer> <leader>/u <cmd>echohl ErrorMsg<cr><cmd>echo "Comments are not available in netrw"<cr>
 augroup END
 augroup nerdtree
-	au filetype nerdtree setlocal nocursorcolumn
+	au filetype nerdtree setlocal nocursorcolumn | call Numbertoggle()
 	au filetype nerdtree nnoremap <silent> <buffer> <leader>/d <cmd>echohl ErrorMsg<cr><cmd>echo "Comments are not available in nerdtree"<cr>
 	au filetype nerdtree nnoremap <silent> <buffer> <leader>/u <cmd>echohl ErrorMsg<cr><cmd>echo "Comments are not available in nerdtree"<cr>
 augroup END
@@ -1275,13 +1275,18 @@ if expand("%") == "" && !exists("g:DO_NOT_OPEN_ANYTHING")
 	edit ./
 endif
 
-function s:PrintIntroHelp()
-	echo 'type ' | echohl SpecialKey | echon ':intro<cr>' | echohl Normal | echon ' to see help'
+function g:PrintIntroHelp()
+	echohl Normal
+	echo 'type '
+	echohl SpecialKey
+	echon ':intro<cr>'
+	echohl Normal
+	echon ' to see help'
 endfunction
 if v:vim_did_enter
-	call s:PrintIntroHelp()
+	call g:PrintIntroHelp()
 else
-	au! SourcePost init.vim call s:PrintIntroHelp()
+	au! SourcePost init.vim call g:PrintIntroHelp()
 endif
 
 set nolazyredraw
