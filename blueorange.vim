@@ -492,6 +492,7 @@ if &t_Co >= 256
     hi CursorLineNrVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#ffffff guibg=#000087 gui=bold
     hi LineNr ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#ffdf00 guibg=#101050 gui=italic
     hi LineNrIns ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#101050 guibg=#00afff gui=italic,reverse
+    hi LineNrVisu ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#101050 guibg=#608fdf gui=italic,reverse
     hi NonText ctermfg=214 ctermbg=NONE cterm=NONE
     hi FoldColumn ctermfg=240 ctermbg=NONE cterm=NONE
     hi EndOfBuffer ctermfg=214 ctermbg=NONE cterm=NONE
@@ -531,7 +532,11 @@ if &t_Co >= 256
     hi Constant ctermfg=213 ctermbg=NONE cterm=NONE
     hi String ctermfg=222 ctermbg=NONE cterm=NONE
     hi Identifier ctermfg=NONE ctermbg=NONE cterm=NONE
-    hi Statement ctermfg=228 ctermbg=NONE cterm=bold guifg=#ffff87 guibg=NONE gui=bold
+    hi StatementNorm ctermfg=228 ctermbg=NONE cterm=NONE guifg=#bd6a00 guibg=NONE gui=NONE
+    hi StatementIns ctermfg=220 ctermbg=NONE cterm=NONE guifg=#00c0ff guibg=NONE gui=NONE
+    hi StatementVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#608fdf guibg=NONE gui=NONE
+    call CopyHighlightGroup("StatementNorm", "Statement")
+    "hi Statement ctermfg=228 ctermbg=NONE cterm=bold guifg=#ffff87 guibg=NONE gui=bold
     hi Keyword ctermfg=220 ctermbg=NONE cterm=italic guifg=#ffdf00 guibg=NONE gui=italic
     hi Type ctermfg=77 ctermbg=NONE cterm=NONE
     hi PreProc ctermfg=116 ctermbg=NONE cterm=NONE
