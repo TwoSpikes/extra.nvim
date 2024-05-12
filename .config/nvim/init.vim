@@ -380,22 +380,6 @@ inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
-let g:NERDTreeGitStatusIndicatorMapCustom = {
-                \ 'Modified'  :'✹',
-                \ 'Staged'    :'✚',
-                \ 'Untracked' :'✭',
-                \ 'Renamed'   :'➜',
-                \ 'Unmerged'  :'═',
-                \ 'Deleted'   :'✖',
-                \ 'Dirty'     :'✗',
-                \ 'Ignored'   :'☒',
-                \ 'Clean'     :'✔︎',
-                \ 'Unknown'   :'?',
-                \ }
-let g:NERDTreeGitStatusUseNerdFonts = 1
-let g:NERDTreeGitStatusShowIgnored = 1
-noremap <c-n> <cmd>NERDTreeToggle<cr>
-
 augroup numbertoggle
 	autocmd!
 	function! Numbertoggle_stcabs()
@@ -424,9 +408,25 @@ augroup numbertoggle
 	endfunction
 	autocmd InsertLeave * call Numbertoggle_stcrel()
 	autocmd InsertEnter * call Numbertoggle_stcabs()
-	autocmd BufReadPost,BufLeave,BufEnter,WinLeave,WinEnter * call Numbertoggle()
+	autocmd BufReadPost,BufEnter,BufLeave,WinLeave,WinEnter * call Numbertoggle()
 	" autocmd BufLeave * call Numbertoggle_no()
 augroup END
+
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+                \ 'Modified'  :'✹',
+                \ 'Staged'    :'✚',
+                \ 'Untracked' :'✭',
+                \ 'Renamed'   :'➜',
+                \ 'Unmerged'  :'═',
+                \ 'Deleted'   :'✖',
+                \ 'Dirty'     :'✗',
+                \ 'Ignored'   :'☒',
+                \ 'Clean'     :'✔︎',
+                \ 'Unknown'   :'?',
+                \ }
+let g:NERDTreeGitStatusUseNerdFonts = 1
+let g:NERDTreeGitStatusShowIgnored = 1
+noremap <c-n> <cmd>NERDTreeToggle<cr><cmd>call Numbertoggle()<cr>
 
 " autocmd BufReadPost,WinLeave,WinEnter * call Numbertoggle_stcrel()
 " call timer_start(500, 'BufModifiableHandler', {'repeat': -1})
@@ -748,16 +748,22 @@ autocmd BufReadPost *
 
 " MY .nvimrc HELP
 noremap <silent> <leader>? <esc>:echo "
-  \MY .nvimrc HELP:
+  \Help for my NeoVim config:
+\\n     By default, \<leader\> is space symbol.
+\\n     You can change it typing this command in Vim/Neovim:
+\\n     ╭───────────────────────────╮
+\\n     │ :let mapleader = \"symbol\" │
+\\n     ╰───────────────────────────╯
+\\n     Where symbol is your symbol (type quotes literally)
 \\n  GLOBAL HELP:
 \\n    \<leader\>? - Show this help message
-\\n  NVIMRC FILE:
+\\n  OPEN init.vim:
 \\n    \<leader\>vet - Open in a new tab
 \\n    \<leader\>veb - Open in a new buffer
 \\n    \<leader\>veh - Open in a new horizontal window (-)
 \\n    \<leader\>vev - Open in a new vertical window (\|)
-\\n    \<leader\>vs  - Source it
-\\n  BASHRC FILE:
+\\n    \<leader\>vs  - Reload config
+\\n  .dotfiles-script.sh FILE:
 \\n    \<leader\>bt - Open in a new tab
 \\n    \<leader\>bb - Open in a new buffer
 \\n    \<leader\>bh - Open in a new horizontal window (-)
@@ -772,29 +778,35 @@ noremap <silent> <leader>? <esc>:echo "
 \\n    SPECIAL:
 \\n      ; - Switch to command mode (:)
 \\n      SPC SPC - Open quickui menu
-\\n      INSERT: jk - Exit from Insert Mode
+\\n      INSERT: jk - Exit from Insert Mode and save
+\\n      INSERT: jK - Exit from Insert Mode
 \\n      INSERT: ju - Make current word uppercase
 \\n      CTRL-a - Move to start of line
 \\n      CTRL-e - Move to end of line
 \\n      CTRL-h - 20zh
 \\n      CTRL-l - 20zl
-\\n      CTRL-a - Increase number
-\\n      CTRL-x - Deecrease number
+\\n      CTRL-a - Increase number under cursor
+\\n      CTRL-x - Deecrease number under cursor
 \\n      ci_ - Edit word from start to first _
-\\n      \<leader\>d  - Remove search highlightings
+\\n      \<leader\>d  - Toggle off search highlightings
 \\n      s - Delete (d) without copying
 \\n      q - Quit window
-\\n      Q - Quit without saving
-\\n      CTRL-c - Find file
-\\n      CTRL-C - Find file in buffer
+\\n      Q - Quit window without saving
+\\n    Tmux-like keybindings:
+\\n      CTRL-c c - Find file
+\\n      CTRL-c C - Find file in buffer
+\\n      CTRL-c % - Split window horizontally
+\\n      CTRL-c \" - Split window vertically
+\\n      CTRL-c w - Quit from window
+\\n      CTRL-c 0-9 - Jump to tab 0-9
 \\n      \<leader\>S - Toggle scrolloff (see :h 'scrolloff')
-\\n    Like in Emacs:
+\\n    Emacs-like keybindings:
 \\n      ALT-x - Switch to command mode (:)
 \\n      F10 - Open quickui menu
 \\n      CTRL-x CTRL-c - Close All windows
 \\n      CTRL-x s - Save current buffer
-\\n      CTRL-x CTRL-s - See CTRL-x s
-\\n      CTRL-x k - Kill current buffer
+\\n      CTRL-x CTRL-s - Save current buffer
+\\n      CTRL-x k - Kill (delete) current buffer
 \\n      CTRL-x 0 - Close current window
 \\n      CTRL-x 1 - Close all but current window
 \\n      CTRL-x 2 - Split window
@@ -809,7 +821,7 @@ noremap <silent> <leader>? <esc>:echo "
 \\n      CTRL-x t O - Previous tab
 \\n      CTRL-x h - Select all text
 \\n      CTRL-x CTRL-h - See help (:h)
-\\n    QUOTES AROUND:
+\\n    QUOTES AROUND (deprecated, use surround.vim):
 \\n      \<leader\>\" - Put \'\"\' around word
 \\n      \<leader\>\' - Put \"\'\" around word
 \\n  TERMINAL:
@@ -817,30 +829,25 @@ noremap <silent> <leader>? <esc>:echo "
 \\n    \<leader\>tb - Open in a new buffer
 \\n    \<leader\>th - Open in a new horizontal window (-)
 \\n    \<leader\>tv - Open in a new vertical window (\|)
+\\n    \<leader\>tf - Open in a new floating window (Floaterm)
 \\n  COLORSCHEME:
-\\n    \<leader\>cet - Open colorschemes in a new tab
-\\n    \<leader\>ceb - Open colorschemes in a new buffer
-\\n    \<leader\>ceh - Open colorschemes in a new horizontal window (-)
-\\n    \<leader\>cev - Open colorschemes in a new vertical window (\|)
-\\n    \<leader\>cs  - Set colorscheme (:colo)
-\\n    \<leader\>cy  - Copy colorscheme name from current buffer and set it
+\\n    \<leader\>ct - Open colorschemes in a new tab
+\\n    \<leader\>cb - Open colorschemes in a new buffer
+\\n    \<leader\>ch - Open colorschemes in a new horizontal window (-)
+\\n    \<leader\>cv - Open colorschemes in a new vertical window (\|)
+\\n    \<leader\>cs - Set colorscheme (:colo)
+\\n    \<leader\>cy - Apply colorscheme under cursor
 \\n  TELESCOPE (Plugin):
 \\n    \<leader\>ff - Find files
 \\n    \<leader\>fg - Live grep
 \\n    \<leader\>fb - Buffers
 \\n    \<leader\>fh - Help tags
 \\n  LSP:
-\\n    \<leader\>slv - Start vim-language-server
-\\n    \<leader\>slb - Start bash-language-server
-\\n    \<leader\>sld - Dump active clients
-\\n  SPECIAL:
-\\n     By default, \<leader\> is space symbol. You can change it typing this command in Vim/Neovim:
-\\n     ╭───────────────────────────╮
-\\n     │ :let mapleader = \"symbol\" │
-\\n     ╰───────────────────────────╯
-\\n     Where symbol is your symbol (type quotes literally)
+\\n    \<leader\>lv - Start vim-language-server
+\\n    \<leader\>lb - Start bash-language-server
+\\n    \<leader\>ld - Dump active clients
 \\n  AUTHOR:
-\\n    Name: TwoSpikes (2023 - 2023)
+\\n    Name: TwoSpikes (2023 - 2024)
 \\n    Github: https://github.com/TwoSpikes/dotfiles.git
 \"<cr>
 
@@ -854,7 +861,7 @@ noremap <leader>= <cmd>echo "use \<c-c\>c"<cr>
 noremap <leader>- <cmd>echo "use \<c-c\>C"<cr>
 noremap <leader>1 :!
 
-" QUOTES AROUND DEPRECATED BECAUSE OF surround.vim
+" QUOTES AROUND (DEPRECATED BECAUSE OF surround.vim)
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>
 nnoremap <leader>' viw<esc>a'<esc>bi'<esc>
 vnoremap <leader>" iw<esc>a"<esc>bi"<esc>v
@@ -908,21 +915,32 @@ augroup googol
 augroup END
 augroup php
 	au!
-	au filetype php nnoremap <silent> <buffer> <leader>g viwoviGLOBALS['<esc>ea']<esc>
+	au filetype php noremap <silent> <buffer> <leader>g viwoviGLOBALS['<esc>ea']<esc>
 augroup END
-augroup bash
+augroup sh
 	au!
 	au filetype bash,sh setlocal nowrap linebreak
+	au filetype python noremap <silent> <buffer> <leader>/d mz0i#<esc>`zl
+	au filetype python noremap <silent> <buffer> <leader>/u mz:s/^#<cr>`zh:noh<cr>
 augroup END
 augroup python
 	au!
-	au filetype python nnoremap <silent> <buffer> <leader>/d mz0i#<esc>`zl
-	au filetype python nnoremap <silent> <buffer> <leader>/u mz:s/^#<cr>`zh:noh<cr>
+	au filetype python noremap <silent> <buffer> <leader>/d mz0i#<esc>`zl
+	au filetype python noremap <silent> <buffer> <leader>/u mz:s/^#<cr>`zh:noh<cr>
+augroup END
+augroup rust
+	au!
 augroup END
 augroup netrw
 	au!
 	au filetype netrw setlocal nocursorcolumn
+	au filetype netrw nnoremap <silent> <buffer> <leader>/d <cmd>echohl ErrorMsg<cr><cmd>echo "Comments are not available in netrw"<cr>
+	au filetype netrw nnoremap <silent> <buffer> <leader>/u <cmd>echohl ErrorMsg<cr><cmd>echo "Comments are not available in netrw"<cr>
+augroup END
+augroup nerdtree
 	au filetype nerdtree setlocal nocursorcolumn
+	au filetype nerdtree nnoremap <silent> <buffer> <leader>/d <cmd>echohl ErrorMsg<cr><cmd>echo "Comments are not available in nerdtree"<cr>
+	au filetype nerdtree nnoremap <silent> <buffer> <leader>/u <cmd>echohl ErrorMsg<cr><cmd>echo "Comments are not available in nerdtree"<cr>
 augroup END
 augroup terminal
 	au!
