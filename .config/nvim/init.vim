@@ -1077,7 +1077,7 @@ inoremap <silent> Jk <esc>
 " 	endif
 " endfunction
 " tnoremap <nowait> <expr> <silent> k ProcessTBut_k()
-"tnoremap <silent> jk <c-\><c-n>
+tnoremap <silent> jk <c-\><c-n>
 tnoremap <silent> jK <c-\><c-n>:bd!<Bar>tabnew<Bar>call OpenTerm("")<cr>
 command! W w
 
