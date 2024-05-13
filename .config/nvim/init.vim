@@ -123,7 +123,7 @@ augroup Visual
 	au! ModeChanged *:[vV]* call Numbertoggle_stcrel()
 	exec "au! ModeChanged *:\<c-v>* call Numbertoggle_stcrel()"
 	au! ModeChanged [vV]*:* call Numbertoggle()
-	exec "au! ModeChanged \<c-v>*:* call Numbertoggle_stcrel()"
+	exec "au! ModeChanged \<c-v>*:* call Numbertoggle()"
 augroup END
 
 function! STCNo()
@@ -897,17 +897,39 @@ noremap <silent> <leader>cv :vsplit $VIMRUNTIME/colors/<cr>
 noremap <silent> <leader>cf :FloatermNew nvim -c "ToggleFullscreen" $VIMRUNTIME/colors/<cr>
 noremap <silent> <leader>cy <cmd>set lazyredraw<cr>yy:<c-f>pvf]o0"_dxicolo <esc>$x$x$x$x<cr>jzb<cmd>set nolazyredraw<cr>
 
+function! CommentOut(comment_string)
+	mark z
+	if mode() !~? 'v.*' && mode() !~? "\<c-v>.*"
+		return "0i".a:comment_string."\<esc>"
+	else
+		return "\<c-v>0I".a:comment_string."\<esc>"
+	endif
+	normal! `z
+endfunction
+function! UncommentOut(comment_string)
+	mark z
+	if mode() !~? 'v.*' && mode() !~? "\<c-v>.*"
+		call setline(line("."), substitute(getline(line(".")), "^".a:comment_string, "", ""))
+	else
+		for l:idx in range(line("'>")-line("'<"))
+			let l:line = line("'<") + l:idx
+			call setline(l:line, substitute(getline(l:line), "^".a:comment_string, "", ""))
+		endfor
+	endif
+	normal! `z
+endfunction
 augroup cpp
 	au!
 	au filetype cpp noremap <silent> <buffer> <leader>n viwo<esc>i::<esc>hi
-	au filetype cpp noremap <silent> <buffer> <leader>/d mz0i//<esc>`zll
-	au filetype cpp noremap <silent> <buffer> <leader>/u mz:s:^//<cr>`zhh:noh<cr>
-	au filetype cpp noremap <silent> <buffer> <leader>! :e ~/.config/tsvimconf/cpp/example.cpp<cr>ggvGy:bd<cr>pgg
+	au filetype cpp noremap <silent> <buffer> <expr> <leader>/d CommentOut('//')
+	au filetype cpp noremap <silent> <buffer> <leader>/u <cmd>call UncommentOut('//')<cr>
 augroup END
 augroup vim
 	au!
-	au filetype vim noremap <silent> <buffer> <leader>/d mz0i"<esc>`zl
-	au filetype vim noremap <silent> <buffer> <leader>/u mz:s/^"<cr>`zh:noh<cr>
+	au filetype vim noremap <silent> <buffer> <expr> <leader>/d CommentOut('"')
+	"au filetype vim noremap <silent> <buffer> <leader>/d mzI"<esc>`zl
+	au filetype vim noremap <silent> <buffer> <leader>/u <cmd>call UncommentOut('"')<cr>
+	"au filetype vim noremap <silent> <buffer> <leader>/u mz:s/^"<cr>`zh:noh<cr>
 augroup END
 augroup googol
 	au!
@@ -921,8 +943,8 @@ augroup END
 augroup sh
 	au!
 	au filetype bash,sh setlocal nowrap linebreak
-	au filetype python noremap <silent> <buffer> <leader>/d mz0i#<esc>`zl
-	au filetype python noremap <silent> <buffer> <leader>/u mz:s/^#<cr>`zh:noh<cr>
+	au filetype bash,sh noremap <silent> <buffer> <expr> <leader>/d CommentOut('#')
+	au filetype bash,sh noremap <silent> <buffer> <leader>/u <cmd>call UncommentOut('#')<cr>
 augroup END
 augroup python
 	au!
@@ -1034,26 +1056,27 @@ inoremap <silent> jK <esc>
 inoremap <silent> JK <esc>:w<cr>
 inoremap <silent> Jk <esc>
 " FIXME: Bicycle invented, but problem not solved
-let g:term_j_was_pressed = v:false
-function! ProcessTBut_j()
-	if g:term_j_was_pressed ==# v:true
-		return "j"
-	else
-		let g:term_j_was_pressed = v:true
-		return ""
-	endif
-endfunction
-tnoremap <nowait> <expr> <silent> j ProcessTBut_j()
-function! ProcessTBut_k()
-	if g:term_j_was_pressed ==# v:true
-		let g:term_j_was_pressed = v:false
-		return "\<c-\>\<c-n>"
-	else
-		let g:term_j_was_pressed = v:false
-		return "k"
-	endif
-endfunction
-tnoremap <nowait> <expr> <silent> k ProcessTBut_k()
+" NOTE: temporarily commented out due to above reason
+" let g:term_j_was_pressed = v:false
+" function! ProcessTBut_j()
+" 	if g:term_j_was_pressed ==# v:true
+" 		return "j"
+" 	else
+" 		let g:term_j_was_pressed = v:true
+" 		return ""
+" 	endif
+" endfunction
+" tnoremap <nowait> <expr> <silent> j ProcessTBut_j()
+" function! ProcessTBut_k()
+" 	if g:term_j_was_pressed ==# v:true
+" 		let g:term_j_was_pressed = v:false
+" 		return "\<c-\>\<c-n>"
+" 	else
+" 		let g:term_j_was_pressed = v:false
+" 		return "k"
+" 	endif
+" endfunction
+" tnoremap <nowait> <expr> <silent> k ProcessTBut_k()
 "tnoremap <silent> jk <c-\><c-n>
 tnoremap <silent> jK <c-\><c-n>:bd!<Bar>tabnew<Bar>call OpenTerm("")<cr>
 command! W w
