@@ -106,7 +106,7 @@ Config for dotfiles
 #### Where is it?
 
 ```console
-$ mkdir ~/.config/dotfiles/vim/
+$ mkdir -p ~/.config/dotfiles/vim/
 $ vim ~/.config/dotfiles/vim/config.json
 ```
 
