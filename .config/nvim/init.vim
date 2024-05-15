@@ -198,6 +198,9 @@ function! STCUpd()
 endfunction
 call STCUpd()
 
+nnoremap <c-f> <c-f><cmd>call STCUpd()<cr>
+nnoremap <c-u> <c-u><cmd>call STCUpd()<cr>
+
 set showcmd
 set showcmdloc=statusline
 set laststatus=2
