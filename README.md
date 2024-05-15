@@ -75,7 +75,7 @@ Screenshots
 
 </details>
 
-> [!warning]
+> [!Warning]
 > It works better in NeoVim, and packer.nvim does not work yet in version of Vim/NeoVim without Lua.
 
 Change to light theme: `:set background=light` \
@@ -117,7 +117,7 @@ $ DOTFILES_VIM_CONFIG_PATH=your_path nvim
 
 #### Default config
 
-> [!note]
+> [!Note]
 > Fields starting with `_comment` are comments
 
 ```json
