@@ -115,10 +115,10 @@ $ vim ~/.config/dotfiles/vim/config.json
 {
 "_comment_1":"Transparent background",
 "_comment_2":"Values:",
-"_comment_3":"	always - In dark and light theme",
-"_comment_4":"	dark   - In dark theme",
-"_comment_5":"	light  - In light theme",
-"_comment_6":"	never  - Non-transparent",
+"_comment_3":"    always - In dark and light theme",
+"_comment_4":"    dark   - In dark theme",
+"_comment_5":"    light  - In light theme",
+"_comment_6":"    never  - Non-transparent",
 	"use_transparent_bg": "dark",
 
 "_comment_7":"Prevent setting up LSP",
