@@ -76,10 +76,9 @@ Screenshots
 </details>
 
 > [!warning]
-> It works better in NeoVim,\
-and packer.nvim does not work yet in version of Vim/NeoVim without Lua.
+> It works better in NeoVim, and packer.nvim does not work yet in version of Vim/NeoVim without Lua.
 
-Change to light theme: `:set background=light`
+Change to light theme: `:set background=light` \
 Change to dark theme: `:set background=dark`
 
 <details><summary>
