@@ -66,8 +66,14 @@ $ cp ./.gitmessage ~/
 
 This is NeoVim/Vim configuration
 
+<details><summary>
+Screenshots
+</summary>
+
 <img src=.github/images/Screenshot_2024-04-13-18-21-05-51_84d3000e3f4017145260f7618db1d683.jpg>
 <img src=.github/images/Screenshot_2024-04-13-18-23-57-59_84d3000e3f4017145260f7618db1d683.jpg>
+
+</details>
 
 > [!warning]
 > It works better in NeoVim,\
@@ -84,6 +90,9 @@ and packer.nvim does not work yet in version of Vim/NeoVim without Lua.
 ```vim
 :set background=dark
 ```
+<details><summary>
+Manual installation
+</summary>
 
 ### Installation
 
@@ -97,13 +106,22 @@ $ cp -r ./.config/nvim/ ~/.config/
 $ echo "so ~/.config/nvim/init.vim" >> ~/.vimrc
 ```
 
+</details>
+
+<details><summary>
 ### Config for dotfiles
+</summary>
 
 #### Where is it?
 
 ```console
 $ mkdir ~/.config/dotfiles/vim/
 $ vim ~/.config/dotfiles/vim/config.json
+```
+
+If you want to change default dotfiles config path:
+```console
+$ DOTFILES_VIM_CONFIG_PATH=your_path nvim
 ```
 
 #### Default config
@@ -126,6 +144,8 @@ $ vim ~/.config/dotfiles/vim/config.json
 	"setup_lsp": false
 }
 ```
+
+</details>
 
 ## tsch.sh [deprecated]
 
