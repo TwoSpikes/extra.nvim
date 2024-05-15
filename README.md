@@ -79,17 +79,9 @@ Screenshots
 > It works better in NeoVim,\
 and packer.nvim does not work yet in version of Vim/NeoVim without Lua.
 
-#### Change to light theme
+Change to light theme: `:set background=light`
+Change to dark theme: `:set background=dark`
 
-```vim
-:set background=light
-```
-
-#### Change to dark theme
-
-```vim
-:set background=dark
-```
 <details><summary>
 Manual installation
 </summary>
@@ -109,7 +101,7 @@ $ echo "so ~/.config/nvim/init.vim" >> ~/.vimrc
 </details>
 
 <details><summary>
-### Config for dotfiles
+Config for dotfiles
 </summary>
 
 #### Where is it?
