@@ -1,4 +1,4 @@
-if vim.call('filereadable', vim.call('expand', vim.g.CONFIG_PATH..'/options/do_not_setup_lsp.null'))==1 then
+if vim.g.setup_lsp == false then
 	return
 end
 

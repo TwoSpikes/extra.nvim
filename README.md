@@ -97,33 +97,35 @@ $ cp -r ./.config/nvim/ ~/.config/
 $ echo "so ~/.config/nvim/init.vim" >> ~/.vimrc
 ```
 
-### Some options
+### Config for dotfiles
 
-#### Make directory for options
-
-```console
-$ mkdir ~/.config/nvim/options
-```
-
-#### Prevent LSP setup
-
-Useful if you do not want to setup LSP or if it does not work
+#### Where is it?
 
 ```console
-$ touch ~/.config/nvim/options/do_not_setup_lsp.null
+$ mkdir ~/.config/dotfiles/vim/
+$ vim ~/.config/dotfiles/vim/config.json
 ```
 
-#### Transparent background
+#### Default config
 
-Useful if you are using terminal with transparent background
+> [!note]
+> Fields starting with `_comment` are comments
 
-```console
-$ touch ~/.config/nvim/options/use_transparent_bg.null
+```json
+{
+"_comment_1":"Transparent background",
+"_comment_2":"Values:",
+"_comment_3":"	always - In dark and light theme",
+"_comment_4":"	dark   - In dark theme",
+"_comment_5":"	light  - In light theme",
+"_comment_6":"	never  - Non-transparent",
+	"use_transparent_bg": "dark",
+
+"_comment_7":"Prevent setting up LSP",
+"_comment_8":"Useful if it does not work",
+	"setup_lsp": false
+}
 ```
-
-### How to remove options
-
-Just delete files connected with them and restart Vim/NeoVim
 
 ## tsch.sh [deprecated]
 

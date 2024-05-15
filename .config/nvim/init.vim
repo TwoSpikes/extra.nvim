@@ -2,7 +2,46 @@
 
 let mapleader = " "
 
-let g:CONFIG_PATH = "$HOME/.config/nvim"
+if !exists('g:DOTFILES_CONFIG_PATH')
+	if !exists('$DOTFILES_VIM_CONFIG_PATH')
+		let g:DOTFILES_CONFIG_PATH = "$HOME/.config/dotfiles/vim/config.json"
+	else
+		let g:DOTFILES_CONFIG_PATH = $DOTFILES_VIM_CONFIG_PATH
+	endif
+	let g:DOTFILES_CONFIG_PATH = expand(g:DOTFILES_CONFIG_PATH)
+endif
+
+function! LoadDotfilesConfig(path)
+	if !filereadable(a:path)
+		echohl ErrorMsg
+		echom "error: no dotfiles vim config"
+		return 1
+	endif
+	let l:dotfiles_config_str = join(readfile(a:path, ''), '')
+	silent execute "let g:dotfiles_config = json_decode(l:dotfiles_config_str)"
+	if type(g:dotfiles_config) !=# v:t_dict
+		echohl ErrorMsg
+		echom "error: failed to parse dotfiles vim config"
+		return 1
+	endif
+
+	if exists('g:dotfiles_config["setup_lsp"]')
+		let g:setup_lsp = g:dotfiles_config["setup_lsp"]
+	endif
+
+	if exists('g:dotfiles_config["use_transparent_bg"]')
+		let g:use_transparent_bg = g:dotfiles_config["use_transparent_bg"]
+	endif
+endfunction
+call LoadDotfilesConfig(g:DOTFILES_CONFIG_PATH)
+
+if !exists('g:CONFIG_PATH')
+	if !exists('$VIM_CONFIG_PATH')
+		let g:CONFIG_PATH = "$HOME/.config/nvim"
+	else
+		let g:CONFIG_PATH = $VIM_CONFIG_PATH
+	endif
+endif
 
 if $PREFIX == ""
 	call setenv('PREFIX', '/usr/')

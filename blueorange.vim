@@ -449,10 +449,13 @@ if &t_Co >= 256
   hi! link MessageWindow PMenu
   hi! link PopupNotification Todo
   if &background ==# 'dark'
-    if filereadable(expand(g:CONFIG_PATH.."/options/use_transparent_bg.null"))
-      hi Normal ctermfg=231 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=NULL gui=NONE
-    else
-      hi Normal ctermfg=231 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=#000020 gui=NONE
+    if exists('g:use_transparent_bg')
+      if g:use_transparent_bg ==# "always"
+      \||g:use_transparent_bg ==# "dark"
+        hi Normal ctermfg=231 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=NULL gui=NONE
+      else
+        hi Normal ctermfg=231 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=#000020 gui=NONE
+      endif
     endif
     hi NormalNC ctermfg=15 ctermbg=NONE cterm=NONE guifg=#ffefff guibg=#000020 gui=NONE
     hi MsgArea ctermfg=15 ctermbg=NONE cterm=NONE guifg=#c6c6c6 guibg=#000020 gui=NONE
@@ -576,10 +579,13 @@ if &t_Co >= 256
     hi CocSearch ctermfg=222 ctermbg=NONE cterm=NONE
   else
     " Light background
-    if filereadable(expand(g:CONFIG_PATH.."/options/use_transparent_bg.null"))
-      hi Normal ctermfg=0 ctermbg=231 cterm=NONE guifg=#000000 guibg=NULL gui=NONE
-    else
-      hi Normal ctermfg=0 ctermbg=231 cterm=NONE guifg=#000000 guibg=#fff8f0 gui=NONE
+    if exists('g:use_transparent_bg')
+      if g:use_transparent_bg ==# "always"
+      \||g:use_transparent_bg ==# "light"
+        hi Normal ctermfg=0 ctermbg=231 cterm=NONE guifg=#000000 guibg=NULL gui=NONE
+      else
+        hi Normal ctermfg=0 ctermbg=231 cterm=NONE guifg=#000000 guibg=#fff8f0 gui=NONE
+      endif
     endif
     hi MsgArea ctermfg=0 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=#505050 gui=reverse
     " hi Statusline ctermfg=231 ctermbg=16 cterm=bold
