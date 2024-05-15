@@ -74,6 +74,10 @@ install_package() {
 }
 run_as_superuser_if_needed() {
 	needed_command="${1}"
+	
+	if ${run_as_yes}; then
+		needed_command="yes | ${needed_command}"
+	fi
 
 	if test ${need_to_run_as_superuser} = "no"; then
 		${needed_command}
@@ -194,6 +198,7 @@ echo "Current system: ${OS}"
 echo "Current system version: ${VER}"
 
 determine_package_manager() {
+	run_as_yes=false
 	package_manager_is_winget=false
 	package_manager_not_found=false
 	if ${presume_no_package_manager}; then
@@ -229,6 +234,9 @@ determine_package_manager() {
 			PACKAGE_COMMAND="slackpkg install"
 		elif command -v "apk" > /dev/null 2>&1; then
 			PACKAGE_COMMAND="apk add"
+		elif command -v "brew" > /dev/null 2>&1; then
+			run_as_yes=true
+			PACKAGE_COMMAND="brew install"
 		elif command -v "flatpak" > /dev/null 2>&1; then
 			PACKAGE_COMMAND="flatpak install"
 		elif command -v "snap" > /dev/null 2>&1; then
