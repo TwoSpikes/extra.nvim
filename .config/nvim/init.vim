@@ -32,6 +32,10 @@ function! LoadDotfilesConfig(path)
 	if exists('g:dotfiles_config["use_transparent_bg"]')
 		let g:use_transparent_bg = g:dotfiles_config["use_transparent_bg"]
 	endif
+
+	if exists('g:dotfiles_config["background"]')
+		let g:background = g:dotfiles_config["background"]
+	endif
 endfunction
 call LoadDotfilesConfig(g:DOTFILES_CONFIG_PATH)
 
@@ -48,7 +52,13 @@ if $PREFIX == ""
 endif
 let g:COLORSCHEME_PATH = "$PREFIX/share/nvim/runtime/colors/blueorange.vim"
 set termguicolors
-set background=dark
+if exists('g:background')
+	if g:background ==# "dark"
+		set background=dark
+	else
+		set background=light
+	endif
+endif
 exec printf("so %s", g:COLORSCHEME_PATH)
 set lazyredraw
 set encoding=utf-8

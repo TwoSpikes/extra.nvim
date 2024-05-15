@@ -122,17 +122,21 @@ $ DOTFILES_VIM_CONFIG_PATH=your_path nvim
 
 ```json
 {
-"_comment_1":"Transparent background",
-"_comment_2":"Values:",
-"_comment_3":"    always - In dark and light theme",
-"_comment_4":"    dark   - In dark theme",
-"_comment_5":"    light  - In light theme",
-"_comment_6":"    never  - Non-transparent",
+"_comment_01":"Transparent background",
+"_comment_02":"Values:",
+"_comment_03":"    always - In dark and light theme",
+"_comment_04":"    dark   - In dark theme",
+"_comment_05":"    light  - In light theme",
+"_comment_06":"    never  - Non-transparent",
 	"use_transparent_bg": "dark",
 
-"_comment_7":"Prevent setting up LSP",
-"_comment_8":"Useful if it does not work",
-	"setup_lsp": false
+"_comment_07":"Prevent setting up LSP if false",
+"_comment_08":"Useful if it does not work",
+	"setup_lsp": false,
+
+"_comment_09":"light - light background",
+"_comment_10":"dark  - dark background",
+	"background": "dark"
 }
 ```
 
