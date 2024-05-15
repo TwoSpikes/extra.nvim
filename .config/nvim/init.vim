@@ -25,17 +25,12 @@ function! LoadDotfilesConfig(path)
 		return 1
 	endif
 
-	if exists('g:dotfiles_config["setup_lsp"]')
-		let g:setup_lsp = g:dotfiles_config["setup_lsp"]
-	endif
-
-	if exists('g:dotfiles_config["use_transparent_bg"]')
-		let g:use_transparent_bg = g:dotfiles_config["use_transparent_bg"]
-	endif
-
-	if exists('g:dotfiles_config["background"]')
-		let g:background = g:dotfiles_config["background"]
-	endif
+	let l:option_list = ['setup_lsp', 'use_transparent_bg', 'background']
+	for option_ in l:option_list
+		if exists('g:dotfiles_config["'.option_.'"]')
+			exec printf("let %s = g:dotfiles_config[option_]", "g:".option_)
+		endif
+	endfor
 endfunction
 call LoadDotfilesConfig(g:DOTFILES_CONFIG_PATH)
 
