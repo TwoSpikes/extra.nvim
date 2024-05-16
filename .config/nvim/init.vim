@@ -1052,6 +1052,7 @@ noremap <c-w><c-g> <cmd>echo "Quit"<cr>
 " Emacs support
 noremap <silent> <c-x><c-c> <cmd>qa<cr>
 noremap <silent> <c-x>s <cmd>w<cr>
+noremap <silent> <c-x>S <cmd>wall<Bar>echohl MsgArea<Bar>echo 'Saved all buffers'<cr>
 noremap <silent> <c-x><c-s> <cmd>w<cr>
 function! Killbuffer()
 	echohl Question

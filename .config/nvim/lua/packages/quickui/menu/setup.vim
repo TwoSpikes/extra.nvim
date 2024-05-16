@@ -8,7 +8,7 @@ call quickui#menu#install('&File', [
             \ ["&Close", 'quit', 'Closes the current buffer'],
             \ ["--", '' ],
             \ ["&Save\tCtrl+x s", 'write', 'Save changes in current buffer'],
-            \ ["Save &All", 'wall | echo "Saved all buffers"', 'Save changes to all buffers' ],
+            \ ["Save &All\tCtrl+x S", 'wall | echo "Saved all buffers"', 'Save changes to all buffers' ],
             \ ["--", '' ],
             \ ["E&xit\tCtrl-x Ctrl-c", 'qall', 'Close Vim/NeoVim'],
             \ ])
