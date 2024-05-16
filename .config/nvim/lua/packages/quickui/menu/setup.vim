@@ -3,28 +3,26 @@ call quickui#menu#reset()
 
 " install a 'File' menu, use [text, command] to represent an item.
 call quickui#menu#install('&File', [
-            \ [ "&New File\tCtrl+n", 'echo 0' ],
-            \ [ "&Open File\t(F3)", 'echo 1' ],
-            \ [ "&Close", 'echo 2' ],
-            \ [ "--", '' ],
-            \ [ "&Save\tCtrl+s", 'echo 3'],
-            \ [ "Save &As", 'echo 4' ],
-            \ [ "Save All", 'echo 5' ],
-            \ [ "--", '' ],
-            \ [ "E&xit\tAlt+x", 'echo 6' ],
+            \ ["&New File", 'new', 'Creates a new buffer'],
+            \ ["&Open File\tCtrl+n", 'NERDTreeToggle', 'Opens a file tree'],
+            \ ["&Close", 'quit', 'Closes the current buffer'],
+            \ ["--", '' ],
+            \ ["&Save\tCtrl+x s", 'write', 'Save changes in current buffer'],
+            \ ["Save &All", 'wall | echo "Saved all buffers"', 'Save changes to all buffers' ],
+            \ ["--", '' ],
+            \ ["E&xit\tCtrl-x Ctrl-c", 'qall', 'Close Vim/NeoVim'],
             \ ])
 
 " items containing tips, tips will display in the cmdline
 call quickui#menu#install('&Edit', [
-            \ [ '&Copy', 'echo 1', 'help 1' ],
-            \ [ '&Paste', 'echo 2', 'help 2' ],
-            \ [ '&Find', 'echo 3', 'help 3' ],
+            \ ["&Copy line\tyy", 'normal! vy', 'Copy the line where cursor is located'],
+            \ ["&Paste\tp", 'normal! p', 'Paste copyied text after the cursor'],
             \ ])
 
 " script inside %{...} will be evaluated and expanded in the string
 call quickui#menu#install("&Option", [
 			\ ['Set &Spell %{&spell? "Off":"On"}', 'set spell!'],
-			\ ['Set &Cursor Line %{&cursorline? "Off":"On"}', 'set cursorline!'],
+			\ ['Set &Cursor Column %{g:cursorcolumn==#v:true?"Off":"On"}', 'let g:cursorcolumn=g:cursorcolumn==#v:true?v:false:v:true|call HandleBuftype()'],
 			\ ['Set &Paste %{&paste? "Off":"On"}', 'set paste!'],
 			\ ])
 

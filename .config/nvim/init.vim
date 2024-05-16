@@ -653,7 +653,7 @@ function! ProcessGBut(button)
 	else
 		let temp .= v:count . a:button
 	endif
-	if s:fullscreen
+	if s:fullscreen || !&cursorcolumn
 		call STCUpd()
 	endif
 	if &buftype !=# 'terminal'
