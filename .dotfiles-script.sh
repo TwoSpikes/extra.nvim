@@ -53,6 +53,8 @@ export SOURCE_PROGRAM='.'
 export CLEAR_PROGRAM='clear'
 export WHICH_PROGRAM='type'
 
+"${ECHO_PROGRAM}" -n "${esc}[5 q"
+
 MAX_INSTALL_ATTEMPT=2
 MAX_WGET_INSTALL_ATTEMPT=2
 DEFAULT_INSTALL_COMMAND='install'
@@ -69,7 +71,7 @@ q() {
 	fi
 	"${EXIT_PROGRAM}" ${actual_exitcode}
 }
-eb() { exec bash --noprofile --init-file <(echo 'clear'); }
+eb() { exec bash --noprofile -c "clear"; }
 _fE() {
     "${CLEAR_PROGRAM}"
 	"${RUST_BUILD_RELEASE_COMMAND}" &> temp_file

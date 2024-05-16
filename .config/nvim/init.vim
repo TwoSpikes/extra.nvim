@@ -1326,23 +1326,25 @@ function! g:TermuxSaveCursorStyle()
 		else
 			let g:termux_cursor_style = trim(readfile(expand("~/.cache/dotfiles/termux/terminal_cursor_style"))[0])
 		endif
+	elseif $TERMUX_VERSION
+		let g:termux_cursor_style = 'bar'
 	endif
 endfunction
 function! g:TermuxLoadCursorStyle()
 	if $TERMUX_VERSION !=# "" && filereadable(expand("~/.termux/termux.properties")) && exists("g:termux_cursor_style")
-		if g:termux_cursor_style ==# "block"
-			let &guicursor = "a:block"
-		elseif g:termux_cursor_style ==# "bar"
-			let &guicursor = "a:ver25"
-		elseif g:termux_cursor_style ==# "underline"
-			let &guicursor = "a:hor25"
+		if g:termux_cursor_style ==# 'block'
+			let &guicursor = 'a:block'
+		elseif g:termux_cursor_style ==# 'bar'
+			let &guicursor = 'a:ver25'
+		elseif g:termux_cursor_style ==# 'underline'
+			let &guicursor = 'a:hor25'
 		endif
 	endif
 endfunction
 au! VimEnter * call g:TermuxSaveCursorStyle()
 au! VimLeave * call g:TermuxLoadCursorStyle()
 
-if expand("%") == "" && !exists("g:DO_NOT_OPEN_ANYTHING")
+if expand('%') == '' && !exists('g:DO_NOT_OPEN_ANYTHING')
 	edit ./
 endif
 
