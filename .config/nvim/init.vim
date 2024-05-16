@@ -25,7 +25,7 @@ function! LoadDotfilesConfig(path)
 		return 1
 	endif
 
-	let l:option_list = ['setup_lsp', 'use_transparent_bg', 'background', 'use_italic_style']
+	let l:option_list = ['setup_lsp', 'use_transparent_bg', 'background', 'use_italic_style', 'cursorcolumn']
 	for option_ in l:option_list
 		if exists('g:dotfiles_config["'.option_.'"]')
 			exec printf("let %s = g:dotfiles_config[option_]", "g:".option_)
@@ -550,9 +550,7 @@ set timeoutlen=500
 set nottimeout
 set ttimeoutlen=500
 
-set cursorline
 set cursorlineopt=screenline,number
-set cursorcolumn
 set mouse=a
 set nomousefocus
 set nomousehide
@@ -1020,7 +1018,11 @@ augroup terminal
 augroup END
 augroup visual
 	function! HandleBuftype()
-		let &cursorcolumn = (mode() !~# "[vVirco]" && mode() !~# "\<c-v>") && !s:fullscreen && &filetype !=# 'netrw' && &buftype !=# 'terminal' && &filetype !=# 'nerdtree' && &buftype !=# 'nofile'
+		let pre_cursorcolumn = (mode() !~# "[vVirco]" && mode() !~# "\<c-v>") && !s:fullscreen && &filetype !=# 'netrw' && &buftype !=# 'terminal' && &filetype !=# 'nerdtree' && &buftype !=# 'nofile'
+		if exists('g:cursorcolumn')
+			let pre_cursorcolumn = pre_cursorcolumn && (g:cursorcolumn ==# v:true)
+		endif
+		let &cursorcolumn = pre_cursorcolumn
 		let &cursorline = mode() !~# "[irco]" && !s:fullscreen && &buftype !=# 'terminal' && (&buftype !=# 'nofile' || &filetype ==# 'nerdtree')
 	endfunction
 	au ModeChanged,BufWinEnter * call HandleBuftype()

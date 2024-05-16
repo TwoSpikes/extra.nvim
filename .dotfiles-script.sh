@@ -49,6 +49,7 @@ export EXIT_PROGRAM='exit'
 export ECHO_PROGRAM='echo'
 export PRINTF_PROGRAM='printf'
 export ALIAS_PROGRAM='alias'
+export UNALIAS_PROGRAM='unalias'
 export SOURCE_PROGRAM='.'
 export CLEAR_PROGRAM='clear'
 export WHICH_PROGRAM='type'
@@ -66,8 +67,8 @@ DEFAULT_INSTALL_COMMAND='install'
 DEFAULT_SEARCH_COMMAND='search'
 
 al() { "${ALIAS_PROGRAM}" "${@}"; }
-if alias ls > /dev/null 2>&1; then
-	unalias ls
+if "${ALIAS_PROGRAM}" ls > /dev/null 2>&1; then
+	"${UNALIAS_PROGRAM}" ls
 fi
 ls() { "${LS_PROGRAM}" "${@}"; }
 q() {

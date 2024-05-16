@@ -140,9 +140,12 @@ $ DOTFILES_VIM_CONFIG_PATH=your_path nvim
 
 "_comment_11":"Use italic style for text",
 "_comment_12":"Useful for terminals with bugged italic font (like Termux)",
-	"use_italic_style": true,
+	"use_italic_style": false,
 
-"_comment_13":"Ending field to not put comma every time"
+"_comment_13":"Enables or disables cursor column",
+	"cursorcolumn": true,
+
+"_comment_end":"Ending field to not put comma every time"
 }
 ```
 
