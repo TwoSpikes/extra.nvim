@@ -52,6 +52,11 @@ export ALIAS_PROGRAM='alias'
 export SOURCE_PROGRAM='.'
 export CLEAR_PROGRAM='clear'
 export WHICH_PROGRAM='type'
+if ! command -v "lsd" > /dev/null 2>&1; then
+	export LS_PROGRAM='ls'
+else
+	export LS_PROGRAM='lsd'
+fi
 
 "${ECHO_PROGRAM}" -n "${esc}[5 q"
 
@@ -60,7 +65,8 @@ MAX_WGET_INSTALL_ATTEMPT=2
 DEFAULT_INSTALL_COMMAND='install'
 DEFAULT_SEARCH_COMMAND='search'
 
-al() { "${ALIAS_PROGRAM}"; }
+al() { "${ALIAS_PROGRAM}" "${@}"; }
+ls() { "${LS_PROGRAM}" "${@}"; }
 q() {
 	exitcode=${1}
 	actual_exitcode=''
