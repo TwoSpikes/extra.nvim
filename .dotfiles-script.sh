@@ -66,6 +66,9 @@ DEFAULT_INSTALL_COMMAND='install'
 DEFAULT_SEARCH_COMMAND='search'
 
 al() { "${ALIAS_PROGRAM}" "${@}"; }
+if alias ls > /dev/null 2>&1; then
+	unalias ls
+fi
 ls() { "${LS_PROGRAM}" "${@}"; }
 q() {
 	exitcode=${1}
