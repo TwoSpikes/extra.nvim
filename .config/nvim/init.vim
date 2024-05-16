@@ -430,14 +430,14 @@ inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
 augroup numbertoggle
 	autocmd!
 	function! Numbertoggle_stcabs()
-		if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree'
+		if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree' && &filetype !=# 'TelescopePrompt'
 			call STCAbs(v:insertmode)
 		else
 			call STCNo()
 		endif
 	endfunction
 	function! Numbertoggle_stcrel()
-		if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree'
+		if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree' && &filetype !=# 'TelescopePrompt'
 			call STCRel()
 		else
 			call STCNo()
@@ -1023,7 +1023,7 @@ augroup visual
 			let pre_cursorcolumn = pre_cursorcolumn && (g:cursorcolumn ==# v:true)
 		endif
 		let &cursorcolumn = pre_cursorcolumn
-		let &cursorline = mode() !~# "[irco]" && !s:fullscreen && &buftype !=# 'terminal' && (&buftype !=# 'nofile' || &filetype ==# 'nerdtree')
+		let &cursorline = mode() !~# "[irco]" && !s:fullscreen && &buftype !=# 'terminal' && (&buftype !=# 'nofile' || &filetype ==# 'nerdtree') && &filetype !=# 'TelescopePrompt'
 	endfunction
 	au ModeChanged,BufWinEnter * call HandleBuftype()
 augroup END
