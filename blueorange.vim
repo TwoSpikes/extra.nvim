@@ -546,7 +546,14 @@ if &t_Co >= 256
     hi StatementVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#608fdf guibg=NONE gui=NONE
     call CopyHighlightGroup("StatementNorm", "Statement")
     "hi Statement ctermfg=228 ctermbg=NONE cterm=bold guifg=#ffff87 guibg=NONE gui=bold
-    hi Keyword ctermfg=220 ctermbg=NONE cterm=italic guifg=#ffdf00 guibg=NONE gui=italic
+    hi Keyword ctermfg=220 ctermbg=NONE guifg=#ffdf00 guibg=NONE
+    if exists('g:use_italic_style')
+      if g:use_italic_style ==# v:true
+        hi Keyword cterm=italic gui=italic
+      else
+        hi Keyword cterm=NONE gui=NONE
+      endif
+    endif
     hi Type ctermfg=77 ctermbg=NONE cterm=NONE
     hi PreProc ctermfg=116 ctermbg=NONE cterm=NONE
     hi Special ctermfg=105 ctermbg=NONE cterm=bold

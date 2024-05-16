@@ -136,7 +136,13 @@ $ DOTFILES_VIM_CONFIG_PATH=your_path nvim
 
 "_comment_09":"light - light background",
 "_comment_10":"dark  - dark background",
-	"background": "dark"
+	"background": "dark",
+
+"_comment_11":"Use italic style for text",
+"_comment_12":"Useful for terminals with bugged italic font (like Termux)",
+	"use_italic_style": true,
+
+"_comment_13":"Ending field to not put comma every time"
 }
 ```
 
