@@ -55,6 +55,14 @@ call quickui#menu#install("&Option", [
 			\ ['Set &Paste %{&paste? "Off":"On"}', 'set paste!'],
 			\ ])
 
+call quickui#menu#install('&Config', [
+		\ ["Open &init.vim\tLEAD ve", 'call SelectPosition("e ".g:CONFIG_PATH."/init.vim")', 'Open '.g:CONFIG_PATH.'/init.vim'],
+		\ ["Open &plugins\tLEAD vi", 'call SelectPosition("e ".g:PLUGINS_INSTALL_FILE_PATH)', 'Open '.g:PLUGINS_INSTALL_FILE_PATH],
+		\ ["Open plugins &setup\tLEAD vs", 'call SelectPosition("e ".g:PLUGINS_SETUP_FILE_PATH)', 'Open '.g:PLUGINS_SETUP_FILE_PATH],
+		\ ["Open &lsp settings\tLEAD vs", 'call SelectPosition("e ".g:LSP_PLUGINS_SETUP_FILE_PATH)', 'Open '.g:LSP_PLUGINS_SETUP_FILE_PATH],
+		\ ["Open &json config\tLEAD vj", 'call SelectPosition("e ".g:DOTFILES_CONFIG_PATH."/config.json")', 'Open '.g:DOTFILES_CONFIG_PATH.'/config.json'],
+	  \ ])
+
 " register HELP menu with weight 10000
 call quickui#menu#install('H&elp', [
 			\ ["&Cheatsheet", 'help index', ''],

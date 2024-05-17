@@ -729,6 +729,28 @@ endfor
 "nnoremap <leader>lC :tabnew<Bar>ter<Bar><cr>a./build.sh
 "nnoremap <leader>lc :tabnext<Bar><c-\><c-n>:bd!<Bar>tabnew<Bar>ter<cr>a!!<cr>
 
+function! SelectPosition(cmd)
+	echohl Question
+	echon 'Select position (h,v,b,t): '
+	echohl Normal
+	let position = nr2char(getchar())
+	echon position
+	redraw
+	if position ==# 'h'
+		split
+	elseif position ==# 'v'
+		vsplit
+	elseif position ==# 'b'
+	elseif position ==# 't'
+		tabnew
+	else
+		echohl ErrorMsg
+		echom "Wrong position: ".position
+		return 1
+	endif
+	exec a:cmd
+endfunction
+
 nnoremap <silent> * *:noh<cr>
 nnoremap <silent> <c-*> *
 nnoremap <silent> # #:noh<cr>
@@ -752,34 +774,23 @@ noremap <silent> <leader><c-e> <c-e>
 noremap <silent> <leader><c-y> <c-y>
 
 " NVIMRC FILE
-let s:INIT_FILE_PATH = '~/.config/nvim/init.vim'
-let s:PLUGINS_INSTALL_FILE_PATH = '~/.config/nvim/lua/packages/plugins.lua'
-let s:PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/plugins_setup.lua'
-let s:LSP_PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/lsp/plugins.lua'
+let g:PLUGINS_INSTALL_FILE_PATH = '~/.config/nvim/lua/packages/plugins.lua'
+let g:PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/plugins_setup.lua'
+let g:LSP_PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/lsp/plugins.lua'
 
-exec printf("noremap <silent> <leader>vet <esc>:tabe %s<cr>", s:INIT_FILE_PATH)
-exec printf("noremap <silent> <leader>veb <esc>:e %s<cr>", s:INIT_FILE_PATH)
-exec printf("noremap <silent> <leader>veh <esc>:sp %s<cr>", s:INIT_FILE_PATH)
-exec printf("noremap <silent> <leader>vev <esc>:vsp %s<cr>", s:INIT_FILE_PATH)
-exec printf("noremap <silent> <leader>ves <esc>:so %s<cr>", s:INIT_FILE_PATH)
+exec printf('noremap <silent> <leader>ve <cmd>call SelectPosition("e %s")<cr>', g:CONFIG_PATH."/init.vim")
+exec printf("noremap <silent> <leader>ves <esc>:so %s<cr>", g:CONFIG_PATH)
 
-exec printf("noremap <silent> <leader>vit <esc>:tabe %s<cr>", s:PLUGINS_INSTALL_FILE_PATH)
-exec printf("noremap <silent> <leader>vib <esc>:e %s<cr>", s:PLUGINS_INSTALL_FILE_PATH)
-exec printf("noremap <silent> <leader>vih <esc>:sp %s<cr>", s:PLUGINS_INSTALL_FILE_PATH)
-exec printf("noremap <silent> <leader>viv <esc>:vsp %s<cr>", s:PLUGINS_INSTALL_FILE_PATH)
-exec printf("noremap <silent> <leader>vis <esc>:so %s<cr>", s:PLUGINS_INSTALL_FILE_PATH)
+exec printf('noremap <silent> <leader>vi <cmd>call SelectPosition("e %s")<cr>', g:PLUGINS_INSTALL_FILE_PATH)
+exec printf("noremap <silent> <leader>vis <esc>:so %s<cr>", g:PLUGINS_INSTALL_FILE_PATH)
 
-exec printf("noremap <silent> <leader>vst <esc>:tabe %s<cr>", s:PLUGINS_SETUP_FILE_PATH)
-exec printf("noremap <silent> <leader>vsb <esc>:e %s<cr>", s:PLUGINS_SETUP_FILE_PATH)
-exec printf("noremap <silent> <leader>vsh <esc>:sp %s<cr>", s:PLUGINS_SETUP_FILE_PATH)
-exec printf("noremap <silent> <leader>vsv <esc>:vsp %s<cr>", s:PLUGINS_SETUP_FILE_PATH)
-exec printf("noremap <silent> <leader>vss <esc>:so %s<cr>", s:PLUGINS_SETUP_FILE_PATH)
+exec printf('noremap <silent> <leader>vs <cmd>call SelectPosition("e %s")<cr>', g:PLUGINS_INSTALL_FILE_PATH)
+exec printf("noremap <silent> <leader>vss <esc>:so %s<cr>", g:PLUGINS_SETUP_FILE_PATH)
 
-exec printf("noremap <silent> <leader>vlt <esc>:tabe %s<cr>", s:LSP_PLUGINS_SETUP_FILE_PATH)
-exec printf("noremap <silent> <leader>vlb <esc>:e %s<cr>", s:LSP_PLUGINS_SETUP_FILE_PATH)
-exec printf("noremap <silent> <leader>vlh <esc>:sp %s<cr>", s:LSP_PLUGINS_SETUP_FILE_PATH)
-exec printf("noremap <silent> <leader>vlv <esc>:vsp %s<cr>", s:LSP_PLUGINS_SETUP_FILE_PATH)
-exec printf("noremap <silent> <leader>vls <esc>:so %s<cr>", s:LSP_PLUGINS_SETUP_FILE_PATH)
+exec printf('noremap <silent> <leader>vl <cmd>call SelectPosition("e %s")<cr>', g:LSP_PLUGINS_SETUP_FILE_PATH)
+exec printf("noremap <silent> <leader>vls <esc>:so %s<cr>", g:LSP_PLUGINS_SETUP_FILE_PATH)
+
+exec printf('noremap <silent> <leader>vj <cmd>call SelectPosition("e %s")<cr>', g:DOTFILES_CONFIG_PATH)
 
 " BASHRC FILE
 noremap <silent> <leader>bt <esc>:tabe ~/.dotfiles-script.sh<cr>
@@ -1212,9 +1223,9 @@ inoremap <expr> " HandleKeystroke('"')
 inoremap <expr> <bs> HandleKeystroke('\<bs>')
 
 if has('nvim')
-	exec printf("luafile %s", s:PLUGINS_INSTALL_FILE_PATH)
+	exec printf("luafile %s", g:PLUGINS_INSTALL_FILE_PATH)
 	PackerInstall
-	exec printf("luafile %s", s:PLUGINS_SETUP_FILE_PATH)
+	exec printf("luafile %s", g:PLUGINS_SETUP_FILE_PATH)
 endif
 
 so ~/xterm-color-table.vim
