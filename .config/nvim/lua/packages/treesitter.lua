@@ -1,4 +1,3 @@
-require('nvim-treesitter').setup()
 require('nvim-treesitter.install').prefer_git = true
 -- require('nvim-treesitter.configs').setup {
 -- 	ensure_installed = { "c", "vim", "lua", "rust" },

@@ -430,14 +430,14 @@ inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
 augroup numbertoggle
 	autocmd!
 	function! Numbertoggle_stcabs()
-		if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree' && &filetype !=# 'TelescopePrompt'
+		if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer'
 			call STCAbs(v:insertmode)
 		else
 			call STCNo()
 		endif
-	endfunction
+	endfunction	
 	function! Numbertoggle_stcrel()
-		if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree' && &filetype !=# 'TelescopePrompt'
+		if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer'
 			call STCRel()
 		else
 			call STCNo()
@@ -456,6 +456,7 @@ augroup numbertoggle
 	autocmd InsertLeave * call Numbertoggle_stcrel()
 	autocmd InsertEnter * call Numbertoggle_stcabs()
 	autocmd BufReadPost,BufEnter,BufLeave,WinLeave,WinEnter * call Numbertoggle()
+	autocmd FileType packer call STCNo() | set nocursorline nocursorcolumn
 	" autocmd BufLeave * call Numbertoggle_no()
 augroup END
 
@@ -909,6 +910,7 @@ noremap <silent> <leader>: :<c-f>a
 noremap <leader>= <cmd>echo "use \<c-c\>c"<cr>
 noremap <leader>- <cmd>echo "use \<c-c\>C"<cr>
 noremap <leader>1 :!
+nnoremap <leader>u <cmd>lua require('packer').sync()<cr>
 
 " QUOTES AROUND (DEPRECATED BECAUSE OF surround.vim)
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>
@@ -954,6 +956,17 @@ function! CommentOut(comment_string)
 	endif
 	normal! `z
 endfunction
+function! CommentOutDefault()
+	if exists('g:default_comment_string')
+		return CommentOut(g:default_comment_string)
+	else
+		echohl ErrorMsg
+		echo "Comments are not available"
+	endif
+endfunction
+function! DoCommentOutDefault()
+	exec "normal! ".CommentOutDefault()
+endfunction
 function! UncommentOut(comment_string)
 	mark z
 	if mode() !~? 'v.*' && mode() !~? "\<c-v>.*"
@@ -966,52 +979,58 @@ function! UncommentOut(comment_string)
 	endif
 	normal! `z
 endfunction
+function! UncommentOutDefault()
+	if exists('g:default_comment_string')
+		call UncommentOut(g:default_comment_string)
+	else
+		echohl ErrorMsg
+		echo "Comments are not available"
+	endif
+endfunction
+noremap <expr> <leader>/d CommentOutDefault()
+noremap <leader>/u <cmd>call UncommentOutDefault()<cr>
 augroup cpp
 	au!
+	au filetype cpp let g:default_comment_string = "//"
 	au filetype cpp noremap <silent> <buffer> <leader>n viwo<esc>i::<esc>hi
-	au filetype cpp noremap <silent> <buffer> <expr> <leader>/d CommentOut('//')
-	au filetype cpp noremap <silent> <buffer> <leader>/u <cmd>call UncommentOut('//')<cr>
 augroup END
 augroup vim
 	au!
-	au filetype vim noremap <silent> <buffer> <expr> <leader>/d CommentOut('"')
-	"au filetype vim noremap <silent> <buffer> <leader>/d mzI"<esc>`zl
-	au filetype vim noremap <silent> <buffer> <leader>/u <cmd>call UncommentOut('"')<cr>
-	"au filetype vim noremap <silent> <buffer> <leader>/u mz:s/^"<cr>`zh:noh<cr>
+	au filetype vim let g:default_comment_string = '"'
 augroup END
 augroup googol
 	au!
-	au syntax googol noremap <silent> <buffer> <leader>/d mz0i//<esc>`zll
-	au syntax googol noremap <silent> <buffer> <leader>/u mz:s:^//<cr>`zhh:noh<cr>
+	au syntax googol let g:default_comment_string = "//"
 augroup END
 augroup php
 	au!
+	au filetype php if exists('g:default_comment_string') | unlet g:default_comment_string | endif
 	au filetype php noremap <silent> <buffer> <leader>g viwoviGLOBALS['<esc>ea']<esc>
 augroup END
 augroup sh
 	au!
+	au filetype bash,sh let g:default_comment_string = "#"
 	au filetype bash,sh setlocal nowrap linebreak
-	au filetype bash,sh noremap <silent> <buffer> <expr> <leader>/d CommentOut('#')
-	au filetype bash,sh noremap <silent> <buffer> <leader>/u <cmd>call UncommentOut('#')<cr>
 augroup END
 augroup python
 	au!
-	au filetype python noremap <silent> <buffer> <leader>/d mz0i#<esc>`zl
-	au filetype python noremap <silent> <buffer> <leader>/u mz:s/^#<cr>`zh:noh<cr>
+	au filetype python let g:default_comment_string = "#"
 augroup END
 augroup rust
 	au!
 augroup END
 augroup netrw
 	au!
+	if exists('g:default_comment_string')
+		unlet g:default_comment_string
+	endif
 	au filetype netrw setlocal nocursorcolumn | call Numbertoggle()
-	au filetype netrw nnoremap <silent> <buffer> <leader>/d <cmd>echohl ErrorMsg<cr><cmd>echo "Comments are not available in netrw"<cr>
-	au filetype netrw nnoremap <silent> <buffer> <leader>/u <cmd>echohl ErrorMsg<cr><cmd>echo "Comments are not available in netrw"<cr>
 augroup END
 augroup nerdtree
+	if exists('g:default_comment_string')
+		unlet g:default_comment_string
+	endif
 	au filetype nerdtree setlocal nocursorcolumn | call Numbertoggle()
-	au filetype nerdtree nnoremap <silent> <buffer> <leader>/d <cmd>echohl ErrorMsg<cr><cmd>echo "Comments are not available in nerdtree"<cr>
-	au filetype nerdtree nnoremap <silent> <buffer> <leader>/u <cmd>echohl ErrorMsg<cr><cmd>echo "Comments are not available in nerdtree"<cr>
 augroup END
 augroup terminal
 	au!
@@ -1095,7 +1114,13 @@ noremap <silent> <c-x>to <cmd>tabnext<cr>
 noremap <silent> <c-x>tO <cmd>tabprevious<cr>
 noremap <silent> <c-x>5 <cmd>echo "Frames are only in Emacs/GNU Emacs"<cr>
 noremap <m-x> :
-noremap <silent> <c-x>h myggVG
+function! SelectAll()
+	mark y
+	normal! ggVG
+	echohl MsgArea
+	echom 'Previous position marked as "y"'
+endfunction
+noremap <silent> <c-x>h <cmd>call SelectAll()<cr>
 noremap <silent> <c-x><c-h> <cmd>h<cr>
 noremap <silent> <c-x><c-g> <cmd>echo "Quit"<cr>
 

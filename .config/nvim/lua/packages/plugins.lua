@@ -35,7 +35,7 @@ return require('packer').startup(function (use)
 	use 'prichrd/netrw.nvim'
 	use {
 		"windwp/nvim-autopairs",
-		config = function() require("nvim-autopairs").setup {} end
+	-- 	config = function() require("nvim-autopairs").setup {} end
 	}
 	use {
 		"folke/which-key.nvim",
