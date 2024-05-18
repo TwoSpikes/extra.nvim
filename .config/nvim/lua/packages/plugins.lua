@@ -101,4 +101,7 @@ return require('packer').startup(function (use)
 	use {
 		'github/copilot.vim',
 	}
+	use {
+		'erietz/vim-terminator',
+	}
 end)
