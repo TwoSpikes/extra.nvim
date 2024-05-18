@@ -105,6 +105,10 @@ return require('packer').startup(function (use)
 		'erietz/vim-terminator',
 	}
 	use {
-		'tpope/vim-fugitive'
+		'tpope/vim-fugitive',
+	}
+	use {
+		'mg979/vim-visual-multi',
+		branch = 'master',
 	}
 end)
