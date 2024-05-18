@@ -474,7 +474,7 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ }
 let g:NERDTreeGitStatusUseNerdFonts = 1
 let g:NERDTreeGitStatusShowIgnored = 1
-noremap <c-n> <cmd>NERDTreeToggle<cr>
+noremap <c-h> <cmd>NERDTreeToggle<cr>
 
 " autocmd BufReadPost,WinLeave,WinEnter * call Numbertoggle_stcrel()
 " call timer_start(500, 'BufModifiableHandler', {'repeat': -1})
