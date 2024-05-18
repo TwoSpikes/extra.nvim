@@ -895,6 +895,26 @@ esac
 press_enter
 
 clear
+echo "==== Setting up ctags ===="
+echo ""
+
+echo "Do you want to install ctags?"
+echo "1) exuberant-ctags (Exuberant ctags)"
+echo "2) ctags (Universal ctags)"
+echo "*) No"
+read user_input
+case "${user_input}" in
+	"1")
+		install_package exuberant-ctags
+		;;
+	"2")
+		install_package ctags
+		;;
+	*)
+		;;
+esac
+
+clear
 echo "Dotfiles setup ended successfully"
 echo "It is recommended to restart your shell"
 exit 0
