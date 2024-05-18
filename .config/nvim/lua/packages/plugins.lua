@@ -104,4 +104,7 @@ return require('packer').startup(function (use)
 	use {
 		'erietz/vim-terminator',
 	}
+	use {
+		'tpope/vim-fugitive'
+	}
 end)

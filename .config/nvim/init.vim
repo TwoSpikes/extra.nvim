@@ -368,7 +368,7 @@ endfunction
 command! Showtab set stl=%{%Showtab()%}
 Showtab
 
-command! -nargs=* Git !git <args>
+" command! -nargs=* Git !git <args>
 command! -nargs=* Pkg !pkg <args>
 
 " let s:tabtimerid = 0
