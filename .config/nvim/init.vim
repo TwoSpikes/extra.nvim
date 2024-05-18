@@ -1294,6 +1294,8 @@ function! OnResized()
 	call STCUpd()
 endfunction
 
+au CursorMoved * call STCUpd()
+
 " Russian mappings
 map й q
 map ц w
