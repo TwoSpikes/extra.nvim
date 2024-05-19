@@ -935,7 +935,8 @@ vnoremap <leader>' iw<esc>a'<esc>bi'<esc>v
 
 " SPECIAL
 nnoremap ci_ yiwct_
-noremap <silent> <leader>d <esc>:noh<cr>
+noremap <silent> <leader>d <cmd>nohlsearch<cr>
+nnoremap <silent> <esc> <cmd>let @/ = ""<cr>
 tnoremap <c-]> <c-\><esc>
 
 " TERMINAL
@@ -963,6 +964,7 @@ noremap <silent> <leader>cf :FloatermNew nvim -c "ToggleFullscreen" $VIMRUNTIME/
 noremap <silent> <leader>cy <cmd>set lazyredraw<cr>yy:<c-f>pvf]o0"_dxicolo <esc>$x$x$x$x<cr>jzb<cmd>set nolazyredraw<cr>
 
 noremap <silent> <leader>cu <cmd>CocUpdate<cr>
+noremap <silent> <leader>tu <cmd>TSUpdate<cr>
 
 function! CommentOut(comment_string)
 	mark z
