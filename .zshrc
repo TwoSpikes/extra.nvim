@@ -110,3 +110,11 @@ case $(setopt) in
 	*)
 		. ~/.dotfiles-script.sh
 esac
+
+# pnpm
+export PNPM_HOME="/data/data/com.termux/files/home/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

@@ -915,6 +915,24 @@ case "${user_input}" in
 esac
 
 clear
+echo "==== Setting up pnpm ==="
+echo ""
+
+echo "Do you want to install pnpm? (Y/n): "
+read user_input
+user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+case "${user_input}" in
+	"n")
+		;;
+	*)
+		echo "Installing getconf..."
+		install_package getconf
+		echo "Downloading install script..."
+		wget -qO- https://get.pnpm.io/install.sh | sh -
+		;;
+esac
+
+clear
 echo "Dotfiles setup ended successfully"
 echo "It is recommended to restart your shell"
 exit 0
