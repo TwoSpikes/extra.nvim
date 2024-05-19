@@ -24,7 +24,7 @@ call quickui#menu#install('&File', [
             \ ["Update &coc language servers\tLEAD cu", 'CocUpdate', 'Update coc.nvim installed language servers'],
             \ ["--", '' ],
             \ ["&Redraw screen\tCtrl-l", 'mode', 'Clear and redraw the screen'],
-            \ ["&Hide highlightings\tLEAD d", 'noh', 'Hide search highlightings'],
+            \ ["Hi&de highlightings\tLEAD d", 'noh', 'Hide search highlightings'],
             \ ["Toggle &fullscreen\tLEAD Ctrl-f", 'ToggleFullscreen', 'Toggle fullscreen mode'],
             \ ["--", '' ],
             \ ["&Exit\tCtrl-x Ctrl-c", 'confirm qall', 'Close Vim/NeoVim softly'],
@@ -66,7 +66,7 @@ call quickui#menu#install('&Config', [
 	  \ ])
 
 " register HELP menu with weight 10000
-call quickui#menu#install('H&elp', [
+call quickui#menu#install('&Help', [
 			\ ["&Cheatsheet", 'help index', ''],
 			\ ['T&ips', 'help tips', ''],
 			\ ['--',''],
