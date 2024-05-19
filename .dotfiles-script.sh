@@ -230,7 +230,14 @@ try_install() {
 
 timer_end_silent
 
-timer_total_time "dotfiles loading time"
+if ! command -v "stat" > /dev/null 2>&1 \
+|| ! command -v "numfmt" > /dev/null 2>&1; then
+	timer_total_time "loading time"
+else
+	space=$(($(stat -f --format="%a*%S" .)))
+	space=$(numfmt --to=iec-i --suffix=B --format="%9.2f" ${space})
+	timer_total_time "free space: ${YELLOW_COLOR}${space}${RESET_COLOR} loading time"
+fi
 
 print_todo() {
 	if [ -f ~/todo ]; then
