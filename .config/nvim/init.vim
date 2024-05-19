@@ -958,6 +958,8 @@ noremap <silent> <leader>cv :vsplit $VIMRUNTIME/colors/<cr>
 noremap <silent> <leader>cf :FloatermNew nvim -c "ToggleFullscreen" $VIMRUNTIME/colors/<cr>
 noremap <silent> <leader>cy <cmd>set lazyredraw<cr>yy:<c-f>pvf]o0"_dxicolo <esc>$x$x$x$x<cr>jzb<cmd>set nolazyredraw<cr>
 
+noremap <silent> <leader>cu <cmd>CocUpdate<cr>
+
 function! CommentOut(comment_string)
 	mark z
 	if mode() !~? 'v.*' && mode() !~? "\<c-v>.*"

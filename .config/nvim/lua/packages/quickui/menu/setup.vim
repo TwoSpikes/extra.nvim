@@ -21,6 +21,8 @@ call quickui#menu#install('&File', [
             \ ["&Next window\tCtrl-x O", 'exec "normal! \<c-w>W"', 'Go to next window'],
             \ ["--", '' ],
             \ ["Update &plugins\tLEAD u", 'lua require("packer").sync()', 'Clear and redraw the screen'],
+            \ ["Update &coc language servers\tLEAD cu", 'CocUpdate', 'Update coc.nvim installed language servers'],
+            \ ["--", '' ],
             \ ["&Redraw screen\tCtrl-l", 'mode', 'Clear and redraw the screen'],
             \ ["&Hide highlightings\tLEAD d", 'noh', 'Hide search highlightings'],
             \ ["Toggle &fullscreen\tLEAD Ctrl-f", 'ToggleFullscreen', 'Toggle fullscreen mode'],
