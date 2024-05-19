@@ -6,7 +6,7 @@ call quickui#menu#install('&File', [
             \ ["Ne&w File\t:new", 'new', 'Creates a new buffer'],
             \ ["&Quit\tq", 'quit', 'Closes the current window'],
             \ ["Force q&uit\tQ", 'quit!', 'Closes the current window without saving changes'],
-            \ ["&Kill buffer\tCtrl-x k", 'Killbuffer', 'Completely removes the current buffer'],
+            \ ["K&ill buffer\tCtrl-x k", 'Killbuffer', 'Completely removes the current buffer'],
             \ ["--", '' ],
             \ ["&Open file in tab\tCtrl-c c", 'Findfile', 'Open file in new tab'],
             \ ["Open file in &buffer\tCtrl-c C", 'Findfilebuffer', 'Open file in current buffer'],
