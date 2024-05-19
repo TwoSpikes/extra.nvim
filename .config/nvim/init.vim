@@ -89,6 +89,10 @@ function! SynStack()
   endif
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
+function! WhenceGroup()
+	let l:s = synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
+	exec "verbose hi ".l:s
+endfunction
 
 function! ReturnHighlightTerm(group, term)
    " Store output of group to variable

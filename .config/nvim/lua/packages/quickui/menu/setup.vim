@@ -3,29 +3,32 @@ call quickui#menu#reset()
 
 " install a 'File' menu, use [text, command] to represent an item.
 call quickui#menu#install('&File', [
-            \ ["Ne&w File\t:new", 'new', 'Creates a new buffer'],
+            \ ["New File\t:new", 'new', 'Creates a new buffer'],
             \ ["&Quit\tq", 'quit', 'Closes the current window'],
             \ ["Force q&uit\tQ", 'quit!', 'Closes the current window without saving changes'],
             \ ["K&ill buffer\tCtrl-x k", 'Killbuffer', 'Completely removes the current buffer'],
             \ ["--", '' ],
             \ ["&Open file in tab\tCtrl-c c", 'Findfile', 'Open file in new tab'],
             \ ["Open file in &buffer\tCtrl-c C", 'Findfilebuffer', 'Open file in current buffer'],
-            \ ["&Toggle file tree\tCtrl-n", 'NERDTreeToggle', 'Toggles a file tree'],
+            \ ["Toggle &file tree\tCtrl-h", 'NERDTreeToggle', 'Toggles a file tree'],
             \ ["Toggle ta&gbar\tCtrl-t", 'TagbarToggle', 'Toggles a file tree'],
             \ ["--", '' ],
             \ ["&Save\tCtrl-x s", 'write', 'Save changes in current buffer'],
             \ ["Save &All\tCtrl-x S", 'wall | echo "Saved all buffers"', 'Save changes to all buffers' ],
             \ ["--", '' ],
-            \ ["&Make only\tCtrl-x 1", 'only', 'Hide all but current window'],
-            \ ["&Previous window\tCtrl-x o", 'exec "normal! \<c-w>w"', 'Go to previous window'],
+            \ ["Make onl&y\tCtrl-x 1", 'only', 'Hide all but current window'],
+            \ ["Previous &window\tCtrl-x o", 'exec "normal! \<c-w>w"', 'Go to previous window'],
             \ ["&Next window\tCtrl-x O", 'exec "normal! \<c-w>W"', 'Go to next window'],
             \ ["--", '' ],
             \ ["Update &plugins\tLEAD u", 'lua require("packer").sync()', 'Clear and redraw the screen'],
-            \ ["Update &coc language servers\tLEAD cu", 'CocUpdate', 'Update coc.nvim installed language servers'],
+            \ ["Update coc language ser&vers\tLEAD cu", 'CocUpdate', 'Update coc.nvim installed language servers'],
+            \ ["Update &TreeSitter parsers\tLEAD cu", 'CocUpdate', 'Update coc.nvim installed language servers'],
             \ ["--", '' ],
             \ ["&Redraw screen\tCtrl-l", 'mode', 'Clear and redraw the screen'],
             \ ["Hi&de highlightings\tLEAD d", 'noh', 'Hide search highlightings'],
-            \ ["Toggle &fullscreen\tLEAD Ctrl-f", 'ToggleFullscreen', 'Toggle fullscreen mode'],
+            \ ["Toggle fulls&creen\tLEAD Ctrl-f", 'ToggleFullscreen', 'Toggle fullscreen mode'],
+            \ ["--", '' ],
+            \ ["Go to &multicursor mode\tCtrl-n", 'call vm#commands#ctrln(1)', 'Go to multicursor mode'],
             \ ["--", '' ],
             \ ["&Exit\tCtrl-x Ctrl-c", 'confirm qall', 'Close Vim/NeoVim softly'],
             \ ["Force e&xit\tCtrl-x Ctrl-q", 'qall!', 'Close Vim/NeoVim without saving'],
@@ -47,6 +50,8 @@ call quickui#menu#install('&Edit', [
             \ ["&Comment out current line\tLEAD /d", 'call DoCommentOutDefault()', 'Backwardly find word under cursor'],
             \ ["&Uncomment current line\tLEAD /u", 'call UncommentOutDefault()', 'Backwardly find word under cursor'],
             \ ["--", '' ],
+            \ ["Show hl&group", 'call SynGroup()', 'Show hlgroup name under cursor'],
+            \ ["&Whence hlgroup", 'call WhenceGroup()', 'Show whence hlgroup under cursor came'],
             \ ["&Select all\tCtrl-x h", 'call SelectAll()', 'Paste copyied text after the cursor'],
             \ ])
 
@@ -59,21 +64,24 @@ call quickui#menu#install("&Option", [
 
 call quickui#menu#install('&Config', [
 		\ ["Open &init.vim\tLEAD ve", 'call SelectPosition("e ".g:CONFIG_PATH."/init.vim")', 'Open '.g:CONFIG_PATH.'/init.vim'],
-		\ ["Open &plugins\tLEAD vi", 'call SelectPosition("e ".g:PLUGINS_INSTALL_FILE_PATH)', 'Open '.g:PLUGINS_INSTALL_FILE_PATH],
-		\ ["Open plugins &setup\tLEAD vs", 'call SelectPosition("e ".g:PLUGINS_SETUP_FILE_PATH)', 'Open '.g:PLUGINS_SETUP_FILE_PATH],
-		\ ["Open &lsp settings\tLEAD vs", 'call SelectPosition("e ".g:LSP_PLUGINS_SETUP_FILE_PATH)', 'Open '.g:LSP_PLUGINS_SETUP_FILE_PATH],
-		\ ["Open &json config\tLEAD vj", 'call SelectPosition("e ".g:DOTFILES_CONFIG_PATH."/config.json")', 'Open '.g:DOTFILES_CONFIG_PATH.'/config.json'],
+		\ ["Open &plugins list\tLEAD vi", 'call SelectPosition("e ".g:PLUGINS_INSTALL_FILE_PATH)', 'Open '.g:PLUGINS_INSTALL_FILE_PATH],
+		\ ["Open plugins set&up\tLEAD vs", 'call SelectPosition("e ".g:PLUGINS_SETUP_FILE_PATH)', 'Open '.g:PLUGINS_SETUP_FILE_PATH],
+		\ ["Open lsp &settings\tLEAD vs", 'call SelectPosition("e ".g:LSP_PLUGINS_SETUP_FILE_PATH)', 'Open '.g:LSP_PLUGINS_SETUP_FILE_PATH],
+		\ ["Open &dotfiles config\tLEAD vj", 'call SelectPosition("e ".g:DOTFILES_CONFIG_PATH."/config.json")', 'Open '.g:DOTFILES_CONFIG_PATH.'/config.json'],
 	  \ ])
 
 " register HELP menu with weight 10000
 call quickui#menu#install('&Help', [
-			\ ["&Cheatsheet", 'help index', ''],
-			\ ['T&ips', 'help tips', ''],
+			\ ["Vim &cheatsheet", 'help index', ''],
+			\ ["&Dotfiles cheatsheet\tLEAD ?", 'DotfilesCheatSheet', 'dotfiles cheatsheet'],
+			\ ['Ti&ps', 'help tips', ''],
 			\ ['--',''],
 			\ ["&Tutorial", 'help tutor', ''],
 			\ ['&Quick Reference', 'help quickref', ''],
 			\ ['&Summary', 'help summary', ''],
-			\ ["&Dotfiles cheatsheet\tLEAD ?", 'DotfilesCheatSheet', 'dotfiles cheatsheet']
+			\ ['--',''],
+			\ ["&Intro screen\t:intro", 'intro', 'Show intro message'],
+			\ ["Vim &version\t:ver", 'version', 'Show Vim version'],
 			\ ], 10000)
 
 " enable to display tips in the cmdline
