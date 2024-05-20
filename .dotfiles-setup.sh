@@ -391,7 +391,7 @@ echo "Now we are ready to start"
 press_enter
 
 clear
-echo "==== Setupping shell ===="
+echo "==== Setting up shell ===="
 echo ""
 echo -n "Do you want to copy .bashrc and its dependencies? (y/N/exit): "
 read user_input
@@ -546,7 +546,7 @@ else
 fi
 
 clear
-echo "==== Setting config for editor: ${setting_editor_for} ===="
+echo "==== Setting up ${setting_editor_for} ===="
 echo ""
 
 if test "${setting_editor_for}" = "vim"; then
@@ -643,7 +643,7 @@ else
 		user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 		case ${user_input} in
 			"y")
-				git clone --depth 1 https://github.com/wbthomason/packer.nvim\
+				run_as_superuser_if_needed git clone --depth 1 https://github.com/wbthomason/packer.nvim\
 	 ${root}/usr/share/nvim/site/pack/packer/start/packer.nvim
 				;;
 			*)
