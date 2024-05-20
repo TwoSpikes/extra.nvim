@@ -737,21 +737,27 @@ function! SelectPosition(cmd)
 	echohl Question
 	echon 'Select position (h,v,b,t): '
 	echohl Normal
-	let position = nr2char(getchar())
-	echon position
-	redraw
-	if position ==# 'h'
-		split
-	elseif position ==# 'v'
-		vsplit
-	elseif position ==# 'b'
-	elseif position ==# 't'
-		tabnew
-	else
-		echohl ErrorMsg
-		echom "Wrong position: ".position
-		return 1
-	endif
+	while v:true
+		let position = nr2char(getchar())
+		echon position
+		redraw
+		if char2nr(position) ==# 0
+			continue
+		endif
+		if position ==# 'h'
+			split
+		elseif position ==# 'v'
+			vsplit
+		elseif position ==# 'b'
+		elseif position ==# 't'
+			tabnew
+		else
+			echohl ErrorMsg
+			echom "Wrong position: ".position
+			return 1
+		endif
+		break
+	endwhile
 	exec a:cmd
 endfunction
 
