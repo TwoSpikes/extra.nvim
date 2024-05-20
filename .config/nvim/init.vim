@@ -1070,7 +1070,10 @@ augroup visual
 augroup END
 
 " TELESCOPE
-nnoremap <silent> <leader>ff :lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
+function! FuzzyFind()
+	lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({winblend = 0 }))
+endfunction
+nnoremap <silent> <leader>ff <cmd>call FuzzyFind()<cr>
 nnoremap <silent> <leader>fg :lua require'telescope.builtin'.live_grep(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
 nnoremap <silent> <leader>fb :lua require'telescope.builtin'.buffers(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
 nnoremap <silent> <leader>fh :lua require'telescope.builtin'.help_tags(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
