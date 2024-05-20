@@ -3,20 +3,22 @@ function! ChangeNames()
 	if mode() !~# '^n'
 		let s:esc_label = "Go to No&rmal mode"
 		let s:esc_command = "normal"
-		let s:names_changed = v:true
 		return
 	else
 		if exists('g:Vm')
 			if g:Vm['buffer'] !=# 0
 				let s:esc_label = "Exit multicu&rsor"
 				let s:esc_command = b:VM_Selection.Vars.noh."call vm#reset()"
-				let s:names_changed = v:true
 				return
 			endif
 		endif
+		if @/ !=# ""
+			let s:esc_label = "Stop sea&rching"
+			let s:esc_command = 'let @/ = ""'
+			return
+		endif
 		let s:esc_label = "Stop cu&rrent command"
 		let s:esc_command = "normal! \<esc>"
-		let s:names_changed = v:true
 		return
 	endif
 endfunction
