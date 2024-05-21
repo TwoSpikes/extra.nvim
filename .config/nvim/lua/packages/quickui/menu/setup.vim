@@ -2,7 +2,7 @@
 function! ChangeNames()
 	if mode() !~# '^n'
 		let s:esc_label = "Go to No&rmal mode"
-		let s:esc_command = "normal"
+		let s:esc_command = 'exec "normal! \<c-\>\<c-n>"'
 		return
 	else
 		if exists('g:Vm')
