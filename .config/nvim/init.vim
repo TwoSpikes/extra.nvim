@@ -705,19 +705,33 @@ nnoremap <bs> X
 noremap <leader><bs> <bs>
 
 function! Findfile()
-	echohl Question
-	let filename = input('find file: ')
-	echohl Normal
+	silent! call quickui#input#open()
+	if !exists('*quickui#input#open')
+		echohl Question
+		let filename = input('Find file: ')
+		echohl Normal
+	else
+		let filename = quickui#input#open('Find file:                 ', fnamemodify(expand('%'), ':~:.'))
+	endif
 	if filename !=# ''
+		set lazyredraw
 		exec printf("tabedit %s", filename)
+		set nolazyredraw
 	endif
 endfunction
 command! Findfile call Findfile()
 noremap <c-c>c <cmd>Findfile<cr>
 function! Findfilebuffer()
-	echohl Question
-	let filename = input('find file (open in buffer): ')
-	echohl Normal
+	silent! call quickui#input#open()
+	if !exists('*quickui#input#open')
+		echohl Question
+		let filename = input('Find file (open in buffer): ')
+		echohl Normal
+	else
+		set lazyredraw
+		let filename = quickui#input#open('Find file (open in buffer):', fnamemodify(expand('%'), ':~:.'))
+		set nolazyredraw
+	endif
 	if filename !=# ''
 		exec printf("edit %s", filename)
 	endif
@@ -734,13 +748,29 @@ endfor
 "nnoremap <leader>lc :tabnext<Bar><c-\><c-n>:bd!<Bar>tabnew<Bar>ter<cr>a!!<cr>
 
 function! SelectPosition(cmd)
-	echohl Question
-	echon 'Select position (h,v,b,t): '
-	echohl Normal
+	silent! call quickui#confirm#open()
 	while v:true
-		let position = nr2char(getchar())
-		echon position
-		redraw
+		if !exists('*quickui#confirm#open')
+			echohl Question
+			echon 'Select position (h,v,b,t): '
+			echohl Normal
+			let position = nr2char(getchar())
+			echon position
+			redraw
+		else
+			let choice = quickui#confirm#open('Select position', "&Split\n&Vsplit\n&Buffer\nNew &tab", 'Confirm')
+			if choice ==# 1
+				let position = 'h'
+			elseif choice ==# 2
+				let position = 'v'
+			elseif choice ==# 3
+				let position = 'b'
+			elseif choice ==# 4
+				let position = 't'
+			else
+				let position = ''
+			endif
+		endif
 		if char2nr(position) ==# 0
 			continue
 		endif
@@ -1107,8 +1137,20 @@ noremap <silent> <c-x>S <cmd>wall<Bar>echohl MsgArea<Bar>echo 'Saved all buffers
 noremap <silent> <c-x><c-s> <cmd>w<cr>
 function! Killbuffer()
 	echohl Question
-	let user_input = input("do you wanna kill the buffer (Y/n): ")
-	echohl Normal
+	silent! call quickui#confirm#open()
+	if !exists("*quickui#confirm#open")
+		let user_input = nr2char(input("do you want to kill the buffer? (Y/n): "))
+		echohl Normal
+	else
+		let choice = quickui#confirm#open('Do you want to kill the buffer?', "&Yes\n&No", 'Confirm')
+		if choice ==# 0
+			let user_input = 'n'
+		elseif choice ==# 1
+			let user_input = 'y'
+		else
+			let user_input = 'n'
+		endif
+	endif
 	if user_input ==# '' || IsYes(user_input)
 		bdelete
 	elseif !IsNo(user_input)
