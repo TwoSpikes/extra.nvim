@@ -148,6 +148,17 @@ $ DOTFILES_VIM_CONFIG_PATH=your_path nvim
 "_comment_14":"Open quickui menu on start",
 	"open_menu_on_start": false,
 
+"_comment_15":"Change quickui_border_style",
+"_comment_16":"1 - Dashed, non-Unicode",
+"_comment_17":"2 - Solid",
+"_comment_18":"3 - Double outer border",
+	"quickui_border_style": "3",
+
+"_comment_19":"Change quickui colorscheme",
+"_comment_20":"Aviable: borland, gruvbox, solarized, papercol dark, papercol light",
+"_comment_21":"See them at https://github.com/skywind3000/vim-quickui/blob/master/MANUAL.md",
+	"quickui_color_scheme": "papercol dark",
+
 "_comment_end":"Ending field to not put comma every time"
 }
 ```

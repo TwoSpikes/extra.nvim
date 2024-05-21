@@ -25,7 +25,7 @@ function! LoadDotfilesConfig(path)
 		return 1
 	endif
 
-	let l:option_list = ['setup_lsp', 'use_transparent_bg', 'background', 'use_italic_style', 'cursorcolumn', 'open_menu_on_start']
+	let l:option_list = ['setup_lsp', 'use_transparent_bg', 'background', 'use_italic_style', 'cursorcolumn', 'open_menu_on_start', 'quickui_border_style', 'quickui_color_scheme']
 	for option_ in l:option_list
 		if exists('g:dotfiles_config["'.option_.'"]')
 			exec printf("let %s = g:dotfiles_config[option_]", "g:".option_)
