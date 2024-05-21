@@ -549,11 +549,21 @@ clear
 echo "==== Setting up ${setting_editor_for} ===="
 echo ""
 
-if test "${setting_editor_for}" = "vim"; then
-	VIMRUNTIME=${root}/usr/share/vim/vim*
-else
-	VIMRUNTIME=${root}/usr/share/nvim/runtime
-fi
+case "${OS}" in
+	MINGW*)
+		if test "${setting_editor_for}" = "vim"; then
+			VIMRUNTIME=/c/AppData/Neovim/share/nvim/runtime
+		else
+			VIMRUNTIME=/c/AppData/Vim/share/vim/vim*
+		fi
+	*)
+		if test "${setting_editor_for}" = "vim"; then
+			VIMRUNTIME=${root}/usr/share/vim/vim*
+		else
+			VIMRUNTIME=${root}/usr/share/nvim/runtime
+		fi
+		;;
+esac
 
 echo -n "That is right? (y/N): "
 read user_input
@@ -633,7 +643,7 @@ echo ""
 
 # FIXME: make work for Vim with Lua or change Plugin Manager
 echo -n "Checking if packer.nvim is installed: "
-if test -e ${root}/usr/share/nvim/site/pack/packer/start/packer.nvim; then
+if test -e ${VIMRUNTIME}/../site/pack/packer/start/packer.nvim; then
 	echo "YES"
 else
 	echo "NO"
@@ -643,8 +653,7 @@ else
 		user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 		case ${user_input} in
 			"y")
-				run_as_superuser_if_needed git clone --depth 1 https://github.com/wbthomason/packer.nvim\
-	 ${root}/usr/share/nvim/site/pack/packer/start/packer.nvim
+				run_as_superuser_if_needed git clone --depth 1 https://github.com/wbthomason/packer.nvim ${VIMRUNTIME}/../site/pack/packer/start/packer.nvim
 				;;
 			*)
 				;;
