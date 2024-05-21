@@ -25,7 +25,7 @@ function! LoadDotfilesConfig(path)
 		return 1
 	endif
 
-	let l:option_list = ['setup_lsp', 'use_transparent_bg', 'background', 'use_italic_style', 'cursorcolumn']
+	let l:option_list = ['setup_lsp', 'use_transparent_bg', 'background', 'use_italic_style', 'cursorcolumn', 'open_menu_on_start']
 	for option_ in l:option_list
 		if exists('g:dotfiles_config["'.option_.'"]')
 			exec printf("let %s = g:dotfiles_config[option_]", "g:".option_)
@@ -1479,6 +1479,15 @@ function OnStart()
 	echon ':intro<cr>'
 	echohl Normal
 	echon ' to see help'
+
+	if exists('g:open_menu_on_start')
+		if g:open_menu_on_start ==# v:true
+			call ChangeNames()
+			call RebindMenus()
+			call quickui#menu#open()
+			echo quickui#menu#section('&File')
+		endif
+	endif
 endfunction
 
 au! VimLeave * call g:TermuxLoadCursorStyle()

@@ -145,6 +145,9 @@ $ DOTFILES_VIM_CONFIG_PATH=your_path nvim
 "_comment_13":"Enables or disables cursor column",
 	"cursorcolumn": true,
 
+"_comment_14":"Open quickui menu on start",
+	"open_menu_on_start": false,
+
 "_comment_end":"Ending field to not put comma every time"
 }
 ```
