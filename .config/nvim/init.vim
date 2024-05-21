@@ -34,6 +34,13 @@ function! LoadDotfilesConfig(path)
 endfunction
 call LoadDotfilesConfig(g:DOTFILES_CONFIG_PATH)
 
+if !exists('g:cursorcolumn')
+	let g:cursorcolumn = v:false
+endif
+if !exists('g:cursorline')
+	let g:cursorline = v:true
+endif
+
 if !exists('g:CONFIG_PATH')
 	if !exists('$VIM_CONFIG_PATH')
 		let g:CONFIG_PATH = "$HOME/.config/nvim"
@@ -1094,16 +1101,28 @@ augroup terminal
 	endif
 augroup END
 augroup visual
-	function! HandleBuftype()
-		let pre_cursorcolumn = (mode() !~# "[vVirco]" && mode() !~# "\<c-v>") && !s:fullscreen && &filetype !=# 'netrw' && &buftype !=# 'terminal' && &filetype !=# 'nerdtree' && &buftype !=# 'nofile'
+	function! HandleBuftype(bufnum)
+		let filetype = getbufvar(a:bufnum, '&filetype', 'ERROR')
+		let buftype = getbufvar(a:bufnum, '&buftype', 'ERROR')
+		let pre_cursorcolumn = (mode() !~# "[vVirco]" && mode() !~# "\<c-v>") && !s:fullscreen && filetype !=# 'netrw' && buftype !=# 'terminal' && filetype !=# 'nerdtree' && buftype !=# 'nofile'
 		if exists('g:cursorcolumn')
-			let pre_cursorcolumn = pre_cursorcolumn && (g:cursorcolumn ==# v:true)
+			let pre_cursorcolumn = pre_cursorcolumn && g:cursorcolumn
 		endif
-		let &cursorcolumn = pre_cursorcolumn
-		let &cursorline = mode() !~# "[irco]" && !s:fullscreen && &buftype !=# 'terminal' && (&buftype !=# 'nofile' || &filetype ==# 'nerdtree') && &filetype !=# 'TelescopePrompt'
+		call setbufvar(a:bufnum, '&cursorcolumn', pre_cursorcolumn)
+		let pre_cursorline = mode() !~# "[irco]" && !s:fullscreen && buftype !=# 'terminal' && (buftype !=# 'nofile' || filetype ==# 'nerdtree') && filetype !=# 'TelescopePrompt'
+		if exists('g:cursorline')
+			let pre_cursorline = pre_cursorline && g:cursorline
+		endif
+		call setbufvar(a:bufnum, '&cursorline', pre_cursorline)
 	endfunction
-	au ModeChanged,BufWinEnter * call HandleBuftype()
+	au ModeChanged,BufWinEnter * call HandleBuftype(bufnr('%'))
 augroup END
+function! HandleBuftypeAll()
+	let buffers = filter(range(1, bufnr('$')), 'bufexists(v:val)')
+	for buffer in buffers
+		call HandleBuftype(buffer)
+	endfor
+endfunction
 
 " TELESCOPE
 function! FuzzyFind()
