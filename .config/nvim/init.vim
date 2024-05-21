@@ -1465,14 +1465,14 @@ function! g:TermuxLoadCursorStyle()
 		endif
 	endif
 endfunction
-au! VimEnter * call g:TermuxSaveCursorStyle()
-au! VimLeave * call g:TermuxLoadCursorStyle()
 
 if expand('%') == '' && !exists('g:DO_NOT_OPEN_ANYTHING')
 	edit ./
 endif
 
-function g:PrintIntroHelp()
+set nolazyredraw
+
+function OnStart()
 	echohl Normal
 	echo 'type '
 	echohl SpecialKey
@@ -1480,10 +1480,6 @@ function g:PrintIntroHelp()
 	echohl Normal
 	echon ' to see help'
 endfunction
-if v:vim_did_enter
-	call g:PrintIntroHelp()
-else
-	au! SourcePost init.vim call g:PrintIntroHelp()
-endif
 
-set nolazyredraw
+au! VimLeave * call g:TermuxLoadCursorStyle()
+au! VimEnter * call g:TermuxSaveCursorStyle() | call OnStart()
