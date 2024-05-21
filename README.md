@@ -71,7 +71,7 @@ Screenshots
 </summary>
 
 <img src=.github/images/a4.jpg width=100px height=100px>
-<img src=.github/images/a3.jpg width=100px height=100px>
+<img src=.github/images/Screenshot_2024-05-21-22-05-31-89_84d3000e3f4017145260f7618db1d683.jpg width=100px height=100px>
 <img src=.github/images/a2.jpg width=100px height=100px>
 <img src=.github/images/a1.jpg width=100px height=100px>
 
