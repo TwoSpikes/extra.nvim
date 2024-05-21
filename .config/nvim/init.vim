@@ -824,7 +824,7 @@ exec printf("noremap <silent> <leader>ves <esc>:so %s<cr>", g:CONFIG_PATH)
 exec printf('noremap <silent> <leader>vi <cmd>call SelectPosition("e %s")<cr>', g:PLUGINS_INSTALL_FILE_PATH)
 exec printf("noremap <silent> <leader>vis <esc>:so %s<cr>", g:PLUGINS_INSTALL_FILE_PATH)
 
-exec printf('noremap <silent> <leader>vs <cmd>call SelectPosition("e %s")<cr>', g:PLUGINS_INSTALL_FILE_PATH)
+exec printf('noremap <silent> <leader>vs <cmd>call SelectPosition("e %s")<cr>', g:PLUGINS_SETUP_FILE_PATH)
 exec printf("noremap <silent> <leader>vss <esc>:so %s<cr>", g:PLUGINS_SETUP_FILE_PATH)
 
 exec printf('noremap <silent> <leader>vl <cmd>call SelectPosition("e %s")<cr>', g:LSP_PLUGINS_SETUP_FILE_PATH)
@@ -1317,6 +1317,7 @@ noremap <silent> <leader>S :let &scrolloff = 999 - &scrolloff<cr>
 nnoremap s "_d
 
 noremap <silent> <f10> <cmd>call quickui#menu#open()<cr>
+noremap <silent> <f9> <cmd>call quickui#menu#open()<cr>
 
 " Interface
 function! ChangeVisualBlue()
