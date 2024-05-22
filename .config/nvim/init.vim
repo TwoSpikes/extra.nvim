@@ -1101,26 +1101,33 @@ augroup terminal
 	endif
 augroup END
 augroup visual
-	function! HandleBuftype(bufnum)
-		let filetype = getbufvar(a:bufnum, '&filetype', 'ERROR')
-		let buftype = getbufvar(a:bufnum, '&buftype', 'ERROR')
+	function! HandleBuftype(winnum)
+		let filetype = getwinvar(a:winnum, '&filetype', 'ERROR')
+		let buftype = getwinvar(a:winnum, '&buftype', 'ERROR')
 		let pre_cursorcolumn = (mode() !~# "[vVirco]" && mode() !~# "\<c-v>") && !s:fullscreen && filetype !=# 'netrw' && buftype !=# 'terminal' && filetype !=# 'nerdtree' && buftype !=# 'nofile'
 		if exists('g:cursorcolumn')
 			let pre_cursorcolumn = pre_cursorcolumn && g:cursorcolumn
 		endif
-		call setbufvar(a:bufnum, '&cursorcolumn', pre_cursorcolumn)
+		call setwinvar(a:winnum, '&cursorcolumn', pre_cursorcolumn)
 		let pre_cursorline = mode() !~# "[irco]" && !s:fullscreen && buftype !=# 'terminal' && (buftype !=# 'nofile' || filetype ==# 'nerdtree') && filetype !=# 'TelescopePrompt'
 		if exists('g:cursorline')
 			let pre_cursorline = pre_cursorline && g:cursorline
 		endif
-		call setbufvar(a:bufnum, '&cursorline', pre_cursorline)
+		call setwinvar(a:winnum, '&cursorline', pre_cursorline)
 	endfunction
-	au ModeChanged,BufWinEnter * call HandleBuftype(bufnr('%'))
+	au ModeChanged,BufWinEnter * call HandleBuftype(winnr())
 augroup END
 function! HandleBuftypeAll()
+"		let windows = nvim_list_wins()
+"		for window in windows
+"			call HandleBuftype(window)
+"		endfor
 	let buffers = filter(range(1, bufnr('$')), 'bufexists(v:val)')
 	for buffer in buffers
-		call HandleBuftype(buffer)
+		let wins = win_findbuf(buffer)
+		for win in wins
+			call HandleBuftype(win)
+		endfor
 	endfor
 endfunction
 
