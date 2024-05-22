@@ -98,6 +98,7 @@ function! RebindMenus()
 			\ ["Open plugins set&up\tLEAD vs", 'call SelectPosition("e ".g:PLUGINS_SETUP_FILE_PATH)', 'Open '.g:PLUGINS_SETUP_FILE_PATH],
 			\ ["Open lsp &settings\tLEAD vl", 'call SelectPosition("e ".g:LSP_PLUGINS_SETUP_FILE_PATH)', 'Open '.g:LSP_PLUGINS_SETUP_FILE_PATH],
 			\ ["Open &dotfiles config\tLEAD vj", 'call SelectPosition("e ".g:DOTFILES_CONFIG_PATH."/config.json")', 'Open '.g:DOTFILES_CONFIG_PATH.'/config.json'],
+			\ ["Open &colorschemes\tLEAD c", 'call SelectPosition("e ".$VIMRUNTIME."/colors")', 'Open '.g:DOTFILES_CONFIG_PATH.'/config.json'],
 		  \ ])
 
 	" register HELP menu with weight 10000

@@ -52,8 +52,6 @@ endif
 if $PREFIX == ""
 	call setenv('PREFIX', '/usr/')
 endif
-let g:COLORSCHEME_PATH = "$PREFIX/share/nvim/runtime/colors/blueorange.vim"
-set termguicolors
 if exists('g:background')
 	if g:background ==# "dark"
 		set background=dark
@@ -61,7 +59,8 @@ if exists('g:background')
 		set background=light
 	endif
 endif
-exec printf("so %s", g:COLORSCHEME_PATH)
+colorscheme blueorange
+set termguicolors
 set lazyredraw
 set encoding=utf-8
 
@@ -134,7 +133,12 @@ function! CopyHighlightGroup(src, dst)
 	if gui ==# ""
 		let gui = "NONE"
 	endif
-	exec printf("hi %s ctermfg=%s ctermbg=%s cterm=%s guifg=%s guibg=%s gui=%s", a:dst, ctermfg, ctermbg, cterm, guifg, guibg, gui)
+	exec printf("hi %s ctermfg=%s", a:dst, ctermfg)
+	exec printf("hi %s ctermbg=%s", a:dst, ctermbg)
+	exec printf("hi %s cterm=%s", a:dst, cterm)
+	exec printf("hi %s guifg=%s", a:dst, guifg)
+	exec printf("hi %s guibg=%s", a:dst, guibg)
+	exec printf("hi %s gui=%s", a:dst, gui)
 endfunction
 
 set nonu
@@ -765,7 +769,7 @@ function! SelectPosition(cmd)
 			echon position
 			redraw
 		else
-			let choice = quickui#confirm#open('Select position', "&Split\n&Vsplit\n&Buffer\nNew &tab", 'Confirm')
+			let choice = quickui#confirm#open('Select position', "&Split\n&Vsplit\n&Buffer\nNew &tab", 1, 'Confirm')
 			if choice ==# 1
 				let position = 'h'
 			elseif choice ==# 2
@@ -999,11 +1003,11 @@ exec printf("noremap <silent> <leader>tf <cmd>FloatermNew %s -l<cr>", $SHELL)
 " noremap <silent> <leader>tct <c-\><c-n>:q\|tabnew\|ter<cr>a
 
 " COLORSCHEME
-noremap <silent> <leader>ct :tabe $VIMRUNTIME/colors/<cr>
-noremap <silent> <leader>cb :e $VIMRUNTIME/colors/<cr>
-noremap <silent> <leader>ch :split $VIMRUNTIME/colors/<cr>
-noremap <silent> <leader>cv :vsplit $VIMRUNTIME/colors/<cr>
-noremap <silent> <leader>cf :FloatermNew nvim -c "ToggleFullscreen" $VIMRUNTIME/colors/<cr>
+"noremap <silent> <leader>ct :tabe $VIMRUNTIME/colors/<cr>
+"noremap <silent> <leader>cb :e $VIMRUNTIME/colors/<cr>
+"noremap <silent> <leader>ch :split $VIMRUNTIME/colors/<cr>
+"noremap <silent> <leader>cv :vsplit $VIMRUNTIME/colors/<cr>
+noremap <silent> <leader>c <cmd>call SelectPosition("e ".$VIMRUNTIME."/colors")<cr>
 noremap <silent> <leader>cy <cmd>set lazyredraw<cr>yy:<c-f>pvf]o0"_dxicolo <esc>$x$x$x$x<cr>jzb<cmd>set nolazyredraw<cr>
 
 noremap <silent> <leader>cu <cmd>CocUpdate<cr>
