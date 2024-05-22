@@ -117,6 +117,11 @@ If you want to change default dotfiles config path:
 $ DOTFILES_VIM_CONFIG_PATH=your_path nvim
 ```
 
+Like
+```console
+$ DOTFILES_VIM_CONFIG_PATH=~/dnsjajsbdn/vim/ nvim
+```
+
 #### Default config
 
 > [!Note]

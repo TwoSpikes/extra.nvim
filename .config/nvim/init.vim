@@ -1,7 +1,5 @@
 #!/bin/env -S nvim -u
 
-let mapleader = " "
-
 if !exists('g:DOTFILES_CONFIG_PATH')
 	if !exists('$DOTFILES_VIM_CONFIG_PATH')
 		let g:DOTFILES_CONFIG_PATH = "$HOME/.config/dotfiles/vim"
@@ -15,6 +13,7 @@ function! LoadDotfilesConfig(path)
 	if !filereadable(a:path)
 		echohl ErrorMsg
 		echom "error: no dotfiles vim config"
+		echohl Normal
 		return 1
 	endif
 	let l:dotfiles_config_str = join(readfile(a:path, ''), '')
@@ -22,10 +21,20 @@ function! LoadDotfilesConfig(path)
 	if type(g:dotfiles_config) !=# v:t_dict
 		echohl ErrorMsg
 		echom "error: failed to parse dotfiles vim config"
+		echohl Normal
 		return 1
 	endif
 
-	let l:option_list = ['setup_lsp', 'use_transparent_bg', 'background', 'use_italic_style', 'cursorcolumn', 'open_menu_on_start', 'quickui_border_style', 'quickui_color_scheme']
+	let l:option_list = [
+		\'setup_lsp',
+		\'use_transparent_bg',
+		\'background',
+		\'use_italic_style',
+		\'cursorcolumn',
+		\'open_menu_on_start',
+		\'quickui_border_style',
+		\'quickui_color_scheme',
+	\]
 	for option_ in l:option_list
 		if exists('g:dotfiles_config["'.option_.'"]')
 			exec printf("let %s = g:dotfiles_config[option_]", "g:".option_)
@@ -51,6 +60,8 @@ function! HandleDotfilesConfig()
 endfunction
 call HandleDotfilesConfig()
 
+let mapleader = " "
+
 if !exists('g:CONFIG_PATH')
 	if !exists('$VIM_CONFIG_PATH')
 		let g:CONFIG_PATH = "$HOME/.config/nvim"
@@ -58,6 +69,13 @@ if !exists('g:CONFIG_PATH')
 		let g:CONFIG_PATH = $VIM_CONFIG_PATH
 	endif
 endif
+
+if exists('g:CONFIG_ALREADY_LOADED')
+	if g:CONFIG_ALREADY_LOADED
+		call HandleBuftypeAll()
+	endif
+endif
+let g:CONFIG_ALREADY_LOADED = v:true
 
 if $PREFIX == ""
 	call setenv('PREFIX', '/usr/')
@@ -798,6 +816,7 @@ function! SelectPosition(cmd)
 		else
 			echohl ErrorMsg
 			echom "Wrong position: ".position
+			echohl Normal
 			return 1
 		endif
 		break
@@ -833,7 +852,7 @@ let g:PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/plugins_setup.lua'
 let g:LSP_PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/lsp/plugins.lua'
 
 exec printf('noremap <silent> <leader>ve <cmd>call SelectPosition("e %s")<cr>', g:CONFIG_PATH."/init.vim")
-exec printf("noremap <silent> <leader>se <esc>:so %s<cr>", g:CONFIG_PATH)
+exec printf("noremap <silent> <leader>se <esc>:so %s<cr>", g:CONFIG_PATH.'/init.vim')
 
 exec printf('noremap <silent> <leader>vi <cmd>call SelectPosition("e %s")<cr>', g:PLUGINS_INSTALL_FILE_PATH)
 exec printf("noremap <silent> <leader>si <esc>:so %s<cr>", g:PLUGINS_INSTALL_FILE_PATH)
@@ -1025,6 +1044,7 @@ function! CommentOutDefault()
 	else
 		echohl ErrorMsg
 		echo "Comments are not available"
+		echohl Normal
 	endif
 endfunction
 function! DoCommentOutDefault()
@@ -1048,6 +1068,7 @@ function! UncommentOutDefault()
 	else
 		echohl ErrorMsg
 		echo "Comments are not available"
+		echohl Normal
 	endif
 endfunction
 noremap <expr> <leader>/d CommentOutDefault()
