@@ -468,7 +468,7 @@ if &t_Co >= 256
     hi Operator ctermfg=220 ctermbg=NONE cterm=bold guifg=#ffdf00 guibg=NONE gui=bold
     hi SpecialChar ctermfg=41 ctermbg=NONE cterm=NONE guifg=#00df5f guibg=NONE gui=NONE
     hi Statusline ctermfg=18 ctermbg=194 cterm=bold guifg=#ffffff guibg=#3040f7 gui=NONE
-    hi Statuslinemod ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#ff3070 guibg=#ffcfaf gui=reverse,bold
+    hi Statuslinemod ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#a84000 guibg=#ffff9f gui=reverse,bold
     hi Statuslinestat1 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#aff0a0 guibg=#000087 gui=NONE
     hi Statuslinestat01 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#000087 guibg=#3040f7 gui=NONE
     hi Statuslinestat12 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#3040f7 guibg=#000087 gui=NONE
@@ -487,11 +487,11 @@ if &t_Co >= 256
     hi ModeTerm ctermfg=47 ctermbg=52 cterm=bold guifg=#00ff5f guibg=#5f0000 gui=bold
     hi VertSplit ctermfg=159 ctermbg=17 cterm=NONE
 "    hi TabLine ctermfg=208 ctermbg=17 cterm=NONE
-    hi TabLine ctermfg=195 ctermbg=18 cterm=NONE guifg=#f03000 guibg=#00005f gui=NONE
-    hi TabLineSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#50f000 guibg=#20005f gui=NONE
-    hi TabLineFill ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#101050 gui=NONE
+    hi TabLine ctermfg=195 ctermbg=18 cterm=NONE guifg=#ffffb0 guibg=#000070 gui=NONE
+    hi TabLineSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#ffaf30 guibg=#000070 gui=NONE
+    hi TabLineFill ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#002050 gui=NONE
 "    hi TabLineSel ctermfg=195 ctermbg=18 cterm=bold
-    hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#0050cf guibg=#ffffff gui=reverse
+    hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#000070 guibg=#fff0b0 gui=bold
     hi ToolbarLine ctermfg=NONE ctermbg=NONE cterm=NONE
     hi ToolbarButton ctermfg=16 ctermbg=231 cterm=NONE
     hi QuickFixLine ctermfg=16 ctermbg=75 cterm=NONE
