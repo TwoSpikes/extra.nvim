@@ -4,7 +4,7 @@ let mapleader = " "
 
 if !exists('g:DOTFILES_CONFIG_PATH')
 	if !exists('$DOTFILES_VIM_CONFIG_PATH')
-		let g:DOTFILES_CONFIG_PATH = "$HOME/.config/dotfiles/vim/config.json"
+		let g:DOTFILES_CONFIG_PATH = "$HOME/.config/dotfiles/vim"
 	else
 		let g:DOTFILES_CONFIG_PATH = $DOTFILES_VIM_CONFIG_PATH
 	endif
@@ -32,14 +32,24 @@ function! LoadDotfilesConfig(path)
 		endif
 	endfor
 endfunction
-call LoadDotfilesConfig(g:DOTFILES_CONFIG_PATH)
+call LoadDotfilesConfig(g:DOTFILES_CONFIG_PATH.'/config.json')
 
-if !exists('g:cursorcolumn')
-	let g:cursorcolumn = v:false
-endif
-if !exists('g:cursorline')
-	let g:cursorline = v:true
-endif
+function! HandleDotfilesConfig()
+	if !exists('g:cursorcolumn')
+		let g:cursorcolumn = v:false
+	endif
+	if !exists('g:cursorline')
+		let g:cursorline = v:true
+	endif
+	if exists('g:background')
+		if g:background ==# "dark"
+			set background=dark
+		else
+			set background=light
+		endif
+	endif
+endfunction
+call HandleDotfilesConfig()
 
 if !exists('g:CONFIG_PATH')
 	if !exists('$VIM_CONFIG_PATH')
@@ -51,13 +61,6 @@ endif
 
 if $PREFIX == ""
 	call setenv('PREFIX', '/usr/')
-endif
-if exists('g:background')
-	if g:background ==# "dark"
-		set background=dark
-	else
-		set background=light
-	endif
 endif
 colorscheme blueorange
 set termguicolors
@@ -830,24 +833,22 @@ let g:PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/plugins_setup.lua'
 let g:LSP_PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/lsp/plugins.lua'
 
 exec printf('noremap <silent> <leader>ve <cmd>call SelectPosition("e %s")<cr>', g:CONFIG_PATH."/init.vim")
-exec printf("noremap <silent> <leader>ves <esc>:so %s<cr>", g:CONFIG_PATH)
+exec printf("noremap <silent> <leader>se <esc>:so %s<cr>", g:CONFIG_PATH)
 
 exec printf('noremap <silent> <leader>vi <cmd>call SelectPosition("e %s")<cr>', g:PLUGINS_INSTALL_FILE_PATH)
-exec printf("noremap <silent> <leader>vis <esc>:so %s<cr>", g:PLUGINS_INSTALL_FILE_PATH)
+exec printf("noremap <silent> <leader>si <esc>:so %s<cr>", g:PLUGINS_INSTALL_FILE_PATH)
 
 exec printf('noremap <silent> <leader>vs <cmd>call SelectPosition("e %s")<cr>', g:PLUGINS_SETUP_FILE_PATH)
-exec printf("noremap <silent> <leader>vss <esc>:so %s<cr>", g:PLUGINS_SETUP_FILE_PATH)
+exec printf("noremap <silent> <leader>ss <esc>:so %s<cr>", g:PLUGINS_SETUP_FILE_PATH)
 
 exec printf('noremap <silent> <leader>vl <cmd>call SelectPosition("e %s")<cr>', g:LSP_PLUGINS_SETUP_FILE_PATH)
-exec printf("noremap <silent> <leader>vls <esc>:so %s<cr>", g:LSP_PLUGINS_SETUP_FILE_PATH)
+exec printf("noremap <silent> <leader>sl <esc>:so %s<cr>", g:LSP_PLUGINS_SETUP_FILE_PATH)
 
-exec printf('noremap <silent> <leader>vj <cmd>call SelectPosition("e %s")<cr>', g:DOTFILES_CONFIG_PATH)
+exec printf('noremap <silent> <leader>vj <cmd>call SelectPosition("e %s")<cr>', g:DOTFILES_CONFIG_PATH.'/config.json')
+exec printf('noremap <silent> <leader>sj <cmd>call LoadDotfilesConfig("%s")<cr>', expand(g:DOTFILES_CONFIG_PATH).'/config.json')
 
-" BASHRC FILE
-noremap <silent> <leader>bt <esc>:tabe ~/.dotfiles-script.sh<cr>
-noremap <silent> <leader>bb <esc>:e ~/.dotfiles-script.sh<cr>
-noremap <silent> <leader>bh <esc>:sp ~/.dotfiles-script.sh<cr>
-noremap <silent> <leader>bv <esc>:vsp ~/.dotfiles-script.sh<cr>
+" .dotfiles-script.sh FILE
+noremap <silent> <leader>b <cmd>call SelectPosition("e ~/.dotfiles-script.sh")<cr>
 
 autocmd BufReadPost *
      \ if line("'\"") > 0 && line("'\"") <= line("$") |
@@ -1003,10 +1004,6 @@ exec printf("noremap <silent> <leader>tf <cmd>FloatermNew %s -l<cr>", $SHELL)
 " noremap <silent> <leader>tct <c-\><c-n>:q\|tabnew\|ter<cr>a
 
 " COLORSCHEME
-"noremap <silent> <leader>ct :tabe $VIMRUNTIME/colors/<cr>
-"noremap <silent> <leader>cb :e $VIMRUNTIME/colors/<cr>
-"noremap <silent> <leader>ch :split $VIMRUNTIME/colors/<cr>
-"noremap <silent> <leader>cv :vsplit $VIMRUNTIME/colors/<cr>
 noremap <silent> <leader>c <cmd>call SelectPosition("e ".$VIMRUNTIME."/colors")<cr>
 noremap <silent> <leader>cy <cmd>set lazyredraw<cr>yy:<c-f>pvf]o0"_dxicolo <esc>$x$x$x$x<cr>jzb<cmd>set nolazyredraw<cr>
 

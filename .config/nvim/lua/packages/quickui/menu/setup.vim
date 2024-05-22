@@ -96,9 +96,15 @@ function! RebindMenus()
 			\ ["Open &init.vim\tLEAD ve", 'call SelectPosition("e ".g:CONFIG_PATH."/init.vim")', 'Open '.g:CONFIG_PATH.'/init.vim'],
 			\ ["Open &plugins list\tLEAD vi", 'call SelectPosition("e ".g:PLUGINS_INSTALL_FILE_PATH)', 'Open '.g:PLUGINS_INSTALL_FILE_PATH],
 			\ ["Open plugins set&up\tLEAD vs", 'call SelectPosition("e ".g:PLUGINS_SETUP_FILE_PATH)', 'Open '.g:PLUGINS_SETUP_FILE_PATH],
-			\ ["Open lsp &settings\tLEAD vl", 'call SelectPosition("e ".g:LSP_PLUGINS_SETUP_FILE_PATH)', 'Open '.g:LSP_PLUGINS_SETUP_FILE_PATH],
+			\ ["Open lsp &settings\tLEAD vl", 'call SelectPosition("e ".g:LSP_PLUGINS_SETUP_FILE_PATH)', 'Open '.g:LSP_PLUGINS_SETUP_FILE_PATH.' (deprecated due to coc.nvim)'],
 			\ ["Open &dotfiles config\tLEAD vj", 'call SelectPosition("e ".g:DOTFILES_CONFIG_PATH."/config.json")', 'Open '.g:DOTFILES_CONFIG_PATH.'/config.json'],
-			\ ["Open &colorschemes\tLEAD c", 'call SelectPosition("e ".$VIMRUNTIME."/colors")', 'Open '.g:DOTFILES_CONFIG_PATH.'/config.json'],
+			\ ["Open &colorschemes\tLEAD c", 'call SelectPosition("e ".$VIMRUNTIME."/colors")', 'Open colorschemes directory'],
+			\ ["--", '' ],
+			\ ["&Reload init.vim\tLEAD se", 'exec "source ".g:CONFIG_PATH."/init.vim"', 'Reload Vim/NeoVim config'],
+			\ ["R&eload plugins list\tLEAD si", 'exec "source ".g:PLUGINS_INSTALL_FILE_PATH', 'Install plugins in '.g:PLUGINS_INSTALL_FILE_PATH],
+			\ ["Rel&oad plugins setup\tLEAD ss", 'exec "source ".g:PLUGINS_SETUP_FILE_PATH', 'Reconfigure plugins'],
+			\ ["Relo&ad lsp setup\tLEAD sl", 'exec "source ".g:LSP_PLUGINS_SETUP_FILE_PATH', 'Reconfigure LSP plugins (deprecated due to coc.nvim)'],
+			\ ["Reload do&tfiles config\tLEAD sj", 'call LoadDotfilesConfig(expand(g:DOTFILES_CONFIG_PATH)."/config.json")|call HandleDotfilesConfig()|call HandleBuftypeAll()', 'Reload dotfiles config'],
 		  \ ])
 
 	" register HELP menu with weight 10000
