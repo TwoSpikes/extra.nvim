@@ -90,42 +90,6 @@ _fE() {
 	"${RM_PROGRAM}" temp_file
 	"${ECHO_PROGRAM}" "_fE was finished with exit code ${errorcode}"
 }
-_df_c() {
-    "${CLEAR_PROGRAM}"
-	"${CD_PROGRAM}" ~/dotfiles/
-	"${CP_PROGRAM}" ~/.dotfiles-script.sh ~/dotfiles/
-# Sbin
-	"${CP_PROGRAM}" ~/sbin/viman ~/dotfiles/sbin/
-# Bashrc script and its dependencies
-	"${CP_PROGRAM}" ~/.dotfiles-script.sh ~/dotfiles/
-	"${CP_PROGRAM}" ~/.fr.sh ~/tsch.sh ~/inverting.sh ~/dotfiles/
-	"${CP_PROGRAM}" -r ~/shlib/ ~/dotfiles/
-	"${CP_PROGRAM}" ~/.profile ~/.zprofile ~/dotfiles/
-	"${CP_PROGRAM}" ~/.bashrc ~/.zshrc ~/dotfiles/
-## Vim/NeoVim configs
-    "${CP_PROGRAM}" ~/.config/nvim/init.vim ~/dotfiles/.config/nvim/
-    "${CP_PROGRAM}" -r ~/.config/nvim/lua/ ~/dotfiles/.config/nvim/
-    "${CP_PROGRAM}" ~/bin/viman ~/dotfiles/
-## Vim/NeoVim themes
-    "${CP_PROGRAM}" ${PREFIX}/share/nvim/runtime/syntax/book.vim ~/dotfiles/
-    "${CP_PROGRAM}" ${PREFIX}/share/nvim/runtime/colors/blueorange.vim ~/dotfiles/
-## Vim/NeoVim scripts
-	"${CP_PROGRAM}" ~/xterm-color-table.vim ~/dotfiles/
-## Tmux
-	"${CP_PROGRAM}" ~/.tmux.conf ~/dotfiles/
-	# "${CP_PROGRAM}" -r ~/.tmux/ ~/dotfiles/
-## Git
-	"${CP_PROGRAM}" ~/.gitconfig-default ~/.gitmessage ~/dotfiles/
-## Termux
-	"${CP_PROGRAM}" ~/.termux/colors.properties ~/dotfiles/.termux/
-	"${CP_PROGRAM}" ~/.termux/termux.properties ~/dotfiles/.termux/
-## Alacritty
-	"${CP_PROGRAM}" -r ~/.config/alacritty/ ~/dotfiles/.config/
-## Nano
-	"${CP_PROGRAM}" ~/.nanorc ~/dotfiles/
-# Commit
-	"${GIT_PROGRAM}" commit --all --verbose
-}
 _tsns_c() {
     "${CLEAR_PROGRAM}"
     "${CD_PROGRAM}" ~/tsns/
