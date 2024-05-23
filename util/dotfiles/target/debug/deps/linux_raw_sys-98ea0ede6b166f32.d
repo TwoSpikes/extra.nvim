@@ -1,0 +1,9 @@
+/data/data/com.termux/files/home/dotfiles/util/dotfiles/target/debug/deps/liblinux_raw_sys-98ea0ede6b166f32.rmeta: /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.14/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.14/src/aarch64/general.rs /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.14/src/aarch64/ioctl.rs
+
+/data/data/com.termux/files/home/dotfiles/util/dotfiles/target/debug/deps/liblinux_raw_sys-98ea0ede6b166f32.rlib: /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.14/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.14/src/aarch64/general.rs /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.14/src/aarch64/ioctl.rs
+
+/data/data/com.termux/files/home/dotfiles/util/dotfiles/target/debug/deps/linux_raw_sys-98ea0ede6b166f32.d: /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.14/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.14/src/aarch64/general.rs /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.14/src/aarch64/ioctl.rs
+
+/data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.14/src/lib.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.14/src/aarch64/general.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.14/src/aarch64/ioctl.rs:

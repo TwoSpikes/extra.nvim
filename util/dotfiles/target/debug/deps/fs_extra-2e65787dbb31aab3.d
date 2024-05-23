@@ -1,0 +1,10 @@
+/data/data/com.termux/files/home/dotfiles/util/dotfiles/target/debug/deps/libfs_extra-2e65787dbb31aab3.rmeta: /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/fs_extra-1.3.0/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/fs_extra-1.3.0/src/error.rs /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/fs_extra-1.3.0/src/file.rs /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/fs_extra-1.3.0/src/dir.rs
+
+/data/data/com.termux/files/home/dotfiles/util/dotfiles/target/debug/deps/libfs_extra-2e65787dbb31aab3.rlib: /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/fs_extra-1.3.0/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/fs_extra-1.3.0/src/error.rs /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/fs_extra-1.3.0/src/file.rs /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/fs_extra-1.3.0/src/dir.rs
+
+/data/data/com.termux/files/home/dotfiles/util/dotfiles/target/debug/deps/fs_extra-2e65787dbb31aab3.d: /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/fs_extra-1.3.0/src/lib.rs /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/fs_extra-1.3.0/src/error.rs /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/fs_extra-1.3.0/src/file.rs /data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/fs_extra-1.3.0/src/dir.rs
+
+/data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/fs_extra-1.3.0/src/lib.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/fs_extra-1.3.0/src/error.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/fs_extra-1.3.0/src/file.rs:
+/data/data/com.termux/files/home/.cargo/registry/src/index.crates.io-6f17d22bba15001f/fs_extra-1.3.0/src/dir.rs:
