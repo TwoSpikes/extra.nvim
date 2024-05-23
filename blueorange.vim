@@ -487,7 +487,7 @@ if &t_Co >= 256
     hi ModeTerm ctermfg=47 ctermbg=52 cterm=bold guifg=#00ff5f guibg=#5f0000 gui=bold
     hi VertSplit ctermfg=159 ctermbg=17 cterm=NONE
 "    hi TabLine ctermfg=208 ctermbg=17 cterm=NONE
-    hi TabLine ctermfg=195 ctermbg=18 cterm=NONE guifg=#ffff00 guibg=#0050a0 gui=NONE
+    hi TabLine ctermfg=195 ctermbg=18 cterm=NONE guifg=#ffe800 guibg=#0050a0 gui=NONE
     hi TabLineSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#ffaf30 guibg=#000070 gui=NONE
     hi TabLineFill ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#002050 gui=NONE
 "    hi TabLineSel ctermfg=195 ctermbg=18 cterm=bold
@@ -499,7 +499,7 @@ if &t_Co >= 256
     hi CursorLineNrIns ctermfg=15 ctermbg=39 cterm=bold guifg=#ffffff guibg=#00afff gui=bold
     hi CursorLineNrRepl ctermfg=15 ctermbg=128 cterm=bold guifg=#ffffff guibg=#af00df gui=bold
     hi CursorLineNrVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#ffffff guibg=#000087 gui=bold
-    hi LineNr ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#ffcf00 guibg=#281808 gui=NONE
+    hi LineNr ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#ffcf00 guibg=#180838 gui=NONE
     hi LineNrIns ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#00cfff guibg=#003050 gui=italic
     hi LineNrVisu ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#101050 guibg=#608fdf gui=italic,reverse
     hi NonText ctermfg=214 ctermbg=NONE cterm=NONE

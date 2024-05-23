@@ -552,10 +552,11 @@ echo ""
 case "${OS}" in
 	MINGW*)
 		if test "${setting_editor_for}" = "vim"; then
-			VIMRUNTIME=/c/AppData/Neovim/share/nvim/runtime
+			VIMRUNTIME=/c/"Program Files"/Neovim/share/nvim/runtime
 		else
-			VIMRUNTIME=/c/AppData/Vim/share/vim/vim*
+			VIMRUNTIME=/c/"Program Files"/Vim/share/vim/vim*
 		fi
+		;;
 	*)
 		if test "${setting_editor_for}" = "vim"; then
 			VIMRUNTIME=${root}/usr/share/vim/vim*
@@ -617,7 +618,7 @@ case ${user_input} in
 		fi
 		cp -r ${dotfiles}/.config/nvim ${home}/.config/${setting_editor_for}
 		if ! test -d "${VIMRUNTIME}/colors"; then
-			mkdir -pv "${VIMRUNTIME}/colors"
+			run_as_superuser_if_needed mkdir -pv "${VIMRUNTIME}/colors"
 		fi
 		run_as_superuser_if_needed "cp -v ${dotfiles}/blueorange.vim ${VIMRUNTIME}/colors"
 		if test "${setting_editor_for}" = "vim"; then
