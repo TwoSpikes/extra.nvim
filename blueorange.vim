@@ -487,11 +487,11 @@ if &t_Co >= 256
     hi ModeTerm ctermfg=47 ctermbg=52 cterm=bold guifg=#00ff5f guibg=#5f0000 gui=bold
     hi VertSplit ctermfg=159 ctermbg=17 cterm=NONE
 "    hi TabLine ctermfg=208 ctermbg=17 cterm=NONE
-    hi TabLine ctermfg=195 ctermbg=18 cterm=NONE guifg=#ffffb0 guibg=#000070 gui=NONE
+    hi TabLine ctermfg=195 ctermbg=18 cterm=NONE guifg=#ffff00 guibg=#0050a0 gui=NONE
     hi TabLineSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#ffaf30 guibg=#000070 gui=NONE
     hi TabLineFill ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#002050 gui=NONE
 "    hi TabLineSel ctermfg=195 ctermbg=18 cterm=bold
-    hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#000070 guibg=#fff0b0 gui=bold
+    hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#ffffaf guibg=#0090f0 gui=bold
     hi ToolbarLine ctermfg=NONE ctermbg=NONE cterm=NONE
     hi ToolbarButton ctermfg=16 ctermbg=231 cterm=NONE
     hi QuickFixLine ctermfg=16 ctermbg=75 cterm=NONE
@@ -499,8 +499,8 @@ if &t_Co >= 256
     hi CursorLineNrIns ctermfg=15 ctermbg=39 cterm=bold guifg=#ffffff guibg=#00afff gui=bold
     hi CursorLineNrRepl ctermfg=15 ctermbg=128 cterm=bold guifg=#ffffff guibg=#af00df gui=bold
     hi CursorLineNrVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#ffffff guibg=#000087 gui=bold
-    hi LineNr ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#ffdf00 guibg=#282848 gui=italic
-    hi LineNrIns ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#00afff guibg=#000050 gui=italic
+    hi LineNr ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#ffcf00 guibg=#281808 gui=NONE
+    hi LineNrIns ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#00cfff guibg=#003050 gui=italic
     hi LineNrVisu ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#101050 guibg=#608fdf gui=italic,reverse
     hi NonText ctermfg=214 ctermbg=NONE cterm=NONE
     hi FoldColumn ctermfg=240 ctermbg=NONE cterm=NONE
@@ -526,7 +526,7 @@ if &t_Co >= 256
     hi WildMenu ctermfg=16 ctermbg=222 cterm=bold
     hi debugPC ctermfg=67 ctermbg=NONE cterm=reverse
     hi debugBreakpoint ctermfg=73 ctermbg=NONE cterm=reverse
-    hi VisualBlue ctermfg=NONE ctermbg=18 cterm=NONE guifg=NONE guibg=#3010a0 gui=bold
+    hi VisualBlue ctermfg=NONE ctermbg=18 cterm=NONE guifg=NONE guibg=#3010a0 gui=NONE
     hi VisualReversed ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
     call CopyHighlightGroup("VisualBlue", "Visual")
     hi MatchParen ctermfg=30 ctermbg=NONE cterm=reverse guifg=#008787 guibg=NONE gui=reverse
