@@ -125,7 +125,7 @@ if ! test -z ${2}; then
 	home=${2}
 fi
 
-dotfiles=${1}
+dotfiles=$(realpath ${1})
 
 if test -z ${PREFIX}; then
 	root=/
@@ -412,6 +412,19 @@ case ${user_input} in
 		;;
 esac
 
+press_enter
+
+clear
+echo "==== Setting up dotfiles ===="
+echo ""
+if ! command -v "cargo" > /dev/null 2>&1; then
+	install_package rust
+fi
+cd ${dotfiles}/util/dotfiles
+echo "Building..."
+cargo build --release
+echo "Installing..."
+install ${dotfiles}/util/dotfiles/target/release/dotfiles ${root}/usr/bin
 press_enter
 
 clear
@@ -935,8 +948,10 @@ case "${user_input}" in
 	"n")
 		;;
 	*)
-		echo "Installing getconf..."
-		install_package getconf
+		if ! command -v "getconf" > /dev/null 2>&1; then
+			echo "Installing getconf..."
+			install_package getconf
+		fi
 		echo "Downloading install script..."
 		wget -qO- https://get.pnpm.io/install.sh | sh -
 		;;
