@@ -400,7 +400,7 @@ case ${user_input} in
 	"y")
 		cp ${dotfiles}/.zshrc ${home}
 		cp ${dotfiles}/.dotfiles-script.sh ${home}
-		cp ${dotfiles}/tsch.sh ${dotfiles}/.fr.sh ${dotfiles}/inverting.sh ${home}
+		cp -r ${dotfiles}/shscripts/ ${home}
 		cp -r ${dotfiles}/shlib/ ${home}
 		cp ${dotfiles}/.profile ${dotfiles}/.zprofile ${home}
 		;;

@@ -127,7 +127,7 @@ set_number_color() {
 	NUMBER_COLOR="\033[0;9${foreground_color};4${background_color}m"
 }
 
-"${SOURCE_PROGRAM}" ~/tsch.sh
+"${SOURCE_PROGRAM}" ~/shscripts/tsch.sh
 
 try_install() {
 	program=${1}

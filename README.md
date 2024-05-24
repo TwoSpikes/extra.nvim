@@ -204,7 +204,7 @@ It is my old thing that asks for my several most used commands but no I do not u
 ### Installation
 
 ```console
-$ echo "source ./tsch.sh" >> ~/.bashrc
+$ echo "source ./shscripts/tsch.sh" >> ~/.bashrc
 ```
 
 Then you need to restart the shell

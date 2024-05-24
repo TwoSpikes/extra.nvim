@@ -80,7 +80,7 @@ macro_rules! run_as_superuser_if_needed {
 	"${CP_PROGRAM}" ~/bin/viman ~/dotfiles/bin/
 # Bashrc script and its dependencies
 	"${CP_PROGRAM}" ~/.dotfiles-script.sh ~/dotfiles/
-	"${CP_PROGRAM}" ~/.fr.sh ~/tsch.sh ~/inverting.sh ~/dotfiles/
+	"${CP_PROGRAM}" -r ~/shscripts/ ~/dotfiles/
 	"${CP_PROGRAM}" -r ~/shlib/ ~/dotfiles/
 	"${CP_PROGRAM}" ~/.profile ~/.zprofile ~/dotfiles/
 	"${CP_PROGRAM}" ~/.bashrc ~/.zshrc ~/dotfiles/
@@ -121,9 +121,7 @@ fn commit() -> ::std::io::Result<()> {
         assert!(::std::env::set_current_dir(&path_to_dotfiles).is_ok());
     }
     ::std::fs::copy(HOME.join(".dotfiles-script.sh"), "./.dotfiles-script.sh")?;
-    ::std::fs::copy(HOME.join(".fr.sh"), "./.fr.sh")?;
-    ::std::fs::copy(HOME.join("tsch.sh"), "./tsch.sh")?;
-    ::std::fs::copy(HOME.join("inverting.sh"), "./inverting.sh")?;
+    copy_dir_if_does_not_exist!(HOME.join("shscripts"), "./");
     copy_dir_if_does_not_exist!(HOME.join("shlib"), "./");
     ::std::fs::copy(HOME.join(".profile"), "./.profile")?;
     ::std::fs::copy(HOME.join(".zprofile"), "./.zprofile")?;
