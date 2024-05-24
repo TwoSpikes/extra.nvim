@@ -2,6 +2,28 @@
 
 My scripts and configs for Linux
 
+# Dependencies to install
+
+- `coreutils` >= 8.22
+- `rustc`
+- `cargo`
+- `chsh`
+- `git`
+- `ping`
+- `wget` or `curl`
+- `ncurses` (not necessary)
+- package manager: `pkg`, `apt`, `apt-get`, `winget`, `pacman`, `zypper`, `xbps-install`, `yum`, `aptitude`, `dnf`, `emerge`, `up2date`, `urpmi`, `slackpkg`, `apk`, `brew`, `flatpak` or `snap`
+- `sudo` or `doas`
+- `awk` or `gawk`
+
+# Consists configs for
+
+- `nvim` (NeoVim) or `vim`
+- `emacs`
+- `nano`
+- `alacritty`
+- `git`
+
 # Automatic installation
 
 ## Cloning the repository
@@ -231,4 +253,14 @@ Then you need to run this command
 :Txct       " In a new tab
 :Exct       " In a new buffer
 :Oxct       " In a fullscreen buffer
+```
+
+# Contribution
+
+## Copy configs to this repo and commit
+
+After installing dotfiles, run:
+
+```console
+$ dotfiles commit
 ```
