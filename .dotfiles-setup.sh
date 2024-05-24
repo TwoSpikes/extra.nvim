@@ -387,7 +387,6 @@ else
 fi
 
 echo "Now we are ready to start"
-
 press_enter
 
 clear
@@ -411,7 +410,6 @@ case ${user_input} in
 	*)
 		;;
 esac
-
 press_enter
 
 clear
@@ -443,7 +441,6 @@ if ! command -v zsh > /dev/null 2>&1; then
 			;;
 	esac
 fi
-
 press_enter
 
 clear
@@ -460,7 +457,6 @@ case ${user_input} in
 		chsh
 		;;
 esac
-
 press_enter
 
 clear
@@ -502,7 +498,6 @@ case ${user_input} in
 		echo "OK"
 		;;
 esac
-
 press_enter
 
 clear
@@ -644,7 +639,6 @@ case ${user_input} in
 			mkdir -pv ${home}/sbin
 		fi
 		cp -v ${dotfiles}/sbin/* ${home}/sbin/
-
 		press_enter
 		;;
 	*)
@@ -676,7 +670,6 @@ else
 		echo "Cannot install packer.nvim: NeoVim not found"
 	fi
 fi
-
 press_enter
 
 clear
@@ -707,7 +700,6 @@ case ${user_input} in
 		fi
 		;;
 esac
-
 press_enter
 
 clear
@@ -758,7 +750,6 @@ else
 	echo "NO"
 	echo "Error: Git not found"
 fi
-
 press_enter
 
 if test ${OS} = "Termux"; then
@@ -910,7 +901,7 @@ case "${user_input}" in
 		fi
 		if command -v "alacritty" > /dev/null 2>&1; then
 			echo -n "Copying config for Alacritty... "
-			cp ${dotfiles}/.config/alacritty/ ${home}/.config/
+			cp -r ${dotfiles}/.config/alacritty/ ${home}/.config/
 			echo "OK"
 		fi
 		;;
@@ -936,12 +927,13 @@ case "${user_input}" in
 	*)
 		;;
 esac
+press_enter
 
 clear
 echo "==== Setting up pnpm ==="
 echo ""
 
-echo "Do you want to install pnpm? (Y/n): "
+echo -n "Do you want to install pnpm? (Y/n): "
 read user_input
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 case "${user_input}" in
@@ -956,6 +948,7 @@ case "${user_input}" in
 		wget -qO- https://get.pnpm.io/install.sh | sh -
 		;;
 esac
+press_enter
 
 clear
 echo "Dotfiles setup ended successfully"
