@@ -1,8 +1,17 @@
 #!/bin/env sh
 
+<<<<<<< HEAD
 if command -v "nvim" > /dev/null; then
 	editor="nvim"
 elif command -v "vim" > /dev/null; then
 	editor="vim"
 fi
 ${editor} -c "Man $1 $2" -c 'silent only'
+=======
+if command -v "nvim" > /dev/null 2>&1; then
+	editor="nvim"
+elif command -v "vim" > /dev/null 2>&1; then
+	editor="vim"
+fi
+${editor} --cmd "let g:DO_NOT_OPEN_ANYTHING=v:true" -c "set nocul nocuc stal=0 ls=0 sloc=last smd ru" -c "Man $1 $2" -c 'silent only'
+>>>>>>> 0d6256559c731d0ca744b90d94755177743865e9
