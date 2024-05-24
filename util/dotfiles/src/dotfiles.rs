@@ -12,7 +12,7 @@ macro_rules! usage {
 
 macro_rules! commands {
     () => {
-        println!("COMAMNDS (case insensitive):");
+        println!("COMAMNDS (case sensitive):");
         println!("\tcommit       Commit changes to dotfiles repo");
         println!("\thelp         Show this help");
     };
@@ -20,7 +20,9 @@ macro_rules! commands {
 
 macro_rules! options {
     () => {
-        
+        println!("OPTIONS (case sensitive):");
+        println!("\tFor 'commit' subcommand:");
+        println!("\t\t--only-copy     Only copy, but not commit");
     };
 }
 
@@ -109,9 +111,8 @@ macro_rules! run_as_superuser_if_needed {
 	"${GIT_PROGRAM}" commit --all --verbose
 }*/
 
-fn commit() -> ::std::io::Result<()> {
+fn commit(only_copy: bool) -> ::std::io::Result<()> {
     let is_termux: bool = ::std::env::var("TERMUX_VERSION").is_ok();
-    clear!();
     let HOME = match ::std::env::home_dir() {
         Some(path) => path,
         None => panic!("Cannot get HOME directory"),
@@ -173,13 +174,17 @@ fn commit() -> ::std::io::Result<()> {
     ::std::fs::copy(HOME.join(".termux/termux.properties"), "./.termux/termux.properties")?;
     copy_dir_if_does_not_exist!(HOME.join(".config/alacritty"), "./.config/");
     ::std::fs::copy(HOME.join(".nanorc"), "./.nanorc")?;
-    match ::std::process::Command::new("git")
-        .args(["commit", "--all", "--verbose"])
-        .stdout(::std::process::Stdio::inherit())
-        .stdin(::std::process::Stdio::inherit())
-        .output() {
-            Ok(_) => Ok(()),
-            Err(e) => Err(e),
+    if !only_copy {
+        match ::std::process::Command::new("git")
+            .args(["commit", "--all", "--verbose"])
+            .stdout(::std::process::Stdio::inherit())
+            .stdin(::std::process::Stdio::inherit())
+            .output() {
+                Ok(_) => Ok(()),
+                Err(e) => Err(e),
+        }
+    } else {
+        Ok(())
     }
 }
 
@@ -192,13 +197,55 @@ fn main() {
         short_help!(program_name);
         ::std::process::exit(1);
     }
-    for arg in args {
-        if arg == "--help" || arg == "help" {
-            help!(program_name);
-            ::std::process::exit(0);
+    enum State {
+        NONE,
+        COMMIT{only_copy: bool},
+    }
+    let mut state = State::NONE;
+    while args.len() > 0 {
+        match args.nth(0).unwrap().as_str() {
+            "--help"|"help" => {
+                help!(program_name);
+                ::std::process::exit(0);
+            },
+            "commit" => {
+                state = State::COMMIT{only_copy: false};
+            },
+            "--only-copy" => {
+                match state {
+                    State::NONE => {
+                        println!("This option can only be used with 'commit' subcommand");
+                        short_help!(program_name);
+                        ::std::process::exit(1);
+                    },
+                    State::COMMIT { only_copy: _ } => {
+                        state = State::COMMIT { only_copy: true };
+                    },
+                }
+            },
+            "++only-copy" => {
+                match state {
+                    State::NONE => {
+                        println!("This option can only be used with 'commit' subcommand");
+                        short_help!(program_name);
+                        ::std::process::exit(1);
+                    },
+                    State::COMMIT { only_copy } => {
+                        state = State::COMMIT { only_copy: false };
+                    },
+                }
+            },
+            &_ => {
+                println!("Unknown argument");
+                short_help!(program_name);
+                ::std::process::exit(1);
+            },
         }
-        if arg == "commit" {
-            match commit() {
+    }
+    match state {
+        State::NONE => {},
+        State::COMMIT { only_copy } => {
+            match commit(only_copy) {
                 Ok(_) => {},
                 Err(e) => {
                     println!("error: {}", e);
@@ -206,6 +253,6 @@ fn main() {
                 },
             };
             ::std::process::exit(0);
-        }
+        },
     }
 }

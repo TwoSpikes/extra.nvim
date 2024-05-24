@@ -406,6 +406,12 @@ Showtab
 
 " command! -nargs=* Git !git <args>
 command! -nargs=* Pkg !pkg <args>
+function! DotfilesCommit()
+	!dotfiles commit --only-copy
+	cd ~/dotfiles
+	Git commit --all --verbose
+endfunction
+command! -nargs=* DotfilesCommit call DotfilesCommit()
 
 " let s:tabtimerid = 0
 " function TabTimerHandler(id)
