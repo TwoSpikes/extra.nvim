@@ -260,7 +260,11 @@ Then you need to run this command
 ## Copy configs to this repo and commit
 
 After installing dotfiles, run:
-
 ```console
 $ dotfiles commit
+```
+
+If using Vim/NeoVim:
+```console
+:DotfilesCommit
 ```

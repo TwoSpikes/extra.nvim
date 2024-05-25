@@ -401,7 +401,7 @@ function! Showtab()
 	endif
 	return s:result
 endfunction
-command! Showtab set stl=%{%Showtab()%}
+command! -nargs=0 Showtab set stl=%{%Showtab()%}
 Showtab
 
 " command! -nargs=* Git !git <args>
@@ -411,7 +411,7 @@ function! DotfilesCommit()
 	cd ~/dotfiles
 	Git commit --all --verbose
 endfunction
-command! -nargs=* DotfilesCommit call DotfilesCommit()
+command! -nargs=0 DotfilesCommit call DotfilesCommit()
 
 " let s:tabtimerid = 0
 " function TabTimerHandler(id)
@@ -596,7 +596,7 @@ set noexpandtab
 
 let g:loaded_perl_provider = 0
 
-command! SWrap setl wrap linebreak nolist
+command! -nargs=0 SWrap setl wrap linebreak nolist
 
 if v:version >= 700
   au BufLeave * let b:winview = winsaveview()
@@ -641,7 +641,6 @@ function! ToggleFullscreen()
 	endif
 endfunction
 command! ToggleFullscreen call ToggleFullscreen()
-command! ToggleLocalFullscreen call ToggleLocalFullscreen()
 noremap <leader><c-f> <cmd>ToggleFullscreen<cr>
 noremap <f3> <cmd>ToggleFullscreen<cr>
 
@@ -732,7 +731,7 @@ function! Findfile()
 		set nolazyredraw
 	endif
 endfunction
-command! Findfile call Findfile()
+command! -nargs=0 Findfile call Findfile()
 noremap <c-c>c <cmd>Findfile<cr>
 function! Findfilebuffer()
 	silent! call quickui#input#open()
@@ -749,7 +748,7 @@ function! Findfilebuffer()
 		exec printf("edit %s", filename)
 	endif
 endfunction
-command! Findfilebuffer call Findfilebuffer()
+command! -nargs=0 Findfilebuffer call Findfilebuffer()
 noremap <c-c>C <cmd>Findfilebuffer<cr>
 noremap <c-c>% <cmd>split<cr>
 noremap <c-c>" <cmd>vsplit<cr>
@@ -961,7 +960,7 @@ function! DotfilesCheatSheet()
 	\\n    Github: https://github.com/TwoSpikes/dotfiles.git
 	\"
 endfunction
-command! DotfilesCheatSheet call DotfilesCheatSheet()
+command! -nargs=0 DotfilesCheatSheet call DotfilesCheatSheet()
 noremap <silent> <leader>? <cmd>DotfilesCheatSheet<cr>
 
 " FAST COMMANDS
@@ -1197,7 +1196,7 @@ function! Killbuffer()
 		echohl Normal
 	endif
 endfunction
-command! Killbuffer call Killbuffer()
+command! -nargs=0 Killbuffer call Killbuffer()
 noremap <silent> <c-x>k <cmd>Killbuffer<cr>
 noremap <silent> <c-x>0 <cmd>q<cr>
 noremap <silent> <c-x>1 <cmd>only<cr>
@@ -1257,7 +1256,7 @@ inoremap <silent> Jk <esc>
 " tnoremap <nowait> <expr> <silent> k ProcessTBut_k()
 tnoremap <silent> jk <c-\><c-n>
 tnoremap <silent> jK <c-\><c-n>:bd!<Bar>tabnew<Bar>call OpenTerm("")<cr>
-command! W w
+command! -nargs=* W w <args>
 
 inoremap <silent> ju <esc>viwUea
 inoremap <silent> ji <esc>viwUea
@@ -1356,12 +1355,12 @@ function! ChangeVisualBlue()
 	echohl Normal
 	call CopyHighlightGroup("VisualBlue", "Visual")
 endfunction
-command! ChangeVisualBlue call ChangeVisualBlue()
+command! -nargs=0 ChangeVisualBlue call ChangeVisualBlue()
 function! ChangeVisualReversed()
 	echo "Visual changed to reversed "
 	call CopyHighlightGroup("VisualReversed", "Visual")
 endfunction
-command! ChangeVisualReversed call ChangeVisualReversed()
+command! -nargs=0 ChangeVisualReversed call ChangeVisualReversed()
 noremap <leader>iv <cmd>ChangeVisualBlue<cr>
 noremap <leader>iV <cmd>ChangeVisualReversed<cr>
 
