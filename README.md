@@ -172,7 +172,7 @@ $ DOTFILES_VIM_CONFIG_PATH=~/dnsjajsbdn/vim/ nvim
 	"use_italic_style": false,
 
 "_comment_13":"Enables or disables cursor column",
-	"cursorcolumn": true,
+	"cursorcolumn": false,
 
 "_comment_14":"Open quickui menu on start",
 	"open_menu_on_start": false,
@@ -187,6 +187,12 @@ $ DOTFILES_VIM_CONFIG_PATH=~/dnsjajsbdn/vim/ nvim
 "_comment_20":"Aviable: borland, gruvbox, solarized, papercol dark, papercol light",
 "_comment_21":"See them at https://github.com/skywind3000/vim-quickui/blob/master/MANUAL.md",
 	"quickui_color_scheme": "papercol dark",
+
+"_comment_22":"Open ranger on start",
+	"open_ranger_on_start": true,
+
+"_comment_23":"Open blank file on start",
+	"DO_NOT_OPEN_ANYTHING": false,
 
 "_comment_end":"Ending field to not put comma every time"
 }

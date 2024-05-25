@@ -34,6 +34,8 @@ function! LoadDotfilesConfig(path)
 		\'open_menu_on_start',
 		\'quickui_border_style',
 		\'quickui_color_scheme',
+		\'open_ranger_on_start',
+		\'DO_NOT_OPEN_ANYTHING',
 	\]
 	for option_ in l:option_list
 		if exists('g:dotfiles_config["'.option_.'"]')
@@ -994,6 +996,7 @@ function! OpenTerm(cmd)
 		exec printf("terminal %s", a:cmd)
 	endif
 	startinsert
+	return bufnr()
 endfunction
 noremap <silent> <leader>tt <cmd>tabnew<cr><cmd>call OpenTerm("")<cr>
 noremap <silent> <leader>tb <cmd>call OpenTerm("")<cr>
@@ -1475,8 +1478,38 @@ function! g:TermuxLoadCursorStyle()
 	endif
 endfunction
 
-if expand('%') == '' && !exists('g:DO_NOT_OPEN_ANYTHING')
-	edit ./
+if expand('%') == ''
+	let open = v:false
+	if exists('g:DO_NOT_OPEN_ANYTHING')
+		let open = !g:DO_NOT_OPEN_ANYTHING
+	else
+		let open = v:false
+	endif
+	if open
+		let open = ""
+		if exists('g:open_ranger_on_start')
+			if g:open_ranger_on_start
+				let open = "ranger"
+			else
+				let open = "explorer"
+			endif
+		else
+			let open = "explorer"
+		endif
+
+		if open ==# "explorer"
+		\||executable('ranger') !=# 1
+			edit ./
+		elseif open ==# "ranger"
+			let TMPFILE = trim(system(["mktemp", "-u"]))
+			let bufnrforranger = OpenTerm("ranger --choosefile=".TMPFILE)
+			call delete(TMPFILE)
+			augroup oncloseranger
+				exec 'au TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.bufnrforranger."|let bufnr=bufadd(filename)|call bufload(bufnr)|call setbufvar(bufnr, '&buflisted', v:true)|augroup oncloseranger_afterbufload|au!|exec 'au BufEnter * au!oncloseranger_afterbufload|filetype detect'|augroup END|unlet bufnr|autocmd! oncloseranger|endif|unlet filename"
+			augroup END
+			unlet TMPFILE
+		endif
+	endif
 endif
 
 set nolazyredraw
