@@ -1512,6 +1512,33 @@ if expand('%') == ''
 	endif
 endif
 
+augroup xdg_open
+	autocmd!
+	function! OpenWithXdg(filename)
+		silent! call quickui#confirm#open()
+		if !exists('*quickui#confirm#open')
+			echohl Question
+			echon 'Open with xdg-open (y/N): '
+			echohl Normal
+			let choice = nr2char(getchar())
+		else
+			let choice = quickui#confirm#open('Open with xdg-open?', "&OK\n&Cancel", 1, 'Confirm')
+			if choice ==# 1
+				let choice = 'y'
+			elseif choice ==# 2
+				let choice = 'n'
+			else
+				let choice = 'n'
+			endif
+		endif
+		if choice ==# 'y'
+		\&&executable('xdg-open') ==# 1
+			exec "!xdg-open -- ".a:filename
+		endif
+	endfunction
+	autocmd BufEnter *.jpg,*.png,*.jpeg,*.bmp call OpenWithXdg(expand('%'))
+augroup END
+
 set nolazyredraw
 
 function OnStart()
