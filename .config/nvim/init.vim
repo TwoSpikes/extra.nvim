@@ -1505,7 +1505,7 @@ if expand('%') == ''
 			let bufnrforranger = OpenTerm("ranger --choosefile=".TMPFILE)
 			call delete(TMPFILE)
 			augroup oncloseranger
-				exec 'au TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.bufnrforranger."|bdelete|exec 'edit '.filename|call Numbertoggle()|filetype detect|endif|unlet filename"
+				exec 'au TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.bufnrforranger."|if filereadable(filename)|bdelete|exec 'edit '.filename|call Numbertoggle()|filetype detect|else|quit|endif|unlet filename"
 				exec 'au BufWinLeave * let f=expand("<afile>")|let n=bufnr("^".f."$")|if n==#'.bufnrforranger.'|exec "call timer_start(100,{_->execute("n".\"bdelete!\")})"|unlet f|unlet n|au!oncloseranger|endif'
 			augroup END
 			unlet TMPFILE
