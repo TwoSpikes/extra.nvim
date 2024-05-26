@@ -1006,10 +1006,10 @@ exec printf("noremap <silent> <leader>tf <cmd>FloatermNew %s -l<cr>", $SHELL)
 " noremap <silent> <leader>tct <c-\><c-n>:q\|tabnew\|ter<cr>a
 
 " COLORSCHEME
-noremap <silent> <leader>c <cmd>call SelectPosition("e ".$VIMRUNTIME."/colors")<cr>
-noremap <silent> <leader>cy <cmd>set lazyredraw<cr>yy:<c-f>pvf]o0"_dxicolo <esc>$x$x$x$x<cr>jzb<cmd>set nolazyredraw<cr>
+noremap <silent> <leader>C <cmd>call SelectPosition("e ".$VIMRUNTIME."/colors")<cr>
+noremap <silent> <leader>Cy <cmd>set lazyredraw<cr>yy:<c-f>pvf]o0"_dxicolo <esc>$x$x$x$x<cr>jzb<cmd>set nolazyredraw<cr>
 
-noremap <silent> <leader>cu <cmd>CocUpdate<cr>
+noremap <silent> <leader>Cu <cmd>CocUpdate<cr>
 noremap <silent> <leader>tu <cmd>TSUpdate<cr>
 
 function! CommentOut(comment_string)
