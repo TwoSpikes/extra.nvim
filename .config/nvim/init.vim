@@ -295,7 +295,7 @@ function! Showtab()
 	elseif mode == 'niV'
 		let strmode = '^o visu REPL '
 	elseif mode == 'nt'
-		let strmode = '%#ModeNorm#NORM %#StatuslinestatNormTerm#%#ModeTerm# TERM '
+		let strmode = '%#ModeNorm#NORM %#StatuslinestatNormTerm#%#ModeTerm# '
 	elseif mode == 'ntT'
 		let strmode = '^\^o norm TERM '
 	elseif mode == 'v'
@@ -349,7 +349,7 @@ function! Showtab()
 	elseif mode == '!'
 		let strmode = 'SHELL '
 	elseif mode == 't'
-		let strmode = '%#ModeTerm#TERM '
+		let strmode = '%#ModeTerm# '
 	else
 		let strmode = '%#ModeVisu#visu %#StatuslinestatVisuBlock#%#ModeBlock# BLOCK '
 	endif
@@ -1445,7 +1445,7 @@ noremap <leader>mh <cmd>split<cr><cmd>call OpenTerm("mc")<cr>
 noremap <leader>mv <cmd>vsplit<cr><cmd>call OpenTerm("mc")<cr>
 noremap <leader>mf <cmd>FloatermNew mc<cr>
 
-function! g:TermuxSaveCursorStyle()
+function! TermuxSaveCursorStyle()
 	if $TERMUX_VERSION !=# "" && filereadable(expand("~/.termux/termux.properties"))
 		if !filereadable(expand("~/.cache/dotfiles/termux/terminal_cursor_style"))
 			let TMPFILE=trim(system(["mktemp", "-u"]))
@@ -1466,7 +1466,7 @@ function! g:TermuxSaveCursorStyle()
 		let g:termux_cursor_style = 'bar'
 	endif
 endfunction
-function! g:TermuxLoadCursorStyle()
+function! TermuxLoadCursorStyle()
 	if $TERMUX_VERSION !=# "" && filereadable(expand("~/.termux/termux.properties")) && exists("g:termux_cursor_style")
 		if g:termux_cursor_style ==# 'block'
 			let &guicursor = 'a:block'
@@ -1505,7 +1505,7 @@ if expand('%') == ''
 			let bufnrforranger = OpenTerm("ranger --choosefile=".TMPFILE)
 			call delete(TMPFILE)
 			augroup oncloseranger
-				exec 'au TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.bufnrforranger."|if filereadable(filename)|bdelete|exec 'edit '.filename|call Numbertoggle()|filetype detect|else|quit|endif|unlet filename"
+				exec 'au TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.bufnrforranger."|if filereadable(filename)|bdelete|exec 'edit '.filename|call Numbertoggle()|filetype detect|else|let s=0|exec \"tabdo let s+=winnr('$')\"|if s==#1|call OnQuit()|quit|endif|unlet s|endif|unlet filename"
 				exec 'au BufWinLeave * let f=expand("<afile>")|let n=bufnr("^".f."$")|if n==#'.bufnrforranger.'|exec "call timer_start(100,{_->execute("n".\"bdelete!\")})"|unlet f|unlet n|au!oncloseranger|endif'
 			augroup END
 			unlet TMPFILE
@@ -1542,7 +1542,7 @@ augroup END
 
 set nolazyredraw
 
-function OnStart()
+function! OpenOnStart()
 	echohl Normal
 	echo 'type '
 	echohl SpecialKey
@@ -1560,5 +1560,13 @@ function OnStart()
 	endif
 endfunction
 
-au! VimLeave * call g:TermuxLoadCursorStyle()
-au! VimEnter * call g:TermuxSaveCursorStyle() | call OnStart()
+function! OnStart()
+	call TermuxSaveCursorStyle()
+	call OpenOnStart()
+endfunction
+function! OnQuit()
+	call TermuxLoadCursorStyle()
+endfunction
+
+au! VimLeave * call OnQuit()
+au! VimEnter * call OnStart()
