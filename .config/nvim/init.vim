@@ -1123,17 +1123,7 @@ augroup visual
 	au ModeChanged,BufWinEnter * call HandleBuftype(winnr())
 augroup END
 function! HandleBuftypeAll()
-"		let windows = nvim_list_wins()
-"		for window in windows
-"			call HandleBuftype(window)
-"		endfor
-	let buffers = filter(range(1, bufnr('$')), 'bufexists(v:val)')
-	for buffer in buffers
-		let wins = win_findbuf(buffer)
-		for win in wins
-			call HandleBuftype(win)
-		endfor
-	endfor
+	tabdo windo call HandleBuftype(winnr())
 endfunction
 
 " TELESCOPE
