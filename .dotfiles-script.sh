@@ -70,6 +70,7 @@ al() { "${ALIAS_PROGRAM}" "${@}"; }
 if "${ALIAS_PROGRAM}" ls > /dev/null 2>&1; then
 	"${UNALIAS_PROGRAM}" ls
 fi
+n() { nvim "${@}"; }
 ls() { "${LS_PROGRAM}" "${@}"; }
 q() {
 	exitcode=${1}
