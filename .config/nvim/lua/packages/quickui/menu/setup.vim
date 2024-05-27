@@ -84,6 +84,29 @@ function! RebindMenus()
 				\ ["&Select all\tCtrl-x h", 'call SelectAll()', 'Paste copyied text after the cursor'],
 				\ ])
 
+	call quickui#menu#install("&LSP", [
+				\ ["Coc &previous diagnostic\t[g", 'call CocActionAsync("diagnosticPrevious")', 'Go to previous diagnostic'],
+				\ ["Coc &next diagnostic\t]g", 'call CocActionAsync("diagnosticNext")', 'Go to next diagnostic'],
+				\ ["Go to &definition\tgd", 'call CocActionAsync("jumpDefinition")', 'Jump to definition'],
+				\ ["Go to &type definition\tgy", 'call CocActionAsync("jumpTypeDefinition")', 'Jump to type definition'],
+				\ ["Go to &implementation\tgi", 'call CocActionAsync("jumpImplementation")', 'Jump to implementation'],
+				\ ["Go to &references\tgr", 'call CocActionAsync("jumpReferences")', 'Jump to references'],
+				\ ["--", '' ],
+				\ ["Code &actions selected\tLEAD a", 'call CocActionAsync("codeAction", visualmode())', 'Apply code actions for selected code'],
+				\ ["Code actions &cursor\tLEAD ac", 'call CocActionAsync("codeAction", "cursor")', 'Apply code actions for current cursor position'],
+				\ ["Code actions &buffer\tLEAD as", 'call CocActionAsync("codeAction", "", ["source"], v:true)', 'Apply code actions for current buffer'],
+				\ ["Fi&x current line\tLEAD qf", 'call CocActionAsync("doQuickfix")', 'Apply the most preferred quickfix action to fix diagnostic on the current line'],
+				\ ["--", '' ],
+				\ ["&Refactor\tLEAD re", 'call CocActionAsync("codeAction", "cursor", ["refactor"], v:true)', 'Codeaction refactor cursor'],
+				\ ["Refactor s&elected\tLEAD r", 'call CocActionAsync("codeAction", visualmode(), ["refactor"], v:true)', 'Codeaction refactor selected'],
+				\ ["--", '' ],
+				\ ["C&ode lens current line\tLEAD cl", 'call CocActionAsync("codeLensAction")', 'Run the Code Lens action on the current line'],
+				\ ["&Show documentation\tK", 'call ShowDocumentation()', 'Show documentation in preview window'],
+				\ ["Rename s&ymbol\tLEAD rn", 'call CocActionAsync("rename")', 'Rename symbol under cursor'],
+				\ ["&Format selected\tLEAD f", 'call CocActionAsync("formatSelected", visualmode())', 'Format selected code'],
+				\ ["Fold c&urrent buffer\t:Fold", 'Fold', 'Make folds for current buffer'],
+				\ ])
+
 	" script inside %{...} will be evaluated and expanded in the string
 	call quickui#menu#install("&Option", [
 				\ ['Set &Spell %{&spell? "Off":"On"}', 'set spell!', '%{(&spell?"Disable":"Enable")." spell checking"}'],
