@@ -570,8 +570,8 @@ set history=10000
 set modelineexpr
 set updatetime=5000
 set timeout
-set timeoutlen=500
-set nottimeout
+set timeoutlen=250
+set ttimeout
 set ttimeoutlen=500
 
 set cursorlineopt=screenline,number
@@ -1551,7 +1551,22 @@ function! OpenOnStart()
 endfunction
 
 function! PrepareWhichKey()
-	map <nowait> <leader> <cmd>WhichKey <leader><cr>
+	let g:which_key_timeout = 100
+	if filereadable(expand('~/.local/share/nvim/site/pack/packer/start/which-key.nvim/lua/which-key/util.lua'))
+		let l:old_lazyredraw=&lazyredraw
+		let &lazyredraw = v:true
+		edit ~/.local/share/nvim/site/pack/packer/start/which-key.nvim/lua/which-key/util.lua
+		if getline(189) =~# 'if not ("nvsxoiRct"):find(mode) then'
+			silent 189,192delete
+			silent write
+		endif
+		bdelete
+		let &lazyredraw = l:old_lazyredraw
+		function! ShowWhichKey()
+			lua require('which-key').show(' ')
+		endfunction
+	endif
+	nnoremap <silent> <leader> <cmd>call ShowWhichKey()<cr>
 endfunction
 
 function! OnStart()
@@ -1563,5 +1578,5 @@ function! OnQuit()
 	call TermuxLoadCursorStyle()
 endfunction
 
-au! VimLeave * call OnQuit()
 au! VimEnter * call OnStart()
+au! VimLeave * call OnQuit()
