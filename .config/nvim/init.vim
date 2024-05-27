@@ -1550,9 +1550,14 @@ function! OpenOnStart()
 	endif
 endfunction
 
+function! PrepareWhichKey()
+	map <nowait> <leader> <cmd>WhichKey <leader><cr>
+endfunction
+
 function! OnStart()
 	call TermuxSaveCursorStyle()
 	call OpenOnStart()
+	call PrepareWhichKey()
 endfunction
 function! OnQuit()
 	call TermuxLoadCursorStyle()
