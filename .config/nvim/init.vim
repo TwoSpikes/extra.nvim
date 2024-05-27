@@ -1562,11 +1562,8 @@ function! PrepareWhichKey()
 		endif
 		bdelete
 		let &lazyredraw = l:old_lazyredraw
-		function! ShowWhichKey()
-			lua require('which-key').show(' ')
-		endfunction
 	endif
-	nnoremap <silent> <leader> <cmd>call ShowWhichKey()<cr>
+	nnoremap <silent> <leader> <cmd>lua require('which-key').show(' ')<cr>
 endfunction
 
 function! OnStart()
