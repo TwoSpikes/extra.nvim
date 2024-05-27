@@ -1563,7 +1563,7 @@ function! PrepareWhichKey()
 		bdelete
 		let &lazyredraw = l:old_lazyredraw
 	endif
-	nnoremap <silent> <leader> <cmd>lua require('which-key').show(' ')<cr>
+	nnoremap <silent> <leader> <cmd>lua require('which-key').show(vim.g.mapleader)<cr>
 endfunction
 
 function! OnStart()
