@@ -635,10 +635,7 @@ case ${user_input} in
 		if ! test -d ${home}/bin; then
 			mkdir -pv ${home}/bin
 		fi
-		if ! test -d ${home}/sbin; then
-			mkdir -pv ${home}/sbin
-		fi
-		cp -v ${dotfiles}/sbin/* ${home}/sbin/
+		cp -v ${dotfiles}/bin/* ${home}/bin/
 		press_enter
 		;;
 	*)

@@ -51,14 +51,6 @@ macro_rules! short_help {
     };
 }
 
-macro_rules! copy_dir_if_does_not_exist {
-    ($src:expr, $dst:expr) => {
-        if !::std::path::Path::new($dst).exists() {
-            ::copy_dir::copy_dir($src, $dst)?;
-        }
-    };
-}
-
 macro_rules! run_as_superuser_if_needed {
     ($name:expr, $args:expr) => {
         if ::whoami::realname() != "root" && !::std::env::var("TERMUX_VERSION").expect("Cannot get envvar").is_empty() {
@@ -73,6 +65,21 @@ macro_rules! run_as_superuser_if_needed {
                 .expect("failed to execute child process")
         }
     };
+}
+
+// Copyied from StackOverflow: https://stackoverflow.com/questions/26958489/how-to-copy-a-folder-recursively-in-rust
+fn copy_dir_all(src: impl AsRef<::std::path::Path> + ::std::convert::AsRef<::std::path::Path>, dst: impl AsRef<::std::path::Path> + ::std::convert::AsRef<::std::path::Path>) -> ::std::io::Result<()> {
+    ::std::fs::create_dir_all(&dst)?;
+    for entry in ::std::fs::read_dir(src)? {
+        let entry = entry?;
+        let ty = entry.file_type()?;
+        if ty.is_dir() {
+            copy_dir_all(entry.path(), dst.as_ref().join(entry.file_name()))?;
+        } else {
+            ::std::fs::copy(entry.path(), dst.as_ref().join(entry.file_name()))?;
+        }
+    }
+    Ok(())
 }
 
 /*_df_c() {
@@ -122,14 +129,14 @@ fn commit(only_copy: bool) -> ::std::io::Result<()> {
         assert!(::std::env::set_current_dir(&path_to_dotfiles).is_ok());
     }
     ::std::fs::copy(HOME.join(".dotfiles-script.sh"), "./.dotfiles-script.sh")?;
-    copy_dir_if_does_not_exist!(HOME.join("shscripts"), "./");
-    copy_dir_if_does_not_exist!(HOME.join("shlib"), "./");
+    copy_dir_all(HOME.join("shscripts"), "./");
+    copy_dir_all(HOME.join("shlib"), "./");
     ::std::fs::copy(HOME.join(".profile"), "./.profile")?;
     ::std::fs::copy(HOME.join(".zprofile"), "./.zprofile")?;
     ::std::fs::copy(HOME.join(".bashrc"), "./.bashrc")?;
     ::std::fs::copy(HOME.join(".zshrc"), "./.zshrc")?;
     ::std::fs::copy(HOME.join(".config/nvim/init.vim"), "./.config/nvim/init.vim")?;
-    copy_dir_if_does_not_exist!(HOME.join(".config/nvim/lua"), "./.config/nvim");
+    copy_dir_all(HOME.join(".config/nvim/lua"), "./.config/nvim");
     ::std::fs::copy(HOME.join("bin/viman"), "./bin/viman")?;
     let VIMRUNTIME = ::std::path::Path::new(if ::which::which("nvim").is_ok() {
         if cfg!(target_os = "windows") {
@@ -172,7 +179,7 @@ fn commit(only_copy: bool) -> ::std::io::Result<()> {
     ::std::fs::copy(HOME.join(".gitmessage"), "./.gitmessage")?;
     ::std::fs::copy(HOME.join(".termux/colors.properties"), "./.termux/colors.properties")?;
     ::std::fs::copy(HOME.join(".termux/termux.properties"), "./.termux/termux.properties")?;
-    copy_dir_if_does_not_exist!(HOME.join(".config/alacritty"), "./.config/");
+    copy_dir_all(HOME.join(".config/alacritty"), "./.config/");
     ::std::fs::copy(HOME.join(".nanorc"), "./.nanorc")?;
     if !only_copy {
         match ::std::process::Command::new("git")
