@@ -164,6 +164,10 @@ function! CopyHighlightGroup(src, dst)
 	exec printf("hi %s gui=%s", a:dst, gui)
 endfunction
 
+function! Wipeout(bufnum=bufnr())
+	exec a:bufnum."bw!"
+endfunction
+
 set nonu
 set nornu
 function! STCRel()
@@ -650,31 +654,15 @@ noremap <c-t> <cmd>TagbarToggle<cr>
 
 nnoremap <leader>g :grep -R <cword> .<cr>
 
-"function! ProcessBut(button)
-"	let mode_was = mode()
-"	let temp = ''
-"
-"	let temp .= "\<cmd>set showcmdloc=last\<cr>"
-"
-"	let temp .= a:button
-"
-"	let temp .= "\<Esc>\<cmd>set showcmdloc=statusline\<cr>"
-"
-"	if mode_was == 'v' || mode_was == 'V' || mode_was == 'CTRL-V'
-"		let temp .= "gv"
-"	endif
-"
-"	return temp
-"endfunction
 function! ProcessGBut(button)
 	let temp = ''
 	if &buftype !=# 'terminal'
 		let temp .= "\<cmd>set lazyredraw\<cr>"
 	endif
 	if v:count == 0
-		let temp .= 'g' . a:button
+		let temp.="g".a:button
 	else
-		let temp .= v:count . a:button
+		let temp.=v:count.a:button
 	endif
 	if s:fullscreen || !&cursorcolumn
 		call STCUpd()
@@ -1495,8 +1483,9 @@ if expand('%') == ''
 			let bufnrforranger = OpenTerm("ranger --choosefile=".TMPFILE)
 			call delete(TMPFILE)
 			augroup oncloseranger
-				exec 'au TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.bufnrforranger."|if filereadable(filename)|bdelete|exec 'edit '.filename|call Numbertoggle()|filetype detect|else|let s=0|exec \"tabdo let s+=winnr('$')\"|if s==#1|call OnQuit()|quit|endif|unlet s|endif|unlet filename"
-				exec 'au BufWinLeave * let f=expand("<afile>")|let n=bufnr("^".f."$")|if n==#'.bufnrforranger.'|exec "call timer_start(100,{_->execute("n".\"bdelete!\")})"|unlet f|unlet n|au!oncloseranger|endif'
+				autocmd! oncloseranger
+				exec 'autocmd TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.bufnrforranger."|if filereadable(filename)==#1|bdelete|exec 'edit '.filename|call Numbertoggle()|filetype detect|exec 'augroup oncloseranger_doautocmd_BufEnter|au!|exec \"autocmd ModeChanged *:* doautocmd BufEnter \".expand(\"%\").\"|autocmd!oncloseranger_doautocmd_BufEnter\"|augroup END'|else|let s=0|exec 'tabdo let s+=winnr(\"$\")'|if s==#1|call OnQuit()|quit|endif|unlet s|endif|endif|unlet filename"
+				exec "autocmd BufWinLeave * let f=expand(\"<afile>\")|let n=bufnr(\"^\".f.\"$\")|if n==#".bufnrforranger."|unlet f|unlet n|au!oncloseranger|augroup oncloseranger_whenleave_whenleft|au!|exec \"autocmd BufEnter,BufLeave,WinEnter,WinLeave * ".bufnrforranger."bw!|au!oncloseranger_whenleave_whenleft\"|augroup END|endif"
 			augroup END
 			unlet TMPFILE
 		endif
@@ -1560,7 +1549,7 @@ function! PrepareWhichKey()
 			silent 189,192delete
 			silent write
 		endif
-		bdelete
+		bwipeout!
 		let &lazyredraw = l:old_lazyredraw
 	endif
 	nnoremap <silent> <leader> <cmd>lua require('which-key').show(vim.g.mapleader)<cr>
@@ -1577,3 +1566,4 @@ endfunction
 
 au! VimEnter * call OnStart()
 au! VimLeave * call OnQuit()
+
