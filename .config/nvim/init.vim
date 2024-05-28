@@ -801,10 +801,10 @@ nnoremap <silent> <c-*> *
 nnoremap <silent> # #:noh<cr>
 nnoremap <silent> <c-#> #
 
-noremap <leader>l 20zl
-noremap <leader>h 20zh
-inoremap <c-l> <esc>20zla
-inoremap <c-h> <esc>20zha
+noremap <leader>l 10zl
+noremap <leader>h 10zh
+inoremap <c-l> <cmd>let old_lazyredraw=&lazyredraw<cr><cmd>set lazyredraw<cr><cmd>normal! 10zl<cr><cmd>let &lazyredraw=old_lazyredraw<cr><cmd>unlet old_lazyredraw<cr>
+inoremap <c-h> <cmd>let old_lazyredraw=&lazyredraw<cr><cmd>set lazyredraw<cr><cmd>normal! 10zl<cr><cmd>let &lazyredraw=old_lazyredraw<cr><cmd>unlet old_lazyredraw<cr>
 let s:SCROLL_UP_FACTOR = 2
 let s:SCROLL_DOWN_FACTOR = 2
 let s:SCROLL_C_E_FACTOR = s:SCROLL_UP_FACTOR
@@ -858,34 +858,29 @@ function! DotfilesCheatSheet()
 	\\n     Where symbol is your symbol (type quotes literally)
 	\\n  GLOBAL HELP:
 	\\n    \<leader\>? - Show this help message
-	\\n  OPEN init.vim:
-	\\n    \<leader\>vet - Open in a new tab
-	\\n    \<leader\>veb - Open in a new buffer
-	\\n    \<leader\>veh - Open in a new horizontal window (-)
-	\\n    \<leader\>vev - Open in a new vertical window (\|)
-	\\n    \<leader\>vs  - Reload config
-	\\n  .dotfiles-script.sh FILE:
-	\\n    \<leader\>bt - Open in a new tab
-	\\n    \<leader\>bb - Open in a new buffer
-	\\n    \<leader\>bh - Open in a new horizontal window (-)
-	\\n    \<leader\>bv - Open in a new vertical window (\|)
+	\\n OPEN CONFIGS:
+	\\n    LEAD ve - Open init.vim
+	\\n    LEAD se  - Reload init.vim
+	\\n    LEAD vi - Open plugins list
+	\\n    LEAD si - Install plugins in plugins list
+	\\n    LEAD vs - Open plugins setup
+	\\n    LEAD ss - Reload plugins setup
+	\\n    LEAD vl - Open lsp settings (deprecated)
+	\\n    LEAD vl - Reload lsp settings (deprecated)
+	\\n    LEAD vj - Open dotfiles config
+	\\n    LEAD sj - Reload dotfiles config
+	\\n    LEAD bt - Open .dotfiles-script.sh
 	\\n  EDITING:
-	\\n    MOVING:
-	\\n      You can press `l`, `h`, `right` and `left` at the end of the line and it will go to the beginning of the next line (in Normal mode).
-	\\n      To disable this feature, run this command in bash:
-	\\n      ╭──────────────────────────╮
-	\\n      │ $ disable_autowrapping=1 │
-	\\n      ╰──────────────────────────╯
 	\\n    SPECIAL:
 	\\n      ; - Switch to command mode (:)
-	\\n      SPC SPC - Open quickui menu
+	\\n      LEAD LEAD - Open quickui menu
 	\\n      INSERT: jk - Exit from Insert Mode and save
 	\\n      INSERT: jK - Exit from Insert Mode
 	\\n      INSERT: ju - Make current word uppercase
 	\\n      CTRL-a - Move to start of line
 	\\n      CTRL-e - Move to end of line
-	\\n      CTRL-h - 20zh
-	\\n      CTRL-l - 20zl
+	\\n      CTRL-h - 10zh
+	\\n      CTRL-l - 10zl
 	\\n      CTRL-a - Increase number under cursor
 	\\n      CTRL-x - Deecrease number under cursor
 	\\n      ci_ - Edit word from start to first _
@@ -1359,7 +1354,7 @@ function! SwapHiGroup(group)
     exec printf('hi %s ctermfg=%s ctermbg=%s guifg=%s guibg=%s', a:group, ctermbg, ctermfg, guibg, guifg)
 endfunction
 
-au VimResized * call OnResized()
+au VimResized * call OnResized()|mode
 function! OnResized()
 	echom "Window: ".&lines."rows, ".&columns."cols"
 	call STCUpd()
@@ -1568,4 +1563,3 @@ endfunction
 
 au! VimEnter * call OnStart()
 au! VimLeave * call OnQuit()
-

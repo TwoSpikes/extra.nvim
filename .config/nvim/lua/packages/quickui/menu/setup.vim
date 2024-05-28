@@ -1,4 +1,3 @@
-
 function! ChangeNames()
 	if mode() !~# '^n'
 		let s:esc_label = "Go to No&rmal mode"
@@ -48,7 +47,7 @@ function! RebindMenus()
 				\ ["Ne&xt window\tCtrl-x O", 'exec "normal! \<c-w>W"', 'Go to next window'],
 				\ ["--", '' ],
 				\ ["Update &plugins\tLEAD u", 'lua require("packer").sync()', 'Clear and redraw the screen'],
-				\ ["Update coc language ser&vers\tLEAD cu", 'CocUpdate', 'Update coc.nvim installed language servers'],
+				\ ["Update coc language ser&vers\tLEAD Cu", 'CocUpdate', 'Update coc.nvim installed language servers'],
 				\ ["Update &TreeSitter parsers\tLEAD tu", 'TSUpdate', 'Update installed TreeSitter parsers'],
 				\ ["--", '' ],
 				\ ["Redraw scree&n\tCtrl-l", 'mode', 'Clear and redraw the screen'],
@@ -121,7 +120,7 @@ function! RebindMenus()
 			\ ["Open plugins set&up\tLEAD vs", 'call SelectPosition("e ".g:PLUGINS_SETUP_FILE_PATH)', 'Open '.g:PLUGINS_SETUP_FILE_PATH],
 			\ ["Open lsp &settings\tLEAD vl", 'call SelectPosition("e ".g:LSP_PLUGINS_SETUP_FILE_PATH)', 'Open '.g:LSP_PLUGINS_SETUP_FILE_PATH.' (deprecated due to coc.nvim)'],
 			\ ["Open &dotfiles config\tLEAD vj", 'call SelectPosition("e ".g:DOTFILES_CONFIG_PATH."/config.json")', 'Open '.g:DOTFILES_CONFIG_PATH.'/config.json'],
-			\ ["Open &colorschemes\tLEAD c", 'call SelectPosition("e ".$VIMRUNTIME."/colors")', 'Open colorschemes directory'],
+			\ ["Open &colorschemes\tLEAD C", 'call SelectPosition("e ".$VIMRUNTIME."/colors")', 'Open colorschemes directory'],
 			\ ["--", '' ],
 			\ ["&Reload init.vim\tLEAD se", 'exec "source ".g:CONFIG_PATH."/init.vim"', 'Reload Vim/NeoVim config'],
 			\ ["R&eload plugins list\tLEAD si", 'exec "source ".g:PLUGINS_INSTALL_FILE_PATH', 'Install plugins in '.g:PLUGINS_INSTALL_FILE_PATH],
