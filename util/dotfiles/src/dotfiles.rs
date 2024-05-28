@@ -129,14 +129,14 @@ fn commit(only_copy: bool) -> ::std::io::Result<()> {
         assert!(::std::env::set_current_dir(&path_to_dotfiles).is_ok());
     }
     ::std::fs::copy(HOME.join(".dotfiles-script.sh"), "./.dotfiles-script.sh")?;
-    copy_dir_all(HOME.join("shscripts"), "./");
-    copy_dir_all(HOME.join("shlib"), "./");
+    copy_dir_all(HOME.join("shscripts"), "./")?;
+    copy_dir_all(HOME.join("shlib"), "./shlib")?;
     ::std::fs::copy(HOME.join(".profile"), "./.profile")?;
     ::std::fs::copy(HOME.join(".zprofile"), "./.zprofile")?;
     ::std::fs::copy(HOME.join(".bashrc"), "./.bashrc")?;
     ::std::fs::copy(HOME.join(".zshrc"), "./.zshrc")?;
     ::std::fs::copy(HOME.join(".config/nvim/init.vim"), "./.config/nvim/init.vim")?;
-    copy_dir_all(HOME.join(".config/nvim/lua"), "./.config/nvim");
+    copy_dir_all(HOME.join(".config/nvim/lua"), "./.config/nvim/lua")?;
     ::std::fs::copy(HOME.join("bin/viman"), "./bin/viman")?;
     let VIMRUNTIME = ::std::path::Path::new(if ::which::which("nvim").is_ok() {
         if cfg!(target_os = "windows") {
@@ -179,7 +179,7 @@ fn commit(only_copy: bool) -> ::std::io::Result<()> {
     ::std::fs::copy(HOME.join(".gitmessage"), "./.gitmessage")?;
     ::std::fs::copy(HOME.join(".termux/colors.properties"), "./.termux/colors.properties")?;
     ::std::fs::copy(HOME.join(".termux/termux.properties"), "./.termux/termux.properties")?;
-    copy_dir_all(HOME.join(".config/alacritty"), "./.config/");
+    copy_dir_all(HOME.join(".config/alacritty"), "./.config/alacritty")?;
     ::std::fs::copy(HOME.join(".nanorc"), "./.nanorc")?;
     if !only_copy {
         match ::std::process::Command::new("git")
