@@ -708,8 +708,7 @@ nnoremap <bs> X
 noremap <leader><bs> <bs>
 
 function! Findfile()
-	silent! call quickui#input#open()
-	if !exists('*quickui#input#open')
+	if !filereadable(expand('~/.local/share/nvim/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim'))
 		echohl Question
 		let filename = input('Find file: ')
 		echohl Normal
@@ -725,8 +724,7 @@ endfunction
 command! -nargs=0 Findfile call Findfile()
 noremap <c-c>c <cmd>Findfile<cr>
 function! Findfilebuffer()
-	silent! call quickui#input#open()
-	if !exists('*quickui#input#open')
+	if !filereadable(expand('~/.local/share/nvim/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim'))
 		echohl Question
 		let filename = input('Find file (open in buffer): ')
 		echohl Normal
@@ -751,9 +749,8 @@ endfor
 "nnoremap <leader>lc :tabnext<Bar><c-\><c-n>:bd!<Bar>tabnew<Bar>ter<cr>a!!<cr>
 
 function! SelectPosition(cmd)
-	silent! call quickui#confirm#open()
 	while v:true
-		if !exists('*quickui#confirm#open')
+		if !filereadable(expand('~/.local/share/nvim/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim'))
 			echohl Question
 			echon 'Select position (h,v,b,t): '
 			echohl Normal
@@ -1142,12 +1139,11 @@ noremap <silent> <c-x>S <cmd>wall<Bar>echohl MsgArea<Bar>echo 'Saved all buffers
 noremap <silent> <c-x><c-s> <cmd>w<cr>
 function! Killbuffer()
 	echohl Question
-	silent! call quickui#confirm#open()
-	if !exists("*quickui#confirm#open")
+	if !filereadable(expand('~/.local/share/nvim/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim'))
 		let user_input = nr2char(input("do you want to kill the buffer? (Y/n): "))
 		echohl Normal
 	else
-		let choice = quickui#confirm#open('Do you want to kill the buffer?', "&Yes\n&No", 'Confirm')
+		let choice = quickui#confirm#open('Do you want to kill the buffer?', "&Yes\n&No", 1, 'Confirm')
 		if choice ==# 0
 			let user_input = 'n'
 		elseif choice ==# 1
@@ -1491,8 +1487,7 @@ endif
 augroup xdg_open
 	autocmd!
 	function! OpenWithXdg(filename)
-		silent! call quickui#confirm#open()
-		if !exists('*quickui#confirm#open')
+		if !filereadable(expand('~/.local/share/nvim/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim'))
 			echohl Question
 			echon 'Open with xdg-open (y/N): '
 			echohl Normal
