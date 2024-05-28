@@ -38,7 +38,7 @@ function! LoadDotfilesConfig(path)
 		\'DO_NOT_OPEN_ANYTHING',
 	\]
 	for option_ in l:option_list
-		if exists('g:dotfiles_config["'.option_.'"]')
+		if exists('g:dotfiles_config["'.option_.'"]') && !exists("g:".option_)
 			exec printf("let %s = g:dotfiles_config[option_]", "g:".option_)
 		endif
 	endfor
