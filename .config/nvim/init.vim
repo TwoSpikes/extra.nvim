@@ -9,7 +9,7 @@ if !exists('g:DOTFILES_CONFIG_PATH')
 	let g:DOTFILES_CONFIG_PATH = expand(g:DOTFILES_CONFIG_PATH)
 endif
 
-function! LoadDotfilesConfig(path)
+function! LoadDotfilesConfig(path, reload=v:false)
 	if !filereadable(a:path)
 		echohl ErrorMsg
 		echom "error: no dotfiles vim config"
@@ -38,8 +38,10 @@ function! LoadDotfilesConfig(path)
 		\'DO_NOT_OPEN_ANYTHING',
 	\]
 	for option_ in l:option_list
-		if exists('g:dotfiles_config["'.option_.'"]') && !exists("g:".option_)
-			exec printf("let %s = g:dotfiles_config[option_]", "g:".option_)
+		if exists('g:dotfiles_config["'.option_.'"]')
+			if !exists("g:".option_) || a:reload
+				exec printf("let g:%s = g:dotfiles_config[option_]", option_)
+			endif
 		endif
 	endfor
 endfunction
@@ -834,7 +836,7 @@ exec printf('noremap <silent> <leader>vl <cmd>call SelectPosition("e %s")<cr>', 
 exec printf("noremap <silent> <leader>sl <esc>:so %s<cr>", g:LSP_PLUGINS_SETUP_FILE_PATH)
 
 exec printf('noremap <silent> <leader>vj <cmd>call SelectPosition("e %s")<cr>', g:DOTFILES_CONFIG_PATH.'/config.json')
-exec printf('noremap <silent> <leader>sj <cmd>call LoadDotfilesConfig("%s")<cr>', expand(g:DOTFILES_CONFIG_PATH).'/config.json')
+exec printf('noremap <silent> <leader>sj <cmd>call LoadDotfilesConfig("%s", v:true)<cr><cmd>call HandleDotfilesConfig()<cr><cmd>call HandleBuftypeAll()<cr>', expand(g:DOTFILES_CONFIG_PATH).'/config.json')
 
 " .dotfiles-script.sh FILE
 noremap <silent> <leader>b <cmd>call SelectPosition("e ~/.dotfiles-script.sh")<cr>

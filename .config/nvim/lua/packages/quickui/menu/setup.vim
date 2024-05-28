@@ -127,7 +127,7 @@ function! RebindMenus()
 			\ ["R&eload plugins list\tLEAD si", 'exec "source ".g:PLUGINS_INSTALL_FILE_PATH', 'Install plugins in '.g:PLUGINS_INSTALL_FILE_PATH],
 			\ ["Rel&oad plugins setup\tLEAD ss", 'exec "source ".g:PLUGINS_SETUP_FILE_PATH', 'Reconfigure plugins'],
 			\ ["Relo&ad lsp setup\tLEAD sl", 'exec "source ".g:LSP_PLUGINS_SETUP_FILE_PATH', 'Reconfigure LSP plugins (deprecated due to coc.nvim)'],
-			\ ["Reload do&tfiles config\tLEAD sj", 'call LoadDotfilesConfig(expand(g:DOTFILES_CONFIG_PATH)."/config.json")|call HandleDotfilesConfig()|call HandleBuftypeAll()', 'Reload dotfiles config'],
+			\ ["Reload do&tfiles config\tLEAD sj", 'call LoadDotfilesConfig(expand(g:DOTFILES_CONFIG_PATH)."/config.json", v:true)|call HandleDotfilesConfig()|call HandleBuftypeAll()', 'Reload dotfiles config'],
 		  \ ])
 
 	" register HELP menu with weight 10000
