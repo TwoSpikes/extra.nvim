@@ -697,7 +697,6 @@ cnoremap <silent> <c-a> <c-b>
 cnoremap <c-g> <c-e><c-u><cr>
 cnoremap <silent> jk <c-e><c-u><cr>
 cnoremap <c-u> <c-e><c-u>
-cnoremap <c-a> <c-b>
 cnoremap <c-b> <S-left>
 "noremap jk <cmd>echo 'Not in Insert Mode'<cr>
 
@@ -803,8 +802,8 @@ nnoremap <silent> <c-#> #
 
 noremap <leader>l 10zl
 noremap <leader>h 10zh
-inoremap <c-l> <cmd>let old_lazyredraw=&lazyredraw<cr><cmd>set lazyredraw<cr><cmd>normal! 10zl<cr><cmd>let &lazyredraw=old_lazyredraw<cr><cmd>unlet old_lazyredraw<cr>
-inoremap <c-h> <cmd>let old_lazyredraw=&lazyredraw<cr><cmd>set lazyredraw<cr><cmd>normal! 10zl<cr><cmd>let &lazyredraw=old_lazyredraw<cr><cmd>unlet old_lazyredraw<cr>
+inoremap <c-l> <cmd>let old_lazyredraw=&lazyredraw<cr><cmd>set lazyredraw<cr><cmd>normal! 10zl<cr><cmd>let &lazyredraw=old_lazyredraw<cr><cmd>unlet old_lazyredraw<cr><cmd>call HandleBuftype(winnr())<cr>
+inoremap <c-h> <cmd>let old_lazyredraw=&lazyredraw<cr><cmd>set lazyredraw<cr><cmd>normal! 10zh<cr><cmd>let &lazyredraw=old_lazyredraw<cr><cmd>unlet old_lazyredraw<cr><cmd>call HandleBuftype(winnr())<cr>
 let s:SCROLL_UP_FACTOR = 2
 let s:SCROLL_DOWN_FACTOR = 2
 let s:SCROLL_C_E_FACTOR = s:SCROLL_UP_FACTOR
@@ -850,14 +849,14 @@ autocmd BufReadPost *
 function! DotfilesCheatSheet()
 	echo "
 	  \Help for my NeoVim config:
-	\\n     By default, \<leader\> is space symbol.
+	\\n     By default, \<leader\> (LEAD) is space symbol.
 	\\n     You can change it typing this command in Vim/Neovim:
 	\\n     ╭───────────────────────────╮
 	\\n     │ :let mapleader = \"symbol\" │
 	\\n     ╰───────────────────────────╯
 	\\n     Where symbol is your symbol (type quotes literally)
 	\\n  GLOBAL HELP:
-	\\n    \<leader\>? - Show this help message
+	\\n    LEAD ? - Show this help message
 	\\n OPEN CONFIGS:
 	\\n    LEAD ve - Open init.vim
 	\\n    LEAD se  - Reload init.vim
@@ -865,26 +864,31 @@ function! DotfilesCheatSheet()
 	\\n    LEAD si - Install plugins in plugins list
 	\\n    LEAD vs - Open plugins setup
 	\\n    LEAD ss - Reload plugins setup
-	\\n    LEAD vl - Open lsp settings (deprecated)
+	\\n    LEAD vl - Open lsp settings (deprecated due to coc.nvim)
 	\\n    LEAD vl - Reload lsp settings (deprecated)
 	\\n    LEAD vj - Open dotfiles config
 	\\n    LEAD sj - Reload dotfiles config
-	\\n    LEAD bt - Open .dotfiles-script.sh
+	\\n    LEAD b - Open .dotfiles-script.sh
+	\\n    LEAD C - Open colorschemes
+	\\n    LEAD Cy - Apply colorscheme under cursor
 	\\n  EDITING:
 	\\n    SPECIAL:
 	\\n      ; - Switch to command mode (:)
-	\\n      LEAD LEAD - Open quickui menu
+	\\n      LEAD - Show possible keyboard shortcuts
+	\\n      LEAD LEAD or F10 or F9 - Open quickui menu
+	\\n      F3 - Toggle fullscreen mode
 	\\n      INSERT: jk - Exit from Insert Mode and save
 	\\n      INSERT: jK - Exit from Insert Mode
 	\\n      INSERT: ju - Make current word uppercase
+	\\n      INSERT: ji - Make current word lowercase
 	\\n      CTRL-a - Move to start of line
 	\\n      CTRL-e - Move to end of line
-	\\n      CTRL-h - 10zh
-	\\n      CTRL-l - 10zl
-	\\n      CTRL-a - Increase number under cursor
-	\\n      CTRL-x - Deecrease number under cursor
+	\\n      CTRL-h - Move screen 10 symbols left
+	\\n      CTRL-l - Move screen 10 symbols right
+	\\n      LEAD i - Increase number under cursor
+	\\n      LEAD x - Substract number under cursor
 	\\n      ci_ - Edit word from start to first _
-	\\n      \<leader\>d  - Toggle off search highlightings
+	\\n      LEAD d  - Hide search highlightings
 	\\n      s - Delete (d) without copying
 	\\n      q - Quit window
 	\\n      Q - Quit window without saving
@@ -898,7 +902,6 @@ function! DotfilesCheatSheet()
 	\\n      \<leader\>S - Toggle scrolloff (see :h 'scrolloff')
 	\\n    Emacs-like keybindings:
 	\\n      ALT-x - Switch to command mode (:)
-	\\n      F10 - Open quickui menu
 	\\n      CTRL-x CTRL-c - Close All windows
 	\\n      CTRL-x s - Save current buffer
 	\\n      CTRL-x CTRL-s - Save current buffer
@@ -918,33 +921,26 @@ function! DotfilesCheatSheet()
 	\\n      CTRL-x h - Select all text
 	\\n      CTRL-x CTRL-h - See help (:h)
 	\\n    QUOTES AROUND (deprecated, use surround.vim):
-	\\n      \<leader\>\" - Put \'\"\' around word
-	\\n      \<leader\>\' - Put \"\'\" around word
+	\\n      LEAD \" - Put \'\"\' around word
+	\\n      LEAD \' - Put \"\'\" around word
 	\\n  TERMINAL:
-	\\n    \<leader\>tt - Open in a new tab
-	\\n    \<leader\>tb - Open in a new buffer
-	\\n    \<leader\>th - Open in a new horizontal window (-)
-	\\n    \<leader\>tv - Open in a new vertical window (\|)
-	\\n    \<leader\>tf - Open in a new floating window (Floaterm)
-	\\n  COLORSCHEME:
-	\\n    \<leader\>ct - Open colorschemes in a new tab
-	\\n    \<leader\>cb - Open colorschemes in a new buffer
-	\\n    \<leader\>ch - Open colorschemes in a new horizontal window (-)
-	\\n    \<leader\>cv - Open colorschemes in a new vertical window (\|)
-	\\n    \<leader\>cs - Set colorscheme (:colo)
-	\\n    \<leader\>cy - Apply colorscheme under cursor
-	\\n  TELESCOPE (Plugin):
-	\\n    \<leader\>ff - Find files
-	\\n    \<leader\>fg - Live grep
-	\\n    \<leader\>fb - Buffers
-	\\n    \<leader\>fh - Help tags
-	\\n  LSP:
-	\\n    \<leader\>lv - Start vim-language-server
-	\\n    \<leader\>lb - Start bash-language-server
-	\\n    \<leader\>ld - Dump active clients
-	\\n  AUTHOR:
-	\\n    Name: TwoSpikes (2023 - 2024)
-	\\n    Github: https://github.com/TwoSpikes/dotfiles.git
+	\\n    LEAD tt - Open in a new tab
+	\\n    LEAD tb - Open in a new buffer
+	\\n    LEAD th - Open in a new horizontal window (-)
+	\\n    LEAD tv - Open in a new vertical window (\|)
+	\\n    LEAD tf - Open in a new floating window (Floaterm)
+	\\n  TELESCOPE plugin:
+	\\n    LEAD ff - Find files
+	\\n    LEAD fg - Live grep
+	\\n    LEAD fb - Buffers
+	\\n    LEAD fh - Help tags
+	\\n  LSP (deprecated due to coc.nvim):
+	\\n    LEAD lv - Start vim-language-server
+	\\n    LEAD lb - Start bash-language-server
+	\\n    LEAD ld - Dump active clients
+	\\n  ABOUT:
+	\\n    Author: TwoSpikes (2023 - 2024)
+	\\n    Github repository: https://github.com/TwoSpikes/dotfiles
 	\"
 endfunction
 command! -nargs=0 DotfilesCheatSheet call DotfilesCheatSheet()
@@ -1120,6 +1116,9 @@ nnoremap <silent> <leader>fg :lua require'telescope.builtin'.live_grep(require('
 nnoremap <silent> <leader>fb :lua require'telescope.builtin'.buffers(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
 nnoremap <silent> <leader>fh :lua require'telescope.builtin'.help_tags(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
 
+noremap <silent> <leader>x <c-x>
+noremap <silent> <leader>i <c-i>
+
 " vnoremap <c-/> <esc>v:q:s/.*/# \0
 " vnoremap <c-?> <esc>:s/.*/\/\/ \0
 
@@ -1236,8 +1235,8 @@ tnoremap <silent> jk <c-\><c-n>
 tnoremap <silent> jK <c-\><c-n>:bd!<Bar>tabnew<Bar>call OpenTerm("")<cr>
 command! -nargs=* W w <args>
 
-inoremap <silent> ju <esc>viwUea
-inoremap <silent> ji <esc>viwUea
+inoremap <silent> ju <cmd>let old_lazyredraw=&lazyredraw<cr><cmd>let &lazyredraw=v:false<cr><cmd>normal! viwUea<cr><cmd>let &lazyredraw=old_lazyredraw<cr><cmd>unlet old_lazyredraw<cr>
+inoremap <silent> ji <cmd>let old_lazyredraw=&lazyredraw<cr><cmd>let &lazyredraw=v:false<cr><cmd>normal! viwuea<cr><cmd>let &lazyredraw=old_lazyredraw<cr><cmd>unlet old_lazyredraw<cr>
 
 inoremap ( ()<c-o>h
 inoremap [ []<c-o>h
@@ -1339,8 +1338,8 @@ function! ChangeVisualReversed()
 	call CopyHighlightGroup("VisualReversed", "Visual")
 endfunction
 command! -nargs=0 ChangeVisualReversed call ChangeVisualReversed()
-noremap <leader>iv <cmd>ChangeVisualBlue<cr>
-noremap <leader>iV <cmd>ChangeVisualReversed<cr>
+"noremap <leader>iv <cmd>ChangeVisualBlue<cr>
+"noremap <leader>iV <cmd>ChangeVisualReversed<cr>
 
 function! SwapHiGroup(group)
     let id = synIDtrans(hlID(a:group))
