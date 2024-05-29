@@ -909,42 +909,81 @@ clear
 echo "==== Setting up ctags ===="
 echo ""
 
-echo "Do you want to install ctags?"
-echo "1) exuberant-ctags (Exuberant ctags)"
-echo "2) ctags (Universal ctags)"
-echo "*) No"
-read user_input
-case "${user_input}" in
-	"1")
-		install_package exuberant-ctags
-		;;
-	"2")
-		install_package ctags
-		;;
-	*)
-		;;
-esac
+echo -n "Checking if ctags are installed: "
+if command -v "ctags" > /dev/null 2>&1; then
+	echo "YES"
+else
+	echo "NO"
+	echo "Do you want to install ctags?"
+	echo "1) Exuberant ctags"
+	echo "2) Universal ctags"
+	echo "*) No"
+	read user_input
+	case "${user_input}" in
+		"1")
+			install_package exuberant-ctags
+			;;
+		"2")
+			git clone --depth=1 https://github.com/universal-ctags/ctags.git
+			cd ctags
+			./autogen.sh
+			./configure
+			make
+			${run_as_superuser_if_needed} make install
+			;;
+		*)
+			;;
+	esac
+fi
+press_enter
+
+clear
+echo "==== Setting up npm ===="
+echo ""
+
+echo -n "Checking if npm installed: "
+if command -v "npm" > /dev/null 2>&1; then
+	echo "YES"
+else
+	echo "NO"
+	echo -n "Do you want to install nodejs? (Y/n): "
+	read user_input
+	user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+	case "${user_input}" in
+		"n")
+			;;
+		*)
+			install_package nodejs
+			;;
+	esac
+fi
 press_enter
 
 clear
 echo "==== Setting up pnpm ==="
 echo ""
 
-echo -n "Do you want to install pnpm? (Y/n): "
-read user_input
-user_input=$(echo ${user_input}|awk '{print tolower($0)}')
-case "${user_input}" in
-	"n")
-		;;
-	*)
-		if ! command -v "getconf" > /dev/null 2>&1; then
-			echo "Installing getconf..."
-			install_package getconf
-		fi
-		echo "Downloading install script..."
-		wget -qO- https://get.pnpm.io/install.sh | sh -
-		;;
-esac
+echo -n "Checking if pnpm is installed: "
+if command -v "pnpm" > /dev/null 2>&1; then
+	echo "YES"
+else
+	echo "NO"
+	echo -n "Do you want to install pnpm? (Y/n): "
+	read user_input
+	user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+	case "${user_input}" in
+		"n")
+			;;
+		*)
+			if ! command -v "getconf" > /dev/null 2>&1; then
+				echo "Installing getconf..."
+				install_package getconf
+			fi
+			echo "Downloading install script..."
+			wget -qO- https://get.pnpm.io/install.sh | sh -
+			;;
+	esac
+fi
 press_enter
 
 clear
