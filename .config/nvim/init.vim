@@ -846,7 +846,7 @@ exec printf('noremap <silent> <leader>vj <cmd>call SelectPosition("%s", g:stdpos
 exec printf('noremap <silent> <leader>sj <cmd>call LoadDotfilesConfig("%s", v:true)<cr><cmd>call HandleDotfilesConfig()<cr><cmd>call HandleBuftypeAll()<cr>', expand(g:DOTFILES_CONFIG_PATH).'/config.json')
 
 " .dotfiles-script.sh FILE
-noremap <silent> <leader>b <cmd>call SelectPosition("e ~/.dotfiles-script.sh")<cr>
+noremap <silent> <leader>b <cmd>call SelectPosition("~/.dotfiles-script.sh", g:stdpos)<cr>
 
 autocmd BufReadPost *
      \ if line("'\"") > 0 && line("'\"") <= line("$") |
@@ -995,7 +995,7 @@ exec printf("noremap <silent> <leader>tf <cmd>FloatermNew %s -l<cr>", $SHELL)
 " noremap <silent> <leader>tct <c-\><c-n>:q\|tabnew\|ter<cr>a
 
 " COLORSCHEME
-noremap <silent> <leader>C <cmd>call SelectPosition("e ".$VIMRUNTIME."/colors")<cr>
+noremap <silent> <leader>C <cmd>call SelectPosition($VIMRUNTIME."/colors", g:stdpos)<cr>
 noremap <silent> <leader>Cy <cmd>set lazyredraw<cr>yy:<c-f>pvf]o0"_dxicolo <esc>$x$x$x$x<cr>jzb<cmd>set nolazyredraw<cr>
 
 noremap <silent> <leader>Cu <cmd>CocUpdate<cr>
