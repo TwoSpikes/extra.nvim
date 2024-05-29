@@ -166,10 +166,6 @@ function! CopyHighlightGroup(src, dst)
 	exec printf("hi %s gui=%s", a:dst, gui)
 endfunction
 
-function! Wipeout(bufnum=bufnr())
-	exec a:bufnum."bw!"
-endfunction
-
 set nonu
 set nornu
 function! STCRel()
@@ -240,7 +236,6 @@ function! STCUpd()
 		endif
 	endif
 endfunction
-call STCUpd()
 
 nnoremap <c-f> <c-f><cmd>call STCUpd()<cr>
 nnoremap <c-u> <c-u><cmd>call STCUpd()<cr>
@@ -410,7 +405,6 @@ function! Showtab()
 	return s:result
 endfunction
 command! -nargs=0 Showtab set stl=%{%Showtab()%}
-Showtab
 
 " command! -nargs=* Git !git <args>
 command! -nargs=* Pkg !pkg <args>
@@ -748,39 +742,43 @@ endfor
 "nnoremap <leader>lC :tabnew<Bar>ter<Bar><cr>a./build.sh
 "nnoremap <leader>lc :tabnext<Bar><c-\><c-n>:bd!<Bar>tabnew<Bar>ter<cr>a!!<cr>
 
-function! SelectPosition(cmd)
+function! FarOrMc()
+	if executable("far")
+		let g:far_or_mc = 'far'
+	elseif executable("far2l")
+		let g:far_or_mc = 'far2l'
+	else
+		let g:far_or_mc = 'far2l'
+	endif
+endfunction
+call FarOrMc()
+
+function! SelectPosition(cmd, positions)
 	while v:true
-		if !filereadable(expand('~/.local/share/nvim/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim'))
+		if !has('nvim')||!filereadable(expand('~/.local/share/nvim/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim'))
 			echohl Question
-			echon 'Select position (h,v,b,t): '
+			echon printf('Select position %s: ', keys(a:positions))
 			echohl Normal
 			let position = nr2char(getchar())
 			echon position
 			redraw
 		else
-			let choice = quickui#confirm#open('Select position', "&Split\n&Vsplit\n&Buffer\nNew &tab", 1, 'Confirm')
-			if choice ==# 1
-				let position = 'h'
-			elseif choice ==# 2
-				let position = 'v'
-			elseif choice ==# 3
-				let position = 'b'
-			elseif choice ==# 4
-				let position = 't'
-			else
-				let position = ''
-			endif
+			let button_label_string = ''
+			for val in values(a:positions)[:-2]
+				let button_label_string .= val['button_label']."\n"
+			endfor
+			let button_label_string .= values(a:positions)[-1]['button_label']
+
+			let choice = quickui#confirm#open('Select position', button_label_string, 1, 'Confirm')
+			unlet button_label_string
+
+			let position = keys(a:positions)[choice-1]
 		endif
 		if char2nr(position) ==# 0
 			continue
 		endif
-		if position ==# 'h'
-			split
-		elseif position ==# 'v'
-			vsplit
-		elseif position ==# 'b'
-		elseif position ==# 't'
-			tabnew
+		if exists('a:positions[position]')
+			exec a:positions[position]['command'](a:cmd)
 		else
 			echohl ErrorMsg
 			echom "Wrong position: ".position
@@ -789,8 +787,21 @@ function! SelectPosition(cmd)
 		endif
 		break
 	endwhile
-	exec a:cmd
 endfunction
+
+let g:stdpos = {
+	\ 'h': {'button_label': '&Split', 'command': {cmd -> 'split '.cmd}},
+	\ 'v': {'button_label': '&Vsplit', 'command': {cmd -> 'vsplit '.cmd}},
+	\ 'b': {'button_label': '&Buffer', 'command': {cmd -> 'e '.cmd}},
+	\ 't': {'button_label': 'New &tab', 'command': {cmd -> 'tabnew|e '.cmd}},
+\ }
+let g:termpos = {
+	\ 'h': {'button_label': '&Split', 'command': {cmd -> 'split|call OpenTerm("'.cmd.'")'}},
+	\ 'v': {'button_label': '&Vsplit', 'command': {cmd -> 'vsplit|call OpenTerm("'.cmd.'")'}},
+	\ 'b': {'button_label': '&Buffer', 'command': {cmd -> 'e|call OpenTerm("'.cmd.'")'}},
+	\ 't': {'button_label': 'New &tab', 'command': {cmd -> 'tabnew|call OpenTerm("'.cmd.'")'}},
+	\ 'f': {'button_label': '&Floating', 'command': {cmd -> 'FloatermNew '.cmd}},
+\ }
 
 nnoremap <silent> * *:noh<cr>
 nnoremap <silent> <c-*> *
@@ -819,19 +830,19 @@ let g:PLUGINS_INSTALL_FILE_PATH = '~/.config/nvim/lua/packages/plugins.lua'
 let g:PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/plugins_setup.lua'
 let g:LSP_PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/lsp/plugins.lua'
 
-exec printf('noremap <silent> <leader>ve <cmd>call SelectPosition("e %s")<cr>', g:CONFIG_PATH."/init.vim")
+exec printf('noremap <silent> <leader>ve <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:CONFIG_PATH."/init.vim")
 exec printf("noremap <silent> <leader>se <esc>:so %s<cr>", g:CONFIG_PATH.'/init.vim')
 
-exec printf('noremap <silent> <leader>vi <cmd>call SelectPosition("e %s")<cr>', g:PLUGINS_INSTALL_FILE_PATH)
+exec printf('noremap <silent> <leader>vi <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:PLUGINS_INSTALL_FILE_PATH)
 exec printf("noremap <silent> <leader>si <esc>:so %s<cr>", g:PLUGINS_INSTALL_FILE_PATH)
 
-exec printf('noremap <silent> <leader>vs <cmd>call SelectPosition("e %s")<cr>', g:PLUGINS_SETUP_FILE_PATH)
+exec printf('noremap <silent> <leader>vs <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:PLUGINS_SETUP_FILE_PATH)
 exec printf("noremap <silent> <leader>ss <esc>:so %s<cr>", g:PLUGINS_SETUP_FILE_PATH)
 
-exec printf('noremap <silent> <leader>vl <cmd>call SelectPosition("e %s")<cr>', g:LSP_PLUGINS_SETUP_FILE_PATH)
+exec printf('noremap <silent> <leader>vl <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:LSP_PLUGINS_SETUP_FILE_PATH)
 exec printf("noremap <silent> <leader>sl <esc>:so %s<cr>", g:LSP_PLUGINS_SETUP_FILE_PATH)
 
-exec printf('noremap <silent> <leader>vj <cmd>call SelectPosition("e %s")<cr>', g:DOTFILES_CONFIG_PATH.'/config.json')
+exec printf('noremap <silent> <leader>vj <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:DOTFILES_CONFIG_PATH.'/config.json')
 exec printf('noremap <silent> <leader>sj <cmd>call LoadDotfilesConfig("%s", v:true)<cr><cmd>call HandleDotfilesConfig()<cr><cmd>call HandleBuftypeAll()<cr>', expand(g:DOTFILES_CONFIG_PATH).'/config.json')
 
 " .dotfiles-script.sh FILE
@@ -1288,8 +1299,6 @@ if has('nvim')
 	exec printf("luafile %s", g:PLUGINS_SETUP_FILE_PATH)
 endif
 
-so ~/xterm-color-table.vim
-
 if has('nvim')
 	lua M = {}
 	lua servers = { gopls = {}, html = {}, jsonls = {}, pyright = {}, rust_analyzer = {}, sumneko_lua = {}, tsserver = {}, vimls = {}, }
@@ -1385,45 +1394,29 @@ map и b
 map т n
 map ь m
 
-augroup LineNrForInactive
-	function! s:SaveStc(clear_stc)
-		exec printf("let g:stc_was_%d = &l:stc", win_getid())
-		if a:clear_stc
-			let &l:stc = ''
-		endif
-	endfunction
-	au! WinLeave * call s:SaveStc(v:true)
-	function! s:LoadStc()
-		if exists("g:stc_was_"..win_getid())==#1
-			let &l:stc = eval("g:stc_was_"..win_getid())
-		else
-			let &l:stc = ''
-		endif
-	endfunction
-	au! WinEnter * call s:LoadStc()
-augroup END
-
-function! FarOrMc()
-	if executable("far")
-		return "far"
-	elseif executable("far2l")
-		return "far2l"
-	else
-		return "mc"
-	endif
-endfunction
+if has('nvim')
+	augroup LineNrForInactive
+		function! s:SaveStc(clear_stc)
+			exec printf("let g:stc_was_%d = &l:stc", win_getid())
+			if a:clear_stc
+				let &l:stc = ''
+			endif
+		endfunction
+		au! WinLeave * call s:SaveStc(v:true)
+		function! s:LoadStc()
+			if exists("g:stc_was_"..win_getid())==#1
+				let &l:stc = eval("g:stc_was_"..win_getid())
+			else
+				let &l:stc = ''
+			endif
+		endfunction
+		au! WinEnter * call s:LoadStc()
+	augroup END
+endif
 
 let g:floaterm_width = 1.0
-noremap <leader>zt <cmd>tabnew<cr><cmd>call OpenTerm("lazygit")<cr>
-noremap <leader>zb <cmd>call OpenTerm("lazygit")<cr>
-noremap <leader>zh <cmd>split<cr><cmd>call OpenTerm("lazygit")<cr>
-noremap <leader>zv <cmd>vsplit<cr><cmd>call OpenTerm("lazygit")<cr>
-noremap <leader>zf <cmd>FloatermNew lazygit<cr>
-noremap <leader>mt <cmd>tabnew<cr><cmd>call OpenTerm(FarOrMc())<cr>
-noremap <leader>mb <cmd>call OpenTerm(FarOrMc())<cr>
-noremap <leader>mh <cmd>split<cr><cmd>call OpenTerm(FarOrMc())<cr>
-noremap <leader>mv <cmd>vsplit<cr><cmd>call OpenTerm(FarOrMc())<cr>
-noremap <leader>mf <cmd>exec "FloatermNew ".FarOrMc()<cr>
+noremap <leader>z <cmd>call SelectPosition('lazygit', g:termpos)<cr>
+noremap <leader>m <cmd>call SelectPosition(g:far_or_mc, g:termpos)<cr>
 
 function! TermuxSaveCursorStyle()
 	if $TERMUX_VERSION !=# "" && filereadable(expand("~/.termux/termux.properties"))
@@ -1560,6 +1553,9 @@ function! OnStart()
 	call TermuxSaveCursorStyle()
 	call PrepareWhichKey()
 	call OpenOnStart()
+	Showtab
+	so ~/xterm-color-table.vim
+	call STCUpd()
 endfunction
 function! OnQuit()
 	call TermuxLoadCursorStyle()
