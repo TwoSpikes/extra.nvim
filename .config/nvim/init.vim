@@ -84,6 +84,7 @@ let g:CONFIG_ALREADY_LOADED = v:true
 if $PREFIX == ""
 	call setenv('PREFIX', '/usr/')
 endif
+
 colorscheme blueorange
 set termguicolors
 set lazyredraw
@@ -164,6 +165,43 @@ function! CopyHighlightGroup(src, dst)
 	exec printf("hi %s guifg=%s", a:dst, guifg)
 	exec printf("hi %s guibg=%s", a:dst, guibg)
 	exec printf("hi %s gui=%s", a:dst, gui)
+endfunction
+
+function! PrepareVital()
+	let g:VitalModule#Random = vital#vital#import('Random')
+
+endfunction
+function! GetRandomName(length)
+	let name = "Rnd_"
+	for _ in range(a:length)
+		let r = g:VitalModule#Random.range(1, 4)
+		if r ==# 1
+			let name .= nr2char(g:VitalModule#Random.range(48, 58))
+		elseif r ==# 2
+			let name .= nr2char(g:VitalModule#Random.range(65, 91))
+		elseif r ==# 3
+			let name .= nr2char(g:VitalModule#Random.range(97, 123))
+		else
+			echohl ErrorMsg
+			echom "Internal error"
+			echohl Normal
+		endif
+	endfor
+	unlet r
+	return name
+endfunction
+function! GenerateTemporaryAutocmd(event, pattern, command, delete_when)
+	let random_name = GetRandomName(20)
+	exec 'augroup '.random_name
+		au!
+		exec "autocmd ".a:event." ".a:pattern." ".a:command."|".a:delete_when(random_name)
+	augroup END
+endfunction
+function! AfterSomeEvent(event, command, delete_when={name -> 'au! '.name})
+	call GenerateTemporaryAutocmd(a:event, '*', a:command, a:delete_when)
+endfunction
+function! MakeThingsThatRequireBeDoneAfterPluginsLoaded()
+	au TermClose * if !exists('g:bufnrforranger')|call IfOneWinDo("call OnQuit()")|call AfterSomeEvent('TermLeave', 'call Numbertoggle()')|quit|endif
 endfunction
 
 set nonu
@@ -1418,6 +1456,32 @@ let g:floaterm_width = 1.0
 noremap <leader>z <cmd>call SelectPosition('lazygit', g:termpos)<cr>
 noremap <leader>m <cmd>call SelectPosition(g:far_or_mc, g:termpos)<cr>
 
+augroup xdg_open
+	autocmd!
+	function! OpenWithXdg(filename)
+		if !filereadable(expand('~/.local/share/nvim/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim'))
+			echohl Question
+			echon 'Open with xdg-open (y/N): '
+			echohl Normal
+			let choice = nr2char(getchar())
+		else
+			let choice = quickui#confirm#open('Open with xdg-open?', "&OK\n&Cancel", 1, 'Confirm')
+			if choice ==# 1
+				let choice = 'y'
+			elseif choice ==# 2
+				let choice = 'n'
+			else
+				let choice = 'n'
+			endif
+		endif
+		if choice ==# 'y'
+		\&&executable('xdg-open') ==# 1
+			exec "!xdg-open -- ".a:filename
+		endif
+	endfunction
+	autocmd BufEnter *.jpg,*.png,*.jpeg,*.bmp call OpenWithXdg(expand('%'))
+augroup END
+
 function! TermuxSaveCursorStyle()
 	if $TERMUX_VERSION !=# "" && filereadable(expand("~/.termux/termux.properties"))
 		if !filereadable(expand("~/.cache/dotfiles/termux/terminal_cursor_style"))
@@ -1451,69 +1515,6 @@ function! TermuxLoadCursorStyle()
 	endif
 endfunction
 
-if expand('%') == ''
-	let open = v:false
-	if exists('g:DO_NOT_OPEN_ANYTHING')
-		let open = !g:DO_NOT_OPEN_ANYTHING
-	else
-		let open = v:false
-	endif
-	if open
-		let open = ""
-		if exists('g:open_ranger_on_start')
-			if g:open_ranger_on_start
-				let open = "ranger"
-			else
-				let open = "explorer"
-			endif
-		else
-			let open = "explorer"
-		endif
-
-		if open ==# "explorer"
-		\||executable('ranger') !=# 1
-			edit ./
-		elseif open ==# "ranger"
-			let TMPFILE = trim(system(["mktemp", "-u"]))
-			let bufnrforranger = OpenTerm("ranger --choosefile=".TMPFILE)
-			call delete(TMPFILE)
-			augroup oncloseranger
-				autocmd! oncloseranger
-				exec 'autocmd TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.bufnrforranger."|if filereadable(filename)==#1|bdelete|exec 'edit '.filename|call Numbertoggle()|filetype detect|exec 'augroup oncloseranger_doautocmd_BufEnter|au!|exec \"autocmd ModeChanged *:* doautocmd BufEnter \".expand(\"%\").\"|autocmd!oncloseranger_doautocmd_BufEnter\"|augroup END'|else|let s=0|exec 'tabdo let s+=winnr(\"$\")'|if s==#1|call OnQuit()|quit|endif|unlet s|endif|endif|unlet filename"
-				exec "autocmd BufWinLeave * let f=expand(\"<afile>\")|let n=bufnr(\"^\".f.\"$\")|if n==#".bufnrforranger."|unlet f|unlet n|au!oncloseranger|augroup oncloseranger_whenleave_whenleft|au!|exec \"autocmd BufEnter,BufLeave,WinEnter,WinLeave * ".bufnrforranger."bw!|au!oncloseranger_whenleave_whenleft\"|augroup END|endif"
-			augroup END
-			unlet bufnrforranger
-			unlet TMPFILE
-		endif
-	endif
-endif
-
-augroup xdg_open
-	autocmd!
-	function! OpenWithXdg(filename)
-		if !filereadable(expand('~/.local/share/nvim/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim'))
-			echohl Question
-			echon 'Open with xdg-open (y/N): '
-			echohl Normal
-			let choice = nr2char(getchar())
-		else
-			let choice = quickui#confirm#open('Open with xdg-open?', "&OK\n&Cancel", 1, 'Confirm')
-			if choice ==# 1
-				let choice = 'y'
-			elseif choice ==# 2
-				let choice = 'n'
-			else
-				let choice = 'n'
-			endif
-		endif
-		if choice ==# 'y'
-		\&&executable('xdg-open') ==# 1
-			exec "!xdg-open -- ".a:filename
-		endif
-	endfunction
-	autocmd BufEnter *.jpg,*.png,*.jpeg,*.bmp call OpenWithXdg(expand('%'))
-augroup END
-
 function! OpenOnStart()
 	if exists('g:open_menu_on_start')
 		if g:open_menu_on_start ==# v:true
@@ -1531,6 +1532,42 @@ function! OpenOnStart()
 	echohl Normal
 	echon ' to see help'
 	echohl Normal
+
+	if expand('%') == ''
+		let open = v:false
+		if exists('g:DO_NOT_OPEN_ANYTHING')
+			let open = !g:DO_NOT_OPEN_ANYTHING
+		else
+			let open = v:false
+		endif
+		if open
+			let open = ""
+			if exists('g:open_ranger_on_start')
+				if g:open_ranger_on_start
+					let open = "ranger"
+				else
+					let open = "explorer"
+				endif
+			else
+				let open = "explorer"
+			endif
+
+			if open ==# "explorer"
+			\||executable('ranger') !=# 1
+				edit ./
+			elseif open ==# "ranger"
+				let TMPFILE = trim(system(["mktemp", "-u"]))
+				let g:bufnrforranger = OpenTerm("ranger --choosefile=".TMPFILE)
+				call delete(TMPFILE)
+				augroup oncloseranger
+					autocmd! oncloseranger
+					exec 'autocmd TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.g:bufnrforranger."|if filereadable(filename)==#1|bdelete|exec 'edit '.filename|call Numbertoggle()|filetype detect|call AfterSomeEvent(\"ModeChanged\", \"doautocmd BufEnter \".expand(\"%\"))|else|call IfOneWinDo(\"call OnQuit()\")|quit|endif|unlet g:bufnrforranger|endif|unlet filename"
+					exec "autocmd BufWinLeave * let f=expand(\"<afile>\")|let n=bufnr(\"^\".f.\"$\")|if n==#".g:bufnrforranger."|unlet f|unlet n|au!oncloseranger|call AfterSomeEvent(\"BufEnter,BufLeave,WinEnter,WinLeave\", \"".g:bufnrforranger."bw!\")|endif"
+				augroup END
+				unlet TMPFILE
+			endif
+		endif
+	endif
 endfunction
 
 function! PrepareWhichKey()
@@ -1550,6 +1587,8 @@ function! PrepareWhichKey()
 endfunction
 
 function! OnStart()
+	call PrepareVital()
+	call MakeThingsThatRequireBeDoneAfterPluginsLoaded()
 	call TermuxSaveCursorStyle()
 	call PrepareWhichKey()
 	call OpenOnStart()
@@ -1559,6 +1598,13 @@ function! OnStart()
 endfunction
 function! OnQuit()
 	call TermuxLoadCursorStyle()
+endfunction
+function! IfOneWinDo(cmd)
+	let s = 0
+	tabdo let s += winnr('$')
+	if s==# 1
+		exec a:cmd
+	endif
 endfunction
 
 au! VimEnter * call OnStart()

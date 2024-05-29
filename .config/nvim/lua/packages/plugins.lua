@@ -111,4 +111,7 @@ return require('packer').startup(function (use)
 		'mg979/vim-visual-multi',
 		branch = 'master',
 	}
+	use {
+		'vim-jp/vital.vim',
+	}
 end)
