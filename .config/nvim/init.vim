@@ -1403,17 +1403,27 @@ augroup LineNrForInactive
 	au! WinEnter * call s:LoadStc()
 augroup END
 
+function! FarOrMc()
+	if executable("far")
+		return "far"
+	elseif executable("far2l")
+		return "far2l"
+	else
+		return "mc"
+	endif
+endfunction
+
 let g:floaterm_width = 1.0
 noremap <leader>zt <cmd>tabnew<cr><cmd>call OpenTerm("lazygit")<cr>
 noremap <leader>zb <cmd>call OpenTerm("lazygit")<cr>
 noremap <leader>zh <cmd>split<cr><cmd>call OpenTerm("lazygit")<cr>
 noremap <leader>zv <cmd>vsplit<cr><cmd>call OpenTerm("lazygit")<cr>
 noremap <leader>zf <cmd>FloatermNew lazygit<cr>
-noremap <leader>mt <cmd>tabnew<cr><cmd>call OpenTerm("mc")<cr>
-noremap <leader>mb <cmd>call OpenTerm("mc")<cr>
-noremap <leader>mh <cmd>split<cr><cmd>call OpenTerm("mc")<cr>
-noremap <leader>mv <cmd>vsplit<cr><cmd>call OpenTerm("mc")<cr>
-noremap <leader>mf <cmd>FloatermNew mc<cr>
+noremap <leader>mt <cmd>tabnew<cr><cmd>call OpenTerm(FarOrMc())<cr>
+noremap <leader>mb <cmd>call OpenTerm(FarOrMc())<cr>
+noremap <leader>mh <cmd>split<cr><cmd>call OpenTerm(FarOrMc())<cr>
+noremap <leader>mv <cmd>vsplit<cr><cmd>call OpenTerm(FarOrMc())<cr>
+noremap <leader>mf <cmd>exec "FloatermNew ".FarOrMc()<cr>
 
 function! TermuxSaveCursorStyle()
 	if $TERMUX_VERSION !=# "" && filereadable(expand("~/.termux/termux.properties"))
@@ -1479,6 +1489,7 @@ if expand('%') == ''
 				exec 'autocmd TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.bufnrforranger."|if filereadable(filename)==#1|bdelete|exec 'edit '.filename|call Numbertoggle()|filetype detect|exec 'augroup oncloseranger_doautocmd_BufEnter|au!|exec \"autocmd ModeChanged *:* doautocmd BufEnter \".expand(\"%\").\"|autocmd!oncloseranger_doautocmd_BufEnter\"|augroup END'|else|let s=0|exec 'tabdo let s+=winnr(\"$\")'|if s==#1|call OnQuit()|quit|endif|unlet s|endif|endif|unlet filename"
 				exec "autocmd BufWinLeave * let f=expand(\"<afile>\")|let n=bufnr(\"^\".f.\"$\")|if n==#".bufnrforranger."|unlet f|unlet n|au!oncloseranger|augroup oncloseranger_whenleave_whenleft|au!|exec \"autocmd BufEnter,BufLeave,WinEnter,WinLeave * ".bufnrforranger."bw!|au!oncloseranger_whenleave_whenleft\"|augroup END|endif"
 			augroup END
+			unlet bufnrforranger
 			unlet TMPFILE
 		endif
 	endif
@@ -1510,16 +1521,7 @@ augroup xdg_open
 	autocmd BufEnter *.jpg,*.png,*.jpeg,*.bmp call OpenWithXdg(expand('%'))
 augroup END
 
-set nolazyredraw
-
 function! OpenOnStart()
-	echohl Normal
-	echo 'type '
-	echohl SpecialKey
-	echon ':intro<cr>'
-	echohl Normal
-	echon ' to see help'
-
 	if exists('g:open_menu_on_start')
 		if g:open_menu_on_start ==# v:true
 			call ChangeNames()
@@ -1528,6 +1530,14 @@ function! OpenOnStart()
 			echo quickui#menu#section('&File')
 		endif
 	endif
+
+	set nolazyredraw
+	echo 'type '
+	echohl SpecialKey
+	echon ':intro<cr>'
+	echohl Normal
+	echon ' to see help'
+	echohl Normal
 endfunction
 
 function! PrepareWhichKey()
@@ -1548,8 +1558,8 @@ endfunction
 
 function! OnStart()
 	call TermuxSaveCursorStyle()
-	call OpenOnStart()
 	call PrepareWhichKey()
+	call OpenOnStart()
 endfunction
 function! OnQuit()
 	call TermuxLoadCursorStyle()
