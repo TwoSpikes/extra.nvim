@@ -670,36 +670,6 @@ fi
 press_enter
 
 clear
-echo "==== Configuring ${setting_editor_for} configuration"
-echo ""
-
-echo -n "Checking if directory for configuration exists: "
-if test -d ${home}/.config/${setting_editor_for}/options; then
-	echo "YES"
-else
-	echo "NO"
-	echo -n "Making a directory for configuration: "
-	mkdir ${home}/.config/${setting_editor_for}/options
-	echo "OK"
-fi
-echo ""
-
-echo -n "Do you want ${setting_editor_for} to install LSP (recommended)? (Y/n): "
-read user_input
-user_input=$(echo ${user_input}|awk '{print tolower($0)}')
-case ${user_input} in
-	"n")
-		touch ${home}/.config/nvim/options/do_not_setup_lsp.null
-		;;
-	*)
-		if test -e ${home}/.config/${setting_editor_for}/options/do_not_setup_lsp.null; then
-			rm ${home}/.config/${setting_editor_for}/options/do_not_setup_lsp.null
-		fi
-		;;
-esac
-press_enter
-
-clear
 echo "==== Miscellaneous stuff ===="
 echo ""
 
@@ -987,6 +957,46 @@ fi
 press_enter
 
 clear
+echo "==== Setting up mc/far ===="
+echo ""
+
+echo "Do you want to install mc/far?"
+echo -n "1) mc (Midnight commander): "
+if command -v "mc" > /dev/null 2>&1; then
+	echo "installed"
+else
+	echo "not installed"
+fi
+echo -n "2) far: "
+if command -v "far" > /dev/null 2>&1; then
+	echo "installed"
+else
+	echo "not installed"
+fi
+echo -n "3) far2l (Far to Linux): "
+if command -v "far2l" > /dev/null 2>&1; then
+	echo "installed"
+else
+	echo "not installed"
+fi
+echo "*) No"
+read user_input
+case "${user_input}" in
+	"1")
+		install_package mc
+		;;
+	"2")
+		install_package far
+		;;
+	"3")
+		install_package far2l
+		;;
+	*)
+		;;
+esac
+press_enter
+clear
+
 echo "Dotfiles setup ended successfully"
 echo "It is recommended to restart your shell"
 exit 0
