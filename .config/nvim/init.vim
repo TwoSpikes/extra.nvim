@@ -780,6 +780,23 @@ endfor
 "nnoremap <leader>lC :tabnew<Bar>ter<Bar><cr>a./build.sh
 "nnoremap <leader>lc :tabnext<Bar><c-\><c-n>:bd!<Bar>tabnew<Bar>ter<cr>a!!<cr>
 
+function! SaveAs()
+	if !filereadable(expand('~/.local/share/nvim/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim'))
+		echohl Question
+		let filename = input('Save as: ')
+		echohl Normal
+	else
+		let filename = quickui#input#open('Save as:             ', fnamemodify(expand('%'), ':~:.'))
+	endif
+	if filename !=# ''
+		set lazyredraw
+		exec printf("w %s", filename)
+		set nolazyredraw
+	endif
+endfunction
+command! -nargs=0 SaveAs call SaveAs()
+noremap <leader><c-s> <cmd>SaveAs<cr>
+
 function! FarOrMc()
 	if executable("far")
 		let g:far_or_mc = 'far'
@@ -1025,11 +1042,12 @@ function! OpenTerm(cmd)
 	startinsert
 	return bufnr()
 endfunction
-noremap <silent> <leader>tt <cmd>tabnew<cr><cmd>call OpenTerm("")<cr>
-noremap <silent> <leader>tb <cmd>call OpenTerm("")<cr>
-noremap <silent> <leader>th <cmd>split<cr><cmd>call OpenTerm("")<cr>
-noremap <silent> <leader>tv <cmd>vsplit<cr><cmd>call OpenTerm("")<cr>
-exec printf("noremap <silent> <leader>tf <cmd>FloatermNew %s -l<cr>", $SHELL)
+"noremap <silent> <leader>tt <cmd>tabnew<cr><cmd>call OpenTerm("")<cr>
+"noremap <silent> <leader>tb <cmd>call OpenTerm("")<cr>
+"noremap <silent> <leader>th <cmd>split<cr><cmd>call OpenTerm("")<cr>
+"noremap <silent> <leader>tv <cmd>vsplit<cr><cmd>call OpenTerm("")<cr>
+"exec printf("noremap <silent> <leader>tf <cmd>FloatermNew %s -l<cr>", $SHELL)
+noremap <silent> <leader>t <cmd>call SelectPosition($SHELL.' -l', g:termpos)<cr>
 " noremap <silent> <leader>tct <c-\><c-n>:q\|tabnew\|ter<cr>a
 
 " COLORSCHEME
@@ -1515,6 +1533,28 @@ function! TermuxLoadCursorStyle()
 	endif
 endfunction
 
+function! OpenRanger()
+	let TMPFILE = trim(system(["mktemp", "-u"]))
+	let g:bufnrforranger = OpenTerm("ranger --choosefile=".TMPFILE)
+	call delete(TMPFILE)
+	augroup oncloseranger
+		autocmd! oncloseranger
+		exec 'autocmd TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.g:bufnrforranger."|if filereadable(filename)==#1|bdelete|exec 'edit '.filename|call Numbertoggle()|filetype detect|call AfterSomeEvent(\"ModeChanged\", \"doautocmd BufEnter \".expand(\"%\"))|unlet g:bufnrforranger|else|call IfOneWinDo(\"call OnQuit()\")|quit|endif|endif|unlet filename"
+		exec "autocmd BufWinLeave * let f=expand(\"<afile>\")|let n=bufnr(\"^\".f.\"$\")|if n==#".g:bufnrforranger."|unlet f|unlet n|au!oncloseranger|call AfterSomeEvent(\"BufEnter,BufLeave,WinEnter,WinLeave\", \"".g:bufnrforranger."bw!\")|unlet g:bufnrforranger|endif"
+	augroup END
+	unlet TMPFILE
+endfunction
+function! OpenRangerCheck()
+	if executable('ranger')
+		call OpenRanger()
+	else
+		echohl ErrorMsg
+		echom "Cannot open ranger: ranger not installed"
+		echohl Normal
+	endif
+endfunction
+nnoremap <leader>R <cmd>call OpenRangerCheck()<cr>
+
 function! OpenOnStart()
 	if exists('g:open_menu_on_start')
 		if g:open_menu_on_start ==# v:true
@@ -1556,15 +1596,7 @@ function! OpenOnStart()
 			\||executable('ranger') !=# 1
 				edit ./
 			elseif open ==# "ranger"
-				let TMPFILE = trim(system(["mktemp", "-u"]))
-				let g:bufnrforranger = OpenTerm("ranger --choosefile=".TMPFILE)
-				call delete(TMPFILE)
-				augroup oncloseranger
-					autocmd! oncloseranger
-					exec 'autocmd TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.g:bufnrforranger."|if filereadable(filename)==#1|bdelete|exec 'edit '.filename|call Numbertoggle()|filetype detect|call AfterSomeEvent(\"ModeChanged\", \"doautocmd BufEnter \".expand(\"%\"))|unlet g:bufnrforranger|else|call IfOneWinDo(\"call OnQuit()\")|quit|endif|endif|unlet filename"
-					exec "autocmd BufWinLeave * let f=expand(\"<afile>\")|let n=bufnr(\"^\".f.\"$\")|if n==#".g:bufnrforranger."|unlet f|unlet n|au!oncloseranger|call AfterSomeEvent(\"BufEnter,BufLeave,WinEnter,WinLeave\", \"".g:bufnrforranger."bw!\")|unlet g:bufnrforranger|endif"
-				augroup END
-				unlet TMPFILE
+				call OpenRanger()
 			endif
 		endif
 	endif
