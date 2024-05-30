@@ -920,7 +920,7 @@ function! DotfilesCheatSheet()
 	\\n     Where symbol is your symbol (type quotes literally)
 	\\n  GLOBAL HELP:
 	\\n    LEAD ? - Show this help message
-	\\n OPEN CONFIGS:
+	\\n CONFIGS:
 	\\n    LEAD ve - Open init.vim
 	\\n    LEAD se  - Reload init.vim
 	\\n    LEAD vi - Open plugins list
@@ -946,10 +946,10 @@ function! DotfilesCheatSheet()
 	\\n      INSERT: ji - Make current word lowercase
 	\\n      CTRL-a - Move to start of line
 	\\n      CTRL-e - Move to end of line
-	\\n      CTRL-h - Move screen 10 symbols left
-	\\n      CTRL-l - Move screen 10 symbols right
-	\\n      LEAD i - Increase number under cursor
-	\\n      LEAD x - Substract number under cursor
+	\\n      LEAD h - Move screen 10 symbols left
+	\\n      LEAD l - Move screen 10 symbols right
+	\\n      INSERT: CTRL-h - Move screen 10 symbols left
+	\\n      INSERT: CTRL-l - Move screen 10 symbols right
 	\\n      ci_ - Edit word from start to first _
 	\\n      LEAD d  - Hide search highlightings
 	\\n      s - Delete (d) without copying
@@ -1179,9 +1179,6 @@ nnoremap <silent> <leader>ff <cmd>call FuzzyFind()<cr>
 nnoremap <silent> <leader>fg :lua require'telescope.builtin'.live_grep(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
 nnoremap <silent> <leader>fb :lua require'telescope.builtin'.buffers(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
 nnoremap <silent> <leader>fh :lua require'telescope.builtin'.help_tags(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
-
-noremap <silent> <leader>x <c-x>
-noremap <silent> <leader>i <c-i>
 
 " vnoremap <c-/> <esc>v:q:s/.*/# \0
 " vnoremap <c-?> <esc>:s/.*/\/\/ \0
