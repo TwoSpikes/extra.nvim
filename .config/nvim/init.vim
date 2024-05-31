@@ -491,14 +491,14 @@ command! -nargs=0 DotfilesCommit call DotfilesCommit()
 augroup numbertoggle
 	autocmd!
 	function! Numbertoggle_stcabs()
-		if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer'
+		if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel'
 			call STCAbs(v:insertmode)
 		else
 			call STCNo()
 		endif
 	endfunction	
 	function! Numbertoggle_stcrel()
-		if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer'
+		if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel'
 			call STCRel()
 		else
 			call STCNo()
@@ -512,7 +512,10 @@ augroup numbertoggle
 		endif
 	endfunction
 	function! Numbertoggle_no()
-		set stc= nonu nornu
+		if has('nvim')
+			set stc=
+		endif
+		set nonu nornu
 	endfunction
 	autocmd InsertLeave * call Numbertoggle_stcrel()
 	autocmd InsertEnter * call Numbertoggle_stcabs()
@@ -880,6 +883,11 @@ exec printf("noremap <silent> <ScrollWheelUp> <cmd>set lazyredraw<cr>%s<c-y><cmd
 noremap <silent> <leader><c-e> <c-e>
 noremap <silent> <leader><c-y> <c-y>
 
+noremap <silent> <leader>st <cmd>lua require('spectre').toggle()<cr><cmd>call Numbertoggle()<cr>
+nnoremap <silent> <leader>sw <cmd>lua require('spectre').open_visual({select_word = true})<cr><cmd>call Numbertoggle()<cr>
+vnoremap <silent> <leader>sw <cmd>lua require('spectre').open_visual()<cr><cmd>call Numbertoggle()<cr>
+noremap <silent> <leader>sp <cmd>lua require('spectre').open_file_search({select_word = true})<cr><cmd>call Numbertoggle()<cr>
+
 " NVIMRC FILE
 let g:PLUGINS_INSTALL_FILE_PATH = '~/.config/nvim/lua/packages/plugins.lua'
 let g:PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/plugins_setup.lua'
@@ -1159,7 +1167,7 @@ augroup visual
 			let pre_cursorcolumn = pre_cursorcolumn && g:cursorcolumn
 		endif
 		call setwinvar(a:winnum, '&cursorcolumn', pre_cursorcolumn)
-		let pre_cursorline = mode() !~# "[irco]" && !s:fullscreen && buftype !=# 'terminal' && (buftype !=# 'nofile' || filetype ==# 'nerdtree') && filetype !=# 'TelescopePrompt'
+		let pre_cursorline = mode() !~# "[irco]" && !s:fullscreen && buftype !=# 'terminal' && (buftype !=# 'nofile' || filetype ==# 'nerdtree') && filetype !=# 'TelescopePrompt' && filetype !=# 'spectre_panel'
 		if exists('g:cursorline')
 			let pre_cursorline = pre_cursorline && g:cursorline
 		endif
@@ -1375,12 +1383,14 @@ if has('nvim')
 	\ end
 endif
 
-noremap <silent> <leader>S :let &scrolloff = 999 - &scrolloff<cr>
+noremap <silent> <leader>so :let &scrolloff = 999 - &scrolloff<cr>
 
 nnoremap s "_d
 
 noremap <silent> <f10> <cmd>call quickui#menu#open()<cr>
 noremap <silent> <f9> <cmd>call quickui#menu#open()<cr>
+
+nnoremap <silent> <c-x><c-b> <cmd>call quickui#tools#list_buffer('e')<cr>
 
 " Interface
 function! ChangeVisualBlue()
@@ -1613,6 +1623,10 @@ function! PrepareWhichKey()
 		let &lazyredraw = l:old_lazyredraw
 	endif
 	nnoremap <silent> <leader> <cmd>lua require('which-key').show(vim.g.mapleader)<cr>
+	" FIXME: Conflicts with another ctrl-x mapping
+	"nnoremap <silent> <c-x> <cmd>lua require('which-key').show(string.char(24))<cr>
+	" FIXME: Built-in mapping starting with ctrl-w do not work
+	"nnoremap <silent> <c-w> <cmd>lua require('which-key').show(string.char(23))<cr>
 endfunction
 
 function! OnStart()

@@ -114,4 +114,10 @@ return require('packer').startup(function (use)
 	use {
 		'vim-jp/vital.vim',
 	}
+	use {
+		'nvim-pack/nvim-spectre',
+		requires = {
+			'nvim-lua/plenary.nvim',
+		}
+	}
 end)

@@ -31,7 +31,6 @@ function! RebindMenus()
 				\ ["Ne&w File\t:new", 'new', 'Creates a new buffer'],
 				\ ["&Quit\tq", 'quit', 'Closes the current window'],
 				\ ["Force q&uit\tQ", 'quit!', 'Closes the current window without saving changes'],
-				\ ["K&ill buffer\tCtrl-x k", 'Killbuffer', 'Completely removes the current buffer'],
 				\ ["--", '' ],
 				\ ["&Save\tCtrl-x s", 'write', 'Save changes in current buffer'],
 				\ ["Save &all\tCtrl-x S", 'wall | echo "Saved all buffers"', 'Save changes to all buffers' ],
@@ -50,7 +49,11 @@ function! RebindMenus()
 				\ ["Exit without confir&m\tCtrl-x Ctrl-q", 'qall!', 'Close Vim/NeoVim without saving'],
 				\ ])
 
-	call quickui#menu#install('&Windows', [
+	call quickui#menu#install('&Window', [
+				\ ["&Kill buffer\tCtrl-x k", 'Killbuffer', 'Completely removes the current buffer'],
+				\ ["&Select buffer\tCtrl-x Ctrl-b", 'call quickui#tools#list_buffer("e")', 'Select buffer to edit in current buffer'],
+				\ ["Find &word using Spectre\tLEAD sw", 'exec "lua require(\"spectre\").open_visual({select_word = true})"|call Numbertoggle()', 'Select buffer to edit in current buffer'],
+				\ ["--", '' ],
 				\ ["Open file in &tab\tCtrl-c c", 'Findfile', 'Open file in new tab'],
 				\ ["Open file in &buffer\tCtrl-c C", 'Findfilebuffer', 'Open file in current buffer'],
 				\ ["Toggle &file tree\tCtrl-h", 'NERDTreeToggle', 'Toggles a file tree'],
