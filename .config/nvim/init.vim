@@ -1084,7 +1084,7 @@ noremap <silent> <leader>tu <cmd>TSUpdate<cr>
 function! CommentOut(comment_string)
 	mark z
 	if mode() !~? 'v.*' && mode() !~? "\<c-v>.*"
-		return "0i".a:comment_string."\<esc>"
+		return "0i".a:comment_string." \<esc>"
 	else
 		return "\<c-v>0I".a:comment_string."\<esc>"
 	endif
@@ -1130,9 +1130,29 @@ augroup cpp
 	au filetype cpp let g:default_comment_string = "//"
 	au filetype cpp noremap <silent> <buffer> <leader>n viwo<esc>i::<esc>hi
 augroup END
+augroup java
+	au!
+	au filetype java let g:default_comment_string = "//"
+augroup END
+augroup javascript
+	au!
+	au filetype javascript let g:default_comment_string = "//"
+augroup END
+augroup javascriptreact
+	au!
+	au filetype javascriptreact let g:default_comment_string = "//"
+augroup END
 augroup vim
 	au!
 	au filetype vim let g:default_comment_string = '"'
+augroup END
+augroup lua
+	au!
+	au filetype lua let g:default_comment_string = '--'
+augroup END
+augroup haskell
+	au!
+	au filetype haskell let g:default_comment_string = '--'
 augroup END
 augroup googol
 	au!
@@ -1140,7 +1160,7 @@ augroup googol
 augroup END
 augroup php
 	au!
-	au filetype php if exists('g:default_comment_string') | unlet g:default_comment_string | endif
+	au filetype php let g:default_comment_string = "//"
 	au filetype php noremap <silent> <buffer> <leader>g viwoviGLOBALS['<esc>ea']<esc>
 augroup END
 augroup sh
@@ -1319,8 +1339,8 @@ tnoremap <silent> jk <c-\><c-n>
 tnoremap <silent> jK <c-\><c-n>:bd!<Bar>tabnew<Bar>call OpenTerm("")<cr>
 command! -nargs=* W w <args>
 
-inoremap <silent> ju <cmd>let old_lazyredraw=&lazyredraw<cr><cmd>let &lazyredraw=v:false<cr><cmd>normal! viwUea<cr><cmd>let &lazyredraw=old_lazyredraw<cr><cmd>unlet old_lazyredraw<cr>
-inoremap <silent> ji <cmd>let old_lazyredraw=&lazyredraw<cr><cmd>let &lazyredraw=v:false<cr><cmd>normal! viwuea<cr><cmd>let &lazyredraw=old_lazyredraw<cr><cmd>unlet old_lazyredraw<cr>
+inoremap <silent> ju <esc>viwUea
+inoremap <silent> ji <esc>viwuea
 
 inoremap ( ()<c-o>h
 inoremap [ []<c-o>h
