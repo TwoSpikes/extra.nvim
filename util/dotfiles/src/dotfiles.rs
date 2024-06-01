@@ -137,6 +137,7 @@ fn commit(only_copy: bool) -> ::std::io::Result<()> {
     ::std::fs::copy(HOME.join(".zshrc"), "./.zshrc")?;
     ::std::fs::copy(HOME.join(".config/nvim/init.vim"), "./.config/nvim/init.vim")?;
     copy_dir_all(HOME.join(".config/nvim/lua"), "./.config/nvim/lua")?;
+    copy_dir_all(HOME.join(".config/nvim/vim"), "./.config/nvim/vim")?;
     ::std::fs::copy(HOME.join("bin/viman"), "./bin/viman")?;
     let VIMRUNTIME = ::std::path::Path::new(if ::which::which("nvim").is_ok() {
         if cfg!(target_os = "windows") {

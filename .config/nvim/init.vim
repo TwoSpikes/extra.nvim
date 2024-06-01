@@ -111,6 +111,7 @@ set splitbelow
 set splitkeep=cursor
 set nosplitright
 set scrolloff=3
+set notildeop
 
 set nogdefault
 set ignorecase
@@ -1465,33 +1466,7 @@ endfunction
 
 au CursorMoved * call STCUpd()
 
-" Russian mappings
-map й q
-map ц w
-map у e
-map к r
-map е t
-map н y
-map г u
-map ш i
-map щ o
-map з p
-map ф a
-map ы s
-map в d
-map а f
-map п g
-map р h
-map о j
-map л k
-map д l
-map я z
-map ч x
-map с c
-map м v
-map и b
-map т n
-map ь m
+
 
 if has('nvim')
 	augroup LineNrForInactive
@@ -1673,6 +1648,7 @@ function! OnStart()
 	call OpenOnStart()
 	Showtab
 	so ~/xterm-color-table.vim
+	exec "so  ".g:CONFIG_PATH."/vim/init.vim"
 	call STCUpd()
 endfunction
 function! OnQuit()
