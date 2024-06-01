@@ -31,11 +31,14 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		\'background',
 		\'use_italic_style',
 		\'cursorcolumn',
+		\'cursorline',
+		\'cursorline_style',
 		\'open_menu_on_start',
 		\'quickui_border_style',
 		\'quickui_color_scheme',
 		\'open_ranger_on_start',
 		\'DO_NOT_OPEN_ANYTHING',
+		\'use_github_copilot',
 	\]
 	for option_ in l:option_list
 		if exists('g:dotfiles_config["'.option_.'"]')
@@ -48,18 +51,31 @@ endfunction
 call LoadDotfilesConfig(g:DOTFILES_CONFIG_PATH.'/config.json')
 
 function! HandleDotfilesConfig()
+	" Default values
 	if !exists('g:cursorcolumn')
 		let g:cursorcolumn = v:false
 	endif
 	if !exists('g:cursorline')
 		let g:cursorline = v:true
 	endif
-	if exists('g:background')
-		if g:background ==# "dark"
-			set background=dark
-		else
-			set background=light
-		endif
+	if !exists('g:background')
+		let g:background = "dark"
+	endif
+	if !exists('g:cursorline_style')
+		let g:cursorline_style = "dim"
+	endif
+
+	if g:background ==# "dark"
+		set background=dark
+	elseif g:background ==# "light"
+		set background=light
+	else
+		echohl ErrorMsg
+		echom "Dotfiles vim config: Error: wrong background value: ".g:background
+		echohl Normal
+
+		let g:background = "dark"
+		set background=dark
 	endif
 endfunction
 call HandleDotfilesConfig()
@@ -1167,7 +1183,7 @@ augroup visual
 			let pre_cursorcolumn = pre_cursorcolumn && g:cursorcolumn
 		endif
 		call setwinvar(a:winnum, '&cursorcolumn', pre_cursorcolumn)
-		let pre_cursorline = mode() !~# "[irco]" && !s:fullscreen && buftype !=# 'terminal' && (buftype !=# 'nofile' || filetype ==# 'nerdtree') && filetype !=# 'TelescopePrompt' && filetype !=# 'spectre_panel'
+		let pre_cursorline = (g:cursorline_style ==# "reverse" ? mode() !~# "[irco]" : v:true) && !s:fullscreen && buftype !=# 'terminal' && (buftype !=# 'nofile' || filetype ==# 'nerdtree') && filetype !=# 'TelescopePrompt' && filetype !=# 'spectre_panel'
 		if exists('g:cursorline')
 			let pre_cursorline = pre_cursorline && g:cursorline
 		endif

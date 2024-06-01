@@ -98,9 +98,11 @@ return require('packer').startup(function (use)
 	use {
 		'mattn/emmet-vim',
 	}
-	use {
-		'github/copilot.vim',
-	}
+	if not vim.g.use_github_copilot == false then
+		use {
+			'github/copilot.vim',
+		}
+	end
 	use {
 		'erietz/vim-terminator',
 	}

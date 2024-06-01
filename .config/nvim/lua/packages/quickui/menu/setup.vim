@@ -122,9 +122,10 @@ function! RebindMenus()
 	" script inside %{...} will be evaluated and expanded in the string
 	call quickui#menu#install("&Option", [
 				\ ['Set &Spell %{&spell? "Off":"On"}', 'set spell!', '%{(&spell?"Disable":"Enable")." spell checking"}'],
+				\ ['Set &Paste %{&paste? "Off":"On"}', 'set paste!'],
+				\ ["--", '' ],
 				\ ['Set Cursor &Column %{&cursorcolumn==#v:true?"Off":"On"}', 'let g:cursorcolumn=!g:cursorcolumn|call HandleBuftypeAll()'],
 				\ ['Set Cursor L&ine %{&cursorline==#v:true?"Off":"On"}', 'let g:cursorline=!g:cursorline|call HandleBuftypeAll()'],
-				\ ['Set &Paste %{&paste? "Off":"On"}', 'set paste!'],
 				\ ])
 
 	call quickui#menu#install('&Config', [

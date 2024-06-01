@@ -531,7 +531,16 @@ if &t_Co >= 256
     call CopyHighlightGroup("VisualBlue", "Visual")
     hi MatchParen ctermfg=30 ctermbg=NONE cterm=reverse guifg=#008787 guibg=NONE gui=reverse
     hi VisualNOS ctermfg=16 ctermbg=73 cterm=NONE
-    hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
+    if !exists('g:cursorline_style')
+      let g:cursorline_style = "dim"
+    endif
+    if g:cursorline_style ==# "dim"
+      hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=#001040 gui=NONE
+    elseif g:cursorline_style ==# "reverse"
+      hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
+    elseif g:cursorline_style ==# "underline"
+      hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=underline
+    endif
     hi CursorColumn ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
     hi Folded ctermfg=15 ctermbg=234 cterm=italic
     hi ColorColumn ctermfg=NONE ctermbg=234 cterm=NONE
