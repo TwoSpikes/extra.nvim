@@ -58,7 +58,7 @@ function! RebindMenus()
 				\ ["Open file in &buffer\tCtrl-c C", 'Findfilebuffer', 'Open file in current buffer'],
 				\ ["Toggle &file tree\tCtrl-h", 'NERDTreeToggle', 'Toggles a file tree'],
 				\ ["Fu&zzy find using Telescope\tLEAD ff", 'call FuzzyFind()', 'Opens Telescope.nvim find file'],
-				\ ["Open file using &ranger\tLEAD R", 'call OpenRangerCheck()', 'Opens ranger to select file to open'],
+				\ ["Open file using &ranger\tLEAD r", 'call OpenRangerCheck()', 'Opens ranger to select file to open'],
 				\ ["--", '' ],
 				\ ["&Make only\tCtrl-x 1", 'only', 'Hide all but current window'],
 				\ ["&Previous window\tCtrl-x o", 'exec "normal! \<c-w>w"', 'Go to previous window'],

@@ -1571,7 +1571,7 @@ function! OpenRangerCheck()
 		echohl Normal
 	endif
 endfunction
-nnoremap <leader>R <cmd>call OpenRangerCheck()<cr>
+nnoremap <leader>r <cmd>call OpenRangerCheck()<cr>
 
 function! OpenOnStart()
 	if exists('g:open_menu_on_start')
