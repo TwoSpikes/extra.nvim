@@ -129,7 +129,7 @@ fn commit(only_copy: bool) -> ::std::io::Result<()> {
         assert!(::std::env::set_current_dir(&path_to_dotfiles).is_ok());
     }
     ::std::fs::copy(HOME.join(".dotfiles-script.sh"), "./.dotfiles-script.sh")?;
-    copy_dir_all(HOME.join("shscripts"), "./")?;
+    copy_dir_all(HOME.join("shscripts"), "./shscripts")?;
     copy_dir_all(HOME.join("shlib"), "./shlib")?;
     ::std::fs::copy(HOME.join(".profile"), "./.profile")?;
     ::std::fs::copy(HOME.join(".zprofile"), "./.zprofile")?;
