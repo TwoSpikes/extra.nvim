@@ -535,7 +535,7 @@ if &t_Co >= 256
       let g:cursorline_style = "dim"
     endif
     if g:cursorline_style ==# "dim"
-      hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=#001040 gui=NONE
+      hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=#002050 gui=NONE
     elseif g:cursorline_style ==# "reverse"
       hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
     elseif g:cursorline_style ==# "underline"
@@ -683,7 +683,16 @@ if &t_Co >= 256
     call CopyHighlightGroup("VisualBlue", "Visual")
     hi MatchParen ctermfg=30 ctermbg=231 cterm=reverse
     hi VisualNOS ctermfg=231 ctermbg=30 cterm=NONE
-    hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
+    if !exists('g:cursorline_style')
+      let g:cursorline_style = "dim"
+    endif
+    if g:cursorline_style ==# "dim"
+      hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=#dfffff gui=NONE
+    elseif g:cursorline_style ==# "reverse"
+      hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
+    elseif g:cursorline_style ==# "underline"
+      hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=underline
+    endif
     hi CursorColumn ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
     hi Folded ctermfg=243 ctermbg=255 cterm=NONE
     hi ColorColumn ctermfg=NONE ctermbg=255 cterm=NONE

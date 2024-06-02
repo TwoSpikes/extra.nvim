@@ -1634,10 +1634,8 @@ function! PrepareWhichKey()
 		let &lazyredraw = l:old_lazyredraw
 	endif
 	nnoremap <silent> <leader> <cmd>lua require('which-key').show(vim.g.mapleader)<cr>
-	" FIXME: Conflicts with another ctrl-x mapping
-	"nnoremap <silent> <c-x> <cmd>lua require('which-key').show(string.char(24))<cr>
-	" FIXME: Built-in mapping starting with ctrl-w do not work
-	"nnoremap <silent> <c-w> <cmd>lua require('which-key').show(string.char(23))<cr>
+	nnoremap <silent> <c-x> <cmd>lua require('which-key').show("\24", {mode = "n", auto = true})<cr>
+	nnoremap <silent> <c-w> <cmd>lua require('which-key').show("\23", {mode = "n", auto = true})<cr>
 endfunction
 
 function! OnStart()
