@@ -122,4 +122,7 @@ return require('packer').startup(function (use)
 			'nvim-lua/plenary.nvim',
 		}
 	}
+	use {
+		'RRethy/vim-illuminate',
+	}
 end)

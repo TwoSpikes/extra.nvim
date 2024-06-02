@@ -1648,7 +1648,7 @@ function! OnStart()
 	call OpenOnStart()
 	Showtab
 	so ~/xterm-color-table.vim
-	exec "so  ".g:CONFIG_PATH."/vim/init.vim"
+	exec "so ".g:CONFIG_PATH."/vim/init.vim"
 	call STCUpd()
 endfunction
 function! OnQuit()
@@ -1660,6 +1660,7 @@ function! IfOneWinDo(cmd)
 	if s==# 1
 		exec a:cmd
 	endif
+	unlet s
 endfunction
 
 au! VimEnter * call OnStart()
