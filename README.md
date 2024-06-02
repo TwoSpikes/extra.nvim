@@ -5,8 +5,7 @@ My scripts and configs for Linux
 # Dependencies to install
 
 - `coreutils` >= 8.22
-- `rustc`
-- `cargo`
+- `rustc` and `cargo`
 - `chsh`
 - `git`
 - `ping`
@@ -19,7 +18,7 @@ My scripts and configs for Linux
 # Consists configs for
 
 - `nvim` (NeoVim) or `vim`
-- `emacs`
+- `emacs` (WIP)
 - `nano`
 - `alacritty`
 - `git`
@@ -100,7 +99,10 @@ Screenshots
 </details>
 
 > [!Warning]
-> It works better in NeoVim, and packer.nvim does not work yet in version of Vim/NeoVim without Lua.
+> It works better in NeoVim, and packer.nvim does not work in version of Vim/NeoVim without Lua.
+
+> [!Note]
+> Press `SPACE ?` to see help
 
 Change to light theme: `:set background=light` \
 Change to dark theme: `:set background=dark`

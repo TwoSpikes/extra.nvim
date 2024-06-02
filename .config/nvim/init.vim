@@ -797,8 +797,6 @@ noremap <c-c>w <cmd>quit<cr>
 for i in range(1, 9)
 	exec "noremap <c-c>".i." <cmd>tabnext ".i."<cr>"
 endfor
-"nnoremap <leader>lC :tabnew<Bar>ter<Bar><cr>a./build.sh
-"nnoremap <leader>lc :tabnext<Bar><c-\><c-n>:bd!<Bar>tabnew<Bar>ter<cr>a!!<cr>
 
 function! SaveAs()
 	if !filereadable(expand('~/.local/share/nvim/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim'))
@@ -959,73 +957,78 @@ function! DotfilesCheatSheet()
 	\\n    LEAD b - Open .dotfiles-script.sh
 	\\n    LEAD C - Open colorschemes
 	\\n    LEAD Cy - Apply colorscheme under cursor
-	\\n  EDITING:
-	\\n    SPECIAL:
-	\\n      ; - Switch to command mode (:)
-	\\n      LEAD - Show possible keyboard shortcuts
-	\\n      LEAD LEAD or F10 or F9 - Open quickui menu
-	\\n      F3 - Toggle fullscreen mode
-	\\n      INSERT: jk - Exit from Insert Mode and save
-	\\n      INSERT: jK - Exit from Insert Mode
-	\\n      INSERT: ju - Make current word uppercase
-	\\n      INSERT: ji - Make current word lowercase
-	\\n      CTRL-a - Move to start of line
-	\\n      CTRL-e - Move to end of line
-	\\n      LEAD h - Move screen 10 symbols left
-	\\n      LEAD l - Move screen 10 symbols right
-	\\n      INSERT: CTRL-h - Move screen 10 symbols left
-	\\n      INSERT: CTRL-l - Move screen 10 symbols right
-	\\n      ci_ - Edit word from start to first _
-	\\n      LEAD d  - Hide search highlightings
-	\\n      s - Delete (d) without copying
-	\\n      q - Quit window
-	\\n      Q - Quit window without saving
-	\\n    Tmux-like keybindings:
-	\\n      CTRL-c c - Find file
-	\\n      CTRL-c C - Find file in buffer
-	\\n      CTRL-c % - Split window horizontally
-	\\n      CTRL-c \" - Split window vertically
-	\\n      CTRL-c w - Quit from window
-	\\n      CTRL-c 0-9 - Jump to tab 0-9
-	\\n      \<leader\>S - Toggle scrolloff (see :h 'scrolloff')
-	\\n    Emacs-like keybindings:
-	\\n      ALT-x - Switch to command mode (:)
-	\\n      CTRL-x CTRL-c - Close All windows
-	\\n      CTRL-x s - Save current buffer
-	\\n      CTRL-x CTRL-s - Save current buffer
-	\\n      CTRL-x k - Kill (delete) current buffer
-	\\n      CTRL-x 0 - Close current window
-	\\n      CTRL-x 1 - Close all but current window
-	\\n      CTRL-x 2 - Split window
-	\\n      CTRL-x 3 - Vertically split window
-	\\n      CTRL-x o - Next tab
-	\\n      CTRL-x O - Previous tab
-	\\n      CTRL-x CTRL-f - See CTRL-c c
-	\\n      CTRL-x t 0 - Close current tab
-	\\n      CTRL-x t 1 - Close all but current tab
-	\\n      CTRL-x t 2 - New tab
-	\\n      CTRL-x t o - Next tab
-	\\n      CTRL-x t O - Previous tab
-	\\n      CTRL-x h - Select all text
-	\\n      CTRL-x CTRL-h - See help (:h)
-	\\n    QUOTES AROUND (deprecated, use surround.vim):
-	\\n      LEAD \" - Put \'\"\' around word
-	\\n      LEAD \' - Put \"\'\" around word
-	\\n  TERMINAL:
-	\\n    LEAD tt - Open in a new tab
-	\\n    LEAD tb - Open in a new buffer
-	\\n    LEAD th - Open in a new horizontal window (-)
-	\\n    LEAD tv - Open in a new vertical window (\|)
-	\\n    LEAD tf - Open in a new floating window (Floaterm)
+	\\n SPECIAL:
+	\\n   ; - Switch to command mode (:)
+	\\n   LEAD - Show possible keyboard shortcuts
+	\\n   LEAD LEAD or F10 or F9 - Open quickui menu
+	\\n   LEAD CTRL-f or F3 - Toggle fullscreen mode
+	\\n   INSERT: jk - Exit from Insert Mode and save
+	\\n   INSERT: jK - Exit from Insert Mode
+	\\n   INSERT: ju - Make current word uppercase
+	\\n   INSERT: ji - Make current word lowercase
+	\\n   CTRL-a - Move to start of line
+	\\n   CTRL-e - Move to end of line
+	\\n   LEAD h - Move screen 10 symbols left
+	\\n   LEAD l - Move screen 10 symbols right
+	\\n   INSERT: CTRL-h - Move screen 10 symbols left
+	\\n   INSERT: CTRL-l - Move screen 10 symbols right
+	\\n   CTRL-h - Toggle NERDTree
+	\\n   CTRL-n - Enter multicursor mode
+	\\n   ci_ - Edit word from start to first _
+	\\n   LEAD d  - Hide search highlightings
+	\\n   s - Delete (d) without copying
+	\\n   q - Quit window
+	\\n   Q - Quit window without saving
+	\\n   LEAD r - Open ranger to select file to edit
+	\\n   LEAD CTRL-s - \"Save as\" dialogue
+	\\n   LEAD u - Update plugins using packer.nvim
+	\\n   LEAD Cu - Update coc.nvim language servers
+	\\n   LEAD tu - Update nvim-treesitter parsers
+	\\n   LEAD sw - Find work under cursor using nvim-spectre
+	\\n   LEAD t - \"Open Terminal\" dialogue
+	\\n   LEAD m - \"Open Far/MC\" dialogue
+	\\n   LEAD z - \"Open lazygit\" dialogue
+	\\n   CTRL-t - Toggle ctags tagbar
+	\\n Tmux-like keybindings:
+	\\n   CTRL-c c - Find file
+	\\n   CTRL-c C - Find file in buffer
+	\\n   CTRL-c % - Split window horizontally
+	\\n   CTRL-c \" - Split window vertically
+	\\n   CTRL-c w - Quit from window
+	\\n   CTRL-c 0-9 - Jump to tab 0-9
+	\\n   LEAD so - Toggle scrolloff (see :h 'scrolloff')
+	\\n Emacs-like keybindings:
+	\\n   ALT-x - Switch to command mode (:)
+	\\n   CTRL-x CTRL-c - Close All windows
+	\\n   CTRL-x s - Save current buffer
+	\\n   CTRL-x CTRL-s - Save current buffer
+	\\n   CTRL-x S - Save all buffers
+	\\n   CTRL-x k - Kill (delete) current buffer dialogue
+	\\n   CTRL-x 0 - Close current window
+	\\n   CTRL-x 1 - Close all but current window
+	\\n   CTRL-x 2 - Split window
+	\\n   CTRL-x 3 - Vertically split window
+	\\n   CTRL-x o - Next tab
+	\\n   CTRL-x O - Previous tab
+	\\n   CTRL-x CTRL-f - See CTRL-c c
+	\\n   CTRL-x t 0 - Close current tab
+	\\n   CTRL-x t 1 - Close all but current tab
+	\\n   CTRL-x t 2 - New tab
+	\\n   CTRL-x t o - Next tab
+	\\n   CTRL-x t O - Previous tab
+	\\n   CTRL-x h - Select all text and save position to register y
+	\\n   CTRL-x CTRL-h - See help (:h)
+	\\n   CTRL-x CTRL-c - Exit
+	\\n   CTRL-x CTRL-q - Exit without confirmation
+	\\n   CTRL-x CTRL-b - \"List buffers\" dialogue
+	\\n QUOTES AROUND (deprecated, use surround.vim):
+	\\n   LEAD \" - Put \'\"\' around word
+	\\n   LEAD \' - Put \"\'\" around word
 	\\n  TELESCOPE plugin:
 	\\n    LEAD ff - Find files
 	\\n    LEAD fg - Live grep
 	\\n    LEAD fb - Buffers
 	\\n    LEAD fh - Help tags
-	\\n  LSP (deprecated due to coc.nvim):
-	\\n    LEAD lv - Start vim-language-server
-	\\n    LEAD lb - Start bash-language-server
-	\\n    LEAD ld - Dump active clients
 	\\n  ABOUT:
 	\\n    Author: TwoSpikes (2023 - 2024)
 	\\n    Github repository: https://github.com/TwoSpikes/dotfiles
