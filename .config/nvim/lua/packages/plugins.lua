@@ -28,7 +28,10 @@ return require('packer').startup(function (use)
         },
     }
     use 'rcarriga/nvim-notify'
-    use ('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
+    use (
+		'nvim-treesitter/nvim-treesitter',
+		{run = ':TSUpdate'}
+	)
     use 'nvim-treesitter/playground'
 	use 'weizheheng/nvim-workbench'
 	use 'ap/vim-css-color'
@@ -124,5 +127,11 @@ return require('packer').startup(function (use)
 	}
 	use {
 		'RRethy/vim-illuminate',
+	}
+	use {
+		'folke/todo-comments.nvim',
+		requires = {
+			'nvim-lua/plenary.nvim',
+		}
 	}
 end)
