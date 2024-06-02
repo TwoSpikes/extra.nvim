@@ -170,31 +170,44 @@ $ DOTFILES_VIM_CONFIG_PATH=~/dnsjajsbdn/vim/ nvim
 	"background": "dark",
 
 "_comment_11":"Use italic style for text",
-"_comment_12":"Useful for terminals with bugged italic font (like Termux)",
+"_comment_12":"Useful to disable for terminals with bugged italic font (like Termux)",
 	"use_italic_style": false,
 
-"_comment_13":"Enables or disables cursor column",
+"_comment_13":"Enable or disable highlighting for current column",
 	"cursorcolumn": false,
 
-"_comment_14":"Open quickui menu on start",
+"_comment_14":"Enable or disable highlighting for current line",
+	"cursorline": true,
+
+"_comment_15":"Change style of cursorline",
+"_comment_16":"    dim       - Small fogging (default)",
+"_comment_17":"    reverse   - Swap fg with bg",
+"_comment_18":"    underline - Underline a line",
+	"cursorline_style": "dim",
+
+"_comment_19":"Open quickui menu on start",
 	"open_menu_on_start": false,
 
-"_comment_15":"Change quickui_border_style",
-"_comment_16":"1 - Dashed, non-Unicode",
-"_comment_17":"2 - Solid",
-"_comment_18":"3 - Double outer border",
+"_comment_20":"Change quickui_border_style",
+"_comment_21":"1 - Dashed, non-Unicode",
+"_comment_22":"2 - Solid",
+"_comment_23":"3 - Double outer border (default)",
 	"quickui_border_style": "3",
 
-"_comment_19":"Change quickui colorscheme",
-"_comment_20":"Aviable: borland, gruvbox, solarized, papercol dark, papercol light",
-"_comment_21":"See them at https://github.com/skywind3000/vim-quickui/blob/master/MANUAL.md",
+"_comment_24":"Change quickui colorscheme",
+"_comment_25":"Aviable: borland, gruvbox, solarized, papercol dark, papercol light",
+"_comment_26":"See them at https://github.com/skywind3000/vim-quickui/blob/master/MANUAL.md",
 	"quickui_color_scheme": "papercol dark",
 
-"_comment_22":"Open ranger on start",
+"_comment_27":"Open ranger on start",
 	"open_ranger_on_start": true,
 
-"_comment_23":"Open blank file on start",
+"_comment_28":"Open blank file on start",
 	"DO_NOT_OPEN_ANYTHING": false,
+
+"_comment_29":"Enable Github Copilot",
+"_comment_30":"Useful to disable if you do not have a subscription to it",
+	"use_github_copilot": false,
 
 "_comment_end":"Ending field to not put comma every time"
 }
