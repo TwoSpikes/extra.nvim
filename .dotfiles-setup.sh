@@ -1,7 +1,5 @@
 #!/bin/env sh
 
-set +xe
-
 subcommands() {
 	echo "SUBCOMMANDS:"
 	echo "	[OPTION]... DOTFILES_PATH"
@@ -73,7 +71,7 @@ install_package() {
 	fi
 }
 run_as_superuser_if_needed() {
-	needed_command="${1}"
+	needed_command="${@}"
 	
 	if ${run_as_yes}; then
 		needed_command="yes | ${needed_command}"
