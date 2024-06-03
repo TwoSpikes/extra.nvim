@@ -84,9 +84,22 @@ let mapleader = " "
 
 if !exists('g:CONFIG_PATH')
 	if !exists('$VIM_CONFIG_PATH')
-		let g:CONFIG_PATH = "$HOME/.config/nvim"
+		let g:CONFIG_PATH = expand("$HOME/.config/nvim")
 	else
 		let g:CONFIG_PATH = $VIM_CONFIG_PATH
+	endif
+endif
+
+if !exists('g:LOCALSHAREPATH')
+	if !exists('$VIM_LOCALSHAREPATH')
+		if has('nvim')
+			let g:LOCALSHAREPATH = '~/.local/share/nvim'
+		else
+			let g:LOCALSHAREPATH = '~/.local/share/vim'
+		endif
+		let g:LOCALSHAREPATH = expand(g:LOCALSHAREPATH)
+	else
+		let g:LOCALSHAREPATH = $VIM_LOCALSHAREPATH
 	endif
 endif
 
@@ -537,8 +550,7 @@ augroup numbertoggle
 	autocmd InsertLeave * call Numbertoggle_stcrel()
 	autocmd InsertEnter * call Numbertoggle_stcabs()
 	autocmd BufReadPost,BufEnter,BufLeave,WinLeave,WinEnter * call Numbertoggle()
-	autocmd FileType packer call STCNo() | set nocursorline nocursorcolumn
-	" autocmd BufLeave * call Numbertoggle_no()
+	autocmd FileType packer,spectre_panel call Numbertoggle()|call HandleBuftype(winnr())
 augroup END
 
 let g:NERDTreeGitStatusIndicatorMapCustom = {
@@ -747,10 +759,9 @@ inoremap <silent> <c-e> <c-o>$
 
 cnoremap <silent> <c-a> <c-b>
 cnoremap <c-g> <c-e><c-u><cr>
-cnoremap <silent> jk <c-e><c-u><cr>
+cnoremap <silent> jk <c-e><c-u><cr><cmd>echon ''<cr>
 cnoremap <c-u> <c-e><c-u>
 cnoremap <c-b> <S-left>
-"noremap jk <cmd>echo 'Not in Insert Mode'<cr>
 
 nnoremap <c-j> viwUe<space><esc>
 vnoremap <c-j> iwUe<space>
@@ -760,7 +771,7 @@ nnoremap <bs> X
 noremap <leader><bs> <bs>
 
 function! Findfile()
-	if !filereadable(expand('~/.local/share/nvim/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim'))
+	if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
 		echohl Question
 		let filename = input('Find file: ')
 		echohl Normal
@@ -776,7 +787,7 @@ endfunction
 command! -nargs=0 Findfile call Findfile()
 noremap <c-c>c <cmd>Findfile<cr>
 function! Findfilebuffer()
-	if !filereadable(expand('~/.local/share/nvim/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim'))
+	if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
 		echohl Question
 		let filename = input('Find file (open in buffer): ')
 		echohl Normal
@@ -799,7 +810,7 @@ for i in range(1, 9)
 endfor
 
 function! SaveAs()
-	if !filereadable(expand('~/.local/share/nvim/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim'))
+	if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
 		echohl Question
 		let filename = input('Save as: ')
 		echohl Normal
@@ -1202,12 +1213,18 @@ augroup visual
 	function! HandleBuftype(winnum)
 		let filetype = getwinvar(a:winnum, '&filetype', 'ERROR')
 		let buftype = getwinvar(a:winnum, '&buftype', 'ERROR')
+
 		let pre_cursorcolumn = (mode() !~# "[vVirco]" && mode() !~# "\<c-v>") && !s:fullscreen && filetype !=# 'netrw' && buftype !=# 'terminal' && filetype !=# 'nerdtree' && buftype !=# 'nofile'
 		if exists('g:cursorcolumn')
 			let pre_cursorcolumn = pre_cursorcolumn && g:cursorcolumn
 		endif
 		call setwinvar(a:winnum, '&cursorcolumn', pre_cursorcolumn)
-		let pre_cursorline = (g:cursorline_style ==# "reverse" ? mode() !~# "[irco]" : v:true) && !s:fullscreen && buftype !=# 'terminal' && (buftype !=# 'nofile' || filetype ==# 'nerdtree') && filetype !=# 'TelescopePrompt' && filetype !=# 'spectre_panel'
+
+		let pre_cursorline = !s:fullscreen
+		if g:cursorline_style ==# "reverse"
+			let pre_cursorline = pre_cursorline && mode() !~# "[irco]"
+			let pre_cursorline = pre_cursorline && buftype !=# 'terminal' && (buftype !=# 'nofile' || filetype ==# 'nerdtree') && filetype !=# 'TelescopePrompt' && filetype !=# 'spectre_panel' && filetype !=# 'packer'
+		endif
 		if exists('g:cursorline')
 			let pre_cursorline = pre_cursorline && g:cursorline
 		endif
@@ -1221,21 +1238,37 @@ endfunction
 
 " TELESCOPE
 function! FuzzyFind()
-	lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({winblend = 0 }))
+	lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown({winblend = 0 }))
 endfunction
 nnoremap <silent> <leader>ff <cmd>call FuzzyFind()<cr>
-nnoremap <silent> <leader>fg :lua require'telescope.builtin'.live_grep(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
-nnoremap <silent> <leader>fb :lua require'telescope.builtin'.buffers(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
-nnoremap <silent> <leader>fh :lua require'telescope.builtin'.help_tags(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
+nnoremap <silent> <leader>fg :lua require('telescope.builtin').live_grep(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
+nnoremap <silent> <leader>fb :lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
+nnoremap <silent> <leader>fh :lua require('telescope.builtin').help_tags(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
 
 " vnoremap <c-/> <esc>v:q:s/.*/# \0
 " vnoremap <c-?> <esc>:s/.*/\/\/ \0
 
 function! IsYes(string)
-	return a:string ==# 'y' || a:string ==# 'Y' || a:string ==# 'yes' || a:string ==# 'Yes' || a:string ==# 'YES'
+	return v:false
+	\|| a:string =~? '^y *!* *$'
+	\|| a:string =~? '^yes *!* *$'
+	\|| a:string =~? '^yea *!* *$'
+	\|| a:string =~? '^yeah *!* *$'
+	\|| a:string =~? '^yep *!* *$'
+	\|| a:string =~? '^yup *!* *$'
+	\|| a:string =~? '^of *course *!* *$'
+	\|| a:string =~? '^\%(сука*\)* *\%(бля*\%(дь\)\?\)* *\%(кон\%(\%(еч\)\|\%(че\)\)но\? *\)*\%(да* *\)*!* *$'
+	\|| a:string =~? '^\%(сука*\)* *\%(бля*\%(дь\)\?\)* *\%(дыа\? *\)\+!* *$'
+	\|| a:string =~? '^\%(сука*\)* *\%(бля*\%(дь\)\?\)* *офк *!* *$'
+	\|| a:string =~? '^\%(сука*\)* *\%(бля*\%(дь\)\?\)* *офкорз *!* *$'
 endfunction
 function! IsNo(string)
-	return a:string ==# 'n' || a:string ==# 'N' || a:string ==# 'no' || a:string ==# 'No' || a:string ==# 'NO'
+	return v:false
+	\|| a:string =~? '^n *!* *$'
+	\|| a:string =~? '^no *!* *$'
+	\|| a:string =~? '^nope *!* *$'
+	\|| a:string =~? '^of *course *not\? *!* *$'
+	\|| a:string =~? '^\%(сука *\)*\%(блядь *\)*\%(кон\%(\%(че\)\|\%(еч\)\)но\? *\)*\%(да *\)*нет\? *!* *$'
 endfunction
 
 " Tab closers
@@ -1251,8 +1284,8 @@ noremap <silent> <c-x>S <cmd>wall<Bar>echohl MsgArea<Bar>echo 'Saved all buffers
 noremap <silent> <c-x><c-s> <cmd>w<cr>
 function! Killbuffer()
 	echohl Question
-	if !filereadable(expand('~/.local/share/nvim/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim'))
-		let user_input = nr2char(input("do you want to kill the buffer? (Y/n): "))
+	if filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
+		let user_input = input("do you want to kill the buffer? (Y/n): ")
 		echohl Normal
 	else
 		let choice = quickui#confirm#open('Do you want to kill the buffer?', "&Yes\n&No", 1, 'Confirm')
@@ -1313,11 +1346,11 @@ noremap my <cmd>echohl ErrorMsg<cr><cmd>echom "my is used for commands"<cr><cmd>
 noremap <leader>q q
 noremap <leader>Q Q
 
-inoremap <silent> jk <esc>:w<cr>
+inoremap <silent> jk <cmd>update<cr><esc>
 inoremap <silent> jK <esc>
-inoremap <silent> JK <esc>:w<cr>
+inoremap <silent> JK <cmd>update<cr><esc>
 inoremap <silent> Jk <esc>
-" FIXME: Bicycle invented, but problem not solved
+" FIXME: Bicycle is invented, but the problem is not solved
 " NOTE: temporarily commented out due to above reason
 " let g:term_j_was_pressed = v:false
 " function! ProcessTBut_j()
@@ -1498,7 +1531,7 @@ noremap <leader>m <cmd>call SelectPosition(g:far_or_mc, g:termpos)<cr>
 augroup xdg_open
 	autocmd!
 	function! OpenWithXdg(filename)
-		if !filereadable(expand('~/.local/share/nvim/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim'))
+		if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
 			echohl Question
 			echon 'Open with xdg-open (y/N): '
 			echohl Normal
@@ -1648,7 +1681,9 @@ function! OnStart()
 	call PrepareWhichKey()
 	call OpenOnStart()
 	Showtab
-	so ~/xterm-color-table.vim
+	if filereadable(expand('~/xterm-color-table.vim'))
+		so ~/xterm-color-table.vim
+	endif
 	exec "so ".g:CONFIG_PATH."/vim/init.vim"
 	call STCUpd()
 endfunction
