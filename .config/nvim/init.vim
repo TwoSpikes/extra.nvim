@@ -1433,12 +1433,14 @@ if has('nvim')
 	exec printf("luafile %s", g:PLUGINS_SETUP_FILE_PATH)
 endif
 
-if has('nvim')
-	lua M = {}
-	lua servers = { gopls = {}, html = {}, jsonls = {}, pyright = {}, rust_analyzer = {}, sumneko_lua = {}, tsserver = {}, vimls = {}, }
-	lua on_attach = function(client, bufnr) vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc") vim.api.nvim_buf_set_option(0, "formatexpr", "v:lua.vim.lsp.formatexpr()") require("config.lsp.keymaps").setup(client, bufnr) end
-	lua opts = { on_attach = on_attach, flags = { debounce_text_changes = 150, }, }
-	lua setup = function() require("config.lsp.installer").setup(servers, opts) end
+if has('nvim') && exists('g:setup_lsp')
+	if g:setup_lsp
+		lua M = {}
+		lua servers = { gopls = {}, html = {}, jsonls = {}, pyright = {}, rust_analyzer = {}, sumneko_lua = {}, tsserver = {}, vimls = {}, }
+		lua on_attach = function(client, bufnr) vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc") vim.api.nvim_buf_set_option(0, "formatexpr", "v:lua.vim.lsp.formatexpr()") require("config.lsp.keymaps").setup(client, bufnr) end
+		lua opts = { on_attach = on_attach, flags = { debounce_text_changes = 150, }, }
+		lua setup = function() require("config.lsp.installer").setup(servers, opts) end
+	endif
 endif
 
 if has('nvim')
@@ -1464,23 +1466,6 @@ noremap <silent> <f10> <cmd>call quickui#menu#open()<cr>
 noremap <silent> <f9> <cmd>call quickui#menu#open()<cr>
 
 nnoremap <silent> <c-x><c-b> <cmd>call quickui#tools#list_buffer('e')<cr>
-
-" Interface
-function! ChangeVisualBlue()
-	echo "Visual changed to "
-	echohl Visual
-	echon "blue"
-	echohl Normal
-	call CopyHighlightGroup("VisualBlue", "Visual")
-endfunction
-command! -nargs=0 ChangeVisualBlue call ChangeVisualBlue()
-function! ChangeVisualReversed()
-	echo "Visual changed to reversed "
-	call CopyHighlightGroup("VisualReversed", "Visual")
-endfunction
-command! -nargs=0 ChangeVisualReversed call ChangeVisualReversed()
-"noremap <leader>iv <cmd>ChangeVisualBlue<cr>
-"noremap <leader>iV <cmd>ChangeVisualReversed<cr>
 
 function! SwapHiGroup(group)
     let id = synIDtrans(hlID(a:group))
