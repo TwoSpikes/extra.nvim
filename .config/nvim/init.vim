@@ -1379,9 +1379,9 @@ command! -nargs=* W w <args>
 inoremap <silent> ju <esc>viwUea
 inoremap <silent> ji <esc>viwuea
 
-inoremap ( ()<c-o>h
-inoremap [ []<c-o>h
-inoremap { {}<c-o>h
+inoremap <silent> ( <cmd>call HandleKeystroke('(')<cr>
+inoremap <silent> [ <cmd>call HandleKeystroke('[')<cr>
+inoremap <silent> { <cmd>call HandleKeystroke('{')<cr>
 function! HandleKeystroke(keystroke)
 	if a:keystroke ==# "\\\<bs>"
 		if getline('.')[col('.')-2] ==# '('
@@ -1412,11 +1412,22 @@ function! HandleKeystroke(keystroke)
 	\|| a:keystroke ==# '"'
 	\&& getline('.')[col('.')-1] ==# '"'
 		return "\<right>"
+	endif
+	if a:keystroke ==# '"'
+	\|| a:keystroke ==# "'"
+		return a:keystroke.a:keystroke."\<left>"
+	endif
+	if v:false
+	elseif a:keystroke ==# '('
+		normal! h
+		normal! a()
+	elseif a:keystroke ==# '['
+		normal! h
+		normal! a[]
+	elseif a:keystroke ==# '{'
+		normal! h
+		normal! a{}
 	else
-		if a:keystroke ==# '"'
-		\|| a:keystroke ==# "'"
-			return a:keystroke.a:keystroke."\<left>"
-		endif
 		return a:keystroke
 	endif
 endfunction
