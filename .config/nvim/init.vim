@@ -1217,8 +1217,9 @@ augroup visual
 		let pre_cursorline = !s:fullscreen
 		if g:cursorline_style ==# "reverse"
 			let pre_cursorline = pre_cursorline && mode() !~# "[irco]"
-			let pre_cursorline = pre_cursorline && buftype !=# 'terminal' && (buftype !=# 'nofile' || filetype ==# 'nerdtree') && filetype !=# 'TelescopePrompt' && filetype !=# 'spectre_panel' && filetype !=# 'packer'
+			let pre_cursorline = pre_cursorline && (buftype !=# 'nofile' || filetype ==# 'nerdtree') && filetype !=# 'TelescopePrompt' && filetype !=# 'spectre_panel' && filetype !=# 'packer'
 		endif
+		let pre_cursorline = pre_cursorline && buftype !=# 'terminal'
 		if exists('g:cursorline')
 			let pre_cursorline = pre_cursorline && g:cursorline
 		endif
