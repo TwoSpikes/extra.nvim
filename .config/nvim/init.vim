@@ -1081,13 +1081,7 @@ function! OpenTerm(cmd)
 	startinsert
 	return bufnr()
 endfunction
-"noremap <silent> <leader>tt <cmd>tabnew<cr><cmd>call OpenTerm("")<cr>
-"noremap <silent> <leader>tb <cmd>call OpenTerm("")<cr>
-"noremap <silent> <leader>th <cmd>split<cr><cmd>call OpenTerm("")<cr>
-"noremap <silent> <leader>tv <cmd>vsplit<cr><cmd>call OpenTerm("")<cr>
-"exec printf("noremap <silent> <leader>tf <cmd>FloatermNew %s -l<cr>", $SHELL)
 noremap <silent> <leader>t <cmd>call SelectPosition($SHELL.' -l', g:termpos)<cr>
-" noremap <silent> <leader>tct <c-\><c-n>:q\|tabnew\|ter<cr>a
 
 " COLORSCHEME
 noremap <silent> <leader>C <cmd>call SelectPosition($VIMRUNTIME."/colors", g:stdpos)<cr>
@@ -1421,12 +1415,15 @@ function! HandleKeystroke(keystroke)
 	elseif a:keystroke ==# '('
 		normal! h
 		normal! a()
+		call Numbertoggle()
 	elseif a:keystroke ==# '['
 		normal! h
 		normal! a[]
+		call Numbertoggle()
 	elseif a:keystroke ==# '{'
 		normal! h
 		normal! a{}
+		call Numbertoggle()
 	else
 		return a:keystroke
 	endif

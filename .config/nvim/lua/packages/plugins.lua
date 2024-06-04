@@ -137,4 +137,58 @@ return require('packer').startup(function (use)
 	use {
 		'lukas-reineke/indent-blankline.nvim',
 	}
+
+	use {
+		"rcarriga/nvim-dap-ui",
+		requires = {
+			{
+				"mfussenegger/nvim-dap",
+			},
+			{
+				"nvim-neotest/nvim-nio",
+			}
+		}
+	}
+	use {
+		"theHamsta/nvim-dap-virtual-text",
+		requires = {
+			{
+				"mfussenegger/nvim-dap",
+			},
+			{
+				'nvim-treesitter/nvim-treesitter',
+				{run = ':TSUpdate'}
+			}
+		}
+	}
+	use {
+		'nvim-telescope/telescope-dap.nvim',
+		requires = {
+			{
+				"mfussenegger/nvim-dap",
+			},
+			{
+				'nvim-telescope/telescope.nvim',
+				requires = {
+					{ 'nvim-lua/plenary.nvim' },
+				},
+			}
+		}
+	}
+	use {
+		'mfussenegger/nvim-dap-python',
+		requires = {
+			{
+				"mfussenegger/nvim-dap",
+			}
+		}
+	}
+	use {
+		'leoluz/nvim-dap-go',
+		requires = {
+			{
+				"mfussenegger/nvim-dap",
+			}
+		}
+	}
 end)

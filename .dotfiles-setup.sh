@@ -742,17 +742,17 @@ case ${user_input} in
 		;;
 esac
 
-echo -n "Do you want to install my Termux colorscheme? (y/N): "
+echo -n "Do you want to install my Termux colorscheme? (Y/n): "
 read user_input
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 case ${user_input} in
-	"y")
+	"n")
+		;;
+	*)
 		if ! test -d ${home}/.termux; then
 			mkdir ${home}/.termux
 		fi
 		cp ${dotfiles}/.termux/colors.properties ${home}/.termux/
-		;;
-	*)
 		;;
 esac
 
@@ -995,6 +995,157 @@ case "${user_input}" in
 esac
 press_enter
 clear
+
+clear
+echo "==== Setting up Python ===="
+echo ""
+
+echo -n "Checking if python is installed: "
+if command -v "python" > /dev/null 2>&1; then
+	echo "YES"
+else
+	echo "NO"
+
+	echo -n "Do you want to install Python (Y/n): "
+	read user_input
+	user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+	case "${user_input}" in
+		"n")
+			;;
+		*)
+			install_package python
+			;;
+	esac
+fi
+
+if command -v "python" > /dev/null 2>&1; then
+	echo ""
+	echo -n "Do you want to install things related to Python (Y/n): "
+	read user_input
+	user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+	case "${user_input}" in
+		"n")
+			to_install_python=false
+			;;
+		*)
+			to_install_python=true
+			;;
+	esac
+fi
+
+press_enter
+
+if ${to_install_python}; then
+	clear
+	echo "==== Setting up pip ===="
+	echo ""
+
+	echo -n "Checking if pip is installed: "
+	if command -v "pip" > /dev/null 2>&1; then
+		echo "YES"
+		echo ""
+		to_install_pipx=true
+	else
+		echo "NO"
+		echo ""
+		echo -n "Do you want to install pip (Y/n): "
+		read user_input
+		user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+		case "${user_input}" in
+			"n")
+				to_install_pipx=false
+				;;
+			*)
+				to_install_pipx=true
+				install_package python-pip
+				press_enter
+				;;
+		esac
+	fi
+	press_enter
+
+	if ${to_install_pipx}; then
+		clear
+		echo "==== Setting up pipx ===="
+		echo ""
+
+		echo -n "Checking if pipx already installed: "
+		if command -v "pipx" > /dev/null 2>&1; then
+			echo "YES"
+		else
+			echo "NO"
+			echo ""
+			echo -n "Do you want to install pipx (Y/n): "
+			read user_input
+			user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+			case "${user_input}" in
+				"n")
+					;;
+				*)
+					pip install pipx
+					;;
+			esac
+		fi
+		press_enter
+	fi
+fi
+
+clear
+echo "==== Setting up golang ===="
+echo ""
+
+echo -n "Checking if golang is installed: "
+if command -v "go" > /dev/null 2>&1; then
+	echo "YES"
+else
+	echo "NO"
+	echo ""
+
+	echo -n "Do you want to install golang (y/N): "
+	read user_input
+	user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+	case "${user_input}" in
+		"y")
+			install_package golang
+			;;
+		*)
+			;;
+	esac
+fi
+press_enter
+
+if command -v "go" > /dev/null 2>&1; then
+	echo ""
+	echo -n "Do you want to install things related to golang (Y/n): "
+	read user_input
+	user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+	case "${user_input}" in
+		"n")
+			to_install_golang_related=false
+			;;
+		*)
+			to_install_golang_related=true
+			;;
+	esac
+
+	if ${to_install_golang_related}; then
+		clear
+		echo "==== Setting up delve ===="
+		echo ""
+
+		echo -n "Do you want to install delve (Y/n): "
+		read user_input
+		case "${user_input}" in
+			"n")
+				;;
+			*)
+				go install github.com/go-delve/delve/cmd/dlv@latest
+				;;
+		esac
+	fi
+fi
+press_enter
+
 
 echo "Dotfiles setup ended successfully"
 echo "It is recommended to restart your shell"
