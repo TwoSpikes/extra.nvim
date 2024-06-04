@@ -84,7 +84,7 @@ let mapleader = " "
 
 if !exists('g:CONFIG_PATH')
 	if !exists('$VIM_CONFIG_PATH')
-		let g:CONFIG_PATH = expand("$HOME/.config/nvim")
+		let g:CONFIG_PATH = "$HOME/.config/nvim"
 	else
 		let g:CONFIG_PATH = $VIM_CONFIG_PATH
 	endif

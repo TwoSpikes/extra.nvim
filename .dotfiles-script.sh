@@ -1,6 +1,8 @@
 #!/bin/env sh
 
-export PATH="${PATH}:${HOME}/sbin"
+GOPATH=${GOPATH:="${HOME}/go"}
+GOBIN=${GOBIN:="${GOPATH}/bin"}
+export PATH="${PATH}:${GOBIN}"
 
 export HISTSIZE=5000
 export DISPLAY=":0"
@@ -11,6 +13,8 @@ fi
 export XDG_CONFIG_HOME="${HOME}/.config/"
 
 [ -z "${PREFIX}" ] && ( export PREFIX="/usr/" )
+
+JAVA_HOME="${PREFIX}/share/jdk8"
 
 . ~/shlib/funcname.sh
 . ~/shlib/timer.sh

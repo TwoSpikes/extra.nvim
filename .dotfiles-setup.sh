@@ -1115,6 +1115,9 @@ fi
 press_enter
 
 if command -v "go" > /dev/null 2>&1; then
+	GOPATH=${GOPATH:="${HOME}/go"}
+	GOBIN=${GOBIN:="${GOPATH}/bin"}
+
 	echo ""
 	echo -n "Do you want to install things related to golang (Y/n): "
 	read user_input
@@ -1133,19 +1136,44 @@ if command -v "go" > /dev/null 2>&1; then
 		echo "==== Setting up delve ===="
 		echo ""
 
-		echo -n "Do you want to install delve (Y/n): "
-		read user_input
-		case "${user_input}" in
-			"n")
-				;;
-			*)
-				go install github.com/go-delve/delve/cmd/dlv@latest
-				;;
-		esac
+		echo -n "Checking if delve is installed: "
+		if test -e ${GOBIN}/dlv; then
+			echo "YES"
+		else
+			echo "NO"
+			echo ""
+			echo -n "Do you want to install delve (Y/n): "
+			read user_input
+			case "${user_input}" in
+				"n")
+					;;
+				*)
+					go install github.com/go-delve/delve/cmd/dlv@latest
+					;;
+			esac
+		fi
 	fi
 fi
 press_enter
 
+clear
+echo "==== Setting up Java ===="
+echo ""
+
+echo -n "Do you want to install Java (Y/n): "
+read user_input
+user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+case "${user_input}" in
+	"n")
+		;;
+	*)
+		if test -z "${TERMUX_VERSION}"
+			install_package default-jre
+		else
+			wget https://raw.githubusercontent.com/MasterDevX/java/master/installjava && bash installjava
+		fi
+		;;
+esac
 
 echo "Dotfiles setup ended successfully"
 echo "It is recommended to restart your shell"
