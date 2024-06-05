@@ -240,8 +240,9 @@ endfunction
 function! AfterSomeEvent(event, command, delete_when={name -> 'au! '.name})
 	call GenerateTemporaryAutocmd(a:event, '*', a:command, a:delete_when)
 endfunction
+let g:please_do_not_close = v:false
 function! MakeThingsThatRequireBeDoneAfterPluginsLoaded()
-	au TermClose * if !exists('g:bufnrforranger')|call IfOneWinDo("call OnQuit()")|call AfterSomeEvent('TermLeave', 'call Numbertoggle()')|quit|endif
+	au TermClose * if !g:please_do_not_close && !exists('g:bufnrforranger')|call IfOneWinDo("call OnQuit()")|call AfterSomeEvent('TermLeave', 'call Numbertoggle()')|quit|endif
 endfunction
 
 set nonu
@@ -1378,7 +1379,7 @@ inoremap <silent> Jk <esc>
 " endfunction
 " tnoremap <nowait> <expr> <silent> k ProcessTBut_k()
 tnoremap <silent> jk <c-\><c-n>
-tnoremap <silent> jK <c-\><c-n>:bd!<Bar>tabnew<Bar>call OpenTerm("")<cr>
+tnoremap <silent> jK <c-\><c-n><cmd>let g:please_do_not_close=v:true<cr><cmd>:bd!<cr><cmd>tabnew<cr><cmd>call OpenTerm("")<cr><cmd>let g:please_do_not_close=v:false<cr>
 command! -nargs=* W w <args>
 
 inoremap <silent> ju <esc>viwUea

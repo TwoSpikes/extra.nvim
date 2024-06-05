@@ -622,7 +622,7 @@ case ${user_input} in
 		if ! test -d ${home}/.config; then
 			mkdir -pv ${home}/.config
 		fi
-		cp -r ${dotfiles}/.config/nvim ${home}/.config/${setting_editor_for}
+		cp -r ${dotfiles}/.config/nvim ${home}/.config/
 		if ! test -d "${VIMRUNTIME}/colors"; then
 			run_as_superuser_if_needed mkdir -pv "${VIMRUNTIME}/colors"
 		fi
