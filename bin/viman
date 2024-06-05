@@ -5,4 +5,4 @@ if command -v "nvim" > /dev/null 2>&1; then
 elif command -v "vim" > /dev/null 2>&1; then
 	editor="vim"
 fi
-${editor} --cmd "let g:DO_NOT_OPEN_ANYTHING=v:true" -c "set nocul nocuc stal=0 ls=0 sloc=last smd ru" -c "au VimEnter * Man $1 $2|silent only"
+${editor} --cmd "let g:DO_NOT_OPEN_ANYTHING=v:true" -c "set nocul nocuc stal=0 ls=0 sloc=last smd ru" --cmd "let g:cursorline=v:false" -c "au VimEnter * Man $1 $2|silent only|call feedkeys(\"\<c-\>\<c-n>\")"
