@@ -858,7 +858,9 @@ function! SaveAsAndRename()
 	call SaveAsBase({filename -> "saveas ".filename}, 'Save as and rename: ')
 endfunction
 command! -nargs=0 SaveAs call SaveAs()
+command! -nargs=0 SaveAsAndRename call SaveAsAndRename()
 noremap <leader><c-s> <cmd>SaveAs<cr>
+noremap <leader><c-r> <cmd>SaveAsAndRename<cr>
 
 function! FarOrMc()
 	if executable("far")
