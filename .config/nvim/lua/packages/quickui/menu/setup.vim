@@ -35,6 +35,7 @@ function! RebindMenus()
 				\ ["&Save\tCtrl-x s", 'write', 'Save changes in current buffer'],
 				\ ["Save &all\tCtrl-x S", 'wall | echo "Saved all buffers"', 'Save changes to all buffers' ],
 				\ ["Sa&ve as\tLEAD Ctrl-s", 'call SaveAs()', 'Save current file as ...' ],
+				\ ["Sav&e as and rename\tLEAD Ctrl-r", 'call SaveAsAndRename()', 'Save current file as ... and edit it' ],
 				\ ["--", '' ],
 				\ ["Update &plugins\tLEAD u", 'lua require("packer").sync()', 'Clear and redraw the screen'],
 				\ ["Update &coc language servers\tLEAD Cu", 'CocUpdate', 'Update coc.nvim installed language servers'],
@@ -45,7 +46,7 @@ function! RebindMenus()
 				\ [s:esc_label."\tesc", s:esc_command, 'Stop searching'],
 				\ ["Toggle &fullscreen\tLEAD Ctrl-f", 'ToggleFullscreen', 'Toggle fullscreen mode'],
 				\ ["--", '' ],
-				\ ["&Exit\tCtrl-x Ctrl-c", 'confirm qall', 'Close Vim/NeoVim softly'],
+				\ ["E&xit\tCtrl-x Ctrl-c", 'confirm qall', 'Close Vim/NeoVim softly'],
 				\ ["Exit without confir&m\tCtrl-x Ctrl-q", 'qall!', 'Close Vim/NeoVim without saving'],
 				\ ])
 

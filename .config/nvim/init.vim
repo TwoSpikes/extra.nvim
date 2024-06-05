@@ -820,7 +820,7 @@ for i in range(1, 9)
 	exec "noremap <c-c>".i." <cmd>tabnext ".i."<cr>"
 endfor
 
-function! SaveAs()
+function! SaveAsBase(command)
 	if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
 		echohl Question
 		let filename = input('Save as: ')
@@ -830,9 +830,15 @@ function! SaveAs()
 	endif
 	if filename !=# ''
 		set lazyredraw
-		exec printf("w %s", filename)
+		exec a:command(filename)
 		set nolazyredraw
 	endif
+endfunction
+function! SaveAs()
+	call SaveAsBase({filename -> "w ".filename})
+endfunction
+function! SaveAsAndRename()
+	call SaveAsBase({filename -> "saveas ".filename})
 endfunction
 command! -nargs=0 SaveAs call SaveAs()
 noremap <leader><c-s> <cmd>SaveAs<cr>
