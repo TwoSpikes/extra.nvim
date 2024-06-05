@@ -39,6 +39,7 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		\'open_ranger_on_start',
 		\'DO_NOT_OPEN_ANYTHING',
 		\'use_github_copilot',
+		\'pad_amount_confirm_dialogue',
 	\]
 	for option_ in l:option_list
 		if exists('g:dotfiles_config["'.option_.'"]')
@@ -63,6 +64,9 @@ function! HandleDotfilesConfig()
 	endif
 	if !exists('g:cursorline_style')
 		let g:cursorline_style = "dim"
+	endif
+	if !exists('g:pad_amount_confirm_dialogue')
+		let g:pad_amount_confirm_dialogue = 30
 	endif
 
 	if g:background ==# "dark"
@@ -205,6 +209,19 @@ function! CopyHighlightGroup(src, dst)
 	exec printf("hi %s guifg=%s", a:dst, guifg)
 	exec printf("hi %s guibg=%s", a:dst, guibg)
 	exec printf("hi %s gui=%s", a:dst, gui)
+endfunction
+
+" Copied from StackOverflow: https://stackoverflow.com/questions/4964772/string-formatting-padding-in-vim
+function! Pad(s,amt)
+    return a:s . repeat(' ',a:amt - len(a:s))
+endfunction
+function! PrePad(s,amt,...)
+    if a:0 > 0
+        let char = a:1
+    else
+        let char = ' '
+    endif
+    return repeat(char,a:amt - len(a:s)) . a:s
 endfunction
 
 function! PrepareVital()
@@ -787,7 +804,7 @@ function! Findfile()
 		let filename = input('Find file: ')
 		echohl Normal
 	else
-		let filename = quickui#input#open('Find file:                 ', fnamemodify(expand('%'), ':~:.'))
+		let filename = quickui#input#open(Pad('Find file:', g:pad_amount_confirm_dialogue), fnamemodify(expand('%'), ':~:.'))
 	endif
 	if filename !=# ''
 		set lazyredraw
@@ -804,7 +821,7 @@ function! Findfilebuffer()
 		echohl Normal
 	else
 		set lazyredraw
-		let filename = quickui#input#open('Find file (open in buffer):', fnamemodify(expand('%'), ':~:.'))
+		let filename = quickui#input#open(Pad('Find file (open in buffer):', g:pad_amount_confirm_dialogue), fnamemodify(expand('%'), ':~:.'))
 		set nolazyredraw
 	endif
 	if filename !=# ''
@@ -820,13 +837,13 @@ for i in range(1, 9)
 	exec "noremap <c-c>".i." <cmd>tabnext ".i."<cr>"
 endfor
 
-function! SaveAsBase(command)
+function! SaveAsBase(command, invitation)
 	if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
 		echohl Question
-		let filename = input('Save as: ')
+		let filename = input(a:invitation)
 		echohl Normal
 	else
-		let filename = quickui#input#open('Save as:             ', fnamemodify(expand('%'), ':~:.'))
+		let filename = quickui#input#open(Pad(a:invitation, g:pad_amount_confirm_dialogue), fnamemodify(expand('%'), ':~:.'))
 	endif
 	if filename !=# ''
 		set lazyredraw
@@ -835,10 +852,10 @@ function! SaveAsBase(command)
 	endif
 endfunction
 function! SaveAs()
-	call SaveAsBase({filename -> "w ".filename})
+	call SaveAsBase({filename -> "w ".filename}, 'Save as: ')
 endfunction
 function! SaveAsAndRename()
-	call SaveAsBase({filename -> "saveas ".filename})
+	call SaveAsBase({filename -> "saveas ".filename}, 'Save as and rename: ')
 endfunction
 command! -nargs=0 SaveAs call SaveAs()
 noremap <leader><c-s> <cmd>SaveAs<cr>

@@ -209,6 +209,10 @@ $ DOTFILES_VIM_CONFIG_PATH=~/dnsjajsbdn/vim/ nvim
 "_comment_30":"Useful to disable if you do not have a subscription to it",
 	"use_github_copilot": false,
 
+"_comment_31":"Confirm dialogue width (vim-quickui)",
+"_comment_32":"Default: 30",
+	"pad_amount_confirm_dialogue": 30,
+
 "_comment_end":"Ending field to not put comma every time"
 }
 ```
