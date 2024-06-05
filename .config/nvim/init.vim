@@ -125,6 +125,15 @@ set splitkeep=cursor
 set nosplitright
 set scrolloff=3
 set notildeop
+set errorfile=errors.err
+set eventignore=
+set noexrc
+set fillchars=
+set fixendofline
+
+set novisualbell
+set belloff=all
+set errorbells
 
 set nogdefault
 set ignorecase
@@ -140,6 +149,7 @@ set foldlevel=0
 set foldmarker={{{,}}}
 set foldmethod=marker
 set foldnestmax=15
+set foldcolumn=0
 
 function! SynGroup()
     let l:s = synID(line('.'), col('.'), 1)
