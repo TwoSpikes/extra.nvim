@@ -5,13 +5,16 @@ if command -v "nvim" > /dev/null 2>&1; then
 elif command -v "vim" > /dev/null 2>&1; then
 	editor="vim"
 fi
-if ! command -v "dotfiles" > /dev/null 2>&1; then
-	${editor} --cmd "let g:DO_NOT_OPEN_ANYTHING=v:true" -c "set nocul nocuc stal=0 ls=0 sloc=last smd ru" --cmd "let g:cursorline=v:false" -c "au VimEnter * Man $1 $2|silent only|call feedkeys(\"\<c-\>\<c-n>\")"
+
+TMPFILE=$(mktemp -u)
+while IFS= read -r REPLY; do
+	echo "${REPLY}"
+done > "${TMPFILE}"
+
+if command -v "dotfiles" > /dev/null 2>&1; then
+	${editor} --cmd "let g:DO_NOT_OPEN_ANYTHING=v:true" -c "set nocul nocuc stal=0 ls=0 sloc=last smd ru" -c "au VimEnter * e ${TMPFILE}|silent only"
 else
-	TMPFILE=$(mktemp -u)
-	while IFS= read -r REPLY; do
-		echo "${REPLY}"
-	done > "${TMPFILE}"
 	${editor} --cmd "let g:PAGER_MODE=v:true" -c "au VimEnter * e ${TMPFILE}|silent only"
-	rm ${TMPFILE}
 fi
+
+rm ${TMPFILE}
