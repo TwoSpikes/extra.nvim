@@ -165,16 +165,10 @@ fn commit(only_copy: bool) -> ::std::io::Result<()> {
         }
         "/dksk"
     });
-    if cfg!(target_os = "windows") {
-        _ = run_as_superuser_if_needed!("cp", &[VIMRUNTIME.join("syntax/book.vim").to_str().expect("Cannot convert path to str"), "./"]);
-    } else {
-        _ = run_as_superuser_if_needed!("cp", &[VIMRUNTIME.join("syntax/book.vim").to_str().expect("Cannot convert path to str"), "./"]);
-    };
-    if cfg!(target_os = "windows") {
-        _ = run_as_superuser_if_needed!("cp", &[VIMRUNTIME.join("colors/blueorange.vim").to_str().expect("Cannot convert path to str"), "./"]);
-    } else {
-        _ = run_as_superuser_if_needed!("cp", &[VIMRUNTIME.join("colors/blueorange.vim").to_str().expect("Cannot convert path to str"), "./"]);
-    };
+    ::std::fs::create_dir_all("./vimruntime/syntax")?;
+    _ = run_as_superuser_if_needed!("cp", &[VIMRUNTIME.join("syntax/book.vim").to_str().expect("Cannot convert path to str"), "./vimruntime/syntax/"]);
+    ::std::fs::create_dir_all("./vimruntime/colors")?;
+    _ = run_as_superuser_if_needed!("cp", &[VIMRUNTIME.join("colors/blueorange.vim").to_str().expect("Cannot convert path to str"), "./vimruntime/colors/"]);
     ::std::fs::copy(HOME.join("xterm-color-table.vim"), "./xterm-color-table.vim")?;
     ::std::fs::copy(HOME.join(".tmux.conf"), "./.tmux.conf")?;
     ::std::fs::copy(HOME.join(".gitconfig-default"), "./.gitconfig-default")?;
