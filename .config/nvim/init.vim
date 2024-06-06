@@ -52,7 +52,12 @@ endfunction
 call LoadDotfilesConfig(g:DOTFILES_CONFIG_PATH.'/config.json')
 
 function! HandleDotfilesConfig()
-	" Default values
+	" Default values for variables
+	if !exists('g:PAGER_MODE')
+		let g:PAGER_MODE = v:false
+	endif
+
+	" Default values for options
 	if !exists('g:cursorcolumn')
 		let g:cursorcolumn = v:false
 	endif
@@ -1558,6 +1563,23 @@ let g:floaterm_width = 1.0
 noremap <leader>z <cmd>call SelectPosition('lazygit', g:termpos)<cr>
 noremap <leader>m <cmd>call SelectPosition(g:far_or_mc, g:termpos)<cr>
 
+function! EnablePagerMode()
+	set nocursorline
+	set nocursorcolumn
+	set showtabline=0
+	set laststatus=0
+	set showcmdloc=last
+	set showmode
+	set ruler
+
+	let g:cursorline
+
+	call feedkeys("\<c-\>\<c-n>")
+endfunction
+if g:PAGER_MODE
+	call EnablePagerMode()
+endif
+
 augroup xdg_open
 	autocmd!
 	function! OpenWithXdg(filename)
@@ -1660,7 +1682,7 @@ function! OpenOnStart()
 	if expand('%') == ''
 		let open = v:false
 		if exists('g:DO_NOT_OPEN_ANYTHING')
-			let open = !g:DO_NOT_OPEN_ANYTHING
+			let open = !g:DO_NOT_OPEN_ANYTHING && !g:PAGER_MODE
 		else
 			let open = v:false
 		endif

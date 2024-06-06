@@ -140,6 +140,7 @@ fn commit(only_copy: bool) -> ::std::io::Result<()> {
     copy_dir_all(HOME.join(".config/nvim/vim"), "./.config/nvim/vim")?;
     copy_dir_all(HOME.join(".config/nvim/ftplugin"), "./.config/nvim/ftplugin")?;
     ::std::fs::copy(HOME.join("bin/viman"), "./bin/viman")?;
+    ::std::fs::copy(HOME.join("bin/vipage"), "./bin/vipage")?;
     let VIMRUNTIME = ::std::path::Path::new(if ::which::which("nvim").is_ok() {
         if cfg!(target_os = "windows") {
             "/c/Program Files/Neovim/share/nvim/runtime"
