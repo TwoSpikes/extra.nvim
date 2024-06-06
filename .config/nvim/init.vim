@@ -1315,7 +1315,7 @@ noremap <silent> <c-x>S <cmd>wall<Bar>echohl MsgArea<Bar>echo 'Saved all buffers
 noremap <silent> <c-x><c-s> <cmd>w<cr>
 function! Killbuffer()
 	echohl Question
-	if filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
+	if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
 		let user_input = input("do you want to kill the buffer? (Y/n): ")
 		echohl Normal
 	else
