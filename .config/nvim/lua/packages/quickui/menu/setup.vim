@@ -35,7 +35,7 @@ function! RebindMenus()
 				\ ["&Save\tCtrl-x s", 'write', 'Save changes in current buffer'],
 				\ ["Save &all\tCtrl-x S", 'wall | echo "Saved all buffers"', 'Save changes to all buffers' ],
 				\ ["Sa&ve as\tLEAD Ctrl-s", 'call SaveAs()', 'Save current file as ...' ],
-				\ ["Sav&e as and rename\tLEAD Ctrl-r", 'call SaveAsAndRename()', 'Save current file as ... and edit it' ],
+				\ ["Sav&e as and edit\tLEAD Ctrl-r", 'call SaveAsAndRename()', 'Save current file as ... and edit it' ],
 				\ ["--", '' ],
 				\ ["Update &plugins\tLEAD u", 'lua require("packer").sync()', 'Clear and redraw the screen'],
 				\ ["Update &coc language servers\tLEAD Cu", 'CocUpdate', 'Update coc.nvim installed language servers'],
@@ -125,8 +125,9 @@ function! RebindMenus()
 				\ ['Set &Spell %{&spell? "Off":"On"}', 'set spell!', '%{(&spell?"Disable":"Enable")." spell checking"}'],
 				\ ['Set &Paste %{&paste? "Off":"On"}', 'set paste!'],
 				\ ["--", '' ],
-				\ ['Set Cursor &Column %{&cursorcolumn==#v:true?"Off":"On"}', 'let g:cursorcolumn=!g:cursorcolumn|call HandleBuftypeAll()'],
-				\ ['Set Cursor L&ine %{&cursorline==#v:true?"Off":"On"}', 'let g:cursorline=!g:cursorline|call HandleBuftypeAll()'],
+				\ ['Set Cursor &Column %{g:cursorcolumn==#v:true?"Off":"On"}', 'let g:cursorcolumn=!g:cursorcolumn|call HandleBuftypeAll()'],
+				\ ['Set Cursor L&ine %{g:cursorline==#v:true?"Off":"On"}', 'let g:cursorline=!g:cursorline|call HandleBuftypeAll()'],
+				\ ['Set Line &numbers %{g:linenr==#v:true?"Off":"On"}', 'let g:linenr=!g:linenr|call STCUpd()'],
 				\ ])
 
 	call quickui#menu#install('&Config', [

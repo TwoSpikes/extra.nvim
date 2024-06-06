@@ -33,6 +33,7 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		\'cursorcolumn',
 		\'cursorline',
 		\'cursorline_style',
+		\'linenr',
 		\'open_menu_on_start',
 		\'quickui_border_style',
 		\'quickui_color_scheme',
@@ -51,6 +52,175 @@ function! LoadDotfilesConfig(path, reload=v:false)
 endfunction
 call LoadDotfilesConfig(g:DOTFILES_CONFIG_PATH.'/config.json')
 
+if !exists('g:CONFIG_PATH')
+	if !exists('$VIM_CONFIG_PATH')
+		let g:CONFIG_PATH = "$HOME/.config/nvim"
+	else
+		let g:CONFIG_PATH = $VIM_CONFIG_PATH
+	endif
+endif
+
+colorscheme blueorange
+function! ReturnHighlightTerm(group, term)
+   " Store output of group to variable
+   let output = execute('hi ' . a:group)
+
+   " Find the term we're looking for
+   return matchstr(output, a:term.'=\zs\S*')
+endfunction
+function! CopyHighlightGroup(src, dst)
+	let ctermfg = ReturnHighlightTerm(a:src, "ctermfg")
+	if ctermfg ==# ""
+		let ctermfg = "NONE"
+	endif
+	let ctermbg = ReturnHighlightTerm(a:src, "ctermbg")
+	if ctermbg ==# ""
+		let ctermbg = "NONE"
+	endif
+	let cterm = ReturnHighlightTerm(a:src, "cterm")
+	if cterm ==# ""
+		let cterm = "NONE"
+	endif
+	let guifg = ReturnHighlightTerm(a:src, "guifg")
+	if guifg ==# ""
+		let guifg = "NONE"
+	endif
+	let guibg = ReturnHighlightTerm(a:src, "guibg")
+	if guibg ==# ""
+		let guibg = "NONE"
+	endif
+	let gui = ReturnHighlightTerm(a:src, "gui")
+	if gui ==# ""
+		let gui = "NONE"
+	endif
+	exec printf("hi %s ctermfg=%s", a:dst, ctermfg)
+	exec printf("hi %s ctermbg=%s", a:dst, ctermbg)
+	exec printf("hi %s cterm=%s", a:dst, cterm)
+	exec printf("hi %s guifg=%s", a:dst, guifg)
+	exec printf("hi %s guibg=%s", a:dst, guibg)
+	exec printf("hi %s gui=%s", a:dst, gui)
+endfunction
+
+if has('nvim')
+	augroup LineNrForInactive
+		function! s:SaveStc(clear_stc)
+			exec printf("let g:stc_was_%d = &l:stc", win_getid())
+			if a:clear_stc
+				let &l:stc = ''
+			endif
+		endfunction
+		au! WinLeave * call s:SaveStc(v:true)
+		function! s:LoadStc()
+			if exists("g:stc_was_"..win_getid())==#1
+				let &l:stc = eval("g:stc_was_"..win_getid())
+			else
+				let &l:stc = ''
+			endif
+		endfunction
+		au! WinEnter * call s:LoadStc()
+	augroup END
+endif
+
+function! STCRel()
+	if has('nvim')
+		if mode() =~? 'v.*' || mode() ==# "\<c-v>"
+			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrVisu#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNrVisu#%=".((v:virtnum <= 0)?v:lnum:""):""%} '
+			call CopyHighlightGroup("StatementVisu", "Statement")
+			return
+		endif
+		let &l:stc = '%#CursorLineNr#%{%v:relnum?"%#LineNr#":((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:relnum:""):""} '
+		call CopyHighlightGroup("StatementNorm", "Statement")
+		call s:SaveStc(v:false)
+	else
+		set nu rnu
+	endif
+endfunction
+function! STCAbs(actual_mode)
+	if has('nvim')
+		if a:actual_mode ==# ''
+			let &l:stc = '%{%v:relnum?"":"%#CursorLineNr#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNr#%=".((v:virtnum <= 0)?v:lnum:""):""%} '
+			call CopyHighlightGroup("StatementNorm", "Statement")
+			return
+		endif
+		if a:actual_mode ==# 'r'
+			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrRepl#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} '
+			return
+		endif
+		if mode() =~? 'v.*' && &modifiable
+			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrVisu#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} '
+			return
+		endif
+		let &l:stc = '%{%v:relnum?"":"%#CursorLineNrIns#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNrIns#%=".((v:virtnum <= 0)?v:lnum:""):""%} '
+		call CopyHighlightGroup("StatementIns", "Statement")
+	else
+		set nu nornu
+	endif
+endfunction
+function! STCNo()
+	if has('nvim')
+		setlocal stc=
+	endif
+	setlocal nonu nornu
+endfunction
+
+function! Numbertoggle_stcabs()
+	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel'
+		call STCAbs(v:insertmode)
+	else
+		call STCNo()
+	endif
+endfunction	
+function! Numbertoggle_stcrel()
+	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel'
+		call STCRel()
+	else
+		call STCNo()
+	endif
+endfunction
+function! Numbertoggle()
+	if mode() =~? 'i'
+		call Numbertoggle_stcabs()
+	else
+		call Numbertoggle_stcrel()
+	endif
+endfunction
+function! Numbertoggle_no()
+	if has('nvim')
+		set stc=
+	endif
+	set nonu nornu
+endfunction
+
+function! DefineAugroupVisual()
+	augroup Visual
+		if g:linenr
+			autocmd! ModeChanged *:[vV]* call Numbertoggle_stcrel()
+			exec "autocmd! ModeChanged *:\<c-v>* call Numbertoggle_stcrel()"
+			autocmd! ModeChanged [vV]*:* call Numbertoggle()
+			exec "autocmd! ModeChanged \<c-v>*:* call Numbertoggle()"
+		else
+			autocmd! Visual
+		endif
+	augroup END
+endfunction
+function! DefineAugroupNumbertoggle()
+	augroup numbertoggle
+		autocmd!
+		if g:linenr
+			autocmd InsertLeave * call Numbertoggle_stcrel()
+			autocmd InsertEnter * call Numbertoggle_stcabs()
+			autocmd BufReadPost,BufEnter,BufLeave,WinLeave,WinEnter * call Numbertoggle()
+			autocmd FileType packer,spectre_panel call Numbertoggle()|call HandleBuftype(winnr())
+		else
+			autocmd! numbertoggle
+		endif
+	augroup END
+endfunction
+
+function! DefineAugroups()
+	call DefineAugroupVisual()
+	call DefineAugroupNumbertoggle()
+endfunction
 function! HandleDotfilesConfig()
 	" Default values for variables
 	if !exists('g:PAGER_MODE')
@@ -64,11 +234,14 @@ function! HandleDotfilesConfig()
 	if !exists('g:cursorline')
 		let g:cursorline = v:true
 	endif
-	if !exists('g:background')
-		let g:background = "dark"
-	endif
 	if !exists('g:cursorline_style')
 		let g:cursorline_style = "dim"
+	endif
+	if !exists('g:linenr')
+		let g:linenr = v:true
+	endif
+	if !exists('g:background')
+		let g:background = "dark"
 	endif
 	if !exists('g:pad_amount_confirm_dialogue')
 		let g:pad_amount_confirm_dialogue = 30
@@ -86,18 +259,17 @@ function! HandleDotfilesConfig()
 		let g:background = "dark"
 		set background=dark
 	endif
+
+	call DefineAugroups()
+	if !g:linenr
+		call STCNo()
+	else
+		call Numbertoggle()
+	endif
 endfunction
 call HandleDotfilesConfig()
 
 let mapleader = " "
-
-if !exists('g:CONFIG_PATH')
-	if !exists('$VIM_CONFIG_PATH')
-		let g:CONFIG_PATH = "$HOME/.config/nvim"
-	else
-		let g:CONFIG_PATH = $VIM_CONFIG_PATH
-	endif
-endif
 
 if !exists('g:LOCALSHAREPATH')
 	if !exists('$VIM_LOCALSHAREPATH')
@@ -123,7 +295,6 @@ if $PREFIX == ""
 	call setenv('PREFIX', '/usr/')
 endif
 
-colorscheme blueorange
 set termguicolors
 set lazyredraw
 set encoding=utf-8
@@ -173,47 +344,6 @@ endfunc
 function! WhenceGroup()
 	let l:s = synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
 	exec "verbose hi ".l:s
-endfunction
-
-function! ReturnHighlightTerm(group, term)
-   " Store output of group to variable
-   let output = execute('hi ' . a:group)
-
-   " Find the term we're looking for
-   return matchstr(output, a:term.'=\zs\S*')
-endfunction
-
-function! CopyHighlightGroup(src, dst)
-	let ctermfg = ReturnHighlightTerm(a:src, "ctermfg")
-	if ctermfg ==# ""
-		let ctermfg = "NONE"
-	endif
-	let ctermbg = ReturnHighlightTerm(a:src, "ctermbg")
-	if ctermbg ==# ""
-		let ctermbg = "NONE"
-	endif
-	let cterm = ReturnHighlightTerm(a:src, "cterm")
-	if cterm ==# ""
-		let cterm = "NONE"
-	endif
-	let guifg = ReturnHighlightTerm(a:src, "guifg")
-	if guifg ==# ""
-		let guifg = "NONE"
-	endif
-	let guibg = ReturnHighlightTerm(a:src, "guibg")
-	if guibg ==# ""
-		let guibg = "NONE"
-	endif
-	let gui = ReturnHighlightTerm(a:src, "gui")
-	if gui ==# ""
-		let gui = "NONE"
-	endif
-	exec printf("hi %s ctermfg=%s", a:dst, ctermfg)
-	exec printf("hi %s ctermbg=%s", a:dst, ctermbg)
-	exec printf("hi %s cterm=%s", a:dst, cterm)
-	exec printf("hi %s guifg=%s", a:dst, guifg)
-	exec printf("hi %s guibg=%s", a:dst, guibg)
-	exec printf("hi %s gui=%s", a:dst, gui)
 endfunction
 
 " Copied from StackOverflow: https://stackoverflow.com/questions/4964772/string-formatting-padding-in-vim
@@ -269,54 +399,6 @@ endfunction
 
 set nonu
 set nornu
-function! STCRel()
-	if has('nvim')
-		if mode() =~? 'v.*' || mode() ==# "\<c-v>"
-			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrVisu#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNrVisu#%=".((v:virtnum <= 0)?v:lnum:""):""%} '
-			call CopyHighlightGroup("StatementVisu", "Statement")
-			return
-		endif
-		let &l:stc = '%#CursorLineNr#%{%v:relnum?"%#LineNr#":((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:relnum:""):""} '
-		call CopyHighlightGroup("StatementNorm", "Statement")
-		call s:SaveStc(v:false)
-	else
-		set nu rnu
-	endif
-endfunction
-function! STCAbs(actual_mode)
-	if has('nvim')
-		if a:actual_mode ==# ''
-			let &l:stc = '%{%v:relnum?"":"%#CursorLineNr#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNr#%=".((v:virtnum <= 0)?v:lnum:""):""%} '
-			call CopyHighlightGroup("StatementNorm", "Statement")
-			return
-		endif
-		if a:actual_mode ==# 'r'
-			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrRepl#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} '
-			return
-		endif
-		if mode() =~? 'v.*' && &modifiable
-			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrVisu#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} '
-			return
-		endif
-		let &l:stc = '%{%v:relnum?"":"%#CursorLineNrIns#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNrIns#%=".((v:virtnum <= 0)?v:lnum:""):""%} '
-		call CopyHighlightGroup("StatementIns", "Statement")
-	else
-		set nu nornu
-	endif
-endfunction
-augroup Visual
-	au! ModeChanged *:[vV]* call Numbertoggle_stcrel()
-	exec "au! ModeChanged *:\<c-v>* call Numbertoggle_stcrel()"
-	au! ModeChanged [vV]*:* call Numbertoggle()
-	exec "au! ModeChanged \<c-v>*:* call Numbertoggle()"
-augroup END
-
-function! STCNo()
-	if has('nvim')
-		setlocal stc=
-	endif
-	setlocal nonu nornu
-endfunction
 let s:stc_shrunk = v:false
 function! STCUpd()
 	if &columns ># 40
@@ -550,41 +632,6 @@ command! -nargs=0 DotfilesCommit call DotfilesCommit()
 " augroup END
 " 
 " "noremap <silent> <esc> <cmd>Showtab<cr>
-
-augroup numbertoggle
-	autocmd!
-	function! Numbertoggle_stcabs()
-		if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel'
-			call STCAbs(v:insertmode)
-		else
-			call STCNo()
-		endif
-	endfunction	
-	function! Numbertoggle_stcrel()
-		if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel'
-			call STCRel()
-		else
-			call STCNo()
-		endif
-	endfunction
-	function! Numbertoggle()
-		if mode() =~? 'i'
-			call Numbertoggle_stcabs()
-		else
-			call Numbertoggle_stcrel()
-		endif
-	endfunction
-	function! Numbertoggle_no()
-		if has('nvim')
-			set stc=
-		endif
-		set nonu nornu
-	endfunction
-	autocmd InsertLeave * call Numbertoggle_stcrel()
-	autocmd InsertEnter * call Numbertoggle_stcabs()
-	autocmd BufReadPost,BufEnter,BufLeave,WinLeave,WinEnter * call Numbertoggle()
-	autocmd FileType packer,spectre_panel call Numbertoggle()|call HandleBuftype(winnr())
-augroup END
 
 let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ 'Modified'  :'✹',
@@ -1539,31 +1586,18 @@ au CursorMoved * call STCUpd()
 
 
 
-if has('nvim')
-	augroup LineNrForInactive
-		function! s:SaveStc(clear_stc)
-			exec printf("let g:stc_was_%d = &l:stc", win_getid())
-			if a:clear_stc
-				let &l:stc = ''
-			endif
-		endfunction
-		au! WinLeave * call s:SaveStc(v:true)
-		function! s:LoadStc()
-			if exists("g:stc_was_"..win_getid())==#1
-				let &l:stc = eval("g:stc_was_"..win_getid())
-			else
-				let &l:stc = ''
-			endif
-		endfunction
-		au! WinEnter * call s:LoadStc()
-	augroup END
-endif
-
 let g:floaterm_width = 1.0
 noremap <leader>z <cmd>call SelectPosition('lazygit', g:termpos)<cr>
 noremap <leader>m <cmd>call SelectPosition(g:far_or_mc, g:termpos)<cr>
 
 function! EnablePagerMode()
+	let s:old_cursorline = &cursorline
+	let s:old_cursorcolumn = &cursorcolumn
+	let s:old_showtabline = &showtabline
+	let s:old_laststatus = &laststatus
+	let s:old_showcmdloc = &showcmdloc
+	let s:old_showmode = &showmode
+	let s:old_ruler = &ruler
 	set nocursorline
 	set nocursorcolumn
 	set showtabline=0
@@ -1579,6 +1613,28 @@ endfunction
 if g:PAGER_MODE
 	call EnablePagerMode()
 endif
+function! DisablePagerMode()
+	let s:fullscreen = v:false
+	let &cursorline = s:old_cursorline
+	let &cursorcolumn = s:old_cursorcolumn
+	let &showtabline = s:old_showtabline
+	let &laststatus = s:old_laststatus
+	let &showcmdloc = s:old_showcmdloc
+	let &showmode = s:old_showmode
+	let &ruler = s:old_ruler
+	echon ''
+endfunction
+
+function! TogglePagerMode()
+	if g:PAGER_MODE
+		call DisablePagerMode()
+	else
+		call EnablePagerMode()
+	endif
+	let g:PAGER_MODE = !g:PAGER_MODE
+endfunction
+command! -nargs=0 TogglePagerMode call TogglePagerMode()
+noremap <leader>xp <cmd>TogglePagerMode<cr>
 
 augroup xdg_open
 	autocmd!
@@ -1733,11 +1789,9 @@ function! OnStart()
 	call PrepareWhichKey()
 	call OpenOnStart()
 	Showtab
-	if filereadable(expand('~/xterm-color-table.vim'))
-		so ~/xterm-color-table.vim
-	endif
 	exec "so ".g:CONFIG_PATH."/vim/init.vim"
-	call STCUpd()
+	call DefineAugroupNumbertoggle()
+	call DefineAugroupVisual()
 endfunction
 function! OnQuit()
 	call TermuxLoadCursorStyle()

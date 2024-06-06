@@ -179,38 +179,41 @@ $ DOTFILES_VIM_CONFIG_PATH=~/dnsjajsbdn/vim/ nvim
 "_comment_14":"Enable or disable highlighting for current line",
 	"cursorline": true,
 
-"_comment_15":"Change style of cursorline",
-"_comment_16":"    dim       - Small fogging (default)",
-"_comment_17":"    reverse   - Swap fg with bg",
-"_comment_18":"    underline - Underline a line",
+"_comment_15":"Enable or disable showing line numbers",
+	"linenr": true,
+
+"_comment_16":"Change style of cursorline",
+"_comment_17":"    dim       - Small fogging (default)",
+"_comment_18":"    reverse   - Swap fg with bg",
+"_comment_19":"    underline - Underline a line",
 	"cursorline_style": "dim",
 
-"_comment_19":"Open quickui menu on start",
+"_comment_20":"Open quickui menu on start",
 	"open_menu_on_start": false,
 
-"_comment_20":"Change quickui_border_style",
-"_comment_21":"1 - Dashed, non-Unicode",
-"_comment_22":"2 - Solid",
-"_comment_23":"3 - Double outer border (default)",
+"_comment_21":"Change quickui_border_style",
+"_comment_22":"1 - Dashed, non-Unicode",
+"_comment_23":"2 - Solid",
+"_comment_24":"3 - Double outer border (default)",
 	"quickui_border_style": "3",
 
-"_comment_24":"Change quickui colorscheme",
-"_comment_25":"Aviable: borland, gruvbox, solarized, papercol dark, papercol light",
-"_comment_26":"See them at https://github.com/skywind3000/vim-quickui/blob/master/MANUAL.md",
+"_comment_25":"Change quickui colorscheme",
+"_comment_26":"Aviable: borland, gruvbox, solarized, papercol dark, papercol light",
+"_comment_27":"See them at https://github.com/skywind3000/vim-quickui/blob/master/MANUAL.md",
 	"quickui_color_scheme": "papercol dark",
 
-"_comment_27":"Open ranger on start",
+"_comment_28":"Open ranger on start",
 	"open_ranger_on_start": true,
 
-"_comment_28":"Open blank file on start",
+"_comment_29":"Open blank file on start",
 	"DO_NOT_OPEN_ANYTHING": false,
 
-"_comment_29":"Enable Github Copilot",
-"_comment_30":"Useful to disable if you do not have a subscription to it",
+"_comment_30":"Enable Github Copilot",
+"_comment_31":"Useful to disable if you do not have a subscription to it",
 	"use_github_copilot": false,
 
-"_comment_31":"Confirm dialogue width (vim-quickui)",
-"_comment_32":"Default: 30",
+"_comment_32":"Confirm dialogue width (vim-quickui)",
+"_comment_33":"Default: 30",
 	"pad_amount_confirm_dialogue": 30,
 
 "_comment_end":"Ending field to not put comma every time"
