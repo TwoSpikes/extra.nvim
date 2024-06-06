@@ -169,7 +169,7 @@ fn commit(only_copy: bool) -> ::std::io::Result<()> {
     _ = run_as_superuser_if_needed!("cp", &[VIMRUNTIME.join("syntax/book.vim").to_str().expect("Cannot convert path to str"), "./vimruntime/syntax/"]);
     ::std::fs::create_dir_all("./vimruntime/colors")?;
     _ = run_as_superuser_if_needed!("cp", &[VIMRUNTIME.join("colors/blueorange.vim").to_str().expect("Cannot convert path to str"), "./vimruntime/colors/"]);
-    ::std::fs::copy(HOME.join("xterm-color-table.vim"), "./xterm-color-table.vim")?;
+    ::std::fs::copy(HOME.join(".config/nvim/vim/xterm-color-table.vim"), "./.config/nvim/vim/xterm-color-table.vim")?;
     ::std::fs::copy(HOME.join(".tmux.conf"), "./.tmux.conf")?;
     ::std::fs::copy(HOME.join(".gitconfig-default"), "./.gitconfig-default")?;
     ::std::fs::copy(HOME.join(".gitmessage"), "./.gitmessage")?;

@@ -672,21 +672,6 @@ fi
 press_enter
 
 clear
-echo "==== Miscellaneous stuff ===="
-echo ""
-
-echo -n "Do you want to copy xterm-color-table.vim (recommended)? (Y/n): "
-read user_input
-user_input=$(echo ${user_input}|awk '{print tolower($0)}')
-case ${user_input} in
-	"n")
-		;;
-	*)
-		cp ${dotfiles}/xterm-color-table.vim ${home}
-		;;
-esac
-
-clear
 echo "==== Setting up git ===="
 echo ""
 

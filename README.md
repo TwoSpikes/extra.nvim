@@ -251,35 +251,6 @@ It is a configuration for GNU Emacs
 $ cp -r ./.emacs.d/ ~/
 ```
 
-## xterm-color-table.vim
-
-### What is this?
-
-It is an xterm color table (256 colors) for vim/neovim.\
-Fork from [this repository](https://github.com/guns/xterm-color-table.vim)
-
-### Installation
-
-```console
-$ cp ./xterm-color-table.vim ~/
-```
-
-### Running in Vim/NeoVim
-
-```console
-$ vim
-```
-
-Then you need to run this command
-
-```vim
-:Sxct       " In a horizontal split
-:Vxct       " In a vertical split
-:Txct       " In a new tab
-:Exct       " In a new buffer
-:Oxct       " In a fullscreen buffer
-```
-
 # Contribution
 
 ## Copy configs to this repo and commit
