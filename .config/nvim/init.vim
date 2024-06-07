@@ -1699,9 +1699,9 @@ function! TermuxLoadCursorStyle()
 	endif
 endfunction
 
-function! OpenRanger()
+function! OpenRanger(path)
 	let TMPFILE = trim(system(["mktemp", "-u"]))
-	let g:bufnrforranger = OpenTerm("ranger --choosefile=".TMPFILE)
+	let g:bufnrforranger = OpenTerm("ranger --choosefile=".TMPFILE." ".a:path)
 	call delete(TMPFILE)
 	augroup oncloseranger
 		autocmd! oncloseranger
@@ -1739,7 +1739,7 @@ function! OpenOnStart()
 	echon ' to see help'
 	echohl Normal
 
-	if expand('%') == ''
+	if expand('%') == '' || isdirectory(expand('%'))
 		let open = v:false
 		if exists('g:DO_NOT_OPEN_ANYTHING')
 			let open = !g:DO_NOT_OPEN_ANYTHING && !g:PAGER_MODE
@@ -1762,7 +1762,11 @@ function! OpenOnStart()
 			\||executable('ranger') !=# 1
 				edit ./
 			elseif open ==# "ranger"
-				call OpenRanger()
+				if argc() ># 0
+					call OpenRanger(argv(0))
+				else
+					call OpenRanger("./")
+				endif
 			endif
 		endif
 	endif
