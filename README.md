@@ -216,6 +216,13 @@ $ DOTFILES_VIM_CONFIG_PATH=~/dnsjajsbdn/vim/ nvim
 "_comment_33":"Default: 30",
 	"pad_amount_confirm_dialogue": 30,
 
+"_comment_34":"Change cursor style",
+"_comment_35":"Aviable styles:",
+"_comment_36":"  block (default)   █",
+"_comment_37":"  bar               ⎸",
+"_comment_38":"  underline         _",
+	"cursor_style": "block",
+
 "_comment_end":"Ending field to not put comma every time"
 }
 ```

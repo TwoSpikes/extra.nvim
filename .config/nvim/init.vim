@@ -41,6 +41,7 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		\'DO_NOT_OPEN_ANYTHING',
 		\'use_github_copilot',
 		\'pad_amount_confirm_dialogue',
+		\'cursor_style',
 	\]
 	for option_ in l:option_list
 		if exists('g:dotfiles_config["'.option_.'"]')
@@ -245,6 +246,9 @@ function! HandleDotfilesConfig()
 	endif
 	if !exists('g:pad_amount_confirm_dialogue')
 		let g:pad_amount_confirm_dialogue = 30
+	endif
+	if !exists('g:cursor_style')
+		let g:cursor_style = "block"
 	endif
 
 	if g:background ==# "dark"
