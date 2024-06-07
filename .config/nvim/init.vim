@@ -1429,9 +1429,9 @@ noremap my <cmd>echohl ErrorMsg<cr><cmd>echom "my is used for commands"<cr><cmd>
 noremap <leader>q q
 noremap <leader>Q Q
 
-inoremap <silent> jk <cmd>update<cr><esc>
+inoremap <silent> jk <esc><cmd>update<cr>
 inoremap <silent> jK <esc>
-inoremap <silent> JK <cmd>update<cr><esc>
+inoremap <silent> JK <esc><cmd>update<cr>
 inoremap <silent> Jk <esc>
 " FIXME: Bicycle is invented, but the problem is not solved
 " NOTE: temporarily commented out due to above reason
