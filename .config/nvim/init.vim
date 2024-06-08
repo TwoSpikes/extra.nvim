@@ -678,8 +678,11 @@ function! MyTabLabel(n)
 	let buflist = tabpagebuflist(a:n)
 	let winnr = tabpagewinnr(a:n)
 	let original_buf_name = bufname(buflist[winnr - 1])
-	if original_buf_name == ''
-		let buf_name = '[null]'
+	let bufnr = bufnr(original_buf_name)
+	if getbufvar(bufnr, '&buftype') ==# "terminal"
+		let buf_name = '[Term]'
+	elseif original_buf_name == ''
+		let buf_name = '[NoName]'
 	else
 		let buf_name = original_buf_name
 	endif
