@@ -26,6 +26,7 @@ timer_start_silent
 export VISUAL="nvim"
 export EDITOR='nvim'
 export PAGER='most'
+alias nvim="nvim -c \"let g:DO_NOT_OPEN_ANYTHING=0\" -c \"let g:PAGER_MODE=0\""
 
 export MAKE_PROGRAM='make'
 export CMAKE_PROGRAM='make'
@@ -169,7 +170,7 @@ try_install() {
 		;;
 	esac
 	attempt=1
-	while [ ${attempt} -lt ${max_attempt} ]; do
+	while test ${attempt} -lt ${max_attempt}; do
 		case ${attempt} in
 			1)
 				"${ECHO_PROGRAM}" "trying to install ${program}..."
@@ -209,7 +210,7 @@ else
 fi
 
 print_todo() {
-	if [ -f ~/todo ]; then
+	if test -f ~/todo; then
 		if [ $("${CAT_PROGRAM}" ~/todo)='' ]; then
 			"${PRINTF_PROGRAM}" "$(base_program): ${RED_COLOR}error${RESET_COLOR}: ${YELLOW_COLOR}todo is empty${RESET_COLOR}\n"
 		else

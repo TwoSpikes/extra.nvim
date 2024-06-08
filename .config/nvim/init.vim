@@ -39,7 +39,6 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		\'quickui_border_style',
 		\'quickui_color_scheme',
 		\'open_ranger_on_start',
-		\'DO_NOT_OPEN_ANYTHING',
 		\'use_github_copilot',
 		\'pad_amount_confirm_dialogue',
 		\'cursor_style',
@@ -233,6 +232,9 @@ function! HandleDotfilesConfig()
 	" Default values for variables
 	if !exists('g:PAGER_MODE')
 		let g:PAGER_MODE = v:false
+	endif
+	if !exists('g:DO_NOT_OPEN_ANYTHING')
+		let g:DO_NOT_OPEN_ANYTHING = v:false
 	endif
 
 	" Default values for options
@@ -1216,7 +1218,12 @@ function! CommentOut(comment_string)
 	if mode() !~? 'v.*' && mode() !~? "\<c-v>.*"
 		return "0i".a:comment_string." \<esc>"
 	else
-		return "\<c-v>0I".a:comment_string."\<esc>"
+		let cmd = ''
+		if mode() !~? "\<c-v>.*"
+			let cmd .= "\<c-v>"
+		endif
+		let cmd .= "0I".a:comment_string."\<esc>"
+		return cmd
 	endif
 	normal! `z
 endfunction
@@ -1643,9 +1650,6 @@ function! EnablePagerMode()
 
 	call feedkeys("\<c-\>\<c-n>")
 endfunction
-if g:PAGER_MODE
-	call EnablePagerMode()
-endif
 function! DisablePagerMode()
 	let s:fullscreen = v:false
 	let &cursorline = s:old_cursorline
@@ -1769,13 +1773,10 @@ function! OpenOnStart()
 	echohl Normal
 
 	if expand('%') == '' || isdirectory(expand('%'))
-		let open = v:false
-		if exists('g:DO_NOT_OPEN_ANYTHING')
-			let open = !g:DO_NOT_OPEN_ANYTHING && !g:PAGER_MODE
-		else
-			let open = v:false
-		endif
-		if open
+		let to_open = v:true
+		let to_open = to_open && !g:DO_NOT_OPEN_ANYTHING
+		let to_open = to_open && !g:PAGER_MODE
+		if to_open
 			let open = ""
 			if exists('g:open_ranger_on_start')
 				if g:open_ranger_on_start
@@ -1829,6 +1830,10 @@ function! OnStart()
 	exec "so ".g:CONFIG_PATH."/vim/init.vim"
 	call DefineAugroups()
 	call UpdateShowtabline()
+
+	if g:PAGER_MODE
+		call EnablePagerMode()
+	endif
 endfunction
 function! OnQuit()
 	call TermuxLoadCursorStyle()

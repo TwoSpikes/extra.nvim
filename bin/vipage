@@ -12,9 +12,9 @@ while IFS= read -r REPLY; do
 done > "${TMPFILE}"
 
 if ! command -v "dotfiles" > /dev/null 2>&1; then
-	${editor} --cmd "let g:DO_NOT_OPEN_ANYTHING=v:true" -c "set nocul nocuc stal=0 ls=0 sloc=last smd ru" -c "au VimEnter * e ${TMPFILE}|silent only|call feedkeys(\"\\<c-\\>\\<c-n>\")"
+	${editor} -c "let g:DO_NOT_OPEN_ANYTHING=v:true" -c "set nocul nocuc stal=0 ls=0 sloc=last smd ru" -c "au VimEnter * e ${TMPFILE}|silent only|call feedkeys(\"\\<c-\\>\\<c-n>\")"
 else
-	${editor} --cmd "let g:PAGER_MODE=v:true" -c "au VimEnter * e ${TMPFILE}|silent only"
+	${editor} -c "let g:PAGER_MODE=v:true" -c "au VimEnter * e ${TMPFILE}|silent only"
 fi
 
 rm ${TMPFILE}
