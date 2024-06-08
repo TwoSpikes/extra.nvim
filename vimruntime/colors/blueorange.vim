@@ -495,6 +495,10 @@ if &t_Co >= 256
 "    hi TabLine ctermfg=208 ctermbg=17 cterm=NONE
     hi TabLine ctermfg=195 ctermbg=18 cterm=NONE guifg=#ffe800 guibg=#0050a0 gui=NONE
     hi TabLineSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#ffaf30 guibg=#000070 gui=NONE
+    hi TabLineToSel ctermfg=222 ctermbg=18 cterm=NONE guifg=#0050a0 guibg=#0090f0 gui=NONE
+    hi TabLineFromSel ctermfg=222 ctermbg=18 cterm=NONE guifg=#0090f0 guibg=#0050a0 gui=NONE
+    hi TabLineToSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#0050a0 guibg=#000070 gui=NONE
+    hi TabLineFromSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#000070 guibg=#0050a0 gui=NONE
     hi TabLineFill ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#002050 gui=NONE
 "    hi TabLineSel ctermfg=195 ctermbg=18 cterm=bold
     hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#ffffaf guibg=#0090f0 gui=bold

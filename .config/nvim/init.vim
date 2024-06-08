@@ -44,6 +44,7 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		\'cursor_style',
 		\'showtabline',
 		\'tabline_path',
+		\'tabline_spacing',
 	\]
 	for option_ in l:option_list
 		if exists('g:dotfiles_config["'.option_.'"]')
@@ -267,6 +268,9 @@ function! HandleDotfilesConfig()
 	endif
 	if !exists('g:tabline_path')
 		let g:tabline_path = "name"
+	endif
+	if !exists('g:tabline_spacing')
+		let g:tabline_spacing = "transition"
 	endif
 
 	if g:background ==# "dark"
@@ -709,15 +713,53 @@ function! MyTabLine()
       let s ..= '%#TabLineSel#'
     elseif (i - tabpagenr()) % 2 == 0
 		let s ..= '%#TabLine#'
-	else
+	elseif i !=# tabpagenr('$') - 1
 		let s ..= '%#TabLineSec#'
     endif
 
     " set the tab page number (for mouse clicks)
     let s ..= '%' .. (i + 1) .. 'T'
 
+	if g:tabline_spacing ==# 'full'
+		let s ..= ' '
+	elseif g:tabline_spacing ==# 'partial'
+		if i !=# tabpagenr()
+			let s ..= ' '
+		endif
+	elseif g:tabline_spacing ==# 'transition'
+		if i ==# tabpagenr()
+			let s ..= '%#TabLineFromSel#'
+		elseif i !=# 0 && i !=# tabpagenr() - 1 && (i - tabpagenr() - 1) % 2 ==# 0
+			let s ..= '%#TabLineToSec#'
+		endif
+		let s ..= ' '
+	endif
+
+    if i + 1 == tabpagenr()
+      let s ..= '%#TabLineSel#'
+    elseif (i - tabpagenr()) % 2 == 0
+		let s ..= '%#TabLine#'
+	else
+		let s ..= '%#TabLineSec#'
+    endif
+
     " the label is made by MyTabLabel()
     let s ..= '%{MyTabLabel(' .. (i + 1) .. ')}'
+	
+	if g:tabline_spacing ==# 'full'
+		let s ..= ' '
+	elseif g:tabline_spacing ==# 'partial'
+		if i !=# tabpagenr() - 2
+			let s ..= ' '
+		endif
+	elseif g:tabline_spacing ==# 'transition'
+		let s ..= ' '
+		if i ==# tabpagenr() - 2
+			let s ..= '%#TabLineToSel#'
+		elseif i !=# tabpagenr('$') - 1 && i !=# tabpagenr() - 1 && (i - tabpagenr()) % 2 !=# 0
+			let s ..= '%#TabLineFromSec#'
+		endif
+	endif
   endfor
 
   " after the last tab fill with TabLineFill and reset tab page nr
