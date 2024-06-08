@@ -34,6 +34,7 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		\'cursorline',
 		\'cursorline_style',
 		\'linenr',
+		\'linenr_style',
 		\'open_menu_on_start',
 		\'quickui_border_style',
 		\'quickui_color_scheme',
@@ -148,7 +149,7 @@ function! STCAbs(actual_mode)
 			return
 		endif
 		if mode() =~? 'v.*' && &modifiable
-			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrVisu#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} '
+			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrVisu#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNrVisu#%=".((v:virtnum <= 0)?v:lnum:""):""%} '
 			return
 		endif
 		let &l:stc = '%{%v:relnum?"":"%#CursorLineNrIns#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNrIns#%=".((v:virtnum <= 0)?v:lnum:""):""%} '
@@ -164,9 +165,9 @@ function! STCNo()
 	setlocal nonu nornu
 endfunction
 
-function! Numbertoggle_stcabs()
+function! Numbertoggle_stcabs(mode='')
 	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel'
-		call STCAbs(v:insertmode)
+		call STCAbs(a:mode)
 	else
 		call STCNo()
 	endif
@@ -178,9 +179,9 @@ function! Numbertoggle_stcrel()
 		call STCNo()
 	endif
 endfunction
-function! Numbertoggle()
-	if mode() =~? 'i'
-		call Numbertoggle_stcabs()
+function! Numbertoggle(mode='')
+	if a:mode =~? 'i' || a:mode =~? 'r' || g:linenr_style ==# 'absolute'
+		call Numbertoggle_stcabs(a:mode)
 	else
 		call Numbertoggle_stcrel()
 	endif
@@ -195,9 +196,9 @@ endfunction
 function! DefineAugroupVisual()
 	augroup Visual
 		if g:linenr
-			autocmd! ModeChanged *:[vV]* call Numbertoggle_stcrel()
-			exec "autocmd! ModeChanged *:\<c-v>* call Numbertoggle_stcrel()"
-			autocmd! ModeChanged [vV]*:* call Numbertoggle()
+			autocmd! ModeChanged *:[vV]* call Numbertoggle('v')
+			exec "autocmd! ModeChanged *:\<c-v>* call Numbertoggle()"
+			autocmd! ModeChanged [vV]*:* call Numbertoggle('')
 			exec "autocmd! ModeChanged \<c-v>*:* call Numbertoggle()"
 		else
 			autocmd! Visual
@@ -208,8 +209,8 @@ function! DefineAugroupNumbertoggle()
 	augroup numbertoggle
 		autocmd!
 		if g:linenr
-			autocmd InsertLeave * call Numbertoggle_stcrel()
-			autocmd InsertEnter * call Numbertoggle_stcabs()
+			autocmd InsertLeave * call Numbertoggle('')
+			autocmd InsertEnter * call Numbertoggle(v:insertmode)
 			autocmd BufReadPost,BufEnter,BufLeave,WinLeave,WinEnter * call Numbertoggle()
 			autocmd FileType packer,spectre_panel call Numbertoggle()|call HandleBuftype(winnr())
 		else
@@ -240,6 +241,9 @@ function! HandleDotfilesConfig()
 	endif
 	if !exists('g:linenr')
 		let g:linenr = v:true
+	endif
+	if !exists('g:linenr_style')
+		let g:linenr_style = v:true
 	endif
 	if !exists('g:background')
 		let g:background = "dark"
@@ -653,7 +657,7 @@ let g:NERDTreeGitStatusUseNerdFonts = 1
 let g:NERDTreeGitStatusShowIgnored = 1
 noremap <c-h> <cmd>NERDTreeToggle<cr>
 
-" autocmd BufReadPost,WinLeave,WinEnter * call Numbertoggle_stcrel()
+" autocmd BufReadPost,WinLeave,WinEnter * call Numbertoggle()
 " call timer_start(500, 'BufModifiableHandler', {'repeat': -1})
 
 function! MyTabLabel(n)
