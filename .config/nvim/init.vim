@@ -43,6 +43,8 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		\'use_github_copilot',
 		\'pad_amount_confirm_dialogue',
 		\'cursor_style',
+		\'showtabline',
+		\'tabline_path',
 	\]
 	for option_ in l:option_list
 		if exists('g:dotfiles_config["'.option_.'"]')
@@ -144,7 +146,7 @@ function! STCAbs(actual_mode)
 			call CopyHighlightGroup("StatementNorm", "Statement")
 			return
 		endif
-		if a:actual_mode ==# 'r'
+		if a:actual_mode ==? 'r'
 			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrRepl#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} '
 			return
 		endif
@@ -219,6 +221,10 @@ function! DefineAugroupNumbertoggle()
 	augroup END
 endfunction
 
+function! UpdateShowtabline()
+	let &showtabline = g:showtabline
+endfunction
+
 function! DefineAugroups()
 	call DefineAugroupVisual()
 	call DefineAugroupNumbertoggle()
@@ -254,6 +260,12 @@ function! HandleDotfilesConfig()
 	if !exists('g:cursor_style')
 		let g:cursor_style = "block"
 	endif
+	if !exists('g:showtabline')
+		let g:showtabline = 2
+	endif
+	if !exists('g:tabline_path')
+		let g:tabline_path = "name"
+	endif
 
 	if g:background ==# "dark"
 		set background=dark
@@ -274,6 +286,8 @@ function! HandleDotfilesConfig()
 	else
 		call Numbertoggle()
 	endif
+
+	call UpdateShowtabline()
 endfunction
 call HandleDotfilesConfig()
 
@@ -669,7 +683,15 @@ function! MyTabLabel(n)
 	else
 		let buf_name = original_buf_name
 	endif
-	return fnamemodify(buf_name, ':~:.:gs?\([^/]\)[^/]*/?\1/?')
+	if g:tabline_path ==# "name"
+		return fnamemodify(buf_name, ':t')
+	elseif g:tabline_path ==# "short"
+		return fnamemodify(buf_name, ':~:.')
+	elseif g:tabline_path ==# "shortdir"
+		return fnamemodify(buf_name, ':~:.:gs?\([^/]\)[^/]*/?\1/?')
+	elseif g:tabline_path ==# "full"
+		return fnamemodify(buf_name, ':p')
+	endif
 	" call execute("normal :!echo '" . buf_name . "' > ~/.config/nvim/config_garbagefile.txt")
 	" redir! > ~/.config/nvim/config_garbagefile.txt
 	" 	silent echo buf_name
@@ -1512,15 +1534,15 @@ function! HandleKeystroke(keystroke)
 	elseif a:keystroke ==# '('
 		normal! h
 		normal! a()
-		call Numbertoggle()
+		call Numbertoggle(mode())
 	elseif a:keystroke ==# '['
 		normal! h
 		normal! a[]
-		call Numbertoggle()
+		call Numbertoggle(mode())
 	elseif a:keystroke ==# '{'
 		normal! h
 		normal! a{}
-		call Numbertoggle()
+		call Numbertoggle(mode())
 	else
 		return a:keystroke
 	endif
@@ -1802,8 +1824,8 @@ function! OnStart()
 	call OpenOnStart()
 	Showtab
 	exec "so ".g:CONFIG_PATH."/vim/init.vim"
-	call DefineAugroupNumbertoggle()
-	call DefineAugroupVisual()
+	call DefineAugroups()
+	call UpdateShowtabline()
 endfunction
 function! OnQuit()
 	call TermuxLoadCursorStyle()

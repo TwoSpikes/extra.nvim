@@ -227,6 +227,19 @@ $ DOTFILES_VIM_CONFIG_PATH=~/dnsjajsbdn/vim/ nvim
 "_comment_40":"  underline         _",
 	"cursor_style": "block",
 
+"_comment_41":"Show or do not show tabline",
+"_comment_42":"  0     Do not show",
+"_comment_43":"  1     Show if there is only one tab",
+"_comment_44":"  2     Show always (default)",
+	"showtabline": 2,
+
+"_comment_45":"Path style of tab in tabline",
+"_comment_46":"  name      Show only filename (default)",
+"_comment_47":"  short     Short path (relative to cwd and $HOME)",
+"_comment_48":"  shortdir  Short path, reduce dirnames to 1 symbol",
+"_comment_49":"  full      Show full filepath",
+	"tabline_path": "name",
+
 "_comment_end":"Ending field to not put comma every time"
 }
 ```
