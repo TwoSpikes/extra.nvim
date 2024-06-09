@@ -646,6 +646,10 @@ if &t_Co >= 256
     hi TabLineFill ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#e0dcd4 gui=NONE
     " hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#0050cf guibg=#ffffff gui=reverse
     hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#00c0ff guibg=#f0f000 gui=reverse,bold
+    hi TabLineToSel ctermfg=222 ctermbg=18 cterm=NONE guifg=#0060bf guibg=#00c0ff gui=NONE
+    hi TabLineFromSel ctermfg=222 ctermbg=18 cterm=NONE guifg=#00c0ff guibg=#0060bf gui=NONE
+    hi TabLineToSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#0060bf guibg=#0020bf gui=NONE
+    hi TabLineFromSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#0020bf guibg=#0060bf gui=NONE
     hi ToolbarLine ctermfg=NONE ctermbg=NONE cterm=NONE
     hi ToolbarButton ctermfg=231 ctermbg=16 cterm=NONE
     hi KeywordNorm ctermfg=220 ctermbg=NONE cterm=NONE guifg=#efaf00 guibg=NONE gui=NONE
