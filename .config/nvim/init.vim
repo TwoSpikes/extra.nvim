@@ -1856,9 +1856,23 @@ function! OpenOnStart()
 	endif
 endfunction
 
+if has('nvim')
+	command! -nargs=* PackerUpdate call BeforeUpdatingPlugins()|lua require('packer').update(<f-args>)|call AfterUpdatingPlugins()
+endif
+function! BeforeUpdatingPlugins()
+	exec "cd ".g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key/"
+	exec "!git stash"
+	cd -
+endfunction
+function! AfterUpdatingPlugins()
+	exec "cd ".g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key/"
+	exec "!git stash pop"
+	cd -
+endfunction
+
 function! PrepareWhichKey()
 	let g:which_key_timeout = 100
-	if filereadable(expand('~/.local/share/nvim/site/pack/packer/start/which-key.nvim/lua/which-key/util.lua'))
+	if filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/which-key.nvim/lua/which-key/util.lua')
 		let l:old_lazyredraw=&lazyredraw
 		let &lazyredraw = v:true
 		edit ~/.local/share/nvim/site/pack/packer/start/which-key.nvim/lua/which-key/util.lua
