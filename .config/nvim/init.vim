@@ -753,7 +753,7 @@ function! MyTabLine()
 	let bufnr = bufnr(bufname(tabpagebuflist(i + 1)[tabpagewinnr(i + 1) - 1]))
 	if g:tabline_modified
 		if getbufvar(bufnr, '&modified')
-			let s ..= ' ●' 
+			let s ..= ' ●'
 		endif
 	endif
 	

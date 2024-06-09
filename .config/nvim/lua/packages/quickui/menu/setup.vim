@@ -38,8 +38,8 @@ function! RebindMenus()
 				\ ["Sav&e as and edit\tLEAD Ctrl-r", 'call SaveAsAndRename()', 'Save current file as ... and edit it' ],
 				\ ["--", '' ],
 				\ ["Update &plugins\tLEAD u", 'lua require("packer").sync()', 'Clear and redraw the screen'],
-				\ ["Update &coc language servers\tLEAD Cu", 'CocUpdate', 'Update coc.nvim installed language servers'],
-				\ ["Update &TreeSitter parsers\tLEAD tu", 'TSUpdate', 'Update installed TreeSitter parsers'],
+				\ ["Update &coc servers\tLEAD Cu", 'CocUpdate', 'Update coc.nvim installed language servers'],
+				\ ["Update &TreeSitter\tLEAD tu", 'TSUpdate', 'Update installed TreeSitter parsers'],
 				\ ["--", '' ],
 				\ ["Redraw scree&n\tCtrl-l", 'mode', 'Clear and redraw the screen'],
 				\ ["Hi&de highlightings\tLEAD d", 'nohlsearch', 'Hide search highlightings'],
@@ -47,7 +47,7 @@ function! RebindMenus()
 				\ ["Toggle &fullscreen\tLEAD Ctrl-f", 'ToggleFullscreen', 'Toggle fullscreen mode'],
 				\ ["--", '' ],
 				\ ["E&xit\tCtrl-x Ctrl-c", 'confirm qall', 'Close Vim/NeoVim softly'],
-				\ ["Exit without confir&m\tCtrl-x Ctrl-q", 'qall!', 'Close Vim/NeoVim without saving'],
+				\ ["Exit w/o confir&m\tCtrl-x Ctrl-q", 'qall!', 'Close Vim/NeoVim without saving'],
 				\ ])
 
 	call quickui#menu#install('&Window', [
@@ -58,7 +58,7 @@ function! RebindMenus()
 				\ ["Open file in &tab\tCtrl-c c", 'Findfile', 'Open file in new tab'],
 				\ ["Open file in &buffer\tCtrl-c C", 'Findfilebuffer', 'Open file in current buffer'],
 				\ ["Toggle &file tree\tCtrl-h", 'NERDTreeToggle', 'Toggles a file tree'],
-				\ ["Fu&zzy find using Telescope\tLEAD ff", 'call FuzzyFind()', 'Opens Telescope.nvim find file'],
+				\ ["Telescope fu&zzy find\tLEAD ff", 'call FuzzyFind()', 'Opens Telescope.nvim find file'],
 				\ ["Open file using &ranger\tLEAD r", 'call OpenRangerCheck()', 'Opens ranger to select file to open'],
 				\ ["--", '' ],
 				\ ["&Make only\tCtrl-x 1", 'only', 'Hide all but current window'],
