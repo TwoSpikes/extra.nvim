@@ -45,6 +45,7 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		\'showtabline',
 		\'tabline_path',
 		\'tabline_spacing',
+		\'tabline_modified',
 	\]
 	for option_ in l:option_list
 		if exists('g:dotfiles_config["'.option_.'"]')
@@ -271,6 +272,9 @@ function! HandleDotfilesConfig()
 	endif
 	if !exists('g:tabline_spacing')
 		let g:tabline_spacing = "transition"
+	endif
+	if !exists('g:tabline_modified')
+		let g:tabline_modified = v:true
 	endif
 
 	if g:background ==# "dark"
@@ -745,6 +749,13 @@ function! MyTabLine()
 
     " the label is made by MyTabLabel()
     let s ..= '%{MyTabLabel(' .. (i + 1) .. ')}'
+
+	let bufnr = bufnr(bufname(tabpagebuflist(i + 1)[tabpagewinnr(i + 1) - 1]))
+	if g:tabline_modified
+		if getbufvar(bufnr, '&modified')
+			let s ..= ' ●' 
+		endif
+	endif
 	
 	if g:tabline_spacing ==# 'full'
 		let s ..= ' '

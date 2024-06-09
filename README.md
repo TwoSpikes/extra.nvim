@@ -244,6 +244,9 @@ $ DOTFILES_VIM_CONFIG_PATH=~/dnsjajsbdn/vim/ nvim
 "_comment_53":"  partial       a b█c█d ",
 	"tabline_spacing": "transition",
 
+"_comment_54":"Show modified symbol ● on modified files",
+	"tabline_modified": true,
+
 "_comment_end":"Ending field to not put comma every time"
 }
 ```
