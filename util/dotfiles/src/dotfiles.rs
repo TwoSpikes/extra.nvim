@@ -178,6 +178,7 @@ fn commit(only_copy: bool) -> ::std::io::Result<()> {
     ::std::fs::copy(HOME.join(".termux/termux.properties"), "./.termux/termux.properties")?;
     copy_dir_all(HOME.join(".config/alacritty"), "./.config/alacritty")?;
     ::std::fs::copy(HOME.join(".nanorc"), "./.nanorc")?;
+    ::std::fs::copy(HOME.join(".config/coc/extensions/node_modules/bash-language-server/out/cli.js"), "./\"coc-sh crutch\"/")?;
     if !only_copy {
         match ::std::process::Command::new("git")
             .args(["commit", "--all", "--verbose"])

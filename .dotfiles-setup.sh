@@ -1156,12 +1156,37 @@ case "${user_input}" in
 		;;
 	*)
 		if test -z "${TERMUX_VERSION}"
+		then
 			install_package default-jre
 		else
 			wget https://raw.githubusercontent.com/MasterDevX/java/master/installjava && bash installjava
 		fi
 		;;
 esac
+
+clear
+echo "==== Setting up coc-sh crutch"
+echo ""
+
+echo -n "Checking if coc-sh crutch installed: "
+if test -e ${home}/.config/coc/extensions/node_modules/coc-sh/node_modules/bash-language-server/out/cli.js_crutch
+then
+	echo "YES"
+else
+	echo "NO"
+
+	echo -n "Do you want to install coc-sh crutch (Y/n): "
+	read user_input
+	user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+	case "${user_input}" in
+		"n")
+			;;
+		*)
+			mv ${home}/.config/coc/extensions/node_modules/coc-sh/node_modules/bash-language-server/out/cli.js ${home}/.config/coc/extensions/node_modules/coc-sh/node_modules/bash-language-server/out/cli.js_crutch
+			cp ${dotfiles}/"coc-sh crutch"/cli.js ${home}/.config/coc/extensions/node_modules/coc-sh/node_modules/bash-language-server/out/cli.js
+			;;
+	esac
+fi
 
 echo "Dotfiles setup ended successfully"
 echo "It is recommended to restart your shell"
