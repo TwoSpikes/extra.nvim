@@ -420,7 +420,7 @@ cd ${dotfiles}/util/dotfiles
 echo "Building..."
 cargo build --release
 echo "Installing..."
-install ${dotfiles}/util/dotfiles/target/release/dotfiles ${root}/usr/bin
+run_as_superuser_if_needed install ${dotfiles}/util/dotfiles/target/release/dotfiles ${root}/usr/bin
 press_enter
 
 clear

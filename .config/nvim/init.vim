@@ -2,7 +2,7 @@
 
 if !exists('g:DOTFILES_CONFIG_PATH')
 	if !exists('$DOTFILES_VIM_CONFIG_PATH')
-		let g:DOTFILES_CONFIG_PATH = "$HOME/.config/dotfiles/vim"
+		let g:DOTFILES_CONFIG_PATH = "$HOME/.config/dotfiles/vim/config.json"
 	else
 		let g:DOTFILES_CONFIG_PATH = $DOTFILES_VIM_CONFIG_PATH
 	endif
@@ -55,7 +55,7 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		endif
 	endfor
 endfunction
-call LoadDotfilesConfig(g:DOTFILES_CONFIG_PATH.'/config.json')
+call LoadDotfilesConfig(g:DOTFILES_CONFIG_PATH)
 
 if !exists('g:CONFIG_PATH')
 	if !exists('$VIM_CONFIG_PATH')
@@ -1107,8 +1107,8 @@ exec printf("noremap <silent> <leader>ss <esc>:so %s<cr>", g:PLUGINS_SETUP_FILE_
 exec printf('noremap <silent> <leader>vl <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:LSP_PLUGINS_SETUP_FILE_PATH)
 exec printf("noremap <silent> <leader>sl <esc>:so %s<cr>", g:LSP_PLUGINS_SETUP_FILE_PATH)
 
-exec printf('noremap <silent> <leader>vj <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:DOTFILES_CONFIG_PATH.'/config.json')
-exec printf('noremap <silent> <leader>sj <cmd>call LoadDotfilesConfig("%s", v:true)<cr><cmd>call HandleDotfilesConfig()<cr><cmd>call HandleBuftypeAll()<cr>', expand(g:DOTFILES_CONFIG_PATH).'/config.json')
+exec printf('noremap <silent> <leader>vj <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:DOTFILES_CONFIG_PATH)
+exec printf('noremap <silent> <leader>sj <cmd>call LoadDotfilesConfig("%s", v:true)<cr><cmd>call HandleDotfilesConfig()<cr><cmd>call HandleBuftypeAll()<cr>', expand(g:DOTFILES_CONFIG_PATH))
 
 " .dotfiles-script.sh FILE
 noremap <silent> <leader>b <cmd>call SelectPosition("~/.dotfiles-script.sh", g:stdpos)<cr>
