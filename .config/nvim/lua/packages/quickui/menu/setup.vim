@@ -138,11 +138,11 @@ function! RebindMenus()
 			\ ["Open &dotfiles config\tLEAD vj", 'call SelectPosition(g:DOTFILES_CONFIG_PATH, g:stdpos)', 'Open '.g:DOTFILES_CONFIG_PATH],
 			\ ["Open &colorschemes\tLEAD C", 'call SelectPosition($VIMRUNTIME."/colors", g:stdpos)', 'Open colorschemes directory'],
 			\ ["--", '' ],
-			\ ["&Reload init.vim\tLEAD se", 'exec "source ".g:CONFIG_PATH."/init.vim"', 'Reload Vim/NeoVim config'],
+			\ ["&Reload init.vim\tLEAD se", 'let old_tabpagenr=tabpagenr()|exec "source ".g:CONFIG_PATH."/init.vim"|exec old_tabpagenr."tabnext"', 'Reload Vim/NeoVim config'],
 			\ ["R&eload plugins list\tLEAD si", 'exec "source ".g:PLUGINS_INSTALL_FILE_PATH', 'Install plugins in '.g:PLUGINS_INSTALL_FILE_PATH],
 			\ ["Rel&oad plugins setup\tLEAD ss", 'exec "source ".g:PLUGINS_SETUP_FILE_PATH', 'Reconfigure plugins'],
 			\ ["Relo&ad lsp setup\tLEAD sl", 'exec "source ".g:LSP_PLUGINS_SETUP_FILE_PATH', 'Reconfigure LSP plugins (deprecated due to coc.nvim)'],
-			\ ["Reload do&tfiles config\tLEAD sj", 'call LoadDotfilesConfig("'.expand(g:DOTFILES_CONFIG_PATH).'", v:true)|call HandleDotfilesConfig()|call HandleBuftypeAll()', 'Reload dotfiles config'],
+			\ ["Reload do&tfiles config\tLEAD sj", 'let old_tabpagenr=tabpagenr()|call LoadDotfilesConfig("'.expand(g:DOTFILES_CONFIG_PATH).'", v:true)|call HandleDotfilesConfig()|call HandleBuftypeAll()|exec old_tabpagenr."tabnext"', 'Reload dotfiles config'],
 		  \ ])
 
 	" register HELP menu with weight 10000

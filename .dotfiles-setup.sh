@@ -421,6 +421,7 @@ echo "Building..."
 cargo build --release
 echo "Installing..."
 run_as_superuser_if_needed install ${dotfiles}/util/dotfiles/target/release/dotfiles ${root}/usr/bin
+cd -
 press_enter
 
 clear
@@ -875,6 +876,7 @@ else
 	echo "1) Exuberant ctags"
 	echo "2) Universal ctags"
 	echo "*) No"
+	echo -n "Your choice: "
 	read user_input
 	case "${user_input}" in
 		"1")
@@ -1163,9 +1165,10 @@ case "${user_input}" in
 		fi
 		;;
 esac
+press_enter
 
 clear
-echo "==== Setting up coc-sh crutch"
+echo "==== Setting up coc-sh crutch ===="
 echo ""
 
 echo -n "Checking if coc-sh crutch installed: "
@@ -1187,6 +1190,26 @@ else
 			;;
 	esac
 fi
+
+clear
+echo "==== Setting up Coursier ===="
+echo ""
+
+echo -n "Checking if Coursier is installed: "
+echo "NO"
+
+echo -n "Do you want to install Coursier (Y/n): "
+read user_input
+user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+case "${user_input}" in
+	"n")
+		;;
+	*)
+		curl -fL "https://github.com/VirtusLab/coursier-m1/releases/latest/download/cs-aarch64-pc-linux.gz" | gzip -d > cs
+		chmod -v +x ./cs
+		./cs setup
+		;;
+esac
 
 echo "Dotfiles setup ended successfully"
 echo "It is recommended to restart your shell"

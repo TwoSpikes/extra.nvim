@@ -49,6 +49,7 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		\'tabline_path',
 		\'tabline_spacing',
 		\'tabline_modified',
+		\'tabline_icons',
 	\]
 	for option_ in l:option_list
 		if exists('g:dotfiles_config["'.option_.'"]')
@@ -278,6 +279,9 @@ function! HandleDotfilesConfig()
 	endif
 	if !exists('g:tabline_modified')
 		let g:tabline_modified = v:true
+	endif
+	if !exists('g:tabline_icons')
+		let g:tabline_icons = v:false
 	endif
 
 	if g:background ==# "dark"
@@ -749,11 +753,98 @@ function! MyTabLine()
 	else
 		let s ..= '%#TabLineSec#'
     endif
+	let bufnr = tabpagebuflist(i + 1)[tabpagewinnr(i + 1) - 1]
+	let bufname = bufname(bufnr)
+
+	if g:tabline_icons
+		if v:false
+		elseif isdirectory(bufname)
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&buftype') ==# 'terminal'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# ''
+			let s ..= '󰈙 '
+		elseif getbufvar(bufnr, '&filetype') ==# 'python'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'c'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'cpp'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'vim'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'lua'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'cs'
+			let s ..= '󰌛 '
+		elseif getbufvar(bufnr, '&filetype') ==# 'sh'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'bash'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'rust'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'java'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'scala'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'kotlin'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'ruby'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'ocaml'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'r'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'javascript'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'typescript'
+			let s ..= '󰛦 '
+		elseif v:false
+		\||getbufvar(bufnr, '&filetype') ==# 'javascriptreact'
+		\||getbufvar(bufnr, '&filetype') ==# 'typescriptreact'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'perl'
+			let s ..= ' '
+		elseif v:false
+		\||getbufvar(bufnr, '&filetype') ==# 'jproperties'
+		\||getbufvar(bufnr, '&filetype') ==# 'conf'
+		\||getbufvar(bufnr, '&filetype') ==# 'toml'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'json'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'html'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'css'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'sass'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'd'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'asm'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'r'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'go'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'fortran'
+			let s ..= '󱈚 '
+		elseif getbufvar(bufnr, '&filetype') ==# 'swift'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'php'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'dart'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'haskell'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'julia'
+			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'gitcommit'
+			let s ..= ' '
+		endif
+	endif
 
     " the label is made by MyTabLabel()
     let s ..= '%{MyTabLabel(' .. (i + 1) .. ')}'
 
-	let bufnr = bufnr(bufname(tabpagebuflist(i + 1)[tabpagewinnr(i + 1) - 1]))
 	if g:tabline_modified
 		if getbufvar(bufnr, '&modified')
 			let s ..= ' ●'
@@ -1802,7 +1893,7 @@ function! OpenRanger(path)
 endfunction
 function! OpenRangerCheck()
 	if executable('ranger')
-		call OpenRanger()
+		call OpenRanger('./')
 	else
 		echohl ErrorMsg
 		echom "Cannot open ranger: ranger not installed"
