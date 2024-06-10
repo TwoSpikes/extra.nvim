@@ -1,13 +1,16 @@
 #!/bin/env -S nvim -u
 
-if !exists('g:DOTFILES_CONFIG_PATH')
-	if !exists('$DOTFILES_VIM_CONFIG_PATH')
-		let g:DOTFILES_CONFIG_PATH = "$HOME/.config/dotfiles/vim/config.json"
-	else
-		let g:DOTFILES_CONFIG_PATH = $DOTFILES_VIM_CONFIG_PATH
+function! SetDotfilesConfigPath()
+	if !exists('g:DOTFILES_CONFIG_PATH')
+		if !exists('$DOTFILES_VIM_CONFIG_PATH')
+			let g:DOTFILES_CONFIG_PATH = "$HOME/.config/dotfiles/vim/config.json"
+		else
+			let g:DOTFILES_CONFIG_PATH = $DOTFILES_VIM_CONFIG_PATH
+		endif
+		let g:DOTFILES_CONFIG_PATH = expand(g:DOTFILES_CONFIG_PATH)
 	endif
-	let g:DOTFILES_CONFIG_PATH = expand(g:DOTFILES_CONFIG_PATH)
-endif
+endfunction
+call SetDotfilesConfigPath()
 
 function! LoadDotfilesConfig(path, reload=v:false)
 	if !filereadable(a:path)
@@ -1889,6 +1892,7 @@ function! PrepareWhichKey()
 endfunction
 
 function! OnStart()
+	call SetDotfilesConfigPath()
 	call PrepareVital()
 	call MakeThingsThatRequireBeDoneAfterPluginsLoaded()
 	call TermuxSaveCursorStyle()
