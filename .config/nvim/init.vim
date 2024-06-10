@@ -758,11 +758,17 @@ function! MyTabLine()
 
 	if g:tabline_icons
 		if v:false
-		elseif isdirectory(bufname)
+		elseif v:false
+		\||isdirectory(bufname)
+		\||getbufvar(bufnr, '&filetype') ==# 'nerdtree'
 			let s ..= ' '
 		elseif getbufvar(bufnr, '&buftype') ==# 'terminal'
 			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# ''
+		elseif fnamemodify(bufname, ':t') ==# 'LICENSE'
+			let s ..= ' '
+		elseif v:false
+		\||getbufvar(bufnr, '&filetype') ==# ''
+		\||getbufvar(bufnr, '&filetype') ==# 'text'
 			let s ..= '󰈙 '
 		elseif getbufvar(bufnr, '&filetype') ==# 'python'
 			let s ..= ' '
@@ -839,6 +845,8 @@ function! MyTabLine()
 			let s ..= ' '
 		elseif getbufvar(bufnr, '&filetype') ==# 'gitcommit'
 			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'markdown'
+			let s ..= ' '
 		endif
 	endif
 
