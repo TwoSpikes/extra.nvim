@@ -460,7 +460,7 @@ if &t_Co >= 256
     if exists('g:use_transparent_bg')
       if g:use_transparent_bg ==# "always"
       \||g:use_transparent_bg ==# "dark"
-        hi Normal ctermfg=231 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=NULL gui=NONE
+        hi Normal ctermfg=231 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=NONE gui=NONE
       else
         hi Normal ctermfg=231 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=#000020 gui=NONE
       endif

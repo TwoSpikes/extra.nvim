@@ -50,6 +50,9 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		\'tabline_spacing',
 		\'tabline_modified',
 		\'tabline_icons',
+		\'tabline_pressable',
+		\'enable_mouse',
+		\'mouse_focus',
 	\]
 	for option_ in l:option_list
 		if exists('g:dotfiles_config["'.option_.'"]')
@@ -59,6 +62,7 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		endif
 	endfor
 endfunction
+
 call LoadDotfilesConfig(g:DOTFILES_CONFIG_PATH)
 
 if !exists('g:CONFIG_PATH')
@@ -281,7 +285,16 @@ function! HandleDotfilesConfig()
 		let g:tabline_modified = v:true
 	endif
 	if !exists('g:tabline_icons')
-		let g:tabline_icons = v:false
+		let g:tabline_icons = v:true
+	endif
+	if !exists('g:tabline_pressable')
+		let g:tabline_icons = v:true
+	endif
+	if !exists('g:enable_mouse')
+		let g:enable_mouse = v:true
+	endif
+	if !exists('g:mouse_focus')
+		let g:mouse_focus = v:true
 	endif
 
 	if g:background ==# "dark"
@@ -405,13 +418,29 @@ endfunction
 function! GetRandomName(length)
 	let name = "Rnd_"
 	for _ in range(a:length)
-		let r = g:VitalModule#Random.range(1, 4)
+		if has('nvim')
+			let r = g:VitalModule#Random.range(1, 4)
+		else
+			let r = rand() % 4 + 1
+		endif
 		if r ==# 1
-			let name .= nr2char(g:VitalModule#Random.range(48, 58))
+			if has('nvim')
+				let name .= nr2char(g:VitalModule#Random.range(48, 58))
+			else
+				let name .= nr2char(rand() % 10 + 48)
+			endif
 		elseif r ==# 2
-			let name .= nr2char(g:VitalModule#Random.range(65, 91))
+			if has('nvim')
+				let name .= nr2char(g:VitalModule#Random.range(65, 91))
+			else
+				let name .= nr2char(rand() % 26 + 65)
+			endif
 		elseif r ==# 3
-			let name .= nr2char(g:VitalModule#Random.range(97, 123))
+			if has('nvim')
+				let name .= nr2char(g:VitalModule#Random.range(97, 123))
+			else
+				let name .= nr2char(rand() % 26 + 97)
+			endif
 		else
 			echohl ErrorMsg
 			echom "Internal error"
@@ -728,8 +757,10 @@ function! MyTabLine()
 		let s ..= '%#TabLineSec#'
     endif
 
-    " set the tab page number (for mouse clicks)
-    let s ..= '%' .. (i + 1) .. 'T'
+	if g:tabline_pressable
+		" set the tab page number (for mouse clicks)
+		let s ..= '%' .. (i + 1) .. 'T'
+	endif
 
 	if g:tabline_spacing ==# 'full'
 		let s ..= ' '
@@ -915,8 +946,12 @@ set ttimeout
 set ttimeoutlen=500
 
 set cursorlineopt=screenline,number
-set mouse=a
-set nomousefocus
+if g:enable_mouse
+	set mouse=a
+else
+	set mouse=
+endif
+let &mousefocus = g:mouse_focus
 set nomousehide
 set mousemodel=popup_setpos
 set nomousemoveevent
@@ -1888,13 +1923,47 @@ function! TermuxLoadCursorStyle()
 	endif
 endfunction
 
+" Copied from StackOverflow: https://stackoverflow.com/questions/59583931/vim-how-do-i-determine-the-status-of-a-process-within-a-terminal-tab
+function! TermRunning(buf)
+	return getbufvar(a:buf, '&buftype') !=# 'terminal' ? 0 :
+		\ has('terminal') ? term_getstatus(a:buf) =~# 'running' :
+		\ has('nvim') ? jobwait([getbufvar(a:buf, '&channel')], 0)[0] == -1 :
+		\ 0
+endfunction
+
 function! OpenRanger(path)
-	let TMPFILE = trim(system(["mktemp", "-u"]))
+	if has('nvim')
+		let TMPFILE = trim(system(["mktemp", "-u"]))
+	else
+		let TMPFILE = trim(system("mktemp -u"))
+	endif
 	let g:bufnrforranger = OpenTerm("ranger --choosefile=".TMPFILE." ".a:path)
 	call delete(TMPFILE)
 	augroup oncloseranger
 		autocmd! oncloseranger
-		exec 'autocmd TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.g:bufnrforranger."|if filereadable(filename)==#1|bdelete|exec 'edit '.filename|call Numbertoggle()|filetype detect|call AfterSomeEvent(\"ModeChanged\", \"doautocmd BufEnter \".expand(\"%\"))|unlet g:bufnrforranger|else|call IfOneWinDo(\"call OnQuit()\")|quit|endif|endif|unlet filename"
+		if has('nvim')
+			exec 'autocmd TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.g:bufnrforranger."|if filereadable(filename)==#1|bdelete|exec 'edit '.filename|call Numbertoggle()|filetype detect|call AfterSomeEvent(\"ModeChanged\", \"doautocmd BufEnter \".expand(\"%\"))|unlet g:bufnrforranger|else|call IfOneWinDo(\"call OnQuit()\")|quit|endif|endif|unlet filename"
+		else
+			while v:true
+				let filename=system("cat ".TMPFILE)
+				let bufnr = bufnr()
+				if bufnr ==# g:bufnrforranger && !TermRunning(bufnr)
+					if filereadable(filename) ==# 1
+						bdelet
+						exec 'edit '.filename
+						call Numbertoggle()
+						filetype detect
+						call AfterSomeEvent("ModeChanged", "doautocmd BufEnter ".expand("%"))
+						unlet g:bufnrforranger
+						break
+					else
+						call IfOneWinDo("call OnQuit()")
+						quit
+					endif
+				endif
+				unlet filename
+			endwhile
+		endif
 		exec "autocmd BufWinLeave * let f=expand(\"<afile>\")|let n=bufnr(\"^\".f.\"$\")|if n==#".g:bufnrforranger."|unlet f|unlet n|au!oncloseranger|call AfterSomeEvent(\"BufEnter,BufLeave,WinEnter,WinLeave\", \"".g:bufnrforranger."bw!\")|unlet g:bufnrforranger|endif"
 	augroup END
 	unlet TMPFILE
@@ -1992,10 +2061,14 @@ endfunction
 
 function! OnStart()
 	call SetDotfilesConfigPath()
-	call PrepareVital()
-	call MakeThingsThatRequireBeDoneAfterPluginsLoaded()
+	if has('nvim')
+		call PrepareVital()
+		call MakeThingsThatRequireBeDoneAfterPluginsLoaded()
+	endif
 	call TermuxSaveCursorStyle()
-	call PrepareWhichKey()
+	if has('nvim')
+		call PrepareWhichKey()
+	endif
 	call OpenOnStart()
 	Showtab
 	exec "so ".g:CONFIG_PATH."/vim/init.vim"

@@ -247,6 +247,10 @@ $ DOTFILES_VIM_CONFIG_PATH=~/dnsjajsbdn/vim/ nvim
 "_comment_54":"Show modified symbol ● on modified files",
 	"tabline_modified": true,
 
+"_comment_55":"Show icons before filename in tabline",
+"_comment_56":"NOTE: You will need Nerd font",
+	"tabline_icons": true,
+
 "_comment_end":"Ending field to not put comma every time"
 }
 ```
