@@ -25,7 +25,17 @@ timer_start_silent
 
 export VISUAL="nvim"
 export EDITOR='nvim'
-export PAGER='most'
+
+if command -v 'most' > /dev/null 2>&1
+then
+	export PAGER='most'
+elif command -v 'less' > /dev/null 2>&1
+then
+	export PAGER='less'
+else
+	export PAGER='more'
+fi
+
 alias nvim="nvim -c \"let g:DO_NOT_OPEN_ANYTHING=0\" -c \"let g:PAGER_MODE=0\""
 
 export MAKE_PROGRAM='make'

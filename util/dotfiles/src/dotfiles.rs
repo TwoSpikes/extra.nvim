@@ -69,14 +69,14 @@ macro_rules! run_as_superuser_if_needed {
 
 // Copyied from StackOverflow: https://stackoverflow.com/questions/26958489/how-to-copy-a-folder-recursively-in-rust
 fn copy_dir_all(src: impl AsRef<::std::path::Path> + ::std::convert::AsRef<::std::path::Path>, dst: impl AsRef<::std::path::Path> + ::std::convert::AsRef<::std::path::Path>) -> ::std::io::Result<()> {
-    ::std::fs::create_dir_all(&dst)?;
+    _ = ::std::fs::create_dir_all(&dst);
     for entry in ::std::fs::read_dir(src)? {
         let entry = entry?;
         let ty = entry.file_type()?;
         if ty.is_dir() {
-            copy_dir_all(entry.path(), dst.as_ref().join(entry.file_name()))?;
+            _ = copy_dir_all(entry.path(), dst.as_ref().join(entry.file_name()));
         } else {
-            ::std::fs::copy(entry.path(), dst.as_ref().join(entry.file_name()))?;
+            _ = ::std::fs::copy(entry.path(), dst.as_ref().join(entry.file_name()));
         }
     }
     Ok(())
@@ -128,19 +128,19 @@ fn commit(only_copy: bool) -> ::std::io::Result<()> {
         let path_to_dotfiles = HOME.as_path().join("dotfiles");
         assert!(::std::env::set_current_dir(&path_to_dotfiles).is_ok());
     }
-    ::std::fs::copy(HOME.join(".dotfiles-script.sh"), "./.dotfiles-script.sh")?;
-    copy_dir_all(HOME.join("shscripts"), "./shscripts")?;
-    copy_dir_all(HOME.join("shlib"), "./shlib")?;
-    ::std::fs::copy(HOME.join(".profile"), "./.profile")?;
-    ::std::fs::copy(HOME.join(".zprofile"), "./.zprofile")?;
-    ::std::fs::copy(HOME.join(".bashrc"), "./.bashrc")?;
-    ::std::fs::copy(HOME.join(".zshrc"), "./.zshrc")?;
-    ::std::fs::copy(HOME.join(".config/nvim/init.vim"), "./.config/nvim/init.vim")?;
-    copy_dir_all(HOME.join(".config/nvim/lua"), "./.config/nvim/lua")?;
-    copy_dir_all(HOME.join(".config/nvim/vim"), "./.config/nvim/vim")?;
-    copy_dir_all(HOME.join(".config/nvim/ftplugin"), "./.config/nvim/ftplugin")?;
-    ::std::fs::copy(HOME.join("bin/viman"), "./bin/viman")?;
-    ::std::fs::copy(HOME.join("bin/vipage"), "./bin/vipage")?;
+    _ = ::std::fs::copy(HOME.join(".dotfiles-script.sh"), "./.dotfiles-script.sh");
+    _ = copy_dir_all(HOME.join("shscripts"), "./shscripts");
+    _ = copy_dir_all(HOME.join("shlib"), "./shlib");
+    _ = ::std::fs::copy(HOME.join(".profile"), "./.profile");
+    _ = ::std::fs::copy(HOME.join(".zprofile"), "./.zprofile");
+    _ = ::std::fs::copy(HOME.join(".bashrc"), "./.bashrc");
+    _ = ::std::fs::copy(HOME.join(".zshrc"), "./.zshrc");
+    _ = ::std::fs::copy(HOME.join(".config/nvim/init.vim"), "./.config/nvim/init.vim");
+    _ = copy_dir_all(HOME.join(".config/nvim/lua"), "./.config/nvim/lua");
+    _ = copy_dir_all(HOME.join(".config/nvim/vim"), "./.config/nvim/vim");
+    _ = copy_dir_all(HOME.join(".config/nvim/ftplugin"), "./.config/nvim/ftplugin");
+    _ = ::std::fs::copy(HOME.join("bin/viman"), "./bin/viman");
+    _ = ::std::fs::copy(HOME.join("bin/vipage"), "./bin/vipage");
     let VIMRUNTIME = ::std::path::Path::new(if ::which::which("nvim").is_ok() {
         if cfg!(target_os = "windows") {
             "/c/Program Files/Neovim/share/nvim/runtime"
@@ -166,19 +166,19 @@ fn commit(only_copy: bool) -> ::std::io::Result<()> {
         }
         "/dksk"
     });
-    ::std::fs::create_dir_all("./vimruntime/syntax")?;
+    _ = ::std::fs::create_dir_all("./vimruntime/syntax");
     _ = run_as_superuser_if_needed!("cp", &[VIMRUNTIME.join("syntax/book.vim").to_str().expect("Cannot convert path to str"), "./vimruntime/syntax/"]);
-    ::std::fs::create_dir_all("./vimruntime/colors")?;
+    _ = ::std::fs::create_dir_all("./vimruntime/colors");
     _ = run_as_superuser_if_needed!("cp", &[VIMRUNTIME.join("colors/blueorange.vim").to_str().expect("Cannot convert path to str"), "./vimruntime/colors/"]);
-    ::std::fs::copy(HOME.join(".config/nvim/vim/xterm-color-table.vim"), "./.config/nvim/vim/xterm-color-table.vim")?;
-    ::std::fs::copy(HOME.join(".tmux.conf"), "./.tmux.conf")?;
-    ::std::fs::copy(HOME.join(".gitconfig-default"), "./.gitconfig-default")?;
-    ::std::fs::copy(HOME.join(".gitmessage"), "./.gitmessage")?;
-    ::std::fs::copy(HOME.join(".termux/colors.properties"), "./.termux/colors.properties")?;
-    ::std::fs::copy(HOME.join(".termux/termux.properties"), "./.termux/termux.properties")?;
-    copy_dir_all(HOME.join(".config/alacritty"), "./.config/alacritty")?;
-    ::std::fs::copy(HOME.join(".nanorc"), "./.nanorc")?;
-    ::std::fs::copy(HOME.join(".config/coc/extensions/node_modules/bash-language-server/out/cli.js"), "./\"coc-sh crutch\"/")?;
+    _ = ::std::fs::copy(HOME.join(".config/nvim/vim/xterm-color-table.vim"), "./.config/nvim/vim/xterm-color-table.vim");
+    _ = ::std::fs::copy(HOME.join(".tmux.conf"), "./.tmux.conf");
+    _ = ::std::fs::copy(HOME.join(".gitconfig-default"), "./.gitconfig-default");
+    _ = ::std::fs::copy(HOME.join(".gitmessage"), "./.gitmessage");
+    _ = ::std::fs::copy(HOME.join(".termux/colors.properties"), "./.termux/colors.properties");
+    _ = ::std::fs::copy(HOME.join(".termux/termux.properties"), "./.termux/termux.properties");
+    _ = copy_dir_all(HOME.join(".config/alacritty"), "./.config/alacritty");
+    _ = ::std::fs::copy(HOME.join(".nanorc"), "./.nanorc");
+    _ = ::std::fs::copy(HOME.join(".config/coc/extensions/node_modules/bash-language-server/out/cli.js"), "./\"coc-sh crutch\"/");
     if !only_copy {
         match ::std::process::Command::new("git")
             .args(["commit", "--all", "--verbose"])
