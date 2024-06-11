@@ -347,4 +347,7 @@ return require('packer').startup(function (use)
 	use {
 		'hrsh7th/vim-vsnip'
 	}
+	use {
+		'lewis6991/gitsigns.nvim'
+	}
 end)
