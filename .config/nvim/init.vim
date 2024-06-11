@@ -53,6 +53,7 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		\'tabline_pressable',
 		\'enable_mouse',
 		\'mouse_focus',
+		\'use_nvim_cmp',
 	\]
 	for option_ in l:option_list
 		if exists('g:dotfiles_config["'.option_.'"]')
@@ -296,7 +297,10 @@ function! HandleDotfilesConfig()
 	if !exists('g:mouse_focus')
 		let g:mouse_focus = v:true
 	endif
-
+	if !exists('g:use_nvim_cmp')
+		let g:use_nvim_cmp = v:false
+	endif
+	
 	if g:background ==# "dark"
 		set background=dark
 	elseif g:background ==# "light"

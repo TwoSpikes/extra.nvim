@@ -251,6 +251,9 @@ $ DOTFILES_VIM_CONFIG_PATH=~/dnsjajsbdn/vim/ nvim
 "_comment_56":"NOTE: You will need Nerd font",
 	"tabline_icons": true,
 
+"_comment_60":"Use nvim-cmp instead of coc.nvim",
+	"use_nvim_cmp": false,
+
 "_comment_end":"Ending field to not put comma every time"
 }
 ```
