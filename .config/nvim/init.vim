@@ -1,5 +1,9 @@
 #!/bin/env -S nvim -u
 
+if has('nvim')
+	lua vim.loader.enable()
+endif
+
 function! SetDotfilesConfigPath()
 	if !exists('g:DOTFILES_CONFIG_PATH')
 		if !exists('$DOTFILES_VIM_CONFIG_PATH')
@@ -41,7 +45,7 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		\'open_menu_on_start',
 		\'quickui_border_style',
 		\'quickui_color_scheme',
-		\'open_ranger_on_start',
+		\'open_on_start',
 		\'use_github_copilot',
 		\'pad_amount_confirm_dialogue',
 		\'cursor_style',
@@ -2006,21 +2010,12 @@ function! OpenOnStart()
 		let to_open = to_open && !g:DO_NOT_OPEN_ANYTHING
 		let to_open = to_open && !g:PAGER_MODE
 		if to_open
-			let open = ""
-			if exists('g:open_ranger_on_start')
-				if g:open_ranger_on_start
-					let open = "ranger"
-				else
-					let open = "explorer"
-				endif
-			else
-				let open = "explorer"
-			endif
-
-			if open ==# "explorer"
+			if g:open_on_start ==# 'alpha'
+				Alpha
+			elseif g:open_on_start ==# "explorer"
 			\||executable('ranger') !=# 1
 				edit ./
-			elseif open ==# "ranger"
+			elseif g:open_on_start ==# "ranger"
 				if argc() ># 0
 					call OpenRanger(argv(0))
 				else
