@@ -429,7 +429,7 @@ function! GetRandomName(length)
 		if has('nvim')
 			let r = g:VitalModule#Random.range(1, 4)
 		else
-			let r = rand() % 4 + 1
+			let r = rand() % 3 + 1
 		endif
 		if r ==# 1
 			if has('nvim')
