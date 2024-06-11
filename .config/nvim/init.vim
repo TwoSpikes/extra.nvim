@@ -1946,31 +1946,34 @@ function! OpenRanger(path)
 		let TMPFILE = trim(system("mktemp -u"))
 	endif
 	let g:bufnrforranger = OpenTerm("ranger --choosefile=".TMPFILE." ".a:path)
-	call delete(TMPFILE)
 	augroup oncloseranger
 		autocmd! oncloseranger
 		if has('nvim')
-			exec 'autocmd TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.g:bufnrforranger."|if filereadable(filename)==#1|bdelete|exec 'edit '.filename|call Numbertoggle()|filetype detect|call AfterSomeEvent(\"ModeChanged\", \"doautocmd BufEnter \".expand(\"%\"))|unlet g:bufnrforranger|else|call IfOneWinDo(\"call OnQuit()\")|quit|endif|endif|unlet filename"
+			exec 'autocmd TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.g:bufnrforranger."|if filereadable(filename)==#1|bdelete|exec 'edit '.filename|call Numbertoggle()|filetype detect|call AfterSomeEvent(\"ModeChanged\", \"doautocmd BufEnter \".expand(\"%\"))|unlet g:bufnrforranger|else|call IfOneWinDo(\"call OnQuit()\")|quit|endif|endif|call delete('".TMPFILE."')|unlet filename"
 		else
-			while v:true
-				let filename=system("cat ".TMPFILE)
+			function! CheckRangerStopped(timer_id, TMPFILE)
 				let bufnr = bufnr()
 				if bufnr ==# g:bufnrforranger && !TermRunning(bufnr)
+					let filename=system("cat ".a:TMPFILE)
+					call delete(a:TMPFILE)
 					if filereadable(filename) ==# 1
 						bdelet
 						exec 'edit '.filename
 						call Numbertoggle()
 						filetype detect
 						call AfterSomeEvent("ModeChanged", "doautocmd BufEnter ".expand("%"))
-						unlet g:bufnrforranger
-						break
+						if exists('g:bufnrforranger')
+							unlet g:bufnrforranger
+						endif
+						call timer_stop(a:timer_id)
 					else
 						call IfOneWinDo("call OnQuit()")
 						quit
 					endif
+					unlet filename
 				endif
-				unlet filename
-			endwhile
+			endfunction
+			exec "call timer_start(0, {timer_id -> CheckRangerStopped(timer_id, '".TMPFILE."')}, {'repeat': -1})"
 		endif
 		exec "autocmd BufWinLeave * let f=expand(\"<afile>\")|let n=bufnr(\"^\".f.\"$\")|if n==#".g:bufnrforranger."|unlet f|unlet n|au!oncloseranger|call AfterSomeEvent(\"BufEnter,BufLeave,WinEnter,WinLeave\", \"".g:bufnrforranger."bw!\")|unlet g:bufnrforranger|endif"
 	augroup END
@@ -2010,9 +2013,9 @@ function! OpenOnStart()
 		let to_open = to_open && !g:DO_NOT_OPEN_ANYTHING
 		let to_open = to_open && !g:PAGER_MODE
 		if to_open
-			if g:open_on_start ==# 'alpha'
+			if g:open_on_start ==# 'alpha' && has('nvim')
 				Alpha
-			elseif g:open_on_start ==# "explorer"
+			elseif g:open_on_start ==# "explorer" || (!has('nvim') && g:open_on_start ==# 'alpha')
 			\||executable('ranger') !=# 1
 				edit ./
 			elseif g:open_on_start ==# "ranger"
