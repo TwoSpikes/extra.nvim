@@ -254,6 +254,9 @@ $ DOTFILES_VIM_CONFIG_PATH=~/dnsjajsbdn/vim/ nvim
 "_comment_60":"Use nvim-cmp instead of coc.nvim",
 	"use_nvim_cmp": false,
 
+"_comment_61":"Show random text at start in alpha-nvim",
+	"enable_fortune": false,
+
 "_comment_end":"Ending field to not put comma every time"
 }
 ```

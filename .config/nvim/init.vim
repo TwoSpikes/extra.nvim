@@ -58,6 +58,7 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		\'enable_mouse',
 		\'mouse_focus',
 		\'use_nvim_cmp',
+		\'enable_fortune',
 	\]
 	for option_ in l:option_list
 		if exists('g:dotfiles_config["'.option_.'"]')
@@ -303,6 +304,9 @@ function! HandleDotfilesConfig()
 	endif
 	if !exists('g:use_nvim_cmp')
 		let g:use_nvim_cmp = v:false
+	endif
+	if !exists('g:enable_fortune')
+		let g:enable_fortune = v:false
 	endif
 	
 	if g:background ==# "dark"
