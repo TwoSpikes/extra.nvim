@@ -1207,7 +1207,7 @@ let g:stdpos = {
 let g:termpos = {
 	\ 'h': {'button_label': '&Split', 'command': {cmd -> 'split|call OpenTerm("'.cmd.'")'}},
 	\ 'v': {'button_label': '&Vsplit', 'command': {cmd -> 'vsplit|call OpenTerm("'.cmd.'")'}},
-	\ 'b': {'button_label': '&Buffer', 'command': {cmd -> 'e|call OpenTerm("'.cmd.'")'}},
+	\ 'b': {'button_label': '&Buffer', 'command': {cmd -> 'call OpenTerm("'.cmd.'")'}},
 	\ 't': {'button_label': 'New &tab', 'command': {cmd -> 'tabnew|call OpenTerm("'.cmd.'")'}},
 	\ 'f': {'button_label': '&Floating', 'command': {cmd -> 'FloatermNew '.cmd}},
 \ }
