@@ -257,6 +257,9 @@ $ DOTFILES_VIM_CONFIG_PATH=~/dnsjajsbdn/vim/ nvim
 "_comment_61":"Show random text at start in alpha-nvim",
 	"enable_fortune": false,
 
+"_comment_62":"Show icons in quickui dialogues",
+	"quickui_icons": true,
+
 "_comment_end":"Ending field to not put comma every time"
 }
 ```

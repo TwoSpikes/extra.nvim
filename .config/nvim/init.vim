@@ -59,6 +59,7 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		\'mouse_focus',
 		\'use_nvim_cmp',
 		\'enable_fortune',
+		\'quickui_icons',
 	\]
 	for option_ in l:option_list
 		if exists('g:dotfiles_config["'.option_.'"]')
@@ -307,6 +308,9 @@ function! HandleDotfilesConfig()
 	endif
 	if !exists('g:enable_fortune')
 		let g:enable_fortune = v:false
+	endif
+	if !exists('g:quickui_icons')
+		let g:quickui_icons = v:true
 	endif
 	
 	if g:background ==# "dark"
@@ -1144,7 +1148,7 @@ function! SaveAs()
 	call SaveAsBase({filename -> "w ".filename}, 'Save as: ')
 endfunction
 function! SaveAsAndRename()
-	call SaveAsBase({filename -> "saveas ".filename}, 'Save as and rename: ')
+	call SaveAsBase({filename -> "saveas ".filename}, 'Save as and edit: ')
 endfunction
 command! -nargs=0 SaveAs call SaveAs()
 command! -nargs=0 SaveAsAndRename call SaveAsAndRename()
