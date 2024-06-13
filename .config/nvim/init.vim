@@ -2037,18 +2037,27 @@ function! OpenOnStart()
 	endif
 endfunction
 
+function! DoPackerUpdate(args)
+	call BeforeUpdatingPlugins()
+	exec "lua require('packer').update(".a:args.")"
+	call AfterUpdatingPlugins()
+endfunction
 if has('nvim')
-	command! -nargs=* PackerUpdate call BeforeUpdatingPlugins()|lua require('packer').update(<f-args>)|call AfterUpdatingPlugins()
+	command! -nargs=* PackerUpdate exec "call DoPackerUpdate('".<f-args>."')"
 endif
 function! BeforeUpdatingPlugins()
-	exec "cd ".g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key/"
-	exec "!git stash"
-	cd -
+	if isdirectory(g:LOCALSHAREPATH."/site/packer/start/which-key.nvim/lua/which-key")
+		exec "cd ".g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key"
+		exec "!git stash"
+		cd -
+	endif
 endfunction
 function! AfterUpdatingPlugins()
-	exec "cd ".g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key/"
-	exec "!git stash pop"
-	cd -
+	if isdirectory(g:LOCALSHAREPATH."/site/packer/start/which-key.nvim/lua/which-key")
+		exec "cd ".g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key/"
+		exec "!git stash pop"
+		cd -
+	endif
 endfunction
 
 function! PrepareWhichKey()

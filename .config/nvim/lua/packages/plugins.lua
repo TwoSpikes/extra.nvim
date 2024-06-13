@@ -356,4 +356,23 @@ return require('packer').startup(function (use)
 	use {
 		'olimorris/persisted.nvim',
 	}
+	use {
+	  'Julian/lean.nvim',
+	  event = { 'BufReadPre *.lean', 'BufNewFile *.lean' },
+
+	  requires = {
+		'neovim/nvim-lspconfig',
+		'nvim-lua/plenary.nvim',
+	  },
+	
+	  opts = {
+		lsp = {
+		  on_attach = on_attach,
+		},
+		mappings = true,
+	  }
+	}
+	 use {
+		 'tommcdo/vim-lion',
+	 }
 end)

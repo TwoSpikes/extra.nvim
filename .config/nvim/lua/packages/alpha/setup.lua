@@ -1,11 +1,12 @@
-local alpha = require'alpha'
-local dashboard = require'alpha.themes.dashboard'
+local alpha = require('alpha')
+local dashboard = require('alpha.themes.dashboard')
 dashboard.section.header.val = 'extra.nvim'
 dashboard.section.buttons.val = {
-	dashboard.button( "e", "  New file" , ":enew <BAR> startinsert <CR>"),
+	dashboard.button( "e", "  New file" , ":enew <CR>:startinsert<cr>"),
+	dashboard.button( "f", "󰥨  Find file" , ":call FuzzyFind()<cr>"),
 	dashboard.button( "l", "  Load last session" , ":SessionLoadLast<CR>"),
 	dashboard.button( "t", "  Open Terminal" , ":call OpenTerm(\"\")<CR>"),
-	dashboard.button( "n", "  Open NERDTree" , ":NERDTreeToggle<CR>"),
+	dashboard.button( "h", "󰙅  Open NERDTree" , ":NERDTreeToggle<CR>"),
 	dashboard.button( "r", "  Open Ranger" , ":call OpenRanger(\"./\")<CR>"),
 	dashboard.button( "q", "  Quit NVIM" , ":qa<CR>"),
 }
