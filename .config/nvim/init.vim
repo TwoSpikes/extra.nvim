@@ -2008,20 +2008,21 @@ function! OpenOnStart()
 		endif
 	endif
 
-	set nolazyredraw
-	echo 'type '
-	echohl SpecialKey
-	echon ':intro<cr>'
-	echohl Normal
-	echon ' to see help'
-	echohl Normal
-
+	if argc() && isdirectory(argv(0))
+		if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/nerdtree")
+			exec 'NERDTree' argv(0)
+			silent only
+		else
+			exec "edit ".argv(0)
+		endif
+	endif
+	echom "curfile is: ".expand('%')
 	if expand('%') == '' || isdirectory(expand('%'))
 		let to_open = v:true
 		let to_open = to_open && !g:DO_NOT_OPEN_ANYTHING
 		let to_open = to_open && !g:PAGER_MODE
 		if to_open
-			if g:open_on_start ==# 'alpha' && has('nvim')
+			if g:open_on_start ==# 'alpha' && has('nvim') && !isdirectory(expand('%'))
 				Alpha
 			elseif g:open_on_start ==# "explorer" || (!has('nvim') && g:open_on_start ==# 'alpha')
 			\||executable('ranger') !=# 1
@@ -2035,6 +2036,14 @@ function! OpenOnStart()
 			endif
 		endif
 	endif
+
+	set nolazyredraw
+	echo 'type '
+	echohl SpecialKey
+	echon ':intro<cr>'
+	echohl Normal
+	echon ' to see help'
+	echohl Normal
 endfunction
 
 function! DoPackerUpdate(args)
@@ -2046,14 +2055,14 @@ if has('nvim')
 	command! -nargs=* PackerUpdate exec "call DoPackerUpdate('".<f-args>."')"
 endif
 function! BeforeUpdatingPlugins()
-	if isdirectory(g:LOCALSHAREPATH."/site/packer/start/which-key.nvim/lua/which-key")
+	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key")
 		exec "cd ".g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key"
 		exec "!git stash"
 		cd -
 	endif
 endfunction
 function! AfterUpdatingPlugins()
-	if isdirectory(g:LOCALSHAREPATH."/site/packer/start/which-key.nvim/lua/which-key")
+	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key")
 		exec "cd ".g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key/"
 		exec "!git stash pop"
 		cd -
@@ -2088,11 +2097,11 @@ function! OnStart()
 	if has('nvim')
 		call PrepareWhichKey()
 	endif
-	call OpenOnStart()
 	Showtab
 	exec "so ".g:CONFIG_PATH."/vim/init.vim"
 	call DefineAugroups()
 	call UpdateShowtabline()
+	call OpenOnStart()
 
 	if g:PAGER_MODE
 		call EnablePagerMode()
