@@ -245,8 +245,8 @@ function! DefineAugroups()
 	call DefineAugroupVisual()
 	call DefineAugroupNumbertoggle()
 endfunction
-function! HandleDotfilesConfig()
-	" Default values for variables
+function! SetDefaultValuesForStartupOptionsAndDotfilesConfigOptions()
+	" Default values for startup options
 	if !exists('g:PAGER_MODE')
 		let g:PAGER_MODE = v:false
 	endif
@@ -312,7 +312,9 @@ function! HandleDotfilesConfig()
 	if !exists('g:quickui_icons')
 		let g:quickui_icons = v:true
 	endif
-	
+endfunction
+call SetDefaultValuesForStartupOptionsAndDotfilesConfigOptions()
+function! HandleDotfilesConfig()
 	if g:background ==# "dark"
 		set background=dark
 	elseif g:background ==# "light"

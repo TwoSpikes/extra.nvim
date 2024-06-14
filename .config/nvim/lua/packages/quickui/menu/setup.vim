@@ -55,23 +55,53 @@ function! RebindMenus()
 				\ [(g:quickui_icons?" ":"")."&Select buffer\tCtrl-x Ctrl-b", 'call quickui#tools#list_buffer("e")', 'Select buffer to edit in current buffer'],
 				\ [(g:quickui_icons?"󱎸 ":"")."Find &word using Spectre\tLEAD sw", 'exec "lua require(\"spectre\").open_visual({select_word = true})"', 'Select buffer to edit in current buffer'],
 				\ ["--", '' ],
+				\ ])
+	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/vim-quickui")
+		call quickui#menu#install('&Window', [
 				\ [(g:quickui_icons?" ":"")."Open file in &tab\tCtrl-c c", 'Findfile', 'Open file in new tab'],
 				\ [(g:quickui_icons?" ":"")."Open file in &buffer\tCtrl-c C", 'Findfilebuffer', 'Open file in current buffer'],
-				\ [(g:quickui_icons?"󰙅 ":"")."Toggle &file tree\tCtrl-h", 'NERDTreeToggle', 'Toggles a file tree'],
-				\ [(g:quickui_icons?"󰥨 ":"")."Telescope fu&zzy find\tLEAD ff", 'call FuzzyFind()', 'Opens Telescope.nvim find file'],
-				\ [(g:quickui_icons?" ":"")."Open file using &ranger\tLEAD r", 'call OpenRangerCheck()', 'Opens ranger to select file to open'],
+				\ ])
+	endif
+	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/nerdtree")
+		call quickui#menu#install('&Window', [
+					\ [(g:quickui_icons?"󰙅 ":"")."Toggle &file tree\tCtrl-h", 'NERDTreeToggle', 'Toggles a file tree'],
+					\ ])
+	endif
+	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/telescope.nvim")
+		call quickui#menu#install('&Window', [
+					\ [(g:quickui_icons?"󰥨 ":"")."Telescope fu&zzy find\tLEAD ff", 'call FuzzyFind()', 'Opens Telescope.nvim find file'],
+					\ ])
+	endif
+	if executable('ranger')
+		call quickui#menu#install('&Window', [
+					\ [(g:quickui_icons?" ":"")."Open file using &ranger\tLEAD r", 'call OpenRangerCheck()', 'Opens ranger to select file to open'],
+					\ ])
+	endif
+	call quickui#menu#install('&Window', [
 				\ ["--", '' ],
-				\ [(g:quickui_icons?" ":"")."&Make only\tCtrl-x 1", 'only', 'Hide all but current window'],
+				\ [(g:quickui_icons?" ":"")."&Make window only\tCtrl-x 1", 'only', 'Hide all but current window'],
 				\ [(g:quickui_icons?" ":"")."&Previous window\tCtrl-x o", 'exec "normal! \<c-w>w"', 'Go to previous window'],
 				\ [(g:quickui_icons?" ":"")."&Next window\tCtrl-x O", 'exec "normal! \<c-w>W"', 'Go to next window'],
 				\ [(g:quickui_icons?" ":"")."Hor&izontally split\tCtrl-x 2", 'split', 'Horizontally split current window'],
 				\ [(g:quickui_icons?" ":"")."&Vertically split\tCtrl-x 3", 'vsplit', 'Vertically split current window'],
 				\ ["--", '' ],
 				\ [(g:quickui_icons?" ":"")."&Open terminal\tLEAD t", 'call SelectPosition($SHELL." -l", g:termpos)', 'Opens a terminal'],
-				\ [(g:quickui_icons?" ":"")."Op&en Far/Mc\tLEAD m", 'call SelectPosition(g:far_or_mc, g:termpos)', 'Opens Far or Midnight commander'],
-				\ [(g:quickui_icons?" ":"")."Open lazy&git\tLEAD z", 'call SelectPosition("lazygit", g:termpos)', 'Opens Lazygit'],
-				\ [(g:quickui_icons?" ":"")."Open st&art menu\tLEAD A", 'call RunAlphaIfNotAlphaRunning()', 'Opens alpha-nvim menu'],
 				\ ])
+	if executable('mc') || executable('far') || executable('far2l')
+		call quickui#menu#install('&Window', [
+				\ [(g:quickui_icons?" ":"")."Op&en Far/Mc\tLEAD m", 'call SelectPosition(g:far_or_mc, g:termpos)', 'Opens Far or Midnight commander'],
+				\ ])
+	endif
+	if executable('lazygit')
+		call quickui#menu#install('&Window', [
+				\ [(g:quickui_icons?" ":"")."Open lazy&git\tLEAD z", 'call SelectPosition("lazygit", g:termpos)', 'Opens Lazygit'],
+				\ ])
+	endif
+	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/alpha-nvim")
+		call quickui#menu#install('&Window', [
+				\ [(g:quickui_icons?"󰍜 ":"")."Open st&art menu\tLEAD A", 'call RunAlphaIfNotAlphaRunning()', 'Opens alpha-nvim menu'],
+				\ ])
+	endif
 
 	" items containing tips, tips will display in the cmdline
 	call quickui#menu#install('&Text', [
@@ -143,8 +173,12 @@ function! RebindMenus()
 			\ ["R&eload plugins list\tLEAD si", 'exec "source ".g:PLUGINS_INSTALL_FILE_PATH', 'Install plugins in '.g:PLUGINS_INSTALL_FILE_PATH],
 			\ ["Rel&oad plugins setup\tLEAD ss", 'exec "source ".g:PLUGINS_SETUP_FILE_PATH', 'Reconfigure plugins'],
 			\ ["Relo&ad lsp setup\tLEAD sl", 'exec "source ".g:LSP_PLUGINS_SETUP_FILE_PATH', 'Reconfigure LSP plugins (deprecated due to coc.nvim)'],
+			\ ])
+	if filereadable(g:DOTFILES_CONFIG_PATH)
+		call quickui#menu#install('&Config', [
 			\ ["Reload do&tfiles config\tLEAD sj", 'let old_tabpagenr=tabpagenr()|call LoadDotfilesConfig("'.expand(g:DOTFILES_CONFIG_PATH).'", v:true)|call HandleDotfilesConfig()|call HandleBuftypeAll()|exec old_tabpagenr."tabnext"', 'Reload dotfiles config'],
-		  \ ])
+			\ ])
+	endif
 
 	" register HELP menu with weight 10000
 	call quickui#menu#install('&Help', [
