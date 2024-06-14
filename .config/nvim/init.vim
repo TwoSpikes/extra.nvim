@@ -1553,7 +1553,7 @@ augroup visual
 			let pre_cursorline = pre_cursorline && mode() !~# "[irco]"
 			let pre_cursorline = pre_cursorline && (buftype !=# 'nofile' || filetype ==# 'nerdtree') && filetype !=# 'TelescopePrompt' && filetype !=# 'spectre_panel' && filetype !=# 'packer'
 		endif
-		let pre_cursorline = pre_cursorline && buftype !=# 'terminal'
+		let pre_cursorline = pre_cursorline && buftype !=# 'terminal' && filetype !=# 'alpha'
 		if exists('g:cursorline')
 			let pre_cursorline = pre_cursorline && g:cursorline
 		endif
@@ -1998,6 +1998,16 @@ function! OpenRangerCheck()
 endfunction
 nnoremap <leader>r <cmd>call OpenRangerCheck()<cr>
 
+function! RunAlphaIfNotAlphaRunning()
+	if &filetype !=# 'alpha'
+		Alpha
+	else
+		AlphaRedraw
+		AlphaRemap
+	endif
+endfunction
+nnoremap <leader>A <cmd>call RunAlphaIfNotAlphaRunning()<cr>
+
 function! OpenOnStart()
 	if exists('g:open_menu_on_start')
 		if g:open_menu_on_start ==# v:true
@@ -2016,7 +2026,6 @@ function! OpenOnStart()
 			exec "edit ".argv(0)
 		endif
 	endif
-	echom "curfile is: ".expand('%')
 	if expand('%') == '' || isdirectory(expand('%'))
 		let to_open = v:true
 		let to_open = to_open && !g:DO_NOT_OPEN_ANYTHING
@@ -2036,14 +2045,6 @@ function! OpenOnStart()
 			endif
 		endif
 	endif
-
-	set nolazyredraw
-	echo 'type '
-	echohl SpecialKey
-	echon ':intro<cr>'
-	echohl Normal
-	echon ' to see help'
-	echohl Normal
 endfunction
 
 function! DoPackerUpdate(args)
@@ -2072,21 +2073,32 @@ endfunction
 function! PrepareWhichKey()
 	let g:which_key_timeout = 100
 	if filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/which-key.nvim/lua/which-key/util.lua')
-		let l:old_lazyredraw=&lazyredraw
-		let &lazyredraw = v:true
 		edit ~/.local/share/nvim/site/pack/packer/start/which-key.nvim/lua/which-key/util.lua
 		if getline(189) =~# 'if not ("nvsxoiRct"):find(mode) then'
 			silent 189,192delete
 			silent write
 		endif
 		bwipeout!
-		let &lazyredraw = l:old_lazyredraw
 	endif
 	nnoremap <silent> <leader> <cmd>lua require('which-key').show(vim.g.mapleader)<cr>
 	nnoremap <silent> <c-x> <cmd>lua require('which-key').show("\24", {mode = "n", auto = true})<cr>
 	nnoremap <silent> <c-w> <cmd>lua require('which-key').show("\23", {mode = "n", auto = true})<cr>
 endfunction
 
+function! HelpOnFirstTime()
+	if !filereadable(fnamemodify(g:DOTFILES_CONFIG_PATH, ':h').'/not_first_time.null')
+		if !isdirectory(fnamemodify(g:DOTFILES_CONFIG_PATH, ':h'))
+			call mkdir(fnamemodify(g:DOTFILES_CONFIG_PATH, ':h'))
+		endif
+		call writefile([], fnamemodify(g:DOTFILES_CONFIG_PATH, ':h').'/not_first_time.null')
+
+		if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
+			echom 'To see help, press SPC-?. You will not see this message again'
+		else
+			call quickui#confirm#open('To see help, press SPC-?')
+		endif
+	endif
+endfunction
 function! OnStart()
 	call SetDotfilesConfigPath()
 	if has('nvim')
@@ -2101,11 +2113,11 @@ function! OnStart()
 	exec "so ".g:CONFIG_PATH."/vim/init.vim"
 	call DefineAugroups()
 	call UpdateShowtabline()
-	call OpenOnStart()
-
 	if g:PAGER_MODE
 		call EnablePagerMode()
 	endif
+	call HelpOnFirstTime()
+	call OpenOnStart()
 endfunction
 function! OnQuit()
 	call TermuxLoadCursorStyle()

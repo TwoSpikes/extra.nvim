@@ -51,7 +51,7 @@ function! RebindMenus()
 				\ ])
 
 	call quickui#menu#install('&Window', [
-				\ [(g:quickui_icons?"󱂥 ":"")."&Kill buffer\tCtrl-x k", 'Killbuffer', 'Completely removes the current buffer'],
+				\ [(g:quickui_icons?"󱂥 ":"")."Kill b&uffer\tCtrl-x k", 'Killbuffer', 'Completely removes the current buffer'],
 				\ [(g:quickui_icons?" ":"")."&Select buffer\tCtrl-x Ctrl-b", 'call quickui#tools#list_buffer("e")', 'Select buffer to edit in current buffer'],
 				\ [(g:quickui_icons?"󱎸 ":"")."Find &word using Spectre\tLEAD sw", 'exec "lua require(\"spectre\").open_visual({select_word = true})"', 'Select buffer to edit in current buffer'],
 				\ ["--", '' ],
@@ -70,6 +70,7 @@ function! RebindMenus()
 				\ [(g:quickui_icons?" ":"")."&Open terminal\tLEAD t", 'call SelectPosition($SHELL." -l", g:termpos)', 'Opens a terminal'],
 				\ [(g:quickui_icons?" ":"")."Op&en Far/Mc\tLEAD m", 'call SelectPosition(g:far_or_mc, g:termpos)', 'Opens Far or Midnight commander'],
 				\ [(g:quickui_icons?" ":"")."Open lazy&git\tLEAD z", 'call SelectPosition("lazygit", g:termpos)', 'Opens Lazygit'],
+				\ [(g:quickui_icons?" ":"")."Open st&art menu\tLEAD A", 'call RunAlphaIfNotAlphaRunning()', 'Opens alpha-nvim menu'],
 				\ ])
 
 	" items containing tips, tips will display in the cmdline

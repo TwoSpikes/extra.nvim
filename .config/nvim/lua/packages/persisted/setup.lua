@@ -1,4 +1,9 @@
-require('persisted').setup()
+require('persisted').setup({
+  should_autosave = function()
+    -- do not autosave if the alpha dashboard is the current filetype
+	return vim.bo.filetype ~= 'alpha'
+  end,
+})
 
 require('telescope').load_extension('persisted')
 require('telescope').setup({
