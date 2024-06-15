@@ -2106,7 +2106,7 @@ function! HelpOnFirstTime()
 		if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
 			echom 'To see help, press SPC-?. You will not see this message again'
 		else
-			call quickui#confirm#open('To see help, press SPC-?')
+			call timer_start(0, {timer_id -> quickui#confirm#open('To see help, press SPC-?')})
 		endif
 	endif
 endfunction
