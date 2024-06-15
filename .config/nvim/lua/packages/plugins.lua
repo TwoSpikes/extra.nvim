@@ -375,4 +375,9 @@ return require('packer').startup(function (use)
 	 use {
 		 'tommcdo/vim-lion',
 	 }
+	if os.getenv('TERMUX_VERSION') == nil then
+		use {
+			'lyokha/vim-xkbswitch',
+		}
+	end
 end)

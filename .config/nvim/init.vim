@@ -1773,6 +1773,8 @@ inoremap <expr> " HandleKeystroke('"')
 inoremap <expr> <bs> HandleKeystroke('\<bs>')
 
 if has('nvim')
+	exec printf("so %s", g:CONFIG_PATH.'/vim/plugins/setup.vim')
+
 	exec printf("luafile %s", g:PLUGINS_INSTALL_FILE_PATH)
 	PackerInstall
 	exec printf("luafile %s", g:PLUGINS_SETUP_FILE_PATH)

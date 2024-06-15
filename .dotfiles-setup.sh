@@ -1210,6 +1210,29 @@ case "${user_input}" in
 		./cs setup
 		;;
 esac
+press_enter
+
+clear
+echo "==== Setting up xkb-switch ===="
+echo ""
+
+echo -n "Checking if xkb-switch is installed: "
+if command -v "xkb-switch" > /dev/null 2>&1; then
+	echo "YES"
+else
+	echo "NO"
+fi
+echo -n "Do you want to install xkb-switch (Y/n): "
+read user_input
+user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+case "${user_input}" in
+	"n")
+		;;
+	*)
+		install_package xkb-switch
+		;;
+esac
+press_enter
 
 echo "Dotfiles setup ended successfully"
 echo "It is recommended to restart your shell"
