@@ -2051,6 +2051,13 @@ function! OpenOnStart()
 	endif
 endfunction
 
+if !exists('##TextYankPost')
+  nmap y <Plug>(highlightedyank)
+  xmap y <Plug>(highlightedyank)
+  omap y <Plug>(highlightedyank)
+endif
+let g:highlightedyank_highlight_duration = 125
+
 function! DoPackerUpdate(args)
 	call BeforeUpdatingPlugins()
 	exec "lua require('packer').update(".a:args.")"

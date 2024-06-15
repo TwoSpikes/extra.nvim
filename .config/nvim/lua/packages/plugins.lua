@@ -380,4 +380,7 @@ return require('packer').startup(function (use)
 			'lyokha/vim-xkbswitch',
 		}
 	end
+	use {
+		'machakann/vim-highlightedyank',
+	}
 end)
