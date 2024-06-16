@@ -102,6 +102,9 @@ Screenshots
 </details>
 
 > [!Warning]
+> Implies to use [Nerd Fonts](https://www.nerdfonts.com)
+
+> [!Warning]
 > It works better in NeoVim, and packer.nvim does not work in version of Vim/NeoVim without Lua.
 
 > [!Note]
