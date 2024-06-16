@@ -1476,7 +1476,7 @@ noremap <leader>/u <cmd>call UncommentOutDefault()<cr>
 augroup cpp
 	au!
 	au filetype cpp let g:default_comment_string = "//"
-	au filetype cpp noremap <silent> <buffer> <leader>n viwo<esc>i::<esc>hi
+	au filetype cpp noremap <silent> <buffer> <leader>N viwo<esc>i::<esc>hi
 augroup END
 augroup java
 	au!
@@ -2060,6 +2060,8 @@ if !exists('##TextYankPost')
   omap y <Plug>(highlightedyank)
 endif
 let g:highlightedyank_highlight_duration = 125
+
+nnoremap <leader>n <cmd>Neogen<cr>
 
 function! DoPackerUpdate(args)
 	call BeforeUpdatingPlugins()

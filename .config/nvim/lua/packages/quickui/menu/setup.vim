@@ -126,6 +126,7 @@ function! RebindMenus()
 				\ [(g:quickui_icons?" ":"")."&Whence hlgroup", 'call WhenceGroup()', 'Show whence hlgroup under cursor came'],
 				\ [(g:quickui_icons?"󰒆 ":"")."&Select all\tCtrl-x h", 'call SelectAll()', 'Paste copyied text after the cursor'],
 				\ [(g:quickui_icons?" ":"")."Toggle &tagbar\tCtrl-t", 'TagbarToggle', 'Toggles tagbar'],
+				\ [(g:quickui_icons?" ":"")."Generate ann&otation\tLEAD n", 'Neogen', 'Generate Neogen annotation (:h neogen)'],
 				\ ])
 
 	call quickui#menu#install("&LSP", [

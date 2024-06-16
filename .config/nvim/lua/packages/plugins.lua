@@ -383,4 +383,9 @@ return require('packer').startup(function (use)
 	use {
 		'machakann/vim-highlightedyank',
 	}
+	use {
+		"danymat/neogen",
+		-- Uncomment next line if you want to follow only stable versions
+		-- tag = "*"
+	}
 end)
