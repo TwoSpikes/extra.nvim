@@ -1383,7 +1383,7 @@ command! -nargs=0 DotfilesCheatSheet call DotfilesCheatSheet()
 noremap <silent> <leader>? <cmd>DotfilesCheatSheet<cr>
 
 " FAST COMMANDS
-noremap ; :
+"noremap ; :
 noremap <silent> <leader>; ;
 noremap <silent> <leader>: :<c-f>a
 "noremap <leader>= :tabe 
