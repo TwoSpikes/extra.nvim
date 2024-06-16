@@ -44,6 +44,9 @@ Or to install everything
 $ yes | sh .dotfiles-setup.sh .
 ```
 
+> [!Note]
+> After installation it is safe to remove local dotfiles repository
+
 # Manual installation
 
 ## .dotfiles-setup.sh
@@ -298,7 +301,7 @@ It is a configuration for GNU Emacs
 $ cp -r ./.emacs.d/ ~/
 ```
 
-# Contribution
+# Contribution and other stuff
 
 ## Copy configs to this repo and commit
 
@@ -310,4 +313,10 @@ $ dotfiles commit
 If using Vim/NeoVim:
 ```console
 :DotfilesCommit
+```
+
+## Get dotfiles version
+
+```console
+dotfiles version
 ```

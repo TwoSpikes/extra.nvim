@@ -1,4 +1,6 @@
-macro_rules! clear {
+use std::{borrow::Borrow, path::PathBuf};
+
+#[allow(unused_macros)] macro_rules! clear {
     () => {
         print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
     };
@@ -81,53 +83,43 @@ fn copy_dir_all(src: impl AsRef<::std::path::Path> + ::std::convert::AsRef<::std
     }
     Ok(())
 }
-
-/*_df_c() {
-    "${CLEAR_PROGRAM}"
-	"${CD_PROGRAM}" ~/dotfiles/
-# Sbin
-	"${CP_PROGRAM}" ~/bin/viman ~/dotfiles/bin/
-# Bashrc script and its dependencies
-	"${CP_PROGRAM}" ~/.dotfiles-script.sh ~/dotfiles/
-	"${CP_PROGRAM}" -r ~/shscripts/ ~/dotfiles/
-	"${CP_PROGRAM}" -r ~/shlib/ ~/dotfiles/
-	"${CP_PROGRAM}" ~/.profile ~/.zprofile ~/dotfiles/
-	"${CP_PROGRAM}" ~/.bashrc ~/.zshrc ~/dotfiles/
-## Vim/NeoVim configs
-    "${CP_PROGRAM}" ~/.config/nvim/init.vim ~/dotfiles/.config/nvim/
-    "${CP_PROGRAM}" -r ~/.config/nvim/lua/ ~/dotfiles/.config/nvim/
-    "${CP_PROGRAM}" ~/bin/viman ~/dotfiles/
-## Vim/NeoVim themes
-    "${CP_PROGRAM}" ${PREFIX}/share/nvim/runtime/syntax/book.vim ~/dotfiles/
-    "${CP_PROGRAM}" ${PREFIX}/share/nvim/runtime/colors/blueorange.vim ~/dotfiles/
-## Vim/NeoVim scripts
-	"${CP_PROGRAM}" ~/xterm-color-table.vim ~/dotfiles/
-## Tmux
-	"${CP_PROGRAM}" ~/.tmux.conf ~/dotfiles/
-	# "${CP_PROGRAM}" -r ~/.tmux/ ~/dotfiles/
-## Git
-	"${CP_PROGRAM}" ~/.gitconfig-default ~/.gitmessage ~/dotfiles/
-## Termux
-	"${CP_PROGRAM}" ~/.termux/colors.properties ~/dotfiles/.termux/
-	"${CP_PROGRAM}" ~/.termux/termux.properties ~/dotfiles/.termux/
-## Alacritty
-	"${CP_PROGRAM}" -r ~/.config/alacritty/ ~/dotfiles/.config/
-## Nano
-	"${CP_PROGRAM}" ~/.nanorc ~/dotfiles/
-# Commit
-	"${GIT_PROGRAM}" commit --all --verbose
-}*/
-
-fn commit(only_copy: bool) -> ::std::io::Result<()> {
-    let is_termux: bool = ::std::env::var("TERMUX_VERSION").is_ok();
-    let HOME = match ::std::env::home_dir() {
-        Some(path) => path,
-        None => panic!("Cannot get HOME directory"),
-    };
-    {
-        let path_to_dotfiles = HOME.as_path().join("dotfiles");
-        assert!(::std::env::set_current_dir(&path_to_dotfiles).is_ok());
+fn find_vim_vimruntime_path(is_termux: bool) -> String {
+    let paths = ::std::fs::read_dir(if cfg!(target_os = "windows") {
+        "/c/Program Files/Vim/share/vim"
+    } else {
+        if is_termux {
+            "/data/data/com.termux/files/usr/share/vim"
+        } else {
+            "/usr/share/vim"
+        }
+    }).unwrap();
+    let mut maxver: Option<u16> = None;
+    for path in paths {
+        let path = path.unwrap().path();
+        let mut filename = path.file_name().unwrap().to_str().unwrap();
+        if filename.starts_with("vim") {
+            let mut chars = filename.chars();
+            _ = chars.next();
+            _ = chars.next();
+            _ = chars.next();
+            filename = chars.as_str();
+            let version = filename.parse::<u16>().unwrap();
+            if match maxver {
+                None => {
+                    true
+                },
+                Some(maxver) => {
+                    version > maxver
+                },
+            } {
+                maxver = Some(version);
+            }
+        }
     }
+    format!("vim{}", maxver.unwrap())
+}
+fn commit(only_copy: bool, #[allow(non_snake_case)] HOME: PathBuf) -> ::std::io::Result<()> {
+    let is_termux: bool = ::std::env::var("TERMUX_VERSION").is_ok();
     _ = ::std::fs::copy(HOME.join(".dotfiles-script.sh"), "./.dotfiles-script.sh");
     _ = copy_dir_all(HOME.join("shscripts"), "./shscripts");
     _ = copy_dir_all(HOME.join("shlib"), "./shlib");
@@ -141,7 +133,7 @@ fn commit(only_copy: bool) -> ::std::io::Result<()> {
     _ = copy_dir_all(HOME.join(".config/nvim/ftplugin"), "./.config/nvim/ftplugin");
     _ = ::std::fs::copy(HOME.join("bin/viman"), "./bin/viman");
     _ = ::std::fs::copy(HOME.join("bin/vipage"), "./bin/vipage");
-    let VIMRUNTIME = ::std::path::Path::new(if ::which::which("nvim").is_ok() {
+    #[allow(non_snake_case)] let VIMRUNTIME = if ::which::which("nvim").is_ok() {
         if cfg!(target_os = "windows") {
             "/c/Program Files/Neovim/share/nvim/runtime"
         } else {
@@ -150,22 +142,11 @@ fn commit(only_copy: bool) -> ::std::io::Result<()> {
             } else {
                 "/usr/share/nvim/runtime"
             }
-        }
+        }.to_string()
     } else {
-        let paths = ::std::fs::read_dir(if cfg!(target_os = "windows") {
-            "/c/Program Files/Vim/share/vim"
-        } else {
-            if is_termux {
-                "/data/data/com.termux/files/usr/share/vim"
-            } else {
-                "/usr/share/vim"
-            }
-        }).unwrap();
-        for path in paths {
-            println!("path is: {}", path.unwrap().path().display());
-        }
-        "/dksk"
-    });
+        find_vim_vimruntime_path(is_termux)
+    };
+    let VIMRUNTIME = ::std::path::Path::new(VIMRUNTIME.as_str());
     _ = ::std::fs::create_dir_all("./vimruntime/syntax");
     _ = run_as_superuser_if_needed!("cp", &[VIMRUNTIME.join("syntax/book.vim").to_str().expect("Cannot convert path to str"), "./vimruntime/syntax/"]);
     _ = ::std::fs::create_dir_all("./vimruntime/colors");
@@ -193,6 +174,10 @@ fn commit(only_copy: bool) -> ::std::io::Result<()> {
     }
 }
 
+fn version() {
+    println!(include_str!("../../../.dotfiles-version"));
+}
+
 fn main() {
     let mut args = ::std::env::args();
     #[allow(unused_variables)]
@@ -205,6 +190,15 @@ fn main() {
     enum State {
         NONE,
         COMMIT{only_copy: bool},
+        VERSION,
+    }
+    #[allow(non_snake_case)] let HOME = match ::home::home_dir() {
+        Some(path) => path,
+        None => panic!("Cannot get HOME directory"),
+    };
+    {
+        let path_to_dotfiles = HOME.as_path().join("dotfiles");
+        assert!(::std::env::set_current_dir(&path_to_dotfiles).is_ok());
     }
     let mut state = State::NONE;
     while args.len() > 0 {
@@ -214,29 +208,50 @@ fn main() {
                 ::std::process::exit(0);
             },
             "commit" => {
-                state = State::COMMIT{only_copy: false};
-            },
-            "--only-copy" => {
                 match state {
                     State::NONE => {
-                        println!("This option can only be used with 'commit' subcommand");
+                        state = State::COMMIT{only_copy: false};
+                    },
+                    _ => {
+                        eprintln!("Subcommands can be used only with first cmdline argument");
                         short_help!(program_name);
                         ::std::process::exit(1);
                     },
+                }
+            },
+            "version" => {
+                match state {
+                    State::NONE => {
+                        state = State::VERSION;
+                    },
+                    _ => {
+                        eprintln!("Subcommands can be used only with first cmdline argument");
+                        short_help!(program_name);
+                        ::std::process::exit(1);
+                    },
+                }
+            },
+            "--only-copy" => {
+                match state {
                     State::COMMIT { only_copy: _ } => {
                         state = State::COMMIT { only_copy: true };
+                    },
+                    _ => {
+                        eprintln!("This option can only be used with `commit` subcommand");
+                        short_help!(program_name);
+                        ::std::process::exit(1);
                     },
                 }
             },
             "++only-copy" => {
                 match state {
-                    State::NONE => {
-                        println!("This option can only be used with 'commit' subcommand");
+                    State::COMMIT { only_copy: _ } => {
+                        state = State::COMMIT { only_copy: false };
+                    },
+                    _ => {
+                        println!("This option can only be used with `commit` subcommand");
                         short_help!(program_name);
                         ::std::process::exit(1);
-                    },
-                    State::COMMIT { only_copy } => {
-                        state = State::COMMIT { only_copy: false };
                     },
                 }
             },
@@ -250,14 +265,18 @@ fn main() {
     match state {
         State::NONE => {},
         State::COMMIT { only_copy } => {
-            match commit(only_copy) {
-                Ok(_) => {},
+            match commit(only_copy, HOME) {
+                Ok(_) => {
+                    ::std::process::exit(0);
+                },
                 Err(e) => {
                     println!("error: {}", e);
                     ::std::process::exit(1);
                 },
             };
-            ::std::process::exit(0);
+        },
+        State::VERSION => {
+            version();
         },
     }
 }

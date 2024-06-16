@@ -4,6 +4,10 @@ if has('nvim')
 	lua vim.loader.enable()
 endif
 
+if !has('nvim')
+	set nocompatible
+endif
+
 function! SetDotfilesConfigPath()
 	if !exists('g:DOTFILES_CONFIG_PATH')
 		if !exists('$DOTFILES_VIM_CONFIG_PATH')
