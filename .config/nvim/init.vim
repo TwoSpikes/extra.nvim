@@ -161,16 +161,16 @@ function! STCRel()
 endfunction
 function! STCAbs(actual_mode)
 	if has('nvim')
-		if a:actual_mode ==# ''
+		if a:actual_mode ==# '' || a:actual_mode =~? 'n'
 			let &l:stc = '%{%v:relnum?"":"%#CursorLineNr#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNr#%=".((v:virtnum <= 0)?v:lnum:""):""%} '
 			call CopyHighlightGroup("StatementNorm", "Statement")
 			return
 		endif
-		if a:actual_mode ==? 'r'
+		if a:actual_mode =~? 'r'
 			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrRepl#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} '
 			return
 		endif
-		if mode() =~? 'v.*' && &modifiable
+		if a:actual_mode =~? 'v' && &modifiable
 			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrVisu#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNrVisu#%=".((v:virtnum <= 0)?v:lnum:""):""%} '
 			return
 		endif
@@ -217,11 +217,10 @@ endfunction
 
 function! DefineAugroupVisual()
 	augroup Visual
+		autocmd!
 		if g:linenr
-			autocmd! ModeChanged *:[vV]* call Numbertoggle('v')
-			exec "autocmd! ModeChanged *:\<c-v>* call Numbertoggle()"
-			autocmd! ModeChanged [vV]*:* call Numbertoggle('')
-			exec "autocmd! ModeChanged \<c-v>*:* call Numbertoggle()"
+			exec "autocmd! ModeChanged {\<c-v>*,[vV]*}:* call Numbertoggle(mode())"
+			exec "autocmd! ModeChanged *:{\<c-v>*,[vV]*} call Numbertoggle('v')"
 		else
 			autocmd! Visual
 		endif
