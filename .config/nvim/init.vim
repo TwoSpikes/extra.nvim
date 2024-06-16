@@ -1337,7 +1337,7 @@ function! DotfilesCheatSheet()
 	\\n   CTRL-c % - Split window horizontally
 	\\n   CTRL-c \" - Split window vertically
 	\\n   CTRL-c w - Quit from window
-	\\n   CTRL-c 0-9 - Jump to tab 0-9
+	\\n   CTRL-c 1-9 - Jump to tab 1-9
 	\\n   LEAD so - Toggle scrolloff (see :h 'scrolloff')
 	\\n Emacs-like keybindings:
 	\\n   ALT-x - Switch to command mode (:)
