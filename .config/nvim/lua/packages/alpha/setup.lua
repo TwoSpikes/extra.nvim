@@ -16,6 +16,7 @@ dashboard.section.buttons.val = TableConcat(dashboard.section.buttons.val, {
 	dashboard.button( "f", "󰥨  Find file" , ":call FuzzyFind()<CR>"),
 	dashboard.button( "l", "  Load last session" , ":SessionLoadLast<CR>"),
 	dashboard.button( "t", "  Open Terminal" , ":call OpenTerm(\"\")<CR>"),
+	dashboard.button( "r", "󰚰  Recently opened files" , ":lua require('telescope').extensions.recent_files.pick()<CR>"),
 })
 if vim.fn.isdirectory(vim.g.LOCALSHAREPATH.."/site/pack/packer/start/nerdtree") == 1 then
 	dashboard.section.buttons.val = TableConcat(dashboard.section.buttons.val, {
@@ -24,11 +25,11 @@ if vim.fn.isdirectory(vim.g.LOCALSHAREPATH.."/site/pack/packer/start/nerdtree") 
 end
 if vim.fn.executable('ranger') == 1 then
 	dashboard.section.buttons.val = TableConcat(dashboard.section.buttons.val, {
-		dashboard.button( "r", "  Open Ranger" , ":call OpenRanger(\"./\")<CR>")
+		dashboard.button( "o", "  Open Ranger" , ":call OpenRanger(\"./\")<CR>")
 	})
 end
 dashboard.section.buttons.val = TableConcat(dashboard.section.buttons.val, {
-	dashboard.button( "q", "  Quit NVIM" , ":qa<CR>"),
+	dashboard.button( "q", "  Quit NeoVim" , ":qa<CR>"),
 })
 if vim.g.enable_fortune then
 	local handle = io.popen('fortune')

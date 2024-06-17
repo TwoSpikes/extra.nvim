@@ -394,4 +394,12 @@ return require('packer').startup(function (use)
 	use {
 		'https://github.com/mfussenegger/nvim-lint',
 	}
+	use {
+		'smartpde/telescope-recent-files',
+		requires = {
+			{
+				'nvim-telescope/telescope.nvim',
+			}
+		}
+	}
 end)

@@ -78,6 +78,7 @@ function! RebindMenus()
 					\ ])
 	endif
 	call quickui#menu#install('&Window', [
+				\ [(g:quickui_icons?"󰚰 ":"")."Re&cently opened files\tLEAD fr", 'lua require("telescope").extensions.recent_files.pick()', 'Show menu to select file from recently opened'],
 				\ ["--", '' ],
 				\ [(g:quickui_icons?" ":"")."&Make window only\tCtrl-x 1", 'only', 'Hide all but current window'],
 				\ [(g:quickui_icons?" ":"")."&Previous window\tCtrl-x o", 'exec "normal! \<c-w>w"', 'Go to previous window'],
