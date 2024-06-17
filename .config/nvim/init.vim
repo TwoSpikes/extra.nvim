@@ -9,7 +9,7 @@ if !has('nvim')
 endif
 
 function! SetDotfilesConfigPath()
-	if !exists('g:DOTFILES_CONFIG_PATH')
+	if !exists('g:DOTFILES_CONFIG_PATH') || g:DOTFILES_CONFIG_PATH ==# ""
 		if !exists('$DOTFILES_VIM_CONFIG_PATH')
 			let g:DOTFILES_CONFIG_PATH = "$HOME/.config/dotfiles/vim/config.json"
 		else
@@ -76,13 +76,16 @@ endfunction
 
 call LoadDotfilesConfig(g:DOTFILES_CONFIG_PATH)
 
-if !exists('g:CONFIG_PATH')
-	if !exists('$VIM_CONFIG_PATH')
-		let g:CONFIG_PATH = "$HOME/.config/nvim"
-	else
-		let g:CONFIG_PATH = $VIM_CONFIG_PATH
+function! SetConfigPath()
+	if !exists('g:CONFIG_PATH') || g:CONFIG_PATH ==# ""
+		if !exists('$VIM_CONFIG_PATH')
+			let g:CONFIG_PATH = "$HOME/.config/nvim"
+		else
+			let g:CONFIG_PATH = $VIM_CONFIG_PATH
+		endif
 	endif
-endif
+endfunction
+call SetConfigPath()
 
 colorscheme blueorange
 function! ReturnHighlightTerm(group, term)
@@ -2146,6 +2149,7 @@ function! OnStart()
 		call PrepareWhichKey()
 	endif
 	Showtab
+	call SetConfigPath()
 	exec "so ".g:CONFIG_PATH."/vim/init.vim"
 	call DefineAugroups()
 	call UpdateShowtabline()
