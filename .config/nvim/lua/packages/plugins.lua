@@ -391,4 +391,7 @@ return require('packer').startup(function (use)
 	use {
 		'https://github.com/folke/yanky.nvim',
 	}
+	use {
+		'https://github.com/mfussenegger/nvim-lint',
+	}
 end)
