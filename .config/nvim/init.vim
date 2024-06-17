@@ -409,6 +409,7 @@ set eventignore=
 set noexrc
 set fillchars=
 set fixendofline
+set cmdheight=1
 
 set novisualbell
 set belloff=all
@@ -1411,7 +1412,6 @@ noremap <silent> <leader>? <cmd>DotfilesCheatSheet<cr>
 
 " FAST COMMANDS
 "noremap ; :
-noremap <silent> <leader>; ;
 noremap <silent> <leader>: :<c-f>a
 "noremap <leader>= :tabe 
 "noremap <leader>- :e 

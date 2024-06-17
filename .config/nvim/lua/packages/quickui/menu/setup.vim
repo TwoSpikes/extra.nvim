@@ -135,7 +135,7 @@ function! RebindMenus()
 				\ ["Go to &definition\tgd", 'call CocActionAsync("jumpDefinition")', 'Jump to definition'],
 				\ ["Go to &type definition\tgy", 'call CocActionAsync("jumpTypeDefinition")', 'Jump to type definition'],
 				\ ["Go to &implementation\tgi", 'call CocActionAsync("jumpImplementation")', 'Jump to implementation'],
-				\ ["Go to &references\tgr", 'call CocActionAsync("jumpReferences")', 'Jump to references'],
+				\ ["G&o to references\tgr", 'call CocActionAsync("jumpReferences")', 'Jump to references'],
 				\ ["--", '' ],
 				\ ["Code &actions selected\tLEAD a", 'call CocActionAsync("codeAction", visualmode())', 'Apply code actions for selected code'],
 				\ ["Code actions &cursor\tLEAD ac", 'call CocActionAsync("codeAction", "cursor")', 'Apply code actions for current cursor position'],

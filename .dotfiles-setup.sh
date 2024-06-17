@@ -1250,6 +1250,22 @@ case "${user_input}" in
 esac
 press_enter
 
+clear
+echo "==== Setting up broken lua syntax workaround ===="
+echo ""
+
+echo -n "Do you want to install lua syntax workaround? (Y/n): "
+read user_input
+user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+case "${user_input}" in
+	"n")
+		;;
+	*)
+		curl -sS https://raw.githubusercontent.com/neovim/neovim/v0.7.2/runtime/syntax/lua.vim > ${VIMRUNTIME}/syntax/lua.vim
+		;;
+esac
+press_enter
+
 echo "Dotfiles setup ended successfully"
 echo "It is recommended to restart your shell"
 exit 0
