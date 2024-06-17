@@ -1020,7 +1020,8 @@ set noexpandtab
 
 let g:loaded_perl_provider = 0
 
-command! -nargs=0 SWrap setl wrap linebreak nolist
+command! -nargs=0 SWrap if !&wrap|setl wrap linebreak nolist|else|setl nowrap nolinebreak list|endif
+nnoremap <leader>sW <cmd>SWrap<cr>
 
 if v:version >= 700
   au BufLeave * let b:winview = winsaveview()
@@ -1540,7 +1541,6 @@ augroup END
 augroup sh
 	au!
 	au filetype bash,sh let g:default_comment_string = "#"
-	au filetype bash,sh setlocal nowrap linebreak
 augroup END
 augroup python
 	au!
