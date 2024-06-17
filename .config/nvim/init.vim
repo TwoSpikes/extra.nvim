@@ -2054,13 +2054,6 @@ function! OpenOnStart()
 	endif
 endfunction
 
-if !exists('##TextYankPost')
-  nmap y <Plug>(highlightedyank)
-  xmap y <Plug>(highlightedyank)
-  omap y <Plug>(highlightedyank)
-endif
-let g:highlightedyank_highlight_duration = 125
-
 nnoremap <leader>n <cmd>Neogen<cr>
 
 function! DoPackerUpdate(args)

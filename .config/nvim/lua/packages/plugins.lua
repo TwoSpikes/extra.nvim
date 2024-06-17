@@ -381,14 +381,14 @@ return require('packer').startup(function (use)
 		}
 	end
 	use {
-		'machakann/vim-highlightedyank',
-	}
-	use {
 		"danymat/neogen",
 		-- Uncomment next line if you want to follow only stable versions
 		-- tag = "*"
 	}
 	use {
 		'folke/flash.nvim',
+	}
+	use {
+		'https://github.com/folke/yanky.nvim',
 	}
 end)
