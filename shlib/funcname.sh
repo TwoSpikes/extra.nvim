@@ -1,15 +1,15 @@
 #!/bin/env sh
 
-[ ! -z "${INCLUDED_FUNCNAME}" ] && return 0 || INCLUDED_FUNCNAME=true
+! test -z "${INCLUDED_FUNCNAME}" && return 0 || INCLUDED_FUNCNAME=true
 
-if [ ! -z ${ZSH_VERSION} ]; then
+if ! test -z ${ZSH_VERSION}; then
 	func_name() {
 		echo "${funcstack[@]:1:1}"
 	}
 	program_name() {
 		echo "${ZSH_ARGZERO}"
 	}
-elif [ ! -z ${BASH_VERSION} ]; then
+elif test ! -z ${BASH_VERSION}; then
 	func_name() {
 		echo "${FUNCNAME[1]}"
 	}

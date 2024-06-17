@@ -74,6 +74,26 @@ else
 	export LS_PROGRAM='lsd'
 fi
 
+md() {
+	test $# -eq 1 && mkdir -p -- "$1" && cd -- "$1"
+}
+if ! test -z "${ZSH_VERSION}"
+then
+	autoload -Uz compinit
+	compinit
+	compdef _directories md
+fi
+
+nd() {
+	test $# -eq 1 && mkdir -p -- "$1" && cd -- "$1" && nvim ./
+}
+if ! test -z "${ZSH_VERSION}"
+then
+	autoload -Uz compinit
+	compinit
+	compdef _directories nd
+fi
+
 "${ECHO_PROGRAM}" -n "${esc}[5 q"
 
 MAX_INSTALL_ATTEMPT=2

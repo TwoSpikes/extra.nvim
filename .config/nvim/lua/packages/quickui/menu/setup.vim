@@ -155,11 +155,11 @@ function! RebindMenus()
 	" script inside %{...} will be evaluated and expanded in the string
 	call quickui#menu#install("&Option", [
 				\ [(g:quickui_icons?"󰓆 ":"")."Set &Spell %{&spell? 'Off':'On'}", 'set spell!', '%{(&spell?"Disable":"Enable")." spell checking"}'],
-				\ [(g:quickui_icons?"  ":"")."Set &Paste %{&paste? 'Off':'On'}", 'set paste!'],
+				\ [(g:quickui_icons?"󰆒 ":"")."Set &Paste %{&paste? 'Off':'On'}", 'set paste!'],
 				\ ["--", '' ],
 				\ [(g:quickui_icons?"  ":"").'Set Cursor &Column %{g:cursorcolumn==#v:true?"Off":"On"}', 'let g:cursorcolumn=!g:cursorcolumn|call HandleBuftypeAll()'],
 				\ [(g:quickui_icons?"  ":"").'Set Cursor L&ine %{g:cursorline==#v:true?"Off":"On"}', 'let g:cursorline=!g:cursorline|call HandleBuftypeAll()'],
-				\ [(g:quickui_icons?" ":"").'Set Line &numbers %{g:linenr==#v:true?"Off":"On"}', 'let g:linenr=!g:linenr|if !g:linenr|call STCNo()|else|call Numbertoggle()|endif'],
+				\ [(g:quickui_icons?" ":"").'Set Line &numbers %{g:linenr==#v:true?"Off":"On"}', 'let g:linenr=!g:linenr|if !g:linenr|call PreserveAndDo("call STCNoAll()", v:true, v:true)|else|call PreserveAndDo("call NumbertoggleAll()", v:true, v:true)|endif'],
 				\ ])
 
 	call quickui#menu#install('&Config', [

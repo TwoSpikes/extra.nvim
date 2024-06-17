@@ -127,92 +127,118 @@ endfunction
 
 if has('nvim')
 	augroup LineNrForInactive
-		function! s:SaveStc(clear_stc)
-			exec printf("let g:stc_was_%d = &l:stc", win_getid())
+		function! s:SaveStc(clear_stc, winnr=winnr())
+			exec printf("let g:stc_was_%d = &l:stc", win_getid(a:winnr))
 			if a:clear_stc
-				let &l:stc = ''
+				call setwinvar(a:winnr, '&stc', '')
 			endif
 		endfunction
 		au! WinLeave * call s:SaveStc(v:true)
-		function! s:LoadStc()
-			if exists("g:stc_was_"..win_getid())==#1
-				let &l:stc = eval("g:stc_was_"..win_getid())
+		function! s:LoadStc(winnr=winnr())
+			if exists("g:stc_was_"..win_getid(a:winnr))==#1
+				call setwinvar(a:winnr, '&stc', eval("g:stc_was_"..win_getid(a:winnr)))
 			else
-				let &l:stc = ''
+				call setwinvar(a:winnr, '&stc', '')
 			endif
 		endfunction
 		au! WinEnter * call s:LoadStc()
 	augroup END
 endif
 
-function! STCRel()
+function! STCRel(winnr=winnr())
 	if has('nvim')
 		if mode() =~? 'v.*' || mode() ==# "\<c-v>"
-			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrVisu#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNrVisu#%=".((v:virtnum <= 0)?v:lnum:""):""%} '
+			call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNrVisu#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNrVisu#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
 			call CopyHighlightGroup("StatementVisu", "Statement")
 			return
 		endif
-		let &l:stc = '%#CursorLineNr#%{%v:relnum?"%#LineNr#":((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:relnum:""):""} '
+		call setwinvar(a:winnr, '&stc', '%#CursorLineNr#%{%v:relnum?"%#LineNr#":((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:relnum:""):""} ')
 		call CopyHighlightGroup("StatementNorm", "Statement")
 		call s:SaveStc(v:false)
 	else
-		set nu rnu
+		call setwinvar(a:winnr, '&number', v:true)
+		call setwinvar(a:winnr, '&relativenumber', v:true)
 	endif
 endfunction
-function! STCAbs(actual_mode)
+function! STCAbs(actual_mode, winnr=winnr())
 	if has('nvim')
 		if a:actual_mode ==# '' || a:actual_mode =~? 'n'
-			let &l:stc = '%{%v:relnum?"":"%#CursorLineNr#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNr#%=".((v:virtnum <= 0)?v:lnum:""):""%} '
+			call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNr#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNr#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
 			call CopyHighlightGroup("StatementNorm", "Statement")
 			return
 		endif
 		if a:actual_mode =~? 'r'
-			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrRepl#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} '
+			call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNrRepl#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} ')
 			return
 		endif
-		if a:actual_mode =~? 'v' && &modifiable
-			let &l:stc = '%{%v:relnum?"":"%#CursorLineNrVisu#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNrVisu#%=".((v:virtnum <= 0)?v:lnum:""):""%} '
+		if a:actual_mode =~? 'v' && getwinvar(a:winnr, '&modifiable')
+			call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNrVisu#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNrVisu#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
 			return
 		endif
-		let &l:stc = '%{%v:relnum?"":"%#CursorLineNrIns#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNrIns#%=".((v:virtnum <= 0)?v:lnum:""):""%} '
+		call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNrIns#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNrIns#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
 		call CopyHighlightGroup("StatementIns", "Statement")
 	else
-		set nu nornu
+		call setwinvar(a:winnr, '&number', v:true)
+		call setwinvar(a:winnr, '&relativenumber', v:false)
 	endif
 endfunction
-function! STCNo()
+function! STCNo(winnr=winnr())
 	if has('nvim')
-		setlocal stc=
+		call setwinvar(a:winnr, '&stc', '')
 	endif
 	setlocal nonu nornu
+	call setwinvar(a:winnr, '&number', v:false)
+	call setwinvar(a:winnr, '&relativenumber', v:false)
+endfunction
+function! STCNoAll()
+	tabdo windo call STCNo(winnr())
 endfunction
 
-function! Numbertoggle_stcabs(mode='')
-	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel'
-		call STCAbs(a:mode)
+function! Numbertoggle_stcabs(mode='', winnr=winnr())
+	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel' && g:linenr
+		call STCAbs(a:mode, a:winnr)
 	else
-		call STCNo()
+		call STCNo(a:winnr)
 	endif
 endfunction	
-function! Numbertoggle_stcrel()
-	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel'
-		call STCRel()
+function! Numbertoggle_stcrel(winnr)
+	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel' && g:linenr
+		call STCRel(a:winnr)
 	else
-		call STCNo()
+		call STCNo(a:winnr)
 	endif
 endfunction
-function! Numbertoggle(mode='')
+function! Numbertoggle(mode='', winnr=winnr())
 	if a:mode =~? 'i' || a:mode =~? 'r' || g:linenr_style ==# 'absolute'
-		call Numbertoggle_stcabs(a:mode)
+		call Numbertoggle_stcabs(a:mode, a:winnr)
 	else
-		call Numbertoggle_stcrel()
+		call Numbertoggle_stcrel(a:winnr)
 	endif
+endfunction
+function! NumbertoggleAll(mode='')
+	tabdo windo call Numbertoggle(a:mode, winnr())
 endfunction
 function! Numbertoggle_no()
 	if has('nvim')
 		set stc=
 	endif
 	set nonu nornu
+endfunction
+
+function! PreserveAndDo(cmd, preserve_tab, preserve_win)
+	if a:preserve_tab
+		let old_tabpagenr = tabpagenr()
+	endif
+	if a:preserve_win
+		let old_winnr = winnr()
+	endif
+	exec a:cmd
+	if a:preserve_tab
+		exec old_tabpagenr 'tabnext'
+	endif
+	if a:preserve_win
+		exec old_winnr 'wincmd w'
+	endif
 endfunction
 
 function! DefineAugroupVisual()
@@ -233,7 +259,7 @@ function! DefineAugroupNumbertoggle()
 			autocmd InsertLeave * call Numbertoggle('')
 			autocmd InsertEnter * call Numbertoggle(v:insertmode)
 			autocmd BufReadPost,BufEnter,BufLeave,WinLeave,WinEnter * call Numbertoggle()
-			autocmd FileType packer,spectre_panel call Numbertoggle()|call HandleBuftype(winnr())
+			autocmd FileType packer,spectre_panel,man call Numbertoggle()|call HandleBuftype(winnr())
 		else
 			autocmd! numbertoggle
 		endif
