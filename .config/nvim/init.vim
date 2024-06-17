@@ -1807,6 +1807,7 @@ if has('nvim')
 
 	exec printf("luafile %s", g:PLUGINS_INSTALL_FILE_PATH)
 	PackerInstall
+	set nolazyredraw
 	exec printf("luafile %s", g:PLUGINS_SETUP_FILE_PATH)
 endif
 
@@ -2153,6 +2154,7 @@ function! OnStart()
 	endif
 	call HelpOnFirstTime()
 	call OpenOnStart()
+	exec printf('luafile %s', fnamemodify(g:PLUGINS_SETUP_FILE_PATH, ':h').'/noice/setup.lua')
 endfunction
 function! OnQuit()
 	call TermuxLoadCursorStyle()

@@ -116,7 +116,7 @@ function! RebindMenus()
 				\ ["--", '' ],
 				\ [(g:quickui_icons?" ":"")."&Forward find <word>\t*", 'normal! *', 'Forwardly find whole word under cursor'],
 				\ [(g:quickui_icons?" ":"")."&Backward find <word>\t#", 'normal! #', 'Backwardly find whole word under cursor'],
-				\ [(g:quickui_icons?" ":"")."F&orward find word\tg*", 'normal! g*', 'Forwardly find word under cursor'],
+				\ [(g:quickui_icons?" ":"")."Fo&rward find word\tg*", 'normal! g*', 'Forwardly find word under cursor'],
 				\ [(g:quickui_icons?" ":"")."B&ackward find word\tg#", 'normal! g#', 'Backwardly find word under cursor'],
 				\ ["--", '' ],
 				\ [(g:quickui_icons?"󰅺 ":"")."&Comment out\tLEAD /d", 'call DoCommentOutDefault()', 'Comment out line under cursor'],
