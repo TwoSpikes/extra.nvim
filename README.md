@@ -110,6 +110,20 @@ Screenshots
 > [!Note]
 > Press `SPACE ?` to see help
 
+> [!Warning]
+> After updating coc-sh language server, you need to reinstall coc-sh crutch:
+
+<details><summary>
+Reinstall coc-sh crutch
+</summary>
+
+Run this:
+```console
+$ ONLY_SETUP_COC_SH_CRUTCH=true ./.dotfiles-setup.sh .
+```
+
+</details>
+
 Change to light theme: `:set background=light` \
 Change to dark theme: `:set background=dark`
 
