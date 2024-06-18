@@ -387,7 +387,7 @@ function! HandleDotfilesConfig()
 	call UpdateShowtabline()
 
 	if g:language ==# 'auto'
-		if $LANG ==# 'ru_RU.UTF-8'
+		if $LANG ==# 'ru_RU.UTF-8' || $TERMUX_LANG ==# 'ru_RU.UTF-8'
 			let g:language = 'russian'
 		else
 			let g:language = 'english'
