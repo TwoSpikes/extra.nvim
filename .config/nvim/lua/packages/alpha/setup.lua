@@ -45,7 +45,7 @@ if vim.fn.isdirectory(vim.g.LOCALSHAREPATH.."/site/pack/packer/start/nerdtree") 
 end
 if vim.fn.executable('ranger') == 1 then
 	dashboard.section.buttons.val = TableConcat(dashboard.section.buttons.val, {
-		dashboard.button("o", "  "..open_terminal_label, ":call OpenRanger(\"./\")<CR>")
+		dashboard.button("o", "  "..open_ranger_label, ":call OpenRanger(\"./\")<CR>")
 	})
 end
 dashboard.section.buttons.val = TableConcat(dashboard.section.buttons.val, {
