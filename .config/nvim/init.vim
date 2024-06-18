@@ -23,7 +23,11 @@ call SetDotfilesConfigPath()
 function! LoadDotfilesConfig(path, reload=v:false)
 	if !filereadable(a:path)
 		echohl ErrorMsg
-		echom "error: no dotfiles vim config"
+		if g:language ==# 'russian'
+			echom "блядь: dotfiles vim конфиг не найден"
+		else
+			echom "error: no dotfiles vim config"
+		endif
 		echohl Normal
 		return 1
 	endif
@@ -31,7 +35,11 @@ function! LoadDotfilesConfig(path, reload=v:false)
 	silent execute "let g:dotfiles_config = json_decode(l:dotfiles_config_str)"
 	if type(g:dotfiles_config) !=# v:t_dict
 		echohl ErrorMsg
-		echom "error: failed to parse dotfiles vim config"
+		if g:language ==# 'russian'
+			echom "блядь: не удалось распарсить dotfiles vim конфиг"
+		else
+			echom "error: failed to parse dotfiles vim config"
+		endif
 		echohl Normal
 		return 1
 	endif
@@ -64,6 +72,7 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		\'use_nvim_cmp',
 		\'enable_fortune',
 		\'quickui_icons',
+		\'language',
 	\]
 	for option_ in l:option_list
 		if exists('g:dotfiles_config["'.option_.'"]')
@@ -344,8 +353,12 @@ function! SetDefaultValuesForStartupOptionsAndDotfilesConfigOptions()
 	if !exists('g:quickui_icons')
 		let g:quickui_icons = v:true
 	endif
+	if !exists('g:language')
+		let g:language = 'auto'
+	endif
 endfunction
 call SetDefaultValuesForStartupOptionsAndDotfilesConfigOptions()
+
 function! HandleDotfilesConfig()
 	if g:background ==# "dark"
 		set background=dark
@@ -353,7 +366,11 @@ function! HandleDotfilesConfig()
 		set background=light
 	else
 		echohl ErrorMsg
-		echom "Dotfiles vim config: Error: wrong background value: ".g:background
+		if g:language ==# 'russian'
+			echom "Dotfiles vim конфиг: блядь: неправильное значение заднего фона: ".g:background
+		else
+			echom "Dotfiles vim config: Error: wrong background value: ".g:background
+		endif
 		echohl Normal
 
 		let g:background = "dark"
@@ -368,23 +385,34 @@ function! HandleDotfilesConfig()
 	endif
 
 	call UpdateShowtabline()
+
+	if g:language ==# 'auto'
+		if $LANG ==# 'ru_RU.UTF-8'
+			let g:language = 'russian'
+		else
+			let g:language = 'english'
+		endif
+	endif
 endfunction
 call HandleDotfilesConfig()
 
 let mapleader = " "
 
-if !exists('g:LOCALSHAREPATH')
-	if !exists('$VIM_LOCALSHAREPATH')
-		if has('nvim')
-			let g:LOCALSHAREPATH = '~/.local/share/nvim'
+function! SetLocalSharePath()
+	if !exists('g:LOCALSHAREPATH') || g:LOCALSHAREPATH ==# ''
+		if !exists('$VIM_LOCALSHAREPATH')
+			if has('nvim')
+				let g:LOCALSHAREPATH = '~/.local/share/nvim'
+			else
+				let g:LOCALSHAREPATH = '~/.local/share/vim'
+			endif
+			let g:LOCALSHAREPATH = expand(g:LOCALSHAREPATH)
 		else
-			let g:LOCALSHAREPATH = '~/.local/share/vim'
+			let g:LOCALSHAREPATH = $VIM_LOCALSHAREPATH
 		endif
-		let g:LOCALSHAREPATH = expand(g:LOCALSHAREPATH)
-	else
-		let g:LOCALSHAREPATH = $VIM_LOCALSHAREPATH
 	endif
-endif
+endfunction
+call SetLocalSharePath()
 
 if exists('g:CONFIG_ALREADY_LOADED')
 	if g:CONFIG_ALREADY_LOADED
@@ -584,77 +612,185 @@ function! Showtab()
 	if mode == 'n'
 		let strmode = '%#ModeNorm# '
 	elseif mode == 'no'
-		let strmode = 'OP_PEND '
+		if g:language ==# 'russian'
+			let strmode = 'ЖДУ_ОПЕР '
+		else
+			let strmode = 'OP_PEND '
+		endif
 	elseif mode == 'nov'
-		let strmode = 'visu OP_PEND '
+		if g:language ==# 'russian'
+			let strmode = 'визуал ЖДУ_ОПЕР '
+		else
+			let strmode = 'visu OP_PEND '
+		endif
 	elseif mode == 'noV'
-		let strmode = 'vis_line OP_PEND '
+		if g:language ==# 'russian'
+			let strmode = 'виз_лин ЖДУ_ОПЕР '
+		else
+			let strmode = 'vis_line OP_PEND '
+		endif
 	elseif mode == 'noCTRL-v'
-		let strmode = 'vis_block OP_PEND '
+		if g:language ==# 'russian'
+			let strmode = 'виз_блок ЖДУ_ОПЕР '
+		else
+			let strmode = 'vis_block OP_PEND '
+		endif
 	elseif mode == 'niI'
-		let strmode = '^o INS '
+		if g:language ==# 'russian'
+			let strmode = '^o ВСТ '
+		else
+			let strmode = '^o INS '
+		endif
 	elseif mode == 'niR'
-		let strmode = '^o REPL '
+		if g:language ==# 'russian'
+			let strmode = '^o ЗАМЕНА '
+		else
+			let strmode = '^o REPL '
+		endif
 	elseif mode == 'niV'
-		let strmode = '^o visu REPL '
+		if g:language ==# 'russian'
+			let strmode = '^o визуал ЗАМЕНА '
+		else
+			let strmode = '^o visu REPL '
+		endif
 	elseif mode == 'nt'
-		let strmode = '%#ModeNorm#NORM %#StatuslinestatNormTerm#%#ModeTerm# '
+		if g:language ==# 'russian'
+			let strmode = '%#ModeNorm#НОРМ %#StatuslinestatNormTerm#%#ModeTerm# '
+		else
+			let strmode = '%#ModeNorm#NORM %#StatuslinestatNormTerm#%#ModeTerm# '
+		endif
 	elseif mode == 'ntT'
-		let strmode = '^\^o norm TERM '
+		if g:language ==# 'russian'
+			let strmode = '^\^o норм ТЕРМ '
+		else
+			let strmode = '^\^o norm TERM '
+		endif
 	elseif mode == 'v'
 		let strmode = '%#ModeVisu# '
 	elseif mode == 'V'
-		let strmode = 'VIS_LINE '
+		if g:language ==# 'russian'
+			let strmode = 'ВИЗ_ЛИНИЯ '
+		else
+			let strmode = 'VIS_LINE '
+		endif
 	elseif mode == 'vs'
-		let strmode = '^o visu SEL '
+		if g:language ==# 'russian'
+			let strmode = '^o визуал ВЫБ '
+		else
+			let strmode = '^o visu SEL '
+		endif
 	elseif mode == 'CTRL-V'
-		let strmode = 'VIS_BLOCK '
+		if g:language ==# 'russian'
+			let strmode = 'ВИЗ_БЛОК '
+		else
+			let strmode = 'VIS_BLOCK '
+		endif
 	elseif mode == 'CTRL-Vs'
-		let strmode = '^o vis_block SEL '
+		if g:language ==# 'russian'
+			let strmode = '^o виз_блок ВЫБ '
+		else
+			let strmode = '^o vis_block SEL '
+		endif
 	elseif mode == 's'
-		let strmode = 'SEL  '
+		if g:language ==# 'russian'
+			let strmode = 'ВЫБ '
+		else
+			let strmode = 'SEL '
+		endif
 	elseif mode == 'S'
-		let strmode = 'SEL LINE '
+		if g:language ==# 'russian'
+			let strmode = 'ВЫБ ЛИНИЯ'
+		else
+			let strmode = 'SEL LINE '
+		endif
 	elseif mode == 'CTRL-S'
-		let strmode = 'SEL BLOCK '
+		if g:language ==# 'russian'
+			let strmode = 'ВЫБ БЛОК '
+		else
+			let strmode = 'SEL BLOCK '
+		endif
 	elseif mode == 'i'
 		let strmode = '%#ModeIns# '
 	elseif mode == 'ic'
-		let strmode = 'compl INS '
+		if g:language ==# 'russian'
+			let strmode = 'дополн ВСТ '
+		else
+			let strmode = 'compl INS '
+		endif
 	elseif mode == 'ix'
-		let strmode = '%#ModeCom#^x compl%#ModeIns#INS'
+		if g:language ==# 'russian'
+			let strmode = '%#ModeCom#^x дополн%#ModeIns#ВСТ '
+		else
+			let strmode = '%#ModeCom#^x compl%#ModeIns#INS '
+		endif
 	elseif mode == 'R'
 		let strmode = '%#ModeRepl# '
 	elseif mode == 'Rc'
-		let strmode = 'compl REPL '
+		if g:language ==# 'russian'
+			let strmode = 'дополн ЗАМЕНА '
+		else
+			let strmode = 'compl REPL '
+		endif
 	elseif mode == 'Rx'
 		let strmode = '^x compl REPL '
 	elseif mode == 'Rv'
-		let strmode = '%#ModeIns#visu%*%#ModeRepl#REPL'
+		if g:language ==# 'russian'
+			let strmode = '%#ModeIns#визуал%*%#ModeRepl#ЗАМЕНА '
+		else
+			let strmode = '%#ModeIns#visu%*%#ModeRepl#REPL '
+		endif
 	elseif mode == 'Rvc'
 		let strmode = 'compl visu REPL '
 	elseif mode == 'Rvx'
 		let strmode = '^x compl visu REPL '
 	elseif mode == 'c'
 		if s:specmode == 'b'
-			let strmode = 'COM_BLOCK '
+			if g:language ==# 'russian'
+				let strmode = 'КОМ_БЛОК '
+			else
+				let strmode = 'COM_BLOCK '
+			endif
 		else
 			let strmode = '%#ModeCom# '
 		endif
 	elseif mode == 'cv'
-		let strmode = 'EX   '
+		if g:language ==# 'russian'
+			let strmode = 'EX '
+		else
+			let strmode = 'EX '
+		endif
 	elseif mode == 'r'
-		let strmode = 'HIT_ENTER '
+		if g:language ==# 'russian'
+			let strmode = 'НАЖ_ВОЗВР '
+		else
+			let strmode = 'HIT_RET '
+		endif
 	elseif mode == 'rm'
-		let strmode = 'MORE '
+		if g:language ==# 'russian'
+			let strmode = 'ДАЛЕЕ '
+		else
+			let strmode = 'MORE '
+		endif
 	elseif mode == 'r?'
-		let strmode = 'CONFIRM '
+		if g:language ==# 'russian'
+			let strmode = 'ПОДТВЕРД '
+		else
+			let strmode = 'CONFIRM '
+		endif
 	elseif mode == '!'
-		let strmode = 'SHELL '
+		if g:language ==# 'russian'
+			let strmode = 'ОБОЛОЧ '
+		else
+			let strmode = 'SHELL '
+		endif
 	elseif mode == 't'
 		let strmode = '%#ModeTerm# '
 	else
-		let strmode = '%#ModeVisu#visu %#StatuslinestatVisuBlock#%#ModeBlock# BLOCK '
+		if g:language ==# 'russian'
+			let strmode = '%#ModeVisu#визуал %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
+		else
+			let strmode = '%#ModeVisu#visu %#StatuslinestatVisuBlock#%#ModeBlock# BLOCK '
+		endif
 	endif
 	"let stl_time = '%{strftime("%b,%d %H:%M:%S")}'
 	
@@ -777,9 +913,17 @@ function! MyTabLabel(n)
 	let original_buf_name = bufname(buflist[winnr - 1])
 	let bufnr = bufnr(original_buf_name)
 	if getbufvar(bufnr, '&buftype') ==# "terminal"
-		let buf_name = '[Term]'
+		if g:language ==# 'russian'
+			let buf_name = '[Терм]'
+		else
+			let buf_name = '[Term]'
+		endif
 	elseif original_buf_name == ''
-		let buf_name = '[NoName]'
+		if g:language ==# 'russian'
+			let buf_name = '[БезИмени]'
+		else
+			let buf_name = '[NoName]'
+		endif
 	else
 		let buf_name = original_buf_name
 	endif
@@ -1128,12 +1272,17 @@ nnoremap <bs> X
 noremap <leader><bs> <bs>
 
 function! Findfile()
+	if g:language ==# 'russian'
+		let find_file_label = 'Найти файл: '
+	else
+		let find_file_label = 'Find file: '
+	endif
 	if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
 		echohl Question
-		let filename = input('Find file: ')
+		let filename = input(find_file_label)
 		echohl Normal
 	else
-		let filename = quickui#input#open(Pad('Find file:', g:pad_amount_confirm_dialogue), fnamemodify(expand('%'), ':~:.'))
+		let filename = quickui#input#open(Pad(find_file_label, g:pad_amount_confirm_dialogue), fnamemodify(expand('%'), ':~:.'))
 	endif
 	if filename !=# ''
 		set lazyredraw
@@ -1144,13 +1293,18 @@ endfunction
 command! -nargs=0 Findfile call Findfile()
 noremap <c-c>c <cmd>Findfile<cr>
 function! Findfilebuffer()
+	if g:language ==# 'russian'
+		let find_file_label = 'Найти файл (открыть в буфере): '
+	else
+		let find_file_label = 'Find file (open in buffer): '
+	endif
 	if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
 		echohl Question
-		let filename = input('Find file (open in buffer): ')
+		let filename = input(find_file_label)
 		echohl Normal
 	else
 		set lazyredraw
-		let filename = quickui#input#open(Pad('Find file (open in buffer):', g:pad_amount_confirm_dialogue), fnamemodify(expand('%'), ':~:.'))
+		let filename = quickui#input#open(Pad(find_file_label, g:pad_amount_confirm_dialogue), fnamemodify(expand('%'), ':~:.'))
 		set nolazyredraw
 	endif
 	if filename !=# ''
@@ -1206,7 +1360,12 @@ function! SelectPosition(cmd, positions)
 	while v:true
 		if !has('nvim')||!filereadable(expand('~/.local/share/nvim/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim'))
 			echohl Question
-			echon printf('Select position %s: ', keys(a:positions))
+			if g:language ==# 'russian'
+				let select_position_label = 'Выберите позицию %s: '
+			else
+				let select_position_label = 'Select position %s: '
+			endif
+			echon printf(select_position_label, keys(a:positions))
 			echohl Normal
 			let position = nr2char(getchar())
 			echon position
@@ -1218,7 +1377,12 @@ function! SelectPosition(cmd, positions)
 			endfor
 			let button_label_string .= values(a:positions)[-1]['button_label']
 
-			let choice = quickui#confirm#open('Select position', button_label_string, 1, 'Confirm')
+			if g:language ==# 'russian'
+				let select_position_label = 'Выбор позиции'
+			else
+				let select_position_label = 'Select position'
+			endif
+			let choice = quickui#confirm#open(select_position_label, button_label_string, 1, 'Confirm')
 			unlet button_label_string
 
 			let position = keys(a:positions)[choice-1]
@@ -1230,7 +1394,11 @@ function! SelectPosition(cmd, positions)
 			exec a:positions[position]['command'](a:cmd)
 		else
 			echohl ErrorMsg
-			echom "Wrong position: ".position
+			if g:language ==# 'russian'
+				echom "Блядь: Неправильная позиция: ".position
+			else
+				echom "Error: Wrong position: ".position
+			endif
 			echohl Normal
 			return 1
 		endif
@@ -1238,19 +1406,35 @@ function! SelectPosition(cmd, positions)
 	endwhile
 endfunction
 
-let g:stdpos = {
-	\ 'h': {'button_label': '&Split', 'command': {cmd -> 'split '.cmd}},
-	\ 'v': {'button_label': '&Vsplit', 'command': {cmd -> 'vsplit '.cmd}},
-	\ 'b': {'button_label': '&Buffer', 'command': {cmd -> 'e '.cmd}},
-	\ 't': {'button_label': 'New &tab', 'command': {cmd -> 'tabnew|e '.cmd}},
-\ }
-let g:termpos = {
-	\ 'h': {'button_label': '&Split', 'command': {cmd -> 'split|call OpenTerm("'.cmd.'")'}},
-	\ 'v': {'button_label': '&Vsplit', 'command': {cmd -> 'vsplit|call OpenTerm("'.cmd.'")'}},
-	\ 'b': {'button_label': '&Buffer', 'command': {cmd -> 'call OpenTerm("'.cmd.'")'}},
-	\ 't': {'button_label': 'New &tab', 'command': {cmd -> 'tabnew|call OpenTerm("'.cmd.'")'}},
-	\ 'f': {'button_label': '&Floating', 'command': {cmd -> 'FloatermNew '.cmd}},
-\ }
+if g:language ==# 'russian'
+	let g:stdpos = {
+		\ 'h': {'button_label': '&s:ГорРаздел', 'command': {cmd -> 'split '.cmd}},
+		\ 'v': {'button_label': '&v:ВерРаздел', 'command': {cmd -> 'vsplit '.cmd}},
+		\ 'b': {'button_label': '&b:Буффер', 'command': {cmd -> 'e '.cmd}},
+		\ 't': {'button_label': '&t:НовВкладк', 'command': {cmd -> 'tabnew|e '.cmd}},
+	\ }
+	let g:termpos = {
+		\ 'h': {'button_label': '&s:ГРазде', 'command': {cmd -> 'split|call OpenTerm("'.cmd.'")'}},
+		\ 'v': {'button_label': '&v:ВРазде', 'command': {cmd -> 'vsplit|call OpenTerm("'.cmd.'")'}},
+		\ 'b': {'button_label': '&b:Буффер', 'command': {cmd -> 'call OpenTerm("'.cmd.'")'}},
+		\ 't': {'button_label': '&t:НовВкл', 'command': {cmd -> 'tabnew|call OpenTerm("'.cmd.'")'}},
+		\ 'f': {'button_label': '&f:Плаваю', 'command': {cmd -> 'FloatermNew '.cmd}},
+	\ }
+else
+	let g:stdpos = {
+		\ 'h': {'button_label': '&Split', 'command': {cmd -> 'split '.cmd}},
+		\ 'v': {'button_label': '&Vsplit', 'command': {cmd -> 'vsplit '.cmd}},
+		\ 'b': {'button_label': '&Buffer', 'command': {cmd -> 'e '.cmd}},
+		\ 't': {'button_label': 'New &tab', 'command': {cmd -> 'tabnew|e '.cmd}},
+	\ }
+	let g:termpos = {
+		\ 'h': {'button_label': '&Split', 'command': {cmd -> 'split|call OpenTerm("'.cmd.'")'}},
+		\ 'v': {'button_label': '&Vsplit', 'command': {cmd -> 'vsplit|call OpenTerm("'.cmd.'")'}},
+		\ 'b': {'button_label': '&Buffer', 'command': {cmd -> 'call OpenTerm("'.cmd.'")'}},
+		\ 't': {'button_label': 'New &tab', 'command': {cmd -> 'tabnew|call OpenTerm("'.cmd.'")'}},
+		\ 'f': {'button_label': '&Floating', 'command': {cmd -> 'FloatermNew '.cmd}},
+	\ }
+endif
 
 nnoremap <silent> * *:noh<cr>
 nnoremap <silent> <c-*> *
@@ -1473,7 +1657,11 @@ function! CommentOutDefault()
 		return CommentOut(g:default_comment_string)
 	else
 		echohl ErrorMsg
-		echo "Comments are not available"
+		if g:language ==# 'russian'
+			echo "Блядь: Комментарии недоступны"
+		else
+			echo "Error: Comments are not available"
+		endif
 		echohl Normal
 	endif
 endfunction
@@ -1497,7 +1685,11 @@ function! UncommentOutDefault()
 		call UncommentOut(g:default_comment_string)
 	else
 		echohl ErrorMsg
-		echo "Comments are not available"
+		if g:language ==# 'russian'
+			echo "Блядь: Комментарии недоступны"
+		else
+			echo "Error: Comments are not available"
+		endif
 		echohl Normal
 	endif
 endfunction
@@ -1648,11 +1840,16 @@ noremap <silent> <c-x>S <cmd>wall<Bar>echohl MsgArea<Bar>echo 'Saved all buffers
 noremap <silent> <c-x><c-s> <cmd>w<cr>
 function! Killbuffer()
 	echohl Question
+	if g:language ==# 'russian'
+		let kill_buffer_label = 'Убить буфер'
+	else
+		let kill_buffer_label = 'Kill buffer'
+	endif
 	if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
-		let user_input = input("do you want to kill the buffer? (Y/n): ")
+		let user_input = input(kill_buffer_label." (Y/n): ")
 		echohl Normal
 	else
-		let choice = quickui#confirm#open('Do you want to kill the buffer?', "&Yes\n&No", 1, 'Confirm')
+		let choice = quickui#confirm#open(kill_buffer_label, "&Yes\n&No", 1, 'Confirm')
 		if choice ==# 0
 			let user_input = 'n'
 		elseif choice ==# 1
@@ -1665,16 +1862,29 @@ function! Killbuffer()
 		bdelete
 	elseif !IsNo(user_input)
 		echohl ErrorMsg
-		echo " "
-		echo "please answer "
-		echohl Title
-		echon "yes"
-		echohl ErrorMsg
-		echon " or "
-		echohl Title
-		echon "no"
-		echohl ErrorMsg
-		echon " or leave blank empty"
+		if g:language ==# 'russian'
+			echo " "
+			echo "Пожалуйста ответь "
+			echohl Title
+			echon "да"
+			echohl ErrorMsg
+			echon " или "
+			echohl Title
+			echon "нет"
+			echohl ErrorMsg
+			echon " или оставь бланк пустым"
+		else
+			echo " "
+			echo "Please answer "
+			echohl Title
+			echon "yes"
+			echohl ErrorMsg
+			echon " or "
+			echohl Title
+			echon "no"
+			echohl ErrorMsg
+			echon " or leave blank empty"
+		endif
 		echohl Normal
 	endif
 endfunction
@@ -1698,7 +1908,11 @@ function! SelectAll()
 	mark y
 	normal! ggVG
 	echohl MsgArea
-	echom 'Previous position marked as "y"'
+	if g:language ==# 'russian'
+		echom 'Предыдущая позиция отмечена как "y"'
+	else
+		echom 'Previous position marked as "y"'
+	endif
 endfunction
 noremap <silent> <c-x>h <cmd>call SelectAll()<cr>
 noremap <silent> <c-x><c-h> <cmd>h<cr>
@@ -1862,7 +2076,11 @@ endfunction
 
 au VimResized * call OnResized()|mode
 function! OnResized()
-	echom "Window: ".&lines."rows, ".&columns."cols"
+	if g:language ==# 'russian'
+		echom "Окно: ".&lines."столбцов, ".&columns."колонок"
+	else
+		echom "Window: ".&lines."rows, ".&columns."cols"
+	endif
 	call STCUpd()
 endfunction
 
@@ -1922,11 +2140,19 @@ augroup xdg_open
 	function! OpenWithXdg(filename)
 		if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
 			echohl Question
-			echon 'Open with xdg-open (y/N): '
+			if g:language ==# 'russian'
+				echon 'Открыть через xdg-open (y/N): '
+			else
+				echon 'Open with xdg-open (y/N): '
+			endif
 			echohl Normal
 			let choice = nr2char(getchar())
 		else
-			let choice = quickui#confirm#open('Open with xdg-open?', "&OK\n&Cancel", 1, 'Confirm')
+			if g:language ==# 'russian'
+				let choice = quickui#confirm#open('Открыть через xdg-open?', "&Да\n&Отмена", 1, 'Confirm')
+			else
+				let choice = quickui#confirm#open('Open with xdg-open?', "&OK\n&Cancel", 1, 'Confirm')
+			endif
 			if choice ==# 1
 				let choice = 'y'
 			elseif choice ==# 2
@@ -2030,7 +2256,11 @@ function! OpenRangerCheck()
 		call OpenRanger('./')
 	else
 		echohl ErrorMsg
-		echom "Cannot open ranger: ranger not installed"
+		if g:language ==# 'russian'
+			echom "Блядь: Не открывается ranger: не установлен"
+		else
+			echom "Error: Cannot open ranger: ranger not installed"
+		endif
 		echohl Normal
 	endif
 endfunction
@@ -2132,7 +2362,11 @@ function! HelpOnFirstTime()
 		call writefile([], fnamemodify(g:DOTFILES_CONFIG_PATH, ':h').'/not_first_time.null')
 
 		if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
-			echom 'To see help, press SPC-?. You will not see this message again'
+			if g:language ==# 'russian'
+				echom 'Чтобы посмотреть помощь, нажмите SPC-?. Вы больше не увидите это сообщение'
+			else
+				echom 'To see help, press SPC-?. You will not see this message again'
+			endif
 		else
 			call timer_start(0, {timer_id -> quickui#confirm#open('To see help, press SPC-?')})
 		endif
@@ -2140,6 +2374,8 @@ function! HelpOnFirstTime()
 endfunction
 function! OnStart()
 	call SetDotfilesConfigPath()
+	call SetLocalSharePath()
+	call SetConfigPath()
 	if has('nvim')
 		call PrepareVital()
 		call MakeThingsThatRequireBeDoneAfterPluginsLoaded()
@@ -2149,7 +2385,6 @@ function! OnStart()
 		call PrepareWhichKey()
 	endif
 	Showtab
-	call SetConfigPath()
 	exec "so ".g:CONFIG_PATH."/vim/init.vim"
 	call DefineAugroups()
 	call UpdateShowtabline()
@@ -2158,7 +2393,9 @@ function! OnStart()
 	endif
 	call HelpOnFirstTime()
 	call OpenOnStart()
-	exec printf('luafile %s', fnamemodify(g:PLUGINS_SETUP_FILE_PATH, ':h').'/noice/setup.lua')
+	if has('nvim')
+		exec printf('luafile %s', fnamemodify(g:PLUGINS_SETUP_FILE_PATH, ':h').'/noice/setup.lua')
+	endif
 endfunction
 function! OnQuit()
 	call TermuxLoadCursorStyle()

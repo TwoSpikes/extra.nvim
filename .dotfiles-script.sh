@@ -1,5 +1,7 @@
 #!/bin/env sh
 
+export LC_CTYPE=ru_RU.utf-8
+
 GOPATH=${GOPATH:="${HOME}/go"}
 GOBIN=${GOBIN:="${GOPATH}/bin"}
 export PATH="${PATH}:${GOBIN}"

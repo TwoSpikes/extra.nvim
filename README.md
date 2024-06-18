@@ -280,6 +280,11 @@ $ DOTFILES_VIM_CONFIG_PATH=~/dnsjajsbdn/vim/ nvim
 "_comment_62":"Show icons in quickui dialogues",
 	"quickui_icons": true,
 
+"_comment_63":"Interface language",
+"_comment_64":"Aviable: auto (default), english, russian)",
+"_comment_65":"This option does not change system locale and Vim interface language",
+	"language": "auto",
+
 "_comment_end":"Ending field to not put comma every time"
 }
 ```
