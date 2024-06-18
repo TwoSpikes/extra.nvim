@@ -484,4 +484,7 @@ return require('packer').startup(function (use)
 			},
 		},
 	}
+	use {
+		'echasnovski/mini.bracketed',
+	}
 end)
