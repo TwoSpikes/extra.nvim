@@ -62,9 +62,9 @@ function! RebindMenus()
 				\ [(g:quickui_icons?" ":"")."Open file in &buffer\tCtrl-c C", 'Findfilebuffer', 'Open file in current buffer'],
 				\ ])
 	endif
-	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/nerdtree")
+	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/neo-tree.nvim")
 		call quickui#menu#install('&Window', [
-					\ [(g:quickui_icons?"󰙅 ":"")."Toggle &file tree\tCtrl-h", 'NERDTreeToggle', 'Toggles a file tree'],
+					\ [(g:quickui_icons?"󰙅 ":"")."Toggle &file tree\tCtrl-h", 'Neotree', 'Toggles a file tree'],
 					\ ])
 	endif
 	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/telescope.nvim")

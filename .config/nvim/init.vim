@@ -2260,6 +2260,8 @@ function! RunAlphaIfNotAlphaRunning()
 endfunction
 nnoremap <leader>A <cmd>call RunAlphaIfNotAlphaRunning()<cr>
 
+nnoremap <c-h> <cmd>Neotree<cr>
+
 function! OpenOnStart()
 	if exists('g:open_menu_on_start')
 		if g:open_menu_on_start ==# v:true
