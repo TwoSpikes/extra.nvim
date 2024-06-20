@@ -1,4 +1,13 @@
-use std::{borrow::Borrow, path::PathBuf};
+pub mod colors;
+pub mod timer;
+pub mod checkhealth;
+
+use std::path::PathBuf;
+use std::io::Write;
+use std::borrow::Borrow;
+
+use timer::timer_end_silent;
+#[allow(unused_imports)] use timer::{timer_endln, timer_start_silent, timer_startln, timer_total_time};
 
 #[allow(unused_macros)] macro_rules! clear {
     () => {
@@ -17,6 +26,9 @@ macro_rules! commands {
         println!("COMAMNDS (case sensitive):");
         println!("\tcommit       Commit changes to dotfiles repo");
         println!("\thelp         Show this help");
+        println!("\tversion --version -V     ");
+        println!("\t             Show version");
+        println!("\tinit         Initialize dotfiles");
     };
 }
 
@@ -122,7 +134,6 @@ fn commit(only_copy: bool, #[allow(non_snake_case)] HOME: PathBuf) -> ::std::io:
     let is_termux: bool = ::std::env::var("TERMUX_VERSION").is_ok();
     _ = ::std::fs::copy(HOME.join(".dotfiles-script.sh"), "./.dotfiles-script.sh");
     _ = copy_dir_all(HOME.join("shscripts"), "./shscripts");
-    _ = copy_dir_all(HOME.join("shlib"), "./shlib");
     _ = ::std::fs::copy(HOME.join(".profile"), "./.profile");
     _ = ::std::fs::copy(HOME.join(".zprofile"), "./.zprofile");
     _ = ::std::fs::copy(HOME.join(".bashrc"), "./.bashrc");
@@ -133,6 +144,9 @@ fn commit(only_copy: bool, #[allow(non_snake_case)] HOME: PathBuf) -> ::std::io:
     _ = copy_dir_all(HOME.join(".config/nvim/ftplugin"), "./.config/nvim/ftplugin");
     _ = ::std::fs::copy(HOME.join("bin/viman"), "./bin/viman");
     _ = ::std::fs::copy(HOME.join("bin/vipage"), "./bin/vipage");
+    _ = ::std::fs::copy(HOME.join("bin/inverting.sh"), "./bin/inverting.sh");
+    _ = ::std::fs::copy(HOME.join("bin/ls"), "./bin/ls");
+    _ = ::std::fs::copy(HOME.join("bin/n"), "./bin/n");
     #[allow(non_snake_case)] let VIMRUNTIME = if ::which::which("nvim").is_ok() {
         if cfg!(target_os = "windows") {
             "/c/Program Files/Neovim/share/nvim/runtime"
@@ -174,6 +188,88 @@ fn commit(only_copy: bool, #[allow(non_snake_case)] HOME: PathBuf) -> ::std::io:
     }
 }
 
+fn init(home: PathBuf) -> ::std::io::Result<()> {
+    let home_str = home.clone().into_os_string().into_string().expect("Cannot convert os_string into string");
+    if ::std::env::var("GOPATH") == Err(::std::env::VarError::NotPresent) {
+        ::std::env::set_var("GOPATH", format!("{}/go", home_str));
+    }
+    if ::std::env::var("GOBIN") == Err(::std::env::VarError::NotPresent) {
+        ::std::env::set_var("GOBIN", format!("{}/go", home_str));
+    }
+    ::std::env::set_var("PATH", format!("{}:{}",
+            ::std::env::var("PATH").expect("Cannot get $PATH environment variable"),
+            ::std::env::var("GOBIN").expect("Cannot get $PATH environment variable")));
+
+    ::std::env::set_var("HISTSIZE", "5000");
+    ::std::env::set_var("DISPLAY", "0");
+    if ::std::path::Path::new("/data/data/com.termux/files/usr/lib/libtermux-exec.so").exists() {
+        ::std::env::set_var("LD_PRELOAD", "/data/data/com.termux/files/usr/lib/libtermux-exec.so");
+    }
+
+    if ::std::env::var("XDG_CONFIG_HOME") == Err(::std::env::VarError::NotPresent) {
+        ::std::env::set_var("XDG_CONFIG_HOME", format!("{}/.config", home_str));
+    }
+    if ::std::env::var("PREFIX") == Err(::std::env::VarError::NotPresent) {
+        ::std::env::set_var("PREFIX", "/usr");
+    }
+    if ::std::env::var("JAVA_HOME") == Err(::std::env::VarError::NotPresent) {
+        ::std::env::set_var("JAVA_HOME", format!("{}/share/jdk8", ::std::env::var("PREFIX").expect("Cannot get environment variable")));
+    }
+
+    crate::colors::init();
+
+    let mut timer = timer_start_silent();
+
+    ::std::env::set_var("VISUAL", "nvim");
+    ::std::env::set_var("EDITOR", "nvim");
+
+    if ::which::which("most").is_ok() {
+        ::std::env::set_var("PAGER", "most");
+    } else if ::which::which("less").is_ok() {
+        ::std::env::set_var("PAGER", "less");
+    } else {
+        ::std::env::set_var("PAGER", "more");
+    }
+
+    let mut f = ::std::fs::File::create(home.join("bin/ls"))?;
+    if ::which::which("lsd").is_ok() {
+        _ = f.write_all(b"#!/bin/env sh\nlsd $@");
+    } else {
+        _ = f.write_all(b"#!/bin/env sh\nls $@");
+    }
+
+    if ::std::env::var("ZSH_VERSION").is_ok() {
+        _ = ::std::process::Command::new("autoload -Uz compinit").spawn();
+        _ = ::std::process::Command::new("compinit").spawn();
+        _ = ::std::process::Command::new("compdef _directories md").spawn();
+        _ = ::std::process::Command::new("compdef _directories nd").spawn();
+    }
+
+    print!("\x1b[5 q");
+
+    timer_end_silent(&mut timer);
+
+    let mut sys = ::sysinfo::System::new_all();
+    sys.refresh_all();
+    let disks = ::sysinfo::Disks::new_with_refreshed_list();
+    let disk_free_space = &disks.last().expect("Cannot get last element of an array").available_space();
+    timer_total_time(&mut timer, &format!("free space: {}{} GiB{} loading time",
+            ::std::env::var("YELLOW_COLOR").expect("Cannot get environment variable"),
+            *disk_free_space as f64 / 1_000_000_000.0f64,
+            ::std::env::var("RESET_COLOR").expect("Cannot get environment variable")));
+
+    let todo_path = home.join("todo");
+    if todo_path.exists() {
+        let content = ::std::fs::read_to_string(todo_path).expect("Cannot read file");
+        if content.is_empty() {
+            eprintln!("[ERROR] todo_is_empty");
+        } else {
+            println!("[NOTE] todo file: {}", content);
+        }
+    }
+    Ok(())
+}
+
 fn version() {
     println!(include_str!("../../../.dotfiles-version"));
 }
@@ -190,6 +286,7 @@ fn main() {
     enum State {
         NONE,
         COMMIT{only_copy: bool},
+        INIT,
         VERSION,
     }
     #[allow(non_snake_case)] let HOME = match ::home::home_dir() {
@@ -219,7 +316,19 @@ fn main() {
                     },
                 }
             },
-            "version" => {
+            "init" => {
+                match state {
+                    State::NONE => {
+                        state = State::INIT;
+                    },
+                    _ => {
+                        eprintln!("Subcommands can be used only with first cmdline argument");
+                        short_help!(program_name);
+                        ::std::process::exit(1);
+                    },
+                }
+            },
+            "version"|"--version"|"-V" => {
                 match state {
                     State::NONE => {
                         state = State::VERSION;
@@ -266,6 +375,17 @@ fn main() {
         State::NONE => {},
         State::COMMIT { only_copy } => {
             match commit(only_copy, HOME) {
+                Ok(_) => {
+                    ::std::process::exit(0);
+                },
+                Err(e) => {
+                    println!("error: {}", e);
+                    ::std::process::exit(1);
+                },
+            };
+        },
+        State::INIT => {
+            match init(HOME) {
                 Ok(_) => {
                     ::std::process::exit(0);
                 },
