@@ -207,14 +207,14 @@ function! STCNoAll()
 endfunction
 
 function! Numbertoggle_stcabs(mode='', winnr=winnr())
-	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel' && g:linenr
+	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel' && g:linenr
 		call STCAbs(a:mode, a:winnr)
 	else
 		call STCNo(a:winnr)
 	endif
 endfunction	
 function! Numbertoggle_stcrel(winnr)
-	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'nerdtree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel' && g:linenr
+	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel' && g:linenr
 		call STCRel(a:winnr)
 	else
 		call STCNo(a:winnr)
@@ -888,22 +888,6 @@ command! -nargs=0 DotfilesCommit call DotfilesCommit()
 " 
 " "noremap <silent> <esc> <cmd>Showtab<cr>
 
-let g:NERDTreeGitStatusIndicatorMapCustom = {
-                \ 'Modified'  :'✹',
-                \ 'Staged'    :'✚',
-                \ 'Untracked' :'✭',
-                \ 'Renamed'   :'➜',
-                \ 'Unmerged'  :'═',
-                \ 'Deleted'   :'✖',
-                \ 'Dirty'     :'✗',
-                \ 'Ignored'   :'☒',
-                \ 'Clean'     :'✔︎',
-                \ 'Unknown'   :'?',
-                \ }
-let g:NERDTreeGitStatusUseNerdFonts = 1
-let g:NERDTreeGitStatusShowIgnored = 1
-noremap <c-h> <cmd>NERDTreeToggle<cr>
-
 " autocmd BufReadPost,WinLeave,WinEnter * call Numbertoggle()
 " call timer_start(500, 'BufModifiableHandler', {'repeat': -1})
 
@@ -986,7 +970,7 @@ function! MyTabLine()
 		if v:false
 		elseif v:false
 		\||isdirectory(bufname)
-		\||getbufvar(bufnr, '&filetype') ==# 'nerdtree'
+		\||getbufvar(bufnr, '&filetype') ==# 'neo-tree'
 			let s ..= ' '
 		elseif getbufvar(bufnr, '&buftype') ==# 'terminal'
 			let s ..= ' '
@@ -1532,7 +1516,7 @@ function! DotfilesCheatSheet()
 	\\n   LEAD l - Move screen 10 symbols right
 	\\n   INSERT: CTRL-h - Move screen 10 symbols left
 	\\n   INSERT: CTRL-l - Move screen 10 symbols right
-	\\n   CTRL-h - Toggle NERDTree
+	\\n   CTRL-h - Toggle Neo-tree
 	\\n   CTRL-n - Enter multicursor mode
 	\\n   ci_ - Edit word from start to first _
 	\\n   LEAD d  - Hide search highlightings
@@ -1751,11 +1735,11 @@ augroup netrw
 	endif
 	au filetype netrw setlocal nocursorcolumn | call Numbertoggle()
 augroup END
-augroup nerdtree
+augroup neo-tree
 	if exists('g:default_comment_string')
 		unlet g:default_comment_string
 	endif
-	au filetype nerdtree setlocal nocursorcolumn | call Numbertoggle()
+	au filetype neo-tree setlocal nocursorcolumn | call Numbertoggle()
 augroup END
 augroup terminal
 	au!
@@ -1768,7 +1752,7 @@ augroup visual
 		let filetype = getwinvar(a:winnum, '&filetype', 'ERROR')
 		let buftype = getwinvar(a:winnum, '&buftype', 'ERROR')
 
-		let pre_cursorcolumn = (mode() !~# "[vVirco]" && mode() !~# "\<c-v>") && !s:fullscreen && filetype !=# 'netrw' && buftype !=# 'terminal' && filetype !=# 'nerdtree' && buftype !=# 'nofile'
+		let pre_cursorcolumn = (mode() !~# "[vVirco]" && mode() !~# "\<c-v>") && !s:fullscreen && filetype !=# 'netrw' && buftype !=# 'terminal' && filetype !=# 'neo-tree' && buftype !=# 'nofile'
 		if exists('g:cursorcolumn')
 			let pre_cursorcolumn = pre_cursorcolumn && g:cursorcolumn
 		endif
@@ -1777,7 +1761,7 @@ augroup visual
 		let pre_cursorline = !s:fullscreen
 		if g:cursorline_style ==# "reverse"
 			let pre_cursorline = pre_cursorline && mode() !~# "[irco]"
-			let pre_cursorline = pre_cursorline && (buftype !=# 'nofile' || filetype ==# 'nerdtree') && filetype !=# 'TelescopePrompt' && filetype !=# 'spectre_panel' && filetype !=# 'packer'
+			let pre_cursorline = pre_cursorline && (buftype !=# 'nofile' || filetype ==# 'neo-tree') && filetype !=# 'TelescopePrompt' && filetype !=# 'spectre_panel' && filetype !=# 'packer'
 		endif
 		let pre_cursorline = pre_cursorline && buftype !=# 'terminal' && filetype !=# 'alpha'
 		if exists('g:cursorline')
@@ -2286,8 +2270,8 @@ function! OpenOnStart()
 	endif
 
 	if argc() && isdirectory(argv(0))
-		if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/nerdtree")
-			exec 'NERDTree' argv(0)
+		if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/neo-tree")
+			exec 'Neotree' argv(0)
 			silent only
 		else
 			exec "edit ".argv(0)

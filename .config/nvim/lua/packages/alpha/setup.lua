@@ -6,7 +6,7 @@ if vim.g.language == 'russian' then
 	load_last_session_label = 'Открыть предыдущую сессию'
 	open_terminal_label = 'Открыть терминал'
 	recently_opened_files_label = 'Предыдущие открытые файлы'
-	open_nerdtree_label = 'Открыть NERDTree'
+	open_nerdtree_label = 'Открыть Neo-tree.nvim'
 	open_ranger_label = 'Открыть ranger'
 	quit_neovim_label = 'Выйти из NeoVim'
 else
@@ -15,7 +15,7 @@ else
 	load_last_session_label = 'Load last session'
 	open_terminal_label = 'Open Terminal'
 	recently_opened_files_label = 'Recently opened files'
-	open_nerdtree_label = 'Open NERDTree'
+	open_nerdtree_label = 'Open Neo-tree.nvim'
 	open_ranger_label = 'Open Ranger'
 	quit_neovim_label = 'Quit NeoVim'
 end
@@ -38,9 +38,9 @@ dashboard.section.buttons.val = TableConcat(dashboard.section.buttons.val, {
 	dashboard.button("t", "  "..open_terminal_label, ":call OpenTerm(\"\")<CR>"),
 	dashboard.button("r", "󰚰  "..recently_opened_files_label, ":lua require('telescope').extensions.recent_files.pick()<CR>"),
 })
-if vim.fn.isdirectory(vim.g.LOCALSHAREPATH.."/site/pack/packer/start/nerdtree") == 1 then
+if vim.fn.isdirectory(vim.g.LOCALSHAREPATH.."/site/pack/packer/start/neo-tree.nvim") == 1 then
 	dashboard.section.buttons.val = TableConcat(dashboard.section.buttons.val, {
-		dashboard.button("h", "󰙅  "..open_nerdtree_label, ":NERDTreeToggle<CR>:silent only<CR>")
+		dashboard.button("h", "󰙅  "..open_nerdtree_label, ":Neotree<CR>:silent only<CR>")
 	})
 end
 if vim.fn.executable('ranger') == 1 then
