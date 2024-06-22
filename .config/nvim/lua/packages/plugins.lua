@@ -501,7 +501,7 @@ return require('packer').startup(function (use)
 		}
 	}
 	use {
-		'plax-00/endscroll.nvim',
+		'TwoSpikes/endscroll.nvim',
 	}
 	use {
 		'declancm/cinnamon.nvim',
