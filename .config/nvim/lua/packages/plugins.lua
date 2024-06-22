@@ -503,4 +503,13 @@ return require('packer').startup(function (use)
 	use {
 		'plax-00/endscroll.nvim',
 	}
+	use {
+		'declancm/cinnamon.nvim',
+	}
+	use {
+		'nvimtools/none-ls.nvim',
+		requires = {
+			'nvimtools/none-ls-extras.nvim',
+		}
+	}
 end)
