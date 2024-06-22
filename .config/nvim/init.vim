@@ -2273,6 +2273,7 @@ function! OpenOnStart()
 
 	if argc() && isdirectory(argv(0))
 		if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/neo-tree.nvim")
+			bwipeout!
 			exec 'Neotree' argv(0)
 			silent only
 		else
