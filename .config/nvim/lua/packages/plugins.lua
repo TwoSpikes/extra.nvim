@@ -14,7 +14,9 @@ return require('packer').startup(function (use)
     use {
         'williamboman/mason-lspconfig.nvim',
     }
-    use 'neovim/nvim-lspconfig'
+    use {
+		'neovim/nvim-lspconfig',
+	}
     use {
         'RishabhRD/lspactions',
         branch = 'master',
@@ -27,15 +29,25 @@ return require('packer').startup(function (use)
             },
         },
     }
-    use 'rcarriga/nvim-notify'
+    use {
+		'rcarriga/nvim-notify',
+	}
     use (
 		'nvim-treesitter/nvim-treesitter',
 		{run = ':TSUpdate'}
 	)
-    use 'nvim-treesitter/playground'
-	use 'weizheheng/nvim-workbench'
-	use 'ap/vim-css-color'
-	use 'prichrd/netrw.nvim'
+    use {
+		'nvim-treesitter/playground',
+	}
+	use {
+		'weizheheng/nvim-workbench',
+	}
+	use {
+		'norcalli/nvim-colorizer.lua',
+	}
+	use {
+		'prichrd/netrw.nvim',
+	}
 	use {
 		"windwp/nvim-autopairs",
 	-- 	config = function() require("nvim-autopairs").setup {} end
