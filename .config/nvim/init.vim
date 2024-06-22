@@ -161,7 +161,7 @@ endif
 function! STCRel(winnr=winnr())
 	if has('nvim')
 		if mode() =~? 'v.*' || mode() ==# "\<c-v>"
-			call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNrVisu#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNrVisu#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
+			call setwinvar(a:winnr, '&stc', '%#CursorLineNrVisu#%{%v:relnum?"%#LineNrVisu#":((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:relnum:""):""} ')
 			call CopyHighlightGroup("StatementVisu", "Statement")
 			return
 		endif
@@ -176,19 +176,19 @@ endfunction
 function! STCAbs(actual_mode, winnr=winnr())
 	if has('nvim')
 		if a:actual_mode ==# '' || a:actual_mode =~? 'n'
-			call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNr#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNr#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
+			call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNr#".((v:virtnum <= 0)?Pad(v:lnum,len(line("$"))):"")%}%{%v:relnum?"%#LineNr#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
 			call CopyHighlightGroup("StatementNorm", "Statement")
 			return
 		endif
 		if a:actual_mode =~? 'r'
-			call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNrRepl#".((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:lnum:""):""} ')
+			call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNrRepl#".((v:virtnum <= 0)?Pad(v:lnum,len(line("$"))):"")%}%{%v:relnum?"%#LineNrIns#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
 			return
 		endif
 		if a:actual_mode =~? 'v' && getwinvar(a:winnr, '&modifiable')
-			call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNrVisu#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNrVisu#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
+			call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNrVisu#".((v:virtnum <= 0)?Pad(v:lnum,len(line("$"))):"")%}%{%v:relnum?"%#LineNrVisu#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
 			return
 		endif
-		call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNrIns#".((v:virtnum <= 0)?v:lnum:"")%}%{%v:relnum?"%#LineNrIns#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
+		call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNrIns#".((v:virtnum <= 0)?Pad(v:lnum,len(line("$"))):"")%}%{%v:relnum?"%#LineNrIns#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
 		call CopyHighlightGroup("StatementIns", "Statement")
 	else
 		call setwinvar(a:winnr, '&number', v:true)
