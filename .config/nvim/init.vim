@@ -73,6 +73,7 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		\'enable_fortune',
 		\'quickui_icons',
 		\'language',
+		\'fast_terminal',
 	\]
 	for option_ in l:option_list
 		if exists('g:dotfiles_config["'.option_.'"]')
@@ -355,6 +356,9 @@ function! SetDefaultValuesForStartupOptionsAndDotfilesConfigOptions()
 	endif
 	if !exists('g:language')
 		let g:language = 'auto'
+	endif
+	if !exists('g:fast_terminal')
+		let g:fast_terminal = v:false
 	endif
 endfunction
 call SetDefaultValuesForStartupOptionsAndDotfilesConfigOptions()
@@ -1429,16 +1433,22 @@ noremap <leader>l 10zl
 noremap <leader>h 10zh
 inoremap <c-l> <cmd>let old_lazyredraw=&lazyredraw<cr><cmd>set lazyredraw<cr><cmd>normal! 10zl<cr><cmd>let &lazyredraw=old_lazyredraw<cr><cmd>unlet old_lazyredraw<cr><cmd>call HandleBuftype(winnr())<cr>
 inoremap <c-h> <cmd>let old_lazyredraw=&lazyredraw<cr><cmd>set lazyredraw<cr><cmd>normal! 10zh<cr><cmd>let &lazyredraw=old_lazyredraw<cr><cmd>unlet old_lazyredraw<cr><cmd>call HandleBuftype(winnr())<cr>
-let s:SCROLL_UP_FACTOR = 2
-let s:SCROLL_DOWN_FACTOR = 2
+let s:SCROLL_FACTOR = 2
+let s:SCROLL_UP_FACTOR = s:SCROLL_FACTOR
+let s:SCROLL_DOWN_FACTOR = s:SCROLL_FACTOR
 let s:SCROLL_C_E_FACTOR = s:SCROLL_UP_FACTOR
 let s:SCROLL_C_Y_FACTOR = s:SCROLL_DOWN_FACTOR
 let s:SCROLL_MOUSE_UP_FACTOR = s:SCROLL_UP_FACTOR
 let s:SCROLL_MOUSE_DOWN_FACTOR = s:SCROLL_DOWN_FACTOR
 exec printf("noremap <silent> <expr> <c-Y> \"%s<c-e>\"", s:SCROLL_C_E_FACTOR)
 exec printf("noremap <silent> <expr> <c-y> \"%s<c-y>\"", s:SCROLL_C_Y_FACTOR)
-exec printf("noremap <silent> <ScrollWheelDown> <cmd>set lazyredraw<cr>%s<c-e><cmd>call STCUpd()<cr><cmd>set nolazyredraw<cr>", s:SCROLL_MOUSE_DOWN_FACTOR)
-exec printf("noremap <silent> <ScrollWheelUp> <cmd>set lazyredraw<cr>%s<c-y><cmd>call STCUpd()<cr><cmd>set nolazyredraw<cr>", s:SCROLL_MOUSE_UP_FACTOR)
+if g:fast_terminal
+	exec printf("noremap <silent> <ScrollWheelDown> :se lz<cr>%s<c-e>:se nolz<cr>", s:SCROLL_MOUSE_DOWN_FACTOR)
+	exec printf("noremap <silent> <ScrollWheelUp> :se lz<cr>%s<c-y>:se nolz<cr>", s:SCROLL_MOUSE_UP_FACTOR)
+else
+	exec printf("noremap <silent> <ScrollWheelDown> %s<c-e>", s:SCROLL_MOUSE_DOWN_FACTOR)
+	exec printf("noremap <silent> <ScrollWheelUp> %s<c-y>", s:SCROLL_MOUSE_UP_FACTOR)
+endif
 noremap <silent> <leader><c-e> <c-e>
 noremap <silent> <leader><c-y> <c-y>
 

@@ -285,6 +285,9 @@ $ DOTFILES_VIM_CONFIG_PATH=~/dnsjajsbdn/vim/ nvim
 "_comment_65":"This option does not change system locale and Vim interface language",
 	"language": "auto",
 
+"_comment_66":"Do things that require fast terminal",
+	"fast_terminal": false,
+
 "_comment_end":"Ending field to not put comma every time"
 }
 ```
