@@ -512,4 +512,7 @@ return require('packer').startup(function (use)
 			'nvimtools/none-ls-extras.nvim',
 		}
 	}
+	use {
+		'stevearc/conform.nvim',
+	}
 end)
