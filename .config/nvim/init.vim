@@ -1209,24 +1209,38 @@ noremap <c-t> <cmd>TagbarToggle<cr>
 
 nnoremap <leader>g :grep -R <cword> .<cr>
 
-function! ProcessGBut(button)
-	let temp = ''
-	if &buftype !=# 'terminal'
-		let temp .= "\<cmd>set lazyredraw\<cr>"
-	endif
-	if v:count == 0
-		let temp.="g".a:button
-	else
-		let temp.=v:count.a:button
-	endif
-	if s:fullscreen || !&cursorcolumn
-		call STCUpd()
-	endif
-	if &buftype !=# 'terminal'
-		let temp .= "\<cmd>set nolazyredraw\<cr>"
-	endif
-	return temp
-endfunction
+let s:process_g_but_function_expression = "
+\\nfunction! ProcessGBut(button)
+\\n	let temp = ''
+\"
+if g:fast_terminal
+let s:process_g_but_function_expression .= "
+\\n	if &buftype !=# 'terminal'
+\\n		let temp .= \"\\<cmd>set lazyredraw\\<cr>\"
+\\n	endif
+\"
+endif
+let s:process_g_but_function_expression .= "
+\\n	if v:count == 0
+\\n		let temp.=\"g\".a:button
+\\n	else
+\\n		let temp.=v:count.a:button
+\\n	endif
+\\n	if s:fullscreen || !&cursorcolumn
+\\n		call STCUpd()
+\\n	endif
+\"
+if g:fast_terminal
+let s:process_g_but_function_expression .= "
+\\n	if &buftype !=# 'terminal'
+\\n		let temp .= \"\\<cmd>set nolazyredraw\\<cr>\"
+\\n	endif
+\"
+endif
+let s:process_g_but_function_expression .= "
+\\n	return temp
+\\nendfunction"
+exec s:process_g_but_function_expression
 
 noremap <silent> <expr> j ProcessGBut('j')
 noremap <silent> <expr> k ProcessGBut('k')
