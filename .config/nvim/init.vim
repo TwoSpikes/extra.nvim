@@ -1230,7 +1230,10 @@ let s:process_g_but_function_expression .= "
 \\n	if v:count == 0
 \\n		let temp.=\"g\".a:button
 \\n	else
-\\n		let temp.=v:count.a:button
+\\n     let temp.=\"\\<esc>\"
+\\n 	for _ in range(v:count)
+\\n			let temp.=a:button
+\\n 	endfor
 \\n	endif
 \\n	if s:fullscreen || !&cursorcolumn
 \\n		call STCUpd()
