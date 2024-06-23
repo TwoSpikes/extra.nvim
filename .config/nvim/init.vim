@@ -297,6 +297,9 @@ function! SetDefaultValuesForStartupOptionsAndDotfilesConfigOptions()
 	endif
 
 	" Default values for options
+	if !exists('g:use_transparent_bg')
+		let g:use_transparent_bg = "dark"
+	endif
 	if !exists('g:cursorcolumn')
 		let g:cursorcolumn = v:false
 	endif
@@ -845,7 +848,6 @@ function! Showtab()
 endfunction
 command! -nargs=0 Showtab set stl=%{%Showtab()%}
 
-" command! -nargs=* Git !git <args>
 command! -nargs=* Pkg !pkg <args>
 function! DotfilesCommit()
 	!dotfiles commit --only-copy
@@ -853,6 +855,13 @@ function! DotfilesCommit()
 	Git commit --all --verbose
 endfunction
 command! -nargs=0 DotfilesCommit call DotfilesCommit()
+
+function! GenerateDotfilesConfig()
+	tabnew
+	call OpenTerm('dotfiles setup dotfiles vim')
+endfunction
+command! -nargs=0 GenerateDotfilesConfig call GenerateDotfilesConfig()
+nnoremap <leader>G <cmd>GenerateDotfilesConfig<cr>
 
 " let s:tabtimerid = 0
 " function TabTimerHandler(id)

@@ -243,7 +243,13 @@ function! RebindMenus()
 			\ ["R&eload plugins list\tLEAD si", 'exec "source ".g:PLUGINS_INSTALL_FILE_PATH', 'Install plugins in '.g:PLUGINS_INSTALL_FILE_PATH],
 			\ ["Rel&oad plugins setup\tLEAD ss", 'exec "source ".g:PLUGINS_SETUP_FILE_PATH', 'Reconfigure plugins'],
 			\ ["Relo&ad lsp setup\tLEAD sl", 'exec "source ".g:LSP_PLUGINS_SETUP_FILE_PATH', 'Reconfigure LSP plugins (deprecated due to coc.nvim)'],
+			\ ["--", '' ],
 			\ ])
+	if executable('dotfiles')
+		call quickui#menu#install(s:config_label, [
+			\ ["&Generate dotfiles config\tLEAD G", 'GenerateDotfilesConfig', 'Regenerate dotfiles vim config'],
+			\ ])
+	endif
 	if filereadable(g:DOTFILES_CONFIG_PATH)
 		call quickui#menu#install(s:config_label, [
 			\ ["Reload do&tfiles config\tLEAD sj", 'let old_tabpagenr=tabpagenr()|call LoadDotfilesConfig("'.expand(g:DOTFILES_CONFIG_PATH).'", v:true)|call HandleDotfilesConfig()|call HandleBuftypeAll()|exec old_tabpagenr."tabnext"', 'Reload dotfiles config'],

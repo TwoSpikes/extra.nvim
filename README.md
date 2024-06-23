@@ -145,9 +145,15 @@ $ echo "so ~/.config/nvim/init.vim" >> ~/.vimrc
 
 </details>
 
-<details><summary>
+<details open><summary>
 Config for dotfiles
 </summary>
+
+#### Autogenerate
+
+```console
+dotfiles setup dotfiles vim
+```
 
 #### Where is it?
 
@@ -164,132 +170,6 @@ $ DOTFILES_VIM_CONFIG_PATH=your_path nvim
 Like
 ```console
 $ DOTFILES_VIM_CONFIG_PATH=~/dnsjajsbdn/vim/ nvim
-```
-
-#### Default config
-
-> [!Note]
-> Fields starting with `_comment` are comments
-
-```json
-{
-"_comment_01":"Transparent background",
-"_comment_02":"Values:",
-"_comment_03":"    always - In dark and light theme",
-"_comment_04":"    dark   - In dark theme",
-"_comment_05":"    light  - In light theme",
-"_comment_06":"    never  - Non-transparent",
-	"use_transparent_bg": "dark",
-
-"_comment_07":"Prevent setting up LSP if false",
-"_comment_08":"Useful if it does not work",
-	"setup_lsp": false,
-
-"_comment_09":"light - light background",
-"_comment_10":"dark  - dark background",
-	"background": "dark",
-
-"_comment_11":"Use italic style for text",
-"_comment_12":"Useful to disable for terminals with bugged italic font (like Termux)",
-	"use_italic_style": false,
-
-"_comment_13":"Enable or disable highlighting for current column",
-	"cursorcolumn": false,
-
-"_comment_14":"Enable or disable highlighting for current line",
-	"cursorline": true,
-
-"_comment_15":"Enable or disable showing line numbers",
-	"linenr": true,
-
-"_comment_16":"Change the style of line numbers",
-"_comment_17":"Aviable: absolute, relative",
-	"linenr_style": true,
-
-"_comment_18":"Change style of cursorline",
-"_comment_19":"    dim       - Small fogging (default)",
-"_comment_20":"    reverse   - Swap fg with bg",
-"_comment_21":"    underline - Underline a line",
-	"cursorline_style": "dim",
-
-"_comment_22":"Open quickui menu on start",
-	"open_menu_on_start": false,
-
-"_comment_23":"Change quickui_border_style",
-"_comment_24":"1 - Dashed, non-Unicode",
-"_comment_25":"2 - Solid",
-"_comment_26":"3 - Double outer border (default)",
-	"quickui_border_style": "3",
-
-"_comment_27":"Change quickui colorscheme",
-"_comment_28":"Aviable: borland, gruvbox, solarized, papercol dark, papercol light",
-"_comment_29":"See them at https://github.com/skywind3000/vim-quickui/blob/master/MANUAL.md",
-	"quickui_color_scheme": "papercol dark",
-
-"_comment_30":"Open ranger on start",
-	"open_ranger_on_start": true,
-
-"_comment_31":"Enable Github Copilot",
-"_comment_32":"Useful to disable if you do not have a subscription to it",
-	"use_github_copilot": false,
-
-"_comment_33":"Confirm dialogue width (vim-quickui)",
-"_comment_34":"Default: 30",
-	"pad_amount_confirm_dialogue": 30,
-
-"_comment_35":"Change cursor style",
-"_comment_36":"Aviable styles:",
-"_comment_37":"  block (default)   █",
-"_comment_38":"  bar               ⎸",
-"_comment_39":"  underline         _",
-	"cursor_style": "block",
-
-"_comment_40":"Show or do not show tabline",
-"_comment_41":"  0     Do not show",
-"_comment_42":"  1     Show if there is only one tab",
-"_comment_43":"  2     Show always (default)",
-	"showtabline": 2,
-
-"_comment_44":"Path style of tab in tabline",
-"_comment_45":"  name      Show only filename (default)",
-"_comment_46":"  short     Short path (relative to cwd and $HOME)",
-"_comment_47":"  shortdir  Short path, reduce dirnames to 1 symbol",
-"_comment_48":"  full      Show full filepath",
-	"tabline_path": "name",
-
-"_comment_49":"Spacing between tabs in tabline",
-"_comment_50":"  none         abCd",
-"_comment_51":"  full          a  b █C█ d ",
-"_comment_52":"  transition    a  b  C  d (default)",
-"_comment_53":"  partial       a b█c█d ",
-	"tabline_spacing": "transition",
-
-"_comment_54":"Show modified symbol ● on modified files",
-	"tabline_modified": true,
-
-"_comment_55":"Show icons before filename in tabline",
-"_comment_56":"NOTE: You will need Nerd font",
-	"tabline_icons": true,
-
-"_comment_60":"Use nvim-cmp instead of coc.nvim",
-	"use_nvim_cmp": false,
-
-"_comment_61":"Show random text at start in alpha-nvim",
-	"enable_fortune": false,
-
-"_comment_62":"Show icons in quickui dialogues",
-	"quickui_icons": true,
-
-"_comment_63":"Interface language",
-"_comment_64":"Aviable: auto (default), english, russian)",
-"_comment_65":"This option does not change system locale and Vim interface language",
-	"language": "auto",
-
-"_comment_66":"Do things that require fast terminal",
-	"fast_terminal": false,
-
-"_comment_end":"Ending field to not put comma every time"
-}
 ```
 
 </details>
