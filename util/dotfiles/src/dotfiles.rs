@@ -429,11 +429,11 @@ fn dotfiles_setup_vim_get_options() -> ::std::io::Result<DotfilesVimConfigOption
                 .child(
                     "",
                     ::cursive::views::LinearLayout::horizontal()
-                        .child(language_group.button(Language::Automatic, "Automatic"))
+                        .child(language_group.button(Language::Automatic, "Automatic").selected())
                         .child(::cursive::views::DummyView)
-                        .child(language_group.button(Language::Russian, "Russian").selected())
+                        .child(language_group.button(Language::Russian, "Russian"))
                         .child(::cursive::views::DummyView)
-                        .child(language_group.button(Language::English, "English").selected())
+                        .child(language_group.button(Language::English, "English"))
                 )
         )
         .button("Save", move |s| {
