@@ -152,7 +152,7 @@ Config for dotfiles
 #### Autogenerate
 
 ```console
-dotfiles setup dotfiles vim
+$ dotfiles setup dotfiles vim
 ```
 
 #### Where is it?
