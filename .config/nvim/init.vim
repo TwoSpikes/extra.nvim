@@ -571,9 +571,6 @@ function! STCUpd()
 	endif
 endfunction
 
-nnoremap <c-f> <c-f><cmd>call STCUpd()<cr>
-nnoremap <c-u> <c-u><cmd>call STCUpd()<cr>
-
 set showcmd
 set showcmdloc=statusline
 set laststatus=2
@@ -1457,11 +1454,11 @@ let s:SCROLL_MOUSE_DOWN_FACTOR = s:SCROLL_DOWN_FACTOR
 exec printf("noremap <silent> <expr> <c-Y> \"%s<c-e>\"", s:SCROLL_C_E_FACTOR)
 exec printf("noremap <silent> <expr> <c-y> \"%s<c-y>\"", s:SCROLL_C_Y_FACTOR)
 if g:fast_terminal
-	exec printf("noremap <silent> <ScrollWheelDown> :se lz<cr>%s<c-e>:se nolz<cr>", s:SCROLL_MOUSE_DOWN_FACTOR)
-	exec printf("noremap <silent> <ScrollWheelUp> :se lz<cr>%s<c-y>:se nolz<cr>", s:SCROLL_MOUSE_UP_FACTOR)
+	exec printf("noremap <ScrollWheelDown> :se lz<cr>%s<c-e>:se nolz<cr>", s:SCROLL_MOUSE_DOWN_FACTOR)
+	exec printf("noremap <ScrollWheelUp> :se lz<cr>%s<c-y>:se nolz<cr>", s:SCROLL_MOUSE_UP_FACTOR)
 else
-	exec printf("noremap <silent> <ScrollWheelDown> %s<c-e>", s:SCROLL_MOUSE_DOWN_FACTOR)
-	exec printf("noremap <silent> <ScrollWheelUp> %s<c-y>", s:SCROLL_MOUSE_UP_FACTOR)
+	exec printf("noremap <ScrollWheelDown> %s<c-e>", s:SCROLL_MOUSE_DOWN_FACTOR)
+	exec printf("noremap <ScrollWheelUp> %s<c-y>", s:SCROLL_MOUSE_UP_FACTOR)
 endif
 noremap <silent> <leader><c-e> <c-e>
 noremap <silent> <leader><c-y> <c-y>
