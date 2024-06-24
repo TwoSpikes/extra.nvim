@@ -1424,6 +1424,12 @@ if g:language ==# 'russian'
 		\ 'b': {'button_label': '&b:Буффер', 'command': {cmd -> 'e '.cmd}},
 		\ 't': {'button_label': '&t:НовВкладк', 'command': {cmd -> 'tabnew|e '.cmd}},
 	\ }
+	let g:neotreepos = {
+		\ 'l': {'button_label': '&l:Слева', 'command': {cmd -> 'Neotree position=left '.cmd}},
+		\ 'r': {'button_label': '&r:Справа', 'command': {cmd -> 'Neotree position=right '.cmd}},
+		\ 'b': {'button_label': '&b:Буффер', 'command': {cmd -> 'Neotree position=current '.cmd}},
+		\ 'f': {'button_label': '&f:Плавающее', 'command': {cmd -> 'Neotree position=float '.cmd}},
+	\ }
 	let g:termpos = {
 		\ 'h': {'button_label': '&s:ГРазде', 'command': {cmd -> 'split|call OpenTerm("'.cmd.'")'}},
 		\ 'v': {'button_label': '&v:ВРазде', 'command': {cmd -> 'vsplit|call OpenTerm("'.cmd.'")'}},
@@ -1649,7 +1655,7 @@ endfunction
 noremap <silent> <leader>t <cmd>call SelectPosition($SHELL.' -l', g:termpos)<cr>
 
 " COLORSCHEME
-noremap <silent> <leader>C <cmd>call SelectPosition($VIMRUNTIME."/colors", g:stdpos)<cr>
+noremap <silent> <leader>C <cmd>call SelectPosition($VIMRUNTIME."/colors", g:neotreepos)<cr>
 noremap <silent> <leader>Cy <cmd>set lazyredraw<cr>yy:<c-f>pvf]o0"_dxicolo <esc>$x$x$x$x<cr>jzb<cmd>set nolazyredraw<cr>
 
 noremap <silent> <leader>Cu <cmd>CocUpdate<cr>
