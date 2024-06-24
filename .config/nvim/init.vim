@@ -1622,6 +1622,7 @@ nnoremap ci_ yiwct_
 noremap <silent> <leader>d <cmd>nohlsearch<cr>
 nnoremap <silent> <esc> <cmd>let @/ = ""<cr>
 tnoremap <c-]> <c-\><esc>
+inoremap <c-c> <c-c><cmd>call Numbertoggle()<cr>
 
 " TERMINAL
 function! OpenTerm(cmd)
