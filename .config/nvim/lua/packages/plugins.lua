@@ -515,4 +515,7 @@ return require('packer').startup(function (use)
 	use {
 		'stevearc/conform.nvim',
 	}
+	use {
+		'cjodo/convert.nvim',
+	}
 end)
