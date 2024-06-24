@@ -240,13 +240,6 @@ fn init(home: PathBuf) -> ::std::io::Result<()> {
         _ = f.write_all(b"#!/bin/env sh\nls $@");
     }
 
-    if ::std::env::var("ZSH_VERSION").is_ok() {
-        _ = ::std::process::Command::new("autoload -Uz compinit").spawn();
-        _ = ::std::process::Command::new("compinit").spawn();
-        _ = ::std::process::Command::new("compdef _directories md").spawn();
-        _ = ::std::process::Command::new("compdef _directories nd").spawn();
-    }
-
     print!("\x1b[5 q");
 
     timer_end_silent(&mut timer);
