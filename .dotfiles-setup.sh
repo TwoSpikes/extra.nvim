@@ -436,7 +436,6 @@ case ${user_input} in
 		cp ${dotfiles}/.zshrc ${home}
 		cp ${dotfiles}/.dotfiles-script.sh ${home}
 		cp -r ${dotfiles}/shscripts/ ${home}
-		cp -r ${dotfiles}/shlib/ ${home}
 		cp ${dotfiles}/.profile ${dotfiles}/.zprofile ${home}
 		;;
 	"exit"|"x"|"e"|"q")

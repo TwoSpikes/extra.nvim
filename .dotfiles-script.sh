@@ -11,3 +11,4 @@ then
 	compdef _directories md
 	compdef _directories nd
 fi
+eb(){ exec bash --noprofile -c "clear"; }
