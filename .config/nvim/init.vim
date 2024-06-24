@@ -555,23 +555,26 @@ set nonu
 set nornu
 let s:stc_shrunk = v:false
 function! STCUpd()
-	if &columns ># 40
-		if has('nvim')
-			let &stc = &stc
-		endif
-		if s:stc_shrunk
-			let &stc = s:old_stc
-		endif
-		let s:stc_shrunk = v:false
-	else
-		if s:stc_shrunk
-			let &stc = ''
-		else
-			let s:stc_shrunk = v:true
-			let s:old_stc = &stc
-			let &stc = ''
-		endif
+	if has('nvim')
+		let &stc = &stc
 	endif
+	"if &columns ># 40
+	"	if has('nvim')
+	"		let &stc = &stc
+	"	endif
+	"	if s:stc_shrunk
+	"		let &stc = s:old_stc
+	"	endif
+	"	let s:stc_shrunk = v:false
+	"else
+	"	if s:stc_shrunk
+	"		let &stc = ''
+	"	else
+	"		let s:stc_shrunk = v:true
+	"		let s:old_stc = &stc
+	"		let &stc = ''
+	"	endif
+	"endif
 endfunction
 
 set showcmd
@@ -1235,9 +1238,9 @@ let s:process_g_but_function_expression .= "
 \\n			let temp.=a:button
 \\n 	endfor
 \\n	endif
-\\n	if s:fullscreen || !&cursorcolumn
-\\n		call STCUpd()
-\\n	endif
+\\n if s:fullscreen || !&cursorcolumn
+\\n     let temp.=\":call STCUpd()\\<cr>\"
+\\n endif
 \"
 if g:fast_terminal
 let s:process_g_but_function_expression .= "
@@ -2112,10 +2115,6 @@ function! OnResized()
 	endif
 	call STCUpd()
 endfunction
-
-au CursorMoved * call STCUpd()
-
-
 
 let g:floaterm_width = 1.0
 noremap <leader>z <cmd>call SelectPosition('lazygit', g:termpos)<cr>
