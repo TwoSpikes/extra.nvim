@@ -4,6 +4,8 @@ if has('nvim')
 	lua vim.loader.enable()
 endif
 
+set lazyredraw
+
 if !has('nvim')
 	set nocompatible
 endif
@@ -432,10 +434,10 @@ if $PREFIX == ""
 	call setenv('PREFIX', '/usr/')
 endif
 
-set termguicolors
-set lazyredraw
-set encoding=utf-8
 
+" Random options
+set termguicolors
+set encoding=utf-8
 set helpheight=10
 set splitbelow
 set splitkeep=cursor
@@ -448,17 +450,21 @@ set noexrc
 set fillchars=
 set fixendofline
 set cmdheight=1
+set smoothscroll
 
+" Bell signal options
 set novisualbell
 set belloff=all
 set errorbells
 
+" Search options
 set nogdefault
 set ignorecase
 set smartcase
 set incsearch
 set magic
 
+" Fold options
 set foldclose=all
 set foldenable
 set foldexpr=0
@@ -574,6 +580,7 @@ function! STCUpd()
 	endif
 endfunction
 
+" Menus options
 set showcmd
 set showcmdloc=statusline
 set laststatus=2
@@ -863,44 +870,6 @@ endfunction
 command! -nargs=0 GenerateDotfilesConfig call GenerateDotfilesConfig()
 nnoremap <leader>G <cmd>GenerateDotfilesConfig<cr>
 
-" let s:tabtimerid = 0
-" function TabTimerHandler(id)
-" 	let s:tabtimerid = a:id
-" 	Showtab
-" endfunction
-" function TabTimerStart()
-" 	if s:tabtimerid == 0
-" 		Showtab
-" 		call timer_start(500, 'TabTimerHandler', {'repeat': -1})
-" 	endif
-" endfunction
-" function TabTimerStop()
-" 	call timer_stop(s:tabtimerid)
-" 	let s:tabtimerid = 0
-" endfunction
-" call TabTimerStart()
-" function Printtabtimerid()
-" 	echom "Timer id is: " . s:tabtimerid
-" endfunction
-" augroup tabtimer
-" 	autocmd!
-" 	autocmd CmdlineEnter * Showtab
-" 	autocmd CmdlineLeave * call TabTimerStart()
-" 	autocmd CmdwinEnter * let s:specmode = 'b' | Showtab
-" 	autocmd CmdwinLeave * let s:specmode = '' | Showtab
-" 	autocmd CursorHold * call TabTimerStop()
-" 	autocmd CursorMoved * call TabTimerStart()
-" 	autocmd CursorHoldI * call TabTimerStop()
-" 	autocmd CursorMovedI * call TabTimerStart()
-" 	autocmd InsertEnter * call TabTimerStart()
-" 	autocmd InsertLeave * call TabTimerStart()
-" augroup END
-" 
-" "noremap <silent> <esc> <cmd>Showtab<cr>
-
-" autocmd BufReadPost,WinLeave,WinEnter * call Numbertoggle()
-" call timer_start(500, 'BufModifiableHandler', {'repeat': -1})
-
 function! MyTabLabel(n)
 	let buflist = tabpagebuflist(a:n)
 	let winnr = tabpagewinnr(a:n)
@@ -930,10 +899,6 @@ function! MyTabLabel(n)
 	elseif g:tabline_path ==# "full"
 		return fnamemodify(buf_name, ':p')
 	endif
-	" call execute("normal :!echo '" . buf_name . "' > ~/.config/nvim/config_garbagefile.txt")
-	" redir! > ~/.config/nvim/config_garbagefile.txt
-	" 	silent echo buf_name
-	" redir END
 endfunction
 function! MyTabLine()
   let s = ''
@@ -1104,10 +1069,11 @@ function! MyTabLine()
 endfunction
 set tabline=%!MyTabLine()
 
+" Edit options
 set hidden
 set nowrap
 set nolinebreak
-"let &breakat = "    !¡@*-+;:,./?¿{}[]^%&"
+let &breakat = "    !¡@*-+;:,./?¿{}[]^%&"
 set list
 set display=lastline
 set fcs=lastline:>
@@ -1120,11 +1086,11 @@ set virtualedit=onemore
 
 setlocal nowrap
 
+" Mappings and functions options
 set matchpairs=(:),{:},[:],<:>
 set noshowmatch
 set matchtime=2
 set maxfuncdepth=50
-" set maxmapdepth=2
 set maxmempattern=500
 set history=10000
 set modelineexpr
@@ -1134,6 +1100,7 @@ set timeoutlen=250
 set ttimeout
 set ttimeoutlen=500
 
+" Mouse options
 set cursorlineopt=screenline,number
 if g:enable_mouse
 	set mouse=a
@@ -1151,16 +1118,16 @@ set mouseshape=i:beam,r:beam,s:updown,sd:cross,m:no,ml:up-arrow,v:rightup-arrow
 set mousetime=400
 set startofline
 
+" Conceal options
 set concealcursor=nc
 set conceallevel=0
 
+" Tab options
 set tabstop=4
 set shiftwidth=4
 set smartindent
 set smarttab
 set noexpandtab
-
-let g:loaded_perl_provider = 0
 
 command! -nargs=0 SWrap if !&wrap|setl wrap linebreak nolist|else|setl nowrap nolinebreak list|endif
 nnoremap <leader>sW <cmd>SWrap<cr>
@@ -1222,7 +1189,7 @@ let s:process_g_but_function_expression = "
 if g:fast_terminal
 let s:process_g_but_function_expression .= "
 \\n	if &buftype !=# 'terminal'
-\\n		let temp .= \"\\<cmd>set lazyredraw\\<cr>\"
+\\n		let temp .= \"\\<cmd>set lazyredraw\<cr>\"
 \\n	endif
 \"
 endif
@@ -1230,25 +1197,25 @@ let s:process_g_but_function_expression .= "
 \\n	if v:count == 0
 \\n		let temp.=\"g\".a:button
 \\n	else
-\\n     let temp.=\"\\<esc>\"
+\\n     let temp.=\":\\<cr>\"
 \\n 	for _ in range(v:count)
 \\n			let temp.=a:button
 \\n 	endfor
 \\n	endif
 \\n if s:fullscreen || !&cursorcolumn
-\\n     let temp.=\":call STCUpd()\\<cr>\"
+\\n     let temp.=\"\\<cmd>call STCUpd()\\<cr>\"
 \\n endif
 \"
 
 " FIXME: This code is a crutch
 let s:process_g_but_function_expression .= "
-\\n let temp.=\":call feedkeys(\\\"hl\\\")\\<cr>\"
+\\n let temp.=\"\\<cmd>call feedkeys(\\\"hl\\\")\<cr>\"
 \"
 
 if g:fast_terminal
 let s:process_g_but_function_expression .= "
 \\n	if &buftype !=# 'terminal'
-\\n		let temp .= \"\\<cmd>set nolazyredraw\\<cr>\"
+\\n		let temp .= \"\\<cmd>set nolazyredraw\<cr>\"
 \\n	endif
 \"
 endif
