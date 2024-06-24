@@ -555,26 +555,23 @@ set nonu
 set nornu
 let s:stc_shrunk = v:false
 function! STCUpd()
-	if has('nvim')
-		let &stc = &stc
+	if &columns ># 40
+		if has('nvim')
+			let &stc = &stc
+		endif
+		if s:stc_shrunk
+			let &stc = s:old_stc
+		endif
+		let s:stc_shrunk = v:false
+	else
+		if s:stc_shrunk
+			let &stc = ''
+		else
+			let s:stc_shrunk = v:true
+			let s:old_stc = &stc
+			let &stc = ''
+		endif
 	endif
-	"if &columns ># 40
-	"	if has('nvim')
-	"		let &stc = &stc
-	"	endif
-	"	if s:stc_shrunk
-	"		let &stc = s:old_stc
-	"	endif
-	"	let s:stc_shrunk = v:false
-	"else
-	"	if s:stc_shrunk
-	"		let &stc = ''
-	"	else
-	"		let s:stc_shrunk = v:true
-	"		let s:old_stc = &stc
-	"		let &stc = ''
-	"	endif
-	"endif
 endfunction
 
 set showcmd
