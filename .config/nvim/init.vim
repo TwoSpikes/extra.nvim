@@ -1096,9 +1096,9 @@ set history=10000
 set modelineexpr
 set updatetime=5000
 set timeout
-set timeoutlen=250
+set timeoutlen=300
 set ttimeout
-set ttimeoutlen=500
+set ttimeoutlen=750
 
 " Mouse options
 set cursorlineopt=screenline,number
@@ -1452,12 +1452,19 @@ exec printf("noremap <silent> <expr> <c-Y> \"%s<c-e>\"", s:SCROLL_C_E_FACTOR)
 exec printf("noremap <silent> <expr> <c-y> \"%s<c-y>\"", s:SCROLL_C_Y_FACTOR)
 let s:SCROLL_UPDATE_TIME = 1000
 if g:fast_terminal
-	exec printf("noremap <ScrollWheelDown> :se lz<cr>%s<c-e>:se nolz<cr>", s:SCROLL_MOUSE_DOWN_FACTOR)
-	exec printf("noremap <ScrollWheelUp> :se lz<cr>%s<c-y>:se nolz<cr>", s:SCROLL_MOUSE_UP_FACTOR)
+	exec printf("noremap <ScrollWheelDown> :se lz<cr>%s<c-e>:se nolz<cr><cmd>call STCUpd()<cr>", s:SCROLL_MOUSE_DOWN_FACTOR)
+	exec printf("noremap <ScrollWheelUp> :se lz<cr>%s<c-y>:se nolz<cr><cmd>call STCUpd()<cr>", s:SCROLL_MOUSE_UP_FACTOR)
 else
-	let g:dotfiles_scrolling = v:false
-	exec printf("noremap <ScrollWheelDown> <cmd>if !g:dotfiles_scrolling<bar>call STCUpd()<bar>endif<cr><cmd>let g:dotfiles_scrolling=v:true<cr><cmd>call timer_start(".s:SCROLL_UPDATE_TIME.", {->execute('let g:scrolling=v:false')})<cr>%s<c-e>", s:SCROLL_MOUSE_DOWN_FACTOR)
-	exec printf("noremap <ScrollWheelUp> <cmd>if !g:dotfiles_scrolling<bar>call STCUpd()<bar>endif<cr><cmd>let g:dotfiles_scrolling=v:true<cr><cmd>call timer_start(".s:SCROLL_UPDATE_TIME.", {->execute('let g:scrolling=v:false')})<cr>%s<c-y>", s:SCROLL_MOUSE_DOWN_FACTOR)
+	function! NoremapScrollWheelDown(_)
+		call STCUpd()
+		exec printf("noremap <ScrollWheelDown> %s<c-e><cmd>exec printf('noremap <ScrollWheelDown> %%s<c-e>', '".s:SCROLL_MOUSE_DOWN_FACTOR."')<cr><cmd>call timer_start(".s:SCROLL_UPDATE_TIME.", 'NoremapScrollWheelDown')<cr>", s:SCROLL_MOUSE_DOWN_FACTOR)
+	endfunction
+	call NoremapScrollWheelDown(0)
+	function! NoremapScrollWheelUp(_)
+		call STCUpd()
+		exec printf("noremap <ScrollWheelUp> %s<c-y><cmd>exec printf('noremap <ScrollWheelUp> %%s<c-y>', '".s:SCROLL_MOUSE_UP_FACTOR."')<cr><cmd>call timer_start(".s:SCROLL_UPDATE_TIME.", 'NoremapScrollWheelUp')<cr>", s:SCROLL_MOUSE_UP_FACTOR)
+	endfunction
+	call NoremapScrollWheelUp(0)
 endif
 noremap <silent> <leader><c-e> <c-e>
 noremap <silent> <leader><c-y> <c-y>
