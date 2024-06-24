@@ -1425,7 +1425,7 @@ if g:language ==# 'russian'
 		\ 't': {'button_label': '&t:НовВкладк', 'command': {cmd -> 'tabnew|e '.cmd}},
 	\ }
 	let g:neotreepos = {
-		\ 'l': {'button_label': '&l:Слева', 'command': {cmd -> 'Neotree position=left '.cmd}},
+		\ 'l': {'button_label': '&v:Слева', 'command': {cmd -> 'Neotree position=left '.cmd}},
 		\ 'r': {'button_label': '&r:Справа', 'command': {cmd -> 'Neotree position=right '.cmd}},
 		\ 'b': {'button_label': '&b:Буффер', 'command': {cmd -> 'Neotree position=current '.cmd}},
 		\ 'f': {'button_label': '&f:Плавающее', 'command': {cmd -> 'Neotree position=float '.cmd}},
@@ -1443,6 +1443,12 @@ else
 		\ 'v': {'button_label': '&Vsplit', 'command': {cmd -> 'vsplit '.cmd}},
 		\ 'b': {'button_label': '&Buffer', 'command': {cmd -> 'e '.cmd}},
 		\ 't': {'button_label': 'New &tab', 'command': {cmd -> 'tabnew|e '.cmd}},
+	\ }
+	let g:neotreepos = {
+		\ 'l': {'button_label': '&v:Left', 'command': {cmd -> 'Neotree position=left '.cmd}},
+		\ 'r': {'button_label': '&Right', 'command': {cmd -> 'Neotree position=right '.cmd}},
+		\ 'b': {'button_label': '&Buffer', 'command': {cmd -> 'Neotree position=current '.cmd}},
+		\ 'f': {'button_label': '&Floating', 'command': {cmd -> 'Neotree position=float '.cmd}},
 	\ }
 	let g:termpos = {
 		\ 'h': {'button_label': '&Split', 'command': {cmd -> 'split|call OpenTerm("'.cmd.'")'}},
