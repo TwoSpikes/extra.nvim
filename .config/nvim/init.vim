@@ -1107,7 +1107,7 @@ set tabline=%!MyTabLine()
 set hidden
 set nowrap
 set nolinebreak
-let &breakat = "    !¡@*-+;:,./?¿{}[]^%&"
+"let &breakat = "    !¡@*-+;:,./?¿{}[]^%&"
 set list
 set display=lastline
 set fcs=lastline:>
@@ -1239,6 +1239,12 @@ let s:process_g_but_function_expression .= "
 \\n     let temp.=\":call STCUpd()\\<cr>\"
 \\n endif
 \"
+
+" FIXME: This code is a crutch
+let s:process_g_but_function_expression .= "
+\\n let temp.=\":call feedkeys(\\\"hl\\\")\\<cr>\"
+\"
+
 if g:fast_terminal
 let s:process_g_but_function_expression .= "
 \\n	if &buftype !=# 'terminal'
@@ -1477,12 +1483,14 @@ let s:SCROLL_MOUSE_UP_FACTOR = s:SCROLL_UP_FACTOR
 let s:SCROLL_MOUSE_DOWN_FACTOR = s:SCROLL_DOWN_FACTOR
 exec printf("noremap <silent> <expr> <c-Y> \"%s<c-e>\"", s:SCROLL_C_E_FACTOR)
 exec printf("noremap <silent> <expr> <c-y> \"%s<c-y>\"", s:SCROLL_C_Y_FACTOR)
+let s:SCROLL_UPDATE_TIME = 1000
 if g:fast_terminal
 	exec printf("noremap <ScrollWheelDown> :se lz<cr>%s<c-e>:se nolz<cr>", s:SCROLL_MOUSE_DOWN_FACTOR)
 	exec printf("noremap <ScrollWheelUp> :se lz<cr>%s<c-y>:se nolz<cr>", s:SCROLL_MOUSE_UP_FACTOR)
 else
-	exec printf("noremap <ScrollWheelDown> %s<c-e>", s:SCROLL_MOUSE_DOWN_FACTOR)
-	exec printf("noremap <ScrollWheelUp> %s<c-y>", s:SCROLL_MOUSE_UP_FACTOR)
+	let g:dotfiles_scrolling = v:false
+	exec printf("noremap <ScrollWheelDown> <cmd>if !g:dotfiles_scrolling<bar>call STCUpd()<bar>endif<cr><cmd>let g:dotfiles_scrolling=v:true<cr><cmd>call timer_start(".s:SCROLL_UPDATE_TIME.", {->execute('let g:scrolling=v:false')})<cr>%s<c-e>", s:SCROLL_MOUSE_DOWN_FACTOR)
+	exec printf("noremap <ScrollWheelUp> <cmd>if !g:dotfiles_scrolling<bar>call STCUpd()<bar>endif<cr><cmd>let g:dotfiles_scrolling=v:true<cr><cmd>call timer_start(".s:SCROLL_UPDATE_TIME.", {->execute('let g:scrolling=v:false')})<cr>%s<c-y>", s:SCROLL_MOUSE_DOWN_FACTOR)
 endif
 noremap <silent> <leader><c-e> <c-e>
 noremap <silent> <leader><c-y> <c-y>
