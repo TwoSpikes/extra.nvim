@@ -1,1 +1,2 @@
 normal! gg
+startinsert

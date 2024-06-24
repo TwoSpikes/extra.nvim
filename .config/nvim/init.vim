@@ -210,14 +210,14 @@ function! STCNoAll()
 endfunction
 
 function! Numbertoggle_stcabs(mode='', winnr=winnr())
-	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel' && g:linenr
+	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
 		call STCAbs(a:mode, a:winnr)
 	else
 		call STCNo(a:winnr)
 	endif
 endfunction	
 function! Numbertoggle_stcrel(winnr)
-	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel' && g:linenr
+	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
 		call STCRel(a:winnr)
 	else
 		call STCNo(a:winnr)
@@ -2325,6 +2325,7 @@ function! OpenOnStart()
 			endif
 		endif
 	endif
+	call Numbertoggle()
 endfunction
 
 nnoremap <leader>n <cmd>Neogen<cr>
