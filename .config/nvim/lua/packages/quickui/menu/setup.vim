@@ -7,6 +7,7 @@ function! ChangeNames()
 		let s:option_label = '&o:Опции'
 		let s:config_label = '&c:Конфиг'
 		let s:help_label = '&h:Помощь'
+		let s:git_label = '&Git'
 	else
 		let s:file_label = '&File'
 		let s:window_label = '&Window'
@@ -15,6 +16,7 @@ function! ChangeNames()
 		let s:option_label = '&Option'
 		let s:config_label = '&Config'
 		let s:help_label = '&Help'
+		let s:git_label = '&Git'
 	endif
 
 	if g:language ==# 'russian'
@@ -220,6 +222,12 @@ function! RebindMenus()
 				\ ["&Format selected\tLEAD f", 'call CocActionAsync("formatSelected", visualmode())', 'Format selected code'],
 				\ ["Fold c&urrent buffer\t:Fold", 'Fold', 'Make folds for current buffer'],
 				\ ])
+
+	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/vim-figutive")
+		call quickui#menu#install(s:git_label, [
+				\ ["&Commit\tLEAD gc"]
+				\ ])
+	endif
 
 	" script inside %{...} will be evaluated and expanded in the string
 	call quickui#menu#install(s:option_label, [

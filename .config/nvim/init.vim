@@ -2324,6 +2324,13 @@ endfunction
 
 nnoremap <leader>n <cmd>Neogen<cr>
 
+nnoremap <leader>gc <cmd>Git commit --verbose<cr>
+nnoremap <leader>ga <cmd>Git commit --verbose --all<cr>
+nnoremap <leader>gA <cmd>Git commit --verbose --amend<cr>
+nnoremap <leader>gP <cmd>Git push<cr>
+nnoremap <leader>gp <cmd>Git pull<cr>
+nnoremap <leader>gr <cmd>Git reset<cr>
+
 function! DoPackerUpdate(args)
 	call BeforeUpdatingPlugins()
 	exec "lua require('packer').update(".a:args.")"
