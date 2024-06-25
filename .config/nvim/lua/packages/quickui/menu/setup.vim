@@ -223,9 +223,17 @@ function! RebindMenus()
 				\ ["Fold c&urrent buffer\t:Fold", 'Fold', 'Make folds for current buffer'],
 				\ ])
 
-	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/vim-figutive")
+	if isdirectory(expand(g:LOCALSHAREPATH)."/site/pack/packer/start/vim-fugitive")
 		call quickui#menu#install(s:git_label, [
-				\ ["&Commit\tLEAD gc"]
+				\ ["&Commit\tLEAD gc", 'Git commit --verbose', 'Commit using fugitive.vim'],
+				\ ["Commit &all\tLEAD ga", 'Git commit --verbose --all', 'Commit all using fugitive.vim'],
+				\ ["Commit a&mend\tLEAD gA", 'Git commit --verbose --amend', 'Amend commit using fugitive.vim'],
+				\ ["P&ull\tLEAD gp", 'Git pull', 'Pull repository using fugitive.vim'],
+				\ ["&Push\tLEAD gP", 'Git push', 'Push repository using fugitive.vim'],
+				\ ["&Reset soft\tLEAD gr", 'Git reset --soft', 'Reset repository using fugitive.vim'],
+				\ ["Reset har&d\tLEAD gR", 'Git reset --hard', 'Hardly reset repository using fugitive.vim'],
+				\ ["Reset mi&xed\tLEAD gm", 'Git reset --mixed', 'Mixed reset repository using fugitive.vim'],
+				\ ["&Status\tLEAD gs", 'Git status', 'Show repository status using fugitive.vim'],
 				\ ])
 	endif
 

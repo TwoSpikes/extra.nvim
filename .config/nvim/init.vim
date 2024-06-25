@@ -2324,12 +2324,17 @@ endfunction
 
 nnoremap <leader>n <cmd>Neogen<cr>
 
-nnoremap <leader>gc <cmd>Git commit --verbose<cr>
-nnoremap <leader>ga <cmd>Git commit --verbose --all<cr>
-nnoremap <leader>gA <cmd>Git commit --verbose --amend<cr>
-nnoremap <leader>gP <cmd>Git push<cr>
-nnoremap <leader>gp <cmd>Git pull<cr>
-nnoremap <leader>gr <cmd>Git reset<cr>
+if isdirectory(expand(g:LOCALSHAREPATH)."/site/pack/packer/start/vim-fugitive")
+	nnoremap <leader>gc <cmd>Git commit --verbose<cr>
+	nnoremap <leader>ga <cmd>Git commit --verbose --all<cr>
+	nnoremap <leader>gA <cmd>Git commit --verbose --amend<cr>
+	nnoremap <leader>gp <cmd>Git pull<cr>
+	nnoremap <leader>gP <cmd>Git push<cr>
+	nnoremap <leader>gr <cmd>Git reset --soft<cr>
+	nnoremap <leader>gR <cmd>Git reset --hard<cr>
+	nnoremap <leader>gm <cmd>Git reset --mixed<cr>
+	nnoremap <leader>gs <cmd>Git status<cr>
+endif
 
 function! DoPackerUpdate(args)
 	call BeforeUpdatingPlugins()
