@@ -236,6 +236,11 @@ function! RebindMenus()
 				\ ["&Status\tLEAD gs", 'Git status', 'Show repository status using fugitive.vim'],
 				\ ])
 	endif
+	if isdirectory(expand(g:LOCALSHAREPATH)."/site/pack/packer/start/diffview.nvim")
+		call quickui#menu#install(s:git_label, [
+				\ ["&View diff\tLEAD gd", 'DiffviewOpen HEAD', 'Show diff'],
+				\ ])
+	endif
 
 	" script inside %{...} will be evaluated and expanded in the string
 	call quickui#menu#install(s:option_label, [

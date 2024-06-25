@@ -530,4 +530,7 @@ return require('packer').startup(function (use)
 			'kevinhwang91/promise-async',
 		}
 	}
+	use {
+		'sindrets/diffview.nvim',
+	}
 end)

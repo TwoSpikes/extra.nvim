@@ -1100,7 +1100,7 @@ set history=10000
 set modelineexpr
 set updatetime=5000
 set timeout
-set timeoutlen=300
+set timeoutlen=500
 set ttimeout
 set ttimeoutlen=750
 
