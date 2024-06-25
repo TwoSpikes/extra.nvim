@@ -2,9 +2,9 @@ pub mod colors;
 pub mod timer;
 pub mod checkhealth;
 
-use std::{borrow::BorrowMut, path::PathBuf};
+use std::path::PathBuf;
 use std::io::Write;
-use cursive::{CursiveExt, With};
+use cursive::CursiveExt;
 
 use timer::timer_end_silent;
 #[allow(unused_imports)] use timer::{timer_endln, timer_start_silent, timer_startln, timer_total_time};

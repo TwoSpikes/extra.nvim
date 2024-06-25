@@ -943,12 +943,12 @@ function! MyTabLine()
 
 	if g:tabline_icons
 		if v:false
+		elseif getbufvar(bufnr, '&buftype') ==# 'terminal'
+			let s ..= ' '
 		elseif v:false
 		\||isdirectory(bufname)
 		\||getbufvar(bufnr, '&filetype') ==# 'neo-tree'
 			let s ..= ' '
-		elseif getbufvar(bufnr, '&buftype') ==# 'terminal'
-			let s ..= ' '
 		elseif fnamemodify(bufname, ':t') ==# 'LICENSE'
 			let s ..= ' '
 		elseif v:false
@@ -1228,8 +1228,8 @@ if has('nvim')
 	noremap k <cmd>call ProcessGBut('k')<cr>
 	noremap <down> <cmd>call ProcessGBut('j')<cr>
 	noremap <up> <cmd>call ProcessGBut('k')<cr>
-	noremap <c-e> <c-e><cmd>call STCUpd()<cr>
 endif
+noremap <c-e> <c-e><cmd>call STCUpd()<cr>
 
 noremap <silent> <c-a> 0
 noremap <silent> <c-e> $
@@ -1628,14 +1628,14 @@ inoremap <c-c> <c-c><cmd>call Numbertoggle()<cr>
 " TERMINAL
 function! OpenTerm(cmd)
 	if a:cmd ==# ""
-		exec printf("terminal %s", $SHELL." -l")
+		exec printf("terminal %s", $SHELL)
 	else
 		exec printf("terminal %s", a:cmd)
 	endif
 	startinsert
 	return bufnr()
 endfunction
-noremap <silent> <leader>t <cmd>call SelectPosition($SHELL.' -l', g:termpos)<cr>
+noremap <silent> <leader>t <cmd>call SelectPosition($SHELL, g:termpos)<cr>
 
 " COLORSCHEME
 noremap <silent> <leader>C <cmd>call SelectPosition($VIMRUNTIME."/colors", g:neotreepos)<cr>

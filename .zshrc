@@ -100,13 +100,6 @@ setopt no_auto_menu  # require an extra TAB press to open the completion menu
 
 export PAGER='most'
 
-case $(setopt) in
-	*login*)
-		;;
-	*)
-		. ~/.dotfiles-script.sh
-esac
-
 # pnpm
 export PNPM_HOME="/data/data/com.termux/files/home/.local/share/pnpm"
 case ":$PATH:" in
@@ -114,3 +107,5 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+. ~/.dotfiles-script.sh
