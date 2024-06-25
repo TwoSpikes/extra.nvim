@@ -521,4 +521,7 @@ return require('packer').startup(function (use)
 	use {
 		'nvim-treesitter/nvim-treesitter-context',
 	}
+	use {
+		'windwp/nvim-ts-autotag',
+	}
 end)
