@@ -77,10 +77,10 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		\'language',
 		\'fast_terminal',
 	\]
-	for option_ in l:option_list
-		if exists('g:dotfiles_config["'.option_.'"]')
-			if !exists("g:".option_) || a:reload
-				exec printf("let g:%s = g:dotfiles_config[option_]", option_)
+	for option in l:option_list
+		if exists('g:dotfiles_config["'.option.'"]')
+			if !exists("g:".option) || a:reload
+				exec "let g:".option." = g:dotfiles_config[option]"
 			endif
 		endif
 	endfor
@@ -1182,65 +1182,59 @@ noremap <c-t> <cmd>TagbarToggle<cr>
 
 nnoremap <leader>g :grep -R <cword> .<cr>
 
+let s:MOVING_UPDATE_TIME = 1000
+let g:moving = v:false
 let s:process_g_but_function_expression = "
 \\nfunction! ProcessGBut(button)
-\\n	let temp = ''
 \"
 if g:fast_terminal
 let s:process_g_but_function_expression .= "
 \\n	if &buftype !=# 'terminal'
-\\n		let temp .= \"\\<cmd>set lazyredraw\<cr>\"
+\\n		set lazyredraw
 \\n	endif
 \"
 endif
 let s:process_g_but_function_expression .= "
-\\n	if v:count == 0
-\\n		let temp.=\"g\".a:button
-\\n	else
-\\n     let temp.=\":\\<cr>\"
-\\n 	for _ in range(v:count)
-\\n			let temp.=a:button
-\\n 	endfor
+\\n	exec \"lua << EOF
+\\\nlocal button = vim.v.count == 0 and \'g\".a:button.\"\' or \'\".a:button.\"\'
+\\\nfor _=1,vim.v.count1,1 do
+\\\nvim.api.nvim_feedkeys(button,\\\"n\\\",false)
+\\\nend
+\\\nEOF\"
+\\n	if !g:moving
+\\n		let g:moving = v:true
+\\n		call timer_start(".s:MOVING_UPDATE_TIME.", {->execute(\"let g:moving=v:false\|call STCUpd()\")})
 \\n	endif
-\\n if s:fullscreen || !&cursorcolumn
-\\n     let temp.=\"\\<cmd>call STCUpd()\\<cr>\"
-\\n endif
-\"
+\\n"
 
 " FIXME: This code is a crutch
 let s:process_g_but_function_expression .= "
-\\n let temp.=\"\\<cmd>call feedkeys(\\\"hl\\\")\<cr>\"
+\\n	normal! hl
 \"
 
 if g:fast_terminal
 let s:process_g_but_function_expression .= "
 \\n	if &buftype !=# 'terminal'
-\\n		let temp .= \"\\<cmd>set nolazyredraw\<cr>\"
+\\n		set nolazyredraw
 \\n	endif
 \"
 endif
 let s:process_g_but_function_expression .= "
-\\n	return temp
 \\nendfunction"
 exec s:process_g_but_function_expression
 
-noremap <silent> <expr> j ProcessGBut('j')
-noremap <silent> <expr> k ProcessGBut('k')
-noremap <silent> <expr> <down> ProcessGBut('j')
-noremap <silent> <expr> <up> ProcessGBut('k')
-inoremap <silent> <down> <cmd>call STCUpd()<cr><down>
-inoremap <silent> <up> <cmd>call STCUpd()<cr><up>
-noremap <silent> <leader><up> k:let &stc=&stc<cr>
-noremap <silent> <leader><down> j:let &stc=&stc<cr>
-noremap <silent> <c-e> <c-e><cmd>call STCUpd()<cr>
-" noremap <silent> 0 g0
-" noremap <silent> $ g$
-" noremap <silent> I g0i
-" noremap <silent> A g$a
+if has('nvim')
+	noremap j <cmd>call ProcessGBut('j')<cr>
+	noremap k <cmd>call ProcessGBut('k')<cr>
+	noremap <down> <cmd>call ProcessGBut('j')<cr>
+	noremap <up> <cmd>call ProcessGBut('k')<cr>
+	noremap <c-e> <c-e><cmd>call STCUpd()<cr>
+endif
 
-noremap <silent> <c-e> <cmd>normal $<cr>
-inoremap <silent> <c-a> <c-o>_
-inoremap <silent> <c-e> <c-o>$
+noremap <silent> <c-a> 0
+noremap <silent> <c-e> $
+inoremap <silent> <c-a> <home>
+inoremap <silent> <c-e> <end>
 
 cnoremap <silent> <c-a> <c-b>
 cnoremap <c-g> <c-e><c-u><cr>
@@ -1254,6 +1248,8 @@ inoremap <c-j> <esc>viwUe<esc>a
 
 nnoremap <bs> X
 noremap <leader><bs> <bs>
+
+noremap <LeftMouse> <LeftMouse><cmd>call STCUpd()<cr>
 
 function! Findfile()
 	if g:language ==# 'russian'
@@ -1451,23 +1447,21 @@ let s:SCROLL_MOUSE_DOWN_FACTOR = s:SCROLL_DOWN_FACTOR
 exec printf("noremap <silent> <expr> <c-Y> \"%s<c-e>\"", s:SCROLL_C_E_FACTOR)
 exec printf("noremap <silent> <expr> <c-y> \"%s<c-y>\"", s:SCROLL_C_Y_FACTOR)
 let s:SCROLL_UPDATE_TIME = 1000
+exec "function! NoremapScrollWheelDown(_)
+\\n		call STCUpd()
+\\n		noremap <ScrollWheelDown> ".s:SCROLL_MOUSE_DOWN_FACTOR."<c-e><cmd>noremap <ScrollWheelDown> ".s:SCROLL_MOUSE_DOWN_FACTOR."<c-e>'<cr><cmd>call timer_start(".s:SCROLL_UPDATE_TIME.", 'NoremapScrollWheelDown')<cr>
+\\n	endfunction"
+exec "function! NoremapScrollWheelUp(_)
+\\n		call STCUpd()
+\\n		noremap <ScrollWheelUp> ".s:SCROLL_MOUSE_UP_FACTOR."<c-y><cmd>noremap <ScrollWheelUp> ".s:SCROLL_MOUSE_UP_FACTOR."<c-y>'<cr><cmd>call timer_start(".s:SCROLL_UPDATE_TIME.", 'NoremapScrollWheelUp')<cr>
+\\n	endfunction"
 if g:fast_terminal
 	exec printf("noremap <ScrollWheelDown> :se lz<cr>%s<c-e>:se nolz<cr><cmd>call STCUpd()<cr>", s:SCROLL_MOUSE_DOWN_FACTOR)
 	exec printf("noremap <ScrollWheelUp> :se lz<cr>%s<c-y>:se nolz<cr><cmd>call STCUpd()<cr>", s:SCROLL_MOUSE_UP_FACTOR)
 else
-	function! NoremapScrollWheelDown(_)
-		call STCUpd()
-		exec printf("noremap <ScrollWheelDown> %s<c-e><cmd>exec printf('noremap <ScrollWheelDown> %%s<c-e>', '".s:SCROLL_MOUSE_DOWN_FACTOR."')<cr><cmd>call timer_start(".s:SCROLL_UPDATE_TIME.", 'NoremapScrollWheelDown')<cr>", s:SCROLL_MOUSE_DOWN_FACTOR)
-	endfunction
 	call NoremapScrollWheelDown(0)
-	function! NoremapScrollWheelUp(_)
-		call STCUpd()
-		exec printf("noremap <ScrollWheelUp> %s<c-y><cmd>exec printf('noremap <ScrollWheelUp> %%s<c-y>', '".s:SCROLL_MOUSE_UP_FACTOR."')<cr><cmd>call timer_start(".s:SCROLL_UPDATE_TIME.", 'NoremapScrollWheelUp')<cr>", s:SCROLL_MOUSE_UP_FACTOR)
-	endfunction
 	call NoremapScrollWheelUp(0)
 endif
-noremap <silent> <leader><c-e> <c-e>
-noremap <silent> <leader><c-y> <c-y>
 
 noremap <silent> <leader>st <cmd>lua require('spectre').toggle()<cr><cmd>call Numbertoggle()<cr>
 nnoremap <silent> <leader>sw <cmd>lua require('spectre').open_visual({select_word = true})<cr><cmd>call Numbertoggle()<cr>

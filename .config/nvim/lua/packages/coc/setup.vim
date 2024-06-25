@@ -106,10 +106,10 @@ if has('nvim-0.4.0') || has('patch-8.2.0750')
   vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 endif
 
-" Use CTRL-S for selections ranges
+" Use LEAD ss for selections ranges
 " Requires 'textDocument/selectionRange' support of language server
-nnoremap <silent> <C-s> <Plug>(coc-range-select)
-xnoremap <silent> <C-s> <Plug>(coc-range-select)
+nnoremap <silent> <leader>ss <Plug>(coc-range-select)
+xnoremap <silent> <leader>ss <Plug>(coc-range-select)
 
 " Add `:Format` command to format current buffer
 command! -nargs=0 Format :call CocActionAsync('format')
