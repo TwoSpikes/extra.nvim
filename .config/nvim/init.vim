@@ -1180,7 +1180,7 @@ noremap <f3> <cmd>ToggleFullscreen<cr>
 
 noremap <c-t> <cmd>TagbarToggle<cr>
 
-nnoremap <leader>g :grep -R <cword> .<cr>
+nnoremap <leader>xg :grep -R <cword> .<cr>
 
 let s:MOVING_UPDATE_TIME = 1000
 let g:moving = v:false

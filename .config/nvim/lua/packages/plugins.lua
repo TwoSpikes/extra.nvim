@@ -518,4 +518,7 @@ return require('packer').startup(function (use)
 	use {
 		'cjodo/convert.nvim',
 	}
+	use {
+		'nvim-treesitter/nvim-treesitter-context',
+	}
 end)
