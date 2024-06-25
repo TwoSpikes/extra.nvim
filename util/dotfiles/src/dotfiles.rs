@@ -595,6 +595,9 @@ fn dotfiles_setup_vim(home: PathBuf) -> ::std::io::Result<()> {
 \"_comment_66\":\"Do things that require fast terminal\",
 	\"fast_terminal\": false,
 
+\"_comment_67\":\"Enable which-key.nvim plugin\",
+	\"enable_which_key\": false,
+
 \"_comment_end\":\"Ending field to not put comma every time\"
 }")).0.to_mut())?;
     Ok(())

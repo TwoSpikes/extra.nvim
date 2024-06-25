@@ -76,6 +76,7 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		\'quickui_icons',
 		\'language',
 		\'fast_terminal',
+		\'enable_which_key',
 	\]
 	for option in l:option_list
 		if exists('g:dotfiles_config["'.option.'"]')
@@ -364,6 +365,9 @@ function! SetDefaultValuesForStartupOptionsAndDotfilesConfigOptions()
 	endif
 	if !exists('g:fast_terminal')
 		let g:fast_terminal = v:false
+	endif
+	if !exists('g:enable_which_key')
+		let g:enable_which_key = v:true
 	endif
 endfunction
 call SetDefaultValuesForStartupOptionsAndDotfilesConfigOptions()
@@ -2401,7 +2405,7 @@ function! OnStart()
 		call MakeThingsThatRequireBeDoneAfterPluginsLoaded()
 	endif
 	call TermuxSaveCursorStyle()
-	if has('nvim')
+	if has('nvim') && g:enable_which_key
 		call PrepareWhichKey()
 	endif
 	Showtab
