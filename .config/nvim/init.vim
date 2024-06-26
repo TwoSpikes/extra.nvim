@@ -77,6 +77,7 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		\'language',
 		\'fast_terminal',
 		\'enable_which_key',
+		\'compatible',
 	\]
 	for option in l:option_list
 		if exists('g:dotfiles_config["'.option.'"]')
@@ -369,6 +370,9 @@ function! SetDefaultValuesForStartupOptionsAndDotfilesConfigOptions()
 	if !exists('g:enable_which_key')
 		let g:enable_which_key = v:true
 	endif
+	if !exists('g:compatible')
+		let g:compatible = "no"
+	endif
 endfunction
 call SetDefaultValuesForStartupOptionsAndDotfilesConfigOptions()
 
@@ -625,7 +629,11 @@ function! Showtab()
 	let mode = mode('lololol')
 	let strmode = ''
 	if mode == 'n'
-		let strmode = '%#ModeNorm# '
+		if g:compatible !=# "helix"
+			let strmode = '%#ModeNorm# '
+		else
+			let strmode = '%#ModeNorm# NOR '
+		endif
 	elseif mode == 'no'
 		if g:language ==# 'russian'
 			let strmode = 'ЖДУ_ОПЕР '
@@ -681,7 +689,11 @@ function! Showtab()
 			let strmode = '^\^o norm TERM '
 		endif
 	elseif mode == 'v'
-		let strmode = '%#ModeVisu# '
+		if g:compatible !=# "helix"
+			let strmode = '%#ModeVisu# '
+		else
+			let strmode = '%#ModeVisu# SEL '
+		endif
 	elseif mode == 'V'
 		if g:language ==# 'russian'
 			let strmode = 'ВИЗ_ЛИНИЯ '
@@ -725,7 +737,11 @@ function! Showtab()
 			let strmode = 'SEL BLOCK '
 		endif
 	elseif mode == 'i'
-		let strmode = '%#ModeIns# '
+		if g:compatible !=# "helix"
+			let strmode = '%#ModeIns# '
+		else
+			let strmode = '%#ModeIns# INS '
+		endif
 	elseif mode == 'ic'
 		if g:language ==# 'russian'
 			let strmode = 'дополн ВСТ '
@@ -1141,9 +1157,9 @@ if v:version >= 700
   au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 endif
 
-noremap <silent> dd ddk
-noremap <silent> - dd
-noremap <silent> + mzyyp`zj
+nnoremap <silent> dd ddk
+nnoremap <silent> - dd
+nnoremap <silent> + mzyyp`zj
 
 noremap <silent> J mzJ`z
 noremap <silent> gJ mzgJ`z
@@ -1201,6 +1217,15 @@ endif
 let s:process_g_but_function_expression .= "
 \\n	exec \"lua << EOF
 \\\nlocal button = vim.v.count == 0 and \'g\".a:button.\"\' or \'\".a:button.\"\'
+\"
+if g:compatible ==# "helix"
+let s:process_g_but_function_expression .= "
+\\\nvim.fn.YesItIsV()
+\\\nif vim.g.pseudo_visual then
+\\\n    button = \\\"\\<esc>\\\"..button
+\\\nend"
+endif
+let s:process_g_but_function_expression .= "
 \\\nfor _=1,vim.v.count1,1 do
 \\\nvim.api.nvim_feedkeys(button,\\\"n\\\",false)
 \\\nend

@@ -533,4 +533,7 @@ return require('packer').startup(function (use)
 	use {
 		'sindrets/diffview.nvim',
 	}
+	use {
+		'folke/trouble.nvim',
+	}
 end)
