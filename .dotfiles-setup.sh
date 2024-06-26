@@ -428,7 +428,7 @@ fi
 clear
 echo "==== Setting up shell ===="
 echo ""
-echo -n "Do you want to copy .bashrc and its dependencies? (y/N/exit): "
+echo -n "Do you want to copy shell scripts and its dependencies? (y/N/exit): "
 read user_input
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 case ${user_input} in
@@ -436,7 +436,7 @@ case ${user_input} in
 		cp ${dotfiles}/.zshrc ${home}
 		cp ${dotfiles}/.dotfiles-script.sh ${home}
 		cp -r ${dotfiles}/shscripts/ ${home}
-		cp ${dotfiles}/.profile ${dotfiles}/.zprofile ${home}
+		cp ${dotfiles}/.bash_profile ${home}
 		;;
 	"exit"|"x"|"e"|"q")
 		echo "Abort"
@@ -534,6 +534,38 @@ case ${user_input} in
 		echo "OK"
 		;;
 esac
+press_enter
+
+clear
+echo "==== Setting up helix ===="
+echo ""
+
+echo -n "Checking if Helix is installed: "
+if command -v "hx" > /dev/null 2>&1
+then
+	echo "YES"
+else
+	echo "NO"
+
+	echo -n "Do you want to install Helix (Y/n): "
+	read user_input
+	user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+	case ${user_input} in
+		"n")
+			;;
+		*)
+			install_package helix
+			;;
+	esac
+fi
+
+echo -n "Installing config for Helix: "
+if ! test -d ${home}/.config/helix
+then
+	mkdir -pv ${home}/.config/helix
+fi
+cp -r ${dotfiles}/.config/helix ${home}/.config/
+echo "OK"
 press_enter
 
 clear

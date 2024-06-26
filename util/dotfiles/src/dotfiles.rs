@@ -1,15 +1,17 @@
+pub mod checkhealth;
 pub mod colors;
 pub mod timer;
-pub mod checkhealth;
 
-use std::path::PathBuf;
-use std::io::Write;
 use cursive::CursiveExt;
+use std::io::Write;
+use std::path::PathBuf;
 
 use timer::timer_end_silent;
-#[allow(unused_imports)] use timer::{timer_endln, timer_start_silent, timer_startln, timer_total_time};
+#[allow(unused_imports)]
+use timer::{timer_endln, timer_start_silent, timer_startln, timer_total_time};
 
-#[allow(unused_macros)] macro_rules! clear {
+#[allow(unused_macros)]
+macro_rules! clear {
     () => {
         print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
     };
@@ -69,7 +71,11 @@ macro_rules! short_help {
 
 macro_rules! run_as_superuser_if_needed {
     ($name:expr, $args:expr) => {
-        if ::whoami::realname() != "root" && !::std::env::var("TERMUX_VERSION").expect("Cannot get envvar").is_empty() {
+        if ::whoami::realname() != "root"
+            && !::std::env::var("TERMUX_VERSION")
+                .expect("Cannot get envvar")
+                .is_empty()
+        {
             ::std::process::Command::new($name)
                 .args($args)
                 .status()
@@ -84,7 +90,10 @@ macro_rules! run_as_superuser_if_needed {
 }
 
 // Copyied from StackOverflow: https://stackoverflow.com/questions/26958489/how-to-copy-a-folder-recursively-in-rust
-fn copy_dir_all(src: impl AsRef<::std::path::Path> + ::std::convert::AsRef<::std::path::Path>, dst: impl AsRef<::std::path::Path> + ::std::convert::AsRef<::std::path::Path>) -> ::std::io::Result<()> {
+fn copy_dir_all(
+    src: impl AsRef<::std::path::Path> + ::std::convert::AsRef<::std::path::Path>,
+    dst: impl AsRef<::std::path::Path> + ::std::convert::AsRef<::std::path::Path>,
+) -> ::std::io::Result<()> {
     _ = ::std::fs::create_dir_all(&dst);
     for entry in ::std::fs::read_dir(src)? {
         let entry = entry?;
@@ -106,7 +115,8 @@ fn find_vim_vimruntime_path(is_termux: bool) -> String {
         } else {
             "/usr/share/vim"
         }
-    }).unwrap();
+    })
+    .unwrap();
     let mut maxver: Option<u16> = None;
     for path in paths {
         let path = path.unwrap().path();
@@ -119,12 +129,8 @@ fn find_vim_vimruntime_path(is_termux: bool) -> String {
             filename = chars.as_str();
             let version = filename.parse::<u16>().unwrap();
             if match maxver {
-                None => {
-                    true
-                },
-                Some(maxver) => {
-                    version > maxver
-                },
+                None => true,
+                Some(maxver) => version > maxver,
             } {
                 maxver = Some(version);
             }
@@ -135,21 +141,27 @@ fn find_vim_vimruntime_path(is_termux: bool) -> String {
 fn commit(only_copy: bool, #[allow(non_snake_case)] HOME: PathBuf) -> ::std::io::Result<()> {
     let is_termux: bool = ::std::env::var("TERMUX_VERSION").is_ok();
     _ = ::std::fs::copy(HOME.join(".dotfiles-script.sh"), "./.dotfiles-script.sh");
-    _ = copy_dir_all(HOME.join("shscripts"), "./shscripts");
-    _ = ::std::fs::copy(HOME.join(".profile"), "./.profile");
-    _ = ::std::fs::copy(HOME.join(".zprofile"), "./.zprofile");
+    _ = ::std::fs::copy(HOME.join(".bash_profile"), "./.bash_profile");
     _ = ::std::fs::copy(HOME.join(".bashrc"), "./.bashrc");
     _ = ::std::fs::copy(HOME.join(".zshrc"), "./.zshrc");
-    _ = ::std::fs::copy(HOME.join(".config/nvim/init.vim"), "./.config/nvim/init.vim");
+    _ = ::std::fs::copy(
+        HOME.join(".config/nvim/init.vim"),
+        "./.config/nvim/init.vim",
+    );
     _ = copy_dir_all(HOME.join(".config/nvim/lua"), "./.config/nvim/lua");
     _ = copy_dir_all(HOME.join(".config/nvim/vim"), "./.config/nvim/vim");
-    _ = copy_dir_all(HOME.join(".config/nvim/ftplugin"), "./.config/nvim/ftplugin");
+    _ = copy_dir_all(
+        HOME.join(".config/nvim/ftplugin"),
+        "./.config/nvim/ftplugin",
+    );
+    _ = copy_dir_all(HOME.join(".config/helix"), "./.config/helix");
     _ = ::std::fs::copy(HOME.join("bin/viman"), "./bin/viman");
     _ = ::std::fs::copy(HOME.join("bin/vipage"), "./bin/vipage");
     _ = ::std::fs::copy(HOME.join("bin/inverting.sh"), "./bin/inverting.sh");
     _ = ::std::fs::copy(HOME.join("bin/ls"), "./bin/ls");
     _ = ::std::fs::copy(HOME.join("bin/n"), "./bin/n");
-    #[allow(non_snake_case)] let VIMRUNTIME = if ::which::which("nvim").is_ok() {
+    #[allow(non_snake_case)]
+    let VIMRUNTIME = if ::which::which("nvim").is_ok() {
         if cfg!(target_os = "windows") {
             "/c/Program Files/Neovim/share/nvim/runtime"
         } else {
@@ -158,32 +170,64 @@ fn commit(only_copy: bool, #[allow(non_snake_case)] HOME: PathBuf) -> ::std::io:
             } else {
                 "/usr/share/nvim/runtime"
             }
-        }.to_string()
+        }
+        .to_string()
     } else {
         find_vim_vimruntime_path(is_termux)
     };
     let VIMRUNTIME = ::std::path::Path::new(VIMRUNTIME.as_str());
     _ = ::std::fs::create_dir_all("./vimruntime/syntax");
-    _ = run_as_superuser_if_needed!("cp", &[VIMRUNTIME.join("syntax/book.vim").to_str().expect("Cannot convert path to str"), "./vimruntime/syntax/"]);
+    _ = run_as_superuser_if_needed!(
+        "cp",
+        &[
+            VIMRUNTIME
+                .join("syntax/book.vim")
+                .to_str()
+                .expect("Cannot convert path to str"),
+            "./vimruntime/syntax/"
+        ]
+    );
     _ = ::std::fs::create_dir_all("./vimruntime/colors");
-    _ = run_as_superuser_if_needed!("cp", &[VIMRUNTIME.join("colors/blueorange.vim").to_str().expect("Cannot convert path to str"), "./vimruntime/colors/"]);
-    _ = ::std::fs::copy(HOME.join(".config/nvim/vim/xterm-color-table.vim"), "./.config/nvim/vim/xterm-color-table.vim");
+    _ = run_as_superuser_if_needed!(
+        "cp",
+        &[
+            VIMRUNTIME
+                .join("colors/blueorange.vim")
+                .to_str()
+                .expect("Cannot convert path to str"),
+            "./vimruntime/colors/"
+        ]
+    );
+    _ = ::std::fs::copy(
+        HOME.join(".config/nvim/vim/xterm-color-table.vim"),
+        "./.config/nvim/vim/xterm-color-table.vim",
+    );
     _ = ::std::fs::copy(HOME.join(".tmux.conf"), "./.tmux.conf");
     _ = ::std::fs::copy(HOME.join(".gitconfig-default"), "./.gitconfig-default");
     _ = ::std::fs::copy(HOME.join(".gitmessage"), "./.gitmessage");
-    _ = ::std::fs::copy(HOME.join(".termux/colors.properties"), "./.termux/colors.properties");
-    _ = ::std::fs::copy(HOME.join(".termux/termux.properties"), "./.termux/termux.properties");
+    _ = ::std::fs::copy(
+        HOME.join(".termux/colors.properties"),
+        "./.termux/colors.properties",
+    );
+    _ = ::std::fs::copy(
+        HOME.join(".termux/termux.properties"),
+        "./.termux/termux.properties",
+    );
     _ = copy_dir_all(HOME.join(".config/alacritty"), "./.config/alacritty");
     _ = ::std::fs::copy(HOME.join(".nanorc"), "./.nanorc");
-    _ = ::std::fs::copy(HOME.join(".config/coc/extensions/node_modules/bash-language-server/out/cli.js"), "./\"coc-sh crutch\"/");
+    _ = ::std::fs::copy(
+        HOME.join(".config/coc/extensions/node_modules/bash-language-server/out/cli.js"),
+        "./\"coc-sh crutch\"/",
+    );
     if !only_copy {
         match ::std::process::Command::new("git")
             .args(["commit", "--all", "--verbose"])
             .stdout(::std::process::Stdio::inherit())
             .stdin(::std::process::Stdio::inherit())
-            .output() {
-                Ok(_) => Ok(()),
-                Err(e) => Err(e),
+            .output()
+        {
+            Ok(_) => Ok(()),
+            Err(e) => Err(e),
         }
     } else {
         Ok(())
@@ -191,21 +235,33 @@ fn commit(only_copy: bool, #[allow(non_snake_case)] HOME: PathBuf) -> ::std::io:
 }
 
 fn init(home: PathBuf) -> ::std::io::Result<()> {
-    let home_str = home.clone().into_os_string().into_string().expect("Cannot convert os_string into string");
+    let home_str = home
+        .clone()
+        .into_os_string()
+        .into_string()
+        .expect("Cannot convert os_string into string");
     if ::std::env::var("GOPATH") == Err(::std::env::VarError::NotPresent) {
         ::std::env::set_var("GOPATH", format!("{}/go", home_str));
     }
     if ::std::env::var("GOBIN") == Err(::std::env::VarError::NotPresent) {
         ::std::env::set_var("GOBIN", format!("{}/go", home_str));
     }
-    ::std::env::set_var("PATH", format!("{}:{}",
+    ::std::env::set_var(
+        "PATH",
+        format!(
+            "{}:{}",
             ::std::env::var("PATH").expect("Cannot get $PATH environment variable"),
-            ::std::env::var("GOBIN").expect("Cannot get $PATH environment variable")));
+            ::std::env::var("GOBIN").expect("Cannot get $PATH environment variable")
+        ),
+    );
 
     ::std::env::set_var("HISTSIZE", "5000");
     ::std::env::set_var("DISPLAY", "0");
     if ::std::path::Path::new("/data/data/com.termux/files/usr/lib/libtermux-exec.so").exists() {
-        ::std::env::set_var("LD_PRELOAD", "/data/data/com.termux/files/usr/lib/libtermux-exec.so");
+        ::std::env::set_var(
+            "LD_PRELOAD",
+            "/data/data/com.termux/files/usr/lib/libtermux-exec.so",
+        );
     }
 
     if ::std::env::var("XDG_CONFIG_HOME") == Err(::std::env::VarError::NotPresent) {
@@ -215,7 +271,13 @@ fn init(home: PathBuf) -> ::std::io::Result<()> {
         ::std::env::set_var("PREFIX", "/usr");
     }
     if ::std::env::var("JAVA_HOME") == Err(::std::env::VarError::NotPresent) {
-        ::std::env::set_var("JAVA_HOME", format!("{}/share/jdk8", ::std::env::var("PREFIX").expect("Cannot get environment variable")));
+        ::std::env::set_var(
+            "JAVA_HOME",
+            format!(
+                "{}/share/jdk8",
+                ::std::env::var("PREFIX").expect("Cannot get environment variable")
+            ),
+        );
     }
 
     crate::colors::init();
@@ -247,11 +309,19 @@ fn init(home: PathBuf) -> ::std::io::Result<()> {
     let mut sys = ::sysinfo::System::new_all();
     sys.refresh_all();
     let disks = ::sysinfo::Disks::new_with_refreshed_list();
-    let disk_free_space = &disks.last().expect("Cannot get last element of an array").available_space();
-    timer_total_time(&mut timer, &format!("free space: {}{} GiB{} loading time",
+    let disk_free_space = &disks
+        .last()
+        .expect("Cannot get last element of an array")
+        .available_space();
+    timer_total_time(
+        &mut timer,
+        &format!(
+            "free space: {}{} GiB{} loading time",
             ::std::env::var("YELLOW_COLOR").expect("Cannot get environment variable"),
             *disk_free_space as f64 / 1_000_000_000.0f64,
-            ::std::env::var("RESET_COLOR").expect("Cannot get environment variable")));
+            ::std::env::var("RESET_COLOR").expect("Cannot get environment variable")
+        ),
+    );
 
     let todo_path = home.join("todo");
     if todo_path.exists() {
@@ -275,10 +345,10 @@ enum UseTransparentBg {
 impl ToString for UseTransparentBg {
     fn to_string(&self) -> String {
         String::from(match self {
-            UseTransparentBg::Never       => "never",
-            UseTransparentBg::InDarkMode  => "dark",
+            UseTransparentBg::Never => "never",
+            UseTransparentBg::InDarkMode => "dark",
             UseTransparentBg::InLightMode => "light",
-            UseTransparentBg::Always      => "always",
+            UseTransparentBg::Always => "always",
         })
     }
 }
@@ -291,7 +361,7 @@ enum Background {
 impl ToString for Background {
     fn to_string(&self) -> String {
         String::from(match self {
-            Background::Dark  => "dark",
+            Background::Dark => "dark",
             Background::Light => "light",
         })
     }
@@ -307,8 +377,8 @@ impl ToString for Language {
     fn to_string(&self) -> String {
         String::from(match self {
             Language::Automatic => "auto",
-            Language::Russian   => "russian",
-            Language::English   => "english",
+            Language::Russian => "russian",
+            Language::English => "english",
         })
     }
 }
@@ -322,7 +392,7 @@ impl ToString for FalseTrue {
     fn to_string(&self) -> String {
         String::from(match self {
             FalseTrue::False => "false",
-            FalseTrue::True  => "true",
+            FalseTrue::True => "true",
         })
     }
 }
@@ -333,30 +403,28 @@ struct DotfilesSetupVimGetOptionsCursiveUserData {
 }
 impl DotfilesSetupVimGetOptionsCursiveUserData {
     pub fn new() -> Self {
-        DotfilesSetupVimGetOptionsCursiveUserData {
-            do_not_save: false,
-        }
+        DotfilesSetupVimGetOptionsCursiveUserData { do_not_save: false }
     }
 }
 
 #[derive(Clone)]
 struct DotfilesVimConfigOptions {
     use_transparent_bg: UseTransparentBg,
-    background:         Background,
-    cursorcolumn:       FalseTrue,
-    cursorline:         FalseTrue,
-    linenr:             FalseTrue,
-    language:           Language,
+    background: Background,
+    cursorcolumn: FalseTrue,
+    cursorline: FalseTrue,
+    linenr: FalseTrue,
+    language: Language,
 }
 impl DotfilesVimConfigOptions {
     pub fn new() -> Self {
         return DotfilesVimConfigOptions {
             use_transparent_bg: UseTransparentBg::InDarkMode,
-            background:         Background::Dark,
-            cursorcolumn:       FalseTrue::False,
-            cursorline:         FalseTrue::True,
-            linenr:             FalseTrue::True,
-            language:           Language::Automatic,
+            background: Background::Dark,
+            cursorcolumn: FalseTrue::False,
+            cursorline: FalseTrue::True,
+            linenr: FalseTrue::True,
+            language: Language::Automatic,
         };
     }
 }
@@ -364,70 +432,109 @@ fn dotfiles_setup_vim_get_options() -> ::std::io::Result<DotfilesVimConfigOption
     let cursive_user_data = DotfilesSetupVimGetOptionsCursiveUserData::new();
 
     let mut app = ::cursive::Cursive::default();
-    let mut use_transparent_bg_group: cursive::views::RadioGroup<UseTransparentBg> = cursive::views::RadioGroup::new();
-    let mut background_group: cursive::views::RadioGroup<Background> = cursive::views::RadioGroup::new();
-    let mut cursorcolumn_group: cursive::views::RadioGroup<FalseTrue> = cursive::views::RadioGroup::new();
-    let mut cursorline_group: cursive::views::RadioGroup<FalseTrue> = cursive::views::RadioGroup::new();
+    let mut use_transparent_bg_group: cursive::views::RadioGroup<UseTransparentBg> =
+        cursive::views::RadioGroup::new();
+    let mut background_group: cursive::views::RadioGroup<Background> =
+        cursive::views::RadioGroup::new();
+    let mut cursorcolumn_group: cursive::views::RadioGroup<FalseTrue> =
+        cursive::views::RadioGroup::new();
+    let mut cursorline_group: cursive::views::RadioGroup<FalseTrue> =
+        cursive::views::RadioGroup::new();
     let mut linenr_group: cursive::views::RadioGroup<FalseTrue> = cursive::views::RadioGroup::new();
-    let mut language_group: cursive::views::RadioGroup<Language> = cursive::views::RadioGroup::new();
+    let mut language_group: cursive::views::RadioGroup<Language> =
+        cursive::views::RadioGroup::new();
     let label_effect = ::cursive::theme::Effect::Bold;
     let main_layer_view = ::cursive::views::Dialog::new()
         .content(
             ::cursive::views::ListView::new()
-                .child("", ::cursive::views::TextView::new("Use transparent background").effect(label_effect))
+                .child(
+                    "",
+                    ::cursive::views::TextView::new("Use transparent background")
+                        .effect(label_effect),
+                )
                 .child(
                     "",
                     ::cursive::views::LinearLayout::horizontal()
                         .child(use_transparent_bg_group.button(UseTransparentBg::Never, "never"))
                         .child(::cursive::views::DummyView)
-                        .child(use_transparent_bg_group.button(UseTransparentBg::InDarkMode, "in dark mode").selected())
+                        .child(
+                            use_transparent_bg_group
+                                .button(UseTransparentBg::InDarkMode, "in dark mode")
+                                .selected(),
+                        )
                         .child(::cursive::views::DummyView)
-                        .child(use_transparent_bg_group.button(UseTransparentBg::InLightMode, "in light mode"))
+                        .child(
+                            use_transparent_bg_group
+                                .button(UseTransparentBg::InLightMode, "in light mode"),
+                        )
                         .child(::cursive::views::DummyView)
-                        .child(use_transparent_bg_group.button(UseTransparentBg::Always, "always"))
+                        .child(use_transparent_bg_group.button(UseTransparentBg::Always, "always")),
                 )
-                .child("", ::cursive::views::TextView::new("Background").effect(label_effect))
+                .child(
+                    "",
+                    ::cursive::views::TextView::new("Background").effect(label_effect),
+                )
                 .child(
                     "",
                     ::cursive::views::LinearLayout::horizontal()
                         .child(background_group.button(Background::Dark, "dark").selected())
                         .child(::cursive::views::DummyView)
-                        .child(background_group.button(Background::Light, "light"))
+                        .child(background_group.button(Background::Light, "light")),
                 )
-                .child("", ::cursive::views::TextView::new("Show cursor column").effect(label_effect))
+                .child(
+                    "",
+                    ::cursive::views::TextView::new("Show cursor column").effect(label_effect),
+                )
                 .child(
                     "",
                     ::cursive::views::LinearLayout::horizontal()
-                        .child(cursorcolumn_group.button(FalseTrue::False, "false").selected())
+                        .child(
+                            cursorcolumn_group
+                                .button(FalseTrue::False, "false")
+                                .selected(),
+                        )
                         .child(::cursive::views::DummyView)
-                        .child(cursorcolumn_group.button(FalseTrue::True, "true"))
+                        .child(cursorcolumn_group.button(FalseTrue::True, "true")),
                 )
-                .child("", ::cursive::views::TextView::new("Show cursor line").effect(label_effect))
+                .child(
+                    "",
+                    ::cursive::views::TextView::new("Show cursor line").effect(label_effect),
+                )
                 .child(
                     "",
                     ::cursive::views::LinearLayout::horizontal()
                         .child(cursorline_group.button(FalseTrue::False, "false"))
                         .child(::cursive::views::DummyView)
-                        .child(cursorline_group.button(FalseTrue::True, "true").selected())
+                        .child(cursorline_group.button(FalseTrue::True, "true").selected()),
                 )
-                .child("", ::cursive::views::TextView::new("Show line numbers").effect(label_effect))
+                .child(
+                    "",
+                    ::cursive::views::TextView::new("Show line numbers").effect(label_effect),
+                )
                 .child(
                     "",
                     ::cursive::views::LinearLayout::horizontal()
                         .child(linenr_group.button(FalseTrue::False, "false"))
                         .child(::cursive::views::DummyView)
-                        .child(linenr_group.button(FalseTrue::True, "true").selected())
+                        .child(linenr_group.button(FalseTrue::True, "true").selected()),
                 )
-                .child("", ::cursive::views::TextView::new("Language").effect(label_effect))
+                .child(
+                    "",
+                    ::cursive::views::TextView::new("Language").effect(label_effect),
+                )
                 .child(
                     "",
                     ::cursive::views::LinearLayout::horizontal()
-                        .child(language_group.button(Language::Automatic, "Automatic").selected())
+                        .child(
+                            language_group
+                                .button(Language::Automatic, "Automatic")
+                                .selected(),
+                        )
                         .child(::cursive::views::DummyView)
                         .child(language_group.button(Language::Russian, "Russian"))
                         .child(::cursive::views::DummyView)
-                        .child(language_group.button(Language::English, "English"))
-                )
+                        .child(language_group.button(Language::English, "English")),
+                ),
         )
         .button("Save", move |s| {
             let mut user_data = cursive_user_data.clone();
@@ -446,15 +553,18 @@ fn dotfiles_setup_vim_get_options() -> ::std::io::Result<DotfilesVimConfigOption
         .title("Setting up dotfiles vim config");
     app.add_layer(main_layer_view);
     app.run();
-    let user_data = app.user_data::<DotfilesSetupVimGetOptionsCursiveUserData>().expect("Cannot get user data").clone();
+    let user_data = app
+        .user_data::<DotfilesSetupVimGetOptionsCursiveUserData>()
+        .expect("Cannot get user data")
+        .clone();
     let options = if !user_data.do_not_save {
         DotfilesVimConfigOptions {
             use_transparent_bg: *use_transparent_bg_group.selection(),
-            background:         *background_group.selection(),
-            cursorcolumn:       *cursorcolumn_group.selection(),
-            cursorline:         *cursorline_group.selection(),
-            linenr:             *linenr_group.selection(),
-            language:           *language_group.selection(),
+            background: *background_group.selection(),
+            cursorcolumn: *cursorcolumn_group.selection(),
+            cursorline: *cursorline_group.selection(),
+            linenr: *linenr_group.selection(),
+            language: *language_group.selection(),
         }
     } else {
         DotfilesVimConfigOptions::new()
@@ -469,7 +579,10 @@ fn dotfiles_setup_vim(home: PathBuf) -> ::std::io::Result<()> {
         _ = ::std::fs::create_dir_all(path.parent().expect("Cannot get parent of a path"));
     }
     let mut f = ::std::fs::File::create(path).expect("Cannot open file for writing");
-    f.write(::encoding_rs::UTF_8.encode(&("{
+    f.write(
+        ::encoding_rs::UTF_8
+            .encode(
+                &("{
 \"_comment_AUTOGENERATED\":\"Autogenerated by `dotfiles setup dotfiles vim`\",
 \"_comment_01\":\"Transparent background\",
 \"_comment_02\":\"Values:\",
@@ -477,7 +590,10 @@ fn dotfiles_setup_vim(home: PathBuf) -> ::std::io::Result<()> {
 \"_comment_04\":\"    dark   - In dark theme\",
 \"_comment_05\":\"    light  - In light theme\",
 \"_comment_06\":\"    never  - Non-transparent\",
-	\"use_transparent_bg\": \"".to_owned()+&options.use_transparent_bg.to_string()+"\",
+	\"use_transparent_bg\": \""
+                    .to_owned()
+                    + &options.use_transparent_bg.to_string()
+                    + "\",
 
 \"_comment_07\":\"Prevent setting up LSP if false\",
 \"_comment_08\":\"Useful if it does not work\",
@@ -485,20 +601,24 @@ fn dotfiles_setup_vim(home: PathBuf) -> ::std::io::Result<()> {
 
 \"_comment_09\":\"light - light background\",
 \"_comment_10\":\"dark - dark background\",
-	\"background\": \""+&options.background.to_string()+"\",
+	\"background\": \"" + &options.background.to_string()
+                    + "\",
 
 \"_comment_11\":\"Use italic style for text\",
 \"_comment_12\":\"Useful to disable for terminals with bugged italic font (like Termux)\",
 	\"use_italic_style\": false,
 
 \"_comment_13\":\"Enable or disable highlighting for current column\",
-	\"cursorcolumn\": "+&options.cursorcolumn.to_string()+",
+	\"cursorcolumn\": " + &options.cursorcolumn.to_string()
+                    + ",
 
 \"_comment_14\":\"Enable or disable highlighting for current line\",
-	\"cursorline\": "+&options.cursorline.to_string()+",
+	\"cursorline\": " + &options.cursorline.to_string()
+                    + ",
 
 \"_comment_15\":\"Enable or disable showing line numbers\",
-	\"linenr\": "+&options.linenr.to_string()+",
+	\"linenr\": " + &options.linenr.to_string()
+                    + ",
 
 \"_comment_16\":\"Change the style of line numbers\",
 \"_comment_17\":\"Aviable: absolute, relative\",
@@ -590,7 +710,8 @@ fn dotfiles_setup_vim(home: PathBuf) -> ::std::io::Result<()> {
 \"_comment_63\":\"Interface language\",
 \"_comment_64\":\"Aviable: auto (default), english, russian)\",
 \"_comment_65\":\"This option does not change system locale and Vim interface language\",
-	\"language\": \""+&options.language.to_string()+"\",
+	\"language\": \"" + &options.language.to_string()
+                    + "\",
 
 \"_comment_66\":\"Do things that require fast terminal\",
 	\"fast_terminal\": false,
@@ -599,24 +720,26 @@ fn dotfiles_setup_vim(home: PathBuf) -> ::std::io::Result<()> {
 	\"enable_which_key\": true,
 
 \"_comment_end\":\"Ending field to not put comma every time\"
-}")).0.to_mut())?;
+}"),
+            )
+            .0
+            .to_mut(),
+    )?;
     Ok(())
 }
 
 fn setup(what: SetupWhat, home: PathBuf) -> ::std::io::Result<()> {
     match what {
-        SetupWhat::ALL => {
-            Err(::std::io::Error::new(::std::io::ErrorKind::Unsupported, "setting up everything is not implemented yet"))
-        },
-        SetupWhat::DOTFILES { what } => {
-            match what {
-                DotfilesSetupWhat::ALL => {
-                    Err(::std::io::Error::new(::std::io::ErrorKind::Unsupported, "setting up everything is not implemented yet"))
-                },
-                DotfilesSetupWhat::VIM => {
-                    dotfiles_setup_vim(home)
-                },
-            }
+        SetupWhat::ALL => Err(::std::io::Error::new(
+            ::std::io::ErrorKind::Unsupported,
+            "setting up everything is not implemented yet",
+        )),
+        SetupWhat::DOTFILES { what } => match what {
+            DotfilesSetupWhat::ALL => Err(::std::io::Error::new(
+                ::std::io::ErrorKind::Unsupported,
+                "setting up everything is not implemented yet",
+            )),
+            DotfilesSetupWhat::VIM => dotfiles_setup_vim(home),
         },
     }
 }
@@ -631,7 +754,7 @@ enum DotfilesSetupWhat {
 }
 enum SetupWhat {
     ALL,
-    DOTFILES{what: DotfilesSetupWhat},
+    DOTFILES { what: DotfilesSetupWhat },
 }
 fn main() {
     let mut args = ::std::env::args();
@@ -644,12 +767,13 @@ fn main() {
     }
     enum State {
         NONE,
-        COMMIT{only_copy: bool},
+        COMMIT { only_copy: bool },
         INIT,
-        SETUP{what: SetupWhat},
+        SETUP { what: SetupWhat },
         VERSION,
     }
-    #[allow(non_snake_case)] let HOME = match ::home::home_dir() {
+    #[allow(non_snake_case)]
+    let HOME = match ::home::home_dir() {
         Some(path) => path,
         None => panic!("Cannot get HOME directory"),
     };
@@ -660,168 +784,158 @@ fn main() {
     let mut state = State::NONE;
     while args.len() > 0 {
         match args.nth(0).unwrap().as_str() {
-            "--help"|"help" => {
+            "--help" | "help" => {
                 help!(program_name);
                 ::std::process::exit(0);
-            },
-            "commit" => {
-                match state {
-                    State::NONE => {
-                        state = State::COMMIT{only_copy: false};
-                    },
-                    _ => {
-                        eprintln!("Subcommands can be used only with first cmdline argument");
-                        short_help!(program_name);
-                        ::std::process::exit(1);
-                    },
+            }
+            "commit" => match state {
+                State::NONE => {
+                    state = State::COMMIT { only_copy: false };
+                }
+                _ => {
+                    eprintln!("Subcommands can be used only with first cmdline argument");
+                    short_help!(program_name);
+                    ::std::process::exit(1);
                 }
             },
-            "init" => {
-                match state {
-                    State::NONE => {
-                        state = State::INIT;
-                    },
-                    _ => {
-                        eprintln!("Subcommands can be used only with first cmdline argument");
-                        short_help!(program_name);
-                        ::std::process::exit(1);
-                    },
+            "init" => match state {
+                State::NONE => {
+                    state = State::INIT;
+                }
+                _ => {
+                    eprintln!("Subcommands can be used only with first cmdline argument");
+                    short_help!(program_name);
+                    ::std::process::exit(1);
                 }
             },
-            "setup" => {
-                match state {
-                    State::NONE => {
-                        state = State::SETUP{what: SetupWhat::ALL};
-                    },
-                    _ => {
-                        eprintln!("Subcommands can be used only with first cmdline argument");
-                        short_help!(program_name);
-                        ::std::process::exit(1);
-                    },
+            "setup" => match state {
+                State::NONE => {
+                    state = State::SETUP {
+                        what: SetupWhat::ALL,
+                    };
+                }
+                _ => {
+                    eprintln!("Subcommands can be used only with first cmdline argument");
+                    short_help!(program_name);
+                    ::std::process::exit(1);
                 }
             },
-            "dotfiles" => {
-                match state {
-                    State::SETUP { what } => {
-                        match what {
-                            SetupWhat::ALL => {
-                                state = State::SETUP { what: SetupWhat::DOTFILES { what: DotfilesSetupWhat::ALL } };
+            "dotfiles" => match state {
+                State::SETUP { what } => match what {
+                    SetupWhat::ALL => {
+                        state = State::SETUP {
+                            what: SetupWhat::DOTFILES {
+                                what: DotfilesSetupWhat::ALL,
                             },
-                            SetupWhat::DOTFILES { what: _ } => {
-                                eprintln!("Cannot set setting up dotfiles because it is already set");
-                                short_help!(program_name);
-                                ::std::process::exit(1);
+                        };
+                    }
+                    SetupWhat::DOTFILES { what: _ } => {
+                        eprintln!("Cannot set setting up dotfiles because it is already set");
+                        short_help!(program_name);
+                        ::std::process::exit(1);
+                    }
+                },
+                _ => {
+                    eprintln!("This subcommand can only be used with `setup` subcommand");
+                    short_help!(program_name);
+                    ::std::process::exit(1);
+                }
+            },
+            "vim" => match state {
+                State::SETUP { what } => match what {
+                    SetupWhat::ALL => {
+                        eprintln!("Cannot set setting up dotfiles vim because it is set to set up everything");
+                        short_help!(program_name);
+                        ::std::process::exit(1);
+                    }
+                    SetupWhat::DOTFILES { what: _ } => {
+                        state = State::SETUP {
+                            what: SetupWhat::DOTFILES {
+                                what: DotfilesSetupWhat::VIM,
                             },
-                        }
-                    },
-                    _ => {
-                        eprintln!("This subcommand can only be used with `setup` subcommand");
-                        short_help!(program_name);
-                        ::std::process::exit(1);
-                    },
+                        };
+                    }
+                },
+                _ => {
+                    eprintln!("This subcommand can only be used with `setup` subcommand");
+                    short_help!(program_name);
+                    ::std::process::exit(1);
                 }
             },
-            "vim" => {
-                match state {
-                    State::SETUP { what } => {
-                        match what {
-                            SetupWhat::ALL => {
-                                eprintln!("Cannot set setting up dotfiles vim because it is set to set up everything");
-                                short_help!(program_name);
-                                ::std::process::exit(1);
-                            },
-                            SetupWhat::DOTFILES { what: _ } => {
-                                state = State::SETUP { what: SetupWhat::DOTFILES { what: DotfilesSetupWhat::VIM } };
-                            },
-                        }
-                    },
-                    _ => {
-                        eprintln!("This subcommand can only be used with `setup` subcommand");
-                        short_help!(program_name);
-                        ::std::process::exit(1);
-                    },
+            "version" | "--version" | "-V" => match state {
+                State::NONE => {
+                    state = State::VERSION;
+                }
+                _ => {
+                    eprintln!("Subcommands can be used only with first cmdline argument");
+                    short_help!(program_name);
+                    ::std::process::exit(1);
                 }
             },
-            "version"|"--version"|"-V" => {
-                match state {
-                    State::NONE => {
-                        state = State::VERSION;
-                    },
-                    _ => {
-                        eprintln!("Subcommands can be used only with first cmdline argument");
-                        short_help!(program_name);
-                        ::std::process::exit(1);
-                    },
+            "--only-copy" | "-o" => match state {
+                State::COMMIT { only_copy: _ } => {
+                    state = State::COMMIT { only_copy: true };
+                }
+                _ => {
+                    eprintln!("This option can only be used with `commit` subcommand");
+                    short_help!(program_name);
+                    ::std::process::exit(1);
                 }
             },
-            "--only-copy"|"-o" => {
-                match state {
-                    State::COMMIT { only_copy: _ } => {
-                        state = State::COMMIT { only_copy: true };
-                    },
-                    _ => {
-                        eprintln!("This option can only be used with `commit` subcommand");
-                        short_help!(program_name);
-                        ::std::process::exit(1);
-                    },
+            "++only-copy" | "+o" => match state {
+                State::COMMIT { only_copy: _ } => {
+                    state = State::COMMIT { only_copy: false };
                 }
-            },
-            "++only-copy"|"+o" => {
-                match state {
-                    State::COMMIT { only_copy: _ } => {
-                        state = State::COMMIT { only_copy: false };
-                    },
-                    _ => {
-                        println!("This option can only be used with `commit` subcommand");
-                        short_help!(program_name);
-                        ::std::process::exit(1);
-                    },
+                _ => {
+                    println!("This option can only be used with `commit` subcommand");
+                    short_help!(program_name);
+                    ::std::process::exit(1);
                 }
             },
             &_ => {
                 println!("Unknown argument");
                 short_help!(program_name);
                 ::std::process::exit(1);
-            },
+            }
         }
     }
     match state {
-        State::NONE => {},
+        State::NONE => {}
         State::COMMIT { only_copy } => {
             match commit(only_copy, HOME) {
                 Ok(_) => {
                     ::std::process::exit(0);
-                },
+                }
                 Err(e) => {
                     println!("error: {}", e);
                     ::std::process::exit(1);
-                },
+                }
             };
-        },
+        }
         State::INIT => {
             match init(HOME) {
                 Ok(_) => {
                     ::std::process::exit(0);
-                },
+                }
                 Err(e) => {
                     println!("error: {}", e);
                     ::std::process::exit(1);
-                },
+                }
             };
-        },
+        }
         State::SETUP { what } => {
             match setup(what, HOME) {
                 Ok(_) => {
                     ::std::process::exit(0);
-                },
+                }
                 Err(e) => {
                     println!("error: {}", e);
                     ::std::process::exit(1);
-                },
+                }
             };
-        },
+        }
         State::VERSION => {
             version();
-        },
+        }
     }
 }
