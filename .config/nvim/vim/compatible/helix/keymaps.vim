@@ -20,6 +20,12 @@ let &whichwrap="b,s,h,l,<,>,~,[,]"
 nnoremap d x
 nnoremap x V
 nnoremap c xi
+unmap ySS
+unmap ySs
+unmap yss
+unmap yS
+unmap ys
+unmap y<c-g>
 nnoremap y vy
 nnoremap t<cr> v$
 nnoremap mm %
@@ -27,6 +33,35 @@ nnoremap <c-c> <cmd>call CommentOutDefault<cr>
 inoremap <c-x> <c-p>
 inoremap <c-p> <c-x>
 nnoremap <a-o> viw
+nnoremap <a-.> ;
+vnoremap R "_dP
+nnoremap ~ v~
+nnoremap > >>
+nnoremap < <<
+unmap <c-a>
+unmap <c-x><c-b>
+unmap <c-x><c-g>
+unmap <c-x><c-h>
+unmap <c-x>h
+unmap <c-x>5
+unmap <c-x>t0
+unmap <c-x>tO
+unmap <c-x>to
+unmap <c-x>t2
+unmap <c-x>t1
+unmap <c-x><c-f>
+unmap <c-x>O
+unmap <c-x>o
+unmap <c-x>3
+unmap <c-x>2
+unmap <c-x>1
+unmap <c-x>0
+unmap <c-x>k
+unmap <c-x><c-s>
+unmap <c-x>S
+unmap <c-x>s
+unmap <c-x><c-q>
+unmap <c-x><c-c>
 vnoremap t<cr> $
 unmap cS
 unmap cs
@@ -46,23 +81,15 @@ function! NoItIsNotV()
 		let g:pseudo_visual = v:true
 	endif
 endfunction
-nnoremap w v<cmd>exec "normal! ".v:count1."e"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual_idk=v:false<cr>
-nnoremap e v<cmd>exec "normal! ".v:count1."e"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual_idk=v:false<cr>
-nnoremap b v<cmd>exec "normal! ".v:count1."b"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual_idk=v:false<cr>
-nnoremap W v<cmd>exec "normal! ".v:count1."W"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual_idk=v:false<cr>
-nnoremap E v<cmd>exec "normal! ".v:count1."E"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual_idk=v:false<cr>
-nnoremap B v<cmd>exec "normal! ".v:count1."B"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual_idk=v:false<cr>
+nnoremap w <cmd>exec "normal! v".v:count1."e"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual_idk=v:false<cr>
+nnoremap e <cmd>exec "normal! v".v:count1."e"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual_idk=v:false<cr>
+nnoremap b <cmd>exec "normal! v".v:count1."b"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual_idk=v:false<cr>
+nnoremap W <cmd>exec "normal! v".v:count1."W"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual_idk=v:false<cr>
+nnoremap E <cmd>exec "normal! v".v:count1."E"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual_idk=v:false<cr>
+nnoremap B <cmd>exec "normal! v".v:count1."B"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual_idk=v:false<cr>
 nnoremap v v<cmd>let g:pseudo_visual_idk=v:true<cr>
 vnoremap x j
 vnoremap X j
-function! V_JK(button)
-	call YesItIsV()
-	if g:pseudo_visual
-		exec "normal! \<esc>".a:button
-	else
-		return a:button
-	endif
-endfunction
 function! V_DoH()
 	call YesItIsV()
 	if g:pseudo_visual
