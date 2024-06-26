@@ -151,7 +151,7 @@ function! V_DoB()
 	if g:pseudo_visual
 		exec "normal! \<esc>vb"
 	else
-		call feedkeys('b')
+		exec "normal! b"
 	endif
 endfunction
 vnoremap b <cmd>call V_DoB()<cr>
@@ -160,7 +160,7 @@ function! V_DoBWhole()
 	if g:pseudo_visual
 		exec "normal! \<esc>vB"
 	else
-		call feedkeys('B')
+		exec "normal! B"
 	endif
 endfunction
 vnoremap B <cmd>call V_DoBWhole()<cr>
