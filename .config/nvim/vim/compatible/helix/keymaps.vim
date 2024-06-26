@@ -175,6 +175,7 @@ nnoremap , <nop>
 vnoremap , <esc>
 nnoremap <c-s> m'
 nnoremap U <c-r>
+vnoremap y ygv
 
 unmap <leader>f
 unmap <leader>fr

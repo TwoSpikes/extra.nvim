@@ -26,7 +26,13 @@ require('packages.neogen.init')
 require('packages.flash-nvim.init')
 require('packages.yanky.init')
 require('packages.nvim-lint.init')
-require('packages.noice.init')
+if vim.g.compatible ~= "helix_hard" then
+	require('packages.noice.init')
+else
+	if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/noice.nvim") then
+		vim.fn.delete(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/noice.nvim", "rf")
+	end
+end
 require('packages.edgy.init')
 require('packages.mini.init')
 require('packages.colorizer.init')

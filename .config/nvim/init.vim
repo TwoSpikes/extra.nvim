@@ -614,22 +614,31 @@ function! GetGitBranch()
 	return s:gitbranch
 endfunction
 function! Showtab()
-	let stl_name = '%<%t'
-	let stl_name .= '%( %* %#StatusLinemod#%M%R%H%W%)%*'
-	if &columns ># 40
-		let stl_name .= '%( %#StatusLinemod#'
-		let stl_name .= &syntax
-		let stl_name .= '%)%*'
+	if g:compatible !=# "helix_hard"
+		let stl_name = '%<%t'
+		let stl_name .= '%( %* %#StatusLinemod#%M%R%H%W%)%*'
+	else
+		let stl_name = '%* %<%t'
+		let stl_name .= '%( %#StatusLinemod#%M%R%H%W%)%*'
 	endif
-	if &columns ># 45
-		let stl_name .= '%( %#Statuslinemod#'
-		let stl_name .= '%{GetGitBranch()}'
-		let stl_name .= '%)%*'
+	if g:compatible !=# "helix_hard"
+		if &columns ># 40
+			let stl_name .= '%( %#StatusLinemod#'
+			let stl_name .= &syntax
+			let stl_name .= '%)%*'
+		endif
+	endif
+	if g:compatible !=# "helix_hard"
+		if &columns ># 45
+			let stl_name .= '%( %#Statuslinemod#'
+			let stl_name .= '%{GetGitBranch()}'
+			let stl_name .= '%)%*'
+		endif
 	endif
 	let mode = mode('lololol')
 	let strmode = ''
 	if mode == 'n'
-		if g:compatible !=# "helix"
+		if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
 			let strmode = '%#ModeNorm# '
 		else
 			let strmode = '%#ModeNorm# NOR '
@@ -689,7 +698,7 @@ function! Showtab()
 			let strmode = '^\^o norm TERM '
 		endif
 	elseif mode == 'v'
-		if g:compatible !=# "helix"
+		if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
 			let strmode = '%#ModeVisu# '
 		else
 			let strmode = '%#ModeVisu# SEL '
@@ -737,7 +746,7 @@ function! Showtab()
 			let strmode = 'SEL BLOCK '
 		endif
 	elseif mode == 'i'
-		if g:compatible !=# "helix"
+		if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
 			let strmode = '%#ModeIns# '
 		else
 			let strmode = '%#ModeIns# INS '
@@ -782,7 +791,11 @@ function! Showtab()
 				let strmode = 'COM_BLOCK '
 			endif
 		else
-			let strmode = '%#ModeCom# '
+			if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
+				let strmode = '%#ModeCom# '
+			else
+				let strmode = '%#ModeCom# COM '
+			endif
 		endif
 	elseif mode == 'cv'
 		if g:language ==# 'russian'
@@ -832,7 +845,9 @@ function! Showtab()
 	endif
 
 	let stl_showcmd = '%(%#Statuslinemod#%S%*%)'
-	let stl_buf = '#%n %p%%'
+	if g:compatible !=# "helix_hard"
+		let stl_buf = '#%n %p%%'
+	endif
 	let stl_mode_to_put = ''
 	if &columns ># 20
 		let stl_mode_to_put .= strmode
@@ -842,33 +857,41 @@ function! Showtab()
 
 	let s:result = stl_mode_to_put
 	let s:result .= stl_name
-	if &columns ># 30
-		let &showcmdloc = 'statusline'
-		let s:result .= ' '
-		let s:result .= stl_showcmd
-	else
-		let &showcmdloc = 'last'
+	if g:compatible !=# "helix_hard"
+		if &columns ># 30
+			let &showcmdloc = 'statusline'
+			let s:result .= ' '
+			let s:result .= stl_showcmd
+		else
+			let &showcmdloc = 'last'
+		endif
 	endif
 	let s:result .= '%='
 	if &columns ># 45
-		let s:result .= '%#Statuslinestat01#'
-		let s:result .= ''
-		let s:result .= '%#Statuslinestat1#'
+		if g:compatible !=# "helix_hard"
+			let s:result .= '%#Statuslinestat01#'
+			let s:result .= ''
+			let s:result .= '%#Statuslinestat1#'
+		endif
 		let s:result .= ' '
 	endif
 	if &columns ># 30
 		let s:result .= stl_pos
 	endif
-	if &columns ># 45
-		let s:result .= ' '
-	endif
-	if &columns ># 45
-		let s:result .= '%#Statuslinestat12#'
-		let s:result .= ''
+	if g:compatible !=# "helix_hard"
+		if &columns ># 45
+			let s:result .= ' '
+		endif
+		if &columns ># 45
+			let s:result .= '%#Statuslinestat12#'
+			let s:result .= ''
+		endif
 	endif
 	if &columns ># 30
-		let s:result .= '%#Statuslinestat2# '
-		let s:result .= stl_buf
+		if g:compatible !=# "helix_hard"
+				let s:result .= '%#Statuslinestat2# '
+				let s:result .= stl_buf
+		endif
 		let s:result .= ' '
 	endif
 	return s:result
@@ -1087,7 +1110,9 @@ function! MyTabLine()
 
   return s
 endfunction
-set tabline=%!MyTabLine()
+if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
+	set tabline=%!MyTabLine()
+endif
 
 " Edit options
 set hidden
@@ -1150,7 +1175,9 @@ set smarttab
 set noexpandtab
 
 command! -nargs=0 SWrap if !&wrap|setl wrap linebreak nolist|else|setl nowrap nolinebreak list|endif
-nnoremap <leader>sW <cmd>SWrap<cr>
+if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
+	nnoremap <leader>sW <cmd>SWrap<cr>
+endif
 
 if v:version >= 700
   au BufLeave * let b:winview = winsaveview()
@@ -1218,7 +1245,7 @@ let s:process_g_but_function_expression .= "
 \\n	exec \"lua << EOF
 \\\nlocal button = vim.v.count == 0 and \'g\".a:button.\"\' or \'\".a:button.\"\'
 \"
-if g:compatible ==# "helix"
+if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
 let s:process_g_but_function_expression .= "
 \\\nvim.fn.YesItIsV()
 \\\nif vim.g.pseudo_visual then
@@ -2442,7 +2469,7 @@ function! OnStart()
 	endif
 	call HelpOnFirstTime()
 	call OpenOnStart()
-	if has('nvim')
+	if has('nvim') && g:compatible !=# "helix_hard"
 		exec printf('luafile %s', fnamemodify(g:PLUGINS_SETUP_FILE_PATH, ':h').'/noice/setup.lua')
 	endif
 endfunction

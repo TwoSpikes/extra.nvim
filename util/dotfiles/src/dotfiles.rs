@@ -720,8 +720,8 @@ fn dotfiles_setup_vim(home: PathBuf) -> ::std::io::Result<()> {
 	\"enable_which_key\": true,
 
 \"_comment_68\":\"Compatibility mode\",
-\"_comment_69\":\"Aviable: no (default), helix\",
-	\"compatible\": \"helix\",
+\"_comment_69\":\"Aviable: no (default), helix, helix_hard\",
+	\"compatible\": \"no\",
 
 \"_comment_end\":\"Ending field to not put comma every time\"
 }"),

@@ -405,17 +405,19 @@ return require('packer').startup(function (use)
 			}
 		}
 	}
-	use {
-		'https://github.com/folke/noice.nvim',
-		requires = {
-			{
-				'MunifTanjim/nui.nvim',
-			},
-			{
-				'rcarriga/nvim-notify',
-			},
+	if vim.g.compatible ~= "helix_hard" then
+		use {
+			'https://github.com/folke/noice.nvim',
+			requires = {
+				{
+					'MunifTanjim/nui.nvim',
+				},
+				{
+					'rcarriga/nvim-notify',
+				},
+			}
 		}
-	}
+	end
 	use {
 		'https://github.com/folke/edgy.nvim',
 		opts = {
