@@ -641,7 +641,11 @@ function! Showtab()
 		if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
 			let strmode = '%#ModeNorm# '
 		else
-			let strmode = '%#ModeNorm# NOR '
+			if g:language ==# 'russian'
+				let strmode = '%#ModeNorm# НОР '
+			else
+				let strmode = '%#ModeNorm# NOR '
+			endif
 		endif
 	elseif mode == 'no'
 		if g:language ==# 'russian'
@@ -701,7 +705,27 @@ function! Showtab()
 		if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
 			let strmode = '%#ModeVisu# '
 		else
-			let strmode = '%#ModeVisu# SEL '
+			if g:pseudo_visual
+				if g:compatible !=# "helix_hard"
+					if g:language ==# 'russian'
+						let strmode = '%#ModeVisu# НОР '
+					else
+						let strmode = '%#ModeVisu# NOR '
+					endif
+				else
+					if g:language ==# 'russian'
+						let strmode = '%#ModeNorm# НОР '
+					else
+						let strmode = '%#ModeNorm# NOR '
+					endif
+				endif
+			else
+				if g:language ==# 'russian'
+					let strmode = '%#ModeVisu# ВЫБ '
+				else
+					let strmode = '%#ModeVisu# SEL '
+				endif
+			endif
 		endif
 	elseif mode == 'V'
 		if g:language ==# 'russian'
@@ -749,7 +773,11 @@ function! Showtab()
 		if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
 			let strmode = '%#ModeIns# '
 		else
-			let strmode = '%#ModeIns# INS '
+			if g:language ==# 'russian'
+				let strmode = '%#ModeIns# INS '
+			else
+				let strmode = '%#ModeIns# INS '
+			endif
 		endif
 	elseif mode == 'ic'
 		if g:language ==# 'russian'
@@ -794,7 +822,11 @@ function! Showtab()
 			if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
 				let strmode = '%#ModeCom# '
 			else
-				let strmode = '%#ModeCom# COM '
+				if g:language ==# 'russian'
+					let strmode = '%#ModeCom# КОМ '
+				else
+					let strmode = '%#ModeCom# COM '
+				endif
 			endif
 		endif
 	elseif mode == 'cv'
@@ -831,7 +863,15 @@ function! Showtab()
 		let strmode = '%#ModeTerm# '
 	else
 		if g:language ==# 'russian'
-			let strmode = '%#ModeVisu#визуал %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
+			if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
+				let strmode = '%#ModeVisu#визуал %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
+			else
+				if g:pseudo_visual
+					let strmode = '%#ModeVisu#нор %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
+				else
+					let strmode = '%#ModeVisu#виз %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
+				endif
+			endif
 		else
 			let strmode = '%#ModeVisu#visu %#StatuslinestatVisuBlock#%#ModeBlock# BLOCK '
 		endif
@@ -1247,7 +1287,6 @@ let s:process_g_but_function_expression .= "
 \"
 if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
 let s:process_g_but_function_expression .= "
-\\\nvim.fn.YesItIsV()
 \\\nif vim.g.pseudo_visual then
 \\\n    button = \\\"\\<esc>\\\"..button
 \\\nend"
@@ -1266,6 +1305,11 @@ let s:process_g_but_function_expression .= "
 " FIXME: This code is a crutch
 let s:process_g_but_function_expression .= "
 \\n	normal! hl
+\"
+
+let s:process_g_but_function_expression .= "
+\\n	call ReorderRightLeft()
+\\n	call SavePosition()
 \"
 
 if g:fast_terminal

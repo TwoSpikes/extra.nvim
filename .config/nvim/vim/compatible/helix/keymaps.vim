@@ -68,50 +68,186 @@ unmap cs
 unmap ci_
 unmap ds
 unmap dd
-let g:pseudo_visual_idk = v:false
-function! YesItIsV()
-	if g:pseudo_visual_idk
-		let g:pseudo_visual_idk = v:false
-		let g:pseudo_visual = v:false
+let g:pseudo_visual = v:false
+let g:lx=1
+let g:ly=1
+let g:rx=1
+let g:ry=1
+let g:visual_mode = "no"
+function! ReorderRightLeft()
+	if g:lx>#g:rx||(g:lx==#g:rx&&g:ly>g:ry)
+		let g:lx=xor(g:lx,g:rx)
+		let g:rx=xor(g:lx,g:rx)
+		let g:lx=xor(g:lx,g:rx)
+		let g:ly=xor(g:ly,g:ry)
+		let g:ry=xor(g:ly,g:ry)
+		let g:ly=xor(g:ly,g:ry)
 	endif
 endfunction
-function! NoItIsNotV()
-	if g:pseudo_visual_idk
-		let g:pseudo_visual_idk = v:false
-		let g:pseudo_visual = v:true
+function! SavePosition()
+	let c=col('.')
+	let l=line('.')
+	if c==#g:ly&&l==#g:lx
+		let g:lx=l
+		let g:ly=c
+	else
+		let g:rx=l
+		let g:ry=c
 	endif
 endfunction
-nnoremap w <cmd>exec "normal! v".v:count1."e"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual_idk=v:false<cr>
-nnoremap e <cmd>exec "normal! v".v:count1."e"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual_idk=v:false<cr>
-nnoremap b <cmd>exec "normal! v".v:count1."b"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual_idk=v:false<cr>
-nnoremap W <cmd>exec "normal! v".v:count1."W"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual_idk=v:false<cr>
-nnoremap E <cmd>exec "normal! v".v:count1."E"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual_idk=v:false<cr>
-nnoremap B <cmd>exec "normal! v".v:count1."B"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:pseudo_visual_idk=v:false<cr>
-nnoremap v v<cmd>let g:pseudo_visual_idk=v:true<cr>
+vnoremap <expr> : g:pseudo_visual?":\<c-u>":":"
+nnoremap w <cmd>exec "normal! v".v:count1."e"<cr><cmd>let g:pseudo_visual = v:true<cr>
+nnoremap e <cmd>exec "normal! v".v:count1."e"<cr><cmd>let g:pseudo_visual = v:true<cr>
+nnoremap b <cmd>exec "normal! v".v:count1."b"<cr><cmd>let g:pseudo_visual = v:true<cr>
+nnoremap W <cmd>exec "normal! v".v:count1."W"<cr><cmd>let g:pseudo_visual = v:true<cr>
+nnoremap E <cmd>exec "normal! v".v:count1."E"<cr><cmd>let g:pseudo_visual = v:true<cr>
+nnoremap B <cmd>exec "normal! v".v:count1."B"<cr><cmd>let g:pseudo_visual = v:true<cr>
+unmap <esc>
+nnoremap v v<cmd>let g:pseudo_visual=v:false<cr><cmd>let g:rx=line('.')<bar>let g:ry=col('.')<bar>let g:lx=rx<bar>let g:ly=ry<cr><cmd>let g:visual_mode="char"<cr>
+nnoremap V V<cmd>let g:pseudo_visual=v:false<cr><cmd>let g:rx=line('.')<bar>let g:ry=col('$')<bar>let g:lx=rx<bar>let g:ly=1<cr><cmd>let g:visual_mode="line"<cr>
+nnoremap <c-v> <c-v><cmd>let g:pseudo_visual=v:false<cr><cmd>let g:rx=line('.')<bar>let g:ry=col('.')<bar>let g:lx=rx<bar>let g:ly=ry<cr><cmd>let g:visual_mode="block"<cr>
+function! V_DoV()
+	if v:false
+	elseif g:visual_mode ==# "no"
+		echohl ErrorMsg
+		echomsg "dotfiles: hcm: V_DoV: Internal error: It is not visual mode"
+		echohl Normal
+	elseif g:visual_mode ==# "char"
+		let g:visual_mode = "no"
+	elseif g:visual_mode ==# "line"
+		let g:visual_mode = "char"
+	elseif g:visual_mode ==# "block"
+		let g:visual_mode = "char"
+	else
+		echohl ErrorMsg
+		echomsg "dotfiles: hcm: V_DoV: Internal error: Wrong visual mode: ".g:visual_mode
+		echohl Normal
+	endif
+endfunction
+vnoremap v v<cmd>call V_DoV()<cr>
+function! V_DoVLine()
+	if v:false
+	elseif g:visual_mode ==# "no"
+		echohl ErrorMsg
+		echomsg "dotfiles: hcm: V_DoVLine: Internal error: It is not visual mode"
+		echohl Normal
+	elseif g:visual_mode ==# "char"
+		let g:visual_mode = "line"
+	elseif g:visual_mode ==# "line"
+		let g:visual_mode = "no"
+	elseif g:visual_mode ==# "block"
+		let g:visual_mode = "line"
+	else
+		echohl ErrorMsg
+		echomsg "dotfiles: hcm: V_DoVLine: Internal error: Wrong visual mode: ".g:visual_mode
+		echohl Normal
+	endif
+endfunction
+vnoremap V V<cmd>call V_DoVLine()<cr>
+function! V_DoVBlock()
+	if v:false
+	elseif g:visual_mode ==# "no"
+		echohl ErrorMsg
+		echomsg "dotfiles: hcm: V_DoVBlock: Internal error: It is not visual mode"
+		echohl Normal
+	elseif g:visual_mode ==# "char"
+		let g:visual_mode = "block"
+	elseif g:visual_mode ==# "line"
+		let g:visual_mode = "block"
+	elseif g:visual_mode ==# "block"
+		let g:visual_mode = "no"
+	else
+		echohl ErrorMsg
+		echomsg "dotfiles: hcm: V_DoVBlock: Internal error: Wrong visual mode: ".g:visual_mode
+		echohl Normal
+	endif
+endfunction
+vnoremap <c-v> <c-v><cmd>call V_DoVBlock()<cr>
+vnoremap <nowait> <esc> <cmd>let g:pseudo_visual=v:true<cr>
+function! V_DoI()
+	let c=col('.')
+	let l=line('.')
+	if v:false
+	elseif v:false
+	\|| g:visual_mode ==# "char"
+	\|| g:visual_mode ==# "block"
+		if v:false
+		\|| c!=#g:ly
+		\|| l!=#g:lx
+			return "o\<esc>i"
+		else
+			return "\<esc>i"
+		endif
+	elseif v:false
+	\|| g:visual_mode ==# "line"
+		return "0\<esc>i"
+	else
+		echohl ErrorMsg
+		echomsg "dotfiles: hcm: V_DoI: Internal error: Wrong visual mode: ".g:visual_mode
+		echohl Normal
+	endif
+endfunction
+vnoremap <expr> i V_DoI()
+function! V_DoA()
+	let c=col('.')
+	let l=line('.')
+	if v:true
+	\&& c==#g:ly
+	\&& l==#g:lx
+		return "o\<esc>a"
+	else
+		return "\<esc>a"
+	endif
+endfunction
+function! V_DoA()
+	let c=col('.')
+	let l=line('.')
+	if v:false
+	elseif v:false
+	\|| g:visual_mode ==# "char"
+	\|| g:visual_mode ==# "block"
+		if v:true
+		\&& c==#g:ly
+		\&& l==#g:lx
+			return "o\<esc>a"
+		else
+			return "\<esc>a"
+		endif
+	elseif v:false
+	\|| g:visual_mode ==# "line"
+		return "$\<esc>a"
+	else
+		echohl ErrorMsg
+		echomsg "dotfiles: hcm: V_DoI: Internal error: Wrong visual mode: ".g:visual_mode
+		echohl Normal
+	endif
+endfunction
+vnoremap <expr> a V_DoA()
 vnoremap x j
 vnoremap X j
 function! V_DoH()
-	call YesItIsV()
 	if g:pseudo_visual
 		exec "normal! \<esc>h"
 	else
 		exec "normal! h"
+		call ReorderRightLeft()
+		call SavePosition()
 	endif
 endfunction
 vnoremap h <cmd>call V_DoH()<cr>
 vnoremap <left> <cmd>call V_DoH()<cr>
 function! V_DoL()
-	call YesItIsV()
 	if g:pseudo_visual
 		exec "normal! \<esc>l"
 	else
 		exec "normal! l"
+		call ReorderRightLeft()
+		call SavePosition()
 	endif
 endfunction
 vnoremap l <cmd>call V_DoL()<cr>
 vnoremap <right> <cmd>call V_DoL()<cr>
 function! V_DoW()
-	call NoItIsNotV()
 	if g:pseudo_visual
 		exec "normal! \<esc>wviw"
 	else
@@ -120,7 +256,6 @@ function! V_DoW()
 endfunction
 vnoremap w <cmd>call V_DoW()<cr>
 function! V_DoWWhole()
-	call NoItIsNotV()
 	if g:pseudo_visual
 		exec "normal! \<esc>wviW"
 	else
@@ -129,7 +264,6 @@ function! V_DoWWhole()
 endfunction
 vnoremap W <cmd>call V_DoWWhole()<cr>
 function! V_DoE()
-	call NoItIsNotV()
 	if g:pseudo_visual
 		exec "normal! \<esc>wviw"
 	else
@@ -138,7 +272,6 @@ function! V_DoE()
 endfunction
 vnoremap e <cmd>call V_DoE()<cr>
 function! V_DoEWhole()
-	call NoItIsNotV()
 	if g:pseudo_visual
 		exec "normal! \<esc>wviW"
 	else
@@ -147,18 +280,16 @@ function! V_DoEWhole()
 endfunction
 vnoremap E <cmd>call V_DoEWhole()<cr>
 function! V_DoB()
-	call NoItIsNotV()
 	if g:pseudo_visual
-		exec "normal! \<esc>vb"
+		exec "normal! \<esc>hviwo"
 	else
 		exec "normal! b"
 	endif
 endfunction
 vnoremap b <cmd>call V_DoB()<cr>
 function! V_DoBWhole()
-	call NoItIsNotV()
 	if g:pseudo_visual
-		exec "normal! \<esc>vB"
+		exec "normal! \<esc>hviW"
 	else
 		exec "normal! B"
 	endif
@@ -169,13 +300,14 @@ nnoremap ; <nop>
 vnoremap ; <esc>
 vnoremap o <esc>o
 vnoremap O <esc>O
+vnoremap <leader>xo o
 nnoremap C <c-v>j
 vnoremap C j
 nnoremap , <nop>
 vnoremap , <esc>
 nnoremap <c-s> m'
 nnoremap U <c-r>
-vnoremap y ygv
+vnoremap y ygv<cmd>let g:pseudo_visual=v:true<cr>
 
 unmap <leader>f
 unmap <leader>fr
