@@ -774,7 +774,7 @@ function! Showtab()
 			let strmode = '%#ModeIns# '
 		else
 			if g:language ==# 'russian'
-				let strmode = '%#ModeIns# INS '
+				let strmode = '%#ModeIns# ВСТ '
 			else
 				let strmode = '%#ModeIns# INS '
 			endif
@@ -1150,7 +1150,7 @@ function! MyTabLine()
 
   return s
 endfunction
-if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
+if g:compatible !=# "helix_hard"
 	set tabline=%!MyTabLine()
 endif
 
@@ -2476,12 +2476,26 @@ function! PrepareWhichKey()
 	nnoremap <silent> <c-w> <cmd>lua require('which-key').show("\23", {mode = "n", auto = true})<cr>
 endfunction
 
-function! HelpOnFirstTime()
-	if !filereadable(fnamemodify(g:DOTFILES_CONFIG_PATH, ':h').'/not_first_time.null')
-		if !isdirectory(fnamemodify(g:DOTFILES_CONFIG_PATH, ':h'))
-			call mkdir(fnamemodify(g:DOTFILES_CONFIG_PATH, ':h'))
+function! LoadLastSelected()
+	if filereadable(expand(g:LOCALSHAREPATH).'/dotfiles/last_selected.txt')
+		let g:last_selected = readfile(expand(g:LOCALSHAREPATH).'/dotfiles/last_selected.txt')[0]
+	endif
+endfunction
+function! SaveLastSelected()
+	if g:last_selected !=# ''
+		if !isdirectory(expand(g:LOCALSHAREPATH).'/dotfiles')
+			call mkdir(expand(g:LOCALSHAREPATH).'/dotfiles', 'p')
 		endif
-		call writefile([], fnamemodify(g:DOTFILES_CONFIG_PATH, ':h').'/not_first_time.null')
+		call writefile([g:last_selected], expand(g:LOCALSHAREPATH).'/dotfiles/last_selected.txt')
+	endif
+endfunction
+
+function! HelpOnFirstTime()
+	if !filereadable(expand(g:LOCALSHAREPATH).'/dotfiles/not_first_time.null')
+		if !isdirectory(expand(g:LOCALSHAREPATH).'/dotfiles')
+			call mkdir(expand(g:LOCALSHAREPATH).'/dotfiles', 'p')
+		endif
+		call writefile([], expand(g:LOCALSHAREPATH).'/dotfiles/not_first_time.null')
 
 		if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
 			if g:language ==# 'russian'
@@ -2518,9 +2532,19 @@ function! OnStart()
 	if has('nvim') && g:compatible !=# "helix_hard"
 		exec printf('luafile %s', fnamemodify(g:PLUGINS_SETUP_FILE_PATH, ':h').'/noice/setup.lua')
 	endif
+	if v:false
+	\|| g:compatible ==# "helix"
+	\|| g:compatible ==# "helix_hard"
+		call LoadLastSelected()
+	endif
 endfunction
 function! OnQuit()
 	call TermuxLoadCursorStyle()
+	if v:false
+	\|| g:compatible ==# "helix"
+	\|| g:compatible ==# "helix_hard"
+		call SaveLastSelected()
+	endif
 endfunction
 function! IfOneWinDo(cmd)
 	let s = 0

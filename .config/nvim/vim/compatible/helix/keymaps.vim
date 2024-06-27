@@ -29,6 +29,7 @@ unmap y<c-g>
 nnoremap y vy
 nnoremap t<cr> v$
 nnoremap mm %
+vnoremap mm %
 nnoremap <c-c> <cmd>call CommentOutDefault<cr>
 inoremap <c-x> <c-p>
 inoremap <c-p> <c-x>
@@ -38,6 +39,8 @@ vnoremap R "_dP
 nnoremap ~ v~
 nnoremap > >>
 nnoremap < <<
+vnoremap < <gv
+vnoremap > >gv
 unmap <c-a>
 unmap <c-x><c-b>
 unmap <c-x><c-g>
@@ -223,6 +226,30 @@ function! V_DoA()
 	endif
 endfunction
 vnoremap <expr> a V_DoA()
+let g:last_selected = ''
+function! V_DoS()
+	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/vim-quickui")
+		let select = quickui#input#open('Select:', g:last_selected)
+	else
+		let hcm_select_label = 'select'.(g:last_selected!=#''?' (default: '.g:last_selected.')':'').':'
+		let select = input(hcm_select_label)
+	endif
+	if select ==# ''
+		let select = g:last_selected
+	else
+		let g:last_selected = select
+	endif
+	mark z
+	normal! V
+	let cnt = count(GetVisualSelection(), select)
+	if cnt !=# 0
+		exec "VMSearch" select
+		for _ in range(cnt)
+			call vm#commands#find_next(v:true, v:true)
+		endfor
+	endif
+endfunction
+vnoremap s <cmd>call V_DoS()<cr>
 vnoremap x j
 vnoremap X j
 function! V_DoH()
@@ -265,7 +292,7 @@ endfunction
 vnoremap W <cmd>call V_DoWWhole()<cr>
 function! V_DoE()
 	if g:pseudo_visual
-		exec "normal! \<esc>wviw"
+		exec "normal! \<esc>eviw"
 	else
 		normal! e
 	endif
