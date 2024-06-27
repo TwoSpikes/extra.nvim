@@ -426,8 +426,23 @@ if test "${ONLY_SETUP_COC_SH_CRUTCH}" = "true"; then
 fi
 
 clear
+echo "==== Setting up dotfiles ===="
+echo ""
+if ! command -v "cargo" > /dev/null 2>&1; then
+	install_package rust
+fi
+cd ${dotfiles}/util/dotfiles
+echo "Building..."
+cargo build --release
+echo "Installing..."
+run_as_superuser_if_needed install ${dotfiles}/util/dotfiles/target/release/dotfiles ${root}/usr/bin
+cd -
+press_enter
+
+clear
 echo "==== Setting up shell ===="
 echo ""
+
 echo -n "Do you want to copy shell scripts and its dependencies? (y/N/exit): "
 read user_input
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
@@ -448,17 +463,28 @@ esac
 press_enter
 
 clear
-echo "==== Setting up dotfiles ===="
+echo "==== Setting up bd ===="
 echo ""
-if ! command -v "cargo" > /dev/null 2>&1; then
-	install_package rust
+
+echo -n "Checking if bd is installed: "
+if command -v "bd" > /dev/null 2>&1; then
+	echo "YES"
+else
+	echo "NO"
+
+	echo -n "Do you want to install bd? (Y/n): "
+	read user_input
+	user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+	case ${user_input} in
+		"n")
+			;;
+		*)
+			test -d ${home}/.zsh/plugins/bd || mkdir -pv ${home}/.zsh/plugins/bd
+			curl https://raw.githubusercontent.com/Tarrasch/zsh-bd/master/bd.zsh > ${home}/.zsh/plugins/bd/bd.zsh
+			echo "\n# zsh-bd\n. \$HOME/.zsh/plugins/bd/bd.zsh" >> $HOME/.zshrc
+			;;
+	esac
 fi
-cd ${dotfiles}/util/dotfiles
-echo "Building..."
-cargo build --release
-echo "Installing..."
-run_as_superuser_if_needed install ${dotfiles}/util/dotfiles/target/release/dotfiles ${root}/usr/bin
-cd -
 press_enter
 
 clear

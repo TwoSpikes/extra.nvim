@@ -39,8 +39,8 @@ vnoremap R "_dP
 nnoremap ~ v~
 nnoremap > >>
 nnoremap < <<
-vnoremap < <gv
-vnoremap > >gv
+vnoremap < <gv<cmd>let g:pseudo_visual=v:true<cr>
+vnoremap > >gv<cmd>let g:pseudo_visual=v:true<cr>
 unmap <c-a>
 unmap <c-x><c-b>
 unmap <c-x><c-g>

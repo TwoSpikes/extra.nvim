@@ -109,3 +109,6 @@ esac
 # pnpm end
 
 . ~/.dotfiles-script.sh
+
+# zsh-bd
+. $HOME/.zsh/plugins/bd/bd.zsh
