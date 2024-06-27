@@ -1307,10 +1307,12 @@ let s:process_g_but_function_expression .= "
 \\n	normal! hl
 \"
 
-let s:process_g_but_function_expression .= "
-\\n	call ReorderRightLeft()
-\\n	call SavePosition()
-\"
+if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
+	let s:process_g_but_function_expression .= "
+	\\n	call ReorderRightLeft()
+	\\n	call SavePosition()
+	\"
+endif
 
 if g:fast_terminal
 let s:process_g_but_function_expression .= "
