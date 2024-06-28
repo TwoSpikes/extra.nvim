@@ -180,19 +180,19 @@ endfunction
 function! STCAbs(actual_mode, winnr=winnr())
 	if has('nvim')
 		if a:actual_mode ==# '' || a:actual_mode =~? 'n'
-			call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNr#".((v:virtnum <= 0)?Pad(v:lnum,len(line("$"))):"")%}%{%v:relnum?"%#LineNr#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
+			call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNr#".((v:virtnum <= 0)?Pad(v:lnum,len(line("$"))+&foldcolumn):"")%}%{%v:relnum?"%#LineNr#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
 			call CopyHighlightGroup("StatementNorm", "Statement")
 			return
 		endif
 		if a:actual_mode =~? 'r'
-			call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNrRepl#".Pad((v:virtnum <= 0)?v:lnum:"",len(line("$")))%}%{%v:relnum?"%#LineNrIns#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
+			call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNrRepl#".Pad((v:virtnum <= 0)?v:lnum:"",len(line("$"))+&foldcolumn)%}%{%v:relnum?"%#LineNrIns#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
 			return
 		endif
 		if a:actual_mode =~? 'v' && getwinvar(a:winnr, '&modifiable')
-			call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNrVisu#".((v:virtnum <= 0)?Pad(v:lnum,len(line("$"))):"")%}%{%v:relnum?"%#LineNrVisu#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
+			call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNrVisu#".((v:virtnum <= 0)?Pad(v:lnum,len(line("$"))+&foldcolumn):"")%}%{%v:relnum?"%#LineNrVisu#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
 			return
 		endif
-		call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNrIns#".Pad((v:virtnum <= 0)?v:lnum:"", len(line("$")))%}%{%v:relnum?"%#LineNrIns#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
+		call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNrIns#".Pad((v:virtnum <= 0)?v:lnum:"", len(line("$"))+&foldcolumn)%}%{%v:relnum?"%#LineNrIns#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
 		call CopyHighlightGroup("StatementIns", "Statement")
 	else
 		call setwinvar(a:winnr, '&number', v:true)
@@ -282,6 +282,11 @@ function! DefineAugroupNumbertoggle()
 		endif
 	augroup END
 endfunction
+
+augroup UnfocusFiletype
+	autocmd!
+	autocmd BufWinEnter * if &filetype==#'notify'|wincmd p|endif
+augroup END
 
 function! UpdateShowtabline()
 	let &showtabline = g:showtabline
@@ -499,21 +504,20 @@ function! WhenceGroup()
 endfunction
 
 " Copied from StackOverflow: https://stackoverflow.com/questions/4964772/string-formatting-padding-in-vim
-function! Pad(s,amt)
-    return a:s . repeat(' ',a:amt - len(a:s))
+function! Pad(s, amt)
+    return a:s . repeat(' ', a:amt - len(a:s))
 endfunction
-function! PrePad(s,amt,...)
-    if a:0 > 0
+function! PrePad(s, amt, ...)
+    if a:0 ># 0
         let char = a:1
     else
         let char = ' '
     endif
-    return repeat(char,a:amt - len(a:s)) . a:s
+    return repeat(char, a:amt - len(a:s)) . a:s
 endfunction
 
 function! PrepareVital()
 	let g:VitalModule#Random = vital#vital#import('Random')
-
 endfunction
 function! GetRandomName(length)
 	let name = "Rnd_"
@@ -691,9 +695,9 @@ function! Showtab()
 		endif
 	elseif mode == 'nt'
 		if g:language ==# 'russian'
-			let strmode = '%#ModeNorm#НОРМ %#StatuslinestatNormTerm#%#ModeTerm# '
+			let strmode = '%#ModeNorm# НОРМ %#StatuslinestatNormTerm#%#ModeTerm# '
 		else
-			let strmode = '%#ModeNorm#NORM %#StatuslinestatNormTerm#%#ModeTerm# '
+			let strmode = '%#ModeNorm# NORM %#StatuslinestatNormTerm#%#ModeTerm# '
 		endif
 	elseif mode == 'ntT'
 		if g:language ==# 'russian'
@@ -1304,7 +1308,7 @@ let s:process_g_but_function_expression .= "
 
 " FIXME: This code is a crutch
 let s:process_g_but_function_expression .= "
-\\n	normal! hl
+\\n	normal! lh
 \"
 
 if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
