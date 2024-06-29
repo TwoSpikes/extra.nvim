@@ -14,11 +14,24 @@ else
 	nnoremap gs ^
 endif
 
+function! ExitVisual()
+	if v:false
+	elseif g:visual_mode ==# "char"
+		normal! v
+	elseif g:visual_mode ==# "line"
+		normal! V
+	elseif g:visual_mode ==# "block"
+		normal! <c-v>
+	else
+		echomsg "dotfiles: hcm: ExitVisual: Internal error: Wrong visual mode: ".g:visual_mode
+	endif
+endfunction
+
 set notildeop
 let &whichwrap="b,s,h,l,<,>,~,[,]"
 
 nnoremap d x
-nnoremap x V
+nnoremap x V<cmd>let g:pseudo_visual=v:true<bar>let g:visual_mode="line"<cr>
 nnoremap c xi
 unmap ySS
 unmap ySs
@@ -115,31 +128,33 @@ function! V_DoV()
 		echohl ErrorMsg
 		echomsg "dotfiles: hcm: V_DoV: Internal error: It is not visual mode"
 		echohl Normal
-	elseif g:visual_mode ==# "char"
-		let g:visual_mode = "no"
-	elseif g:visual_mode ==# "line"
-		let g:visual_mode = "char"
-	elseif g:visual_mode ==# "block"
-		let g:visual_mode = "char"
+	elseif v:false
+	\|| g:visual_mode ==# "char"
+	\|| g:visual_mode ==# "line"
+	\|| g:visual_mode ==# "block"
+		let g:pseudo_visual = !g:pseudo_visual
+		Showtab
+		return ""
 	else
 		echohl ErrorMsg
 		echomsg "dotfiles: hcm: V_DoV: Internal error: Wrong visual mode: ".g:visual_mode
 		echohl Normal
 	endif
 endfunction
-vnoremap v v<cmd>call V_DoV()<cr>
+vnoremap <expr> v V_DoV()
 function! V_DoVLine()
 	if v:false
 	elseif g:visual_mode ==# "no"
 		echohl ErrorMsg
 		echomsg "dotfiles: hcm: V_DoVLine: Internal error: It is not visual mode"
 		echohl Normal
-	elseif g:visual_mode ==# "char"
-		let g:visual_mode = "line"
-	elseif g:visual_mode ==# "line"
-		let g:visual_mode = "no"
-	elseif g:visual_mode ==# "block"
-		let g:visual_mode = "line"
+	elseif v:false
+	\|| g:visual_mode ==# "char"
+	\|| g:visual_mode ==# "line"
+	\|| g:visual_mode ==# "block"
+		let g:pseudo_visual = !g:pseudo_visual
+		Showtab
+		return ""
 	else
 		echohl ErrorMsg
 		echomsg "dotfiles: hcm: V_DoVLine: Internal error: Wrong visual mode: ".g:visual_mode
@@ -167,7 +182,7 @@ function! V_DoVBlock()
 endfunction
 vnoremap <c-v> <c-v><cmd>call V_DoVBlock()<cr>
 vnoremap <nowait> <esc> <cmd>let g:pseudo_visual=v:true<cr>
-function! V_DoI()
+function! MoveLeft()
 	let c=col('.')
 	let l=line('.')
 	if v:false
@@ -177,32 +192,27 @@ function! V_DoI()
 		if v:false
 		\|| c!=#g:ly
 		\|| l!=#g:lx
-			return "o\<esc>i"
-		else
-			return "\<esc>i"
+			return "o"
 		endif
 	elseif v:false
 	\|| g:visual_mode ==# "line"
-		return "0\<esc>i"
+		if v:false
+		\|| c!=#g:ly
+		\|| l!=#g:lx
+			return "o"
+		endif
+		return "o0"
 	else
 		echohl ErrorMsg
-		echomsg "dotfiles: hcm: V_DoI: Internal error: Wrong visual mode: ".g:visual_mode
+		echomsg "dotfiles: hcm: MoveLeft: Internal error: Wrong visual mode: ".g:visual_mode
 		echohl Normal
 	endif
 endfunction
-vnoremap <expr> i V_DoI()
-function! V_DoA()
-	let c=col('.')
-	let l=line('.')
-	if v:true
-	\&& c==#g:ly
-	\&& l==#g:lx
-		return "o\<esc>a"
-	else
-		return "\<esc>a"
-	endif
+function! V_DoI()
+	return MoveLeft()."\<esc>i"
 endfunction
-function! V_DoA()
+vnoremap <expr> i V_DoI()
+function! MoveRight()
 	let c=col('.')
 	let l=line('.')
 	if v:false
@@ -212,18 +222,22 @@ function! V_DoA()
 		if v:true
 		\&& c==#g:ly
 		\&& l==#g:lx
-			return "o\<esc>a"
-		else
-			return "\<esc>a"
+			return "o"
 		endif
 	elseif v:false
 	\|| g:visual_mode ==# "line"
-		return "$\<esc>a"
+		if l==#g:lx
+			return "o$"
+		endif
+		return "$"
 	else
 		echohl ErrorMsg
-		echomsg "dotfiles: hcm: V_DoI: Internal error: Wrong visual mode: ".g:visual_mode
+		echomsg "dotfiles: hcm: MoveRight: Internal error: Wrong visual mode: ".g:visual_mode
 		echohl Normal
 	endif
+endfunction
+function! V_DoA()
+	return MoveRight()."\<esc>a"
 endfunction
 vnoremap <expr> a V_DoA()
 let g:last_selected = ''
@@ -239,18 +253,29 @@ function! V_DoS()
 	else
 		let g:last_selected = select
 	endif
-	mark z
-	normal! V
+	call feedkeys(MoveLeft(), 't')
+	call ExitVisual()
 	let cnt = count(GetVisualSelection(), select)
+	echomsg "cnt is: ".cnt
 	if cnt !=# 0
 		exec "VMSearch" select
-		for _ in range(cnt)
-			call vm#commands#find_next(v:true, v:true)
+		for _ in range(cnt-1)
+			call vm#commands#find_next(v:false, v:false)
 		endfor
 	endif
 endfunction
 vnoremap s <cmd>call V_DoS()<cr>
-vnoremap x j
+function! V_DoX()
+	let result = ""
+	if g:visual_mode==#"char"
+		let g:visual_mode="line"
+		let result .= "V"
+	endif
+	let result .= MoveRight()
+	let result .= "j"
+	return result
+endfunction
+vnoremap <expr> x V_DoX()
 vnoremap X j
 function! V_DoH()
 	if g:pseudo_visual
@@ -327,7 +352,7 @@ nnoremap ; <nop>
 vnoremap ; <esc>
 vnoremap o <esc>o
 vnoremap O <esc>O
-vnoremap <leader>xo o
+vnoremap <leader>xo o<cmd>call ReorderRightLeft()<cr>
 nnoremap C <c-v>j
 vnoremap C j
 nnoremap , <nop>
