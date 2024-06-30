@@ -1313,12 +1313,15 @@ let s:process_g_but_function_expression .= "
 \\nendfunction"
 exec s:process_g_but_function_expression
 
-if has('nvim')
-	noremap j <cmd>call ProcessGBut('j')<cr>
-	noremap k <cmd>call ProcessGBut('k')<cr>
-	noremap <down> <cmd>call ProcessGBut('j')<cr>
-	noremap <up> <cmd>call ProcessGBut('k')<cr>
-endif
+function! JKWorkaround()
+	if has('nvim')
+		noremap j <cmd>call ProcessGBut('j')<cr>
+		noremap k <cmd>call ProcessGBut('k')<cr>
+		noremap <down> <cmd>call ProcessGBut('j')<cr>
+		noremap <up> <cmd>call ProcessGBut('k')<cr>
+	endif
+endfunction
+call JKWorkaround()
 
 noremap <silent> <c-a> 0
 noremap <silent> <c-e> $
@@ -1517,7 +1520,7 @@ endif
 
 augroup AlphaNvim_CinnamonNvim_JK_Workaround
 	autocmd!
-	autocmd FileType alpha exec "noremap <buffer> j j" | exec "noremap <buffer> k k" | noremap <down> <down> | noremap <up> <up> | call AfterSomeEvent('BufLeave', 'if g:compatible!=#"helix"||g:compatible!=#"helix_hard"|exec printf("luafile %s", g:CONFIG_PATH."/lua/packages/cinnamon/setup.lua")|exec printf("so %s", g:CONFIG_PATH."/vim/compatible/helix/keymaps.vim")')
+	autocmd FileType alpha exec "noremap <buffer> j j" | exec "noremap <buffer> k k" | noremap <down> <down> | noremap <up> <up> | call AfterSomeEvent('BufLeave', 'call JKWorkaround()')
 augroup END
 
 let g:LUA_REQUIRE_GOTO_PREFIX = [$HOME]
