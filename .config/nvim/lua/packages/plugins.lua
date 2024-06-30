@@ -391,9 +391,6 @@ return require('packer').startup(function (use)
 		-- tag = "*"
 	}
 	use {
-		'folke/flash.nvim',
-	}
-	use {
 		'https://github.com/folke/yanky.nvim',
 	}
 	use {
@@ -552,4 +549,7 @@ return require('packer').startup(function (use)
 			}
 		},
 	})
+	use {
+		'justinmk/vim-sneak',
+	}
 end)

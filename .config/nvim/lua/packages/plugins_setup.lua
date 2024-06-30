@@ -26,7 +26,6 @@ require('packages.alpha.init')
 require('packages.persisted.init')
 --require('packages.lean.init')
 require('packages.neogen.init')
-require('packages.flash-nvim.init')
 require('packages.yanky.init')
 require('packages.nvim-lint.init')
 if vim.g.compatible ~= "helix_hard" then
@@ -49,5 +48,6 @@ require('packages.ts-autotag.init')
 require('packages.ufo.init')
 require('packages.trouble.init')
 require('packages.luasnip.init')
+require('packages.sneak.init')
 
 -- DotfilesOptionInComment LUA_REQUIRE_GOTO_PREFIX [g:CONFIG_PATH.'/lua/', g:LOCALSHAREPATH.'/site/pack/packer/start/']

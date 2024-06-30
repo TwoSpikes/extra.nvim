@@ -1,7 +1,7 @@
 nnoremap gh 0
 xnoremap gh 0
-nnoremap gl $
-xnoremap gl $
+nnoremap gl $h
+xnoremap gl $h
 nnoremap ge G
 xnoremap ge G
 nnoremap gs ^
@@ -325,6 +325,8 @@ nnoremap ; <nop>
 vnoremap ; <esc>
 vnoremap o <esc>o
 vnoremap O <esc>O
+vnoremap p <esc>p
+vnoremap P <esc>P
 vnoremap <leader>xo o<cmd>call ReorderRightLeft()<cr>
 nnoremap C <c-v>j
 vnoremap C j
@@ -333,6 +335,8 @@ vnoremap , <esc>
 nnoremap <c-s> m'
 nnoremap U <c-r>
 vnoremap y ygv<cmd>let g:pseudo_visual=v:true<cr>
+nnoremap g. g;
+noremap <a-.> ;
 
 if !g:use_nvim_cmp
 	unmap <leader>f

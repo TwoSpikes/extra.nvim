@@ -2324,8 +2324,6 @@ endif
 
 noremap <silent> <leader>so :let &scrolloff = 999 - &scrolloff<cr>
 
-nnoremap s "_d
-
 noremap <silent> <f10> <cmd>call quickui#menu#open()<cr>
 noremap <silent> <f9> <cmd>call quickui#menu#open()<cr>
 
