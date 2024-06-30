@@ -1,12 +1,12 @@
 if isdirectory(expand(g:LOCALSHAREPATH)."/site/pack/packer/start/cinnamon.nvim")
-	nnoremap gh <cmd>lua Scroll('0')<cr>
-	xnoremap gh <cmd>lua Scroll('0')<cr>
-	nnoremap gl <cmd>lua Scroll('$', 0, 1)<cr>
-	xnoremap gl <cmd>lua Scroll('$', 0, 1)<cr>h
-	nnoremap ge <cmd>lua Scroll('G', 0, 1)<cr>
-	xnoremap ge <cmd>lua Scroll('G', 0, 1)<cr>
-	nnoremap gs <cmd>lua Scroll('^')<cr>
-	xnoremap gs <cmd>lua Scroll('^')<cr>
+	nnoremap gh <cmd>lua require('cinnamon').scroll('0')<cr>
+	xnoremap gh <cmd>lua require('cinnamon').scroll('0')<cr>
+	nnoremap gl <cmd>lua require('cinnamon').scroll('$', 0, 1)<cr>
+	xnoremap gl <cmd>lua require('cinnamon').scroll('$', 0, 1)<cr>h
+	nnoremap ge <cmd>lua require('cinnamon').scroll('G', 0, 1)<cr>
+	xnoremap ge <cmd>lua require('cinnamon').scroll('G', 0, 1)<cr>
+	nnoremap gs <cmd>lua require('cinnamon').scroll('^')<cr>
+	xnoremap gs <cmd>lua require('cinnamon').scroll('^')<cr>
 else
 	nnoremap gh 0
 	nnoremap gl $
