@@ -452,6 +452,8 @@ case ${user_input} in
 		cp ${dotfiles}/.dotfiles-script.sh ${home}
 		cp -r ${dotfiles}/shscripts/ ${home}
 		cp ${dotfiles}/.bash_profile ${home}
+		cp ${dotfiles}/.eclrc ${home}
+		cp ${dotfiles}/sbclrc ${home}
 		;;
 	"exit"|"x"|"e"|"q")
 		echo "Abort"

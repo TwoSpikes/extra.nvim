@@ -148,6 +148,8 @@ fn commit(only_copy: bool, #[allow(non_snake_case)] HOME: PathBuf) -> ::std::io:
         HOME.join(".config/nvim/init.vim"),
         "./.config/nvim/init.vim",
     );
+    _ = ::std::fs::copy(HOME.join(".eclrc"), "./.eclrc");
+    _ = ::std::fs::copy(HOME.join("sbclrc"), "./sbclrc");
     _ = copy_dir_all(HOME.join(".config/nvim/lua"), "./.config/nvim/lua");
     _ = copy_dir_all(HOME.join(".config/nvim/vim"), "./.config/nvim/vim");
     _ = copy_dir_all(
