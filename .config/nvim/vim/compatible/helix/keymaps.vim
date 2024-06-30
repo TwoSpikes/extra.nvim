@@ -55,29 +55,6 @@ nnoremap < <<
 vnoremap < <gv<cmd>let g:pseudo_visual=v:true<cr>
 vnoremap > >gv<cmd>let g:pseudo_visual=v:true<cr>
 unmap <c-a>
-unmap <c-x><c-b>
-unmap <c-x><c-g>
-unmap <c-x><c-h>
-unmap <c-x>h
-unmap <c-x>5
-unmap <c-x>t0
-unmap <c-x>tO
-unmap <c-x>to
-unmap <c-x>t2
-unmap <c-x>t1
-unmap <c-x><c-f>
-unmap <c-x>O
-unmap <c-x>o
-unmap <c-x>3
-unmap <c-x>2
-unmap <c-x>1
-unmap <c-x>0
-unmap <c-x>k
-unmap <c-x><c-s>
-unmap <c-x>S
-unmap <c-x>s
-unmap <c-x><c-q>
-unmap <c-x><c-c>
 vnoremap t<cr> $
 unmap cS
 unmap cs

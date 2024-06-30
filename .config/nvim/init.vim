@@ -1529,13 +1529,18 @@ else
 	\ }
 endif
 
+augroup AlphaNvim_CinnamonNvim_JK_Workaround
+	autocmd!
+	autocmd FileType alpha noremap j j | noremap k k | noremap <down> <down> | noremap <up> <up> | call AfterSomeEvent('BufLeave', 'exec printf("luafile %s", g:CONFIG_PATH."/lua/packages/cinnamon/setup.lua")')
+augroup END
+
 nnoremap <silent> * *:noh<cr>
 nnoremap <silent> <c-*> *
 nnoremap <silent> # #:noh<cr>
 nnoremap <silent> <c-#> #
 
-noremap <leader>l 10zl
-noremap <leader>h 10zh
+noremap <leader>l 5zl5zl5zl
+noremap <leader>h 5zh5zh5zh
 inoremap <c-l> <cmd>let old_lazyredraw=&lazyredraw<cr><cmd>set lazyredraw<cr><cmd>normal! 10zl<cr><cmd>let &lazyredraw=old_lazyredraw<cr><cmd>unlet old_lazyredraw<cr><cmd>call HandleBuftype(winnr())<cr>
 inoremap <c-h> <cmd>let old_lazyredraw=&lazyredraw<cr><cmd>set lazyredraw<cr><cmd>normal! 10zh<cr><cmd>let &lazyredraw=old_lazyredraw<cr><cmd>unlet old_lazyredraw<cr><cmd>call HandleBuftype(winnr())<cr>
 let s:SCROLL_FACTOR = 2

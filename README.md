@@ -86,6 +86,9 @@ $ cp ./.gitmessage ~/
 
 ## .config/nvim/
 
+> [!Warning]
+> Do not delete code that seems strange, maybe you will break something
+
 ### What is this?
 
 This is NeoVim/Vim configuration
