@@ -503,19 +503,6 @@ function! WhenceGroup()
 	exec "verbose hi ".l:s
 endfunction
 
-" Copied from StackOverflow: https://stackoverflow.com/questions/4964772/string-formatting-padding-in-vim
-function! Pad(s, amt)
-    return a:s . repeat(' ', a:amt - len(a:s))
-endfunction
-function! PrePad(s, amt, ...)
-    if a:0 ># 0
-        let char = a:1
-    else
-        let char = ' '
-    endif
-    return repeat(char, a:amt - len(a:s)) . a:s
-endfunction
-
 function! PrepareVital()
 	let g:VitalModule#Random = vital#vital#import('Random')
 endfunction
@@ -1464,7 +1451,6 @@ function! SelectPosition(cmd, positions)
 				let select_position_label = 'Select position'
 			endif
 			let choice = quickui#confirm#open(select_position_label, button_label_string, 1, 'Confirm')
-			unlet button_label_string
 
 			let position = keys(a:positions)[choice-1]
 		endif
@@ -1531,7 +1517,180 @@ endif
 
 augroup AlphaNvim_CinnamonNvim_JK_Workaround
 	autocmd!
-	autocmd FileType alpha noremap j j | noremap k k | noremap <down> <down> | noremap <up> <up> | call AfterSomeEvent('BufLeave', 'exec printf("luafile %s", g:CONFIG_PATH."/lua/packages/cinnamon/setup.lua")')
+	autocmd FileType alpha exec "noremap <buffer> j j" | exec "noremap <buffer> k k" | noremap <down> <down> | noremap <up> <up> | call AfterSomeEvent('BufLeave', 'if g:compatible!=#"helix"||g:compatible!=#"helix_hard"|exec printf("luafile %s", g:CONFIG_PATH."/lua/packages/cinnamon/setup.lua")|exec printf("so %s", g:CONFIG_PATH."/vim/compatible/helix/keymaps.vim")')
+augroup END
+
+let g:LUA_REQUIRE_GOTO_PREFIX = [$HOME]
+function! Lua_Require_Goto_Workaround_Wincmd_f()
+	if !filereadable(expand(g:LOCALSHAREPATH).'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
+		echohl Question
+		if g:language ==# 'russian'
+			let lua_require_goto_workaround_wincmd_f_dialogue_label = 'Выберите способ перехода %s: '
+		else
+			let lua_require_goto_workaround_wincmd_f_dialogue_label = 'Select goto way %s: '
+		endif
+		echon printf(lua_require_goto_workaround_wincmd_f_dialogua_label, ["n", "r"])
+		echohl Normal
+		let goto_way = nr2char(getchar())
+		echon goto_way
+		if v:false
+		elseif goto_way ==# 'n'
+			let choice = 1
+		elseif goto_way ==# 'r'
+			let choice = 2
+		else
+			echohl ErrorMsg
+			echomsg "Wrong goto way"
+			echohl Normal
+		endif
+		redraw
+	else
+		if g:language ==# 'russian'
+			let dialogue_label = 'Выберите способ перехода'
+		else
+			let dialogue_label = 'Select goto way'
+		endif
+		let choice = quickui#confirm#open(dialogue_label, "Normal\n`require`", 1, 'Confirm')
+	endif
+	if choice ==# 0
+		echohl ErrorMsg
+		echomsg "Goto way is null"
+		echohl Normal
+		return
+	endif
+	if v:false
+	elseif choice ==# 1
+		exec printf("split %s", expand("<cword>"))
+	elseif choice ==# 2
+		let line = getline(line('.'))
+		let col = col('.')
+		let colend = col('$')
+		let startcol = 2
+		while startcol <# colend
+			let start = startcol
+			let start_found = v:false
+			while start <# colend
+				let character = line[start]
+				if v:false
+				\|| character ==# "\""
+				\|| character ==# "'"
+					let endsymbol = character
+					let start_found = v:true
+					break
+				endif
+				let start += 1
+			endwhile
+			if !start_found
+				echohl ErrorMsg
+				echomsg "Start symbol was not found"
+				echohl Normal
+				return
+			endif
+			let end_found = v:false
+			let end = start + 1
+			while end <# colend
+				let character = line[end]
+				if character ==# endsymbol
+					let end_found = v:true
+					break
+				endif
+				let end += 1
+			endwhile
+			if !end_found
+				echohl ErrorMsg
+				echomsg "End symbol was not found"
+				echohl Normal
+				return
+			endif
+			if col <# start || col ># end
+				continue
+			endif
+			let filename = strpart(line, start + 1, end - start - 1)
+			let filename = substitute(filename, '\.', '\/', 'g')
+			let file_found = v:false
+			for i in g:LUA_REQUIRE_GOTO_PREFIX
+				if !filereadable(expand(i).filename.'.lua')
+					continue
+				endif
+				exec printf("split %s", i.filename.'.lua')
+				let file_found = v:true
+				return
+			endfor
+			echohl ErrorMsg
+			echomsg "file not found, editing a new file"
+			echohl Normal
+			exec printf("split %s", g:LUA_REQUIRE_GOTO_PREFIX[0].filename.'.lua')
+			return
+		endwhile
+		echohl ErrorMsg
+		echomsg "dotfiles: Lua_Require_Goto_Workaround_Wincmd_f: Internal error: unreachable code"
+		echohl Normal
+	else
+		echohl ErrorMsg
+		echomsg printf("Wrong goto way: %s", choice)
+		echohl Normal
+	endif
+endfunction
+augroup Lua_Require_Goto_Workaround
+	autocmd!
+	autocmd FileType lua exec "noremap <buffer> <c-w>f <cmd>call Lua_Require_Goto_Workaround_Wincmd_f()<cr>"
+augroup END
+
+function! HandleDotfilesOptionsInComment()
+	if !exists('g:default_comment_string')
+		return
+	endif
+	let default_comment_string_len = g:default_comment_string
+	let i = 1
+	let lastline = line('$')
+	while i <# lastline + 1
+		let line = getline(i)
+		let line = Trim(line)
+		if !StartsWith(line, g:default_comment_string)
+			let i += 1
+			continue
+		endif
+		let line = line[default_comment_string_len+2:]
+		let line = Trim(line)
+		let end_option = 1
+		while end_option <# len(line)
+			let character = line[end_option]
+			if character ==# ' '
+				let end_option -= 1
+				break
+			endif
+			let end_option += 1
+		endwhile
+		let option = line[0:end_option]
+		if option !=# 'DotfilesOptionInComment'
+			let i += 1
+			continue
+		endif
+		let line = line[end_option+1:]
+		let line = Trim(line)
+		let end_option = 1
+		while end_option <# len(line)
+			let character = line[end_option]
+			if character ==# ' '
+				let end_option -= 1
+				break
+			endif
+			let end_option += 1
+		endwhile
+		let option_name = line[0:end_option]
+		let line = line[end_option+1:]
+		let line = Trim(line)
+		let option_value = line
+		if v:false
+		\|| option_name ==# 'LUA_REQUIRE_GOTO_PREFIX'
+			exec printf("let g:%s = %s", option_name, option_value)
+		endif
+		let i += 1
+	endwhile
+endfunction
+augroup DotfilesOptionsInComment
+	autocmd!
+	autocmd BufAdd * call HandleDotfilesOptionsInComment()
 augroup END
 
 nnoremap <silent> * *:noh<cr>
@@ -1587,7 +1746,7 @@ noremap <silent> <leader>b <cmd>call SelectPosition("~/.dotfiles-script.sh", g:s
 
 autocmd BufReadPost *
      \ if line("'\"") > 0 && line("'\"") <= line("$") |
-     \   exe "normal! g`\"" |
+     \   exec "normal! g`\"" |
      \ endif
 
 " MY .nvimrc HELP

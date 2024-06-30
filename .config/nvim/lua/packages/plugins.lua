@@ -76,10 +76,12 @@ return require('packer').startup(function (use)
 	use {
 		'skywind3000/vim-quickui',
 	}
-	use {
-		'neoclide/coc.nvim',
-		branch = 'release',
-	}
+	if not vim.g.use_nvim_cmp then
+		use {
+			'neoclide/coc.nvim',
+			branch = 'release',
+		}
+	end
 	use {
 		'neoclide/vim-jsx-improve',
 	}
@@ -538,4 +540,16 @@ return require('packer').startup(function (use)
 	use {
 		'folke/trouble.nvim',
 	}
+	use({
+		"L3MON4D3/LuaSnip",
+		-- follow latest release.
+		tag = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+		-- install jsregexp (optional!:).
+		run = "make install_jsregexp",
+		requires = {
+			{
+				'rafamadriz/friendly-snippets',
+			}
+		},
+	})
 end)

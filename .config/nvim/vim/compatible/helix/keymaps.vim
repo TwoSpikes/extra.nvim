@@ -33,12 +33,14 @@ let &whichwrap="b,s,h,l,<,>,~,[,]"
 nnoremap d x
 nnoremap x V<cmd>let g:pseudo_visual=v:true<bar>let g:visual_mode="line"<cr>
 nnoremap c xi
-unmap ySS
-unmap ySs
-unmap yss
-unmap yS
-unmap ys
-unmap y<c-g>
+if !g:use_nvim_cmp
+	unmap ySS
+	unmap ySs
+	unmap yss
+	unmap yS
+	unmap ys
+	unmap y<c-g>
+endif
 nnoremap y vy
 nnoremap t<cr> v$
 nnoremap mm %
@@ -54,12 +56,13 @@ nnoremap > >>
 nnoremap < <<
 vnoremap < <gv<cmd>let g:pseudo_visual=v:true<cr>
 vnoremap > >gv<cmd>let g:pseudo_visual=v:true<cr>
-unmap <c-a>
 vnoremap t<cr> $
-unmap cS
-unmap cs
-unmap ci_
-unmap ds
+if !g:use_nvim_cmp
+	unmap cS
+	unmap cs
+	unmap ci_
+	unmap ds
+endif
 unmap dd
 let g:pseudo_visual = v:false
 let g:lx=1
@@ -338,12 +341,14 @@ nnoremap <c-s> m'
 nnoremap U <c-r>
 vnoremap y ygv<cmd>let g:pseudo_visual=v:true<cr>
 
-unmap <leader>f
-unmap <leader>fr
-unmap <leader>fh
-unmap <leader>fb
-unmap <leader>fg
-unmap <leader>ff
+if !g:use_nvim_cmp
+	unmap <leader>f
+	unmap <leader>fr
+	unmap <leader>fh
+	unmap <leader>fb
+	unmap <leader>fg
+	unmap <leader>ff
+endif
 nnoremap <leader>f <cmd>call FuzzyFind()<cr>
 nnoremap <leader>F <cmd>call FuzzyFind()<cr>
 unmap <leader>b

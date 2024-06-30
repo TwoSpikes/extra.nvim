@@ -13,14 +13,14 @@ require('cinnamon').setup({
         -- Post-movement callback
         callback = nil, ---@type function?
         -- Delay between each movement step (in ms)
-        delay = 7,
+        delay = 5,
         max_delta = {
             -- Maximum distance for line movements. Set to `nil` to disable
             line = nil, ---@type number?
             -- Maximum distance for column movements. Set to `nil` to disable
             column = nil, ---@type number?
             -- Maximum duration for a movement (in ms). Automatically adjusts the step delay
-            time = 1000, ---@type number
+            time = 500, ---@type number
         },
         -- The scrolling mode
         -- `cursor`: Smoothly scrolls the cursor for any movement

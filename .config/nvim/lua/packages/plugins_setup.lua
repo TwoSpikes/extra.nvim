@@ -9,6 +9,9 @@ end
 require('packages.quickui.init')
 vim.cmd('exec printf("so %s/lua/packages/mason.vim", g:CONFIG_PATH)')
 if vim.g.use_nvim_cmp then
+	if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/coc.nvim") then
+		vim.fn.delete(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/coc.nvim", "rf")
+	end
 	require('packages.nvim-cmp.init')
 else
 	require('packages.coc.init')
@@ -45,3 +48,6 @@ require('packages.treesitter-context.init')
 require('packages.ts-autotag.init')
 require('packages.ufo.init')
 require('packages.trouble.init')
+require('packages.luasnip.init')
+
+-- DotfilesOptionInComment LUA_REQUIRE_GOTO_PREFIX [g:CONFIG_PATH.'/lua/', g:LOCALSHAREPATH.'/site/pack/packer/start/']
