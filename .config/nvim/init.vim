@@ -1301,10 +1301,6 @@ let s:process_g_but_function_expression .= "
 \\\nvim.api.nvim_feedkeys(button,\\\"n\\\",false)
 \\\nend
 \\\nEOF\"
-\\n	if reltimefloat(reltime(g:prev_time)) ># 0.1
-\\n		call STCUpd()
-\\n	endif
-\\n	let g:prev_time = reltime()
 \\n"
 
 " FIXME: This code is a crutch
@@ -1336,7 +1332,6 @@ if has('nvim')
 	noremap <down> <cmd>call ProcessGBut('j')<cr>
 	noremap <up> <cmd>call ProcessGBut('k')<cr>
 endif
-noremap <c-e> <c-e><cmd>call STCUpd()<cr>
 
 noremap <silent> <c-a> 0
 noremap <silent> <c-e> $
@@ -1356,7 +1351,6 @@ inoremap <c-j> <esc>viwUe<esc>a
 nnoremap <bs> X
 noremap <leader><bs> <bs>
 
-noremap <LeftMouse> <LeftMouse><cmd>call STCUpd()<cr>
 
 function! Findfile()
 	if g:language ==# 'russian'
@@ -1554,21 +1548,9 @@ let s:SCROLL_MOUSE_DOWN_FACTOR = s:SCROLL_DOWN_FACTOR
 exec printf("noremap <silent> <expr> <c-Y> \"%s<c-e>\"", s:SCROLL_C_E_FACTOR)
 exec printf("noremap <silent> <expr> <c-y> \"%s<c-y>\"", s:SCROLL_C_Y_FACTOR)
 let s:SCROLL_UPDATE_TIME = 1000
-exec "function! NoremapScrollWheelDown(_)
-\\n		call STCUpd()
-\\n		noremap <ScrollWheelDown> ".s:SCROLL_MOUSE_DOWN_FACTOR."<c-e><cmd>noremap <ScrollWheelDown> ".s:SCROLL_MOUSE_DOWN_FACTOR."<c-e>'<cr><cmd>call timer_start(".s:SCROLL_UPDATE_TIME.", 'NoremapScrollWheelDown')<cr>
-\\n	endfunction"
-exec "function! NoremapScrollWheelUp(_)
-\\n		call STCUpd()
-\\n		noremap <ScrollWheelUp> ".s:SCROLL_MOUSE_UP_FACTOR."<c-y><cmd>noremap <ScrollWheelUp> ".s:SCROLL_MOUSE_UP_FACTOR."<c-y>'<cr><cmd>call timer_start(".s:SCROLL_UPDATE_TIME.", 'NoremapScrollWheelUp')<cr>
-\\n	endfunction"
-if g:fast_terminal
-	exec printf("noremap <ScrollWheelDown> :se lz<cr>%s<c-e>:se nolz<cr><cmd>call STCUpd()<cr>", s:SCROLL_MOUSE_DOWN_FACTOR)
-	exec printf("noremap <ScrollWheelUp> :se lz<cr>%s<c-y>:se nolz<cr><cmd>call STCUpd()<cr>", s:SCROLL_MOUSE_UP_FACTOR)
-else
-	call NoremapScrollWheelDown(0)
-	call NoremapScrollWheelUp(0)
-endif
+call timer_start(s:SCROLL_UPDATE_TIME, {->STCUpd()}, {'repeat': -1})
+exec printf("noremap <ScrollWheelDown> %s<c-e>", s:SCROLL_MOUSE_DOWN_FACTOR)
+exec printf("noremap <ScrollWheelUp> %s<c-y>", s:SCROLL_MOUSE_UP_FACTOR)
 
 noremap <silent> <leader>st <cmd>lua require('spectre').toggle()<cr><cmd>call Numbertoggle()<cr>
 nnoremap <silent> <leader>sw <cmd>lua require('spectre').open_visual({select_word = true})<cr><cmd>call Numbertoggle()<cr>
@@ -2196,7 +2178,6 @@ function! OnResized()
 	else
 		echom "Window: ".&lines."rows, ".&columns."cols"
 	endif
-	call STCUpd()
 endfunction
 
 let g:floaterm_width = 1.0
