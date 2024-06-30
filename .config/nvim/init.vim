@@ -1313,12 +1313,17 @@ let s:process_g_but_function_expression .= "
 \\nendfunction"
 exec s:process_g_but_function_expression
 
-function! JKWorkaround()
+function! JKWorkaroundAlpha()
 	if has('nvim')
-		noremap <buffer> j <cmd>call ProcessGBut('k')<cr>
+		noremap <buffer> j <cmd>call ProcessGBut('j')<cr>
 		noremap <buffer> k <cmd>call ProcessGBut('k')<cr>
 		noremap <down> <cmd>call ProcessGBut('j')<cr>
 		noremap <up> <cmd>call ProcessGBut('k')<cr>
+	endif
+endfunction
+function! JKWorkaround()
+	if has('nvim')
+		noremap k <cmd>call ProcessGBut('k')<cr>
 	endif
 endfunction
 call JKWorkaround()
