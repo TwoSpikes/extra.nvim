@@ -2662,7 +2662,7 @@ function! HelpOnFirstTime()
 				echom 'To see help, press SPC-?. You will not see this message again'
 			endif
 		else
-			call timer_start(0, {timer_id -> quickui#confirm#open('To see help, press SPC-?')})
+			call quickui#confirm#open('To see help, press SPC-?')
 		endif
 	endif
 endfunction
@@ -2685,7 +2685,6 @@ function! OnStart()
 	if g:PAGER_MODE
 		call EnablePagerMode()
 	endif
-	call HelpOnFirstTime()
 	call OpenOnStart()
 	if has('nvim') && g:compatible !=# "helix_hard"
 		exec printf('luafile %s', fnamemodify(g:PLUGINS_SETUP_FILE_PATH, ':h').'/noice/setup.lua')
@@ -2695,6 +2694,7 @@ function! OnStart()
 	\|| g:compatible ==# "helix_hard"
 		call LoadLastSelected()
 	endif
+	call HelpOnFirstTime()
 endfunction
 function! OnQuit()
 	call TermuxLoadCursorStyle()

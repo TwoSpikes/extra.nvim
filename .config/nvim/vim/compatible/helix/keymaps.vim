@@ -1,18 +1,11 @@
-if isdirectory(expand(g:LOCALSHAREPATH)."/site/pack/packer/start/cinnamon.nvim")
-	nnoremap gh <cmd>lua require('cinnamon').scroll('0')<cr>
-	xnoremap gh <cmd>lua require('cinnamon').scroll('0')<cr>
-	nnoremap gl <cmd>lua require('cinnamon').scroll('$', 0, 1)<cr>
-	xnoremap gl <cmd>lua require('cinnamon').scroll('$', 0, 1)<cr>h
-	nnoremap ge <cmd>lua require('cinnamon').scroll('G', 0, 1)<cr>
-	xnoremap ge <cmd>lua require('cinnamon').scroll('G', 0, 1)<cr>
-	nnoremap gs <cmd>lua require('cinnamon').scroll('^')<cr>
-	xnoremap gs <cmd>lua require('cinnamon').scroll('^')<cr>
-else
-	nnoremap gh 0
-	nnoremap gl $
-	nnoremap ge G
-	nnoremap gs ^
-endif
+nnoremap gh 0
+xnoremap gh 0
+nnoremap gl $
+xnoremap gl $
+nnoremap ge G
+xnoremap ge G
+nnoremap gs ^
+xnoremap gs ^
 
 function! ExitVisual()
 	if v:false
