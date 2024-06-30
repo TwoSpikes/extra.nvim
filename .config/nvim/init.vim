@@ -1285,6 +1285,7 @@ let s:process_g_but_function_expression .= "
 \\n	endif
 \"
 endif
+let g:prev_time = reltime()
 let s:process_g_but_function_expression .= "
 \\n	exec \"lua << EOF
 \\\nlocal button = vim.v.count == 0 and \'g\".a:button.\"\' or \'\".a:button.\"\'
@@ -1300,10 +1301,10 @@ let s:process_g_but_function_expression .= "
 \\\nvim.api.nvim_feedkeys(button,\\\"n\\\",false)
 \\\nend
 \\\nEOF\"
-\\n	if !g:moving
-\\n		let g:moving = v:true
-\\n		call timer_start(".s:MOVING_UPDATE_TIME.", {->execute(\"let g:moving=v:false\|call STCUpd()\")})
+\\n	if reltimefloat(reltime(g:prev_time)) ># 0.1
+\\n		call STCUpd()
 \\n	endif
+\\n	let g:prev_time = reltime()
 \\n"
 
 " FIXME: This code is a crutch
