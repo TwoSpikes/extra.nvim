@@ -1527,7 +1527,7 @@ endif
 
 augroup AlphaNvim_CinnamonNvim_JK_Workaround
 	autocmd!
-	autocmd FileType alpha exec "noremap <buffer> j j" | exec "noremap <buffer> k k" | noremap <down> <down> | noremap <up> <up> | call AfterSomeEvent('BufLeave', 'call JKWorkaround()')
+	autocmd FileType alpha exec "noremap <buffer> j j" | exec "noremap <buffer> k k" | exec "noremap <buffer> <down> <down>" | exec "noremap <buffer> <up> <up>" | call AfterSomeEvent('BufLeave', 'call JKWorkaround()')
 augroup END
 
 let g:LUA_REQUIRE_GOTO_PREFIX = [$HOME]
@@ -1890,6 +1890,9 @@ inoremap <c-c> <c-c><cmd>call Numbertoggle()<cr>
 
 " TERMINAL
 function! OpenTerm(cmd)
+	if !&modifiable
+		new
+	endif
 	if a:cmd ==# ""
 		exec printf("terminal %s", $SHELL)
 	else
