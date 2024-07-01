@@ -1100,6 +1100,8 @@ function! MyTabLine()
 			let s ..= ' '
 		elseif getbufvar(bufnr, '&filetype') ==# 'haskell'
 			let s ..= ' '
+		elseif getbufvar(bufnr, '&filetype') ==# 'erlang'
+			let s ..= ' '
 		elseif getbufvar(bufnr, '&filetype') ==# 'julia'
 			let s ..= ' '
 		elseif getbufvar(bufnr, '&filetype') ==# 'gitcommit'
@@ -2264,16 +2266,13 @@ function! HandleKeystroke(keystroke)
 	endif
 	if v:false
 	elseif a:keystroke ==# '('
-		normal! h
-		normal! a()
+		normal! i()
 		call Numbertoggle(mode())
 	elseif a:keystroke ==# '['
-		normal! h
-		normal! a[]
+		normal! i[]
 		call Numbertoggle(mode())
 	elseif a:keystroke ==# '{'
-		normal! h
-		normal! a{}
+		normal! i{}
 		call Numbertoggle(mode())
 	else
 		return a:keystroke

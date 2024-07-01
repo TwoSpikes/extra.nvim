@@ -54,9 +54,9 @@ if !g:use_nvim_cmp
 	unmap cS
 	unmap cs
 	unmap ci_
-	unmap ds
 endif
 unmap dd
+unmap ds
 let g:pseudo_visual = v:false
 let g:lx=1
 let g:ly=1
