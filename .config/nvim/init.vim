@@ -1511,7 +1511,8 @@ augroup AlphaNvim_CinnamonNvim_JK_Workaround
 	autocmd FileType alpha exec "noremap <buffer> j j" | exec "noremap <buffer> k k" | exec "noremap <buffer> <down> <down>" | exec "noremap <buffer> <up> <up>" | call AfterSomeEvent('BufLeave', 'call JKWorkaround()')
 augroup END
 
-let g:LUA_REQUIRE_GOTO_PREFIX = [$HOME]
+let g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT = [$HOME]
+let g:LUA_REQUIRE_GOTO_PREFIX = g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT
 function! Lua_Require_Goto_Workaround_Wincmd_f()
 	if !filereadable(expand(g:LOCALSHAREPATH).'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
 		echohl Question
@@ -1632,6 +1633,7 @@ function! HandleDotfilesOptionsInComment()
 		return
 	endif
 	let default_comment_string_len = g:default_comment_string
+	let LUA_REQUIRE_GOTO_PREFIX_idx = 0
 	let i = 1
 	let lastline = line('$')
 	while i <# lastline + 1
@@ -1672,16 +1674,103 @@ function! HandleDotfilesOptionsInComment()
 		let line = line[end_option+1:]
 		let line = Trim(line)
 		let option_value = line
+		let option_value_len = len(option_value)
+		let option_calculated = ''
+		let j = 0
+		let vartype = ''
+		let varname = ''
+		while j < option_value_len
+			let c = option_value[j]
+			if j + 1 < option_value_len
+				let cnext = option_value[j+1]
+			endif
+			if c ==# '%'
+				if v:false
+				elseif vartype ==# ''
+					let vartype = 'vim'
+					let varname = ''
+				elseif vartype ==# 'vim'
+					let vartype = ''
+					if varname ==# ''
+						let option_calculated .= '%'
+					else
+						execute "let option_calculated .= g:".varname
+					endif
+				elseif vartype ==# 'shell'
+					echohl ErrorMsg
+					echomsg "error: Cannot use '%' in shell variables"
+					echohl Normal
+				else
+					echohl ErrorMsg
+					echomsg "dotfiles: internal error: wrong vartype: ".vartype
+					echohl Normal
+				endif
+			elseif c ==# '$'
+				if v:false
+				elseif vartype ==# ''
+					let vartype = 'shell'
+					let varname = ''
+				elseif vartype ==# 'vim'
+					echohl ErrorMsg
+					echomsg "error: Cannot use '$' in vim variables"
+					echohl Normal
+				elseif vartype ==# 'shell'
+					let vartype = ''
+					if varname ==# ''
+						let option_calculated .= '$'
+					else
+						let option_calculated .= getenv(varname)
+					endif
+				else
+					echohl ErrorMsg
+					echomsg "dotfiles: internal error: wrong vartype: ".vartype
+					echohl Normal
+				endif
+			else
+				if v:false
+				elseif vartype ==# ''
+					let option_calculated .= c
+				elseif vartype ==# 'vim'
+					let varname .= c
+				elseif vartype ==# 'shell'
+					let varname .= c
+				else
+					echohl ErrorMsg
+					echomsg "dotfiles: internal error: wrong vartype: ".vartype
+					echohl Normal
+				endif
+			endif
+			let j += 1
+		endwhile
+		if v:false
+		elseif vartype ==# ''
+			execute
+		elseif vartype ==# 'vim'
+			let option_calculated .= '%'
+		elseif vartype ==# 'shell'
+			let option_calculated .= '$'
+		else
+			echohl ErrorMsg
+			echomsg "dotfiles: internal error: wrong vartype: ".vartype
+			echohl Normal
+		endif
+		if vartype !=# ''
+			let option_calculated .= varname
+		endif
 		if v:false
 		\|| option_name ==# 'LUA_REQUIRE_GOTO_PREFIX'
-			execute printf("let g:%s = %s", option_name, option_value)
+			if LUA_REQUIRE_GOTO_PREFIX_idx ==# 0
+				let g:LUA_REQUIRE_GOTO_PREFIX = []
+			endif
+			call add(g:LUA_REQUIRE_GOTO_PREFIX, option_calculated)
+			let LUA_REQUIRE_GOTO_PREFIX_idx += 1
 		endif
 		let i += 1
 	endwhile
 endfunction
 augroup DotfilesOptionsInComment
 	autocmd!
-	autocmd BufAdd * call HandleDotfilesOptionsInComment()
+	autocmd BufEnter * call HandleDotfilesOptionsInComment()
 augroup END
 
 nnoremap <silent> * *:noh<cr>
@@ -2704,6 +2793,7 @@ endfunction
 function! FixShaDa()
 	let g:PAGER_MODE = 0
 	let g:DO_NOT_OPEN_ANYTHING = 0
+	let g:LUA_REQUIRE_GOTO_PREFIX = g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT
 endfunction
 autocmd! VimLeavePre * call FixShaDa()
 

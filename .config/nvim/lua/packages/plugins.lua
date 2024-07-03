@@ -29,7 +29,7 @@ return require('packer').startup(function (use)
             },
         },
     }
-    use {
+	use {
 		'rcarriga/nvim-notify',
 	}
     use (
