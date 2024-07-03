@@ -2701,5 +2701,11 @@ function! IfOneWinDo(cmd)
 	unlet s
 endfunction
 
-au! VimEnter * call OnStart()
-au! VimLeave * call OnQuit()
+function! FixShaDa()
+	let g:PAGER_MODE = 0
+	let g:DO_NOT_OPEN_ANYTHING = 0
+endfunction
+autocmd! VimLeavePre * call FixShaDa()
+
+autocmd! VimEnter * call OnStart()
+autocmd! VimLeave * call OnQuit()
