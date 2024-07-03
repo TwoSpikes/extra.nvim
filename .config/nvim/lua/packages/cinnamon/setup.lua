@@ -6,7 +6,7 @@ require('cinnamon').setup({
         -- Enable the provided 'basic' keymaps
         basic = true,
         -- Enable the provided 'extra' keymaps
-        extra = true,
+        extra = vim.g.fast_terminal,
     },
     ---@class ScrollOptions
     options = {

@@ -26,9 +26,9 @@ function! LoadDotfilesConfig(path, reload=v:false)
 	if !filereadable(a:path)
 		echohl ErrorMsg
 		if g:language ==# 'russian'
-			echom "блядь: dotfiles vim конфиг не найден"
+			echomsg "блядь: dotfiles vim конфиг не найден"
 		else
-			echom "error: no dotfiles vim config"
+			echomsg "error: no dotfiles vim config"
 		endif
 		echohl Normal
 		return 1
@@ -38,9 +38,9 @@ function! LoadDotfilesConfig(path, reload=v:false)
 	if type(g:dotfiles_config) !=# v:t_dict
 		echohl ErrorMsg
 		if g:language ==# 'russian'
-			echom "блядь: не удалось распарсить dotfiles vim конфиг"
+			echomsg "блядь: не удалось распарсить dotfiles vim конфиг"
 		else
-			echom "error: failed to parse dotfiles vim config"
+			echomsg "error: failed to parse dotfiles vim config"
 		endif
 		echohl Normal
 		return 1
@@ -82,7 +82,7 @@ function! LoadDotfilesConfig(path, reload=v:false)
 	for option in l:option_list
 		if exists('g:dotfiles_config["'.option.'"]')
 			if !exists("g:".option) || a:reload
-				exec "let g:".option." = g:dotfiles_config[option]"
+				execute "let g:".option." = g:dotfiles_config[option]"
 			endif
 		endif
 	endfor
@@ -134,18 +134,18 @@ function! CopyHighlightGroup(src, dst)
 	if gui ==# ""
 		let gui = "NONE"
 	endif
-	exec printf("hi %s ctermfg=%s", a:dst, ctermfg)
-	exec printf("hi %s ctermbg=%s", a:dst, ctermbg)
-	exec printf("hi %s cterm=%s", a:dst, cterm)
-	exec printf("hi %s guifg=%s", a:dst, guifg)
-	exec printf("hi %s guibg=%s", a:dst, guibg)
-	exec printf("hi %s gui=%s", a:dst, gui)
+	execute printf("hi %s ctermfg=%s", a:dst, ctermfg)
+	execute printf("hi %s ctermbg=%s", a:dst, ctermbg)
+	execute printf("hi %s cterm=%s", a:dst, cterm)
+	execute printf("hi %s guifg=%s", a:dst, guifg)
+	execute printf("hi %s guibg=%s", a:dst, guibg)
+	execute printf("hi %s gui=%s", a:dst, gui)
 endfunction
 
 if has('nvim')
 	augroup LineNrForInactive
 		function! s:SaveStc(clear_stc, winnr=winnr())
-			exec printf("let g:stc_was_%d = &l:stc", win_getid(a:winnr))
+			execute printf("let g:stc_was_%d = &l:stc", win_getid(a:winnr))
 			if a:clear_stc
 				call setwinvar(a:winnr, '&stc', '')
 			endif
@@ -251,10 +251,10 @@ function! PreserveAndDo(cmd, preserve_tab, preserve_win)
 	endif
 	exec a:cmd
 	if a:preserve_tab
-		exec old_tabpagenr 'tabnext'
+		execute old_tabpagenr 'tabnext'
 	endif
 	if a:preserve_win
-		exec old_winnr 'wincmd w'
+		execute old_winnr 'wincmd w'
 	endif
 endfunction
 
@@ -262,8 +262,8 @@ function! DefineAugroupVisual()
 	augroup Visual
 		autocmd!
 		if g:linenr
-			exec "autocmd! ModeChanged {\<c-v>*,[vV]*}:* call Numbertoggle(mode())"
-			exec "autocmd! ModeChanged *:{\<c-v>*,[vV]*} call Numbertoggle('v')"
+			execute "autocmd! ModeChanged {\<c-v>*,[vV]*}:* call Numbertoggle(mode())"
+			execute "autocmd! ModeChanged *:{\<c-v>*,[vV]*} call Numbertoggle('v')"
 		else
 			autocmd! Visual
 		endif
@@ -389,9 +389,9 @@ function! HandleDotfilesConfig()
 	else
 		echohl ErrorMsg
 		if g:language ==# 'russian'
-			echom "Dotfiles vim конфиг: блядь: неправильное значение заднего фона: ".g:background
+			echomsg "Dotfiles vim конфиг: блядь: неправильное значение заднего фона: ".g:background
 		else
-			echom "Dotfiles vim config: Error: wrong background value: ".g:background
+			echomsg "Dotfiles vim config: Error: wrong background value: ".g:background
 		endif
 		echohl Normal
 
@@ -497,10 +497,10 @@ function! SynStack()
     return
   endif
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunc
+endfunction
 function! WhenceGroup()
 	let l:s = synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
-	exec "verbose hi ".l:s
+	execute "verbose hi ".l:s
 endfunction
 
 function! PrepareVital()
@@ -534,7 +534,7 @@ function! GetRandomName(length)
 			endif
 		else
 			echohl ErrorMsg
-			echom "Internal error"
+			echomsg "Internal error"
 			echohl Normal
 		endif
 	endfor
@@ -544,8 +544,8 @@ endfunction
 function! GenerateTemporaryAutocmd(event, pattern, command, delete_when)
 	let random_name = GetRandomName(20)
 	exec 'augroup '.random_name
-		au!
-		exec "autocmd ".a:event." ".a:pattern." ".a:command."|".a:delete_when(random_name)
+		autocmd!
+		execute "autocmd ".a:event." ".a:pattern." ".a:command."|".a:delete_when(random_name)
 	augroup END
 endfunction
 function! AfterSomeEvent(event, command, delete_when={name -> 'au! '.name})
@@ -553,7 +553,7 @@ function! AfterSomeEvent(event, command, delete_when={name -> 'au! '.name})
 endfunction
 let g:please_do_not_close = v:false
 function! MakeThingsThatRequireBeDoneAfterPluginsLoaded()
-	au TermClose * if !g:please_do_not_close && !exists('g:bufnrforranger')|call IfOneWinDo("call OnQuit()")|call AfterSomeEvent('TermLeave', 'call Numbertoggle()')|quit|endif
+	autocmd TermClose * if !g:please_do_not_close && !exists('g:bufnrforranger')|call IfOneWinDo("call OnQuit()")|call AfterSomeEvent('TermLeave', 'call Numbertoggle()')|quit|endif
 endfunction
 
 set nonu
@@ -1213,8 +1213,8 @@ if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
 endif
 
 if v:version >= 700
-  au BufLeave * let b:winview = winsaveview()
-  au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
+  autocmd BufLeave * let b:winview = winsaveview()
+  autocmd BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 endif
 
 nnoremap <silent> dd ddk
@@ -1276,7 +1276,7 @@ let s:process_g_but_function_expression .= "
 endif
 let g:prev_time = reltime()
 let s:process_g_but_function_expression .= "
-\\n	exec \"lua << EOF
+\\n	execute \"lua << EOF
 \\\nlocal button = vim.v.count == 0 and \'g\".a:button.\"\' or \'\".a:button.\"\'
 \"
 if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
@@ -1313,7 +1313,7 @@ let s:process_g_but_function_expression .= "
 endif
 let s:process_g_but_function_expression .= "
 \\nendfunction"
-exec s:process_g_but_function_expression
+execute s:process_g_but_function_expression
 
 function! JKWorkaroundAlpha()
 	if has('nvim')
@@ -1348,7 +1348,6 @@ inoremap <c-j> <esc>viwUe<esc>a
 nnoremap <bs> X
 noremap <leader><bs> <bs>
 
-
 function! Findfile()
 	if g:language ==# 'russian'
 		let find_file_label = 'Найти файл: '
@@ -1364,7 +1363,7 @@ function! Findfile()
 	endif
 	if filename !=# ''
 		set lazyredraw
-		exec printf("tabedit %s", filename)
+		execute printf("tabedit %s", filename)
 		set nolazyredraw
 	endif
 endfunction
@@ -1386,7 +1385,7 @@ function! Findfilebuffer()
 		set nolazyredraw
 	endif
 	if filename !=# ''
-		exec printf("edit %s", filename)
+		execute printf("edit %s", filename)
 	endif
 endfunction
 command! -nargs=0 Findfilebuffer call Findfilebuffer()
@@ -1395,7 +1394,7 @@ noremap <c-c>% <cmd>split<cr>
 noremap <c-c>" <cmd>vsplit<cr>
 noremap <c-c>w <cmd>quit<cr>
 for i in range(1, 9)
-	exec "noremap <c-c>".i." <cmd>tabnext ".i."<cr>"
+	execute "noremap <c-c>".i." <cmd>tabnext ".i."<cr>"
 endfor
 
 function! SaveAsBase(command, invitation)
@@ -1408,7 +1407,7 @@ function! SaveAsBase(command, invitation)
 	endif
 	if filename !=# ''
 		set lazyredraw
-		exec a:command(filename)
+		execute a:command(filename)
 		set nolazyredraw
 	endif
 endfunction
@@ -1468,13 +1467,13 @@ function! SelectPosition(cmd, positions)
 			continue
 		endif
 		if exists('a:positions[position]')
-			exec a:positions[position]['command'](a:cmd)
+			execute a:positions[position]['command'](a:cmd)
 		else
 			echohl ErrorMsg
 			if g:language ==# 'russian'
-				echom "Блядь: Неправильная позиция: ".position
+				echomsg "Блядь: Неправильная позиция: ".position
 			else
-				echom "Error: Wrong position: ".position
+				echomsg "Error: Wrong position: ".position
 			endif
 			echohl Normal
 			return 1
@@ -1570,7 +1569,7 @@ function! Lua_Require_Goto_Workaround_Wincmd_f()
 	endif
 	if v:false
 	elseif choice ==# 1
-		exec printf("split %s", expand("<cword>"))
+		execute printf("split %s", expand("<cword>"))
 	elseif choice ==# 2
 		let line = getline(line('.'))
 		let col = col('.')
@@ -1622,7 +1621,7 @@ function! Lua_Require_Goto_Workaround_Wincmd_f()
 				if !filereadable(expand(i).filename.'.lua')
 					continue
 				endif
-				exec printf("split %s", i.filename.'.lua')
+				execute printf("split %s", i.filename.'.lua')
 				let file_found = v:true
 				return
 			endfor
@@ -1693,7 +1692,7 @@ function! HandleDotfilesOptionsInComment()
 		let option_value = line
 		if v:false
 		\|| option_name ==# 'LUA_REQUIRE_GOTO_PREFIX'
-			exec printf("let g:%s = %s", option_name, option_value)
+			execute printf("let g:%s = %s", option_name, option_value)
 		endif
 		let i += 1
 	endwhile
@@ -1710,8 +1709,13 @@ nnoremap <silent> <c-#> #
 
 noremap <leader>l 5zl5zl5zl
 noremap <leader>h 5zh5zh5zh
-inoremap <c-l> <cmd>let old_lazyredraw=&lazyredraw<cr><cmd>set lazyredraw<cr><cmd>normal! 10zl<cr><cmd>let &lazyredraw=old_lazyredraw<cr><cmd>unlet old_lazyredraw<cr><cmd>call HandleBuftype(winnr())<cr>
-inoremap <c-h> <cmd>let old_lazyredraw=&lazyredraw<cr><cmd>set lazyredraw<cr><cmd>normal! 10zh<cr><cmd>let &lazyredraw=old_lazyredraw<cr><cmd>unlet old_lazyredraw<cr><cmd>call HandleBuftype(winnr())<cr>
+if g:fast_terminal
+	inoremap <c-l> <cmd>let old_lazyredraw=&lazyredraw<cr><cmd>set lazyredraw<cr><cmd>normal! 10zl<cr><cmd>let &lazyredraw=old_lazyredraw<cr><cmd>unlet old_lazyredraw<cr><cmd>call HandleBuftype(winnr())<cr>
+	inoremap <c-h> <cmd>let old_lazyredraw=&lazyredraw<cr><cmd>set lazyredraw<cr><cmd>normal! 10zh<cr><cmd>let &lazyredraw=old_lazyredraw<cr><cmd>unlet old_lazyredraw<cr><cmd>call HandleBuftype(winnr())<cr>
+else
+	inoremap <c-l> <esc>5zl5zl5zla
+	inoremap <c-h> <esc>5zh5zh5zha
+endif
 let s:SCROLL_FACTOR = 2
 let s:SCROLL_UP_FACTOR = s:SCROLL_FACTOR
 let s:SCROLL_DOWN_FACTOR = s:SCROLL_FACTOR
@@ -1719,12 +1723,12 @@ let s:SCROLL_C_E_FACTOR = s:SCROLL_UP_FACTOR
 let s:SCROLL_C_Y_FACTOR = s:SCROLL_DOWN_FACTOR
 let s:SCROLL_MOUSE_UP_FACTOR = s:SCROLL_UP_FACTOR
 let s:SCROLL_MOUSE_DOWN_FACTOR = s:SCROLL_DOWN_FACTOR
-exec printf("noremap <silent> <expr> <c-Y> \"%s<c-e>\"", s:SCROLL_C_E_FACTOR)
-exec printf("noremap <silent> <expr> <c-y> \"%s<c-y>\"", s:SCROLL_C_Y_FACTOR)
+execute printf("noremap <silent> <expr> <c-Y> \"%s<c-e>\"", s:SCROLL_C_E_FACTOR)
+execute printf("noremap <silent> <expr> <c-y> \"%s<c-y>\"", s:SCROLL_C_Y_FACTOR)
 let s:SCROLL_UPDATE_TIME = 1000
 call timer_start(s:SCROLL_UPDATE_TIME, {->STCUpd()}, {'repeat': -1})
-exec printf("noremap <ScrollWheelDown> %s<c-e>", s:SCROLL_MOUSE_DOWN_FACTOR)
-exec printf("noremap <ScrollWheelUp> %s<c-y>", s:SCROLL_MOUSE_UP_FACTOR)
+execute printf("noremap <ScrollWheelDown> %s<c-e>", s:SCROLL_MOUSE_DOWN_FACTOR)
+execute printf("noremap <ScrollWheelUp> %s<c-y>", s:SCROLL_MOUSE_UP_FACTOR)
 
 noremap <silent> <leader>st <cmd>lua require('spectre').toggle()<cr><cmd>call Numbertoggle()<cr>
 nnoremap <silent> <leader>sw <cmd>lua require('spectre').open_visual({select_word = true})<cr><cmd>call Numbertoggle()<cr>
@@ -1736,27 +1740,27 @@ let g:PLUGINS_INSTALL_FILE_PATH = '~/.config/nvim/lua/packages/plugins.lua'
 let g:PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/plugins_setup.lua'
 let g:LSP_PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/lsp/plugins.lua'
 
-exec printf('noremap <silent> <leader>ve <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:CONFIG_PATH."/init.vim")
-exec printf("noremap <silent> <leader>se <esc>:so %s<cr>", g:CONFIG_PATH.'/init.vim')
+execute printf('noremap <silent> <leader>ve <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:CONFIG_PATH."/init.vim")
+execute printf("noremap <silent> <leader>se <esc>:so %s<cr>", g:CONFIG_PATH.'/init.vim')
 
-exec printf('noremap <silent> <leader>vi <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:PLUGINS_INSTALL_FILE_PATH)
-exec printf("noremap <silent> <leader>si <esc>:so %s<cr>", g:PLUGINS_INSTALL_FILE_PATH)
+execute printf('noremap <silent> <leader>vi <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:PLUGINS_INSTALL_FILE_PATH)
+execute printf("noremap <silent> <leader>si <esc>:so %s<cr>", g:PLUGINS_INSTALL_FILE_PATH)
 
-exec printf('noremap <silent> <leader>vs <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:PLUGINS_SETUP_FILE_PATH)
-exec printf("noremap <silent> <leader>ss <esc>:so %s<cr>", g:PLUGINS_SETUP_FILE_PATH)
+execute printf('noremap <silent> <leader>vs <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:PLUGINS_SETUP_FILE_PATH)
+execute printf("noremap <silent> <leader>ss <esc>:so %s<cr>", g:PLUGINS_SETUP_FILE_PATH)
 
-exec printf('noremap <silent> <leader>vl <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:LSP_PLUGINS_SETUP_FILE_PATH)
-exec printf("noremap <silent> <leader>sl <esc>:so %s<cr>", g:LSP_PLUGINS_SETUP_FILE_PATH)
+execute printf('noremap <silent> <leader>vl <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:LSP_PLUGINS_SETUP_FILE_PATH)
+execute printf("noremap <silent> <leader>sl <esc>:so %s<cr>", g:LSP_PLUGINS_SETUP_FILE_PATH)
 
-exec printf('noremap <silent> <leader>vj <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:DOTFILES_CONFIG_PATH)
-exec printf('noremap <silent> <leader>sj <cmd>call LoadDotfilesConfig("%s", v:true)<cr><cmd>call HandleDotfilesConfig()<cr><cmd>call HandleBuftypeAll()<cr>', expand(g:DOTFILES_CONFIG_PATH))
+execute printf('noremap <silent> <leader>vj <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:DOTFILES_CONFIG_PATH)
+execute printf('noremap <silent> <leader>sj <cmd>call LoadDotfilesConfig("%s", v:true)<cr><cmd>call HandleDotfilesConfig()<cr><cmd>call HandleBuftypeAll()<cr>', expand(g:DOTFILES_CONFIG_PATH))
 
 " .dotfiles-script.sh FILE
 noremap <silent> <leader>b <cmd>call SelectPosition("~/.dotfiles-script.sh", g:stdpos)<cr>
 
 autocmd BufReadPost *
      \ if line("'\"") > 0 && line("'\"") <= line("$") |
-     \   exec "normal! g`\"" |
+     \   execute "normal! g`\"" |
      \ endif
 
 " MY .nvimrc HELP
@@ -1894,9 +1898,9 @@ function! OpenTerm(cmd)
 		new
 	endif
 	if a:cmd ==# ""
-		exec printf("terminal %s", $SHELL)
+		execute printf("terminal %s", $SHELL)
 	else
-		exec printf("terminal %s", a:cmd)
+		execute printf("terminal %s", a:cmd)
 	endif
 	startinsert
 	return bufnr()
@@ -1938,7 +1942,7 @@ function! CommentOutDefault()
 	endif
 endfunction
 function! DoCommentOutDefault()
-	exec "normal! ".CommentOutDefault()
+	execute "normal! ".CommentOutDefault()
 endfunction
 function! UncommentOut(comment_string)
 	mark z
@@ -1968,71 +1972,73 @@ endfunction
 noremap <expr> <leader>/d CommentOutDefault()
 noremap <leader>/u <cmd>call UncommentOutDefault()<cr>
 augroup cpp
-	au!
-	au filetype cpp let g:default_comment_string = "//"
-	au filetype cpp noremap <silent> <buffer> <leader>N viwo<esc>i::<esc>hi
+	autocmd!
+	autocmd filetype cpp let g:default_comment_string = "//"
+	autocmd filetype cpp noremap <silent> <buffer> <leader>N viwo<esc>i::<esc>hi
 augroup END
 augroup java
-	au!
-	au filetype java let g:default_comment_string = "//"
+	autocmd!
+	autocmd filetype java let g:default_comment_string = "//"
 augroup END
 augroup javascript
-	au!
-	au filetype javascript let g:default_comment_string = "//"
+	autocmd!
+	autocmd filetype javascript let g:default_comment_string = "//"
 augroup END
 augroup javascriptreact
-	au!
-	au filetype javascriptreact let g:default_comment_string = "//"
+	autocmd!
+	autocmd filetype javascriptreact let g:default_comment_string = "//"
 augroup END
 augroup vim
-	au!
-	au filetype vim let g:default_comment_string = '"'
+	autocmd!
+	autocmd filetype vim let g:default_comment_string = '"'
 augroup END
 augroup lua
-	au!
-	au filetype lua let g:default_comment_string = '--'
+	autocmd!
+	autocmd filetype lua let g:default_comment_string = '--'
 augroup END
 augroup haskell
-	au!
-	au filetype haskell let g:default_comment_string = '--'
+	autocmd!
+	autocmd filetype haskell let g:default_comment_string = '--'
 augroup END
 augroup googol
-	au!
-	au syntax googol let g:default_comment_string = "//"
+	autocmd!
+	autocmd syntax googol let g:default_comment_string = "//"
 augroup END
 augroup php
-	au!
-	au filetype php let g:default_comment_string = "//"
-	au filetype php noremap <silent> <buffer> <leader>g viwoviGLOBALS['<esc>ea']<esc>
+	autocmd!
+	autocmd filetype php let g:default_comment_string = "//"
+	autocmd filetype php noremap <silent> <buffer> <leader>g viwoviGLOBALS['<esc>ea']<esc>
 augroup END
 augroup sh
-	au!
-	au filetype bash,sh let g:default_comment_string = "#"
+	autocmd!
+	autocmd filetype bash,sh let g:default_comment_string = "#"
 augroup END
 augroup python
-	au!
-	au filetype python let g:default_comment_string = "#"
+	autocmd!
+	autocmd filetype python let g:default_comment_string = "#"
 augroup END
 augroup rust
-	au!
+	autocmd!
+	autocmd filetype python let g:default_comment_string = "//"
 augroup END
 augroup netrw
-	au!
+	autocmd!
 	if exists('g:default_comment_string')
 		unlet g:default_comment_string
 	endif
-	au filetype netrw setlocal nocursorcolumn | call Numbertoggle()
+	autocmd filetype netrw setlocal nocursorcolumn | call Numbertoggle()
 augroup END
 augroup neo-tree
+	autocmd!
 	if exists('g:default_comment_string')
 		unlet g:default_comment_string
 	endif
-	au filetype neo-tree setlocal nocursorcolumn | call Numbertoggle()
+	autocmd filetype neo-tree setlocal nocursorcolumn | call Numbertoggle()
 augroup END
 augroup terminal
-	au!
+	autocmd!
 	if has('nvim')
-		au termopen * setlocal nocursorline nocursorcolumn | call STCNo()
+		autocmd termopen * setlocal nocursorline nocursorcolumn | call STCNo()
 	endif
 augroup END
 augroup visual
@@ -2181,9 +2187,9 @@ function! SelectAll()
 	normal! ggVG
 	echohl MsgArea
 	if g:language ==# 'russian'
-		echom 'Предыдущая позиция отмечена как "y"'
+		echomsg 'Предыдущая позиция отмечена как "y"'
 	else
-		echom 'Previous position marked as "y"'
+		echomsg 'Previous position marked as "y"'
 	endif
 endfunction
 noremap <silent> <c-x>h <cmd>call SelectAll()<cr>
@@ -2224,7 +2230,7 @@ inoremap <silent> Jk <esc>
 " tnoremap <nowait> <expr> <silent> k ProcessTBut_k()
 tnoremap <silent> jk <c-\><c-n>
 tnoremap <silent> jK <c-\><c-n><cmd>let g:please_do_not_close=v:true<cr><cmd>:bd!<cr><cmd>tabnew<cr><cmd>call OpenTerm("")<cr><cmd>let g:please_do_not_close=v:false<cr>
-command! -nargs=* W w <args>
+command! -nargs=* Write write <args>
 
 inoremap <silent> ju <esc>viwUea
 inoremap <silent> ji <esc>viwuea
@@ -2289,14 +2295,14 @@ inoremap <expr> " HandleKeystroke('"')
 inoremap <expr> <bs> HandleKeystroke('\<bs>')
 
 if has('nvim')
-	exec printf("so %s", g:CONFIG_PATH.'/vim/plugins/setup.vim')
+	execute printf("so %s", g:CONFIG_PATH.'/vim/plugins/setup.vim')
 
 	if executable('git')
-		exec printf("luafile %s", g:PLUGINS_INSTALL_FILE_PATH)
+		execute printf("luafile %s", g:PLUGINS_INSTALL_FILE_PATH)
 	endif
 	PackerInstall
 	set nolazyredraw
-	exec printf("luafile %s", g:PLUGINS_SETUP_FILE_PATH)
+	execute printf("luafile %s", g:PLUGINS_SETUP_FILE_PATH)
 endif
 
 if has('nvim') && exists('g:setup_lsp')
@@ -2335,12 +2341,12 @@ function! SwapHiGroup(group)
     let id = synIDtrans(hlID(a:group))
     for mode in ['cterm', 'gui']
         for g in ['fg', 'bg']
-            exe 'let '. mode.g. "=  synIDattr(id, '".
+            execute 'let '. mode.g. "=  synIDattr(id, '".
                         \ g."#', '". mode. "')"
-            exe "let ". mode.g. " = empty(". mode.g. ") ? 'NONE' : ". mode.g
+            execute "let ". mode.g. " = empty(". mode.g. ") ? 'NONE' : ". mode.g
         endfor
     endfor
-    exec printf('hi %s ctermfg=%s ctermbg=%s guifg=%s guibg=%s', a:group, ctermbg, ctermfg, guibg, guifg)
+    execute printf('hi %s ctermfg=%s ctermbg=%s guifg=%s guibg=%s', a:group, ctermbg, ctermfg, guibg, guifg)
 endfunction
 
 au VimResized * call OnResized()|mode
@@ -2427,7 +2433,7 @@ augroup xdg_open
 		endif
 		if choice ==# 'y'
 		\&&executable('xdg-open') ==# 1
-			exec "!xdg-open -- ".a:filename
+			execute "!xdg-open -- ".a:filename
 		endif
 	endfunction
 	autocmd BufEnter *.jpg,*.png,*.jpeg,*.bmp call OpenWithXdg(expand('%'))
@@ -2485,7 +2491,7 @@ function! OpenRanger(path)
 	augroup oncloseranger
 		autocmd! oncloseranger
 		if has('nvim')
-			exec 'autocmd TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.g:bufnrforranger."|if filereadable(filename)==#1|bdelete|exec 'edit '.filename|call Numbertoggle()|filetype detect|call AfterSomeEvent(\"ModeChanged\", \"doautocmd BufEnter \".expand(\"%\"))|unlet g:bufnrforranger|else|call IfOneWinDo(\"call OnQuit()\")|quit|endif|endif|call delete('".TMPFILE."')|unlet filename"
+			execute 'autocmd TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.g:bufnrforranger."|if filereadable(filename)==#1|bdelete|execute 'edit '.filename|call Numbertoggle()|filetype detect|call AfterSomeEvent(\"ModeChanged\", \"doautocmd BufEnter \".expand(\"%\"))|unlet g:bufnrforranger|else|call IfOneWinDo(\"call OnQuit()\")|quit|endif|endif|call delete('".TMPFILE."')|unlet filename"
 		else
 			function! CheckRangerStopped(timer_id, TMPFILE)
 				let bufnr = bufnr()
@@ -2493,8 +2499,8 @@ function! OpenRanger(path)
 					let filename=system("cat ".a:TMPFILE)
 					call delete(a:TMPFILE)
 					if filereadable(filename) ==# 1
-						bdelet
-						exec 'edit '.filename
+						bwipeout!
+						execute 'edit '.filename
 						call Numbertoggle()
 						filetype detect
 						call AfterSomeEvent("ModeChanged", "doautocmd BufEnter ".expand("%"))
@@ -2509,9 +2515,9 @@ function! OpenRanger(path)
 					unlet filename
 				endif
 			endfunction
-			exec "call timer_start(0, {timer_id -> CheckRangerStopped(timer_id, '".TMPFILE."')}, {'repeat': -1})"
+			execute "call timer_start(0, {timer_id -> CheckRangerStopped(timer_id, '".TMPFILE."')}, {'repeat': -1})"
 		endif
-		exec "autocmd BufWinLeave * let f=expand(\"<afile>\")|let n=bufnr(\"^\".f.\"$\")|if n==#".g:bufnrforranger."|unlet f|unlet n|au!oncloseranger|call AfterSomeEvent(\"BufEnter,BufLeave,WinEnter,WinLeave\", \"".g:bufnrforranger."bw!\")|unlet g:bufnrforranger|endif"
+		execute "autocmd BufWinLeave * let f=expand(\"<afile>\")|let n=bufnr(\"^\".f.\"$\")|if n==#".g:bufnrforranger."|unlet f|unlet n|autocmd!oncloseranger|call AfterSomeEvent(\"BufEnter,BufLeave,WinEnter,WinLeave\", \"".g:bufnrforranger."bwipeout!\")|unlet g:bufnrforranger|endif"
 	augroup END
 	unlet TMPFILE
 endfunction
@@ -2521,9 +2527,9 @@ function! OpenRangerCheck()
 	else
 		echohl ErrorMsg
 		if g:language ==# 'russian'
-			echom "Блядь: Не открывается ranger: не установлен"
+			echomsg "Блядь: Не открывается ranger: не установлен"
 		else
-			echom "Error: Cannot open ranger: ranger not installed"
+			echomsg "Error: Cannot open ranger: ranger not installed"
 		endif
 		echohl Normal
 	endif
@@ -2554,10 +2560,10 @@ function! OpenOnStart()
 	if argc() && isdirectory(argv(0))
 		if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/neo-tree.nvim")
 			bwipeout!
-			exec 'Neotree' argv(0)
+			execute 'Neotree' argv(0)
 			silent only
 		else
-			exec "edit ".argv(0)
+			execute "edit ".argv(0)
 		endif
 	endif
 	if expand('%') == '' || isdirectory(expand('%'))
@@ -2598,7 +2604,7 @@ endif
 
 function! DoPackerUpdate(args)
 	call BeforeUpdatingPlugins()
-	exec "lua require('packer').update(".a:args.")"
+	execute "lua require('packer').update(".a:args.")"
 	call AfterUpdatingPlugins()
 endfunction
 if has('nvim')
@@ -2606,15 +2612,15 @@ if has('nvim')
 endif
 function! BeforeUpdatingPlugins()
 	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key")
-		exec "cd ".g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key"
-		exec "!git stash"
+		execute "cd ".g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key"
+		execute "!git stash"
 		cd -
 	endif
 endfunction
 function! AfterUpdatingPlugins()
 	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key")
-		exec "cd ".g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key/"
-		exec "!git stash pop"
+		execute "cd ".g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key/"
+		execute "!git stash pop"
 		cd -
 	endif
 endfunction
@@ -2657,9 +2663,9 @@ function! HelpOnFirstTime()
 
 		if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
 			if g:language ==# 'russian'
-				echom 'Чтобы посмотреть помощь, нажмите SPC-?. Вы больше не увидите это сообщение'
+				echomsg 'Чтобы посмотреть помощь, нажмите SPC-?. Вы больше не увидите это сообщение'
 			else
-				echom 'To see help, press SPC-?. You will not see this message again'
+				echomsg 'To see help, press SPC-?. You will not see this message again'
 			endif
 		else
 			call quickui#confirm#open('To see help, press SPC-?')
@@ -2667,34 +2673,34 @@ function! HelpOnFirstTime()
 	endif
 endfunction
 function! OnStart()
+	call timer_start(0, {->OpenOnStart()})
 	call SetDotfilesConfigPath()
 	call SetLocalSharePath()
 	call SetConfigPath()
-	if has('nvim')
-		call PrepareVital()
-		call MakeThingsThatRequireBeDoneAfterPluginsLoaded()
-	endif
-	call TermuxSaveCursorStyle()
 	if has('nvim') && g:enable_which_key
 		call PrepareWhichKey()
 	endif
-	Showtab
-	exec "so ".g:CONFIG_PATH."/vim/init.vim"
+	if has('nvim')
+		call PrepareVital()
+		call timer_start(0, {->MakeThingsThatRequireBeDoneAfterPluginsLoaded()})
+	endif
+	call timer_start(0, {->TermuxSaveCursorStyle()})
+	execute "source ".g:CONFIG_PATH."/vim/init.vim"
 	call DefineAugroups()
 	call UpdateShowtabline()
 	if g:PAGER_MODE
 		call EnablePagerMode()
 	endif
-	call OpenOnStart()
 	if has('nvim') && g:compatible !=# "helix_hard"
-		exec printf('luafile %s', fnamemodify(g:PLUGINS_SETUP_FILE_PATH, ':h').'/noice/setup.lua')
+		execute printf('luafile %s', fnamemodify(g:PLUGINS_SETUP_FILE_PATH, ':h').'/noice/setup.lua')
 	endif
 	if v:false
 	\|| g:compatible ==# "helix"
 	\|| g:compatible ==# "helix_hard"
 		call LoadLastSelected()
 	endif
-	call HelpOnFirstTime()
+	call timer_start(0, {->execute('Showtab')})
+	call timer_start(0, {->HelpOnFirstTime()})
 endfunction
 function! OnQuit()
 	call TermuxLoadCursorStyle()
@@ -2708,7 +2714,7 @@ function! IfOneWinDo(cmd)
 	let s = 0
 	tabdo let s += winnr('$')
 	if s==# 1
-		exec a:cmd
+		execute a:cmd
 	endif
 	unlet s
 endfunction
