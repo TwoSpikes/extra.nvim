@@ -1676,14 +1676,12 @@ function! HandleDotfilesOptionsInComment()
 		let option_value = line
 		let option_value_len = len(option_value)
 		let option_calculated = ''
-		let j = 0
 		let vartype = ''
 		let varname = ''
+		let wrong_var = v:false
+		let j = 0
 		while j < option_value_len
 			let c = option_value[j]
-			if j + 1 < option_value_len
-				let cnext = option_value[j+1]
-			endif
 			if c ==# '%'
 				if v:false
 				elseif vartype ==# ''
@@ -1694,16 +1692,27 @@ function! HandleDotfilesOptionsInComment()
 					if varname ==# ''
 						let option_calculated .= '%'
 					else
+						if varname !~# '^[a-zA-Z0-9_]\+$'
+							echohl ErrorMsg
+							echomsg "error: Using special symbols in vim variable is not allowed"
+							echohl Normal
+							let wrong_var = v:true
+							break
+						endif
 						execute "let option_calculated .= g:".varname
 					endif
 				elseif vartype ==# 'shell'
 					echohl ErrorMsg
 					echomsg "error: Cannot use '%' in shell variables"
 					echohl Normal
+					let wrong_var = v:true
+					break
 				else
 					echohl ErrorMsg
 					echomsg "dotfiles: internal error: wrong vartype: ".vartype
 					echohl Normal
+					let wrong_var = v:true
+					break
 				endif
 			elseif c ==# '$'
 				if v:false
@@ -1714,17 +1723,28 @@ function! HandleDotfilesOptionsInComment()
 					echohl ErrorMsg
 					echomsg "error: Cannot use '$' in vim variables"
 					echohl Normal
+					let wrong_var = v:true
+					break
 				elseif vartype ==# 'shell'
 					let vartype = ''
 					if varname ==# ''
 						let option_calculated .= '$'
 					else
+						if varname !~# '^[a-zA-Z0-9_]\+$'
+							echohl ErrorMsg
+							echomsg "error: Using special symbols in shell variable is not allowed"
+							echohl Normal
+							let wrong_var = v:true
+							break
+						endif
 						let option_calculated .= getenv(varname)
 					endif
 				else
 					echohl ErrorMsg
 					echomsg "dotfiles: internal error: wrong vartype: ".vartype
 					echohl Normal
+					let wrong_var = v:true
+					break
 				endif
 			else
 				if v:false
@@ -1738,6 +1758,8 @@ function! HandleDotfilesOptionsInComment()
 					echohl ErrorMsg
 					echomsg "dotfiles: internal error: wrong vartype: ".vartype
 					echohl Normal
+					let wrong_var = v:true
+					break
 				endif
 			endif
 			let j += 1
@@ -1757,13 +1779,15 @@ function! HandleDotfilesOptionsInComment()
 		if vartype !=# ''
 			let option_calculated .= varname
 		endif
-		if v:false
-		\|| option_name ==# 'LUA_REQUIRE_GOTO_PREFIX'
-			if LUA_REQUIRE_GOTO_PREFIX_idx ==# 0
-				let g:LUA_REQUIRE_GOTO_PREFIX = []
+		if !wrong_var
+			if v:false
+			\|| option_name ==# 'LUA_REQUIRE_GOTO_PREFIX'
+				if LUA_REQUIRE_GOTO_PREFIX_idx ==# 0
+					let g:LUA_REQUIRE_GOTO_PREFIX = []
+				endif
+				call add(g:LUA_REQUIRE_GOTO_PREFIX, option_calculated)
+				let LUA_REQUIRE_GOTO_PREFIX_idx += 1
 			endif
-			call add(g:LUA_REQUIRE_GOTO_PREFIX, option_calculated)
-			let LUA_REQUIRE_GOTO_PREFIX_idx += 1
 		endif
 		let i += 1
 	endwhile
