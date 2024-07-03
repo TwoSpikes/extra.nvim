@@ -1595,6 +1595,7 @@ function! Lua_Require_Goto_Workaround_Wincmd_f()
 				return
 			endif
 			if col <# start || col ># end
+				let startcol = end + 1
 				continue
 			endif
 			let filename = strpart(line, start + 1, end - start - 1)
@@ -1602,6 +1603,7 @@ function! Lua_Require_Goto_Workaround_Wincmd_f()
 			let file_found = v:false
 			for i in g:LUA_REQUIRE_GOTO_PREFIX
 				if !filereadable(expand(i).filename.'.lua')
+					startcol = end
 					continue
 				endif
 				execute printf("split %s", i.filename.'.lua')
