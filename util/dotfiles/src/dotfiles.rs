@@ -242,23 +242,6 @@ fn init(home: PathBuf) -> ::std::io::Result<()> {
         .into_os_string()
         .into_string()
         .expect("Cannot convert os_string into string");
-    if ::std::env::var("GOPATH") == Err(::std::env::VarError::NotPresent) {
-        ::std::env::set_var("GOPATH", format!("{}/go", home_str));
-    }
-    if ::std::env::var("GOBIN") == Err(::std::env::VarError::NotPresent) {
-        ::std::env::set_var("GOBIN", format!("{}/go", home_str));
-    }
-    ::std::env::set_var(
-        "PATH",
-        format!(
-            "{}:{}",
-            ::std::env::var("PATH").expect("Cannot get $PATH environment variable"),
-            ::std::env::var("GOBIN").expect("Cannot get $PATH environment variable")
-        ),
-    );
-
-    ::std::env::set_var("HISTSIZE", "5000");
-    ::std::env::set_var("DISPLAY", "0");
     if ::std::path::Path::new("/data/data/com.termux/files/usr/lib/libtermux-exec.so").exists() {
         ::std::env::set_var(
             "LD_PRELOAD",
@@ -266,36 +249,9 @@ fn init(home: PathBuf) -> ::std::io::Result<()> {
         );
     }
 
-    if ::std::env::var("XDG_CONFIG_HOME") == Err(::std::env::VarError::NotPresent) {
-        ::std::env::set_var("XDG_CONFIG_HOME", format!("{}/.config", home_str));
-    }
-    if ::std::env::var("PREFIX") == Err(::std::env::VarError::NotPresent) {
-        ::std::env::set_var("PREFIX", "/usr");
-    }
-    if ::std::env::var("JAVA_HOME") == Err(::std::env::VarError::NotPresent) {
-        ::std::env::set_var(
-            "JAVA_HOME",
-            format!(
-                "{}/share/jdk8",
-                ::std::env::var("PREFIX").expect("Cannot get environment variable")
-            ),
-        );
-    }
-
     crate::colors::init();
 
     let mut timer = timer_start_silent();
-
-    ::std::env::set_var("VISUAL", "nvim");
-    ::std::env::set_var("EDITOR", "nvim");
-
-    if ::which::which("most").is_ok() {
-        ::std::env::set_var("PAGER", "most");
-    } else if ::which::which("less").is_ok() {
-        ::std::env::set_var("PAGER", "less");
-    } else {
-        ::std::env::set_var("PAGER", "more");
-    }
 
     let mut f = ::std::fs::File::create(home.join("bin/ls"))?;
     if ::which::which("lsd").is_ok() {

@@ -1756,7 +1756,7 @@ execute printf('noremap <silent> <leader>vj <cmd>call SelectPosition("%s", g:std
 execute printf('noremap <silent> <leader>sj <cmd>call LoadDotfilesConfig("%s", v:true)<cr><cmd>call HandleDotfilesConfig()<cr><cmd>call HandleBuftypeAll()<cr>', expand(g:DOTFILES_CONFIG_PATH))
 
 " .dotfiles-script.sh FILE
-noremap <silent> <leader>b <cmd>call SelectPosition("~/.dotfiles-script.sh", g:stdpos)<cr>
+noremap <silent> <leader>vb <cmd>call SelectPosition("~/.dotfiles-script.sh", g:stdpos)<cr>
 
 autocmd BufReadPost *
      \ if line("'\"") > 0 && line("'\"") <= line("$") |
@@ -1786,11 +1786,12 @@ function! DotfilesCheatSheet()
 	\\n    LEAD vl - Reload lsp settings (deprecated)
 	\\n    LEAD vj - Open dotfiles config
 	\\n    LEAD sj - Reload dotfiles config
-	\\n    LEAD b - Open .dotfiles-script.sh
+	\\n    LEAD vb - Open .dotfiles-script.sh
 	\\n    LEAD C - Open colorschemes
 	\\n    LEAD Cy - Apply colorscheme under cursor
 	\\n SPECIAL:
 	\\n   ; - Switch to command mode (:)
+	\\n   LEAD 1 - Switch to command mode (:)
 	\\n   LEAD - Show possible keyboard shortcuts
 	\\n   LEAD LEAD or F10 or F9 - Open quickui menu
 	\\n   LEAD CTRL-f or F3 - Toggle fullscreen mode
@@ -1806,9 +1807,9 @@ function! DotfilesCheatSheet()
 	\\n   INSERT: CTRL-l - Move screen 10 symbols right
 	\\n   CTRL-h - Toggle Neo-tree
 	\\n   CTRL-n - Enter multicursor mode
-	\\n   ci_ - Edit word from start to first _
+	\\n   ci_ - Edit word from start to first `_`
 	\\n   LEAD d  - Hide search highlightings
-	\\n   s - Delete (d) without copying
+	\\n   s - Jump to a 2-character label
 	\\n   q - Quit window
 	\\n   Q - Quit window without saving
 	\\n   LEAD r - Open ranger to select file to edit
@@ -1848,7 +1849,7 @@ function! DotfilesCheatSheet()
 	\\n   CTRL-x t 2 - New tab
 	\\n   CTRL-x t o - Next tab
 	\\n   CTRL-x t O - Previous tab
-	\\n   CTRL-x h - Select all text and save position to register y
+	\\n   CTRL-x h - Select all text and save position to register `y`
 	\\n   CTRL-x CTRL-h - See help (:h)
 	\\n   CTRL-x CTRL-c - Exit
 	\\n   CTRL-x CTRL-q - Exit without confirmation

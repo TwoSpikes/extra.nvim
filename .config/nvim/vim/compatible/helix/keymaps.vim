@@ -349,7 +349,6 @@ if !g:use_nvim_cmp
 endif
 nnoremap <leader>f <cmd>call FuzzyFind()<cr>
 nnoremap <leader>F <cmd>call FuzzyFind()<cr>
-unmap <leader>b
 nnoremap <leader>b <cmd>call quickui#tools#list_buffer('e')<cr>
 nnoremap <leader>j <cmd>jumps<cr>
 nnoremap <leader>s <cmd>TagbarToggle<cr>
@@ -395,4 +394,4 @@ nnoremap <leader>k K
 nnoremap <leader>r <Plug>(coc-rename)
 nnoremap <expr> <leader>c <cmd>CommentOutDefault()<cr>
 nnoremap <expr> <leader>C <cmd>CommentOutDefault()<cr>
-nnoremap <leader>? <cmd>Telescope commands<cr>
+nnoremap <leader><c-c> <cmd>Telescope commands<cr>

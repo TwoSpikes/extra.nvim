@@ -469,7 +469,8 @@ echo "==== Setting up bd ===="
 echo ""
 
 echo -n "Checking if bd is installed: "
-if command -v "bd" > /dev/null 2>&1; then
+if test -f "${HOME}/.zsh/plugins/bd/bd.zsh"
+then
 	echo "YES"
 else
 	echo "NO"

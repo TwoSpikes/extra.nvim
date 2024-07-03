@@ -112,3 +112,6 @@ esac
 
 # zsh-bd
 . $HOME/.zsh/plugins/bd/bd.zsh
+
+# zsh-bd
+. $HOME/.zsh/plugins/bd/bd.zsh
