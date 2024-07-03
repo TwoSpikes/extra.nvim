@@ -503,35 +503,17 @@ function! WhenceGroup()
 	execute "verbose hi ".l:s
 endfunction
 
-function! PrepareVital()
-	let g:VitalModule#Random = vital#vital#import('Random')
-endfunction
 function! GetRandomName(length)
 	let name = "Rnd_"
 	for _ in range(a:length)
-		if has('nvim')
-			let r = g:VitalModule#Random.range(1, 4)
-		else
-			let r = rand() % 3 + 1
-		endif
-		if r ==# 1
-			if has('nvim')
-				let name .= nr2char(g:VitalModule#Random.range(48, 58))
-			else
-				let name .= nr2char(rand() % 10 + 48)
-			endif
+		let r = rand() % 3 + 1
+		if v:false
+		elseif r ==# 1
+			let name .= nr2char(rand() % 10 + 48)
 		elseif r ==# 2
-			if has('nvim')
-				let name .= nr2char(g:VitalModule#Random.range(65, 91))
-			else
-				let name .= nr2char(rand() % 26 + 65)
-			endif
+			let name .= nr2char(rand() % 26 + 65)
 		elseif r ==# 3
-			if has('nvim')
-				let name .= nr2char(g:VitalModule#Random.range(97, 123))
-			else
-				let name .= nr2char(rand() % 26 + 97)
-			endif
+			let name .= nr2char(rand() % 26 + 97)
 		else
 			echohl ErrorMsg
 			echomsg "Internal error"
@@ -2682,7 +2664,6 @@ function! OnStart()
 		call PrepareWhichKey()
 	endif
 	if has('nvim')
-		call PrepareVital()
 		call timer_start(0, {->MakeThingsThatRequireBeDoneAfterPluginsLoaded()})
 	endif
 	call timer_start(0, {->TermuxSaveCursorStyle()})
