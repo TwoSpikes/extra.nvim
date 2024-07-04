@@ -1247,7 +1247,7 @@ nnoremap <leader>xg :grep -R <cword> .<cr>
 let s:MOVING_UPDATE_TIME = 1000
 let g:moving = v:false
 let s:process_g_but_function_expression = "
-\\nfunction! ProcessGBut(button)
+\function! ProcessGBut(button)
 \"
 if g:fast_terminal
 let s:process_g_but_function_expression .= "
@@ -1259,7 +1259,12 @@ endif
 let g:prev_time = reltime()
 let s:process_g_but_function_expression .= "
 \\n	execute \"lua << EOF
-\\\nlocal button = vim.v.count == 0 and \'g\".a:button.\"\' or \'\".a:button.\"\'
+\\\nlocal button ="
+if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
+let s:process_g_but_function_expression .= "\\\"mz`z\\\".."
+endif
+let s:process_g_but_function_expression .= "
+\(vim.v.count == 0 and \'g\".a:button.\"\' or \'\".a:button.\"\')
 \"
 if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
 let s:process_g_but_function_expression .= "
@@ -1273,11 +1278,6 @@ let s:process_g_but_function_expression .= "
 \\\nend
 \\\nEOF\"
 \\n"
-
-" FIXME: This code is a crutch
-let s:process_g_but_function_expression .= "
-\\n	normal! lh
-\"
 
 if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
 	let s:process_g_but_function_expression .= "

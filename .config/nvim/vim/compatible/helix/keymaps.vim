@@ -22,6 +22,7 @@ endfunction
 
 set notildeop
 let &whichwrap="b,s,h,l,<,>,~,[,]"
+set virtualedit=onemore
 
 nnoremap d x
 function! N_DoX()
@@ -86,7 +87,9 @@ if !g:use_nvim_cmp
 	unmap ci_
 endif
 unmap dd
-unmap ds
+if has('nvim')
+	unmap ds
+endif
 let g:pseudo_visual = v:false
 let g:lx=1
 let g:ly=1
@@ -115,12 +118,12 @@ function! SavePosition()
 	endif
 endfunction
 xnoremap <expr> : g:pseudo_visual?":\<c-u>":":"
-nnoremap w <cmd>exec "normal! v".v:count1."e"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr>
-nnoremap e <cmd>exec "normal! v".v:count1."e"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr>
-nnoremap b <cmd>exec "normal! v".v:count1."b"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr>
-nnoremap W <cmd>exec "normal! v".v:count1."W"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr>
-nnoremap E <cmd>exec "normal! v".v:count1."E"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr>
-nnoremap B <cmd>exec "normal! v".v:count1."B"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr>
+nnoremap w <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>exec "normal! v".v:count1."e"<bar>let g:rx=line('.')<bar>let g:ry=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
+nnoremap e <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>exec "normal! v".v:count1."e"<bar>let g:rx=line('.')<bar>let g:ry=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
+nnoremap b <cmd>let g:rx=line('.')<bar>let g:ry=col('.')<bar>exec "normal! v".v:count1."b"<bar>let g:lx=line('.')<bar>let g:ly=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
+nnoremap W <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>exec "normal! v".v:count1."W"<bar>let g:rx=line('.')<bar>let g:ry=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
+nnoremap E <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>exec "normal! v".v:count1."E"<bar>let g:rx=line('.')<bar>let g:ry=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
+nnoremap B <cmd>let g:rx=line('.')<bar>let g:ry=col('.')<bar>exec "normal! v".v:count1."B"<bar>let g:lx=line('.')<bar>let g:ly=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
 unmap <esc>
 nnoremap v v<cmd>let g:pseudo_visual=v:false<cr><cmd>let g:rx=line('.')<bar>let g:ry=col('.')<bar>let g:lx=rx<bar>let g:ly=ry<cr><cmd>let g:visual_mode="char"<cr>
 nnoremap V V<cmd>let g:pseudo_visual=v:false<cr><cmd>let g:rx=line('.')<bar>let g:ry=col('$')<bar>let g:lx=rx<bar>let g:ly=1<cr><cmd>let g:visual_mode="line"<cr>
