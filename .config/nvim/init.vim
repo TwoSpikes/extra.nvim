@@ -1796,7 +1796,7 @@ function! HandleDotfilesOptionsInComment()
 endfunction
 augroup DotfilesOptionsInComment
 	autocmd!
-	autocmd BufEnter * call HandleDotfilesOptionsInComment()
+	autocmd BufEnter * if v:vim_did_enter|call HandleDotfilesOptionsInComment()|endif
 augroup END
 
 nnoremap <silent> * *:noh<cr>
