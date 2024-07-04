@@ -392,6 +392,4 @@ vnoremap <leader>Y y
 nnoremap <leader>R <cmd>for i in range(line("'>")-line("'<"))<bar>let l=line("'<")+i<bar>call setline(l,substitute(getline(l),getreg('x')))<bar>endfor<cr>
 nnoremap <leader>k K
 nnoremap <leader>r <Plug>(coc-rename)
-nnoremap <expr> <leader>c <cmd>CommentOutDefault()<cr>
-nnoremap <expr> <leader>C <cmd>CommentOutDefault()<cr>
 nnoremap <leader><c-c> <cmd>Telescope commands<cr>

@@ -1884,8 +1884,8 @@ function! DotfilesCheatSheet()
 	\\n    LEAD vj - Open dotfiles config
 	\\n    LEAD sj - Reload dotfiles config
 	\\n    LEAD vb - Open .dotfiles-script.sh
-	\\n    LEAD C - Open colorschemes
-	\\n    LEAD Cy - Apply colorscheme under cursor
+	\\n    LEAD vc - Open colorschemes
+	\\n    LEAD vC - Apply colorscheme under cursor
 	\\n SPECIAL:
 	\\n   ; - Switch to command mode (:)
 	\\n   LEAD 1 - Switch to command mode (:)
@@ -1900,6 +1900,8 @@ function! DotfilesCheatSheet()
 	\\n   CTRL-e - Move to end of line
 	\\n   LEAD h - Move screen 10 symbols left
 	\\n   LEAD l - Move screen 10 symbols right
+	\\n   LEAD c - Comment selected / current line
+	\\n   LEAD C - Uncomment selected / current line
 	\\n   INSERT: CTRL-h - Move screen 10 symbols left
 	\\n   INSERT: CTRL-l - Move screen 10 symbols right
 	\\n   CTRL-h - Toggle Neo-tree
@@ -1911,9 +1913,9 @@ function! DotfilesCheatSheet()
 	\\n   Q - Quit window without saving
 	\\n   LEAD r - Open ranger to select file to edit
 	\\n   LEAD CTRL-s - \"Save as\" dialogue
-	\\n   LEAD u - Update plugins using packer.nvim
-	\\n   LEAD Cu - Update coc.nvim language servers
-	\\n   LEAD tu - Update nvim-treesitter parsers
+	\\n   LEAD up - Update plugins using packer.nvim
+	\\n   LEAD uc - Update coc.nvim language servers
+	\\n   LEAD ut - Update nvim-treesitter parsers
 	\\n   LEAD sw - Find work under cursor using nvim-spectre
 	\\n   LEAD t - \"Open Terminal\" dialogue
 	\\n   LEAD m - \"Open Far/MC\" dialogue
@@ -1975,7 +1977,7 @@ noremap <silent> <leader>: :<c-f>a
 noremap <leader>= <cmd>echo "use \<c-c\>c"<cr>
 noremap <leader>- <cmd>echo "use \<c-c\>C"<cr>
 noremap <leader>1 :!
-nnoremap <leader>u <cmd>lua require('packer').sync()<cr>
+nnoremap <leader>up <cmd>lua require('packer').sync()<cr>
 
 " QUOTES AROUND (DEPRECATED BECAUSE OF surround.vim)
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>
@@ -2006,11 +2008,11 @@ endfunction
 noremap <silent> <leader>t <cmd>call SelectPosition($SHELL, g:termpos)<cr>
 
 " COLORSCHEME
-noremap <silent> <leader>C <cmd>call SelectPosition($VIMRUNTIME."/colors", g:neotreepos)<cr>
-noremap <silent> <leader>Cy <cmd>set lazyredraw<cr>yy:<c-f>pvf]o0"_dxicolo <esc>$x$x$x$x<cr>jzb<cmd>set nolazyredraw<cr>
+noremap <silent> <leader>vc <cmd>call SelectPosition($VIMRUNTIME."/colors", g:neotreepos)<cr>
+noremap <silent> <leader>vC <cmd>set lazyredraw<cr>yy:<c-f>pvf]o0"_dxicolo <esc>$x$x$x$x<cr>jzb<cmd>set nolazyredraw<cr>
 
-noremap <silent> <leader>Cu <cmd>CocUpdate<cr>
-noremap <silent> <leader>tu <cmd>TSUpdate<cr>
+noremap <silent> <leader>uc <cmd>CocUpdate<cr>
+noremap <silent> <leader>ut <cmd>TSUpdate<cr>
 
 function! CommentOut(comment_string)
 	mark z
@@ -2067,8 +2069,8 @@ function! UncommentOutDefault()
 		echohl Normal
 	endif
 endfunction
-noremap <expr> <leader>/d CommentOutDefault()
-noremap <leader>/u <cmd>call UncommentOutDefault()<cr>
+nnoremap <expr> <leader>c CommentOutDefault()
+nnoremap <leader>C <cmd>call UncommentOutDefault()<cr>
 augroup cpp
 	autocmd!
 	autocmd filetype cpp let g:default_comment_string = "//"
