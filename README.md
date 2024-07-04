@@ -4,6 +4,8 @@ My scripts and configs for Linux
 
 # Dependencies to install
 
+If you have internet, most of that stuff can be downloaded by install script using system package manager.
+
 - `coreutils` >= 8.22
 - `rustc` and `cargo`
 - `chsh`
@@ -103,6 +105,12 @@ Screenshots
 <img src=.github/images/a1.jpg width=100px height=100px>
 
 </details>
+
+### Minimal requirements (approximate)
+
+- RAM: 60 MiB (minimal), 128 MiB (recommended)
+- Free disk space: 146,4 MiB (minimal, including all plugins)
+- Internet connection (to download plugins)
 
 > [!Warning]
 > Implies to use [Nerd Fonts](https://www.nerdfonts.com)
