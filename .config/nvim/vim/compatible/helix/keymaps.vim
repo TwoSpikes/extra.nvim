@@ -24,7 +24,37 @@ set notildeop
 let &whichwrap="b,s,h,l,<,>,~,[,]"
 
 nnoremap d x
-nnoremap x V<cmd>let g:pseudo_visual=v:true<bar>let g:visual_mode="line"<cr>
+function! N_DoX()
+	let result = ""
+	let result .= "v"
+	let result .= "0o$"
+	let g:pseudo_visual=v:true
+	let g:visual_mode="char"
+	return result
+endfunction
+nnoremap <expr> x N_DoX()
+nnoremap <expr> X N_DoX()
+xnoremap u <esc>u
+xnoremap U <esc><c-r>
+if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/yanky.nvim")
+	nnoremap p <Plug>(YankyPutAfter)`[v`]
+	nnoremap P <Plug>(YankyPutBefore)`[v`]
+	xnoremap p <esc><Plug>(YankyPutAfter)`[v`]
+	xnoremap P <esc><Plug>(YankyPutBefore)`[v`]
+	nnoremap gp <Plug>(YankyGPutAfter)`[v`]
+	nnoremap gP <Plug>(YankyGPutBefore)`[v`]
+	xnoremap gp <esc><Plug>(YankyGPutAfter)`[v`]
+	xnoremap gP <esc><Plug>(YankyGPutBefore)`[v`]
+else
+	nnoremap p p`[v`]
+	nnoremap P P`[v`]
+	xnoremap p <esc>p`[v`]
+	xnoremap P <esc>P`[v`]
+	nnoremap gp gp`[v`]
+	nnoremap gP gP`[v`]
+	xnoremap gp <esc>gp`[v`]
+	xnoremap gP <esc>gP`[v`]
+endif
 nnoremap c xi
 if !g:use_nvim_cmp
 	unmap ySS
@@ -37,19 +67,19 @@ endif
 nnoremap y vy
 nnoremap t<cr> v$
 nnoremap mm %
-vnoremap mm %
+xnoremap mm %
 nnoremap <c-c> <cmd>call CommentOutDefault<cr>
 inoremap <c-x> <c-p>
 inoremap <c-p> <c-x>
 nnoremap <a-o> viw
 nnoremap <a-.> ;
-vnoremap R "_dP
+xnoremap R "_dP
 nnoremap ~ v~
 nnoremap > >>
 nnoremap < <<
-vnoremap < <gv<cmd>let g:pseudo_visual=v:true<cr>
-vnoremap > >gv<cmd>let g:pseudo_visual=v:true<cr>
-vnoremap t<cr> $
+xnoremap < <gv<cmd>let g:pseudo_visual=v:true<cr>
+xnoremap > >gv<cmd>let g:pseudo_visual=v:true<cr>
+xnoremap t<cr> $
 if !g:use_nvim_cmp
 	unmap cS
 	unmap cs
@@ -84,7 +114,7 @@ function! SavePosition()
 		let g:ry=c
 	endif
 endfunction
-vnoremap <expr> : g:pseudo_visual?":\<c-u>":":"
+xnoremap <expr> : g:pseudo_visual?":\<c-u>":":"
 nnoremap w <cmd>exec "normal! v".v:count1."e"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr>
 nnoremap e <cmd>exec "normal! v".v:count1."e"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr>
 nnoremap b <cmd>exec "normal! v".v:count1."b"<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr>
@@ -114,7 +144,7 @@ function! V_DoV()
 		echohl Normal
 	endif
 endfunction
-vnoremap <expr> v V_DoV()
+xnoremap <expr> v V_DoV()
 function! V_DoVLine()
 	if v:false
 	elseif g:visual_mode ==# "no"
@@ -127,34 +157,33 @@ function! V_DoVLine()
 	\|| g:visual_mode ==# "block"
 		let g:pseudo_visual = !g:pseudo_visual
 		Showtab
-		return ""
 	else
 		echohl ErrorMsg
 		echomsg "dotfiles: hcm: V_DoVLine: Internal error: Wrong visual mode: ".g:visual_mode
 		echohl Normal
 	endif
 endfunction
-vnoremap V V<cmd>call V_DoVLine()<cr>
+xnoremap V <cmd>call V_DoVLine()<cr>
 function! V_DoVBlock()
 	if v:false
 	elseif g:visual_mode ==# "no"
 		echohl ErrorMsg
 		echomsg "dotfiles: hcm: V_DoVBlock: Internal error: It is not visual mode"
 		echohl Normal
-	elseif g:visual_mode ==# "char"
-		let g:visual_mode = "block"
-	elseif g:visual_mode ==# "line"
-		let g:visual_mode = "block"
-	elseif g:visual_mode ==# "block"
-		let g:visual_mode = "no"
+	elseif v:false
+	\|| g:visual_mode ==# "char"
+	\|| g:visual_mode ==# "line"
+	\|| g:visual_mode ==# "block"
+		let g:pseudo_visual = !g:pseudo_visual
+		Showtab
 	else
 		echohl ErrorMsg
 		echomsg "dotfiles: hcm: V_DoVBlock: Internal error: Wrong visual mode: ".g:visual_mode
 		echohl Normal
 	endif
 endfunction
-vnoremap <c-v> <c-v><cmd>call V_DoVBlock()<cr>
-vnoremap <nowait> <esc> <cmd>let g:pseudo_visual=v:true<cr>
+xnoremap <c-v> <cmd>call V_DoVBlock()<cr>
+xnoremap <nowait> <esc> <cmd>let g:pseudo_visual=v:true<cr>
 function! MoveLeft()
 	let c=col('.')
 	let l=line('.')
@@ -184,7 +213,7 @@ endfunction
 function! V_DoI()
 	return MoveLeft()."\<esc>i"
 endfunction
-vnoremap <expr> i V_DoI()
+xnoremap <expr> i V_DoI()
 function! MoveRight()
 	let c=col('.')
 	let l=line('.')
@@ -213,7 +242,7 @@ function! V_DoA()
 	return MoveRight()."\<esc>a"
 endfunction
 unmap a%
-vnoremap <expr> a V_DoA()
+xnoremap <expr> a V_DoA()
 let g:last_selected = ''
 function! V_DoS()
 	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/vim-quickui")
@@ -238,19 +267,51 @@ function! V_DoS()
 		endfor
 	endif
 endfunction
-vnoremap s <cmd>call V_DoS()<cr>
+xnoremap s <cmd>call V_DoS()<cr>
 function! V_DoX()
-	let result = ""
-	if g:visual_mode==#"char"
-		let g:visual_mode="line"
-		let result .= "V"
+	let g:lx = line('.')
+	let g:ly = col('.')
+	normal! o
+	let g:rx = line('.')
+	let g:ry = col('.')
+	normal! o
+	call ReorderRightLeft()
+	exec "normal! ".MoveLeft()
+	let lx=line('.')
+	let ly=col('.')
+	normal! o
+	let rx=line('.')
+	let ry=col('.')
+	if v:false
+	\|| ly !=# 1
+	\|| ry <# strlen(getline(rx))
+		normal! o0o$
+	else
+		normal! j$
 	endif
-	let result .= MoveRight()
-	let result .= "j"
-	return result
 endfunction
-vnoremap <expr> x V_DoX()
-vnoremap X j
+xnoremap x <cmd>call V_DoX()<cr>
+function! V_DoXDoNotExtendSubsequentLines()
+	let g:lx = line('.')
+	let g:ly = col('.')
+	normal! o
+	let g:rx = line('.')
+	let g:ry = col('.')
+	normal! o
+	call ReorderRightLeft()
+	exec "normal! ".MoveLeft()
+	let lx=line('.')
+	let ly=col('.')
+	normal! o
+	let rx=line('.')
+	let ry=col('.')
+	if v:false
+	\|| ly !=# 1
+	\|| ry <# strlen(getline(rx))
+		normal! o0o$
+	endif
+endfunction
+xnoremap X <cmd>call V_DoXDoNotExtendSubsequentLines()<cr>
 function! V_DoH()
 	if g:pseudo_visual
 		exec "normal! \<esc>h"
@@ -260,8 +321,8 @@ function! V_DoH()
 		call SavePosition()
 	endif
 endfunction
-vnoremap h <cmd>call V_DoH()<cr>
-vnoremap <left> <cmd>call V_DoH()<cr>
+xnoremap h <cmd>call V_DoH()<cr>
+xnoremap <left> <cmd>call V_DoH()<cr>
 function! V_DoL()
 	if g:pseudo_visual
 		exec "normal! \<esc>l"
@@ -271,8 +332,8 @@ function! V_DoL()
 		call SavePosition()
 	endif
 endfunction
-vnoremap l <cmd>call V_DoL()<cr>
-vnoremap <right> <cmd>call V_DoL()<cr>
+xnoremap l <cmd>call V_DoL()<cr>
+xnoremap <right> <cmd>call V_DoL()<cr>
 function! V_DoW()
 	if g:pseudo_visual
 		exec "normal! \<esc>wviw"
@@ -280,7 +341,7 @@ function! V_DoW()
 		normal! w
 	endif
 endfunction
-vnoremap w <cmd>call V_DoW()<cr>
+xnoremap w <cmd>call V_DoW()<cr>
 function! V_DoWWhole()
 	if g:pseudo_visual
 		exec "normal! \<esc>wviW"
@@ -288,7 +349,7 @@ function! V_DoWWhole()
 		normal! W
 	endif
 endfunction
-vnoremap W <cmd>call V_DoWWhole()<cr>
+xnoremap W <cmd>call V_DoWWhole()<cr>
 function! V_DoE()
 	if g:pseudo_visual
 		exec "normal! \<esc>eviw"
@@ -296,7 +357,7 @@ function! V_DoE()
 		normal! e
 	endif
 endfunction
-vnoremap e <cmd>call V_DoE()<cr>
+xnoremap e <cmd>call V_DoE()<cr>
 function! V_DoEWhole()
 	if g:pseudo_visual
 		exec "normal! \<esc>wviW"
@@ -304,7 +365,7 @@ function! V_DoEWhole()
 		normal! E
 	endif
 endfunction
-vnoremap E <cmd>call V_DoEWhole()<cr>
+xnoremap E <cmd>call V_DoEWhole()<cr>
 function! V_DoB()
 	if g:pseudo_visual
 		exec "normal! \<esc>hviwo"
@@ -312,7 +373,7 @@ function! V_DoB()
 		exec "normal! b"
 	endif
 endfunction
-vnoremap b <cmd>call V_DoB()<cr>
+xnoremap b <cmd>call V_DoB()<cr>
 function! V_DoBWhole()
 	if g:pseudo_visual
 		exec "normal! \<esc>hviW"
@@ -320,22 +381,20 @@ function! V_DoBWhole()
 		exec "normal! B"
 	endif
 endfunction
-vnoremap B <cmd>call V_DoBWhole()<cr>
+xnoremap B <cmd>call V_DoBWhole()<cr>
 unmap ;
 nnoremap ; <nop>
-vnoremap ; <esc>
-vnoremap o <esc>o
-vnoremap O <esc>O
-vnoremap p <esc>p
-vnoremap P <esc>P
-vnoremap <leader>xo o<cmd>call ReorderRightLeft()<cr>
+xnoremap ; <esc>
+xnoremap o <esc>o
+xnoremap O <esc>O
+xnoremap <leader>xo o<cmd>call ReorderRightLeft()<cr>
 nnoremap C <c-v>j
-vnoremap C j
+xnoremap C j
 nnoremap , <nop>
-vnoremap , <esc>
+xnoremap , <esc>
 nnoremap <c-s> m'
 nnoremap U <c-r>
-vnoremap y ygv<cmd>let g:pseudo_visual=v:true<cr>
+xnoremap y ygv<cmd>let g:pseudo_visual=v:true<cr>
 nnoremap g. g;
 noremap <a-.> ;
 
@@ -387,8 +446,8 @@ nnoremap <leader>wK <c-w>K
 nnoremap <leader>wL <c-w>L
 nnoremap <leader>y <cmd>echohl ErrorMsg<cr><cmd>echom "No selection"<cr><cmd>echohl Normal<cr>
 nnoremap <leader>Y <cmd>echohl ErrorMsg<cr><cmd>echom "No selection"<cr><cmd>echohl Normal<cr>
-vnoremap <leader>y y
-vnoremap <leader>Y y
+xnoremap <leader>y y
+xnoremap <leader>Y y
 nnoremap <leader>R <cmd>for i in range(line("'>")-line("'<"))<bar>let l=line("'<")+i<bar>call setline(l,substitute(getline(l),getreg('x')))<bar>endfor<cr>
 nnoremap <leader>k K
 nnoremap <leader>r <Plug>(coc-rename)
