@@ -1,5 +1,13 @@
 #!/bin/env sh
 
+# Copyied from StackOverflow: https://stackoverflow.com/questions/8725925/how-to-read-just-a-single-character-in-shell-script
+read_char() {
+  stty -icanon -echo
+  eval "$1=\$(dd bs=1 count=1 2>/dev/null)"
+  stty icanon echo
+  echo
+}
+
 subcommands() {
 	echo "SUBCOMMANDS:"
 	echo "	[OPTION]... DOTFILES_PATH"
@@ -108,7 +116,7 @@ install_coc_sh_crutch() {
 	if ${installed} || ${INSTALL_ANYWAYS}
 	then
 		echo -n "Do you want to install coc-sh crutch (Y/n): "
-		read user_input
+		read_char user_input
 		user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 		case "${user_input}" in
 			"n")
@@ -199,7 +207,7 @@ echo "<<< ${root}"
 echo ""
 echo -n "That is right? (y/N): "
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
-read user_input
+read_char user_input
 case ${user_input} in
 	"y")
 		break
@@ -320,7 +328,7 @@ if test -d ${dotfiles}; then
 else
 	echo "Dotfiles directory does not exist"
 	echo -n "Do you want to create it? (y/N): "
-	read user_input
+	read_char user_input
 	user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 	case ${user_input} in
 		"y")
@@ -388,7 +396,7 @@ else
 	fi
 	if "${have_internet}"; then
 		echo -n "Do you want to download it? (y/N): "
-		read user_input
+		read_char user_input
 		user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 		case ${user_input} in
 			"y")
@@ -444,7 +452,7 @@ echo "==== Setting up shell ===="
 echo ""
 
 echo -n "Do you want to copy shell scripts and its dependencies? (y/N/exit): "
-read user_input
+read_char user_input
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 case ${user_input} in
 	"y")
@@ -476,7 +484,7 @@ else
 	echo "NO"
 
 	echo -n "Do you want to install bd? (Y/n): "
-	read user_input
+	read_char user_input
 	user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 	case ${user_input} in
 		"n")
@@ -496,7 +504,7 @@ echo ""
 
 if ! command -v zsh > /dev/null 2>&1; then
 	echo -n "Do you want to install Zsh? (Y/n): "
-	read user_input
+	read_char user_input
 	user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 	case ${user_input} in
 		"n")
@@ -513,7 +521,7 @@ echo "==== Making Zsh your default shell ===="
 echo ""
 
 echo -n "Do you want to make Zsh your default shell? (Y/n): "
-read user_input
+read_char user_input
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 case ${user_input} in
 	"n")
@@ -529,7 +537,7 @@ echo "==== Installing zsh4humans ===="
 echo ""
 
 echo -n "Do you want to install zsh4humans? (Y/n): "
-read user_input
+read_char user_input
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 case ${user_input} in
 	"n")
@@ -577,7 +585,7 @@ else
 	echo "NO"
 
 	echo -n "Do you want to install Helix (Y/n): "
-	read user_input
+	read_char user_input
 	user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 	case ${user_input} in
 		"n")
@@ -624,7 +632,7 @@ if ${vim_found}; then
 		echo "2. Neovim"
 		echo "Other. Abort"
 		echo -n ">>> "
-		read user_input
+		read_char user_input
 		case "${user_input}" in
 			"1")
 				setting_editor_for=vim
@@ -633,7 +641,7 @@ if ${vim_found}; then
 				setting_editor_for=nvim
 				;;
 			*)
-				echo "Abort"
+				>&2 echo "Abort"
 				return 1
 				;;
 		esac
@@ -644,8 +652,8 @@ else
 	if ${neovim_found}; then
 		setting_editor_for=nvim
 	else
-		echo "Vim/NeoVim not found"
-		echo "Abort"
+		>&2 echo "Vim/NeoVim not found"
+		>&2 echo "Abort"
 		return 1
 	fi
 fi
@@ -672,14 +680,14 @@ case "${OS}" in
 esac
 
 echo -n "That is right? (y/N): "
-read user_input
+read_char user_input
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 case ${user_input} in
 	"y")
 		echo "Ok"
 		;;
 	*)
-		echo "Abort"
+		>&2 echo "Abort"
 		return 1
 		;;
 esac
@@ -691,26 +699,24 @@ echo ""
 if test -d ${dotfiles}/.config/nvim; then
 	echo "Directory exists"
 else
-	echo "Abort: Directory does not exist"
+	>&2 echo "Abort: Directory does not exist"
 	return 1
 fi
 
 if test -z "$(ls ${dotfiles}/.config/nvim)"; then
-	echo "Abort: Directory is empty"
+	>&2 echo "Abort: Directory is empty"
 	return 1
-else
-	echo "Directory is not empty"
 fi
 
 if test -f ${dotfiles}/.config/nvim/init.vim; then
 	echo "Config for ${setting_editor_for} exists"
 else
-	echo "Abort: Config for ${setting_editor_for} does not exist"
+	>&2 echo "Abort: Config for ${setting_editor_for} does not exist"
 	return 1
 fi
 
 echo -n "Do you want to copy config for ${setting_editor_for}? (y/N): "
-read user_input
+read_char user_input
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 case ${user_input} in
 	"y")
@@ -747,27 +753,33 @@ clear
 echo "==== Installing packer.nvim ===="
 echo ""
 
-# FIXME: make work for Vim with Lua or change Plugin Manager
-echo -n "Checking if packer.nvim is installed: "
-if test -e ${VIMRUNTIME}/../site/pack/packer/start/packer.nvim; then
-	echo "YES"
-else
-	echo "NO"
-	if ${neovim_found}; then
-		echo -n "Do you want to install packer.nvim to NeoVim (y/N): "
-		read user_input
-		user_input=$(echo ${user_input}|awk '{print tolower($0)}')
-		case ${user_input} in
-			"y")
-				run_as_superuser_if_needed git clone --depth 1 https://github.com/wbthomason/packer.nvim ${VIMRUNTIME}/../site/pack/packer/start/packer.nvim
-				;;
-			*)
-				;;
-		esac
-	else
-		echo "Cannot install packer.nvim: NeoVim not found"
-	fi
-fi
+case "${OS}" in
+	MINGW*)
+		>&2 echo "Cannot install packer.nvim to NeoVim: not implemented for Mingw"
+		;;
+	*)
+		# FIXME: make work for Vim with Lua or change Plugin Manager
+		echo -n "Checking if packer.nvim is installed: "
+		if test -e ${home}/.local/share/nvim/site/pack/packer/start/packer.nvim; then
+			echo "YES"
+		else
+			echo "NO"
+			if ${neovim_found}; then
+				echo -n "Do you want to install packer.nvim to NeoVim (y/N): "
+				read_char user_input
+				user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+				case ${user_input} in
+					"y")
+						run_as_superuser_if_needed git clone --depth 1 https://github.com/wbthomason/packer.nvim ${home}/.local/share/nvim/site/pack/packer/start/packer.nvim
+						;;
+					*)
+						;;
+				esac
+			else
+				>&2 echo "Cannot install packer.nvim: NeoVim not found"
+			fi
+		fi
+esac
 press_enter
 
 clear
@@ -780,7 +792,7 @@ if $git_found; then
 	echo ""
 
 	echo -n "Do you want to setup Git? (Y/n): "
-	read user_input
+	read_char user_input
 	user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 	case ${user_input} in
 		"n")
@@ -801,17 +813,18 @@ if $git_found; then
 	esac
 else
 	echo "NO"
-	echo "Error: Git not found"
+	>&2 echo "Error: Git not found"
 fi
 press_enter
 
-if test ${OS} = "Termux"; then
+if test ${OS} = "Termux"
+then
 clear
 echo "==== Setting up termux ===="
 echo ""
 
 echo -n "Do you want to setup Termux? (Y/n): "
-read user_input
+read_char user_input
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 case ${user_input} in
 	"n")
@@ -819,47 +832,50 @@ case ${user_input} in
 	*)
 		termux-setup-storage
 		cp -r ${dotfiles}/.termux/ ${home}/
-		if test -e ${home}/.termux/colors.properties; then
+		if test -e ${home}/.termux/colors.properties
+		then
 			rm ${home}/.termux/colors.properties
 		fi
-		if test -e ${home}/.termux/termux.properties; then
+		if test -e ${home}/.termux/termux.properties
+		then
 			rm ${home}/.termux/termux.properties
 		fi
 
+		echo -n "Do you want to install my Termux colorscheme? (Y/n): "
+		read_char user_input
+		user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+		case ${user_input} in
+			"n")
+				;;
+			*)
+				if ! test -d ${home}/.termux
+				then
+					mkdir ${home}/.termux
+				fi
+				cp ${dotfiles}/.termux/colors.properties ${home}/.termux/
+				;;
+		esac
+
+		echo -n "Do you want to install my Termux settings? (Y/n): "
+		read_char user_input
+		user_input=$(echo ${user_input}|awk '{print tolower($0)}')
+		case ${user_input} in
+			"n")
+				;;
+			*)
+				if ! test -d ${home}/.termux
+				then
+					mkdir ${home}/.termux
+				fi
+				cp ${dotfiles}/.termux/termux.properties ${home}/.termux/
+				;;
+		esac
+
+		echo -n "Reloading Termux settings... "
+		termux-reload-settings
+		echo "OK"
 		;;
 esac
-
-echo -n "Do you want to install my Termux colorscheme? (Y/n): "
-read user_input
-user_input=$(echo ${user_input}|awk '{print tolower($0)}')
-case ${user_input} in
-	"n")
-		;;
-	*)
-		if ! test -d ${home}/.termux; then
-			mkdir ${home}/.termux
-		fi
-		cp ${dotfiles}/.termux/colors.properties ${home}/.termux/
-		;;
-esac
-
-echo -n "Do you want to install my Termux settings? (Y/n): "
-read user_input
-user_input=$(echo ${user_input}|awk '{print tolower($0)}')
-case ${user_input} in
-	"n")
-		;;
-	*)
-		if ! test -d ${home}/.termux; then
-			mkdir ${home}/.termux
-		fi
-		cp ${dotfiles}/.termux/termux.properties ${home}/.termux/
-		;;
-esac
-
-echo -n "Reloading Termux settings... "
-termux-reload-settings
-echo "OK"
 fi
 
 clear
@@ -867,16 +883,17 @@ echo "==== Setting up Tmux ===="
 echo ""
 
 echo -n "Do you want to setup Tmux? (Y/n): "
-read user_input
+read_char user_input
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 case "${user_input}" in
 	"n")
 		;;
 	*)
-		if ! command -v "tmux" > /dev/null 2>&1; then
-			echo "Tmux is not installed"
+		if ! command -v "tmux" > /dev/null 2>&1
+		then
+			>&2 echo "Tmux is not installed"
 			echo -n "Do you want to install it? (Y/n): "
-			read user_input
+			read_char user_input
 			user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 			case "${user_input}" in
 				n)
@@ -900,16 +917,17 @@ echo "==== Setting up Nano ===="
 echo ""
 
 echo -n "Do you want to setup Nano? (Y/n): "
-read user_input
+read_char user_input
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 case "${user_input}" in
 	"n")
 		;;
 	*)
-		if ! command -v "nano" > /dev/null 2>&1; then
+		if ! command -v "nano" > /dev/null 2>&1
+		then
 			echo "Nano is not installed"
 			echo -n "Do you want to install it? (Y/n): "
-			read user_input
+			read_char user_input
 			user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 			case "${user_input}" in
 				n)
@@ -919,7 +937,8 @@ case "${user_input}" in
 					;;
 			esac
 		fi
-		if command -v "nano" > /dev/null 2>&1; then
+		if command -v "nano" > /dev/null 2>&1
+		then
 			echo -n "Copying config for Nano... "
 			cp ${dotfiles}/.nanorc ${home}/
 			echo "OK"
@@ -933,14 +952,15 @@ echo "==== Setting up Alacritty ===="
 echo ""
 
 echo -n "Do you want to setup Alacritty? (Y/n): "
-read user_input
+read_char user_input
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 case "${user_input}" in
 	"n")
 		;;
 	*)
-		if ! command -v "alacritty" > /dev/null 2>&1; then
-			echo "Alacritty is not installed"
+		if ! command -v "alacritty" > /dev/null 2>&1
+		then
+			>&2 echo "Alacritty is not installed"
 			echo -n "Do you want to install it? (Y/n): "
 			read user_input
 			user_input=$(echo ${user_input}|awk '{print tolower($0)}')
@@ -952,7 +972,8 @@ case "${user_input}" in
 					;;
 			esac
 		fi
-		if command -v "alacritty" > /dev/null 2>&1; then
+		if command -v "alacritty" > /dev/null 2>&1
+		then
 			echo -n "Copying config for Alacritty... "
 			cp -r ${dotfiles}/.config/alacritty/ ${home}/.config/
 			echo "OK"
@@ -966,7 +987,8 @@ echo "==== Setting up ctags ===="
 echo ""
 
 echo -n "Checking if ctags are installed: "
-if command -v "ctags" > /dev/null 2>&1; then
+if command -v "ctags" > /dev/null 2>&1
+then
 	echo "YES"
 else
 	echo "NO"
@@ -975,14 +997,14 @@ else
 	echo "2) Universal ctags"
 	echo "*) No"
 	echo -n "Your choice: "
-	read user_input
+	read_char user_input
 	case "${user_input}" in
 		"1")
 			install_package exuberant-ctags
 			;;
 		"2")
 			git clone --depth=1 https://github.com/universal-ctags/ctags.git
-			cd ctags
+			cd ctags/
 			./autogen.sh
 			./configure
 			make
@@ -1067,7 +1089,7 @@ else
 	echo "not installed"
 fi
 echo "*) No"
-read user_input
+read_char user_input
 case "${user_input}" in
 	"1")
 		install_package mc
@@ -1249,7 +1271,7 @@ echo "==== Setting up Java ===="
 echo ""
 
 echo -n "Do you want to install Java (Y/n): "
-read user_input
+read_char user_input
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 case "${user_input}" in
 	"n")
@@ -1275,7 +1297,7 @@ echo -n "Checking if Coursier is installed: "
 echo "NO"
 
 echo -n "Do you want to install Coursier (Y/n): "
-read user_input
+read_char user_input
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 case "${user_input}" in
 	"n")
@@ -1299,7 +1321,7 @@ else
 	echo "NO"
 fi
 echo -n "Do you want to install xkb-switch (Y/n): "
-read user_input
+read_char user_input
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 case "${user_input}" in
 	"n")
@@ -1315,7 +1337,7 @@ echo "==== Setting up broken lua syntax workaround ===="
 echo ""
 
 echo -n "Do you want to install lua syntax workaround? (Y/n): "
-read user_input
+read_char user_input
 user_input=$(echo ${user_input}|awk '{print tolower($0)}')
 case "${user_input}" in
 	"n")
