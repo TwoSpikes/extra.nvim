@@ -62,7 +62,7 @@ $ cp ./.dotfiles-setup.sh ~/
 Then you need to restart your shell
 
 ```console
-$ exec $SHELL -l
+$ exec $SHELL
 ```
 
 ## .gitconfig-default .gitmessage
@@ -71,20 +71,24 @@ $ exec $SHELL -l
 
 This is a basic Git configuration
 
-### Installation
+<details><summary>
+Manual installation
+</summary>
 
 ```console
 $ cp ./.gitconfig-default ~/
 $ cp ~/.gitconfig-default ~/.gitconfig
 ```
 Now, in file `~/.gitconfig`
-Uncomment lines `[user] name` and `[user] email`\
+uncomment lines `[user] name` and `[user] email`\
 Change `Your Name` to your name\
 Change `youremail@example.com` to your email
 
 ```console
 $ cp ./.gitmessage ~/
 ```
+
+</details>
 
 ## .config/nvim/
 
@@ -99,10 +103,10 @@ This is NeoVim/Vim configuration
 Screenshots
 </summary>
 
-<img src=.github/images/a4.jpg width=100px height=100px>
+<img src=.github/images/a4.jpg width=100px height=222px>
 <img src=.github/images/Screenshot_2024-05-21-22-05-31-89_84d3000e3f4017145260f7618db1d683.jpg width=100px height=100px>
-<img src=.github/images/a2.jpg width=100px height=100px>
-<img src=.github/images/a1.jpg width=100px height=100px>
+<img src=.github/images/a2.jpg width=100px height=222px>
+<img src=.github/images/a1.jpg width=100px height=222px>
 
 </details>
 
