@@ -98,12 +98,12 @@ let g:ry=1
 let g:visual_mode = "no"
 function! ReorderRightLeft()
 	if g:lx>#g:rx||(g:lx==#g:rx&&g:ly>g:ry)
-		let g:lx=xor(g:lx,g:rx)
+		let g:lx=xor(g:rx,g:lx)
 		let g:rx=xor(g:lx,g:rx)
-		let g:lx=xor(g:lx,g:rx)
-		let g:ly=xor(g:ly,g:ry)
+		let g:lx=xor(g:rx,g:lx)
+		let g:ly=xor(g:ry,g:ly)
 		let g:ry=xor(g:ly,g:ry)
-		let g:ly=xor(g:ly,g:ry)
+		let g:ly=xor(g:ry,g:ly)
 	endif
 endfunction
 function! SavePosition()
@@ -199,6 +199,7 @@ function! MoveLeft()
 		\|| l!=#g:lx
 			return "o"
 		endif
+		return "oo"
 	elseif v:false
 	\|| g:visual_mode ==# "line"
 		if v:false
@@ -280,14 +281,10 @@ function! V_DoX()
 	normal! o
 	call ReorderRightLeft()
 	exec "normal! ".MoveLeft()
-	let lx=line('.')
-	let ly=col('.')
 	normal! o
-	let rx=line('.')
-	let ry=col('.')
 	if v:false
-	\|| ly !=# 1
-	\|| ry <# strlen(getline(rx))
+	\|| g:ly !=# 1
+	\|| g:ry <# strlen(getline(g:rx))
 		normal! o0o$
 	else
 		normal! j$
@@ -385,6 +382,27 @@ function! V_DoBWhole()
 	endif
 endfunction
 xnoremap B <cmd>call V_DoBWhole()<cr>
+function! V_DoC()
+	let g:lx = line('.')
+	let g:ly = col('.')
+	normal! o
+	let g:rx = line('.')
+	let g:ry = col('.')
+	normal! o
+	call ReorderRightLeft()
+	exec "normal! ".MoveLeft()
+	normal! o
+	if v:false
+	\|| g:ly !=# 1
+	\|| g:ry <# strlen(getline(g:rx))
+		normal! d
+		startinsert
+	else
+		normal! dO
+		startinsert
+	endif
+endfunction
+xnoremap c <cmd>call V_DoC()<cr>
 unmap ;
 nnoremap ; <nop>
 xnoremap ; <esc>
