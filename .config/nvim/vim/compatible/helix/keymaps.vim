@@ -38,14 +38,41 @@ nnoremap <expr> X N_DoX()
 xnoremap u <esc>u
 xnoremap U <esc><c-r>
 if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/yanky.nvim")
-	nnoremap p <Plug>(YankyPutAfter)`[v`]
-	nnoremap P <Plug>(YankyPutBefore)`[v`]
-	xnoremap p <esc><Plug>(YankyPutAfter)`[v`]
-	xnoremap P <esc><Plug>(YankyPutBefore)`[v`]
-	nnoremap gp <Plug>(YankyGPutAfter)`[v`]
-	nnoremap gP <Plug>(YankyGPutBefore)`[v`]
-	xnoremap gp <esc><Plug>(YankyGPutAfter)`[v`]
-	xnoremap gP <esc><Plug>(YankyGPutBefore)`[v`]
+	function ChangeVisModeBasedOnSelectedText()
+		let g:lx = line('.')
+		let g:ly = col('.')
+		normal! o
+		let g:rx = line('.')
+		let g:ry = col('.')
+		normal! o
+		call ReorderRightLeft()
+		exec "normal! ".MoveLeft()
+		normal! o
+		if v:false
+		\|| g:ly !=# 1
+		\|| g:ry <# strlen(getline(g:rx))
+		else
+			echomsg "YES"
+			if mode() !~# 'V'
+				call feedkeys("V")
+			endif
+		endif
+	endfunction
+	function! SimulateCorrectPasteMode(cmd)
+		if g:yank_mode ==# "line"
+			execute "normal! ".a:cmd
+		else
+			execute
+		endif
+	endfunction
+	nnoremap p <cmd>call SimulateCorrectPasteMode('$')<cr><Plug>(YankyPutAfter)`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
+	nnoremap P <cmd>call SimulateCorrectPasteMode('0')<cr><Plug>(YankyPutBefore)`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
+	xnoremap p <esc><cmd>call SimulateCorrectPasteMode('$')<cr><Plug>(YankyPutAfter)`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
+	xnoremap P <esc><cmd>call SimulateCorrectPasteMode('0')<cr><Plug>(YankyPutBefore)`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
+	nnoremap gp <cmd>call SimulateCorrectPasteMode('$')<cr><Plug>(YankyGPutAfter)`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
+	nnoremap gP <cmd>call SimulateCorrectPasteMode('0')<cr><Plug>(YankyGPutBefore)`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
+	xnoremap gp <esc><cmd>call SimulateCorrectPasteMode('$')<cr><Plug>(YankyGPutAfter)`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
+	xnoremap gP <esc><cmd>call SimulateCorrectPasteMode('0')<cr><Plug>(YankyGPutBefore)`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
 else
 	nnoremap p p`[v`]
 	nnoremap P P`[v`]
@@ -126,7 +153,15 @@ nnoremap E <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>exec "normal! v".v:
 nnoremap B <cmd>let g:rx=line('.')<bar>let g:ry=col('.')<bar>exec "normal! v".v:count1."B"<bar>let g:lx=line('.')<bar>let g:ly=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
 unmap <esc>
 nnoremap v v<cmd>let g:pseudo_visual=v:false<cr><cmd>let g:rx=line('.')<bar>let g:ry=col('.')<bar>let g:lx=rx<bar>let g:ly=ry<cr><cmd>let g:visual_mode="char"<cr>
-nnoremap V V<cmd>let g:pseudo_visual=v:false<cr><cmd>let g:rx=line('.')<bar>let g:ry=col('$')<bar>let g:lx=rx<bar>let g:ly=1<cr><cmd>let g:visual_mode="line"<cr>
+function! N_DoVLine()
+	let result = ""
+	let result .= "v"
+	let result .= "0o$"
+	let g:pseudo_visual=v:false
+	let g:visual_mode="char"
+	return result
+endfunction
+nnoremap <expr> V N_DoVLine()
 nnoremap <c-v> <c-v><cmd>let g:pseudo_visual=v:false<cr><cmd>let g:rx=line('.')<bar>let g:ry=col('.')<bar>let g:lx=rx<bar>let g:ly=ry<cr><cmd>let g:visual_mode="block"<cr>
 function! V_DoV()
 	if v:false
@@ -403,6 +438,28 @@ function! V_DoC()
 	endif
 endfunction
 xnoremap c <cmd>call V_DoC()<cr>
+let g:yank_mode = "char"
+function! V_DoY()
+	let g:lx = line('.')
+	let g:ly = col('.')
+	normal! o
+	let g:rx = line('.')
+	let g:ry = col('.')
+	normal! o
+	call ReorderRightLeft()
+	execute "normal! ".MoveLeft()
+	normal! o
+	if v:false
+	\|| g:ly ==# len(getline(g:lx))+1
+	\&& g:ry ==# len(getline(g:rx))+1
+		execute "normal! \<esc>mzgv`zy"
+		let g:yank_mode = "line"
+	else
+		normal! y
+		let g:yank_mode = "char"
+	endif
+endfunction
+xnoremap y <cmd>call V_DoY()<cr>
 unmap ;
 nnoremap ; <nop>
 xnoremap ; <esc>
@@ -415,7 +472,6 @@ nnoremap , <nop>
 xnoremap , <esc>
 nnoremap <c-s> m'
 nnoremap U <c-r>
-xnoremap y ygv<cmd>let g:pseudo_visual=v:true<cr>
 nnoremap g. g;
 noremap <a-.> ;
 
