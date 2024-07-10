@@ -19,7 +19,7 @@ macro_rules! clear {
 
 macro_rules! usage {
     ($program_name:expr) => {
-        println!("{}: [OPTION]... COMMAND", stringify!($program_name));
+        println!("{}: [OPTION]... COMMAND", $program_name);
     };
 }
 
