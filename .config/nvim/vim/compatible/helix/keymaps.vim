@@ -399,7 +399,7 @@ function! V_DoC()
 		startinsert
 	else
 		normal! dO
-		startinsert
+		call feedkeys("cc", 'n')
 	endif
 endfunction
 xnoremap c <cmd>call V_DoC()<cr>
