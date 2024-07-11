@@ -1619,7 +1619,11 @@ function! Lua_Require_Goto_Workaround_Wincmd_f()
 					startcol = end
 					continue
 				endif
-				execute printf("split %s", i.filename.'.lua')
+				split
+				let goto_buffer = bufadd(expand(i).filename.'.lua')
+				call bufload(goto_buffer)
+				exec goto_buffer."buffer"
+				normal! `"
 				let file_found = v:true
 				return
 			endfor
