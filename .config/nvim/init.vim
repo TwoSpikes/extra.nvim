@@ -1242,10 +1242,8 @@ noremap <f3> <cmd>ToggleFullscreen<cr>
 
 noremap <c-t> <cmd>TagbarToggle<cr>
 
-nnoremap <leader>xg :grep -R <cword> .<cr>
+nnoremap <leader>xg <cmd>grep <cword> .<cr>
 
-let s:MOVING_UPDATE_TIME = 1000
-let g:moving = v:false
 let s:process_g_but_function_expression = "
 \function! ProcessGBut(button)
 \"
@@ -1523,7 +1521,8 @@ endif
 
 augroup AlphaNvim_CinnamonNvim_JK_Workaround
 	autocmd!
-	autocmd FileType alpha exec "noremap <buffer> j j" | exec "noremap <buffer> k k" | exec "noremap <buffer> <down> <down>" | exec "noremap <buffer> <up> <up>" | call AfterSomeEvent('BufLeave', 'call JKWorkaround()')
+	autocmd FileType alpha call JKWorkaroundAlpha()  | call AfterSomeEvent('BufLeave', 'call JKWorkaround()')
+	"autocmd FileType alpha exec "noremap <buffer> j j" | exec "noremap <buffer> k k" | exec "noremap <buffer> <down> <down>" | exec "noremap <buffer> <up> <up>" | call AfterSomeEvent('BufLeave', 'call JKWorkaround()')
 augroup END
 
 let g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT = [$HOME]
@@ -1636,7 +1635,11 @@ function! Lua_Require_Goto_Workaround_Wincmd_f()
 		echohl Normal
 	else
 		echohl ErrorMsg
-		echomsg printf("Wrong goto way: %s", choice)
+		if g:language ==# 'russian'
+			echomsg printf("Неправильный способ перехода: %s", choice)
+		else
+			echomsg printf("Wrong goto way: %s", choice)
+		endif
 		echohl Normal
 	endif
 endfunction
@@ -2840,11 +2843,14 @@ function! OnQuit()
 endfunction
 function! IfOneWinDo(cmd)
 	let s = 0
-	tabdo let s += winnr('$')
-	if s==# 1
+	let t = 1
+	while s <=# 1 && t <=# tabpagenr()
+		let s += tabpagewinnr(t, '$')
+		let t += 1
+	endwhile
+	if s ==# 1
 		execute a:cmd
 	endif
-	unlet s
 endfunction
 
 function! FixShaDa()
