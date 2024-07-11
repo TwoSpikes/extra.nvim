@@ -1615,12 +1615,12 @@ function! Lua_Require_Goto_Workaround_Wincmd_f()
 			let filename = substitute(filename, '\.', '\/', 'g')
 			let file_found = v:false
 			for i in g:LUA_REQUIRE_GOTO_PREFIX
-				if !filereadable(expand(i).filename.'.lua')
-					startcol = end
+				if !filereadable(i.filename.'.lua')
+					let startcol = end
 					continue
 				endif
 				split
-				let goto_buffer = bufadd(expand(i).filename.'.lua')
+				let goto_buffer = bufadd(i.filename.'.lua')
 				call bufload(goto_buffer)
 				exec goto_buffer."buffer"
 				normal! `"
@@ -1630,7 +1630,10 @@ function! Lua_Require_Goto_Workaround_Wincmd_f()
 			echohl ErrorMsg
 			echomsg "file not found, editing a new file"
 			echohl Normal
-			exec printf("split %s", g:LUA_REQUIRE_GOTO_PREFIX[0].filename.'.lua')
+			let goto_buffer = bufadd(g:LUA_REQUIRE_GOTO_PREFIX[0].filename.'.lua')
+			call bufload(goto_buffer)
+			exec goto_buffer."buffer"
+			normal! `"
 			return
 		endwhile
 		echohl ErrorMsg
@@ -1722,7 +1725,7 @@ function! HandleDotfilesOptionsInComment()
 							let wrong_var = v:true
 							break
 						endif
-						execute "let option_calculated .= g:".varname
+						execute "let option_calculated .= expand(g:".varname.")"
 					endif
 				elseif vartype ==# 'shell'
 					echohl ErrorMsg
