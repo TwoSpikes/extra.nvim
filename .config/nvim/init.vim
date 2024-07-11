@@ -1522,7 +1522,6 @@ endif
 augroup AlphaNvim_CinnamonNvim_JK_Workaround
 	autocmd!
 	autocmd FileType alpha call JKWorkaroundAlpha()  | call AfterSomeEvent('BufLeave', 'call JKWorkaround()')
-	"autocmd FileType alpha exec "noremap <buffer> j j" | exec "noremap <buffer> k k" | exec "noremap <buffer> <down> <down>" | exec "noremap <buffer> <up> <up>" | call AfterSomeEvent('BufLeave', 'call JKWorkaround()')
 augroup END
 
 let g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT = [$HOME]
