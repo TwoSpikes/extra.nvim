@@ -1256,7 +1256,7 @@ let s:process_g_but_function_expression .= "
 \\n	endif
 \"
 endif
-let g:prev_time = reltime()
+if has('nvim')
 let s:process_g_but_function_expression .= "
 \\n	execute \"lua << EOF
 \\\nlocal button ="
@@ -1278,6 +1278,22 @@ let s:process_g_but_function_expression .= "
 \\\nend
 \\\nEOF\"
 \\n"
+else
+let s:process_g_but_function_expression .= "
+\\nif v:count ==# 0
+\\nexe \"norm! g\".a:button
+\\nelse
+\\nexe \"norm! \".v:count1.a:button
+\\nendif
+\\n"
+if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
+let s:process_g_but_function_expression .= "
+\\nif g:pseudo_visual
+\\n	call feedkeys(\"\\<c-\\>\\<c-n>\")
+\\nendif
+\\n"
+endif
+endif
 
 if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
 	let s:process_g_but_function_expression .= "
@@ -1298,16 +1314,15 @@ let s:process_g_but_function_expression .= "
 execute s:process_g_but_function_expression
 
 function! JKWorkaroundAlpha()
-	if has('nvim')
-		noremap <buffer> j <cmd>call ProcessGBut('j')<cr>
-		noremap <buffer> k <cmd>call ProcessGBut('k')<cr>
-		noremap <down> <cmd>call ProcessGBut('j')<cr>
-		noremap <up> <cmd>call ProcessGBut('k')<cr>
-	endif
+	noremap <buffer> j <cmd>call ProcessGBut('j')<cr>
+	noremap <buffer> k <cmd>call ProcessGBut('k')<cr>
+	noremap <down> <cmd>call ProcessGBut('j')<cr>
+	noremap <up> <cmd>call ProcessGBut('k')<cr>
 endfunction
 function! JKWorkaround()
-	if has('nvim')
-		noremap k <cmd>call ProcessGBut('k')<cr>
+	noremap k <cmd>call ProcessGBut('k')<cr>
+	if !isdirectory(g:LOCALSHAREPATH.'/site/pack/packer/start/endscroll.nvim')
+		noremap j <cmd>call ProcessGBut('j')<cr>
 	endif
 endfunction
 call JKWorkaround()
@@ -2637,6 +2652,16 @@ endfunction
 nnoremap <leader>r <cmd>call OpenRangerCheck()<cr>
 
 function! RunAlphaIfNotAlphaRunning()
+	if !isdirectory(g:LOCALSHAREPATH.'/site/pack/packer/start/alpha-nvim')
+		echohl ErrorMsg
+		if g:language ==# 'russian'
+			echomsg "Блядь: alpha-nvim не установлен"
+		else
+			echomsg "Error: alpha-nvim is not installed"
+		endif
+		echohl Normal
+		return
+	endif
 	if &filetype !=# 'alpha'
 		Alpha
 	else
@@ -2773,7 +2798,11 @@ function! HelpOnFirstTime()
 	endif
 endfunction
 function! OnStart()
-	call timer_start(0, {->OpenOnStart()})
+	if has('nvim')
+		call timer_start(0, {->OpenOnStart()})
+	else
+		call OpenOnStart()
+	endif
 	call SetDotfilesConfigPath()
 	call SetLocalSharePath()
 	call SetConfigPath()

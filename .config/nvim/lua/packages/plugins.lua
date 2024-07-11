@@ -552,4 +552,20 @@ return require('packer').startup(function (use)
 	use {
 		'justinmk/vim-sneak',
 	}
+	use {
+		'kevinhwang91/nvim-bqf',
+		ft = 'qf',
+		requires = {
+			{
+				'junegunn/fzf',
+				run = function()
+					vim.fn['fzf#install']()
+				end,
+			},
+			{
+				'nvim-treesitter/nvim-treesitter',
+				run = ':TSUpdate',
+			},
+		},
+	}
 end)

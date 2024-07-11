@@ -85,12 +85,14 @@ else
 endif
 nnoremap c xi
 if !g:use_nvim_cmp
-	unmap ySS
-	unmap ySs
-	unmap yss
-	unmap yS
-	unmap ys
-	unmap y<c-g>
+	if has('nvim')
+		unmap ySS
+		unmap ySs
+		unmap yss
+		unmap yS
+		unmap ys
+		unmap y<c-g>
+	endif
 endif
 nnoremap y vy
 nnoremap t<cr> v$
@@ -109,8 +111,10 @@ xnoremap < <gv<cmd>let g:pseudo_visual=v:true<cr>
 xnoremap > >gv<cmd>let g:pseudo_visual=v:true<cr>
 xnoremap t<cr> $
 if !g:use_nvim_cmp
-	unmap cS
-	unmap cs
+	if has('nvim')
+		unmap cS
+		unmap cs
+	endif
 	unmap ci_
 endif
 unmap dd
@@ -476,7 +480,9 @@ nnoremap g. g;
 noremap <a-.> ;
 
 if !g:use_nvim_cmp
-	unmap <leader>f
+	if has('nvim')
+		unmap <leader>f
+	endif
 	unmap <leader>fr
 	unmap <leader>fh
 	unmap <leader>fb
