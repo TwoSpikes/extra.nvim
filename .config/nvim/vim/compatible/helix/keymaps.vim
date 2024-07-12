@@ -2,6 +2,8 @@ nnoremap gh 0
 xnoremap gh 0
 nnoremap gl $mz`z
 xnoremap gl $mz`z
+nnoremap $ $mz`z
+xnoremap $ $mz`z
 nnoremap ge G
 xnoremap ge G
 nnoremap gs ^
