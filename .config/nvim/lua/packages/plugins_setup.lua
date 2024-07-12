@@ -26,7 +26,9 @@ require('packages.alpha.init')
 require('packages.persisted.init')
 --require('packages.lean.init')
 require('packages.neogen.init')
-require('packages.yanky.init')
+if vim.g.compatible ~= "helix" and vim.g.compatible ~= "helix_hard" then
+	require('packages.yanky.init')
+end
 require('packages.nvim-lint.init')
 if vim.g.compatible ~= "helix_hard" then
 	require('packages.noice.init')

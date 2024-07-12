@@ -739,11 +739,19 @@ function! Showtab()
 		else
 			let strmode = 'SEL LINE '
 		endif
-	elseif mode == 'CTRL-S'
+	elseif mode == "\<c-v>"
 		if g:language ==# 'russian'
-			let strmode = 'ВЫБ БЛОК '
+			if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
+				let strmode = '%#ModeVisu#визуал %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
+			else
+				if g:pseudo_visual
+					let strmode = '%#ModeVisu#нор %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
+				else
+					let strmode = '%#ModeVisu#виз %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
+				endif
+			endif
 		else
-			let strmode = 'SEL BLOCK '
+			let strmode = '%#ModeVisu#visu %#StatuslinestatVisuBlock#%#ModeBlock# BLOCK '
 		endif
 	elseif mode == 'i'
 		if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
@@ -838,19 +846,13 @@ function! Showtab()
 	elseif mode == 't'
 		let strmode = '%#ModeTerm# '
 	else
+		echohl ErrorMsg
 		if g:language ==# 'russian'
-			if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
-				let strmode = '%#ModeVisu#визуал %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
-			else
-				if g:pseudo_visual
-					let strmode = '%#ModeVisu#нор %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
-				else
-					let strmode = '%#ModeVisu#виз %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
-				endif
-			endif
+			echomsg "блядь: Неправильный режим: ".mode()
 		else
-			let strmode = '%#ModeVisu#visu %#StatuslinestatVisuBlock#%#ModeBlock# BLOCK '
+			echomsg "error: Wrong mode: ".mode()
 		endif
+		echohl Normal
 	endif
 	"let stl_time = '%{strftime("%b,%d %H:%M:%S")}'
 	
@@ -1988,6 +1990,15 @@ function! DotfilesCheatSheet()
 	\\n    LEAD fg - Live grep
 	\\n    LEAD fb - Buffers
 	\\n    LEAD fh - Help tags
+	\\n  Helix-compatible mode commands:
+	\\n    p - Paste after and set cursor at the end of pasted text
+	\\n    P - Paste before and set cursor at the end of pasted text
+	\\n    gp - Paste after and set cursor at the start of pasted text
+	\\n    gP - Paste before and set cursor at the start of pasted text
+	\\n    LEAD xo - See :h v_o
+	\\n    LEAD xO - See :h v_O
+	\\n    g. - See :h g;
+	\\n    gw - See :h sneak|50
 	\\n  ABOUT:
 	\\n    Author: TwoSpikes (2023 - 2024)
 	\\n    Github repository: https://github.com/TwoSpikes/dotfiles

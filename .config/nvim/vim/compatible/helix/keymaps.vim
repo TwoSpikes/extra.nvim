@@ -39,52 +39,81 @@ nnoremap <expr> x N_DoX()
 nnoremap <expr> X N_DoX()
 xnoremap u <esc>u
 xnoremap U <esc><c-r>
-if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/yanky.nvim")
-	function ChangeVisModeBasedOnSelectedText()
-		let g:lx = line('.')
-		let g:ly = col('.')
-		normal! o
-		let g:rx = line('.')
-		let g:ry = col('.')
-		normal! o
-		call ReorderRightLeft()
-		exec "normal! ".MoveLeft()
-		normal! o
+function ChangeVisModeBasedOnSelectedText()
+	let g:lx = line('.')
+	let g:ly = col('.')
+	normal! o
+	let g:rx = line('.')
+	let g:ry = col('.')
+	normal! o
+	call ReorderRightLeft()
+	exec "normal! ".MoveLeft()
+	normal! o
+	if v:false
+	\|| g:ly !=# 1
+	\|| g:ry <# strlen(getline(g:rx))
+	else
+		echomsg "YES"
+		if mode() !~# 'V'
+			call feedkeys("V")
+		endif
+	endif
+endfunction
+function! SimulateCorrectPasteMode(cmd)
+	if v:false
+	elseif v:false
+	\|| g:yank_mode ==# 'char'
 		if v:false
-		\|| g:ly !=# 1
-		\|| g:ry <# strlen(getline(g:rx))
+		elseif a:cmd ==# '$'
+			let paste_cmd = 'p'
+		elseif a:cmd ==# '0'
+			let paste_cmd = 'P'
 		else
-			echomsg "YES"
-			if mode() !~# 'V'
-				call feedkeys("V")
-			endif
+			echohl ErrorMsg
+			echomsg "dotfiles: SimulateCorrectPasteMode: Internal error: wrong a:cmd: ".a:cmd
+			echohl Normal
 		endif
-	endfunction
-	function! SimulateCorrectPasteMode(cmd)
-		if g:yank_mode ==# "line"
-			execute "normal! ".a:cmd
+	elseif g:yank_mode ==# "line"
+		execute "normal! ".a:cmd
+		if v:false
+		elseif a:cmd ==# '$'
+			let paste_cmd = 'p'
+		elseif a:cmd ==# '0'
+			let paste_cmd = 'P'
 		else
-			execute
+			echohl ErrorMsg
+			echomsg "dotfiles: SimulateCorrectPasteMode: Internal error: wrong a:cmd: ".a:cmd
+			echohl Normal
 		endif
-	endfunction
-	nnoremap p <cmd>call SimulateCorrectPasteMode('$')<cr><Plug>(YankyPutAfter)`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
-	nnoremap P <cmd>call SimulateCorrectPasteMode('0')<cr><Plug>(YankyPutBefore)`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
-	xnoremap p <esc><cmd>call SimulateCorrectPasteMode('$')<cr><Plug>(YankyPutAfter)`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
-	xnoremap P <esc><cmd>call SimulateCorrectPasteMode('0')<cr><Plug>(YankyPutBefore)`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
-	nnoremap gp <cmd>call SimulateCorrectPasteMode('$')<cr><Plug>(YankyGPutAfter)`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
-	nnoremap gP <cmd>call SimulateCorrectPasteMode('0')<cr><Plug>(YankyGPutBefore)`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
-	xnoremap gp <esc><cmd>call SimulateCorrectPasteMode('$')<cr><Plug>(YankyGPutAfter)`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
-	xnoremap gP <esc><cmd>call SimulateCorrectPasteMode('0')<cr><Plug>(YankyGPutBefore)`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
-else
-	nnoremap p p`[v`]
-	nnoremap P P`[v`]
-	xnoremap p <esc>p`[v`]
-	xnoremap P <esc>P`[v`]
-	nnoremap gp gp`[v`]
-	nnoremap gP gP`[v`]
-	xnoremap gp <esc>gp`[v`]
-	xnoremap gP <esc>gP`[v`]
-endif
+	elseif g:yank_mode ==# "line_post"
+		if v:false
+		elseif a:cmd ==# '$'
+			execute "normal! j0"
+			let paste_cmd = 'P'
+		elseif a:cmd ==# '0'
+			execute "normal! k$"
+			let paste_cmd = 'p'
+		else
+			echohl ErrorMsg
+			echomsg "dotfiles: SimulateCorrectPasteMode: Internal error: wrong a:cmd: ".a:cmd
+			echohl Normal
+		endif
+	else
+		echohl ErrorMsg
+		echomsg "dotfiles: SimulateCorrectPasteMode: Internal error: wrong yank mode: ".g:yank_mode
+		echohl Normal
+	endif
+
+	execute "normal! ".paste_cmd
+endfunction
+nnoremap p <cmd>call SimulateCorrectPasteMode('$')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
+nnoremap P <cmd>call SimulateCorrectPasteMode('0')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
+xnoremap p <esc><cmd>call SimulateCorrectPasteMode('$')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
+xnoremap P <esc><cmd>call SimulateCorrectPasteMode('0')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
+nnoremap gp <cmd>call SimulateCorrectPasteMode('$')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>o
+nnoremap gP <cmd>call SimulateCorrectPasteMode('0')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>o
+xnoremap gp <esc><cmd>call SimulateCorrectPasteMode('$')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>o
+xnoremap gP <esc><cmd>call SimulateCorrectPasteMode('0')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>o
 nnoremap c xi
 if !g:use_nvim_cmp
 	if has('nvim')
@@ -353,28 +382,46 @@ function! V_DoXDoNotExtendSubsequentLines()
 	endif
 endfunction
 xnoremap X <cmd>call V_DoXDoNotExtendSubsequentLines()<cr>
-function! V_DoH()
+function! V_DoH(c)
 	if g:pseudo_visual
-		exec "normal! \<esc>h"
+		exec "normal! \<esc>"
+		let i=0
+		while i<#a:c
+			normal! h
+			let i+=1
+		endwhile
 	else
-		exec "normal! h"
+		let i=0
+		while i<#a:c
+			normal! h
+			let i+=1
+		endwhile
 		call ReorderRightLeft()
 		call SavePosition()
 	endif
 endfunction
-xnoremap h <cmd>call V_DoH()<cr>
-xnoremap <left> <cmd>call V_DoH()<cr>
-function! V_DoL()
+xnoremap h <cmd>call V_DoH(v:count1)<cr>
+xnoremap <left> <cmd>call V_DoH(v:count1)<cr>
+function! V_DoL(c)
 	if g:pseudo_visual
-		exec "normal! \<esc>l"
+		exec "normal! \<esc>"
+		let i=0
+		while i<#a:c
+			normal! l
+			let i+=1
+		endwhile
 	else
-		exec "normal! l"
+		let i=0
+		while i<#a:c
+			normal! l
+			let i+=1
+		endwhile
 		call ReorderRightLeft()
 		call SavePosition()
 	endif
 endfunction
-xnoremap l <cmd>call V_DoL()<cr>
-xnoremap <right> <cmd>call V_DoL()<cr>
+xnoremap l <cmd>call V_DoL(v:count1)<cr>
+xnoremap <right> <cmd>call V_DoL(v:count1)<cr>
 function! V_DoW()
 	if g:pseudo_visual
 		exec "normal! \<esc>wviw"
@@ -456,13 +503,48 @@ function! V_DoY()
 	execute "normal! ".MoveLeft()
 	normal! o
 	if v:false
+	elseif v:false
 	\|| g:ly ==# len(getline(g:lx))+1
 	\&& g:ry ==# len(getline(g:rx))+1
-		execute "normal! \<esc>mzgv`zy"
 		let g:yank_mode = "line"
+	elseif v:false
+	\|| (v:false
+	\|| g:ry ==# len(getline(g:rx))
+	\|| g:ry ==# len(getline(g:rx))+1
+	\|| v:false)
+	\&& g:ly ==# 1
+		let g:yank_mode = "line_post"
 	else
 		normal! y
 		let g:yank_mode = "char"
+	endif
+
+	if v:false
+	elseif v:false
+	\|| g:yank_mode ==# "char"
+		execute
+	elseif v:false
+	\|| g:yank_mode ==# "line"
+	\|| g:yank_mode ==# "line_post"
+		execute "normal! \<esc>mzgv`zy"
+	else
+		echohl ErrorMsg
+		echomsg "dotfiles: V_DoY: Internal error: wrong yank mode: ".g:yank_mode
+		echohl Normal
+	endif
+
+	execute "normal! gv"
+	let g:pseudo_visual = v:true
+
+	if mode() ==# "\<c-v>"
+		let g:visual_mode = "block"
+		let startcol = getpos("'<")[2]
+		let endcol = getpos("'>")[2]
+		if col('.') !=# (startcol>#endcol?startcol:endcol)
+			execute "normal! O"
+		endif
+	else
+		let g:visual_mode = "char"
 	endif
 endfunction
 xnoremap y <cmd>call V_DoY()<cr>
@@ -472,6 +554,7 @@ xnoremap ; <esc>
 xnoremap o <esc>o
 xnoremap O <esc>O
 xnoremap <leader>xo o<cmd>call ReorderRightLeft()<cr>
+xnoremap <leader>xO O<cmd>call ReorderRightLeft()<cr>
 nnoremap C <c-v>j
 xnoremap C j
 nnoremap , <nop>
