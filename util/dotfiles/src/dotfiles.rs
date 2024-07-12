@@ -681,6 +681,8 @@ fn dotfiles_setup_vim(home: PathBuf) -> ::std::io::Result<()> {
 \"_comment_69\":\"Aviable: no (default), helix, helix_hard\",
 	\"compatible\": \"no\",
 
+	\"do_not_save_previous_column_position_when_going_up_or_down\": false,
+
 \"_comment_end\":\"Ending field to not put comma every time\"
 }"),
             )
