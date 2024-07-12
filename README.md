@@ -115,6 +115,8 @@ Screenshots
 - RAM: 60 MiB (minimal), 128 MiB (recommended)
 - Free disk space: 146,4 MiB (minimal, including all plugins)
 - Internet connection (to download plugins)
+- `vim`
+- `vim-runtime` (it is often already installed as a `vim` dependency)
 
 > [!Warning]
 > Implies to use [Nerd Fonts](https://www.nerdfonts.com)
