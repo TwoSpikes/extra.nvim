@@ -1,7 +1,7 @@
 nnoremap gh 0
 xnoremap gh 0
-nnoremap gl $h
-xnoremap gl $h
+nnoremap gl $mz`z
+xnoremap gl $mz`z
 nnoremap ge G
 xnoremap ge G
 nnoremap gs ^

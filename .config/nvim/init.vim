@@ -378,6 +378,9 @@ function! SetDefaultValuesForStartupOptionsAndDotfilesConfigOptions()
 	if !exists('g:compatible')
 		let g:compatible = "no"
 	endif
+	if !exists('g:do_not_save_previous_column_position_when_going_up_or_down')
+		let g:do_not_save_previous_column_position_when_going_up_or_down = v:false
+	endif
 endfunction
 call SetDefaultValuesForStartupOptionsAndDotfilesConfigOptions()
 
@@ -1258,7 +1261,7 @@ if has('nvim')
 let s:process_g_but_function_expression .= "
 \\n	execute \"lua << EOF
 \\\nlocal button ="
-if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
+if g:do_not_save_previous_column_position_when_going_up_or_down&&g:compatible ==# "helix" || g:compatible ==# "helix_hard"
 let s:process_g_but_function_expression .= "\\\"mz`z\\\".."
 endif
 let s:process_g_but_function_expression .= "
