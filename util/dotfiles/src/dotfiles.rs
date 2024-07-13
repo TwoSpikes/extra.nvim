@@ -162,6 +162,7 @@ fn commit(only_copy: bool, #[allow(non_snake_case)] HOME: PathBuf) -> ::std::io:
     _ = ::std::fs::copy(HOME.join("bin/inverting.sh"), "./bin/inverting.sh");
     _ = ::std::fs::copy(HOME.join("bin/ls"), "./bin/ls");
     _ = ::std::fs::copy(HOME.join("bin/n"), "./bin/n");
+    _ = ::std::fs::copy(HOME.join("bin/pie"), "./bin/pie");
     #[allow(non_snake_case)]
     let VIMRUNTIME = if ::which::which("nvim").is_ok() {
         if cfg!(target_os = "windows") {

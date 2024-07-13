@@ -462,6 +462,7 @@ case ${user_input} in
 		cp ${dotfiles}/.bash_profile ${home}
 		cp ${dotfiles}/.eclrc ${home}
 		cp ${dotfiles}/sbclrc ${home}
+		cp -v ${dotfiles}/bin/* ${home}/bin/
 		;;
 	"exit"|"x"|"e"|"q")
 		echo "Abort"
@@ -742,7 +743,6 @@ case ${user_input} in
 		if ! test -d ${home}/bin; then
 			mkdir -pv ${home}/bin
 		fi
-		cp -v ${dotfiles}/bin/* ${home}/bin/
 		press_enter
 		;;
 	*)
