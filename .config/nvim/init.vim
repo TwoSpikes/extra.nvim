@@ -2819,7 +2819,7 @@ function! OnFirstTime()
 			call quickui#confirm#open('To see help, press SPC-?')
 		endif
 
-		!dotfiles setup dotfiles vim
+		call OpenTerm('dotfiles setup dotfiles vim')
 	endif
 endfunction
 function! OnStart()
