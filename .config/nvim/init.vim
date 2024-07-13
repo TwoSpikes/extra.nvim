@@ -2802,7 +2802,7 @@ function! SaveLastSelected()
 	endif
 endfunction
 
-function! HelpOnFirstTime()
+function! OnFirstTime()
 	if !filereadable(expand(g:LOCALSHAREPATH).'/dotfiles/not_first_time.null')
 		if !isdirectory(expand(g:LOCALSHAREPATH).'/dotfiles')
 			call mkdir(expand(g:LOCALSHAREPATH).'/dotfiles', 'p')
@@ -2818,6 +2818,8 @@ function! HelpOnFirstTime()
 		else
 			call quickui#confirm#open('To see help, press SPC-?')
 		endif
+
+		!dotfiles setup dotfiles vim
 	endif
 endfunction
 function! OnStart()
@@ -2851,7 +2853,7 @@ function! OnStart()
 		call LoadLastSelected()
 	endif
 	call timer_start(0, {->execute('Showtab')})
-	call timer_start(0, {->HelpOnFirstTime()})
+	call timer_start(0, {->OnFirstTime()})
 endfunction
 function! OnQuit()
 	call TermuxLoadCursorStyle()
