@@ -2405,6 +2405,7 @@ inoremap <silent> Jk <esc>
 " tnoremap <nowait> <expr> <silent> k ProcessTBut_k()
 tnoremap <silent> jk <c-\><c-n>
 tnoremap <silent> jK <c-\><c-n><cmd>let g:please_do_not_close=v:true<cr><cmd>:bd!<cr><cmd>tabnew<cr><cmd>call OpenTerm("")<cr><cmd>let g:please_do_not_close=v:false<cr>
+tnoremap <silent> <nowait> jj jj
 command! -nargs=* Write write <args>
 
 inoremap <silent> ju <esc>viwUea
@@ -2524,7 +2525,10 @@ function! SwapHiGroup(group)
     execute printf('hi %s ctermfg=%s ctermbg=%s guifg=%s guibg=%s', a:group, ctermbg, ctermfg, guibg, guifg)
 endfunction
 
-au VimResized * call OnResized()|mode
+augroup on_resized
+	au!
+	au VimResized * call OnResized()|mode
+augroup END
 function! OnResized()
 	if g:language ==# 'russian'
 		echom "Окно: ".&lines."столбцов, ".&columns."колонок"
@@ -2552,8 +2556,6 @@ function! EnablePagerMode()
 	set showcmdloc=last
 	set showmode
 	set ruler
-
-	let g:cursorline
 
 	call feedkeys("\<c-\>\<c-n>")
 endfunction
