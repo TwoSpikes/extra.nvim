@@ -47,7 +47,7 @@ function ChangeVisModeBasedOnSelectedText()
 	let g:ry = col('.')
 	normal! o
 	call ReorderRightLeft()
-	exec "normal! ".MoveLeft()
+	execute "normal! ".MoveLeft()
 	normal! o
 	if v:false
 	\|| g:ly !=# 1
@@ -180,14 +180,22 @@ function! SavePosition()
 	endif
 endfunction
 xnoremap <expr> : g:pseudo_visual?":\<c-u>":":"
-nnoremap w <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>exec "normal! v".v:count1."e"<bar>let g:rx=line('.')<bar>let g:ry=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
-nnoremap e <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>exec "normal! v".v:count1."e"<bar>let g:rx=line('.')<bar>let g:ry=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
-nnoremap b <cmd>let g:rx=line('.')<bar>let g:ry=col('.')<bar>exec "normal! v".v:count1."b"<bar>let g:lx=line('.')<bar>let g:ly=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
-nnoremap W <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>exec "normal! v".v:count1."W"<bar>let g:rx=line('.')<bar>let g:ry=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
-nnoremap E <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>exec "normal! v".v:count1."E"<bar>let g:rx=line('.')<bar>let g:ry=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
-nnoremap B <cmd>let g:rx=line('.')<bar>let g:ry=col('.')<bar>exec "normal! v".v:count1."B"<bar>let g:lx=line('.')<bar>let g:ly=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
+nnoremap w <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>execute "normal! v".v:count1."e"<bar>let g:rx=line('.')<bar>let g:ry=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
+nnoremap e <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>execute "normal! v".v:count1."e"<bar>let g:rx=line('.')<bar>let g:ry=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
+nnoremap b <cmd>let g:rx=line('.')<bar>let g:ry=col('.')<bar>execute "normal! v".v:count1."b"<bar>let g:lx=line('.')<bar>let g:ly=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
+nnoremap W <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>execute "normal! v".v:count1."W"<bar>let g:rx=line('.')<bar>let g:ry=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
+nnoremap E <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>execute "normal! v".v:count1."E"<bar>let g:rx=line('.')<bar>let g:ry=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
+nnoremap B <cmd>let g:rx=line('.')<bar>let g:ry=col('.')<bar>execute "normal! v".v:count1."B"<bar>let g:lx=line('.')<bar>let g:ly=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
 unmap <esc>
-nnoremap v v<cmd>let g:pseudo_visual=v:false<cr><cmd>let g:rx=line('.')<bar>let g:ry=col('.')<bar>let g:lx=rx<bar>let g:ly=ry<cr><cmd>let g:visual_mode="char"<cr>
+function! N_DoV()
+	let g:pseudo_visual=v:false
+	let g:rx=line('.')
+	let g:ry=col('.')
+	let g:lx=g:rx
+	let g:ly=g:ry
+	let g:visual_mode="char"
+endfunction
+nnoremap v v<cmd>call N_DoV()<cr>
 function! N_DoVLine()
 	let result = ""
 	let result .= "v"
@@ -208,7 +216,7 @@ function! V_DoV()
 	\|| g:visual_mode ==# "char"
 	\|| g:visual_mode ==# "line"
 	\|| g:visual_mode ==# "block"
-		let g:pseudo_visual = !g:pseudo_visual
+		let g:pseudo_visual = g:pseudo_visual?v:false:v:true
 		Showtab
 		return ""
 	else
@@ -228,7 +236,7 @@ function! V_DoVLine()
 	\|| g:visual_mode ==# "char"
 	\|| g:visual_mode ==# "line"
 	\|| g:visual_mode ==# "block"
-		let g:pseudo_visual = !g:pseudo_visual
+		let g:pseudo_visual = g:pseudo_visual?v:false:v:true
 		Showtab
 	else
 		echohl ErrorMsg
@@ -247,7 +255,7 @@ function! V_DoVBlock()
 	\|| g:visual_mode ==# "char"
 	\|| g:visual_mode ==# "line"
 	\|| g:visual_mode ==# "block"
-		let g:pseudo_visual = !g:pseudo_visual
+		let g:pseudo_visual = g:pseudo_visual?v:false?v:true
 		Showtab
 	else
 		echohl ErrorMsg
@@ -335,7 +343,7 @@ function! V_DoS()
 	let cnt = count(GetVisualSelection(), select)
 	echomsg "cnt is: ".cnt
 	if cnt !=# 0
-		exec "VMSearch" select
+		execute "VMSearch" select
 		for _ in range(cnt-1)
 			call vm#commands#find_next(v:false, v:false)
 		endfor
@@ -350,7 +358,7 @@ function! V_DoX()
 	let g:ry = col('.')
 	normal! o
 	call ReorderRightLeft()
-	exec "normal! ".MoveLeft()
+	execute "normal! ".MoveLeft()
 	normal! o
 	if v:false
 	\|| g:ly !=# 1
@@ -369,7 +377,7 @@ function! V_DoXDoNotExtendSubsequentLines()
 	let g:ry = col('.')
 	normal! o
 	call ReorderRightLeft()
-	exec "normal! ".MoveLeft()
+	execute "normal! ".MoveLeft()
 	let lx=line('.')
 	let ly=col('.')
 	normal! o
@@ -384,7 +392,7 @@ endfunction
 xnoremap X <cmd>call V_DoXDoNotExtendSubsequentLines()<cr>
 function! V_DoH(c)
 	if g:pseudo_visual
-		exec "normal! \<esc>"
+		execute "normal! \<esc>"
 		let i=0
 		while i<#a:c
 			normal! h
@@ -404,7 +412,7 @@ xnoremap h <cmd>call V_DoH(v:count1)<cr>
 xnoremap <left> <cmd>call V_DoH(v:count1)<cr>
 function! V_DoL(c)
 	if g:pseudo_visual
-		exec "normal! \<esc>"
+		execute "normal! \<esc>"
 		let i=0
 		while i<#a:c
 			normal! l
@@ -424,7 +432,7 @@ xnoremap l <cmd>call V_DoL(v:count1)<cr>
 xnoremap <right> <cmd>call V_DoL(v:count1)<cr>
 function! V_DoW()
 	if g:pseudo_visual
-		exec "normal! \<esc>wviw"
+		execute "normal! \<esc>wviw"
 	else
 		normal! w
 	endif
@@ -432,7 +440,7 @@ endfunction
 xnoremap w <cmd>call V_DoW()<cr>
 function! V_DoWWhole()
 	if g:pseudo_visual
-		exec "normal! \<esc>wviW"
+		execute "normal! \<esc>wviW"
 	else
 		normal! W
 	endif
@@ -440,7 +448,7 @@ endfunction
 xnoremap W <cmd>call V_DoWWhole()<cr>
 function! V_DoE()
 	if g:pseudo_visual
-		exec "normal! \<esc>eviw"
+		execute "normal! \<esc>eviw"
 	else
 		normal! e
 	endif
@@ -448,7 +456,7 @@ endfunction
 xnoremap e <cmd>call V_DoE()<cr>
 function! V_DoEWhole()
 	if g:pseudo_visual
-		exec "normal! \<esc>wviW"
+		execute "normal! \<esc>wviW"
 	else
 		normal! E
 	endif
@@ -456,17 +464,17 @@ endfunction
 xnoremap E <cmd>call V_DoEWhole()<cr>
 function! V_DoB()
 	if g:pseudo_visual
-		exec "normal! \<esc>hviwo"
+		execute "normal! \<esc>hviwo"
 	else
-		exec "normal! b"
+		execute "normal! b"
 	endif
 endfunction
 xnoremap b <cmd>call V_DoB()<cr>
 function! V_DoBWhole()
 	if g:pseudo_visual
-		exec "normal! \<esc>hviW"
+		execute "normal! \<esc>hviW"
 	else
-		exec "normal! B"
+		execute "normal! B"
 	endif
 endfunction
 xnoremap B <cmd>call V_DoBWhole()<cr>
@@ -478,7 +486,7 @@ function! V_DoC()
 	let g:ry = col('.')
 	normal! o
 	call ReorderRightLeft()
-	exec "normal! ".MoveLeft()
+	execute "normal! ".MoveLeft()
 	normal! o
 	if v:false
 	\|| g:ly !=# 1
