@@ -9,6 +9,10 @@ xnoremap ge G
 nnoremap gs ^
 xnoremap gs ^
 
+if g:compatible ==# "helix_hard"
+	set noruler
+endif
+
 function! ExitVisual()
 	if v:false
 	elseif g:visual_mode ==# "char"
@@ -106,14 +110,14 @@ function! SimulateCorrectPasteMode(cmd)
 
 	execute "normal! ".paste_cmd
 endfunction
-nnoremap p <cmd>call SimulateCorrectPasteMode('$')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
-nnoremap P <cmd>call SimulateCorrectPasteMode('0')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
-xnoremap p <esc><cmd>call SimulateCorrectPasteMode('$')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
-xnoremap P <esc><cmd>call SimulateCorrectPasteMode('0')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>
-nnoremap gp <cmd>call SimulateCorrectPasteMode('$')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>o
-nnoremap gP <cmd>call SimulateCorrectPasteMode('0')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>o
-xnoremap gp <esc><cmd>call SimulateCorrectPasteMode('$')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>o
-xnoremap gP <esc><cmd>call SimulateCorrectPasteMode('0')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>o
+nnoremap p <cmd>call SimulateCorrectPasteMode('$')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr><cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr>
+nnoremap P <cmd>call SimulateCorrectPasteMode('0')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr><cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr>
+xnoremap p <esc><cmd>call SimulateCorrectPasteMode('$')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr><cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr>
+xnoremap P <esc><cmd>call SimulateCorrectPasteMode('0')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr><cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr>
+nnoremap gp <cmd>call SimulateCorrectPasteMode('$')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>o<cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr>
+nnoremap gP <cmd>call SimulateCorrectPasteMode('0')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>o<cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr>
+xnoremap gp <esc><cmd>call SimulateCorrectPasteMode('$')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>o<cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr>
+xnoremap gP <esc><cmd>call SimulateCorrectPasteMode('0')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>o<cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr>
 nnoremap c xi
 if !g:use_nvim_cmp
 	if has('nvim')
@@ -255,7 +259,7 @@ function! V_DoVBlock()
 	\|| g:visual_mode ==# "char"
 	\|| g:visual_mode ==# "line"
 	\|| g:visual_mode ==# "block"
-		let g:pseudo_visual = g:pseudo_visual?v:false?v:true
+		let g:pseudo_visual = g:pseudo_visual?v:false:v:true
 		Showtab
 	else
 		echohl ErrorMsg
@@ -571,6 +575,14 @@ nnoremap <c-s> m'
 nnoremap U <c-r>
 nnoremap g. g;
 noremap <a-.> ;
+noremap % <cmd>if v:count==#0<bar>call SelectAll()<bar>else<bar>execute "normal! ".v:count1."%"<bar>endif<cr>
+if g:compatible ==# "helix_hard"
+	nnoremap * <cmd>let c=getline(line('.'))[col('.')-1]<bar>let @/=c<bar>echomsg "register '/' set to '".c."'"<cr>
+	unmap q
+	unmap Q
+	noremap q <cmd>if v:register==#'"'<bar>execute "normal! @q"<bar>else<bar>execute "normal! @".v:register<bar>endif<bar>let g:no_currently_selected_register = v:true<cr>
+	noremap Q <cmd>if v:register==#'"'<bar>execute "normal! qq"<bar>else<bar>execute "normal! q".v:register<bar>endif<bar>let g:no_currently_selected_register = v:true<cr>
+endif
 
 if !g:use_nvim_cmp
 	if has('nvim')

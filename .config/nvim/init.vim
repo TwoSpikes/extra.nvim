@@ -2320,16 +2320,41 @@ noremap <silent> <c-x>to <cmd>tabnext<cr>
 noremap <silent> <c-x>tO <cmd>tabprevious<cr>
 noremap <silent> <c-x>5 <cmd>echo "Frames are only in Emacs/GNU Emacs"<cr>
 noremap <m-x> :
-function! SelectAll()
-	mark y
-	normal! ggVG
-	echohl MsgArea
-	if g:language ==# 'russian'
-		echomsg 'Предыдущая позиция отмечена как "y"'
-	else
-		echomsg 'Previous position marked as "y"'
-	endif
-endfunction
+let s:select_all_definition = ""
+let s:select_all_definition .= "
+\function! SelectAll()
+\\n	mark y
+\\n	normal! gg
+\\n	let mode = mode()
+\\n	if mode !~# '^v'
+\\n		normal! v
+\\n	else
+\\n		normal! o
+\\n	endif
+\\n	normal! G$
+\\n	echohl MsgArea
+\\n	if g:language ==# 'russian'
+\\n		echomsg 'Предыдущая позиция отмечена как \"y\"'
+\\n	else
+\\n		echomsg 'Previous position marked as \"y\"'
+\\n	endif"
+if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
+let s:select_all_definition .= "
+\\n	if mode !~? '^v'
+\\n		let g:pseudo_visual = v:true
+\\n		Showtab
+\\n	endif
+\\n	let g:visual_mode = \"char\"
+\\n	let g:lx = 1
+\\n	let g:ly = 1
+\\n	let l:l = line('$')
+\\n	let g:rx = l:l
+\\n	let g:ry = len(getline(l:l))
+\\n	call ReorderRightLeft()"
+endif
+let s:select_all_definition .= "
+\\nendfunction"
+exec s:select_all_definition
 noremap <silent> <c-x>h <cmd>call SelectAll()<cr>
 noremap <silent> <c-x><c-h> <cmd>h<cr>
 noremap <silent> <c-x><c-g> <cmd>echo "Quit"<cr>
