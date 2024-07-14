@@ -475,6 +475,9 @@ if &t_Co >= 256
     hi SpecialChar ctermfg=41 ctermbg=NONE cterm=NONE guifg=#00df5f guibg=NONE gui=NONE
     hi Statusline ctermfg=18 ctermbg=194 cterm=bold guifg=#ffffff guibg=#3040f7 gui=NONE
     hi Statuslinemod ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#a84000 guibg=#ffff9f gui=reverse,bold
+    hi Statuslinemac ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#870000 guibg=#ffffd0 gui=reverse,bold
+    hi Statusline0mac ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#870000 guibg=#3040f7 gui=NONE
+    hi Statuslinemac1 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#000087 guibg=#870000 gui=NONE
     hi Statuslinestat1 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#aff0a0 guibg=#000087 gui=NONE
     hi Statuslinestat01 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#000087 guibg=#3040f7 gui=NONE
     hi Statuslinestat12 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#3040f7 guibg=#000087 gui=NONE
@@ -620,6 +623,9 @@ if &t_Co >= 256
     " hi Statusline ctermfg=231 ctermbg=16 cterm=bold
     hi Statusline ctermfg=255 ctermbg=20 cterm=bold guifg=#ffffff guibg=#0080ff gui=NONE
     hi Statuslinemod ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#fff070 guibg=#000000 gui=reverse
+    hi Statuslinemac ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#870000 guibg=#ffffd0 gui=reverse,bold
+    hi Statusline0mac ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#870000 guibg=#0080ff gui=NONE
+    hi Statuslinemac1 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#f0a007 guibg=#870000 gui=NONE
     hi Statuslinestat1 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#ffffff guibg=#f0a007 gui=bold
     hi Statuslinestat01 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#f0a007 guibg=#0080ff gui=NONE
     hi Statuslinestat12 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#0080ff guibg=#f0a007 gui=NONE

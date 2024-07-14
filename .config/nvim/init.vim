@@ -885,9 +885,21 @@ function! Showtab()
 		endif
 	endif
 	let s:result .= '%='
+	if reg_recording() !=# ''
+		let s:result .= '%#Statusline0mac#'
+		if reg_recording() =~# '^\u$'
+			let s:result .= '%#Statuslinemac# REC '.reg_recording().' '
+		else
+			let s:result .= '%#Statuslinemac# rec '.reg_recording().' '
+		endif
+	endif
 	if &columns ># 45
 		if g:compatible !=# "helix_hard"
-			let s:result .= '%#Statuslinestat01#'
+			if reg_recording() !=# ''
+				let s:result .= '%#Statuslinemac1#'
+			else
+				let s:result .= '%#Statuslinestat01#'
+			endif
 			let s:result .= ''
 			let s:result .= '%#Statuslinestat1#'
 		endif
