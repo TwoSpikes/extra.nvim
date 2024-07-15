@@ -101,5 +101,25 @@ $ DOTFILES_VIM_CONFIG_PATH=~/dnsjajsbdn/vim/ nvim
 
 </details>
 
+# Contribution
+
+## Copy configs to this repo and commit
+
+After installing extra.nvim, run:
+```console
+$ exnvim commit
+```
+
+It using Vim/NeoVim:
+```console
+:ExNvimCommit
+```
+
+## Get extra.nvim version
+
+```console
+$ exnvim version
+```
+
 > [!Warning]
 > Do not delete code that seems strange, maybe you will break something

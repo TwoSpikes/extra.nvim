@@ -935,6 +935,12 @@ function! DotfilesCommit()
 	Git commit --all --verbose
 endfunction
 command! -nargs=0 DotfilesCommit call DotfilesCommit()
+function! ExNvimCommit()
+	!exnvim commit --only-copy
+	cd ~/extra.nvim
+	Git commit --all --verbose
+endfunction
+command! -nargs=0 ExNvimCommit call ExNvimCommit()
 
 function! GenerateDotfilesConfig()
 	tabnew
