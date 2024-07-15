@@ -8,10 +8,12 @@ This is NeoVim/Vim configuration
 Screenshots
 </summary>
 
-<img src=.github/images/a4.jpg width=100px height=222px>
-<img src=.github/images/Screenshot_2024-05-21-22-05-31-89_84d3000e3f4017145260f7618db1d683.jpg width=100px height=100px>
-<img src=.github/images/a2.jpg width=100px height=222px>
-<img src=.github/images/a1.jpg width=100px height=222px>
+<img src=https://i.imgur.com/5mH5Dko.jpeg width=100px height=222px />
+<img src=https://i.imgur.com/4w3YoOV.jpeg width=100px height=222px />
+<img src=https://i.imgur.com/WEGmaj0.jpeg width=100px height=222px />
+<img src=https://i.imgur.com/tvM6cbs.jpeg width=100px height=222px />
+<img src=https://i.imgur.com/4V1da5Q.jpeg width=100px height=222px />
+<img src=https://i.imgur.com/Paf2BIr.jpeg width=100px height=222px />
 
 </details>
 
