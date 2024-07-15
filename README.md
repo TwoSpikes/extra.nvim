@@ -58,9 +58,10 @@ Manual installation
 ## Installation
 
 ```console
-$ git clone https://github.com/TwoSpikes/extra.nvim ~/extra.nvim
-$ cd ~/extra.nvim/util/installer
-$ cargo run --
+$ git clone https://github.com/TwoSpikes/extra.nvim extra.nvim
+$ cd extra.nvim
+$ cargo install --path util/exnvim
+$ exnvim install
 ```
 
 ## Extra step for Vim
