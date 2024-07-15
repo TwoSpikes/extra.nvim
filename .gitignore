@@ -1,1 +1,3 @@
 *~
+util/installer/target/
+util/installer/Cargo.lock

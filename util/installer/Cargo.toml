@@ -1,0 +1,11 @@
+[package]
+name = "installer"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+cursive = "0.20.0"
+home = "0.5.9"
+runas = "1.2.0"
+which = "6.0.1"
+whoami = "1.5.1"
