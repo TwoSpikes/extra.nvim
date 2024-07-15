@@ -583,6 +583,13 @@ if g:compatible ==# "helix_hard"
 	noremap q <cmd>if v:register==#'"'<bar>execute "normal! @q"<bar>else<bar>execute "normal! @".v:register<bar>endif<bar>let g:no_currently_selected_register = v:true<cr>
 	noremap Q <cmd>if v:register==#'"'<bar>execute "normal! qq"<bar>else<bar>execute "normal! q".v:register<bar>endif<bar>let g:no_currently_selected_register = v:true<cr>
 endif
+nnoremap [<space> mzO<esc>`z
+xnoremap [<space> mz<esc>O<esc>`z
+nnoremap ]<space> mzo<esc>`z
+xnoremap ]<space> mz<esc>o<esc>`zgv
+xnoremap u ugv
+xnoremap U <c-r>gv
+nnoremap <c-c> <cmd>call CommentOutDefault()<cr>
 
 if !g:use_nvim_cmp
 	if has('nvim')
