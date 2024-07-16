@@ -24,8 +24,8 @@ local alpha = require('alpha')
 local dashboard = require('alpha.themes.dashboard')
 dashboard.section.header.val = 'extra.nvim'
 if os.getenv('HOME') ~= nil then
-	if vim.fn.executable('dotfiles') == 1 then
-		local readfile = io.popen('dotfiles version')
+	if vim.fn.executable('exnvim') == 1 then
+		local readfile = io.popen('exnvim version')
 		dashboard.section.header.val = dashboard.section.header.val .. ' ' .. readfile:read()
 		readfile:close()
 	end
