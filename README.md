@@ -62,6 +62,7 @@ $ git clone https://github.com/TwoSpikes/extra.nvim extra.nvim
 $ cd extra.nvim
 $ cargo install --path util/exnvim
 $ exnvim install
+$ exnvim setup
 ```
 
 ## Extra step for Vim
@@ -123,3 +124,6 @@ $ exnvim version
 
 > [!Warning]
 > Do not delete code that seems strange, maybe you will break something
+
+> [!Warning]
+> Due to version is built in `exnvim` binary, you should recompile it every time `.exnvim-version` changes

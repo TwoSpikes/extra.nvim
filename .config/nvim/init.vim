@@ -25,11 +25,7 @@ call SetDotfilesConfigPath()
 function! LoadDotfilesConfig(path, reload=v:false)
 	if !filereadable(a:path)
 		echohl ErrorMsg
-		if g:language ==# 'russian'
-			echomsg "блядь: dotfiles vim конфиг не найден"
-		else
-			echomsg "error: no dotfiles vim config"
-		endif
+		echomsg "error: no dotfiles vim config"
 		echohl Normal
 		return 1
 	endif
@@ -37,11 +33,7 @@ function! LoadDotfilesConfig(path, reload=v:false)
 	silent execute "let g:dotfiles_config = json_decode(l:dotfiles_config_str)"
 	if type(g:dotfiles_config) !=# v:t_dict
 		echohl ErrorMsg
-		if g:language ==# 'russian'
-			echomsg "блядь: не удалось распарсить dotfiles vim конфиг"
-		else
-			echomsg "error: failed to parse dotfiles vim config"
-		endif
+		echomsg "error: failed to parse dotfiles vim config"
 		echohl Normal
 		return 1
 	endif
@@ -89,6 +81,106 @@ function! LoadDotfilesConfig(path, reload=v:false)
 endfunction
 
 call LoadDotfilesConfig(g:DOTFILES_CONFIG_PATH)
+
+function! SetDefaultValuesForStartupOptionsAndDotfilesConfigOptions()
+	" Default values for startup options
+	if !exists('g:PAGER_MODE')
+		let g:PAGER_MODE = v:false
+	endif
+	if !exists('g:DO_NOT_OPEN_ANYTHING')
+		let g:DO_NOT_OPEN_ANYTHING = v:false
+	endif
+
+	" Default values for options
+	if !exists('g:use_transparent_bg')
+		let g:use_transparent_bg = "dark"
+	endif
+	if !exists('g:cursorcolumn')
+		let g:cursorcolumn = v:false
+	endif
+	if !exists('g:cursorline')
+		let g:cursorline = v:true
+	endif
+	if !exists('g:cursorline_style')
+		let g:cursorline_style = "dim"
+	endif
+	if !exists('g:linenr')
+		let g:linenr = v:true
+	endif
+	if !exists('g:linenr_style')
+		let g:linenr_style = v:true
+	endif
+	if !exists('g:background')
+		let g:background = "dark"
+	endif
+	if !exists('g:quickui_border_style')
+		let g:quickui_border_style = 3
+	endif
+	if !exists('g:quickui_color_scheme')
+		let g:quickui_color_scheme = "papercol dark"
+	endif
+	if !exists('g:open_on_start')
+		let g:open_on_start = "alpha"
+	endif
+	if !exists('g:use_github_copilot')
+		let g:use_github_copilot = v:false
+	endif
+	if !exists('g:pad_amount_confirm_dialogue')
+		let g:pad_amount_confirm_dialogue = 30
+	endif
+	if !exists('g:cursor_style')
+		let g:cursor_style = "block"
+	endif
+	if !exists('g:showtabline')
+		let g:showtabline = 2
+	endif
+	if !exists('g:tabline_path')
+		let g:tabline_path = "name"
+	endif
+	if !exists('g:tabline_spacing')
+		let g:tabline_spacing = "transition"
+	endif
+	if !exists('g:tabline_modified')
+		let g:tabline_modified = v:true
+	endif
+	if !exists('g:tabline_icons')
+		let g:tabline_icons = v:true
+	endif
+	if !exists('g:tabline_pressable')
+		let g:tabline_pressable = v:true
+	endif
+	if !exists('g:enable_mouse')
+		let g:enable_mouse = v:true
+	endif
+	if !exists('g:mouse_focus')
+		let g:mouse_focus = v:true
+	endif
+	if !exists('g:use_nvim_cmp')
+		let g:use_nvim_cmp = v:false
+	endif
+	if !exists('g:enable_fortune')
+		let g:enable_fortune = v:false
+	endif
+	if !exists('g:quickui_icons')
+		let g:quickui_icons = v:true
+	endif
+	if !exists('g:language')
+		let g:language = 'auto'
+	endif
+	if !exists('g:fast_terminal')
+		let g:fast_terminal = v:false
+	endif
+	if !exists('g:enable_which_key')
+		let g:enable_which_key = v:true
+	endif
+	if !exists('g:compatible')
+		let g:compatible = "no"
+	endif
+	if !exists('g:do_not_save_previous_column_position_when_going_up_or_down')
+		let g:do_not_save_previous_column_position_when_going_up_or_down = v:false
+	endif
+endfunction
+call SetDefaultValuesForStartupOptionsAndDotfilesConfigOptions()
 
 function! SetConfigPath()
 	if !exists('g:CONFIG_PATH') || g:CONFIG_PATH ==# ""
@@ -296,94 +388,6 @@ function! DefineAugroups()
 	call DefineAugroupVisual()
 	call DefineAugroupNumbertoggle()
 endfunction
-function! SetDefaultValuesForStartupOptionsAndDotfilesConfigOptions()
-	" Default values for startup options
-	if !exists('g:PAGER_MODE')
-		let g:PAGER_MODE = v:false
-	endif
-	if !exists('g:DO_NOT_OPEN_ANYTHING')
-		let g:DO_NOT_OPEN_ANYTHING = v:false
-	endif
-
-	" Default values for options
-	if !exists('g:use_transparent_bg')
-		let g:use_transparent_bg = "dark"
-	endif
-	if !exists('g:cursorcolumn')
-		let g:cursorcolumn = v:false
-	endif
-	if !exists('g:cursorline')
-		let g:cursorline = v:true
-	endif
-	if !exists('g:cursorline_style')
-		let g:cursorline_style = "dim"
-	endif
-	if !exists('g:linenr')
-		let g:linenr = v:true
-	endif
-	if !exists('g:linenr_style')
-		let g:linenr_style = v:true
-	endif
-	if !exists('g:background')
-		let g:background = "dark"
-	endif
-	if !exists('g:pad_amount_confirm_dialogue')
-		let g:pad_amount_confirm_dialogue = 30
-	endif
-	if !exists('g:cursor_style')
-		let g:cursor_style = "block"
-	endif
-	if !exists('g:showtabline')
-		let g:showtabline = 2
-	endif
-	if !exists('g:tabline_path')
-		let g:tabline_path = "name"
-	endif
-	if !exists('g:tabline_spacing')
-		let g:tabline_spacing = "transition"
-	endif
-	if !exists('g:tabline_modified')
-		let g:tabline_modified = v:true
-	endif
-	if !exists('g:tabline_icons')
-		let g:tabline_icons = v:true
-	endif
-	if !exists('g:tabline_pressable')
-		let g:tabline_icons = v:true
-	endif
-	if !exists('g:enable_mouse')
-		let g:enable_mouse = v:true
-	endif
-	if !exists('g:mouse_focus')
-		let g:mouse_focus = v:true
-	endif
-	if !exists('g:use_nvim_cmp')
-		let g:use_nvim_cmp = v:false
-	endif
-	if !exists('g:enable_fortune')
-		let g:enable_fortune = v:false
-	endif
-	if !exists('g:quickui_icons')
-		let g:quickui_icons = v:true
-	endif
-	if !exists('g:language')
-		let g:language = 'auto'
-	endif
-	if !exists('g:fast_terminal')
-		let g:fast_terminal = v:false
-	endif
-	if !exists('g:enable_which_key')
-		let g:enable_which_key = v:true
-	endif
-	if !exists('g:compatible')
-		let g:compatible = "no"
-	endif
-	if !exists('g:do_not_save_previous_column_position_when_going_up_or_down')
-		let g:do_not_save_previous_column_position_when_going_up_or_down = v:false
-	endif
-endfunction
-call SetDefaultValuesForStartupOptionsAndDotfilesConfigOptions()
-
 function! HandleDotfilesConfig()
 	if g:background ==# "dark"
 		set background=dark
@@ -944,7 +948,13 @@ command! -nargs=0 ExNvimCommit call ExNvimCommit()
 
 function! GenerateDotfilesConfig()
 	tabnew
-	call OpenTerm('dotfiles setup dotfiles vim')
+	if !executable('exnvim')
+		echohl ErrorMsg
+		echomsg "error: exnvim not installed"
+		echohl Normal
+		return
+	endif
+	call OpenTerm('exnvim setup')
 endfunction
 command! -nargs=0 GenerateDotfilesConfig call GenerateDotfilesConfig()
 nnoremap <leader>G <cmd>GenerateDotfilesConfig<cr>
@@ -2864,7 +2874,9 @@ function! OnFirstTime()
 			call quickui#confirm#open('To see help, press SPC-?')
 		endif
 
-		call OpenTerm('dotfiles setup dotfiles vim')
+		if !filereadable(g:DOTFILES_CONFIG_PATH)
+			GenerateDotfilesConfig
+		endif
 	endif
 endfunction
 function! OnStart()
