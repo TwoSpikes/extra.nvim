@@ -43,7 +43,7 @@ Reinstall coc-sh crutch
 
 Run this:
 ```console
-$ ONLY_SETUP_COC_SH_CRUTCH=true ./.dotfiles-setup.sh .
+$ exnvim install-coc-sh-crutch -f
 ```
 
 </details>

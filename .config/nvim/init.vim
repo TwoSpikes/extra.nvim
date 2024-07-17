@@ -930,14 +930,14 @@ command! -nargs=0 Showtab set stl=%{%Showtab()%}
 
 command! -nargs=* Pkg !pkg <args>
 function! DotfilesCommit()
-	!dotfiles commit --only-copy
 	cd ~/dotfiles
+	!dotfiles commit --only-copy
 	Git commit --all --verbose
 endfunction
 command! -nargs=0 DotfilesCommit call DotfilesCommit()
 function! ExNvimCommit()
-	!exnvim commit --only-copy
 	cd ~/extra.nvim
+	!exnvim commit --only-copy
 	Git commit --all --verbose
 endfunction
 command! -nargs=0 ExNvimCommit call ExNvimCommit()

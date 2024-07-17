@@ -21,6 +21,9 @@ macro_rules! usage {
         println!("  For `install` subcommand:");
         println!("    --without-coc-sh-crutch -w  Do not install coc-sh crutch");
         println!("    ++without-coc-sh-crutch +w  Install coc-sh crutch (default)");
+        println!("  For `install-coc-sh-crutch` subcommand:");
+        println!("    --force -f      Reinstall coc-sh crutch if it is already installed");
+        println!("    ++force +f      Do not reinstall coc-sh crutch (default)");
         println!("  --help -h         Show this message");
         println!("  --version -V      Show version");
     };
@@ -117,16 +120,19 @@ fn install(
     );
 
     if with_coc_sh_crutch {
-        install_coc_sh_crutch(target)
+        install_coc_sh_crutch(target, false)
     } else {
         Ok(())
     }
 }
 
-fn install_coc_sh_crutch(home: ::std::path::PathBuf) -> ::std::io::Result<()> {
+fn install_coc_sh_crutch(
+    home: ::std::path::PathBuf,
+    force: bool,
+) -> ::std::io::Result<()> {
     let coc_sh_crutch_file = home.join(".config/coc/extensions/node_modules/coc-sh/node_modules/bash-language-server/out/cli.js_crutch");
     let orig_cli_file = home.join(".config/coc/extensions/node_modules/coc-sh/node_modules/bash-language-server/out/cli.js");
-    if coc_sh_crutch_file.exists() {
+    if !force && coc_sh_crutch_file.exists() {
         return Ok(());
     }
     ::std::fs::rename(orig_cli_file.clone(), coc_sh_crutch_file.clone())?;
@@ -203,7 +209,9 @@ fn main() {
         INSTALL {
             with_coc_sh_crutch: bool,
         },
-        INSTALL_COC_SH_CRUTCH,
+        INSTALL_COC_SH_CRUTCH {
+            force: bool,
+        },
         COMMIT {
             only_copy: bool,
         },
@@ -279,18 +287,6 @@ fn main() {
                     },
                 }
             },
-            "install-coc-sh-crutch" => {
-                match state {
-                    State::NONE => {
-                        state = State::INSTALL_COC_SH_CRUTCH;
-                    },
-                    _ => {
-                        eprintln!("Cannot use subcommand while using another subcommand");
-                        usage!(program_name);
-                        ::std::process::exit(1);
-                    },
-                }
-            },
             "--without-coc-sh-crutch"|"-w" => match state {
                 State::INSTALL {
                     with_coc_sh_crutch: _,
@@ -314,7 +310,49 @@ fn main() {
                     };
                 }
                 _ => {
-                    eprintln!("This option can only be used with `installcommit` subcommand");
+                    eprintln!("This option can only be used with `install` subcommand");
+                    usage!(program_name);
+                    ::std::process::exit(1);
+                }
+            },
+            "install-coc-sh-crutch" => {
+                match state {
+                    State::NONE => {
+                        state = State::INSTALL_COC_SH_CRUTCH {
+                            force: false,
+                        };
+                    },
+                    _ => {
+                        eprintln!("Cannot use subcommand while using another subcommand");
+                        usage!(program_name);
+                        ::std::process::exit(1);
+                    },
+                }
+            },
+            "--force"|"-f" => match state {
+                State::INSTALL_COC_SH_CRUTCH {
+                    force: _,
+                } => {
+                    state = State::INSTALL_COC_SH_CRUTCH {
+                        force: true,
+                    };
+                }
+                _ => {
+                    eprintln!("This option can only be used with `install-coc-sh-crutch` subcommand");
+                    usage!(program_name);
+                    ::std::process::exit(1);
+                }
+            },
+            "++force"|"+f" => match state {
+                State::INSTALL_COC_SH_CRUTCH {
+                    force: _,
+                } => {
+                    state = State::INSTALL_COC_SH_CRUTCH {
+                        force: false,
+                    };
+                }
+                _ => {
+                    eprintln!("This option can only be used with `install-coc-sh-crutch` subcommand");
                     usage!(program_name);
                     ::std::process::exit(1);
                 }
@@ -391,8 +429,10 @@ fn main() {
                 },
             };
         },
-        State::INSTALL_COC_SH_CRUTCH => {
-            match install_coc_sh_crutch(home) {
+        State::INSTALL_COC_SH_CRUTCH {
+            force,
+        } => {
+            match install_coc_sh_crutch(home, force) {
                 Ok(()) => (),
                 Err(e) => {
                     eprintln!("{}: Failed to install coc-sh crutch: {}", program_name, e);
