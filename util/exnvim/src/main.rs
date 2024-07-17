@@ -12,6 +12,7 @@ macro_rules! usage {
         println!("  install-coc-sh-crutch");
         println!("                 Install only coc-sh crutch");
         println!("  commit         Commit changes to extra.nvim repo");
+        println!("  setup          Generate config for extra.nvim");
         println!("  help           Show this message");
         println!("  version        Show version");
         println!("OPTIONS (case sensitive):");
