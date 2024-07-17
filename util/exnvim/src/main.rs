@@ -1,5 +1,7 @@
 use std::os::unix::fs::PermissionsExt;
 
+mod setup;
+
 macro_rules! usage {
     ($program_name:expr) => {
         println!("{}: [OPTION]...", $program_name);
@@ -7,15 +9,20 @@ macro_rules! usage {
         println!();
         println!("SUBCOMMANDS (case sensitive):");
         println!("  install        Install configs from extra.nvim repo");
+        println!("  install-coc-sh-crutch");
+        println!("                 Install only coc-sh crutch");
         println!("  commit         Commit changes to extra.nvim repo");
         println!("  help           Show this message");
         println!("  version        Show version");
         println!("OPTIONS (case sensitive):");
         println!("  For `commit` subcommand:");
-        println!("    --only_copy  Only copy files, do not do actual commit");
-        println!("    ++only_copy  Do actual commit, default");
-        println!("  --help -h      Show this message");
-        println!("  --version -V   Show version");
+        println!("    --only_copy -o  Only copy files, do not do actual commit");
+        println!("    ++only_copy +o  Do actual commit, default");
+        println!("  For `install` subcommand:");
+        println!("    --without-coc-sh-crutch -w  Do not install coc-sh crutch");
+        println!("    ++without-coc-sh-crutch +w  Install coc-sh crutch (default)");
+        println!("  --help -h         Show this message");
+        println!("  --version -V      Show version");
     };
 }
 
@@ -190,14 +197,17 @@ fn main() {
         ::std::process::exit(1);
     }
 
+    #[allow(non_camel_case_types)]
     enum State {
         NONE,
         INSTALL {
             with_coc_sh_crutch: bool,
         },
+        INSTALL_COC_SH_CRUTCH,
         COMMIT {
             only_copy: bool,
         },
+        SETUP,
         VERSION,
     }
     let mut state = State::NONE;
@@ -269,7 +279,19 @@ fn main() {
                     },
                 }
             },
-            "--without-coc-sh-crutch" => match state {
+            "install-coc-sh-crutch" => {
+                match state {
+                    State::NONE => {
+                        state = State::INSTALL_COC_SH_CRUTCH;
+                    },
+                    _ => {
+                        eprintln!("Cannot use subcommand while using another subcommand");
+                        usage!(program_name);
+                        ::std::process::exit(1);
+                    },
+                }
+            },
+            "--without-coc-sh-crutch"|"-w" => match state {
                 State::INSTALL {
                     with_coc_sh_crutch: _,
                 } => {
@@ -283,7 +305,7 @@ fn main() {
                     ::std::process::exit(1);
                 }
             },
-            "++without-coc-sh-crutch" => match state {
+            "++without-coc-sh-crutch"|"+W" => match state {
                 State::INSTALL {
                     with_coc_sh_crutch: _,
                 } => {
@@ -297,6 +319,18 @@ fn main() {
                     ::std::process::exit(1);
                 }
             },
+            "setup" => {
+                match state {
+                    State::NONE => {
+                        state = State::SETUP;
+                    },
+                    _ => {
+                        eprintln!("Cannot use subcommand while using another subcommand");
+                        usage!(program_name);
+                        ::std::process::exit(1);
+                    },
+                }
+            },
             "version"|"--version"|"-V" => {
                 match state {
                     State::NONE => {
@@ -307,7 +341,8 @@ fn main() {
                         usage!(program_name);
                         ::std::process::exit(1);
                     },
-                }            }
+                }
+            },
             &_ => {
                 eprintln!("{}: Unknown argument", program_name);
                 usage!(program_name);
@@ -356,8 +391,26 @@ fn main() {
                 },
             };
         },
+        State::INSTALL_COC_SH_CRUTCH => {
+            match install_coc_sh_crutch(home) {
+                Ok(()) => (),
+                Err(e) => {
+                    eprintln!("{}: Failed to install coc-sh crutch: {}", program_name, e);
+                    ::std::process::exit(2);
+                },
+            };
+        },
         State::COMMIT {only_copy} => {
             _ = commit(home, vimruntime, only_copy, program_name);
+        },
+        State::SETUP => {
+            match crate::setup::setup(home) {
+                Ok(()) => (),
+                Err(e) => {
+                    eprintln!("{}: Failed to setup: {}", program_name, e);
+                    ::std::process::exit(2);
+                }
+            };
         },
         State::VERSION => {
             version();
