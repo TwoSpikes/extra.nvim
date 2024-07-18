@@ -41,8 +41,9 @@ function! N_DoX()
 endfunction
 nnoremap <expr> x N_DoX()
 nnoremap <expr> X N_DoX()
-xnoremap u <esc>u
-xnoremap U <esc><c-r>
+xnoremap u ugv
+xnoremap U Ugv
+xnoremap ~ ~gv
 function ChangeVisModeBasedOnSelectedText()
 	let g:lx = line('.')
 	let g:ly = col('.')
@@ -95,8 +96,8 @@ function! SimulateCorrectPasteMode(cmd)
 			execute "normal! j0"
 			let paste_cmd = 'P'
 		elseif a:cmd ==# '0'
-			execute "normal! k$"
-			let paste_cmd = 'p'
+			execute "normal! 0"
+			let paste_cmd = 'P'
 		else
 			echohl ErrorMsg
 			echomsg "dotfiles: SimulateCorrectPasteMode: Internal error: wrong a:cmd: ".a:cmd
@@ -110,14 +111,14 @@ function! SimulateCorrectPasteMode(cmd)
 
 	execute "normal! ".paste_cmd
 endfunction
-nnoremap p <cmd>call SimulateCorrectPasteMode('$')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr><cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr>
-nnoremap P <cmd>call SimulateCorrectPasteMode('0')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr><cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr>
-xnoremap p <esc><cmd>call SimulateCorrectPasteMode('$')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr><cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr>
-xnoremap P <esc><cmd>call SimulateCorrectPasteMode('0')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr><cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr>
-nnoremap gp <cmd>call SimulateCorrectPasteMode('$')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>o<cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr>
-nnoremap gP <cmd>call SimulateCorrectPasteMode('0')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>o<cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr>
-xnoremap gp <esc><cmd>call SimulateCorrectPasteMode('$')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>o<cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr>
-xnoremap gP <esc><cmd>call SimulateCorrectPasteMode('0')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>o<cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr>
+nnoremap p <cmd>call SimulateCorrectPasteMode('$')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr><cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr><cmd>let g:pseudo_visual=v:true<cr><cmd>Showtab<cr>
+nnoremap P <cmd>call SimulateCorrectPasteMode('0')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr><cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr><cmd>let g:pseudo_visual=v:true<cr><cmd>Showtab<cr>
+xnoremap p <esc><cmd>call SimulateCorrectPasteMode('$')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr><cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr><cmd>let g:pseudo_visual=v:true<cr><cmd>Showtab<cr>
+xnoremap P <esc><cmd>call SimulateCorrectPasteMode('0')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr><cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr><cmd>let g:pseudo_visual=v:true<cr><cmd>Showtab<cr>
+nnoremap gp <cmd>call SimulateCorrectPasteMode('$')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>o<cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr><cmd>let g:pseudo_visual=v:true<cr><cmd>Showtab<cr>
+nnoremap gP <cmd>call SimulateCorrectPasteMode('0')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>o<cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr><cmd>let g:pseudo_visual=v:true<cr><cmd>Showtab<cr>
+xnoremap gp <esc><cmd>call SimulateCorrectPasteMode('$')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>o<cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr><cmd>let g:pseudo_visual=v:true<cr><cmd>Showtab<cr>
+xnoremap gP <esc><cmd>call SimulateCorrectPasteMode('0')<cr>`[v<cmd>let g:visual_mode="char"<cr>`]<cmd>call ChangeVisModeBasedOnSelectedText()<cr>o<cmd>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<cr><cmd>let g:pseudo_visual=v:true<cr><cmd>Showtab<cr>
 nnoremap c xi
 if !g:use_nvim_cmp
 	if has('nvim')
@@ -519,13 +520,15 @@ function! V_DoY()
 	\|| g:ly ==# len(getline(g:lx))+1
 	\&& g:ry ==# len(getline(g:rx))+1
 		let g:yank_mode = "line"
-	elseif v:false
-	\|| (v:false
+	elseif v:true
+	\&& (v:false
 	\|| g:ry ==# len(getline(g:rx))
 	\|| g:ry ==# len(getline(g:rx))+1
 	\|| v:false)
 	\&& g:ly ==# 1
 		let g:yank_mode = "line_post"
+		if g:ry ==# len(getline(g:rx))+1
+		endif
 	else
 		normal! y
 		let g:yank_mode = "char"
@@ -574,6 +577,26 @@ xnoremap , <esc>
 nnoremap <c-s> m'
 nnoremap U <c-r>
 nnoremap g. g;
+function! V_DoUndo()
+	if g:pseudo_visual
+		undo
+		execute "normal! \<c-\>\<c-n>"
+	else
+		normal! ugv
+		let g:pseudo_visual = v:true
+	endif
+endfunction
+xnoremap u <cmd>call V_DoUndo()<cr>
+function! V_DoRedo()
+	if g:pseudo_visual
+		redo
+		execute "normal! \<c-\>\<c-n>"
+	else
+		execute "normal! \<c-r>gv"
+		let g:pseudo_visual = v:true
+	endif
+endfunction
+xnoremap U <cmd>call V_DoRedo()<cr>
 noremap <a-.> ;
 noremap % <cmd>if v:count==#0<bar>call SelectAll()<bar>else<bar>execute "normal! ".v:count1."%"<bar>endif<cr>
 if g:compatible ==# "helix_hard"
@@ -587,8 +610,6 @@ nnoremap [<space> mzO<esc>`z
 xnoremap [<space> mz<esc>O<esc>`z
 nnoremap ]<space> mzo<esc>`z
 xnoremap ]<space> mz<esc>o<esc>`zgv
-xnoremap u ugv
-xnoremap U <c-r>gv
 nnoremap <c-c> <cmd>call CommentOutDefault()<cr>
 
 if !g:use_nvim_cmp
@@ -644,6 +665,7 @@ nnoremap <leader>Y <cmd>echohl ErrorMsg<cr><cmd>echom "No selection"<cr><cmd>ech
 xnoremap <leader>y y
 xnoremap <leader>Y y
 nnoremap <leader>R <cmd>for i in range(line("'>")-line("'<"))<bar>let l=line("'<")+i<bar>call setline(l,substitute(getline(l),getreg('x')))<bar>endfor<cr>
+nnoremap <leader>xr <cmd>call OpenRangerCheck()<cr>
 nnoremap <leader>k K
 nnoremap <leader>r <Plug>(coc-rename)
 nnoremap <leader><c-c> <cmd>Telescope commands<cr>

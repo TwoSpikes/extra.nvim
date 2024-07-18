@@ -144,7 +144,7 @@ function! RebindMenus()
 	endif
 	if executable('ranger')
 		call quickui#menu#install(s:window_label, [
-					\ [(g:quickui_icons?" ":"")."Open file using &ranger\tLEAD r", 'call OpenRangerCheck()', 'Opens ranger to select file to open'],
+					\ [(g:quickui_icons?" ":"")."Open file using &ranger\t".(g:compatible==#"helix"||g:compatible==#"helix_hard"?"LEAD xr":"LEAD r"), 'call OpenRangerCheck()', 'Opens ranger to select file to open'],
 					\ ])
 	endif
 	call quickui#menu#install(s:window_label, [
@@ -257,7 +257,7 @@ function! RebindMenus()
 			\ ["Open &plugins list\tLEAD vi", 'call SelectPosition(g:PLUGINS_INSTALL_FILE_PATH, g:stdpos)', 'Open '.g:PLUGINS_INSTALL_FILE_PATH],
 			\ ["Open plugins set&up\tLEAD vs", 'call SelectPosition(g:PLUGINS_SETUP_FILE_PATH, g:stdpos)', 'Open '.g:PLUGINS_SETUP_FILE_PATH],
 			\ ["Open lsp &settings\tLEAD vl", 'call SelectPosition(g:LSP_PLUGINS_SETUP_FILE_PATH, g:stdpos)', 'Open '.g:LSP_PLUGINS_SETUP_FILE_PATH.' (deprecated due to coc.nvim)'],
-			\ ["Open &dotfiles config\tLEAD vj", 'call SelectPosition(g:DOTFILES_CONFIG_PATH, g:stdpos)', 'Open '.g:DOTFILES_CONFIG_PATH],
+			\ ["Open ex&nvim config\tLEAD vj", 'call SelectPosition(g:DOTFILES_CONFIG_PATH, g:stdpos)', 'Open '.g:DOTFILES_CONFIG_PATH],
 			\ ["Open &colorschemes\tLEAD vc", 'call SelectPosition($VIMRUNTIME."/colors", g:stdpos)', 'Open colorschemes directory'],
 			\ ["--", '' ],
 			\ ["&Reload init.vim\tLEAD se", 'let old_tabpagenr=tabpagenr()|exec "source ".g:CONFIG_PATH."/init.vim"|exec old_tabpagenr."tabnext"', 'Reload Vim/NeoVim config'],
@@ -273,14 +273,14 @@ function! RebindMenus()
 	endif
 	if filereadable(g:DOTFILES_CONFIG_PATH)
 		call quickui#menu#install(s:config_label, [
-			\ ["Reload do&tfiles config\tLEAD sj", 'let old_tabpagenr=tabpagenr()|call LoadDotfilesConfig("'.expand(g:DOTFILES_CONFIG_PATH).'", v:true)|call HandleDotfilesConfig()|call HandleBuftypeAll()|exec old_tabpagenr."tabnext"', 'Reload dotfiles config'],
+			\ ["Reload e&xnvim config\tLEAD sj", 'let old_tabpagenr=tabpagenr()|call LoadDotfilesConfig("'.expand(g:DOTFILES_CONFIG_PATH).'", v:true)|call HandleDotfilesConfig()|call HandleBuftypeAll()|exec old_tabpagenr."tabnext"', 'Reload dotfiles config'],
 			\ ])
 	endif
 
 	" register HELP menu with weight 10000
 	call quickui#menu#install(s:help_label, [
 				\ ["Vim &cheatsheet", 'help index', ''],
-				\ ["&Dotfiles cheatsheet\tLEAD ?", 'DotfilesCheatSheet', 'dotfiles cheatsheet'],
+				\ ["&extra.nvim cheatsheet\tLEAD ?", 'ExNvimCheatSheet', 'dotfiles cheatsheet'],
 				\ ['Ti&ps', 'help tips', ''],
 				\ ['--',''],
 				\ ["&Tutorial", 'help tutor', ''],

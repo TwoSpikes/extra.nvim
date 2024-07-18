@@ -1918,7 +1918,7 @@ autocmd BufReadPost *
      \ endif
 
 " MY .nvimrc HELP
-function! DotfilesCheatSheet()
+function! ExNvimCheatSheet()
 	echo "
 	  \Help for my NeoVim config:
 	\\n     By default, \<leader\> (LEAD) is space symbol.
@@ -2029,11 +2029,12 @@ function! DotfilesCheatSheet()
 	\\n    gw - See :h sneak|50
 	\\n  ABOUT:
 	\\n    Author: TwoSpikes (2023 - 2024)
-	\\n    Github repository: https://github.com/TwoSpikes/dotfiles
+	\\n    Github repository: https://github.com/TwoSpikes/extra.nvim
+	\\n    Also see: https://github.com/TwoSpikes/dotfiles
 	\"
 endfunction
-command! -nargs=0 DotfilesCheatSheet call DotfilesCheatSheet()
-noremap <silent> <leader>? <cmd>DotfilesCheatSheet<cr>
+command! -nargs=0 ExNvimCheatSheet call ExNvimCheatSheet()
+noremap <silent> <leader>? <cmd>ExNvimCheatSheet<cr>
 
 " FAST COMMANDS
 "noremap ; :
@@ -2061,8 +2062,18 @@ inoremap <c-c> <c-c><cmd>call Numbertoggle()<cr>
 " TERMINAL
 function! OpenTerm(cmd)
 	if !&modifiable
+		wincmd p
+		let prevwinid = win_getid(winnr(), tabpagenr())
+		wincmd p
 		new
+		wincmd p
+		close
+		wincmd p
+		call win_gotoid(prevwinid)
+		wincmd p
 	endif
+	call setline(5, 'lol')
+	set nomodified
 	if a:cmd ==# ""
 		execute printf("terminal %s", $SHELL)
 	else
@@ -2113,7 +2124,7 @@ endfunction
 function! UncommentOut(comment_string)
 	mark z
 	if mode() !~? 'v.*' && mode() !~? "\<c-v>.*"
-		call setline(line("."), substitute(getline(line(".")), "^".a:comment_string, "", ""))
+		call setline(line("."), substitute(getline(line(".")), '^\( *\)'.a:comment_string." *", '\1', ""))
 	else
 		for l:idx in range(line("'>")-line("'<"))
 			let l:line = line("'<") + l:idx
@@ -2792,6 +2803,71 @@ function! OpenOnStart()
 endfunction
 
 nnoremap <leader>n <cmd>Neogen<cr>
+
+if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
+	nnoremap <c-w>nv <cmd>vsplit<bar>enew<cr>
+	nnoremap <c-w>n<c-v> <cmd>vsplit<bar>enew<cr>
+	nnoremap <c-w>ns <cmd>split<bar>enew<cr>
+	nnoremap <c-w>n<c-s> <cmd>split<bar>enew<cr>
+else
+	nnoremap <c-w>n <cmd>execute v:count1."wincmd n"<cr>
+	nnoremap <c-w><c-n> <cmd>execute v:count1."wincmd n"<cr>
+endif
+nnoremap <c-w>o <cmd>silent only<cr>
+nnoremap <c-w><c-o> <cmd>silent only<cr>
+nnoremap <c-w>q <cmd>quit<cr>
+nnoremap <c-w><c-q> <cmd>quit<cr>
+nnoremap <c-w>f <cmd>wincmd f<cr>
+nnoremap <c-w>F <cmd>wincmd F<cr>
+nnoremap <c-w>gf <cmd>wincmd gf<cr>
+nnoremap <c-w>gF <cmd>wincmd gF<cr>
+nnoremap <c-w>gt <cmd>tabnext<cr>
+nnoremap <c-w>gT <cmd>tabprevious<cr>
+nnoremap <c-w>j <cmd>execute v:count1."wincmd j"<cr>
+nnoremap <c-w><down> <cmd>execute v:count1."wincmd j"<cr>
+nnoremap <c-w>k <cmd>execute v:count1."wincmd k"<cr>
+nnoremap <c-w><up> <cmd>execute v:count1."wincmd k"<cr>
+nnoremap <c-w>h <cmd>execute v:count1."wincmd h"<cr>
+nnoremap <c-w><left> <cmd>execute v:count1."wincmd h"<cr>
+nnoremap <c-w>l <cmd>execute v:count1."wincmd l"<cr>
+nnoremap <c-w><right> <cmd>execute v:count1."wincmd l"<cr>
+nnoremap <c-w>t <cmd>execute v:count1."wincmd t"<cr>
+nnoremap <c-w>b <cmd>execute v:count1."wincmd b"<cr>
+nnoremap <c-w>J <cmd>execute v:count1."wincmd J"<cr>
+nnoremap <c-w>K <cmd>execute v:count1."wincmd K"<cr>
+nnoremap <c-w>H <cmd>execute v:count1."wincmd H"<cr>
+nnoremap <c-w>L <cmd>execute v:count1."wincmd L"<cr>
+nnoremap <c-w>+ <cmd>execute v:count1."wincmd +"<cr>
+nnoremap <c-w>- <cmd>execute v:count1."wincmd -"<cr>
+nnoremap <c-w>< <cmd>execute v:count1."wincmd <"<cr>
+nnoremap <c-w>> <cmd>execute v:count1."wincmd >"<cr>
+nnoremap <c-w>= <cmd>wincmd ><cr>
+nnoremap <c-w>P <cmd>wincmd P<cr>
+nnoremap <c-w><c-p> <cmd>wincmd P<cr>
+nnoremap <c-w>R <cmd>execute v:count1."wincmd R"<cr>
+nnoremap <c-w><c-r> <cmd>execute v:count1."wincmd R"<cr>
+nnoremap <c-w>s <cmd>execute v:count1."wincmd s"<cr>
+nnoremap <c-w>S <cmd>execute v:count1."wincmd s"<cr>
+nnoremap <c-w>T <cmd>wincmd T<cr>
+nnoremap <c-w>w <cmd>execute v:count1."wincmd w"<cr>
+nnoremap <c-w>x <cmd>execute v:count1."wincmd x"<cr>
+nnoremap <c-w>W <cmd>execute v:count1."wincmd W"<cr>
+nnoremap <c-w>] <cmd>wincmd ]<cr>
+nnoremap <c-w>^ <cmd>execute v:count1."wincmd ^"<cr>
+nnoremap <c-w><c-^> <cmd>execute v:count1."wincmd ^"<cr>
+nnoremap <c-w>_ <cmd>execute v:count1."wincmd _"<cr>
+nnoremap <c-w><c-_> <cmd>execute v:count1."wincmd _"<cr>
+nnoremap <c-w>c <cmd>wincmd c<cr>
+nnoremap <c-w>d <cmd>wincmd d<cr>
+nnoremap <c-w>g<c-]> <cmd>execute "wincmd g\<c-]>"<cr>
+nnoremap <c-w>g] <cmd>wincmd g]<cr>
+nnoremap <c-w>g} <cmd>wincmd g}<cr>
+nnoremap <c-w>g<tab> <cmd>execute "wincmd g\<tab>"<cr>
+nnoremap <c-w>i <cmd>wincmd i<cr>
+nnoremap <c-w>p <cmd>wincmd p<cr>
+nnoremap <c-w>r <cmd>execute v:count1."wincmd r"<cr>
+nnoremap <c-w>z <cmd>wincmd z<cr>
+nnoremap <c-w>\| <cmd>execute v:count1."wincmd \|"<cr>
 
 if isdirectory(expand(g:LOCALSHAREPATH)."/site/pack/packer/start/vim-fugitive")
 	nnoremap <leader>gc <cmd>Git commit --verbose<cr>
