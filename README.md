@@ -51,8 +51,8 @@ $ exnvim install-coc-sh-crutch -f
 Change to light theme: `:set background=light` \
 Change to dark theme: `:set background=dark`
 
-<details><summary>
-Manual installation
+<details open><summary>
+Installation
 </summary>
 
 ## Installation
@@ -77,12 +77,6 @@ $ echo "so ~/.config/nvim/init.vim" >> ~/.vimrc
 Config for dotfiles
 </summary>
 
-### Autogenerate
-
-```console
-$ dotfiles setup dotfiles vim
-```
-
 ### Where is it?
 
 ```console
@@ -106,9 +100,18 @@ $ DOTFILES_VIM_CONFIG_PATH=~/dnsjajsbdn/vim/ nvim
 
 ## Copy configs to this repo and commit
 
-After installing extra.nvim, run:
 ```console
 $ exnvim commit
+```
+
+### Only copy configs, but not commit:
+
+```console
+$ exnvim commit --only-copy
+```
+Or
+```console
+$ exnvim commit -o
 ```
 
 It using Vim/NeoVim:
