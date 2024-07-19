@@ -1,2 +1,3 @@
 normal! gg
-startinsert
+call timer_start(0, {->execute('startinsert')})
+
