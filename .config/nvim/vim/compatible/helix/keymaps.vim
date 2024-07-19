@@ -31,6 +31,36 @@ let &whichwrap="b,s,h,l,<,>,~,[,]"
 set virtualedit=onemore
 
 nnoremap d x
+function! V_DoD()
+	let g:lx = line('.')
+	let g:ly = col('.')
+	normal! o
+	let g:rx = line('.')
+	let g:ry = col('.')
+	normal! o
+	call ReorderRightLeft()
+	execute "normal! ".MoveLeft()
+	normal! o
+	if v:false
+	elseif v:false
+	\|| g:ly ==# len(getline(g:lx))+1
+	\&& g:ry ==# len(getline(g:rx))+1
+		let g:yank_mode = "line"
+	elseif v:true
+	\&& (v:false
+	\|| g:ry ==# len(getline(g:rx))
+	\|| g:ry ==# len(getline(g:rx))+1
+	\|| v:false)
+	\&& g:ly ==# 1
+		let g:yank_mode = "line_post"
+		if g:ry ==# len(getline(g:rx))+1
+		endif
+	else
+		let g:yank_mode = "char"
+	endif
+	normal! d
+endfunction
+xnoremap d <cmd>call V_DoD()<cr>
 function! N_DoX()
 	let result = ""
 	let result .= "v"
