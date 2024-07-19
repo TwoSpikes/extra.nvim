@@ -25,7 +25,7 @@ call SetDotfilesConfigPath()
 function! LoadDotfilesConfig(path, reload=v:false)
 	if !filereadable(a:path)
 		echohl ErrorMsg
-		echomsg "error: no dotfiles vim config"
+		echomsg "error: no extra.nvim config"
 		echohl Normal
 		return 1
 	endif
@@ -33,7 +33,7 @@ function! LoadDotfilesConfig(path, reload=v:false)
 	silent execute "let g:dotfiles_config = json_decode(l:dotfiles_config_str)"
 	if type(g:dotfiles_config) !=# v:t_dict
 		echohl ErrorMsg
-		echomsg "error: failed to parse dotfiles vim config"
+		echomsg "error: failed to parse extra.nvim config"
 		echohl Normal
 		return 1
 	endif
@@ -396,9 +396,9 @@ function! HandleDotfilesConfig()
 	else
 		echohl ErrorMsg
 		if g:language ==# 'russian'
-			echomsg "Dotfiles vim конфиг: блядь: неправильное значение заднего фона: ".g:background
+			echomsg "extra.nvim конфиг: блядь: неправильное значение заднего фона: ".g:background
 		else
-			echomsg "Dotfiles vim config: Error: wrong background value: ".g:background
+			echomsg "extra.nvim config: Error: wrong background value: ".g:background
 		endif
 		echohl Normal
 
@@ -946,7 +946,7 @@ function! ExNvimCommit()
 endfunction
 command! -nargs=0 ExNvimCommit call ExNvimCommit()
 
-function! GenerateDotfilesConfig()
+function! GenerateExNvimConfig()
 	tabnew
 	if !executable('exnvim')
 		echohl ErrorMsg
@@ -956,8 +956,8 @@ function! GenerateDotfilesConfig()
 	endif
 	call OpenTerm('exnvim setup')
 endfunction
-command! -nargs=0 GenerateDotfilesConfig call GenerateDotfilesConfig()
-nnoremap <leader>G <cmd>GenerateDotfilesConfig<cr>
+command! -nargs=0 GenerateExNvimConfig call GenerateExNvimConfig()
+nnoremap <leader>G <cmd>GenerateExNvimConfig<cr>
 
 function! MyTabLabel(n)
 	let buflist = tabpagebuflist(a:n)
@@ -1670,7 +1670,7 @@ function! Lua_Require_Goto_Workaround_Wincmd_f()
 			return
 		endwhile
 		echohl ErrorMsg
-		echomsg "dotfiles: Lua_Require_Goto_Workaround_Wincmd_f: Internal error: unreachable code"
+		echomsg "extra.nvim: Lua_Require_Goto_Workaround_Wincmd_f: Internal error: unreachable code"
 		echohl Normal
 	else
 		echohl ErrorMsg
@@ -2951,7 +2951,7 @@ function! OnFirstTime()
 		endif
 
 		if !filereadable(g:DOTFILES_CONFIG_PATH)
-			GenerateDotfilesConfig
+			GenerateExNvimConfig
 		endif
 	endif
 endfunction

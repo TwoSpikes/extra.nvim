@@ -22,7 +22,7 @@ function! ExitVisual()
 	elseif g:visual_mode ==# "block"
 		normal! <c-v>
 	else
-		echomsg "dotfiles: hcm: ExitVisual: Internal error: Wrong visual mode: ".g:visual_mode
+		echomsg "extra.nvim: hcm: ExitVisual: Internal error: Wrong visual mode: ".g:visual_mode
 	endif
 endfunction
 
@@ -75,7 +75,7 @@ function! SimulateCorrectPasteMode(cmd)
 			let paste_cmd = 'P'
 		else
 			echohl ErrorMsg
-			echomsg "dotfiles: SimulateCorrectPasteMode: Internal error: wrong a:cmd: ".a:cmd
+			echomsg "extra.nvim: SimulateCorrectPasteMode: Internal error: wrong a:cmd: ".a:cmd
 			echohl Normal
 		endif
 	elseif g:yank_mode ==# "line"
@@ -87,7 +87,7 @@ function! SimulateCorrectPasteMode(cmd)
 			let paste_cmd = 'P'
 		else
 			echohl ErrorMsg
-			echomsg "dotfiles: SimulateCorrectPasteMode: Internal error: wrong a:cmd: ".a:cmd
+			echomsg "extra.nvim: SimulateCorrectPasteMode: Internal error: wrong a:cmd: ".a:cmd
 			echohl Normal
 		endif
 	elseif g:yank_mode ==# "line_post"
@@ -100,12 +100,12 @@ function! SimulateCorrectPasteMode(cmd)
 			let paste_cmd = 'P'
 		else
 			echohl ErrorMsg
-			echomsg "dotfiles: SimulateCorrectPasteMode: Internal error: wrong a:cmd: ".a:cmd
+			echomsg "extra.nvim: SimulateCorrectPasteMode: Internal error: wrong a:cmd: ".a:cmd
 			echohl Normal
 		endif
 	else
 		echohl ErrorMsg
-		echomsg "dotfiles: SimulateCorrectPasteMode: Internal error: wrong yank mode: ".g:yank_mode
+		echomsg "extra.nvim: SimulateCorrectPasteMode: Internal error: wrong yank mode: ".g:yank_mode
 		echohl Normal
 	endif
 
@@ -215,7 +215,7 @@ function! V_DoV()
 	if v:false
 	elseif g:visual_mode ==# "no"
 		echohl ErrorMsg
-		echomsg "dotfiles: hcm: V_DoV: Internal error: It is not visual mode"
+		echomsg "extra.nvim: hcm: V_DoV: Internal error: It is not visual mode"
 		echohl Normal
 	elseif v:false
 	\|| g:visual_mode ==# "char"
@@ -226,7 +226,7 @@ function! V_DoV()
 		return ""
 	else
 		echohl ErrorMsg
-		echomsg "dotfiles: hcm: V_DoV: Internal error: Wrong visual mode: ".g:visual_mode
+		echomsg "extra.nvim: hcm: V_DoV: Internal error: Wrong visual mode: ".g:visual_mode
 		echohl Normal
 	endif
 endfunction
@@ -235,7 +235,7 @@ function! V_DoVLine()
 	if v:false
 	elseif g:visual_mode ==# "no"
 		echohl ErrorMsg
-		echomsg "dotfiles: hcm: V_DoVLine: Internal error: It is not visual mode"
+		echomsg "extra.nvim: hcm: V_DoVLine: Internal error: It is not visual mode"
 		echohl Normal
 	elseif v:false
 	\|| g:visual_mode ==# "char"
@@ -245,7 +245,7 @@ function! V_DoVLine()
 		Showtab
 	else
 		echohl ErrorMsg
-		echomsg "dotfiles: hcm: V_DoVLine: Internal error: Wrong visual mode: ".g:visual_mode
+		echomsg "extra.nvim: hcm: V_DoVLine: Internal error: Wrong visual mode: ".g:visual_mode
 		echohl Normal
 	endif
 endfunction
@@ -254,7 +254,7 @@ function! V_DoVBlock()
 	if v:false
 	elseif g:visual_mode ==# "no"
 		echohl ErrorMsg
-		echomsg "dotfiles: hcm: V_DoVBlock: Internal error: It is not visual mode"
+		echomsg "extra.nvim: hcm: V_DoVBlock: Internal error: It is not visual mode"
 		echohl Normal
 	elseif v:false
 	\|| g:visual_mode ==# "char"
@@ -264,7 +264,7 @@ function! V_DoVBlock()
 		Showtab
 	else
 		echohl ErrorMsg
-		echomsg "dotfiles: hcm: V_DoVBlock: Internal error: Wrong visual mode: ".g:visual_mode
+		echomsg "extra.nvim: hcm: V_DoVBlock: Internal error: Wrong visual mode: ".g:visual_mode
 		echohl Normal
 	endif
 endfunction
@@ -293,7 +293,7 @@ function! MoveLeft()
 		return "o0"
 	else
 		echohl ErrorMsg
-		echomsg "dotfiles: hcm: MoveLeft: Internal error: Wrong visual mode: ".g:visual_mode
+		echomsg "extra.nvim: hcm: MoveLeft: Internal error: Wrong visual mode: ".g:visual_mode
 		echohl Normal
 	endif
 endfunction
@@ -313,6 +313,7 @@ function! MoveRight()
 		\&& l==#g:lx
 			return "o"
 		endif
+		return ""
 	elseif v:false
 	\|| g:visual_mode ==# "line"
 		if l==#g:lx
@@ -321,7 +322,7 @@ function! MoveRight()
 		return "$"
 	else
 		echohl ErrorMsg
-		echomsg "dotfiles: hcm: MoveRight: Internal error: Wrong visual mode: ".g:visual_mode
+		echomsg "extra.nvim: hcm: MoveRight: Internal error: Wrong visual mode: ".g:visual_mode
 		echohl Normal
 	endif
 endfunction
@@ -544,7 +545,7 @@ function! V_DoY()
 		execute "normal! \<esc>mzgv`zy"
 	else
 		echohl ErrorMsg
-		echomsg "dotfiles: V_DoY: Internal error: wrong yank mode: ".g:yank_mode
+		echomsg "extra.nvim: V_DoY: Internal error: wrong yank mode: ".g:yank_mode
 		echohl Normal
 	endif
 
