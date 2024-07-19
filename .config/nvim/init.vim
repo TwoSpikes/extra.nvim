@@ -2062,7 +2062,7 @@ vnoremap <leader>' iw<esc>a'<esc>bi'<esc>v
 nnoremap ci_ yiwct_
 noremap <silent> <leader>d <cmd>nohlsearch<cr>
 nnoremap <silent> <esc> <cmd>let @/ = ""<cr>
-tnoremap <c-]> <c-\><esc>
+tnoremap <esc> <c-\><c-n>
 inoremap <c-c> <c-c><cmd>call Numbertoggle()<cr>
 
 " TERMINAL
@@ -2436,9 +2436,10 @@ inoremap <silent> Jk <esc>
 " 	endif
 " endfunction
 " tnoremap <nowait> <expr> <silent> k ProcessTBut_k()
-tnoremap <silent> jk <c-\><c-n>
-tnoremap <silent> jK <c-\><c-n><cmd>let g:please_do_not_close=v:true<cr><cmd>:bd!<cr><cmd>tabnew<cr><cmd>call OpenTerm("")<cr><cmd>let g:please_do_not_close=v:false<cr>
-tnoremap <silent> <nowait> jj jj
+
+" tnoremap <silent> jk <c-\><c-n>
+" tnoremap <silent> jK <c-\><c-n><cmd>let g:please_do_not_close=v:true<cr><cmd>:bd!<cr><cmd>tabnew<cr><cmd>call OpenTerm("")<cr><cmd>let g:please_do_not_close=v:false<cr>
+" tnoremap <silent> <nowait> jj jj
 command! -nargs=* Write write <args>
 
 inoremap <silent> ju <esc>viwUea
