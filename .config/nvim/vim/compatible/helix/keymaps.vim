@@ -173,15 +173,13 @@ function! ReorderRightLeft()
 		let g:ly=xor(g:ry,g:ly)
 	endif
 endfunction
-function! SavePosition()
-	let c=col('.')
-	let l=line('.')
-	if c==#g:ly&&l==#g:lx
-		let g:lx=l
-		let g:ly=c
+function! SavePosition(old_c, old_l, new_c, new_l)
+	if a:old_c==#g:ly&&a:old_l==#g:lx
+		let g:lx=a:new_l
+		let g:ly=a:new_c
 	else
-		let g:rx=l
-		let g:ry=c
+		let g:rx=a:new_l
+		let g:ry=a:new_c
 	endif
 endfunction
 xnoremap <expr> : g:pseudo_visual?":\<c-u>":":"
@@ -327,6 +325,7 @@ function! MoveRight()
 	endif
 endfunction
 function! V_DoA()
+	call ReorderRightLeft()
 	return MoveRight()."\<esc>a"
 endfunction
 unmap a%
@@ -405,13 +404,15 @@ function! V_DoH(c)
 			let i+=1
 		endwhile
 	else
+		let old_l=line('.')
+		let old_c=col('.')
 		let i=0
 		while i<#a:c
 			normal! h
 			let i+=1
 		endwhile
 		call ReorderRightLeft()
-		call SavePosition()
+		call SavePosition(old_c, old_l, col('.'), line('.'))
 	endif
 endfunction
 xnoremap h <cmd>call V_DoH(v:count1)<cr>
@@ -425,13 +426,15 @@ function! V_DoL(c)
 			let i+=1
 		endwhile
 	else
+		let old_c = col('.')
+		let old_l = line('.')
 		let i=0
 		while i<#a:c
 			normal! l
 			let i+=1
 		endwhile
 		call ReorderRightLeft()
-		call SavePosition()
+		call SavePosition(old_c, old_l, col('.'), line('.'))
 	endif
 endfunction
 xnoremap l <cmd>call V_DoL(v:count1)<cr>

@@ -1280,6 +1280,12 @@ nnoremap <leader>xg <cmd>grep <cword> .<cr>
 let s:process_g_but_function_expression = "
 \function! ProcessGBut(button)
 \"
+if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
+let s:process_g_but_function_expression .= "
+\\n	let old_c=col('.')
+\\n	let old_l=line('.')
+\"
+endif
 if g:fast_terminal
 let s:process_g_but_function_expression .= "
 \\n	if &buftype !=# 'terminal'
@@ -1329,7 +1335,7 @@ endif
 if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
 	let s:process_g_but_function_expression .= "
 	\\n	call ReorderRightLeft()
-	\\n	call SavePosition()
+	\\n	call SavePosition(old_c, old_l, col('.'), line('.'))
 	\"
 endif
 
