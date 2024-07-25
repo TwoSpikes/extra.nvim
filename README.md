@@ -114,7 +114,8 @@ Or
 $ exnvim commit -o
 ```
 
-It using Vim/NeoVim:
+#### If using Vim/NeoVim:
+
 ```console
 :ExNvimCommit
 ```
