@@ -70,6 +70,7 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		\'fast_terminal',
 		\'enable_which_key',
 		\'compatible',
+		\'enable_nvim_treesitter_context',
 	\]
 	for option in l:option_list
 		if exists('g:dotfiles_config["'.option.'"]')
@@ -94,6 +95,9 @@ function! SetDefaultValuesForStartupOptionsAndDotfilesConfigOptions()
 	" Default values for options
 	if !exists('g:use_transparent_bg')
 		let g:use_transparent_bg = "dark"
+	endif
+	if !exists('g:use_italic_style')
+		let g:use_italic_style = v:true
 	endif
 	if !exists('g:cursorcolumn')
 		let g:cursorcolumn = v:false
@@ -175,6 +179,9 @@ function! SetDefaultValuesForStartupOptionsAndDotfilesConfigOptions()
 	endif
 	if !exists('g:compatible')
 		let g:compatible = "no"
+	endif
+	if !exists('g:enable_nvim_treesitter_context')
+		let g:enable_nvim_treesitter_context = v:true
 	endif
 	if !exists('g:do_not_save_previous_column_position_when_going_up_or_down')
 		let g:do_not_save_previous_column_position_when_going_up_or_down = v:false

@@ -519,9 +519,11 @@ return require('packer').startup(function (use)
 	use {
 		'cjodo/convert.nvim',
 	}
-	use {
-		'nvim-treesitter/nvim-treesitter-context',
-	}
+	if vim.g.enable_nvim_treesitter_context then
+		use {
+			'nvim-treesitter/nvim-treesitter-context',
+		}
+	end
 	use {
 		'windwp/nvim-ts-autotag',
 	}

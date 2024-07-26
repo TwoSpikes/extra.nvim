@@ -45,7 +45,13 @@ require('packages.endscroll.init')
 require('packages.null-ls.init')
 require('packages.conform.init')
 require('packages.convert.init')
-require('packages.treesitter-context.init')
+if vim.g.enable_nvim_treesitter_context then
+	require('packages.treesitter-context.init')
+else
+	if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/nvim-treesitter-context") then
+		vim.fn.delete(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/nvim-treesitter-context", "rf")
+	end
+end
 require('packages.ts-autotag.init')
 require('packages.ufo.init')
 require('packages.trouble.init')

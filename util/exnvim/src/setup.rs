@@ -391,6 +391,10 @@ pub fn setup(home: ::std::path::PathBuf) -> ::std::io::Result<()> {
 \"_comment_69\":\"Aviable: no (default), helix, helix_hard\",
 	\"compatible\": \"no\",
 
+\"_comment_70\":\"Enable nvim-treesitter-context plugin\",
+\"_comment_71\":\"Useful to disable if it lags (for me it lags)\",
+	\"enable_nvim_treesitter_context\": true,
+
 	\"do_not_save_previous_column_position_when_going_up_or_down\": false,
 
 \"_comment_end\":\"Ending field to not put comma every time\"
