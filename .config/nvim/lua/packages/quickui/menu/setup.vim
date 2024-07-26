@@ -268,7 +268,7 @@ function! RebindMenus()
 			\ ])
 	if executable('dotfiles')
 		call quickui#menu#install(s:config_label, [
-			\ ["&Generate dotfiles config\tLEAD G", 'GenerateDotfilesConfig', 'Regenerate dotfiles vim config'],
+			\ ["&Generate extra.nvim config\tLEAD G", 'GenerateExNvimConfig', 'Regenerate extra.nvim config'],
 			\ ])
 	endif
 	if filereadable(g:DOTFILES_CONFIG_PATH)
