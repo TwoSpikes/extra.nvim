@@ -74,24 +74,24 @@ $ echo "so ~/.config/nvim/init.vim" >> ~/.vimrc
 </details>
 
 <details open><summary>
-Config for dotfiles
+Config for extra.nvim
 </summary>
 
 ### Where is it?
 
 ```console
-$ mkdir -p ~/.config/dotfiles/vim/
-$ vim ~/.config/dotfiles/vim/config.json
+$ mkdir -p ~/.config/exnvim/
+$ vim ~/.config/exnvim/config.json
 ```
 
 If you want to change default dotfiles config path:
 ```console
-$ DOTFILES_VIM_CONFIG_PATH=your_path nvim
+$ EXNVIM_CONFIG_PATH=your_path nvim
 ```
 
 Like
 ```console
-$ DOTFILES_VIM_CONFIG_PATH=~/dnsjajsbdn/vim/ nvim
+$ EXNVIM_CONFIG_PATH=~/dnsjajsbdn/exnvim/ nvim
 ```
 
 </details>

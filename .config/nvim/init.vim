@@ -10,28 +10,28 @@ if !has('nvim')
 	set nocompatible
 endif
 
-function! SetDotfilesConfigPath()
-	if !exists('g:DOTFILES_CONFIG_PATH') || g:DOTFILES_CONFIG_PATH ==# ""
-		if !exists('$DOTFILES_VIM_CONFIG_PATH')
-			let g:DOTFILES_CONFIG_PATH = "$HOME/.config/dotfiles/vim/config.json"
+function! SetExNvimConfigPath()
+	if !exists('g:EXNVIM_CONFIG_PATH') || g:EXNVIM_CONFIG_PATH ==# ""
+		if !exists('$EXNVIM_CONFIG_PATH')
+			let g:EXNVIM_CONFIG_PATH = "$HOME/.config/exnvim/config.json"
 		else
-			let g:DOTFILES_CONFIG_PATH = $DOTFILES_VIM_CONFIG_PATH
+			let g:EXNVIM_CONFIG_PATH = $EXNVIM_CONFIG_PATH
 		endif
-		let g:DOTFILES_CONFIG_PATH = expand(g:DOTFILES_CONFIG_PATH)
+		let g:EXNVIM_CONFIG_PATH = expand(g:EXNVIM_CONFIG_PATH)
 	endif
 endfunction
-call SetDotfilesConfigPath()
+call SetExNvimConfigPath()
 
-function! LoadDotfilesConfig(path, reload=v:false)
+function! LoadExNvimConfig(path, reload=v:false)
 	if !filereadable(a:path)
 		echohl ErrorMsg
 		echomsg "error: no extra.nvim config"
 		echohl Normal
 		return 1
 	endif
-	let l:dotfiles_config_str = join(readfile(a:path, ''), '')
-	silent execute "let g:dotfiles_config = json_decode(l:dotfiles_config_str)"
-	if type(g:dotfiles_config) !=# v:t_dict
+	let l:exnvim_config_str = join(readfile(a:path, ''), '')
+	silent execute "let g:exnvim_config = json_decode(l:exnvim_config_str)"
+	if type(g:exnvim_config) !=# v:t_dict
 		echohl ErrorMsg
 		echomsg "error: failed to parse extra.nvim config"
 		echohl Normal
@@ -73,17 +73,17 @@ function! LoadDotfilesConfig(path, reload=v:false)
 		\'enable_nvim_treesitter_context',
 	\]
 	for option in l:option_list
-		if exists('g:dotfiles_config["'.option.'"]')
+		if exists('g:exnvim_config["'.option.'"]')
 			if !exists("g:".option) || a:reload
-				execute "let g:".option." = g:dotfiles_config[option]"
+				execute "let g:".option." = g:exnvim_config[option]"
 			endif
 		endif
 	endfor
 endfunction
 
-call LoadDotfilesConfig(g:DOTFILES_CONFIG_PATH)
+call LoadExNvimConfig(g:EXNVIM_CONFIG_PATH)
 
-function! SetDefaultValuesForStartupOptionsAndDotfilesConfigOptions()
+function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 	" Default values for startup options
 	if !exists('g:PAGER_MODE')
 		let g:PAGER_MODE = v:false
@@ -187,7 +187,7 @@ function! SetDefaultValuesForStartupOptionsAndDotfilesConfigOptions()
 		let g:do_not_save_previous_column_position_when_going_up_or_down = v:false
 	endif
 endfunction
-call SetDefaultValuesForStartupOptionsAndDotfilesConfigOptions()
+call SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 
 function! SetConfigPath()
 	if !exists('g:CONFIG_PATH') || g:CONFIG_PATH ==# ""
@@ -395,7 +395,7 @@ function! DefineAugroups()
 	call DefineAugroupVisual()
 	call DefineAugroupNumbertoggle()
 endfunction
-function! HandleDotfilesConfig()
+function! HandleExNvimConfig()
 	if g:background ==# "dark"
 		set background=dark
 	elseif g:background ==# "light"
@@ -430,7 +430,7 @@ function! HandleDotfilesConfig()
 		endif
 	endif
 endfunction
-call HandleDotfilesConfig()
+call HandleExNvimConfig()
 
 let mapleader = " "
 
@@ -1700,7 +1700,7 @@ augroup Lua_Require_Goto_Workaround
 	autocmd FileType lua exec "noremap <buffer> <c-w>f <cmd>call Lua_Require_Goto_Workaround_Wincmd_f()<cr>"
 augroup END
 
-function! HandleDotfilesOptionsInComment()
+function! HandleExNvimOptionsInComment()
 	if !exists('g:default_comment_string')
 		return
 	endif
@@ -1727,7 +1727,7 @@ function! HandleDotfilesOptionsInComment()
 			let end_option += 1
 		endwhile
 		let option = line[0:end_option]
-		if option !=# 'DotfilesOptionInComment'
+		if option !=# 'ExNvimOptionInComment'
 			let i += 1
 			continue
 		endif
@@ -1781,7 +1781,7 @@ function! HandleDotfilesOptionsInComment()
 					break
 				else
 					echohl ErrorMsg
-					echomsg "dotfiles: internal error: wrong vartype: ".vartype
+					echomsg "extra.nvim: internal error: wrong vartype: ".vartype
 					echohl Normal
 					let wrong_var = v:true
 					break
@@ -1813,7 +1813,7 @@ function! HandleDotfilesOptionsInComment()
 					endif
 				else
 					echohl ErrorMsg
-					echomsg "dotfiles: internal error: wrong vartype: ".vartype
+					echomsg "extra.nvim: internal error: wrong vartype: ".vartype
 					echohl Normal
 					let wrong_var = v:true
 					break
@@ -1828,7 +1828,7 @@ function! HandleDotfilesOptionsInComment()
 					let varname .= c
 				else
 					echohl ErrorMsg
-					echomsg "dotfiles: internal error: wrong vartype: ".vartype
+					echomsg "extra.nvim: internal error: wrong vartype: ".vartype
 					echohl Normal
 					let wrong_var = v:true
 					break
@@ -1845,7 +1845,7 @@ function! HandleDotfilesOptionsInComment()
 			let option_calculated .= '$'
 		else
 			echohl ErrorMsg
-			echomsg "dotfiles: internal error: wrong vartype: ".vartype
+			echomsg "extra.nvim: internal error: wrong vartype: ".vartype
 			echohl Normal
 		endif
 		if vartype !=# ''
@@ -1864,9 +1864,9 @@ function! HandleDotfilesOptionsInComment()
 		let i += 1
 	endwhile
 endfunction
-augroup DotfilesOptionsInComment
+augroup ExNvimOptionsInComment
 	autocmd!
-	autocmd BufEnter * if v:vim_did_enter|call HandleDotfilesOptionsInComment()|endif
+	autocmd BufEnter * if v:vim_did_enter|call HandleExNvimOptionsInComment()|endif
 augroup END
 
 nnoremap <silent> * *:noh<cr>
@@ -1919,11 +1919,14 @@ execute printf("noremap <silent> <leader>ss <esc>:so %s<cr>", g:PLUGINS_SETUP_FI
 execute printf('noremap <silent> <leader>vl <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:LSP_PLUGINS_SETUP_FILE_PATH)
 execute printf("noremap <silent> <leader>sl <esc>:so %s<cr>", g:LSP_PLUGINS_SETUP_FILE_PATH)
 
-execute printf('noremap <silent> <leader>vj <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:DOTFILES_CONFIG_PATH)
-execute printf('noremap <silent> <leader>sj <cmd>call LoadDotfilesConfig("%s", v:true)<cr><cmd>call HandleDotfilesConfig()<cr><cmd>call HandleBuftypeAll()<cr>', expand(g:DOTFILES_CONFIG_PATH))
+execute printf('noremap <silent> <leader>vj <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:EXNVIM_CONFIG_PATH)
+execute printf('noremap <silent> <leader>sj <cmd>call LoadExNvimConfig("%s", v:true)<cr><cmd>call HandleExNvimConfig()<cr><cmd>call HandleBuftypeAll()<cr>', expand(g:EXNVIM_CONFIG_PATH))
 
 " .dotfiles-script.sh FILE
-noremap <silent> <leader>vb <cmd>call SelectPosition("~/.dotfiles-script.sh", g:stdpos)<cr>
+" See https://github.com/TwoSpikes/dotfiles.git
+if filereadable(expand("~/.dotfiles-script.sh"))
+	noremap <silent> <leader>vb <cmd>call SelectPosition("~/.dotfiles-script.sh", g:stdpos)<cr>
+endif
 
 autocmd BufReadPost *
      \ if line("'\"") > 0 && line("'\"") <= line("$") |
@@ -1951,9 +1954,10 @@ function! ExNvimCheatSheet()
 	\\n    LEAD ss - Reload plugins setup
 	\\n    LEAD vl - Open lsp settings (deprecated due to coc.nvim)
 	\\n    LEAD vl - Reload lsp settings (deprecated)
-	\\n    LEAD vj - Open dotfiles config
-	\\n    LEAD sj - Reload dotfiles config
+	\\n    LEAD vj - Open extra.nvim config
+	\\n    LEAD sj - Reload extra.nvim config
 	\\n    LEAD vb - Open .dotfiles-script.sh
+	\\n        Also see: https://github.com/TwoSpikes/dotfiles.git
 	\\n    LEAD vc - Open colorschemes
 	\\n    LEAD vC - Apply colorscheme under cursor
 	\\n SPECIAL:
@@ -2659,7 +2663,7 @@ augroup END
 
 function! TermuxSaveCursorStyle()
 	if $TERMUX_VERSION !=# "" && filereadable(expand("~/.termux/termux.properties"))
-		if !filereadable(expand("~/.cache/dotfiles/termux/terminal_cursor_style"))
+		if !filereadable(expand("~/.cache/extra.nvim/termux/terminal_cursor_style"))
 			let TMPFILE=trim(system(["mktemp", "-u"]))
 			call system(["cp", expand("~/.termux/termux.properties"), TMPFILE])
 			call system(["sed", "-i", "s/ *= */=/", TMPFILE])
@@ -2667,13 +2671,13 @@ function! TermuxSaveCursorStyle()
 			call system(["chmod", "+x", TMPFILE])
 			call writefile(["echo $terminal_cursor_style"], TMPFILE, "a")
 			let g:termux_cursor_style = trim(system(TMPFILE))
-			if !isdirectory(expand("~/.cache/dotfiles/termux"))
-				call mkdir(expand("~/.cache/dotfiles/termux"), "p", 0700)
+			if !isdirectory(expand("~/.cache/extra.nvim/termux"))
+				call mkdir(expand("~/.cache/extra.nvim/termux"), "p", 0700)
 			endif
-			call writefile([g:termux_cursor_style], expand("~/.cache/dotfiles/termux/terminal_cursor_style"), "")
+			call writefile([g:termux_cursor_style], expand("~/.cache/extra.nvim/termux/terminal_cursor_style"), "")
 			call system(["rm", TMPFILE])
 		else
-			let g:termux_cursor_style = trim(readfile(expand("~/.cache/dotfiles/termux/terminal_cursor_style"))[0])
+			let g:termux_cursor_style = trim(readfile(expand("~/.cache/extra.nvim/termux/terminal_cursor_style"))[0])
 		endif
 	elseif $TERMUX_VERSION
 		let g:termux_cursor_style = 'bar'
@@ -2934,25 +2938,25 @@ function! PrepareWhichKey()
 endfunction
 
 function! LoadLastSelected()
-	if filereadable(expand(g:LOCALSHAREPATH).'/dotfiles/last_selected.txt')
-		let g:last_selected = readfile(expand(g:LOCALSHAREPATH).'/dotfiles/last_selected.txt')[0]
+	if filereadable(expand(g:LOCALSHAREPATH).'/extra.nvim/last_selected.txt')
+		let g:last_selected = readfile(expand(g:LOCALSHAREPATH).'/extra.nvim/last_selected.txt')[0]
 	endif
 endfunction
 function! SaveLastSelected()
 	if g:last_selected !=# ''
-		if !isdirectory(expand(g:LOCALSHAREPATH).'/dotfiles')
-			call mkdir(expand(g:LOCALSHAREPATH).'/dotfiles', 'p')
+		if !isdirectory(expand(g:LOCALSHAREPATH).'/extra.nvim')
+			call mkdir(expand(g:LOCALSHAREPATH).'/extra.nvim', 'p')
 		endif
-		call writefile([g:last_selected], expand(g:LOCALSHAREPATH).'/dotfiles/last_selected.txt')
+		call writefile([g:last_selected], expand(g:LOCALSHAREPATH).'/extra.nvim/last_selected.txt')
 	endif
 endfunction
 
 function! OnFirstTime()
-	if !filereadable(expand(g:LOCALSHAREPATH).'/dotfiles/not_first_time.null')
-		if !isdirectory(expand(g:LOCALSHAREPATH).'/dotfiles')
-			call mkdir(expand(g:LOCALSHAREPATH).'/dotfiles', 'p')
+	if !filereadable(expand(g:LOCALSHAREPATH).'/extra.nvim/not_first_time.null')
+		if !isdirectory(expand(g:LOCALSHAREPATH).'/extra.nvim')
+			call mkdir(expand(g:LOCALSHAREPATH).'/extra.nvim', 'p')
 		endif
-		call writefile([], expand(g:LOCALSHAREPATH).'/dotfiles/not_first_time.null')
+		call writefile([], expand(g:LOCALSHAREPATH).'/extra.nvim/not_first_time.null')
 
 		if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
 			if g:language ==# 'russian'
@@ -2964,7 +2968,7 @@ function! OnFirstTime()
 			call quickui#confirm#open('To see help, press SPC-?')
 		endif
 
-		if !filereadable(g:DOTFILES_CONFIG_PATH)
+		if !filereadable(g:EXNVIM_CONFIG_PATH)
 			GenerateExNvimConfig
 		endif
 	endif
@@ -2975,7 +2979,7 @@ function! OnStart()
 	else
 		call OpenOnStart()
 	endif
-	call SetDotfilesConfigPath()
+	call SetExNvimConfigPath()
 	call SetLocalSharePath()
 	call SetConfigPath()
 	if has('nvim') && g:enable_which_key

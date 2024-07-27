@@ -58,5 +58,5 @@ require('packages.trouble.init')
 require('packages.luasnip.init')
 require('packages.sneak.init')
 
--- DotfilesOptionInComment LUA_REQUIRE_GOTO_PREFIX %CONFIG_PATH%/lua/
--- DotfilesOptionInComment LUA_REQUIRE_GOTO_PREFIX %LOCALSHAREPATH%/site/pack/packer/start/
+-- ExNvimOptionInComment LUA_REQUIRE_GOTO_PREFIX %CONFIG_PATH%/lua/
+-- ExNvimOptionInComment LUA_REQUIRE_GOTO_PREFIX %LOCALSHAREPATH%/site/pack/packer/start/
