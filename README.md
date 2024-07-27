@@ -131,3 +131,7 @@ $ exnvim version
 
 > [!Warning]
 > Due to version is built in `exnvim` binary, you should recompile it every time `.exnvim-version` changes
+
+# Also see
+
+- [dotfiles](https://github.com/TwoSpikes/dotfiles.git)
