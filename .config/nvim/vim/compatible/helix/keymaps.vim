@@ -1,9 +1,14 @@
 nnoremap gh 0
 xnoremap gh 0
-nnoremap gl $mz`z
-xnoremap gl $mz`z
-nnoremap $ $mz`z
-xnoremap $ $mz`z
+nnoremap gl $
+nnoremap $ $
+if !g:do_not_save_previous_column_position_when_going_up_or_down
+	xnoremap gl $<cmd>if strlen(getline('.'))<bar>exe"normal! h"<bar>endif<cr>
+	xnoremap $ $<cmd>if strlen(getline('.'))<bar>exe"normal! h"<bar>endif<cr>
+else
+	xnoremap gl $<cmd>if strlen(getline('.'))<bar>exe"normal! h"<bar>endif<cr>mz`z
+	xnoremap $ $<cmd>if strlen(getline('.'))<bar>exe"normal! h"<bar>endif<cr>mz`z
+endif
 nnoremap ge G
 xnoremap ge G
 nnoremap gs ^
@@ -31,16 +36,7 @@ let &whichwrap="b,s,h,l,<,>,~,[,]"
 set virtualedit=onemore
 
 nnoremap d x
-function! V_DoD()
-	let g:lx = line('.')
-	let g:ly = col('.')
-	normal! o
-	let g:rx = line('.')
-	let g:ry = col('.')
-	normal! o
-	call ReorderRightLeft()
-	execute "normal! ".MoveLeft()
-	normal! o
+function! SetYankMode()
 	if v:false
 	elseif v:false
 	\|| g:ly ==# len(getline(g:lx))+1
@@ -53,11 +49,21 @@ function! V_DoD()
 	\|| v:false)
 	\&& g:ly ==# 1
 		let g:yank_mode = "line_post"
-		if g:ry ==# len(getline(g:rx))+1
-		endif
 	else
 		let g:yank_mode = "char"
 	endif
+endfunction
+function! V_DoD()
+	let g:lx = line('.')
+	let g:ly = col('.')
+	normal! o
+	let g:rx = line('.')
+	let g:ry = col('.')
+	normal! o
+	call ReorderRightLeft()
+	execute "normal! ".MoveLeft()
+	normal! o
+	call SetYankMode()
 	normal! d
 endfunction
 xnoremap d <cmd>call V_DoD()<cr>
@@ -527,14 +533,17 @@ function! V_DoC()
 	call ReorderRightLeft()
 	execute "normal! ".MoveLeft()
 	normal! o
+	let rxlen = strlen(getline(g:rx))
+	call SetYankMode()
+	normal! d
 	if v:false
+	elseif v:false
 	\|| g:ly !=# 1
-	\|| g:ry <# strlen(getline(g:rx))
-		normal! d
+	\|| g:ry !=# rxlen + 1
 		startinsert
 	else
-		normal! dO
-		call feedkeys("cc", 'n')
+		normal! O
+		call feedkeys("\"_cc", 'n')
 	endif
 endfunction
 xnoremap c <cmd>call V_DoC()<cr>
@@ -549,29 +558,12 @@ function! V_DoY()
 	call ReorderRightLeft()
 	execute "normal! ".MoveLeft()
 	normal! o
-	if v:false
-	elseif v:false
-	\|| g:ly ==# len(getline(g:lx))+1
-	\&& g:ry ==# len(getline(g:rx))+1
-		let g:yank_mode = "line"
-	elseif v:true
-	\&& (v:false
-	\|| g:ry ==# len(getline(g:rx))
-	\|| g:ry ==# len(getline(g:rx))+1
-	\|| v:false)
-	\&& g:ly ==# 1
-		let g:yank_mode = "line_post"
-		if g:ry ==# len(getline(g:rx))+1
-		endif
-	else
-		normal! y
-		let g:yank_mode = "char"
-	endif
+	call SetYankMode()
 
 	if v:false
 	elseif v:false
 	\|| g:yank_mode ==# "char"
-		execute
+		normal! y
 	elseif v:false
 	\|| g:yank_mode ==# "line"
 	\|| g:yank_mode ==# "line_post"
