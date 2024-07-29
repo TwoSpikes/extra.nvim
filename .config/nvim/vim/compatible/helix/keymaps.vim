@@ -511,7 +511,7 @@ function! V_DoB()
 	if g:pseudo_visual
 		execute "normal! \<esc>hviwo"
 	else
-		execute "normal! b"
+		normal! b
 	endif
 endfunction
 xnoremap b <cmd>call V_DoB()<cr>
