@@ -24,6 +24,8 @@ local defaults = {
   ---@type wk.Spec
   triggers = {
     { "<auto>", mode = "nixsotc" },
+    { "<c-x>", mode = "nixsotc" },
+    { "<c-w>", mode = "nixsotc" },
   },
   -- Start hidden and wait for a key to be pressed before showing the popup
   -- Only used by enabled xo mapping modes.

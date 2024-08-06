@@ -2923,7 +2923,7 @@ function! AfterUpdatingPlugins()
 endfunction
 
 function! PrepareWhichKey()
-	let g:which_key_timeout = 100
+	let g:which_key_timeout = 0
 	if filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/which-key.nvim/lua/which-key/util.lua')
 		edit ~/.local/share/nvim/site/pack/packer/start/which-key.nvim/lua/which-key/util.lua
 		if getline(189) =~# 'if not ("nvsxoiRct"):find(mode) then'
@@ -2932,9 +2932,6 @@ function! PrepareWhichKey()
 		endif
 		bwipeout!
 	endif
-	nnoremap <silent> <leader> <cmd>lua require('which-key').show(vim.g.mapleader)<cr>
-	nnoremap <silent> <c-x> <cmd>lua require('which-key').show("\24", {mode = "n", auto = true})<cr>
-	nnoremap <silent> <c-w> <cmd>lua require('which-key').show("\23", {mode = "n", auto = true})<cr>
 endfunction
 
 function! LoadLastSelected()
