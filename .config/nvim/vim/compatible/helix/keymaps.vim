@@ -9,36 +9,24 @@ else
 	xnoremap gl $<cmd>if strlen(getline('.'))<bar>exe"normal! h"<bar>endif<cr>mz`z
 	xnoremap $ $<cmd>if strlen(getline('.'))<bar>exe"normal! h"<bar>endif<cr>mz`z
 endif
-function! Do_ge()
-	if v:count
-		execute v:count
-		return
-	endif
+function! Do_V_ge(vcount)
 	if g:pseudo_visual
-		call feedkeys("\<c-\>\<c-n>G", "n")
-		return
+		call feedkeys("\<esc>", "n")
 	endif
-	call feedkeys("G", "n")
+	call feedkeys(a:vcount."G", "n")
 endfunction
-nnoremap ge <cmd>call Do_ge()<cr>
-xnoremap ge <cmd>call Do_ge()<cr>
-nnoremap G <cmd>call Do_ge()<cr>
-xnoremap G <cmd>call Do_ge()<cr>
+nnoremap ge G
+xnoremap ge <cmd>call Do_V_ge(v:prevcount)<cr>
+xnoremap G <cmd>call Do_V_ge(v:count)<cr>
 nnoremap gs ^
 xnoremap gs ^
-function! Do_gg()
-	if v:count
-		execute v:count
-		return
-	endif
+function! Do_V_gg(vcount)
 	if g:pseudo_visual
-		call feedkeys("\<c-\>\<c-n>gg", "n")
-		return
+		call feedkeys("\<esc>", "n")
 	endif
-	call feedkeys("gg", "n")
+	call feedkeys(a:vcount."gg", "n")
 endfunction
-nnoremap gg <cmd>call Do_gg()<cr>
-xnoremap gg <cmd>call Do_gg()<cr>
+xnoremap gg <cmd>call Do_V_gg(v:prevcount)<cr>
 
 if g:compatible ==# "helix_hard"
 	set noruler
