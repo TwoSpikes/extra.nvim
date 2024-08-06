@@ -9,10 +9,36 @@ else
 	xnoremap gl $<cmd>if strlen(getline('.'))<bar>exe"normal! h"<bar>endif<cr>mz`z
 	xnoremap $ $<cmd>if strlen(getline('.'))<bar>exe"normal! h"<bar>endif<cr>mz`z
 endif
-nnoremap ge G
-xnoremap ge G
+function! Do_ge()
+	if v:count
+		execute v:count
+		return
+	endif
+	if g:pseudo_visual
+		call feedkeys("\<c-\>\<c-n>G", "n")
+		return
+	endif
+	call feedkeys("G", "n")
+endfunction
+nnoremap ge <cmd>call Do_ge()<cr>
+xnoremap ge <cmd>call Do_ge()<cr>
+nnoremap G <cmd>call Do_ge()<cr>
+xnoremap G <cmd>call Do_ge()<cr>
 nnoremap gs ^
 xnoremap gs ^
+function! Do_gg()
+	if v:count
+		execute v:count
+		return
+	endif
+	if g:pseudo_visual
+		call feedkeys("\<c-\>\<c-n>gg", "n")
+		return
+	endif
+	call feedkeys("gg", "n")
+endfunction
+nnoremap gg <cmd>call Do_gg()<cr>
+xnoremap gg <cmd>call Do_gg()<cr>
 
 if g:compatible ==# "helix_hard"
 	set noruler
