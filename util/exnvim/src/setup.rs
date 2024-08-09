@@ -397,6 +397,8 @@ pub fn setup(home: ::std::path::PathBuf) -> ::std::io::Result<()> {
 
 	\"do_not_save_previous_column_position_when_going_up_or_down\": false,
 
+    \"use_codeium\": false,
+
 \"_comment_end\":\"Ending field to not put comma every time\"
 }"),
             )

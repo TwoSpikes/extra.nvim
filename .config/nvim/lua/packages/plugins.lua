@@ -570,7 +570,9 @@ return require('packer').startup(function (use)
 			},
 		},
 	}
-	use {
-		'Exafunction/codeium.vim',
-	}
+	if vim.g.use_codeium then
+		use {
+			'Exafunction/codeium.vim',
+		}
+	end
 end)

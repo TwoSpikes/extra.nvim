@@ -71,6 +71,8 @@ function! LoadExNvimConfig(path, reload=v:false)
 		\'enable_which_key',
 		\'compatible',
 		\'enable_nvim_treesitter_context',
+		\'do_not_save_previous_column_position_when_going_up_or_down',
+		\'use_codeium',
 	\]
 	for option in l:option_list
 		if exists('g:exnvim_config["'.option.'"]')
@@ -185,6 +187,9 @@ function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 	endif
 	if !exists('g:do_not_save_previous_column_position_when_going_up_or_down')
 		let g:do_not_save_previous_column_position_when_going_up_or_down = v:false
+	endif
+	if !exists('g:use_codeium')
+		let g:use_codeium = v:false
 	endif
 endfunction
 call SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()

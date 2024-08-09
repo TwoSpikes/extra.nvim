@@ -16,6 +16,11 @@ if vim.g.use_nvim_cmp then
 else
 	require('packages.coc.init')
 end
+if not vim.g.use_codeium then
+	if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/codeium.vim") then
+		vim.fn.delete(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/codeium.vim", "rf")
+	end
+end
 require('packages.vim-illuminate.init')
 require('packages.todo-comments.init')
 require('packages.indent-blankline.init')
