@@ -238,4 +238,4 @@ $ exnvim version
 - [vim-sneak](https://github.com/justinmk/vim-sneak)
 - [nvim-bqf](https://github.com/kevinhwang91/nvim-bqf)
 - [fzf](https://github.com/junegunn/fzf)
-- [codeium.nvim](https://github.com/Exafunction/codeium.vim)
+- [codeium.nvim](https://github.com/Exafunction/codeium.vim) (disabled by default)
