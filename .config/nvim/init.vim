@@ -606,6 +606,12 @@ function! GetGitBranch()
 	return s:gitbranch
 endfunction
 function! Showtab()
+	if v:false
+	elseif v:false
+	\|| &filetype ==# 'neo-tree'
+	\|| &filetype ==# 'musicplayer'
+		return bufname('')
+	endif
 	if g:compatible !=# "helix_hard"
 		let stl_name = '%<%t'
 		let stl_name .= '%( %* %#StatusLinemod#%M%R%H%W%)%*'
