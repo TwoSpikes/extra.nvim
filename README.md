@@ -96,7 +96,7 @@ $ mkdir -p ~/.config/exnvim/
 $ nvim ~/.config/exnvim/config.json
 ```
 
-If you want to change default dotfiles config path:
+If you want to change default extra.nvim config path:
 ```console
 $ EXNVIM_CONFIG_PATH=your_path nvim
 ```
