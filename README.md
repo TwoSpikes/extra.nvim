@@ -4,6 +4,9 @@
 
 This is NeoVim/Vim configuration
 
+> [!Note]
+> 100%-compatible with Termux
+
 <details open><summary>
 Screenshots
 </summary>
@@ -22,23 +25,29 @@ Screenshots
 - Free RAM: 60 MiB (minimal), 128 MiB (recommended)
 - Free disk space: 278,1 MiB (minimal, including all plugins)
 - Internet connection (to download plugins)
-- `vim`
-- `vim-runtime` (it is often already installed as a `vim` dependency)
+- [Nerd Fonts](https://www.nerdfonts.com) (or some symbols will look like squares ("not found" symbol))
 
-> [!Warning]
-> Implies to use [Nerd Fonts](https://www.nerdfonts.com)
+### If installing to Vim
+
+- `vim` package
+- `vim-runtime` package (it is often already installed as a `vim` dependency)
+
+### If installing to NeoVim
+
+- `neovim` package
+
 
 > [!Warning]
 > It works better in NeoVim, and packer.nvim does not work in version of Vim/NeoVim without Lua.
 
 > [!Note]
 > Press `SPACE ?` to see help
-> Press `f10` or `f9` to open menu, `hjkl` to navigate in it
+> Press `f10` or `f9` to open menu, `hjkl` to navigate in it, `SPC` to select menu item
 
 > [!Warning]
 > After updating coc-sh language server, you need to reinstall coc-sh crutch:
 
-<details><summary>
+<details open><summary>
 Reinstall coc-sh crutch
 </summary>
 
@@ -64,6 +73,8 @@ $ cd extra.nvim
 $ cargo install --path util/exnvim
 $ exnvim install
 $ exnvim setup
+$ git clone --depth 1 https://github.com/wbthomason/packer.nvim\
+ ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 ```
 
 After that, you need to install [packer.nvim](https://github.com/wbthomason/packer.nvim)
