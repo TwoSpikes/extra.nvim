@@ -77,8 +77,6 @@ $ git clone --depth 1 https://github.com/wbthomason/packer.nvim\
  ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 ```
 
-After that, you need to install [packer.nvim](https://github.com/wbthomason/packer.nvim)
-
 ### Extra step for Vim
 
 ```console
