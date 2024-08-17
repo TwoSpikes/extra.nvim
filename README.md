@@ -248,3 +248,4 @@ $ exnvim version
 - [nvim-bqf](https://github.com/kevinhwang91/nvim-bqf)
 - [fzf](https://github.com/junegunn/fzf)
 - [codeium.nvim](https://github.com/Exafunction/codeium.vim) (disabled by default)
+- [music-player.vim](https://github.com/TwoSpikes/music-player.vim)

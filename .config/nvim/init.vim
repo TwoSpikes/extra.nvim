@@ -1968,7 +1968,7 @@ function! ExNvimCheatSheet()
 	\\n    LEAD vj - Open extra.nvim config
 	\\n    LEAD sj - Reload extra.nvim config
 	\\n    LEAD vb - Open .dotfiles-script.sh
-	\\n        Also see: https://github.com/TwoSpikes/dotfiles.git
+	\\n        See: https://github.com/TwoSpikes/dotfiles.git
 	\\n    LEAD vc - Open colorschemes
 	\\n    LEAD vC - Apply colorscheme under cursor
 	\\n SPECIAL:
