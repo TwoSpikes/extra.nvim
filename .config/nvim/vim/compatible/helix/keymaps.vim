@@ -1,13 +1,32 @@
-nnoremap gh 0
-xnoremap gh 0
-nnoremap gl $
-nnoremap $ $
+function! Do_V_0()
+	if g:pseudo_visual
+		execute "normal! \<c-\>\<c-n>"
+	endif
+	normal! 0
+endfunction
+nnoremap gh <cmd>call Do_V_0()<cr>
+xnoremap gh <cmd>call Do_V_0()<cr>
+nnoremap 0 <cmd>call Do_V_0()<cr>
+xnoremap 0 <cmd>call Do_V_0()<cr>
+function! Do_V_Dollar()
+	if g:pseudo_visual
+		execute "normal! \<c-\>\<c-n>"
+	endif
+	normal! $
+endfunction
+nnoremap gl <cmd>call Do_V_Dollar()<cr>
+nnoremap $ <cmd>call Do_V_Dollar()<cr>
+function! Fix_V_Dollar()
+	if strlen(getline('.')) && mode() =~? '^v'
+		exe"normal! h"
+	endif
+endfunction
 if !g:do_not_save_previous_column_position_when_going_up_or_down
-	xnoremap gl $<cmd>if strlen(getline('.'))<bar>exe"normal! h"<bar>endif<cr>
-	xnoremap $ $<cmd>if strlen(getline('.'))<bar>exe"normal! h"<bar>endif<cr>
+	xnoremap gl <cmd>call Do_V_Dollar()<cr><cmd>call Fix_V_Dollar()<cr>
+	xnoremap $ <cmd>call Do_V_Dollar()<cr><cmd>call Fix_V_Dollar()<cr>
 else
-	xnoremap gl $<cmd>if strlen(getline('.'))<bar>exe"normal! h"<bar>endif<cr>mz`z
-	xnoremap $ $<cmd>if strlen(getline('.'))<bar>exe"normal! h"<bar>endif<cr>mz`z
+	xnoremap gl <cmd>call Do_V_Dollar()<cr><cmd>call Fix_V_Dollar()<cr>mz`z
+	xnoremap $ <cmd>call Do_V_Dollar()<cr><cmd>call Fix_V_Dollar()<cr>mz`z
 endif
 function! Do_V_ge(vcount)
 	if g:pseudo_visual
