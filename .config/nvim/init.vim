@@ -1,5 +1,50 @@
 #!/bin/env -S nvim -u
 
+" Main file of Vim/NeoVim config
+
+"" LEGEND
+" plugin: plug-in
+" ExNvim, exnvim: extra.nvim
+" stc: statuscolumn
+" linenr: line numbers
+" STCRel: enable stc with relative linenr (template for function name)
+" STCAbs: enable stc with absolute linenr (template for function name)
+" STCNo: disable stc (template for function name)
+" STCUpd: update stc (template for function name)
+" autocmd: autocommand
+" augroup: autocmd group
+" buf: buffer
+" buftype: buf type
+" filetype: file type
+" hlgroup: highlight group
+" specmode: special mode
+" stl: statusline
+" lang: language
+" cmd: command
+" showcmd: current Vim cmd
+" stl_pos: current line, current column and number of lines in buffer, buffer number and position in buffer in percent
+" stl_mode_to_put: current mode
+" SWrap: toggle soft wrapping (template to match function name)
+" win: window
+" but: button
+" ProcessGBut: process `gj`, `gk`, `j` and `k` commands (template to match function name)
+" Alpha: `alpha.nvim` plugin
+" JKWorkaroundAlpha: fix `j` and `k` buttons for `alpha.nvim` plugin (template to match function name)
+" JKWorkaround: return to normal from JKWorkaroundAlpha function (template to match function name)
+" Findfile: find file and open in a new tab (template to match Ex command and function name)
+" Findfilebuffer: find file and open in this window (template to match Ex command and function name)
+" term: terminal
+" neotree: `Neo-tree.nvim` plugin
+" std: standart
+" col: column
+" goto: go to
+" var: variable
+" c: character
+" floaterm: `floaterm.nvim` plugin
+" xdg_open: open files with `xdg-open` shell command (template for augroup name)
+" TMPFILE: temporary file name
+" filename: file name
+
 if has('nvim')
 	lua vim.loader.enable()
 endif

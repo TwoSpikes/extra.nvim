@@ -1,3 +1,13 @@
+" Files of hcm (Helix compatibility mode)
+
+"" LEGEND
+" hcm: Helix compatibility mode
+" Text*: text and any number of symbols after it (template to match function name)
+" Do_V_*, V_Do_*: xnoremap action
+" N_Do_*: nnoremap action
+" *_NPV_*: non-pseudo visual mode action
+" *_PV_*: pseudo visual mode action
+
 function! Do_V_0()
 	if g:pseudo_visual
 		execute "normal! \<c-\>\<c-n>"
@@ -16,7 +26,7 @@ function! Do_V_Dollar()
 endfunction
 nnoremap gl <cmd>call Do_V_Dollar()<cr>
 nnoremap $ <cmd>call Do_V_Dollar()<cr>
-function! Fix_V_Dollar()
+function! Fix_NPV_Dollar()
 	if strlen(getline('.')) && mode() =~? '^v'
 		exe"normal! h"
 	endif
@@ -60,7 +70,9 @@ function! ExitVisual()
 	elseif g:visual_mode ==# "block"
 		normal! <c-v>
 	else
+		echohl ErrorMsg
 		echomsg "extra.nvim: hcm: ExitVisual: Internal error: Wrong visual mode: ".g:visual_mode
+		echohl Normal
 	endif
 endfunction
 
@@ -144,7 +156,7 @@ function! SimulateCorrectPasteMode(cmd)
 			let paste_cmd = 'P'
 		else
 			echohl ErrorMsg
-			echomsg "extra.nvim: SimulateCorrectPasteMode: Internal error: wrong a:cmd: ".a:cmd
+			echomsg "extra.nvim: hcm: SimulateCorrectPasteMode: Internal error: wrong a:cmd: ".a:cmd
 			echohl Normal
 		endif
 	elseif g:yank_mode ==# "line"
@@ -156,7 +168,7 @@ function! SimulateCorrectPasteMode(cmd)
 			let paste_cmd = 'P'
 		else
 			echohl ErrorMsg
-			echomsg "extra.nvim: SimulateCorrectPasteMode: Internal error: wrong a:cmd: ".a:cmd
+			echomsg "extra.nvim: hcm: SimulateCorrectPasteMode: Internal error: wrong a:cmd: ".a:cmd
 			echohl Normal
 		endif
 	elseif g:yank_mode ==# "line_post"
@@ -169,12 +181,12 @@ function! SimulateCorrectPasteMode(cmd)
 			let paste_cmd = 'P'
 		else
 			echohl ErrorMsg
-			echomsg "extra.nvim: SimulateCorrectPasteMode: Internal error: wrong a:cmd: ".a:cmd
+			echomsg "extra.nvim: hcm: SimulateCorrectPasteMode: Internal error: wrong a:cmd: ".a:cmd
 			echohl Normal
 		endif
 	else
 		echohl ErrorMsg
-		echomsg "extra.nvim: SimulateCorrectPasteMode: Internal error: wrong yank mode: ".g:yank_mode
+		echomsg "extra.nvim: hcm: SimulateCorrectPasteMode: Internal error: wrong yank mode: ".g:yank_mode
 		echohl Normal
 	endif
 

@@ -154,7 +154,7 @@ $ exnvim version
 - [packer.nvim](https://github.com/wbthomason/packer.nvim)
 - [Git](https://git-scm.com/)
 
-# Plugins used
+# Plug-ins used
 
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 - [plenary.nvim](https://github.com/nvim-lua/plenary.nvim)
