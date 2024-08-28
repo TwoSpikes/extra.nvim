@@ -1,5 +1,7 @@
 # Extra.nvim
 
+<img src=https://i.imgur.com/ZmdjS8i.png />
+
 ## What is this?
 
 This is NeoVim/Vim configuration

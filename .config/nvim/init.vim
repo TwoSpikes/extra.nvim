@@ -44,6 +44,7 @@
 " xdg_open: open files with `xdg-open` shell command (template for augroup name)
 " TMPFILE: temporary file name
 " filename: file name
+" config: configuration
 
 if has('nvim')
 	lua vim.loader.enable()
