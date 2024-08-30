@@ -399,6 +399,8 @@ pub fn setup(home: ::std::path::PathBuf) -> ::std::io::Result<()> {
 
     \"use_codeium\": false,
 
+    \"open_cmd_on_up\": false,
+
 \"_comment_end\":\"Ending field to not put comma every time\"
 }"),
             )

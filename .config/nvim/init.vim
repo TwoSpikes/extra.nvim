@@ -119,6 +119,7 @@ function! LoadExNvimConfig(path, reload=v:false)
 		\'enable_nvim_treesitter_context',
 		\'do_not_save_previous_column_position_when_going_up_or_down',
 		\'use_codeium',
+		\'open_cmd_on_up',
 	\]
 	for option in l:option_list
 		if exists('g:exnvim_config["'.option.'"]')
@@ -236,6 +237,9 @@ function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 	endif
 	if !exists('g:use_codeium')
 		let g:use_codeium = v:false
+	endif
+	if !exists('g:open_cmd_on_up')
+		let g:open_cmd_on_up = v:false
 	endif
 endfunction
 call SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
@@ -1417,8 +1421,10 @@ execute s:process_g_but_function_expression
 function! JKWorkaroundAlpha()
 	noremap <buffer> j <cmd>call ProcessGBut('j')<cr>
 	noremap <buffer> k <cmd>call ProcessGBut('k')<cr>
+	if !g:open_cmd_on_up
+		noremap <up> <cmd>call ProcessGBut('k')<cr>
+	endif
 	noremap <down> <cmd>call ProcessGBut('j')<cr>
-	noremap <up> <cmd>call ProcessGBut('k')<cr>
 endfunction
 function! JKWorkaround()
 	noremap k <cmd>call ProcessGBut('k')<cr>
@@ -2943,6 +2949,13 @@ nnoremap <c-w>p <cmd>wincmd p<cr>
 nnoremap <c-w>r <cmd>execute v:count1."wincmd r"<cr>
 nnoremap <c-w>z <cmd>wincmd z<cr>
 nnoremap <c-w>\| <cmd>execute v:count1."wincmd \|"<cr>
+
+nnoremap <c-p> :<up>
+vnoremap <c-p> :<up>
+if g:open_cmd_on_up
+	nnoremap <up> :<up>
+	vnoremap <up> :<up>
+endif
 
 if isdirectory(expand(g:LOCALSHAREPATH)."/site/pack/packer/start/vim-fugitive")
 	nnoremap <leader>gc <cmd>Git commit --verbose<cr>
