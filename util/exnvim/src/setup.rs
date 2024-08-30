@@ -401,6 +401,9 @@ pub fn setup(home: ::std::path::PathBuf) -> ::std::io::Result<()> {
 
     \"open_cmd_on_up\": false,
 
+    \"insert_exit_on_jk\": true,
+    \"insert_exit_on_jk_save\": true,
+
 \"_comment_end\":\"Ending field to not put comma every time\"
 }"),
             )

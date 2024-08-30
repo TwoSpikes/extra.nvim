@@ -120,6 +120,8 @@ function! LoadExNvimConfig(path, reload=v:false)
 		\'do_not_save_previous_column_position_when_going_up_or_down',
 		\'use_codeium',
 		\'open_cmd_on_up',
+		\'insert_exit_on_jk',
+		\'insert_exit_on_jk_save',
 	\]
 	for option in l:option_list
 		if exists('g:exnvim_config["'.option.'"]')
@@ -240,6 +242,12 @@ function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 	endif
 	if !exists('g:open_cmd_on_up')
 		let g:open_cmd_on_up = v:false
+	endif
+	if !exists('g:insert_exit_on_jk')
+		let g:insert_exit_on_jk = v:true
+	endif
+	if !exists('g:insert_exit_on_jk_save')
+		let g:insert_exit_on_jk_save = v:true
 	endif
 endfunction
 call SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
@@ -1441,7 +1449,9 @@ inoremap <silent> <c-e> <end>
 
 cnoremap <silent> <c-a> <c-b>
 cnoremap <c-g> <c-e><c-u><cr>
-cnoremap <silent> jk <c-e><c-u><cr><cmd>echon ''<cr>
+if g:insert_exit_on_jk
+	cnoremap <silent> jk <c-e><c-u><cr><cmd>echon ''<cr>
+endif
 cnoremap <c-u> <c-e><c-u>
 cnoremap <c-b> <S-left>
 
@@ -2484,10 +2494,17 @@ noremap my <cmd>echohl ErrorMsg<cr><cmd>echom "my is used for commands"<cr><cmd>
 noremap <leader>q q
 noremap <leader>Q Q
 
-inoremap <silent> jk <esc><cmd>update<cr>
-inoremap <silent> jK <esc>
-inoremap <silent> JK <esc><cmd>update<cr>
-inoremap <silent> Jk <esc>
+if g:insert_exit_on_jk
+	if g:insert_exit_on_jk_save
+		inoremap <silent> jk <esc><cmd>update<cr>
+		inoremap <silent> JK <esc><cmd>update<cr>
+	else
+		inoremap <silent> jk <esc>
+		inoremap <silent> JK <esc>
+	endif
+	inoremap <silent> jK <esc>
+	inoremap <silent> Jk <esc>
+endif
 " FIXME: Bicycle is invented, but the problem is not solved
 " NOTE: temporarily commented out due to above reason
 " let g:term_j_was_pressed = v:false
