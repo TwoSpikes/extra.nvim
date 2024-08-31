@@ -2540,53 +2540,57 @@ inoremap <silent> ( <cmd>call HandleKeystroke('(')<cr>
 inoremap <silent> [ <cmd>call HandleKeystroke('[')<cr>
 inoremap <silent> { <cmd>call HandleKeystroke('{')<cr>
 function! HandleKeystroke(keystroke)
+	let l = line('.')
+	let line = getline(l)
+	let col = col('.')
+	let prev_c = line[col-2]
+	let c = line[col-1]
 	if a:keystroke ==# "\\\<bs>"
-		if getline('.')[col('.')-2] ==# '('
-		\&& getline('.')[col('.')-1] ==# ')'
-		\|| getline('.')[col('.')-2] ==# '{'
-		\&& getline('.')[col('.')-1] ==# '}'
-		\|| getline('.')[col('.')-2] ==# '['
-		\&& getline('.')[col('.')-1] ==# ']'
-		\|| getline('.')[col('.')-2] ==# "'"
-		\&& getline('.')[col('.')-1] ==# "'"
-		\|| getline('.')[col('.')-2] ==# '"'
-		\&& getline('.')[col('.')-1] ==# '"'
-		\|| getline('.')[col('.')-2] ==# '<'
-		\&& getline('.')[col('.')-1] ==# '>'
+		if prev_c ==# '('
+		\&& c ==# ')'
+		\|| prev_c ==# '{'
+		\&& c ==# '}'
+		\|| prev_c ==# '['
+		\&& c ==# ']'
+		\|| prev_c ==# "'"
+		\&& c ==# "'"
+		\|| prev_c ==# '"'
+		\&& c ==# '"'
+		\|| prev_c ==# '<'
+		\&& c ==# '>'
 			return "\<del>\<bs>"
 		else
 			return "\<bs>"
 		endif
 	endif
 	if a:keystroke ==# ')'
-	\&& getline('.')[col('.')-1] ==# ')'
+	\&& c ==# ')'
 	\|| a:keystroke ==# ']'
-	\&& getline('.')[col('.')-1] ==# ']'
+	\&& c ==# ']'
 	\|| a:keystroke ==# '}'
-	\&& getline('.')[col('.')-1] ==# '}'
+	\&& c ==# '}'
 	\|| a:keystroke ==# "'"
-	\&& getline('.')[col('.')-1] ==# "'"
+	\&& c ==# "'"
 	\|| a:keystroke ==# '"'
-	\&& getline('.')[col('.')-1] ==# '"'
+	\&& c ==# '"'
 		return "\<right>"
 	endif
 	if a:keystroke ==# '"'
 	\|| a:keystroke ==# "'"
 		return a:keystroke.a:keystroke."\<left>"
 	endif
+	let mode = mode()
 	if v:false
 	elseif a:keystroke ==# '('
 		normal! i()
-		call Numbertoggle(mode())
 	elseif a:keystroke ==# '['
 		normal! i[]
-		call Numbertoggle(mode())
 	elseif a:keystroke ==# '{'
 		normal! i{}
-		call Numbertoggle(mode())
 	else
 		return a:keystroke
 	endif
+	call Numbertoggle(mode)
 endfunction
 inoremap <expr> ) HandleKeystroke(')')
 inoremap <expr> ] HandleKeystroke(']')
@@ -2972,6 +2976,121 @@ vnoremap <c-p> :<up>
 if g:open_cmd_on_up
 	nnoremap <up> :<up>
 	vnoremap <up> :<up>
+endif
+
+function! Do_N_Tilde()
+	let l = line('.')
+	let line = getline(l)
+	let col = col('.')
+	let c = line[col-1]
+	let ll = strpart(line, 0, col-1)
+	let lr = strpart(line, col)
+	unlet line
+	if c ==# "0"
+		call setline(l, ll.'1'.lr)
+		return
+	elseif c ==# "1"
+		call setline(l, ll.'0'.lr)
+		return
+	elseif c ==# "("
+		call setline(l, ll.')'.lr)
+		return
+	elseif c ==# "["
+		call setline(l, ll.']'.lr)
+		return
+	elseif c ==# "<"
+		call setline(l, ll.'>'.lr)
+		return
+	elseif c ==# ")"
+		call setline(l, ll.'('.lr)
+		return
+	elseif c ==# "]"
+		call setline(l, ll.'['.lr)
+		return
+	elseif c ==# ">"
+		call setline(l, ll.'<'.lr)
+		return
+	elseif c ==# "-"
+		call setline(l, ll.'+'.lr)
+		return
+	elseif c ==# "+"
+		call setline(l, ll.'-'.lr)
+		return
+	elseif c ==# "^"
+		call setline(l, ll.'$'.lr)
+		return
+	elseif c ==# "$"
+		call setline(l, ll.'^'.lr)
+		return
+	elseif c ==# "*"
+		call setline(l, ll.'/'.lr)
+		return
+	elseif c ==# "/"
+		call setline(l, ll.'*'.lr)
+		return
+	elseif c ==# "\\"
+		call setline(l, ll.'|'.lr)
+		return
+	elseif c ==# "|"
+		call setline(l, ll.'\'.lr)
+		return
+	elseif c ==# "\""
+		call setline(l, ll.''''.lr)
+		return
+	elseif c ==# "'"
+		call setline(l, ll.'"'.lr)
+		return
+	elseif c ==# "."
+		call setline(l, ll.','.lr)
+		return
+	elseif c ==# ","
+		call setline(l, ll.'.'.lr)
+		return
+	elseif c ==# ";"
+		call setline(l, ll.':'.lr)
+		return
+	elseif c ==# ":"
+		call setline(l, ll.';'.lr)
+		return
+	endif
+	let n = char2nr(c)
+	if n >= 97 && n <= 122
+		call setline(l, ll.toupper(c).lr)
+	elseif n >= 65 && n <= 90
+		call setline(l, ll.tolower(c).lr)
+	endif
+endfunction
+function! Do_V_Tilde()
+	let [ls, cs] = getpos("'<")[1:2]
+	let [le, ce] = getpos("'>")[1:2]
+	for l in range(ls, le)
+		let ln = getline(l)
+		let col = len(ln)
+		let line = ''
+		if l ==# le
+			let lr = strpart(ln, ce)
+		endif
+		if l ==# ls
+			let ll = strpart(ln, 0, cs-1)
+		endif
+		for c in range(l!=#ls?0:cs-1, l!=#le?col:ce-1)
+			let c = ln[c]
+			let n = char2nr(c)
+			if n >= 97 && n <= 122
+				let line .= toupper(c)
+			elseif n >= 65 && n <= 90
+				let line .= tolower(c)
+			else
+				let line .= c
+			endif
+		endfor
+		call setline(l, (l==#ls?ll:'').line.(l==#le?lr:''))
+	endfor
+endfunction
+
+if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
+	nnoremap ~ <cmd>call Do_N_Tilde()<cr><space>
+	xnoremap ~ <c-\><c-n><cmd>call Do_V_Tilde()<cr>
 endif
 
 if isdirectory(expand(g:LOCALSHAREPATH)."/site/pack/packer/start/vim-fugitive")

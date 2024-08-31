@@ -124,7 +124,7 @@ nnoremap <expr> x N_DoX()
 nnoremap <expr> X N_DoX()
 xnoremap u ugv
 xnoremap U Ugv
-xnoremap ~ ~gv
+xnoremap ~ <c-\><c-n><cmd>call Do_V_Tilde()<bar>execute "normal! gv"<bar>let g:pseudo_visual=v:true<bar>execute "Showtab"<cr>
 function ChangeVisModeBasedOnSelectedText()
 	let g:lx = line('.')
 	let g:ly = col('.')
@@ -221,7 +221,7 @@ inoremap <c-p> <c-x>
 nnoremap <a-o> viw
 nnoremap <a-.> ;
 xnoremap R "_dP
-nnoremap ~ v~
+nnoremap ~ <cmd>call Do_N_Tilde()<cr>
 nnoremap > >>
 nnoremap < <<
 xnoremap < <gv<cmd>let g:pseudo_visual=v:true<cr>
