@@ -645,13 +645,10 @@ set laststatus=2
 
 let s:custom_mode = ''
 let s:specmode = ''
-function! SetStatusLineNc()
-	echohl StatusLineNc
-endfunction
 function! SetGitBranch()
-	let s:virtual_gitbranch = split(system('git rev-parse --abbrev-ref HEAD 2> /dev/null'))
-	if len(s:virtual_gitbranch) > 0
-		let s:gitbranch = s:virtual_gitbranch[0]
+	let s:gitbranch = split(system('git rev-parse --abbrev-ref HEAD 2> /dev/null'))
+	if len(s:gitbranch) > 0
+		let s:gitbranch = s:gitbranch[0]
 	else
 		let s:gitbranch = ''
 	endif
@@ -965,17 +962,18 @@ function! Showtab()
 		endif
 	endif
 	let s:result .= '%='
-	if reg_recording() !=# ''
+	let is_macro_recording = reg_recording()
+	if is_macro_recording !=# ''
 		let s:result .= '%#Statusline0mac#'
-		if reg_recording() =~# '^\u$'
-			let s:result .= '%#Statuslinemac# REC '.reg_recording().' '
+		if is_macro_recording =~# '^\u$'
+			let s:result .= '%#Statuslinemac# REC '.is_macro_recording.' '
 		else
-			let s:result .= '%#Statuslinemac# rec '.reg_recording().' '
+			let s:result .= '%#Statuslinemac# rec '.is_macro_recording.' '
 		endif
 	endif
 	if &columns ># 45
 		if g:compatible !=# "helix_hard"
-			if reg_recording() !=# ''
+			if is_macro_recording !=# ''
 				let s:result .= '%#Statuslinemac1#'
 			else
 				let s:result .= '%#Statuslinestat01#'
@@ -1017,7 +1015,7 @@ endfunction
 command! -nargs=0 DotfilesCommit call DotfilesCommit()
 function! ExNvimCommit()
 	cd ~/extra.nvim
-	!exnvim commit --only-copy
+	call timer_start(0, {->execute('!exnvim commit --only-copy')})
 	Git commit --all --verbose
 endfunction
 command! -nargs=0 ExNvimCommit call ExNvimCommit()
@@ -1442,15 +1440,15 @@ function! JKWorkaround()
 endfunction
 call JKWorkaround()
 
-noremap <silent> <c-a> 0
-noremap <silent> <c-e> $
-inoremap <silent> <c-a> <home>
-inoremap <silent> <c-e> <end>
+noremap <c-a> 0
+noremap <c-e> $
+inoremap <c-a> <home>
+inoremap <c-e> <end>
 
-cnoremap <silent> <c-a> <c-b>
+cnoremap <c-a> <c-b>
 cnoremap <c-g> <c-e><c-u><cr>
 if g:insert_exit_on_jk
-	cnoremap <silent> jk <c-e><c-u><cr><cmd>echon ''<cr>
+	cnoremap jk <c-e><c-u><cr><cmd>echon ''<cr>
 endif
 cnoremap <c-u> <c-e><c-u>
 cnoremap <c-b> <S-left>
@@ -1942,10 +1940,10 @@ augroup ExNvimOptionsInComment
 	autocmd BufEnter * if v:vim_did_enter|call HandleExNvimOptionsInComment()|endif
 augroup END
 
-nnoremap <silent> * *:noh<cr>
-nnoremap <silent> <c-*> *
-nnoremap <silent> # #:noh<cr>
-nnoremap <silent> <c-#> #
+nnoremap * *<cmd>noh<cr>
+nnoremap <c-*> *
+nnoremap # #:noh<cr>
+nnoremap <c-#> #
 
 noremap <leader>l 2zl2zl2zl2zl2zl2zl
 noremap <leader>h 2zh2zh2zh2zh2zh2zh
@@ -2131,8 +2129,8 @@ noremap <silent> <leader>? <cmd>ExNvimCheatSheet<cr>
 noremap <silent> <leader>: :<c-f>a
 "noremap <leader>= :tabe 
 "noremap <leader>- :e 
-noremap <leader>= <cmd>echo "use \<c-c\>c"<cr>
-noremap <leader>- <cmd>echo "use \<c-c\>C"<cr>
+noremap <leader>= <cmd>ec"use \<c-c\>c"<cr>
+noremap <leader>- <cmd>ec"use \<c-c\>C"<cr>
 noremap <leader>1 :!
 nnoremap <leader>up <cmd>lua require('packer').sync()<cr>
 
