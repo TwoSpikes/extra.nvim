@@ -1038,11 +1038,53 @@ function! MyTabLabel(n)
 	let winnr = tabpagewinnr(a:n)
 	let original_buf_name = bufname(buflist[winnr - 1])
 	let bufnr = bufnr(original_buf_name)
-	if getbufvar(bufnr, '&buftype') ==# "terminal"
+	let buftype = getbufvar(bufnr, '&buftype')
+	let filetype = getbufvar(bufnr, '&filetype')
+	if v:false
+	elseif buftype ==# "terminal"
 		if g:language ==# 'russian'
 			let buf_name = '[Терм]'
 		else
 			let buf_name = '[Term]'
+		endif
+	elseif filetype ==# "alpha"
+		if g:language ==# 'russian'
+			let buf_name = '[Меню]'
+		else
+			let buf_name = '[Menu]'
+		endif
+	elseif filetype ==# "spectre_panel"
+		if g:language ==# 'russian'
+			let buf_name = '[Spectre]'
+		else
+			let buf_name = '[Spectre]'
+		endif
+	elseif filetype ==# "neo-tree"
+		if g:language ==# 'russian'
+			let buf_name = '[NeoTree]'
+		else
+			let buf_name = '[NeoTree]'
+		endif
+	elseif filetype ==# "TelescopePrompt"
+		if g:language ==# 'russian'
+			let buf_name = '[Телескоп]'
+		else
+			let buf_name = '[Telescope]'
+		endif
+	elseif filetype ==# "gitcommit"
+		if g:language ==# 'russian'
+			let buf_name = '[Коммит]'
+		else
+			let buf_name = '[Commit]'
+		endif
+	elseif v:false
+	\|| filetype ==# "packer"
+		let buf_name = original_buf_name
+	elseif buftype ==# "nofile"
+		if g:language ==# 'russian'
+			let buf_name = '[НеФайл]'
+		else
+			let buf_name = '[NoFile]'
 		endif
 	elseif original_buf_name == ''
 		if g:language ==# 'russian'
@@ -1052,16 +1094,21 @@ function! MyTabLabel(n)
 		endif
 	else
 		let buf_name = original_buf_name
+		if g:tabline_path ==# "name"
+			return fnamemodify(buf_name, ':t')
+		elseif g:tabline_path ==# "short"
+			return fnamemodify(buf_name, ':~:.')
+		elseif g:tabline_path ==# "shortdir"
+			return fnamemodify(buf_name, ':~:.:gs?\([^/]\)[^/]*/?\1/?')
+		elseif g:tabline_path ==# "full"
+			return fnamemodify(buf_name, ':p')
+		endif
+		echohl ErrorMsg
+		echomsg "extra.nvim: config: error: wrong tabline_path: ".g:tabline_path
+		echohl Normal
+		return 0
 	endif
-	if g:tabline_path ==# "name"
-		return fnamemodify(buf_name, ':t')
-	elseif g:tabline_path ==# "short"
-		return fnamemodify(buf_name, ':~:.')
-	elseif g:tabline_path ==# "shortdir"
-		return fnamemodify(buf_name, ':~:.:gs?\([^/]\)[^/]*/?\1/?')
-	elseif g:tabline_path ==# "full"
-		return fnamemodify(buf_name, ':p')
-	endif
+	return buf_name
 endfunction
 function! MyTabLine()
   let s = ''
