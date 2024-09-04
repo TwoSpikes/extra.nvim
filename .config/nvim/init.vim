@@ -1015,7 +1015,7 @@ endfunction
 command! -nargs=0 DotfilesCommit call DotfilesCommit()
 function! ExNvimCommit()
 	cd ~/extra.nvim
-	call timer_start(0, {->execute('!exnvim commit --only-copy')})
+	!exnvim commit --only-copy
 	Git commit --all --verbose
 endfunction
 command! -nargs=0 ExNvimCommit call ExNvimCommit()
