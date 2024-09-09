@@ -404,6 +404,8 @@ pub fn setup(home: ::std::path::PathBuf) -> ::std::io::Result<()> {
     \"insert_exit_on_jk\": true,
     \"insert_exit_on_jk_save\": true,
 
+    \"selected_colorscheme\": \"blueorange\",
+
 \"_comment_end\":\"Ending field to not put comma every time\"
 }"),
             )

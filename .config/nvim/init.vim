@@ -122,6 +122,7 @@ function! LoadExNvimConfig(path, reload=v:false)
 		\'open_cmd_on_up',
 		\'insert_exit_on_jk',
 		\'insert_exit_on_jk_save',
+		\'selected_colorscheme',
 	\]
 	for option in l:option_list
 		if exists('g:exnvim_config["'.option.'"]')
@@ -249,6 +250,9 @@ function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 	if !exists('g:insert_exit_on_jk_save')
 		let g:insert_exit_on_jk_save = v:true
 	endif
+	if !exists('g:selected_colorscheme')
+		let g:selected_colorscheme = "blueorange"
+	endif
 endfunction
 call SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 
@@ -263,7 +267,7 @@ function! SetConfigPath()
 endfunction
 call SetConfigPath()
 
-colorscheme blueorange
+execute "colorscheme ".g:selected_colorscheme
 function! ReturnHighlightTerm(group, term)
    " Store output of group to variable
    let output = execute('hi ' . a:group)
