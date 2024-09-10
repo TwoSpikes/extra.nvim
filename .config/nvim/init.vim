@@ -1823,17 +1823,17 @@ augroup Lua_Require_Goto_Workaround
 augroup END
 
 function! HandleExNvimOptionsInComment()
-	if !exists('g:default_comment_string')
+	if &commentstring ==# ''
 		return
 	endif
-	let default_comment_string_len = g:default_comment_string
+	let default_comment_string_len = &commentstring
 	let LUA_REQUIRE_GOTO_PREFIX_idx = 0
 	let i = 1
 	let lastline = line('$')
 	while i <# lastline + 1
 		let line = getline(i)
 		let line = Trim(line)
-		if !StartsWith(line, g:default_comment_string)
+		if !StartsWith(line, &commentstring)
 			let i += 1
 			continue
 		endif
@@ -2245,8 +2245,8 @@ function! CommentOut(comment_string)
 	normal! `z
 endfunction
 function! CommentOutDefault()
-	if exists('g:default_comment_string')
-		return CommentOut(g:default_comment_string)
+	if &commentstring !=# ''
+		return CommentOut(&commentstring)
 	else
 		echohl ErrorMsg
 		if g:language ==# 'russian'
@@ -2273,8 +2273,8 @@ function! UncommentOut(comment_string)
 	normal! `z
 endfunction
 function! UncommentOutDefault()
-	if exists('g:default_comment_string')
-		call UncommentOut(g:default_comment_string)
+	if &commentstring !=# ''
+		call UncommentOut(&commentstring)
 	else
 		echohl ErrorMsg
 		if g:language ==# 'russian'
@@ -2287,68 +2287,12 @@ function! UncommentOutDefault()
 endfunction
 nnoremap <expr> <leader>c CommentOutDefault()
 nnoremap <leader>C <cmd>call UncommentOutDefault()<cr>
-augroup cpp
-	autocmd!
-	autocmd filetype cpp let g:default_comment_string = "//"
-	autocmd filetype cpp noremap <silent> <buffer> <leader>N viwo<esc>i::<esc>hi
-augroup END
-augroup java
-	autocmd!
-	autocmd filetype java let g:default_comment_string = "//"
-augroup END
-augroup javascript
-	autocmd!
-	autocmd filetype javascript let g:default_comment_string = "//"
-augroup END
-augroup javascriptreact
-	autocmd!
-	autocmd filetype javascriptreact let g:default_comment_string = "//"
-augroup END
-augroup vim
-	autocmd!
-	autocmd filetype vim let g:default_comment_string = '"'
-augroup END
-augroup lua
-	autocmd!
-	autocmd filetype lua let g:default_comment_string = '--'
-augroup END
-augroup haskell
-	autocmd!
-	autocmd filetype haskell let g:default_comment_string = '--'
-augroup END
-augroup googol
-	autocmd!
-	autocmd syntax googol let g:default_comment_string = "//"
-augroup END
-augroup php
-	autocmd!
-	autocmd filetype php let g:default_comment_string = "//"
-	autocmd filetype php noremap <silent> <buffer> <leader>g viwoviGLOBALS['<esc>ea']<esc>
-augroup END
-augroup sh
-	autocmd!
-	autocmd filetype bash,sh let g:default_comment_string = "#"
-augroup END
-augroup python
-	autocmd!
-	autocmd filetype python let g:default_comment_string = "#"
-augroup END
-augroup rust
-	autocmd!
-	autocmd filetype python let g:default_comment_string = "//"
-augroup END
 augroup netrw
 	autocmd!
-	if exists('g:default_comment_string')
-		unlet g:default_comment_string
-	endif
 	autocmd filetype netrw setlocal nocursorcolumn | call Numbertoggle()
 augroup END
 augroup neo-tree
 	autocmd!
-	if exists('g:default_comment_string')
-		unlet g:default_comment_string
-	endif
 	autocmd filetype neo-tree setlocal nocursorcolumn | call Numbertoggle()
 augroup END
 augroup terminal
