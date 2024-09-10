@@ -32,11 +32,11 @@ function! Fix_NPV_Dollar()
 	endif
 endfunction
 if !g:do_not_save_previous_column_position_when_going_up_or_down
-	xnoremap gl <cmd>call Do_V_Dollar()<cr><cmd>call Fix_V_Dollar()<cr>
-	xnoremap $ <cmd>call Do_V_Dollar()<cr><cmd>call Fix_V_Dollar()<cr>
+	xnoremap gl <cmd>call Do_V_Dollar()<cr><cmd>call Fix_NPV_Dollar()<cr>
+	xnoremap $ <cmd>call Do_V_Dollar()<cr><cmd>call Fix_NPV_Dollar()<cr>
 else
-	xnoremap gl <cmd>call Do_V_Dollar()<cr><cmd>call Fix_V_Dollar()<cr>mz`z
-	xnoremap $ <cmd>call Do_V_Dollar()<cr><cmd>call Fix_V_Dollar()<cr>mz`z
+	xnoremap gl <cmd>call Do_V_Dollar()<cr><cmd>call Fix_NPV_Dollar()<cr>mz`z
+	xnoremap $ <cmd>call Do_V_Dollar()<cr><cmd>call Fix_NPV_Dollar()<cr>mz`z
 endif
 function! Do_V_ge(vcount)
 	if g:pseudo_visual
