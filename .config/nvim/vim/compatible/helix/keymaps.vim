@@ -38,24 +38,28 @@ else
 	xnoremap gl <cmd>call Do_V_Dollar()<cr><cmd>call Fix_NPV_Dollar()<cr>mz`z
 	xnoremap $ <cmd>call Do_V_Dollar()<cr><cmd>call Fix_NPV_Dollar()<cr>mz`z
 endif
-function! Do_V_ge(vcount)
-	if g:pseudo_visual
-		call feedkeys("\<esc>", "n")
-	endif
-	call feedkeys(a:vcount."G", "n")
+
+function! Do_V_ge_base_define(name, count)
+execute "
+\xnoremap ".a:name." <cmd>
+\if g:pseudo_visual<bar>
+\execute \"normal! v\"<bar>
+\endif<bar>
+\call feedkeys(".a:count.".\"G\", \"n\")
+\<cr>"
 endfunction
+call Do_V_ge_base_define('ge', 'v:prevcount')
+call Do_V_ge_base_define('G', 'v:count')
+
 nnoremap ge G
-xnoremap ge <cmd>call Do_V_ge(v:prevcount)<cr>
-xnoremap G <cmd>call Do_V_ge(v:count)<cr>
 nnoremap gs ^
 xnoremap gs ^
-function! Do_V_gg(vcount)
-	if g:pseudo_visual
-		call feedkeys("\<esc>", "n")
-	endif
-	call feedkeys(a:vcount."gg", "n")
-endfunction
-xnoremap gg <cmd>call Do_V_gg(v:prevcount)<cr>
+xnoremap gg <cmd>
+\if g:pseudo_visual<bar>
+\execute "normal! v"<bar>
+\endif<bar>
+\call feedkeys(v:count."gg", "n")
+\<cr>
 
 if g:compatible ==# "helix_hard"
 	set noruler
@@ -133,6 +137,9 @@ function ChangeVisModeBasedOnSelectedText()
 	let g:ry = col('.')
 	normal! o
 	call ReorderRightLeft()
+function! V_DoI()
+	return MoveLeft()."\<esc>i"
+endfunction
 	execute "normal! ".MoveLeft()
 	normal! o
 	if v:false
@@ -253,6 +260,7 @@ function! ReorderRightLeft()
 		let g:ry=xor(g:ly,g:ry)
 		let g:ly=xor(g:ry,g:ly)
 	endif
+	return ''
 endfunction
 function! SavePosition(old_c, old_l, new_c, new_l)
 	if a:old_c==#g:ly&&a:old_l==#g:lx
@@ -376,10 +384,7 @@ function! MoveLeft()
 		echohl Normal
 	endif
 endfunction
-function! V_DoI()
-	return MoveLeft()."\<esc>i"
-endfunction
-xnoremap <expr> i V_DoI()
+xnoremap <expr> i MoveLeft()."\<esc>i"
 function! MoveRight()
 	let c=col('.')
 	let l=line('.')
@@ -405,12 +410,8 @@ function! MoveRight()
 		echohl Normal
 	endif
 endfunction
-function! V_DoA()
-	call ReorderRightLeft()
-	return MoveRight()."\<esc>a"
-endfunction
 unmap a%
-xnoremap <expr> a V_DoA()
+xnoremap <expr> a ReorderRightLeft().MoveRight()."\<esc>a"
 let g:last_selected = ''
 function! V_DoS()
 	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/vim-quickui")
