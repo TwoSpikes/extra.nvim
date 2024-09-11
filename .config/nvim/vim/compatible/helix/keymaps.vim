@@ -137,9 +137,6 @@ function ChangeVisModeBasedOnSelectedText()
 	let g:ry = col('.')
 	normal! o
 	call ReorderRightLeft()
-function! V_DoI()
-	return MoveLeft()."\<esc>i"
-endfunction
 	execute "normal! ".MoveLeft()
 	normal! o
 	if v:false
