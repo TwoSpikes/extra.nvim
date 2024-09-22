@@ -267,7 +267,10 @@ function! SetConfigPath()
 endfunction
 call SetConfigPath()
 
-execute "colorscheme ".g:selected_colorscheme
+function! IsHightlightGroupDefined(group)
+	silent! let output = execute('hi '.a:group)
+	return output !~# 'E411:'
+endfunction
 function! ReturnHighlightTerm(group, term)
    " Store output of group to variable
    let output = execute('hi ' . a:group)
@@ -307,6 +310,15 @@ function! CopyHighlightGroup(src, dst)
 	execute printf("hi %s guibg=%s", a:dst, guibg)
 	execute printf("hi %s gui=%s", a:dst, gui)
 endfunction
+function! ApplyColorscheme(colorscheme)
+	execute "colorscheme ".a:colorscheme
+	if !IsHightlightGroupDefined('StatementNorm')
+		call CopyHighlightGroup('Statement', 'StatementNorm')
+		call CopyHighlightGroup('Statement', 'StatementIns')
+		call CopyHighlightGroup('Statement', 'StatementVisu')
+	endif
+endfunction
+call ApplyColorscheme(g:selected_colorscheme)
 
 if has('nvim')
 	augroup LineNrForInactive
