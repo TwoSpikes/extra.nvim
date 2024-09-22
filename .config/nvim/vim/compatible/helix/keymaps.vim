@@ -680,6 +680,10 @@ xnoremap [<space> mz<esc>O<esc>`z
 nnoremap ]<space> mzo<esc>`z
 xnoremap ]<space> mz<esc>o<esc>`zgv
 nnoremap <c-c> <cmd>call CommentOutDefault()<cr>
+if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/convert.nvim")
+	unmap <leader>cc
+	unmap <leader>cn
+endif
 
 if !g:use_nvim_cmp
 	if has('nvim')

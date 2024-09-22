@@ -2246,33 +2246,43 @@ noremap <silent> <leader>vC <cmd>set lazyredraw<cr>yy:<c-f>pvf]o0"_dxicolo <esc>
 noremap <silent> <leader>uc <cmd>CocUpdate<cr>
 noremap <silent> <leader>ut <cmd>TSUpdate<cr>
 
-function! CommentOut(comment_string)
-	mark z
-	if mode() !~? 'v.*' && mode() !~? "\<c-v>.*"
-		return "0i".a:comment_string." \<esc>"
-	else
-		let cmd = ''
-		if mode() !~? "\<c-v>.*"
-			let cmd .= "\<c-v>"
-		endif
-		let cmd .= "0I".a:comment_string."\<esc>"
-		return cmd
-	endif
-	normal! `z
+function! Save_WW_and_Do(cmd)
+	let old_whichwrap = &whichwrap
+	let &whichwrap = 'b,s'
+	execute a:cmd
+	let &whichwrap = old_whichwrap
 endfunction
-function! CommentOutDefault()
-	if &commentstring !=# ''
-		return CommentOut(&commentstring)
-	else
-		echohl ErrorMsg
-		if g:language ==# 'russian'
-			echo "Блядь: Комментарии недоступны"
-		else
-			echo "Error: Comments are not available"
-		endif
-		echohl Normal
-	endif
+function! N_CommentOut(comment_string)
+	let l=line('.')
+	call setline(l, substitute(a:comment_string, '%s', Repr_Vim_Grep(getline(l)), ''))
+	call Save_WW_and_Do('normal! '.Defone(len(substitute(a:comment_string, '%s', '', ''))).'l')
 endfunction
+function! X_CommentOut(comment_string)
+    let line_start = getpos("'<")[1]
+    let line_end = getpos("'>")[1]
+	for line in range(line_start, line_end)
+		call setline(line, substitute(a:comment_string, '%s', Repr_Vim_Grep(getline(line)), ''))
+	endfor
+	call Save_WW_and_Do('normal! '.Defone(len(substitute(a:comment_string, '%s', '', ''))).'l')
+endfunction
+function! CommentOutDefault_Define(mode)
+	execute "
+	\function! ".a:mode."_CommentOutDefault()
+	\\n	if &commentstring !=# ''
+	\\n		return ".a:mode."_CommentOut(&commentstring)
+	\\n	else
+	\\n		echohl ErrorMsg
+	\\n		if g:language ==# 'russian'
+	\\n			echo \"Блядь: Комментарии недоступны\"
+	\\n		else
+	\\n			echo \"Error: Comments are not available\"
+	\\n		endif
+	\\n		echohl Normal
+	\\n	endif
+	\\nendfunction"
+endfunction
+call CommentOutDefault_Define('N')
+call CommentOutDefault_Define('X')
 function! DoCommentOutDefault()
 	execute "normal! ".CommentOutDefault()
 endfunction
@@ -2301,7 +2311,8 @@ function! UncommentOutDefault()
 		echohl Normal
 	endif
 endfunction
-nnoremap <expr> <leader>c CommentOutDefault()
+nnoremap <leader>c <cmd>call N_CommentOutDefault()<cr>
+xnoremap <leader>c <c-\><c-n><cmd>call X_CommentOutDefault()<cr>
 nnoremap <leader>C <cmd>call UncommentOutDefault()<cr>
 augroup netrw
 	autocmd!

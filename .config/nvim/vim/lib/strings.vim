@@ -26,3 +26,36 @@ function! PrePad(s, amt, ...)
     endif
     return repeat(char, a:amt - len(a:s)) . a:s
 endfunction
+
+function! Repr_Vim_Grep(string)
+	let result = ''
+	let state = 'norm'
+	for char in a:string
+		if state ==# 'norm'
+			if char ==# '\'
+				let state = 'backslash'
+			else
+				let result .= char
+			endif
+		elseif state ==# 'backslash'
+			if char ==# '\'
+				let result .= '\\\\'
+			elseif v:false
+			\|| char ==# 'n'
+			\|| char ==# 't'
+				let result .= '\\'.char
+			else
+				let result .= '\'.char
+			endif
+			let state = 'norm'
+		else
+			echohl ErrorMsg
+			echomsg "extra.nvim: Repr_Vim_Grep: Internal Error: Invalid state: ".state
+			echohl Normal
+		endif
+	endfor
+	if state ==# 'backslash'
+		let result .= '\\'
+	endif
+	return result
+endfunction
