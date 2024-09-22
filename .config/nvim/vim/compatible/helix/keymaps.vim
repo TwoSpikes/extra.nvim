@@ -85,6 +85,14 @@ let &whichwrap="b,s,h,l,<,>,~,[,]"
 set virtualedit=onemore
 
 nnoremap d x
+function! PV()
+	normal! gv
+	let g:pseudo_visual = v:true
+endfunction
+function! PV_x()
+	execute "normal! ".N_DoX()
+	let g:pseudo_visual = v:true
+endfunction
 function! SetYankMode()
 	if v:false
 	elseif v:false

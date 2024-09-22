@@ -2252,18 +2252,25 @@ function! Save_WW_and_Do(cmd)
 	execute a:cmd
 	let &whichwrap = old_whichwrap
 endfunction
+function! Comment_Move_Left(comment_string)
+	call Save_WW_and_Do('normal! '.Defone(len(a:comment_string)).'h')
+endfunction
+function! Comment_Move_Right(comment_string)
+	call Save_WW_and_Do('normal! '.Defone(len(a:comment_string)).'l')
+endfunction
 function! N_CommentOut(comment_string)
 	let l=line('.')
 	call setline(l, substitute(a:comment_string, '%s', Repr_Vim_Grep(getline(l)), ''))
-	call Save_WW_and_Do('normal! '.Defone(len(substitute(a:comment_string, '%s', '', ''))).'l')
+	call Comment_Move_Right(substitute(a:comment_string, '%s', '', ''))
 endfunction
 function! X_CommentOut(comment_string)
-    let line_start = getpos("'<")[1]
-    let line_end = getpos("'>")[1]
+	let line_start = getpos("'<")[1]
+	let line_end = getpos("'>")[1]
 	for line in range(line_start, line_end)
 		call setline(line, substitute(a:comment_string, '%s', Repr_Vim_Grep(getline(line)), ''))
 	endfor
-	call Save_WW_and_Do('normal! '.Defone(len(substitute(a:comment_string, '%s', '', ''))).'l')
+	call Comment_Move_Right(substitute(a:comment_string, '%s', '', ''))
+	call PV()
 endfunction
 function! CommentOutDefault_Define(mode)
 	execute "
@@ -2286,34 +2293,45 @@ call CommentOutDefault_Define('X')
 function! DoCommentOutDefault()
 	execute "normal! ".CommentOutDefault()
 endfunction
-function! UncommentOut(comment_string)
-	mark z
-	if mode() !~? 'v.*' && mode() !~? "\<c-v>.*"
-		call setline(line("."), substitute(getline(line(".")), '^\( *\)'.a:comment_string." *", '\1', ""))
-	else
-		for l:idx in range(line("'>")-line("'<"))
-			let l:line = line("'<") + l:idx
-			call setline(l:line, substitute(getline(l:line), "^".a:comment_string, "", ""))
-		endfor
-	endif
-	normal! `z
+function! N_UncommentOut(comment_string)
+	let l=line('.')
+	let line=getline(l)
+	let comment=substitute(a:comment_string, '%s', '', '')
+	call setline(l, substitute(line, comment, '', ''))
+	call Comment_Move_Left(comment)
 endfunction
-function! UncommentOutDefault()
-	if &commentstring !=# ''
-		call UncommentOut(&commentstring)
-	else
-		echohl ErrorMsg
-		if g:language ==# 'russian'
-			echo "Блядь: Комментарии недоступны"
-		else
-			echo "Error: Comments are not available"
-		endif
-		echohl Normal
-	endif
+function! X_UncommentOut(comment_string)
+	let comment=substitute(a:comment_string, '%s', '', '')
+	for l:idx in range(line("'>")-line("'<")+1)
+		let l = line("'<") + l:idx
+		let line=getline(l)
+		call setline(l, substitute(line, comment, '', ''))
+	endfor
+	call Comment_Move_Left(comment)
+	call PV()
 endfunction
+function! UncommentOutDefault_Define(mode)
+	execute "
+	\function! ".a:mode."_UncommentOutDefault()
+	\\n	if &commentstring !=# ''
+	\\n		call ".a:mode."_UncommentOut(&commentstring)
+	\\n	else
+	\\n		echohl ErrorMsg
+	\\n		if g:language ==# 'russian'
+	\\n			echomsg \"Блядь: Комментарии недоступны\"
+	\\n		else
+	\\n			echomsg \"Error: Comments are not available\"
+	\\n		endif
+	\\n		echohl Normal
+	\\n	endif
+	\\nendfunction"
+endfunction
+call UncommentOutDefault_Define('N')
+call UncommentOutDefault_Define('X')
 nnoremap <leader>c <cmd>call N_CommentOutDefault()<cr>
 xnoremap <leader>c <c-\><c-n><cmd>call X_CommentOutDefault()<cr>
-nnoremap <leader>C <cmd>call UncommentOutDefault()<cr>
+nnoremap <leader>C <cmd>call N_UncommentOutDefault()<cr>
+xnoremap <leader>C <c-\><c-n><cmd>call X_UncommentOutDefault()<cr>
 augroup netrw
 	autocmd!
 	autocmd filetype netrw setlocal nocursorcolumn | call Numbertoggle()
