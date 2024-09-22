@@ -314,7 +314,11 @@ function! ApplyColorscheme(colorscheme)
 	execute "colorscheme ".a:colorscheme
 	if !IsHightlightGroupDefined('StatementNorm')
 		call CopyHighlightGroup('Statement', 'StatementNorm')
+	endif
+	if !IsHightlightGroupDefined('StatementIns')
 		call CopyHighlightGroup('Statement', 'StatementIns')
+	endif
+	if !IsHightlightGroupDefined('StatementVisu')
 		call CopyHighlightGroup('Statement', 'StatementVisu')
 	endif
 endfunction
