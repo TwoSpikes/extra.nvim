@@ -1839,6 +1839,16 @@ augroup Lua_Require_Goto_Workaround
 augroup END
 
 function! HandleExNvimOptionsInComment()
+	if !exists('*Trim') || !exists('*StartsWith')
+		echohl ErrorMsg
+		if g:language ==# 'russian'
+			echomsg "блядь: библиотеку со строками импортируй"
+		else
+			echomsg "error: library with strings is not imported"
+		endif
+		echohl Normal
+		return
+	endif
 	if &commentstring ==# ''
 		return
 	endif
@@ -2638,7 +2648,7 @@ inoremap <expr> " HandleKeystroke('"')
 inoremap <expr> <bs> HandleKeystroke('\<bs>')
 
 if has('nvim')
-	execute printf("so %s", g:CONFIG_PATH.'/vim/plugins/setup.vim')
+	execute "source ".g:CONFIG_PATH.'/vim/plugins/setup.vim'
 
 	if executable('git')
 		execute printf("luafile %s", g:PLUGINS_INSTALL_FILE_PATH)
