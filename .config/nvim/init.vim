@@ -1849,17 +1849,18 @@ function! HandleExNvimOptionsInComment()
 		echohl Normal
 		return
 	endif
-	if &commentstring ==# ''
+	let commentstring = substitute(&commentstring, '%s', '', '')
+	if commentstring ==# ''
 		return
 	endif
-	let default_comment_string_len = &commentstring
+	let default_comment_string_len = commentstring
 	let LUA_REQUIRE_GOTO_PREFIX_idx = 0
 	let i = 1
 	let lastline = line('$')
 	while i <# lastline + 1
 		let line = getline(i)
 		let line = Trim(line)
-		if !StartsWith(line, &commentstring)
+		if !StartsWith(line, commentstring)
 			let i += 1
 			continue
 		endif
