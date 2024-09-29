@@ -2647,15 +2647,27 @@ inoremap <expr> ' HandleKeystroke("'")
 inoremap <expr> " HandleKeystroke('"')
 inoremap <expr> <bs> HandleKeystroke('\<bs>')
 
-if has('nvim')
+function! InitPacker()
 	execute "source ".g:CONFIG_PATH.'/vim/plugins/setup.vim'
 
-	if executable('git')
-		execute printf("luafile %s", g:PLUGINS_INSTALL_FILE_PATH)
-	endif
+	execute printf("luafile %s", g:PLUGINS_INSTALL_FILE_PATH)
 	PackerInstall
-	set nolazyredraw
 	execute printf("luafile %s", g:PLUGINS_SETUP_FILE_PATH)
+endfunction
+
+set nolazyredraw
+if has('nvim')
+	if executable('git')
+		if !isdirectory(g:LOCALSHAREPATH.."/site/pack/packer/start/packer.nvim")
+			echomsg "Installing packer.nvim"
+			!git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+		endif
+		call timer_start(0, {->InitPacker()})
+	else
+		echohl ErrorMsg
+		echomsg "Please install Git"
+		echohl Normal
+	endif
 endif
 
 if has('nvim') && exists('g:setup_lsp')
