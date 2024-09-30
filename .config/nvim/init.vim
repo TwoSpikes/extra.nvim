@@ -2663,7 +2663,7 @@ if has('nvim')
 			echomsg "Installing packer.nvim"
 			!git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 		endif
-		call timer_start(0, {->InitPacker()})
+		call InitPacker()
 	else
 		echohl ErrorMsg
 		echomsg "Please install Git"
