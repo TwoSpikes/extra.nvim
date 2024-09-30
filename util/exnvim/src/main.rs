@@ -119,13 +119,6 @@ fn install(
             ).as_str(),
         ]
     );
-    let mut easy = ::curl::easy::Easy::new();
-    easy.url("https://raw.githubusercontent.com/neovim/neovim/v0.7.2/runtime/syntax/lua.vim").unwrap();
-    easy.write_function(move |data| {
-        ::std::fs::write(vimruntime.clone().join("syntax/lua.vim"), data).unwrap();
-        Ok(data.len())
-    }).unwrap();
-    easy.perform().unwrap();
 
     if with_coc_sh_crutch {
         install_coc_sh_crutch(target, false)
