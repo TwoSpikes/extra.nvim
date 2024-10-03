@@ -215,12 +215,14 @@ xnoremap gP <esc><cmd>if &modifiable<bar>call SimulateCorrectPasteMode('0')<bar>
 nnoremap c xi
 if !g:use_nvim_cmp
 	if has('nvim')
-		unmap ySS
-		unmap ySs
-		unmap yss
-		unmap yS
-		unmap ys
-		unmap y<c-g>
+		if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/vim-surround")
+			unmap ySS
+			unmap ySs
+			unmap yss
+			unmap yS
+			unmap ys
+			unmap y<c-g>
+		endif
 	endif
 endif
 nnoremap y vy
@@ -241,14 +243,18 @@ xnoremap > >gv<cmd>let g:pseudo_visual=v:true<cr>
 xnoremap t<cr> $
 if !g:use_nvim_cmp
 	if has('nvim')
-		unmap cS
-		unmap cs
+		if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/vim-surround")
+			unmap cS
+			unmap cs
+		endif
 	endif
 	unmap ci_
 endif
 unmap dd
 if has('nvim')
-	unmap ds
+	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/vim-surround")
+		unmap ds
+	endif
 endif
 let g:pseudo_visual = v:false
 let g:lx=1
@@ -694,9 +700,6 @@ if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/convert.nvim")
 endif
 
 if !g:use_nvim_cmp
-	if has('nvim')
-		unmap <leader>f
-	endif
 	unmap <leader>fr
 	unmap <leader>fh
 	unmap <leader>fb

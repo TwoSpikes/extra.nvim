@@ -1718,7 +1718,7 @@ function! Lua_Require_Goto_Workaround_Wincmd_f()
 		else
 			let lua_require_goto_workaround_wincmd_f_dialogue_label = 'Select goto way %s: '
 		endif
-		echon printf(lua_require_goto_workaround_wincmd_f_dialogua_label, ["n", "r"])
+		echon printf(lua_require_goto_workaround_wincmd_f_dialogue_label, ["n", "r"])
 		echohl Normal
 		let goto_way = nr2char(getchar())
 		echon goto_way
@@ -2948,7 +2948,7 @@ function! OpenOnStart()
 		let to_open = to_open && !g:DO_NOT_OPEN_ANYTHING
 		let to_open = to_open && !g:PAGER_MODE
 		if to_open
-			if g:open_on_start ==# 'alpha' && has('nvim') && !isdirectory(expand('%'))
+			if g:open_on_start ==# 'alpha' && has('nvim') && !isdirectory(expand('%')) && isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/alpha-nvim")
 				Alpha
 			elseif g:open_on_start ==# "explorer" || (!has('nvim') && g:open_on_start ==# 'alpha')
 			\||executable('ranger') !=# 1
@@ -3259,7 +3259,7 @@ function! OnStart()
 	if g:PAGER_MODE
 		call EnablePagerMode()
 	endif
-	if has('nvim') && g:compatible !=# "helix_hard"
+	if has('nvim') && g:compatible !=# "helix_hard" && isdirectory(g:LOCALSHAREPATH.'/site/pack/packer/start/nvim-notify')
 		execute printf('luafile %s', fnamemodify(g:PLUGINS_SETUP_FILE_PATH, ':h').'/noice/setup.lua')
 	endif
 	if v:false
