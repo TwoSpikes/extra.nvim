@@ -1,6 +1,8 @@
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/nvim-dap-python") == 1 then
+require('lib.vim.plugins')
+
+if plugin_installed("nvim-dap-python") then
 	require('packages.dap.python.init')
 end
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/nvim-dap-go") == 1 then
+if plugin_installed("nvim-dap-go") then
 	require('packages.dap.go.init')
 end

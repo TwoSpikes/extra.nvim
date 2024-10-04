@@ -544,6 +544,7 @@ if $PREFIX == ""
 	call setenv('PREFIX', '/usr/')
 endif
 
+execute "luafile ".expand(g:CONFIG_PATH)."/lua/lib/vim/plugins.lua"
 
 " Random options
 set termguicolors
@@ -2921,7 +2922,9 @@ function! RunAlphaIfNotAlphaRunning()
 		AlphaRemap
 	endif
 endfunction
-nnoremap <leader>A <cmd>call RunAlphaIfNotAlphaRunning()<cr>
+if isdirectory(g:LOCALSHAREPATH.'/site/pack/packer/start/alpha-nvim')
+	nnoremap <leader>A <cmd>call RunAlphaIfNotAlphaRunning()<cr>
+endif
 
 nnoremap <c-h> <cmd>Neotree<cr>
 
@@ -2935,7 +2938,7 @@ function! OpenOnStart()
 	endif
 
 	if argc() && isdirectory(argv(0))
-		if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/neo-tree.nvim")
+		if luaeval("plugin_installed(_A[1])", ["neo-tree.nvim"])
 			bwipeout!
 			execute 'Neotree' argv(0)
 			silent only
@@ -2948,7 +2951,7 @@ function! OpenOnStart()
 		let to_open = to_open && !g:DO_NOT_OPEN_ANYTHING
 		let to_open = to_open && !g:PAGER_MODE
 		if to_open
-			if g:open_on_start ==# 'alpha' && has('nvim') && !isdirectory(expand('%')) && isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/alpha-nvim")
+			if g:open_on_start ==# 'alpha' && has('nvim') && !isdirectory(expand('%')) && luaeval("plugin_installed(_A[1])", ["alpha-nvim"])
 				Alpha
 			elseif g:open_on_start ==# "explorer" || (!has('nvim') && g:open_on_start ==# 'alpha')
 			\||executable('ranger') !=# 1

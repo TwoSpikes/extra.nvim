@@ -1,14 +1,16 @@
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/nvim-notify") == 1 then
+require('lib.vim.plugins')
+
+if plugin_installed("nvim-notify") then
 	require('packages.vim-notify')
 end
 require('packages.lsp.plugins')
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/nvim-treesitter") == 1 then
+if plugin_installed("nvim-treesitter") then
 	require('packages.treesitter')
 end
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/netrw.nvim") == 1 then
+if plugin_installed("netrw.nvim") then
 	require('packages.netrw')
 end
-if vim.g.enable_which_key and vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/netrw.nvim") == 1 then
+if vim.g.enable_which_key and plugin_installed("which-key.nvim") then
 	require('packages.which-key.init')
 end
 --require('packages.bufresize.init')
@@ -27,41 +29,41 @@ if not vim.g.use_codeium then
 		vim.fn.delete(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/codeium.vim", "rf")
 	end
 end
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/vim-illuminate") == 1 then
+if plugin_installed("vim-illuminate") then
 	require('packages.vim-illuminate.init')
 end
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/todo-comments.nvim") == 1 then
+if plugin_installed("todo-comments.nvim") then
 	require('packages.todo-comments.init')
 end
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/indent-blankline.nvim") == 1 then
+if plugin_installed("indent-blankline.nvim") then
 	require('packages.indent-blankline.init')
 end
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/nvim-dap") == 1 then
+if plugin_installed("nvim-dap") then
 	require('packages.dap.init')
 end
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/nvim-dap-ui") == 1 then
+if plugin_installed("nvim-dap-ui") then
 	require('packages.dapui.init')
 end
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/gitsigns.nvim") == 1 then
+if plugin_installed("gitsigns.nvim") then
 	require('packages.gitsigns.init')
 end
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/alpha-nvim") == 1 then
+if plugin_installed("alpha-nvim") then
 	require('packages.alpha.init')
 end
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/persisted.nvim") == 1 then
+if plugin_installed("persisted.nvim") then
 	require('packages.persisted.init')
 end
 --require('packages.lean.init')
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/neogen") == 1 then
+if plugin_installed("neogen") then
 	require('packages.neogen.init')
 end
-if vim.g.compatible ~= "helix" and vim.g.compatible ~= "helix_hard" and vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/yanky.nvim") == 1 then
+if vim.g.compatible ~= "helix" and vim.g.compatible ~= "helix_hard" and plugin_installed("yanky.nvim") then
 	require('packages.yanky.init')
 end
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/nvim-lint") == 1 then
+if plugin_installed("nvim-lint") then
 	require('packages.nvim-lint.init')
 end
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/noice.nvim") == 1 then
+if plugin_installed("noice.nvim") then
 	if vim.g.compatible ~= "helix_hard" then
 		require('packages.noice.init')
 	else
@@ -70,25 +72,25 @@ if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/st
 		end
 	end
 end
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/edgy.nvim") == 1 then
+if plugin_installed("edgy.nvim") then
 	require('packages.edgy.init')
 end
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/mini.bracketed") == 1 then
+if plugin_installed("mini.bracketed") then
 	require('packages.mini.init')
 end
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/nvim-colorizer.lua") == 1 then
+if plugin_installed("nvim-colorizer.lua") then
 	require('packages.colorizer.init')
 end
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/cinnamon.nvim") == 1 then
+if plugin_installed("cinnamon.nvim") then
 	require('packages.cinnamon.init')
 end
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/endscroll.nvim") == 1 then
+if plugin_installed("endscroll.nvim") then
 	require('packages.endscroll.init')
 end
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/none-ls.nvim") == 1 then
+if plugin_installed("none-ls.nvim") then
 	require('packages.null-ls.init')
 end
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/conform.nvim") == 1 then
+if plugin_installed("conform.nvim") then
 	require('packages.conform.init')
 end
 require('packages.convert.init')
@@ -99,14 +101,14 @@ else
 		vim.fn.delete(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/nvim-treesitter-context", "rf")
 	end
 end
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/conform.nvim") == 1 then
+if plugin_installed("nvim-ts-autotag") then
 	require('packages.ts-autotag.init')
 end
 require('packages.ufo.init')
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/trouble.nvim") == 1 then
+if plugin_installed("trouble.nvim") then
 	require('packages.trouble.init')
 end
-if vim.fn.isdirectory(vim.fn.expand(vim.g.LOCALSHAREPATH).."/site/pack/packer/start/LuaSnip") == 1 then
+if plugin_installed("LuaSnip") then
 	require('packages.luasnip.init')
 end
 require('packages.sneak.init')

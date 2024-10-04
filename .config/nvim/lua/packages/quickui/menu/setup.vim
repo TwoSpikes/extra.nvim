@@ -1,3 +1,7 @@
+if !isdirectory(expand(g:LOCALSHAREPATH)."/site/pack/packer/start/vim-quickui")
+	finish
+endif
+
 function! ChangeNames()
 	if g:language ==# 'russian'
 		let s:file_label = '&f:Файл'

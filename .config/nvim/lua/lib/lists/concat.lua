@@ -1,4 +1,4 @@
-if DOTFILES_VIM_LIB_LISTS_CONCAT_INCLUDED == nil then DOTFILES_VIM_LIB_LISTS_CONCAT_INCLUDED = true else os.exit(0) end
+if EXNVIM_LIB_LISTS_CONCAT_INCLUDED == nil then EXNVIM_LIB_LISTS_CONCAT_INCLUDED = true else os.exit(0) end
 
 -- Copyied from StackOverflow: https://stackoverflow.com/questions/1410862/concatenation-of-tables-in-lua
 function TableConcat(t1,t2)
