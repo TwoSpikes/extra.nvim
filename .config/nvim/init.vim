@@ -2032,8 +2032,8 @@ if g:fast_terminal
 	inoremap <c-l> <cmd>let old_lazyredraw=&lazyredraw<cr><cmd>set lazyredraw<cr><cmd>normal! 10zl<cr><cmd>let &lazyredraw=old_lazyredraw<cr><cmd>unlet old_lazyredraw<cr><cmd>call HandleBuftype(winnr())<cr>
 	inoremap <c-h> <cmd>let old_lazyredraw=&lazyredraw<cr><cmd>set lazyredraw<cr><cmd>normal! 10zh<cr><cmd>let &lazyredraw=old_lazyredraw<cr><cmd>unlet old_lazyredraw<cr><cmd>call HandleBuftype(winnr())<cr>
 else
-	inoremap <c-l> <esc>2zl2zl2zl2zl2zl2zl
-	inoremap <c-h> <esc>2zh2zh2zh2zh2zh2zh
+	inoremap <c-l> <cmd>exe"norm! 10zl"<cr>
+	inoremap <c-h> <cmd>exe"norm! 10zh"<cr>
 endif
 let s:SCROLL_FACTOR = 2
 let s:SCROLL_UP_FACTOR = s:SCROLL_FACTOR
