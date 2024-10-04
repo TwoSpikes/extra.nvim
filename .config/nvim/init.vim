@@ -544,7 +544,9 @@ if $PREFIX == ""
 	call setenv('PREFIX', '/usr/')
 endif
 
-execute "luafile ".expand(g:CONFIG_PATH)."/lua/lib/vim/plugins.lua"
+if has('nvim')
+	execute "luafile ".expand(g:CONFIG_PATH)."/lua/lib/vim/plugins.lua"
+endif
 
 " Random options
 set termguicolors
