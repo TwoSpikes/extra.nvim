@@ -2223,7 +2223,6 @@ vnoremap <leader>' iw<esc>a'<esc>bi'<esc>v
 nnoremap ci_ yiwct_
 noremap <silent> <leader>d <cmd>nohlsearch<cr>
 nnoremap <silent> <esc> <cmd>let @/ = ""<cr>
-tnoremap <esc> <c-\><c-n>
 inoremap <c-c> <c-c><cmd>call Numbertoggle()<cr>
 
 " TERMINAL
@@ -2627,16 +2626,32 @@ function! HandleKeystroke(keystroke)
 	endif
 	if a:keystroke ==# '"'
 	\|| a:keystroke ==# "'"
-		return a:keystroke.a:keystroke."\<left>"
+		if c =~# "[a-zA-Z]"
+			return a:keystroke
+		else
+			return a:keystroke.a:keystroke."\<left>"
+		endif
 	endif
 	let mode = mode()
 	if v:false
 	elseif a:keystroke ==# '('
-		normal! i()
+		if c =~# "[a-zA-Z]"
+			execute "normal! i(\<right>"
+		else
+			normal! i()
+		endif
 	elseif a:keystroke ==# '['
-		normal! i[]
+		if c =~# "[a-zA-Z]"
+			execute "normal! i[\<right>"
+		else
+			normal! i[]
+		endif
 	elseif a:keystroke ==# '{'
-		normal! i{}
+		if c =~# "[a-zA-Z]"
+			execute "normal! i{\<right>"
+		else
+			normal! i{}
+		endif
 	else
 		return a:keystroke
 	endif
