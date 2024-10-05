@@ -111,6 +111,7 @@ function! SetYankMode()
 	endif
 endfunction
 function! V_DoD()
+	let register = v:register
 	let g:lx = line('.')
 	let g:ly = col('.')
 	normal! o
@@ -121,7 +122,7 @@ function! V_DoD()
 	execute "normal! ".MoveLeft()
 	normal! o
 	call SetYankMode()
-	normal! d
+	execute "normal! \"".register."d"
 endfunction
 xnoremap d <cmd>call V_DoD()<cr>
 function! N_DoX()
@@ -137,7 +138,7 @@ nnoremap <expr> X N_DoX()
 xnoremap u ugv
 xnoremap U Ugv
 xnoremap ~ <c-\><c-n><cmd>call Do_V_Tilde()<bar>execute "normal! gv"<bar>let g:pseudo_visual=v:true<bar>execute "Showtab"<cr>
-function ChangeVisModeBasedOnSelectedText()
+function! ChangeVisModeBasedOnSelectedText()
 	let g:lx = line('.')
 	let g:ly = col('.')
 	normal! o
@@ -157,7 +158,7 @@ function ChangeVisModeBasedOnSelectedText()
 		endif
 	endif
 endfunction
-function! SimulateCorrectPasteMode(cmd)
+function! SimulateCorrectPasteMode(cmd, register)
 	if v:false
 	elseif v:false
 	\|| g:yank_mode ==# 'char'
@@ -202,16 +203,16 @@ function! SimulateCorrectPasteMode(cmd)
 		echohl Normal
 	endif
 
-	execute "normal! ".paste_cmd
+	execute "normal! \"".a:register.paste_cmd
 endfunction
-nnoremap p <cmd>if &modifiable<bar>call SimulateCorrectPasteMode('$')<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
-nnoremap P <cmd>if &modifiable<bar>call SimulateCorrectPasteMode('0')<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
-xnoremap p <esc><cmd>if &modifiable<bar>call SimulateCorrectPasteMode('$')<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
-xnoremap P <esc><cmd>if &modifiable<bar>call SimulateCorrectPasteMode('0')<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
-nnoremap gp <cmd>if &modifiable<bar>call SimulateCorrectPasteMode('$')<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>exe"norm! o"<bar>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
-nnoremap gP <cmd>if &modifiable<bar>call SimulateCorrectPasteMode('0')<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>exe"norm! o"<bar>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
-xnoremap gp <esc><cmd>if &modifiable<bar>call SimulateCorrectPasteMode('$')<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>exe"norm! o"<bar>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
-xnoremap gP <esc><cmd>if &modifiable<bar>call SimulateCorrectPasteMode('0')<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>exe"norm! o"<bar>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
+nnoremap p <cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCorrectPasteMode('$', register)<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
+nnoremap P <cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCorrectPasteMode('0', register)<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
+xnoremap p <esc><cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCorrectPasteMode('$', register)<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
+xnoremap P <esc><cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCorrectPasteMode('0', register)<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
+nnoremap gp <cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCorrectPasteMode('$', register)<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>exe"norm! o"<bar>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
+nnoremap gP <cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCorrectPasteMode('0', register)<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>exe"norm! o"<bar>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
+xnoremap gp <esc><cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCorrectPasteMode('$', register)<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>exe"norm! o"<bar>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
+xnoremap gP <esc><cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCorrectPasteMode('0', register)<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>exe"norm! o"<bar>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
 nnoremap c xi
 if !g:use_nvim_cmp
 	if has('nvim')
@@ -225,7 +226,7 @@ if !g:use_nvim_cmp
 		endif
 	endif
 endif
-nnoremap y vy
+nnoremap y <cmd>let register=v:register<bar>exe"norm! v\"".register."y"<cr>
 nnoremap t<cr> v$
 nnoremap mm %
 xnoremap mm %
@@ -606,6 +607,7 @@ endfunction
 xnoremap c <cmd>call V_DoC()<cr>
 let g:yank_mode = "char"
 function! V_DoY()
+	let register = v:register
 	let g:lx = line('.')
 	let g:ly = col('.')
 	normal! o
@@ -620,11 +622,11 @@ function! V_DoY()
 	if v:false
 	elseif v:false
 	\|| g:yank_mode ==# "char"
-		normal! y
+		execute "normal! \"".register."y"
 	elseif v:false
 	\|| g:yank_mode ==# "line"
 	\|| g:yank_mode ==# "line_post"
-		execute "normal! \<esc>mzgv`zy"
+		execute "normal! \<esc>mzgv`z\"".register."y"
 	else
 		echohl ErrorMsg
 		echomsg "extra.nvim: V_DoY: Internal error: wrong yank mode: ".g:yank_mode
