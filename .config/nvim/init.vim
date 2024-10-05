@@ -2607,6 +2607,8 @@ function! HandleKeystroke(keystroke)
 		\&& c ==# "'"
 		\|| prev_c ==# '"'
 		\&& c ==# '"'
+		\|| prev_c ==# "`"
+		\&& c ==# "`"
 		\|| prev_c ==# '<'
 		\&& c ==# '>'
 			return "\<del>\<bs>"
@@ -2624,11 +2626,16 @@ function! HandleKeystroke(keystroke)
 	\&& c ==# "'"
 	\|| a:keystroke ==# '"'
 	\&& c ==# '"'
+	\|| a:keystroke ==# "`"
+	\&& c ==# "`"
 		return "\<right>"
 	endif
 	if a:keystroke ==# '"'
 	\|| a:keystroke ==# "'"
-		if c =~# "[a-zA-Z]"
+	\|| a:keystroke ==# "`"
+		if v:false
+		\|| c =~# "[a-zA-Z0-9]"
+		\|| prev_c =~# "[a-zA-Z0-9]"
 			return a:keystroke
 		else
 			return a:keystroke.a:keystroke."\<left>"
@@ -2637,19 +2644,19 @@ function! HandleKeystroke(keystroke)
 	let mode = mode()
 	if v:false
 	elseif a:keystroke ==# '('
-		if c =~# "[a-zA-Z]"
+		if c =~# "[a-zA-Z0-9]"
 			execute "normal! i(\<right>"
 		else
 			normal! i()
 		endif
 	elseif a:keystroke ==# '['
-		if c =~# "[a-zA-Z]"
+		if c =~# "[a-zA-Z0-9]"
 			execute "normal! i[\<right>"
 		else
 			normal! i[]
 		endif
 	elseif a:keystroke ==# '{'
-		if c =~# "[a-zA-Z]"
+		if c =~# "[a-zA-Z0-9]"
 			execute "normal! i{\<right>"
 		else
 			normal! i{}
@@ -2664,6 +2671,7 @@ inoremap <expr> ] HandleKeystroke(']')
 inoremap <expr> } HandleKeystroke('}')
 inoremap <expr> ' HandleKeystroke("'")
 inoremap <expr> " HandleKeystroke('"')
+inoremap <expr> ` HandleKeystroke("`")
 inoremap <expr> <bs> HandleKeystroke('\<bs>')
 
 function! InitPacker()
