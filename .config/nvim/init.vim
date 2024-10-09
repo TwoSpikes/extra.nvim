@@ -50,7 +50,8 @@ if has('nvim')
 	lua vim.loader.enable()
 endif
 
-set lazyredraw
+mode
+set statusline=%#Loading0#Loading\ 0%%
 
 if !has('nvim')
 	set nocompatible
@@ -400,6 +401,7 @@ function! Numbertoggle_stcabs(mode='', winnr=winnr())
 		call STCNo(a:winnr)
 	endif
 endfunction	
+set statusline=%#Loading13#Loading\ 12.5%%
 function! Numbertoggle_stcrel(winnr)
 	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
 		call STCRel(a:winnr)
@@ -1027,6 +1029,7 @@ function! Showtab()
 	endif
 	return s:result
 endfunction
+set statusline=%#Loading25#Loading\ 25%%
 command! -nargs=0 Showtab set stl=%{%Showtab()%}
 
 command! -nargs=* Pkg !pkg <args>
@@ -1302,6 +1305,7 @@ function! MyTabLine()
 
   return s
 endfunction
+set statusline=%#Loading38#Loading\ 37.5%%
 if g:compatible !=# "helix_hard"
 	set tabline=%!MyTabLine()
 endif
@@ -1663,6 +1667,7 @@ function! SelectPosition(cmd, positions)
 		break
 	endwhile
 endfunction
+set statusline=%#Loading50#Loading\ 50%%
 
 if g:language ==# 'russian'
 	let g:stdpos = {
@@ -2059,6 +2064,7 @@ let g:PLUGINS_INSTALL_FILE_PATH = '~/.config/nvim/lua/packages/plugins.lua'
 let g:PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/plugins_setup.lua'
 let g:LSP_PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/lsp/plugins.lua'
 
+set statusline=%#Loading63#Loading\ 62.5%%
 execute printf('noremap <silent> <leader>ve <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:CONFIG_PATH."/init.vim")
 execute printf("noremap <silent> <leader>se <esc>:so %s<cr>", g:CONFIG_PATH.'/init.vim')
 
@@ -2492,6 +2498,7 @@ noremap <silent> <c-x>2 <cmd>split<cr>
 noremap <silent> <c-x>3 <cmd>vsplit<cr>
 noremap <silent> <c-x>o <c-w>w
 noremap <silent> <c-x>O <c-w>W
+set statusline=%#Loading75#Loading\ 75%%
 noremap <silent> <c-x><c-f> <cmd>Findfilebuffer<cr>
 noremap <silent> <c-x>t0 <cmd>tabclose<cr>
 noremap <silent> <c-x>t1 <cmd>tabonly<cr>
@@ -2927,6 +2934,7 @@ function! OpenRangerCheck()
 		echohl Normal
 	endif
 endfunction
+set statusline=%#Loading88#Loading\ 87.5%%
 nnoremap <leader>r <cmd>call OpenRangerCheck()<cr>
 
 function! RunAlphaIfNotAlphaRunning()
@@ -3327,3 +3335,4 @@ autocmd! VimLeavePre * call FixShaDa()
 
 autocmd! VimEnter * call OnStart()
 autocmd! VimLeave * call OnQuit()
+set statusline=%#Loading100#Loading\ 100%%
