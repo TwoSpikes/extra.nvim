@@ -637,7 +637,7 @@ function! AfterSomeEvent(event, command, delete_when={name -> 'au! '.name})
 endfunction
 let g:please_do_not_close = v:false
 function! MakeThingsThatRequireBeDoneAfterPluginsLoaded()
-	autocmd TermClose * if !g:please_do_not_close && !exists('g:bufnrforranger')|call IfOneWinDo("call OnQuit()")|call AfterSomeEvent('TermLeave', 'call Numbertoggle()')|quit|endif
+	autocmd TermClose * if !g:please_do_not_close && !exists('g:bufnrforranger')|call IfOneWinDo('call OnQuit()')|call AfterSomeEvent('TermLeave', 'call Numbertoggle()')|qall!|endif
 endfunction
 
 set nonu
@@ -2461,7 +2461,7 @@ function! Killbuffer()
 		endif
 	endif
 	if user_input ==# '' || IsYes(user_input)
-		bdelete
+		bdelete!
 	elseif !IsNo(user_input)
 		echohl ErrorMsg
 		if g:language ==# 'russian'
