@@ -637,7 +637,7 @@ function! AfterSomeEvent(event, command, delete_when={name -> 'au! '.name})
 endfunction
 let g:please_do_not_close = v:false
 function! MakeThingsThatRequireBeDoneAfterPluginsLoaded()
-	autocmd TermClose * if !g:please_do_not_close && !exists('g:bufnrforranger')|call IfOneWinDo('call OnQuit()')|call AfterSomeEvent('TermLeave', 'call Numbertoggle()')|qall!|endif
+	autocmd TermClose * if !g:please_do_not_close && !exists('g:bufnrforranger')|if IsOneWin()|call OnQuit()|endif|call AfterSomeEvent('TermLeave', 'call Numbertoggle()')|call IfOneWinDoElse('qall!', 'quit!')|endif
 endfunction
 
 set nonu
@@ -2461,7 +2461,7 @@ function! Killbuffer()
 		endif
 	endif
 	if user_input ==# '' || IsYes(user_input)
-		bdelete!
+		call PleaseDoNotCloseIfNotOneWin('bdelete!')
 	elseif !IsNo(user_input)
 		echohl ErrorMsg
 		if g:language ==# 'russian'
@@ -2891,7 +2891,7 @@ function! OpenRanger(path)
 	augroup oncloseranger
 		autocmd! oncloseranger
 		if has('nvim')
-			execute 'autocmd TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.g:bufnrforranger."|if filereadable(filename)==#1|bdelete|execute 'edit '.filename|call Numbertoggle()|filetype detect|call AfterSomeEvent(\"ModeChanged\", \"doautocmd BufEnter \".expand(\"%\"))|unlet g:bufnrforranger|else|call IfOneWinDo(\"call OnQuit()\")|quit|endif|endif|call delete('".TMPFILE."')|unlet filename"
+			execute 'autocmd TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.g:bufnrforranger."|if filereadable(filename)==#1|bdelete|execute 'edit '.filename|call Numbertoggle()|filetype detect|call AfterSomeEvent(\"ModeChanged\", \"doautocmd BufEnter \".expand(\"%\"))|unlet g:bufnrforranger|else|call IfOneWinDo('call OnQuit()')|endif|quit|endif|endif|call delete('".TMPFILE."')|unlet filename"
 		else
 			function! CheckRangerStopped(timer_id, TMPFILE)
 				let bufnr = bufnr()
@@ -2909,7 +2909,7 @@ function! OpenRanger(path)
 						endif
 						call timer_stop(a:timer_id)
 					else
-						call IfOneWinDo("call OnQuit()")
+						call IfOneWinDo('call OnQuit()')
 						quit
 					endif
 					unlet filename
@@ -3314,17 +3314,60 @@ function! OnQuit()
 		call SaveLastSelected()
 	endif
 endfunction
-function! IfOneWinDo(cmd)
-	let s = 0
-	let t = 1
-	while s <=# 1 && t <=# tabpagenr()
-		let s += tabpagewinnr(t, '$')
-		let t += 1
-	endwhile
-	if s ==# 1
-		execute a:cmd
+let s:MACRO_IS_ONE_WIN = "
+\	let s = 0
+\\n	let t = 1
+\\n	while s <=# 1 && t <=# tabpagenr()
+\\n		let s += tabpagewinnr(t, '$')
+\\n		let t += 1
+\\n	endwhile"
+execute "
+\function! IfOneWinDo(cmd)
+\\n".s:MACRO_IS_ONE_WIN."
+\\n	if s ==# 1
+\\n		execute a:cmd
+\\n	endif
+\\nendfunction"
+execute "
+\function! IfOneWinDoElse(cmd1, cmd2)
+\\n".s:MACRO_IS_ONE_WIN."
+\\n	if s ==# 1
+\\n		execute a:cmd1
+\\n	else
+\\n		execute a:cmd2
+\\n	endif
+\\nendfunction"
+function! PleaseDoNotCloseWrapper(cmd, cond)
+	if a:cond
+		let g:please_do_not_close = v:true
+	endif
+	execute a:cmd
+	if a:cond
+		let g:please_do_not_close = v:false
 	endif
 endfunction
+execute "
+\function! PleaseDoNotCloseIfOneWin(cmd)
+\\n".s:MACRO_IS_ONE_WIN."
+\\n	if s ==# 1
+\\n		let g:please_do_not_close = v:true
+\\n	endif
+\\n	execute a:cmd
+\\n	if s ==# 1
+\\n		let g:please_do_not_close = v:false
+\\n	endif
+\\nendfunction"
+execute "
+\function! PleaseDoNotCloseIfNotOneWin(cmd)
+\\n".s:MACRO_IS_ONE_WIN."
+\\n	if s !=# 1
+\\n		let g:please_do_not_close = v:true
+\\n	endif
+\\n	execute a:cmd
+\\n	if s !=# 1
+\\n		let g:please_do_not_close = v:false
+\\n	endif
+\\nendfunction"
 
 function! FixShaDa()
 	let g:PAGER_MODE = 0
