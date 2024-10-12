@@ -575,4 +575,7 @@ return require('packer').startup(function (use)
 			'Exafunction/codeium.vim',
 		}
 	end
+	use {
+		'TwoSpikes/music-player.vim',
+	}
 end)
