@@ -637,7 +637,7 @@ function! AfterSomeEvent(event, command, delete_when={name -> 'au! '.name})
 endfunction
 let g:please_do_not_close = v:false
 function! MakeThingsThatRequireBeDoneAfterPluginsLoaded()
-	autocmd TermClose * if !g:please_do_not_close && !exists('g:bufnrforranger')|if IsOneWin()|call OnQuit()|endif|call AfterSomeEvent('TermLeave', 'call Numbertoggle()')|call IfOneWinDoElse('qall!', 'quit!')|endif
+	autocmd TermClose * if !g:please_do_not_close && !exists('g:bufnrforranger')|call IfOneWinDo('call OnQuit()')|call AfterSomeEvent('TermLeave', 'call Numbertoggle()')|call IfOneWinDoElse('qall!', 'quit!')|endif
 endfunction
 
 set nonu
@@ -3321,6 +3321,11 @@ let s:MACRO_IS_ONE_WIN = "
 \\n		let s += tabpagewinnr(t, '$')
 \\n		let t += 1
 \\n	endwhile"
+execute "
+\function! IsOneWin()
+\\n".s:MACRO_IS_ONE_WIN."
+\\n	return s ==# 1
+\\nendfunction"
 execute "
 \function! IfOneWinDo(cmd)
 \\n".s:MACRO_IS_ONE_WIN."
