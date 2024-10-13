@@ -677,7 +677,7 @@ function! V_DoRedo()
 		redo
 		execute "normal! \<c-\>\<c-n>"
 	else
-		execute "normal! \<c-r>gv"
+		normal! Ugv
 		let g:pseudo_visual = v:true
 	endif
 endfunction
