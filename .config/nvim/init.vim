@@ -50,8 +50,9 @@ if has('nvim')
 	lua vim.loader.enable()
 endif
 
-mode
 set statusline=%#Loading0#Loading\ 0%%
+hi Loading0 ctermfg=0 ctermbg=9 cterm=bold guifg=#303030 guibg=#ff0000 gui=bold
+mode
 
 if !has('nvim')
 	set nocompatible
@@ -124,6 +125,8 @@ function! LoadExNvimConfig(path, reload=v:false)
 		\'insert_exit_on_jk',
 		\'insert_exit_on_jk_save',
 		\'selected_colorscheme',
+		\'disable_cinnamon',
+		\'disable_animations',
 	\]
 	for option in l:option_list
 		if exists('g:exnvim_config["'.option.'"]')
@@ -253,6 +256,12 @@ function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 	endif
 	if !exists('g:selected_colorscheme')
 		let g:selected_colorscheme = "blueorange"
+	endif
+	if !exists('g:disable_cinnamon')
+		let g:disable_cinnamon = v:false
+	endif
+	if !exists('g:disable_animations')
+		let g:disable_animations = v:false
 	endif
 endfunction
 call SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
@@ -1428,6 +1437,7 @@ nnoremap <leader>xg <cmd>grep <cword> .<cr>
 let s:process_g_but_function_expression = "
 \function! ProcessGBut(button)
 \"
+if !g:disable_animations
 if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
 let s:process_g_but_function_expression .= "
 \\n	let old_c=col('.')
@@ -1492,6 +1502,12 @@ let s:process_g_but_function_expression .= "
 \\n	if &buftype !=# 'terminal'
 \\n		set nolazyredraw
 \\n	endif
+\"
+endif
+else
+let s:process_g_but_function_expression .= "
+\\n	let button=v:count==#0?\"g\".a:button:a:button
+\\n	execute \"norm! \".v:count1.button
 \"
 endif
 let s:process_g_but_function_expression .= "

@@ -81,7 +81,7 @@ end
 if plugin_installed("nvim-colorizer.lua") then
 	require('packages.colorizer.init')
 end
-if plugin_installed("cinnamon.nvim") then
+if plugin_installed("cinnamon.nvim") and not vim.g.disable_cinnamon then
 	require('packages.cinnamon.init')
 end
 if plugin_installed("endscroll.nvim") then

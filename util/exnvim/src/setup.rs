@@ -406,6 +406,9 @@ pub fn setup(home: ::std::path::PathBuf) -> ::std::io::Result<()> {
 
     \"selected_colorscheme\": \"blueorange\",
 
+    \"disable_cinnamon\": false,
+    \"disable_animations\": false,
+
 \"_comment_end\":\"Ending field to not put comma every time\"
 }"),
             )
