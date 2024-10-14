@@ -59,7 +59,7 @@ function! ChangeNames()
 
 	if mode() !~# '^n'
 		if g:language ==# 'russian'
-			let s:esc_label = "[&r] Выйти в нормальный режим"
+			let s:esc_label = "&r:Выйти в нормальный режим"
 		else
 			let s:esc_label = "Go to No&rmal mode"
 		endif
