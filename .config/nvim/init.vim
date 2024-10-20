@@ -1511,8 +1511,25 @@ endif
 else
 let s:process_g_but_function_expression .= "
 \\n	let button=v:count==#0?\"g\".a:button:a:button
+\"
+if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
+let s:process_g_but_function_expression .= "
+\\n	let old_c=col('.')
+\\n	let old_l=line('.')
+\"
+endif
+let s:process_g_but_function_expression .= "
 \\n	execute \"norm! \".v:count1.button
 \"
+if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
+let s:process_g_but_function_expression .= "
+\\n	if g:pseudo_visual
+\\n		call feedkeys(\"\\<c-\\>\\<c-n>\")
+\\n	endif
+\\n	call ReorderRightLeft()
+\\n	call SavePosition(old_c, old_l, col('.'), line('.'))
+\"
+endif
 endif
 let s:process_g_but_function_expression .= "
 \\nendfunction"
@@ -2790,15 +2807,8 @@ endfunction
 
 augroup on_resized
 	au!
-	au VimResized * call OnResized()|mode
+	au VimResized * mode
 augroup END
-function! OnResized()
-	if g:language ==# 'russian'
-		echom "Окно: ".&lines."столбцов, ".&columns."колонок"
-	else
-		echom "Window: ".&lines."rows, ".&columns."cols"
-	endif
-endfunction
 
 let g:floaterm_width = 1.0
 noremap <leader>z <cmd>call SelectPosition('lazygit', g:termpos)<cr>
