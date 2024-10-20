@@ -409,6 +409,12 @@ pub fn setup(home: ::std::path::PathBuf) -> ::std::io::Result<()> {
     \"disable_cinnamon\": false,
     \"disable_animations\": false,
 
+\"_comment_72\":\"Prefer FAR or Midnight Commander\",
+\"_comment_73\":\"Aviable:\",
+\"_comment_74\":\"far — `far` or `far2l` (default)\",
+\"_comment_75\":\"mc — `mc`\",
+	\"prefer_far_or_mc\" : \"far\",
+
 \"_comment_end\":\"Ending field to not put comma every time\"
 }"),
             )

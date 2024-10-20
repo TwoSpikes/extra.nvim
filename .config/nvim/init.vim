@@ -127,6 +127,7 @@ function! LoadExNvimConfig(path, reload=v:false)
 		\'selected_colorscheme',
 		\'disable_cinnamon',
 		\'disable_animations',
+		\'prefer_far_or_mc',
 	\]
 	for option in l:option_list
 		if exists('g:exnvim_config["'.option.'"]')
@@ -262,6 +263,9 @@ function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 	endif
 	if !exists('g:disable_animations')
 		let g:disable_animations = v:false
+	endif
+	if !exists('g:prefer_far_or_mc')
+		let g:prefer_far_or_mc = "far"
 	endif
 endfunction
 call SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
@@ -1625,12 +1629,32 @@ noremap <leader><c-s> <cmd>SaveAs<cr>
 noremap <leader><c-r> <cmd>SaveAsAndRename<cr>
 
 function! FarOrMc()
-	if executable("far")
-		let g:far_or_mc = 'far'
-	elseif executable("far2l")
-		let g:far_or_mc = 'far2l'
+	if g:prefer_far_or_mc ==# "far"
+		if executable("far")
+			let g:far_or_mc = 'far'
+		elseif executable("far2l")
+			let g:far_or_mc = 'far2l'
+		else
+			let g:far_or_mc = 'mc'
+		endif
+	elseif g:prefer_far_or_mc ==# "mc"
+		if executable("mc")
+			let g:far_or_mc = 'far'
+		elseif executable("far")
+			let g:far_or_mc = 'far'
+		else
+			let g:far_or_mc = 'far2l'
+		endif
 	else
-		let g:far_or_mc = 'far2l'
+		echohl ErrorMsg
+		if g:language ==# "russian"
+			echomsg "блядь: конфиг: неправильное значение опции \"prefer_far_or_mc\": ".g:prefer_far_or_mc
+		else
+			echomsg "error: config: wrong option \"prefer_far_or_mc\" value: ".g:prefer_far_or_mc
+		endif
+		echohl Normal
+		let g:prefer_far_or_mc = 'far'
+		call FarOrMc()
 	endif
 endfunction
 call FarOrMc()
