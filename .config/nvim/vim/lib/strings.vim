@@ -11,7 +11,7 @@ fu! EndsWith(longer, shorter) abort
   return a:longer[len(a:longer)-len(a:shorter):] ==# a:shorter
 endfunction
 fu! Contains(longer, shorter) abort
-  return stridx(a:longer, a:short) >= 0
+  return stridx(a:longer, a:shorter) >= 0
 endfunction
 
 " Copied from StackOverflow: https://stackoverflow.com/questions/4964772/string-formatting-padding-in-vim
