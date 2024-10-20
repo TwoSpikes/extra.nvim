@@ -1763,7 +1763,7 @@ function! Lua_Require_Goto_Workaround_Wincmd_f()
 		else
 			let dialogue_label = 'Select goto way'
 		endif
-		let choice = quickui#confirm#open(dialogue_label, "Normal\n`require`", 1, 'Confirm')
+		let choice = quickui#confirm#open(dialogue_label, "&Normal\n`&require`", 1, 'Confirm')
 	endif
 	if choice ==# 0
 		echohl ErrorMsg
