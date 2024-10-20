@@ -39,6 +39,45 @@ function! ChangeNames()
 		let s:toggle_fullscreen_label = '&f:Переключ.полноэкр.реж.'
 		let s:exit_label = '&x:Выйти'
 		let s:exit_wo_confirm_label = '&m:Выйти всё равно'
+
+		let s:kill_buffer_label = '&u:Убить буффер'
+		let s:select_buffer_label = '&s:Выбрать буффер'
+		let s:search_word_using_spectre_label = '&w:Искать слово в Spectre'
+		let s:open_file_in_tab_label = '&t:Открыть файл в нов.вкл.'
+		let s:open_file_in_buffer_label = '&b:Открыть файл а буффере'
+		let s:toggle_file_tree_label = '&f:Переключ.дерево файлов'
+		let s:telescope_fuzzy_find_label = '&z:Поиск Telescope'
+		let s:open_file_using_ranger_label = '&r:Открыть файл в ranger'
+		let s:recently_opened_files_label = '&c:Недавно открытые файлы'
+		let s:make_window_only_label = '&m:Закрыть остальные окна'
+		let s:previous_window_label = '&p:Предыдущее окно'
+		let s:next_window_label = '&n:Следующее окно'
+		let s:horizontally_split_label = '&i:Горизонтальный сплит'
+		let s:vertically_split_label = '&v:Вертикальный сплит'
+		let s:open_terminal_label = '&o:Открыть терминал'
+		let s:open_far_mc_label = '&e:Открыть Far/Mc'
+		let s:open_lazygit_label = '&g:Открыть lazygit'
+		let s:open_start_menu_label = '&a:Открыть главное меню'
+
+		let s:copy_line_label = '&y:Копировать строку'
+		let s:delete_line_label = '&d:Удалить строку'
+		let s:cut_line_label = '&u:Вырезать строку'
+		let s:paste_after_label = '&p:Вставить после'
+		let s:paste_before_label = '&e:Вставить перед'
+		let s:join_lines_label = '&n:Соединить строки'
+		let s:force_join_lines_label = '&r:Соединить строки!'
+		let s:forward_find_whole_word_label = '&f:Искать вперёд <слово>'
+		let s:backward_find_whole_word_label = '&b:Искать назад <слово>'
+		let s:forward_find_word_label = '&r:Искать вперёд слово'
+		let s:backward_find_word_label = '&a:Искать назад слово'
+		let s:comment_out_label = '&c:Закомментировать'
+		let s:uncomment_out_label = '&u:Раскомментировать'
+		let s:go_to_multicursor_mode_label = '&m:Режим мультикурсора'
+		let s:show_hlgroup_label = 'Показать hl&group'
+		let s:whence_hlgroup_label = '&w:Откуда hlgroup'
+		let s:select_all_label = '&s:Выбрать всё'
+		let s:toggle_tagbar_label = 'Переключить &tagbar'
+		let s:generate_annotation_label = '&o:Создать аннотацию'
 	else
 		let s:new_file_label = 'Ne&w file'
 		let s:close_label = 'Cl&ose'
@@ -55,6 +94,45 @@ function! ChangeNames()
 		let s:toggle_fullscreen_label = 'Toggle &fullscreen'
 		let s:exit_label = 'E&xit'
 		let s:exit_wo_confirm_label = 'Exit w/o confir&m'
+
+		let s:kill_buffer_label = 'Kill b&uffer'
+		let s:select_buffer_label = '&Select buffer'
+		let s:search_word_using_spectre_label = 'Find &word using Spectre'
+		let s:open_file_in_tab_label = 'Open file in &tab'
+		let s:open_file_in_buffer_label = 'Open file in &buffer'
+		let s:toggle_file_tree_label = 'Toggle &file tree'
+		let s:telescope_fuzzy_find_label = 'Telescope fu&zzy find'
+		let s:open_file_using_ranger_label = 'Open file using &ranger'
+		let s:recently_opened_files_label = 'Re&cently opened files'
+		let s:make_window_only_label = '&Make window only'
+		let s:previous_window_label = '&Previous window'
+		let s:next_window_label = '&Next window'
+		let s:horizontally_split_label = 'Hor&izontally split'
+		let s:vertically_split_label = '&Vertically split'
+		let s:open_terminal_label = '&Open terminal'
+		let s:open_far_mc_label = 'Op&en Far/Mc'
+		let s:open_lazygit_label = 'Open lazy&git'
+		let s:open_start_menu_label = 'Open st&art menu'
+
+		let s:copy_line_label = 'Cop&y line'
+		let s:delete_line_label = '&Delete line'
+		let s:cut_line_label = 'C&ut line'
+		let s:paste_after_label = '&Paste after'
+		let s:paste_before_label = 'Past&e before'
+		let s:join_lines_label = 'Joi&n lines'
+		let s:force_join_lines_label = 'Fo&rce join lines'
+		let s:forward_find_whole_word_label = '&Forward find <word>'
+		let s:backward_find_whole_word_label = '&Backward find <word>'
+		let s:forward_find_word_label = 'Fo&rward find word'
+		let s:backward_find_word_label = 'B&ackward find word'
+		let s:comment_out_label = '&Comment out'
+		let s:uncomment_out_label = '&Uncomment out'
+		let s:go_to_multicursor_mode_label = 'Go to &multicursor mode'
+		let s:show_hlgroup_label = 'Show hl&group'
+		let s:whence_hlgroup_label = '&Whence hlgroup'
+		let s:select_all_label = '&Select all'
+		let s:toggle_tagbar_label = '&Toggle tagbar'
+		let s:generate_annotation_label = 'Generate ann&otation'
 	endif
 
 	if mode() !~# '^n'
@@ -125,83 +203,83 @@ function! RebindMenus()
 				\ ])
 
 	call quickui#menu#install(s:window_label, [
-				\ [(g:quickui_icons?"󱂥 ":"")."Kill b&uffer\tCtrl-x k", 'Killbuffer', 'Completely removes the current buffer'],
-				\ [(g:quickui_icons?" ":"")."&Select buffer\tCtrl-x Ctrl-b", 'call quickui#tools#list_buffer("e")', 'Select buffer to edit in current buffer'],
-				\ [(g:quickui_icons?"󱎸 ":"")."Find &word using Spectre\tLEAD sw", 'exec "lua require(\"spectre\").open_visual({select_word = true})"', 'Select buffer to edit in current buffer'],
+				\ [(g:quickui_icons?"󱂥 ":"").s:kill_buffer_label."\tCtrl-x k", 'Killbuffer', 'Completely removes the current buffer'],
+				\ [(g:quickui_icons?" ":"").s:select_buffer_label."\tCtrl-x Ctrl-b", 'call quickui#tools#list_buffer("e")', 'Select buffer to edit in current buffer'],
+				\ [(g:quickui_icons?"󱎸 ":"").s:search_word_using_spectre_label."\tLEAD sw", 'exec "lua require(\"spectre\").open_visual({select_word = true})"', 'Select buffer to edit in current buffer'],
 				\ ["--", '' ],
 				\ ])
 	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/vim-quickui")
 		call quickui#menu#install(s:window_label, [
-				\ [(g:quickui_icons?" ":"")."Open file in &tab\tCtrl-c c", 'Findfile', 'Open file in new tab'],
-				\ [(g:quickui_icons?" ":"")."Open file in &buffer\tCtrl-c C", 'Findfilebuffer', 'Open file in current buffer'],
+				\ [(g:quickui_icons?" ":"").s:open_file_in_tab_label."\tCtrl-c c", 'Findfile', 'Open file in new tab'],
+				\ [(g:quickui_icons?" ":"").s:open_file_in_buffer_label."\tCtrl-c C", 'Findfilebuffer', 'Open file in current buffer'],
 				\ ])
 	endif
 	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/neo-tree.nvim")
 		call quickui#menu#install(s:window_label, [
-					\ [(g:quickui_icons?"󰙅 ":"")."Toggle &file tree\tCtrl-h", 'Neotree', 'Toggles a file tree'],
+					\ [(g:quickui_icons?"󰙅 ":"").s:toggle_file_tree_label."\tCtrl-h", 'Neotree', 'Toggles a file tree'],
 					\ ])
 	endif
 	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/telescope.nvim")
 		call quickui#menu#install(s:window_label, [
-					\ [(g:quickui_icons?"󰥨 ":"")."Telescope fu&zzy find\tLEAD ff", 'call FuzzyFind()', 'Opens Telescope.nvim find file'],
+					\ [(g:quickui_icons?"󰥨 ":"").s:telescope_fuzzy_find_label."\tLEAD ff", 'call FuzzyFind()', 'Opens Telescope.nvim find file'],
 					\ ])
 	endif
 	if executable('ranger')
 		call quickui#menu#install(s:window_label, [
-					\ [(g:quickui_icons?" ":"")."Open file using &ranger\t".(g:compatible==#"helix"||g:compatible==#"helix_hard"?"LEAD xr":"LEAD r"), 'call OpenRangerCheck()', 'Opens ranger to select file to open'],
+					\ [(g:quickui_icons?" ":"").s:open_file_using_ranger_label."\t".(g:compatible==#"helix"||g:compatible==#"helix_hard"?"LEAD xr":"LEAD r"), 'call OpenRangerCheck()', 'Opens ranger to select file to open'],
 					\ ])
 	endif
 	call quickui#menu#install(s:window_label, [
-				\ [(g:quickui_icons?"󰚰 ":"")."Re&cently opened files\tLEAD fr", 'lua require("telescope").extensions.recent_files.pick()', 'Show menu to select file from recently opened'],
+				\ [(g:quickui_icons?"󰚰 ":"").s:recently_opened_files_label."\tLEAD fr", 'lua require("telescope").extensions.recent_files.pick()', 'Show menu to select file from recently opened'],
 				\ ["--", '' ],
-				\ [(g:quickui_icons?" ":"")."&Make window only\tCtrl-x 1", 'only', 'Hide all but current window'],
-				\ [(g:quickui_icons?" ":"")."&Previous window\tCtrl-x o", 'exec "normal! \<c-w>w"', 'Go to previous window'],
-				\ [(g:quickui_icons?" ":"")."&Next window\tCtrl-x O", 'exec "normal! \<c-w>W"', 'Go to next window'],
-				\ [(g:quickui_icons?" ":"")."Hor&izontally split\tCtrl-x 2", 'split', 'Horizontally split current window'],
-				\ [(g:quickui_icons?" ":"")."&Vertically split\tCtrl-x 3", 'vsplit', 'Vertically split current window'],
+				\ [(g:quickui_icons?" ":"").s:make_window_only_label."\tCtrl-x 1", 'only', 'Hide all but current window'],
+				\ [(g:quickui_icons?" ":"").s:previous_window_label."\tCtrl-x o", 'exec "normal! \<c-w>w"', 'Go to previous window'],
+				\ [(g:quickui_icons?" ":"").s:next_window_label."\tCtrl-x O", 'exec "normal! \<c-w>W"', 'Go to next window'],
+				\ [(g:quickui_icons?" ":"").s:horizontally_split_label."\tCtrl-x 2", 'split', 'Horizontally split current window'],
+				\ [(g:quickui_icons?" ":"").s:vertically_split_label."\tCtrl-x 3", 'vsplit', 'Vertically split current window'],
 				\ ["--", '' ],
-				\ [(g:quickui_icons?" ":"")."&Open terminal\tLEAD t", 'call SelectPosition($SHELL." -l", g:termpos)', 'Opens a terminal'],
+				\ [(g:quickui_icons?" ":"").s:open_terminal_label."\tLEAD t", 'call SelectPosition($SHELL." -l", g:termpos)', 'Opens a terminal'],
 				\ ])
 	if executable('mc') || executable('far') || executable('far2l')
 		call quickui#menu#install(s:window_label, [
-				\ [(g:quickui_icons?" ":"")."Op&en Far/Mc\tLEAD m", 'call SelectPosition(g:far_or_mc, g:termpos)', 'Opens Far or Midnight commander'],
+				\ [(g:quickui_icons?" ":"").s:open_far_mc_label."\tLEAD m", 'call SelectPosition(g:far_or_mc, g:termpos)', 'Opens Far or Midnight commander'],
 				\ ])
 	endif
 	if executable('lazygit')
 		call quickui#menu#install(s:window_label, [
-				\ [(g:quickui_icons?" ":"")."Open lazy&git\tLEAD z", 'call SelectPosition("lazygit", g:termpos)', 'Opens Lazygit'],
+				\ [(g:quickui_icons?" ":"").s:open_lazygit_label."\tLEAD z", 'call SelectPosition("lazygit", g:termpos)', 'Opens Lazygit'],
 				\ ])
 	endif
 	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/alpha-nvim")
 		call quickui#menu#install(s:window_label, [
-				\ [(g:quickui_icons?"󰍜 ":"")."Open st&art menu\tLEAD A", 'call RunAlphaIfNotAlphaRunning()', 'Opens alpha-nvim menu'],
+				\ [(g:quickui_icons?"󰍜 ":"").s:open_start_menu_label."\tLEAD A", 'call RunAlphaIfNotAlphaRunning()', 'Opens alpha-nvim menu'],
 				\ ])
 	endif
 
 	" items containing tips, tips will display in the cmdline
 	call quickui#menu#install(s:text_label, [
-				\ [(g:quickui_icons?"󰆏 ":"")."Cop&y line\t".(g:compatible==#"helix"||g:compatible==#"helix_hard"?"xy":"yy"), 'yank', 'Copy the line where cursor is located'],
-				\ [(g:quickui_icons?"󰆴 ":"")."&Delete line\t".(g:compatible==#"helix"||g:compatible==#"helix_hard"?"x\"_d":"sd"), 'delete x', 'Delete the line where cursor is located'],
-				\ [(g:quickui_icons?"󰆐 ":"")."C&ut line\t".(g:compatible==#"helix"||g:compatible==#"helix_hard"?"xd":"dd"), 'delete _', 'Cut the line where cursor is located'],
-				\ [(g:quickui_icons?"󰆒 ":"")."&Paste after\tp", 'normal! p', 'Paste copyied text after the cursor'],
-				\ [(g:quickui_icons?"󰆒 ":"")."Past&e before\tP", 'normal! P', 'Paste copyied text before the cursor'],
-				\ [(g:quickui_icons?"  ":"")."Joi&n line\tJ", 'join', 'Join current and next line and put between them a space'],
-				\ [(g:quickui_icons?"  ":"")."Fo&rce join line\tgJ", 'normal! p', 'Join current and next line and leave blanks as it is'],
+				\ [(g:quickui_icons?"󰆏 ":"").s:copy_line_label."\t".(g:compatible==#"helix"||g:compatible==#"helix_hard"?"xy":"yy"), 'yank', 'Copy the line where cursor is located'],
+				\ [(g:quickui_icons?"󰆴 ":"").s:delete_line_label."\t".(g:compatible==#"helix"||g:compatible==#"helix_hard"?"x\"_d":"sd"), 'delete x', 'Delete the line where cursor is located'],
+				\ [(g:quickui_icons?"󰆐 ":"").s:cut_line_label."\t".(g:compatible==#"helix"||g:compatible==#"helix_hard"?"xd":"dd"), 'delete _', 'Cut the line where cursor is located'],
+				\ [(g:quickui_icons?"󰆒 ":"").s:paste_after_label."\tp", 'normal! p', 'Paste copyied text after the cursor'],
+				\ [(g:quickui_icons?"󰆒 ":"").s:paste_before_label."\tP", 'normal! P', 'Paste copyied text before the cursor'],
+				\ [(g:quickui_icons?"  ":"").s:join_lines_label."\tJ", 'join', 'Join current and next line and put between them a space'],
+				\ [(g:quickui_icons?"  ":"").s:force_join_lines_label."\tgJ", 'normal! p', 'Join current and next line and leave blanks as it is'],
 				\ ["--", '' ],
-				\ [(g:quickui_icons?" ":"")."&Forward find <word>\t".(g:compatible==#"helix_hard"?"eb*":"*"), 'normal! *', 'Forwardly find whole word under cursor'],
-				\ [(g:quickui_icons?" ":"")."&Backward find <word>\t".(g:compatible==#"helix_hard"?"eb#":"#"), 'normal! #', 'Backwardly find whole word under cursor'],
-				\ [(g:quickui_icons?" ":"")."Fo&rward find word\t".(g:compatible==#"helix_hard"?"ebg*":"g*"), 'normal! g*', 'Forwardly find word under cursor'],
-				\ [(g:quickui_icons?" ":"")."B&ackward find word\t".(g:compatible==#"helix_hard"?"ebg#":"g#"), 'normal! g#', 'Backwardly find word under cursor'],
+				\ [(g:quickui_icons?" ":"").s:forward_find_whole_word_label."\t".(g:compatible==#"helix_hard"?"eb*":"*"), 'normal! *', 'Forwardly find whole word under cursor'],
+				\ [(g:quickui_icons?" ":"").s:backward_find_whole_word_label."\t".(g:compatible==#"helix_hard"?"eb#":"#"), 'normal! #', 'Backwardly find whole word under cursor'],
+				\ [(g:quickui_icons?" ":"").s:forward_find_word_label."\t".(g:compatible==#"helix_hard"?"ebg*":"g*"), 'normal! g*', 'Forwardly find word under cursor'],
+				\ [(g:quickui_icons?" ":"").s:backward_find_word_label."\t".(g:compatible==#"helix_hard"?"ebg#":"g#"), 'normal! g#', 'Backwardly find word under cursor'],
 				\ ["--", '' ],
-				\ [(g:quickui_icons?"󰅺 ":"")."&Comment out\tLEAD c", 'call DoCommentOutDefault()', 'Comment out line under cursor'],
-				\ [(g:quickui_icons?"󱗡 ":"")."&Uncomment\tLEAD C", 'call UncommentOutDefault()', 'Uncomment line under cursor'],
+				\ [(g:quickui_icons?"󰅺 ":"").s:comment_out_label."\tLEAD c", 'call DoCommentOutDefault()', 'Comment out line under cursor'],
+				\ [(g:quickui_icons?"󱗡 ":"").s:uncomment_out_label."\tLEAD C", 'call UncommentOutDefault()', 'Uncomment line under cursor'],
 				\ ["--", '' ],
-				\ [(g:quickui_icons?"󰗧 ":"")."Go to &multicursor mode\tCtrl-n", 'call vm#commands#ctrln(1)', 'Go to multicursor mode'],
-				\ [(g:quickui_icons?" ":"")."Show hl&group", 'call SynGroup()', 'Show hlgroup name under cursor'],
-				\ [(g:quickui_icons?" ":"")."&Whence hlgroup", 'call WhenceGroup()', 'Show whence hlgroup under cursor came'],
-				\ [(g:quickui_icons?"󰒆 ":"")."&Select all\t".(g:compatible==#"helix"||g:compatible==#"helix_hard"?"%":"Ctrl-x h"), 'call SelectAll()', 'Paste copyied text after the cursor'],
-				\ [(g:quickui_icons?" ":"")."Toggle &tagbar\tCtrl-t", 'TagbarToggle', 'Toggles tagbar'],
-				\ [(g:quickui_icons?" ":"")."Generate ann&otation\tLEAD n", 'Neogen', 'Generate Neogen annotation (:h neogen)'],
+				\ [(g:quickui_icons?"󰗧 ":"").s:go_to_multicursor_mode_label."\tCtrl-n", 'call vm#commands#ctrln(1)', 'Go to multicursor mode'],
+				\ [(g:quickui_icons?" ":"").s:show_hlgroup_label."", 'call SynGroup()', 'Show hlgroup name under cursor'],
+				\ [(g:quickui_icons?" ":"").s:whence_hlgroup_label, 'call WhenceGroup()', 'Show whence hlgroup under cursor came'],
+				\ [(g:quickui_icons?"󰒆 ":"").s:select_all_label."\t".(g:compatible==#"helix"||g:compatible==#"helix_hard"?"%":"Ctrl-x h"), 'call SelectAll()', 'Paste copyied text after the cursor'],
+				\ [(g:quickui_icons?" ":"").s:toggle_tagbar_label."\tCtrl-t", 'TagbarToggle', 'Toggles tagbar'],
+				\ [(g:quickui_icons?" ":"").s:generate_annotation_label."\tLEAD n", 'Neogen', 'Generate Neogen annotation (:h neogen)'],
 				\ ])
 
 	call quickui#menu#install(s:lsp_label, [
