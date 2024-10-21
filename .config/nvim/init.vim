@@ -1586,7 +1586,12 @@ function! Findfile()
 	endif
 	if filename !=# ''
 		set lazyredraw
-		execute printf("tabedit %s", filename)
+		if luaeval("plugin_installed(_A[1])", ["neo-tree.nvim"]) && isdirectory(expand(filename))
+			tabedit
+			execute printf("Neotree position=current %s", filename)
+		else
+			execute printf("tabedit %s", filename)
+		endif
 		set nolazyredraw
 	endif
 endfunction
@@ -1608,7 +1613,11 @@ function! Findfilebuffer()
 		set nolazyredraw
 	endif
 	if filename !=# ''
-		execute printf("edit %s", filename)
+		if luaeval("plugin_installed(_A[1])", ["neo-tree.nvim"]) && isdirectory(expand(filename))
+			execute printf("Neotree position=current %s", filename)
+		else
+			execute printf("edit %s", filename)
+		endif
 	endif
 endfunction
 command! -nargs=0 Findfilebuffer call Findfilebuffer()
@@ -3005,7 +3014,7 @@ function! RunAlphaIfNotAlphaRunning()
 		AlphaRemap
 	endif
 endfunction
-if isdirectory(g:LOCALSHAREPATH.'/site/pack/packer/start/alpha-nvim')
+if luaeval("plugin_installed(_A[1])", ["alpha-nvim"])
 	nnoremap <leader>A <cmd>call RunAlphaIfNotAlphaRunning()<cr>
 endif
 
