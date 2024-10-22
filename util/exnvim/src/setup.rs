@@ -415,6 +415,8 @@ pub fn setup(home: ::std::path::PathBuf) -> ::std::io::Result<()> {
 \"_comment_75\":\"mc — `mc`\",
 	\"prefer_far_or_mc\" : \"far\",
 
+    \"automatically_open_neo_tree_instead_of_netrw\": true,
+
 \"_comment_end\":\"Ending field to not put comma every time\"
 }"),
             )

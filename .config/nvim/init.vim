@@ -128,6 +128,7 @@ function! LoadExNvimConfig(path, reload=v:false)
 		\'disable_cinnamon',
 		\'disable_animations',
 		\'prefer_far_or_mc',
+		\'automatically_open_neo_tree_instead_of_netrw',
 	\]
 	for option in l:option_list
 		if exists('g:exnvim_config["'.option.'"]')
@@ -266,6 +267,9 @@ function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 	endif
 	if !exists('g:prefer_far_or_mc')
 		let g:prefer_far_or_mc = "far"
+	endif
+	if !exists('g:automatically_open_neo_tree_instead_of_netrw')
+		let g:automatically_open_neo_tree_instead_of_netrw = v:true
 	endif
 endfunction
 call SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
@@ -3018,7 +3022,9 @@ if luaeval("plugin_installed(_A[1])", ["alpha-nvim"])
 	nnoremap <leader>A <cmd>call RunAlphaIfNotAlphaRunning()<cr>
 endif
 
-nnoremap <c-h> <cmd>Neotree<cr>
+if luaeval("plugin_installed(_A[1])", ["neo-tree.nvim"])
+	nnoremap <c-h> <cmd>Neotree<cr>
+endif
 
 function! OpenOnStart()
 	if exists('g:open_menu_on_start')
@@ -3029,16 +3035,9 @@ function! OpenOnStart()
 		endif
 	endif
 
-	if argc() && isdirectory(argv(0))
-		if luaeval("plugin_installed(_A[1])", ["neo-tree.nvim"])
-			bwipeout!
-			execute 'Neotree' argv(0)
-			silent only
-		else
-			execute "edit ".argv(0)
-		endif
-	endif
-	if expand('%') == '' || isdirectory(expand('%'))
+	if argc()
+		argument 1
+	elseif expand('%') == '' || isdirectory(expand('%'))
 		let to_open = v:true
 		let to_open = to_open && !g:DO_NOT_OPEN_ANYTHING
 		let to_open = to_open && !g:PAGER_MODE
@@ -3341,6 +3340,13 @@ function! OnStart()
 	call SetExNvimConfigPath()
 	call SetLocalSharePath()
 	call SetConfigPath()
+	if luaeval("plugin_installed(_A[1])", ["neo-tree.nvim"]) && g:automatically_open_neo_tree_instead_of_netrw
+		autocmd! FileExplorer *
+		augroup auto_neo_tree
+			autocmd!
+			autocmd BufEnter * if isdirectory(expand(expand("%")))|let prev_bufnr=bufnr()|execute "Neotree position=current" expand("%")|execute prev_bufnr."bwipeout!"|endif
+		augroup END
+	endif
 	if has('nvim') && g:enable_which_key
 		call PrepareWhichKey()
 	endif
