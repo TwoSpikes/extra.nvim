@@ -1332,7 +1332,11 @@ set hidden
 set nowrap
 set nolinebreak
 let &breakat = "    !¡@*-+;:,./?¿{}[]^%&"
-set list
+if has('nvim')
+	set nolist
+else
+	set list
+endif
 set display=lastline
 set fcs=lastline:>
 set listchars=tab:>\ ,trail:_,nbsp:+
