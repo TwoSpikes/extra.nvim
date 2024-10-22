@@ -3022,11 +3022,11 @@ function! RunAlphaIfNotAlphaRunning()
 		AlphaRemap
 	endif
 endfunction
-if luaeval("plugin_installed(_A[1])", ["alpha-nvim"])
+if has('nvim') && luaeval("plugin_installed(_A[1])", ["alpha-nvim"])
 	nnoremap <leader>A <cmd>call RunAlphaIfNotAlphaRunning()<cr>
 endif
 
-if luaeval("plugin_installed(_A[1])", ["neo-tree.nvim"])
+if has('nvim') && luaeval("plugin_installed(_A[1])", ["neo-tree.nvim"])
 	nnoremap <c-h> <cmd>Neotree<cr>
 endif
 
@@ -3344,7 +3344,7 @@ function! OnStart()
 	call SetExNvimConfigPath()
 	call SetLocalSharePath()
 	call SetConfigPath()
-	if luaeval("plugin_installed(_A[1])", ["neo-tree.nvim"]) && g:automatically_open_neo_tree_instead_of_netrw
+	if has('nvim') && luaeval("plugin_installed(_A[1])", ["neo-tree.nvim"]) && g:automatically_open_neo_tree_instead_of_netrw
 		autocmd! FileExplorer *
 		augroup auto_neo_tree
 			autocmd!
