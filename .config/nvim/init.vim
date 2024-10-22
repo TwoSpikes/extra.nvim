@@ -1399,7 +1399,7 @@ endif
 
 nnoremap <silent> dd ddk
 nnoremap <silent> - dd
-nnoremap <silent> + mzyyp`zj
+nnoremap <silent> + mz<cmd>let line=getline('.')<bar>call append(line('.'), line)<cr>`zj
 
 noremap <silent> J mzJ`z
 noremap <silent> gJ mzgJ`z
