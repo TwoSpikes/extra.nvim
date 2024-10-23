@@ -249,3 +249,4 @@ $ exnvim version
 - [fzf](https://github.com/junegunn/fzf)
 - [codeium.nvim](https://github.com/Exafunction/codeium.vim) (disabled by default)
 - [music-player.vim](https://github.com/TwoSpikes/music-player.vim)
+- [vim-gitgutter](https://github.com/airblade/vim-gitgutter)
