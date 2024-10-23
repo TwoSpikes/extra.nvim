@@ -2,7 +2,6 @@
 
 " Main file of Vim/NeoVim config
 
-"" LEGEND
 " plugin: plug-in
 " ExNvim, exnvim: extra.nvim
 " stc: statuscolumn
@@ -149,6 +148,10 @@ function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 	if !exists('g:DO_NOT_OPEN_ANYTHING')
 		let g:DO_NOT_OPEN_ANYTHING = v:false
 	endif
+
+	" Default vars
+	let g:last_selected = ''
+	let g:last_open_term_program = ''
 
 	" Default values for options
 	if !exists('g:use_transparent_bg')
@@ -2831,6 +2834,23 @@ let g:floaterm_width = 1.0
 noremap <leader>z <cmd>call SelectPosition('lazygit', g:termpos)<cr>
 noremap <leader>m <cmd>call SelectPosition(g:far_or_mc, g:termpos)<cr>
 
+function! OpenTermProgram()
+	if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-quickui"])
+		let select = quickui#input#open(Pad('Open terminal program:', 40), g:last_open_term_program)
+	else
+		let hcm_select_label = 'Open in terminal'.(g:last_open_term_program!=#''?' (default: '.g:last_open_term_program.')':'').': '
+		let select = input(hcm_select_label)
+		execute "normal! \<esc>"
+	endif
+	if select ==# ''
+		let select = g:last_open_term_program
+	else
+		let g:last_open_term_program = select
+	endif
+	call SelectPosition(select, g:termpos)
+endfunction
+noremap <leader>xx <cmd>call OpenTermProgram()<cr>
+
 function! EnablePagerMode()
 	let s:old_cursorline = &cursorline
 	let s:old_cursorcolumn = &cursorcolumn
@@ -3299,17 +3319,27 @@ function! PrepareWhichKey()
 	endif
 endfunction
 
-function! LoadLastSelected()
+function! LoadVars()
 	if filereadable(expand(g:LOCALSHAREPATH).'/extra.nvim/last_selected.txt')
 		let g:last_selected = readfile(expand(g:LOCALSHAREPATH).'/extra.nvim/last_selected.txt')[0]
 	endif
+	if filereadable(expand(g:LOCALSHAREPATH).'/extra.nvim/last_open_term_program.txt')
+		let g:last_open_term_program = readfile(expand(g:LOCALSHAREPATH).'/extra.nvim/last_open_term_program.txt')[0]
+	endif
 endfunction
-function! SaveLastSelected()
-	if g:last_selected !=# ''
+function! SaveVars()
+	if v:false
+	\|| g:last_selected !=# ''
+	\|| g:last_open_term_program !=# ''
 		if !isdirectory(expand(g:LOCALSHAREPATH).'/extra.nvim')
 			call mkdir(expand(g:LOCALSHAREPATH).'/extra.nvim', 'p')
 		endif
+	endif
+	if g:last_selected !=# ''
 		call writefile([g:last_selected], expand(g:LOCALSHAREPATH).'/extra.nvim/last_selected.txt')
+	endif
+	if g:last_open_term_program !=# ''
+		call writefile([g:last_open_term_program], expand(g:LOCALSHAREPATH).'/extra.nvim/last_open_term_program.txt')
 	endif
 endfunction
 
@@ -3370,7 +3400,7 @@ function! OnStart()
 	if v:false
 	\|| g:compatible ==# "helix"
 	\|| g:compatible ==# "helix_hard"
-		call LoadLastSelected()
+		call LoadVars()
 	endif
 	call timer_start(0, {->execute('Showtab')})
 	call timer_start(0, {->OnFirstTime()})
@@ -3380,7 +3410,7 @@ function! OnQuit()
 	if v:false
 	\|| g:compatible ==# "helix"
 	\|| g:compatible ==# "helix_hard"
-		call SaveLastSelected()
+		call SaveVars()
 	endif
 endfunction
 let s:MACRO_IS_ONE_WIN = "

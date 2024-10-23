@@ -578,4 +578,7 @@ return require('packer').startup(function (use)
 	use {
 		'TwoSpikes/music-player.vim',
 	}
+	use {
+		'airblade/vim-gitgutter',
+	}
 end)

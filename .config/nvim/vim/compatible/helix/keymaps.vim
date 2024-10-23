@@ -424,9 +424,8 @@ function! MoveRight()
 endfunction
 unmap a%
 xnoremap <expr> a ReorderRightLeft().MoveRight()."\<esc>a"
-let g:last_selected = ''
 function! V_DoS()
-	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/vim-quickui")
+	if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-quickui"])
 		let select = quickui#input#open('Select:', g:last_selected)
 	else
 		let hcm_select_label = 'select'.(g:last_selected!=#''?' (default: '.g:last_selected.')':'').':'
