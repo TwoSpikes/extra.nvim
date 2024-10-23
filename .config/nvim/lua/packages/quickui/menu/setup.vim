@@ -355,7 +355,7 @@ function! RebindMenus()
 	endif
 	if filereadable(g:EXNVIM_CONFIG_PATH)
 		call quickui#menu#install(s:config_label, [
-			\ ["Reload e&xnvim config\tLEAD sj", 'let old_tabpagenr=tabpagenr()|call LoadExNvimConfig("'.expand(g:EXNVIM_CONFIG_PATH).'", v:true)|call HandleExNvimConfig()|call HandleBuftypeAll()|exec old_tabpagenr."tabnext"', 'Reload extra.nvim config'],
+			\ ["Reload e&xnvim config\tLEAD sj", 'let old_tabpagenr=tabpagenr()|call LoadExNvimConfig("'.expand(g:EXNVIM_CONFIG_PATH).'", v:true)|call HandleExNvimConfig()|call HandleBuftypeAll()|exec old_tabpagenr."tabnext"|execute "Showtab"', 'Reload extra.nvim config'],
 			\ ])
 	endif
 
