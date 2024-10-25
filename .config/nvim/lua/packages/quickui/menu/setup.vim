@@ -328,8 +328,8 @@ function! RebindMenus()
 				\ [(g:quickui_icons?"󰓆 ":"")."Set &Spell %{&spell? 'Off':'On'}", 'set spell!', '%{&spell?"Disable":"Enable"} spell checking'],
 				\ [(g:quickui_icons?"󰆒 ":"")."Set &Paste %{&paste? 'Off':'On'}", 'set paste!', 'Obsolete thing'],
 				\ ["--", '' ],
-				\ [(g:quickui_icons?"  ":"").'Set Cursor &Column %{g:cursorcolumn==#v:true?"Off":"On"}', 'let g:cursorcolumn=!g:cursorcolumn|call HandleBuftypeAll()', '%{g:cursorcolumn?"Disable":"Enable"} current column highlighting'],
-				\ [(g:quickui_icons?"  ":"").'Set Cursor L&ine %{g:cursorline==#v:true?"Off":"On"}', 'let g:cursorline=!g:cursorline|call HandleBuftypeAll()', '%{g:cursorline?"Disable":"Enable"} current line highlighting'],
+				\ [(g:quickui_icons?"  ":"").'Set Cursor &Column %{g:cursorcolumn==#v:true?"Off":"On"}', 'let g:cursorcolumn=!g:cursorcolumn|call PreserveAndDo("call HandleBuftypeAll()", v:true, v:true)', '%{g:cursorcolumn?"Disable":"Enable"} current column highlighting'],
+				\ [(g:quickui_icons?"  ":"").'Set Cursor L&ine %{g:cursorline==#v:true?"Off":"On"}', 'let g:cursorline=!g:cursorline|call PreserveAndDo("call HandleBuftypeAll()", v:true, v:true)', '%{g:cursorline?"Disable":"Enable"} current line highlighting'],
 				\ ])
 	if exists('g:cursorline_style_supported') && len(g:cursorline_style_supported) ># 1
 		call quickui#menu#install(s:option_label, [
@@ -337,8 +337,8 @@ function! RebindMenus()
 					\ ])
 	endif
 	call quickui#menu#install(s:option_label, [
-				\ [(g:quickui_icons?" ":"").'Set Line &numbers %{g:linenr==#v:true?"Off":"On"}', 'let g:linenr=!g:linenr|if !g:linenr|call PreserveAndDo("call STCNoAll()", v:true, v:true)|else|call PreserveAndDo("call NumbertoggleAll()", v:true, v:true)|endif', '%{g:linenr?"Disable":"Enable"} line numbers'],
-				\ [(g:quickui_icons?" ":"").'Line numbers &style: %{g:linenr_style}', 'let g:linenr_style=g:linenr_style==#"relative"?"absolute":"relative"|if g:linenr|call PreserveAndDo("call NumbertoggleAll()", v:true, v:true)|endif', 'Make line numbers %{g:linenr_style==#"absolute"?"relative":"absolute"}'],
+				\ [(g:quickui_icons?" ":"").'Set Line &numbers %{g:linenr==#v:true?"Off":"On"}', 'let g:linenr=!g:linenr|if !g:linenr|call PreserveAndDo("call STCNoAll()", v:true, v:true)|else|call PreserveAndDo("call NumbertoggleAll(mode())", v:true, v:true)|endif', '%{g:linenr?"Disable":"Enable"} line numbers'],
+				\ [(g:quickui_icons?" ":"").'Line numbers &style: %{g:linenr_style}', 'let g:linenr_style=g:linenr_style==#"relative"?"absolute":"relative"|if g:linenr|call PreserveAndDo("call NumbertoggleAll(mode())", v:true, v:true)|endif', 'Make line numbers %{g:linenr_style==#"absolute"?"relative":"absolute"}'],
 				\ ])
 
 	call quickui#menu#install(s:config_label, [
@@ -362,7 +362,7 @@ function! RebindMenus()
 	endif
 	if filereadable(g:EXNVIM_CONFIG_PATH)
 		call quickui#menu#install(s:config_label, [
-			\ ["Reload e&xnvim config\tLEAD sj", 'let old_tabpagenr=tabpagenr()|call LoadExNvimConfig("'.expand(g:EXNVIM_CONFIG_PATH).'", v:true)|call HandleExNvimConfig()|call RehandleExNvimConfig()|call HandleBuftypeAll()|exec old_tabpagenr."tabnext"|execute "Showtab"', 'Reload extra.nvim config'],
+			\ ["Reload e&xnvim config\tLEAD sj", 'call LoadExNvimConfig("'.expand(g:EXNVIM_CONFIG_PATH).'", v:true)|call HandleExNvimConfig()|call RehandleExNvimConfig()|call PreserveAndDo("call HandleBuftypeAll()", v:true, v:true)|execute "Showtab"', 'Reload extra.nvim config'],
 			\ ])
 	endif
 

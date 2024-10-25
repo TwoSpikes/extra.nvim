@@ -465,18 +465,20 @@ endfunction
 
 function! PreserveAndDo(cmd, preserve_tab, preserve_win)
 	if a:preserve_tab
-		let old_tabpagenr = tabpagenr()
+		let g:old_tabpagenr = tabpagenr()
 	endif
 	if a:preserve_win
-		let old_winnr = winnr()
+		let g:old_winnr = winnr()
 	endif
 	exec a:cmd
 	if a:preserve_tab
-		execute old_tabpagenr 'tabnext'
+		execute g:old_tabpagenr 'tabnext'
 	endif
 	if a:preserve_win
-		execute old_winnr 'wincmd w'
+		execute g:old_winnr 'wincmd w'
 	endif
+	unlet g:old_tabpagenr
+	unlet g:old_winnr
 endfunction
 
 function! DefineAugroupVisual()
@@ -2489,7 +2491,7 @@ augroup visual
 			let pre_cursorline = pre_cursorline && mode() !~# "[irco]"
 			let pre_cursorline = pre_cursorline && (buftype !=# 'nofile' || filetype ==# 'neo-tree') && filetype !=# 'TelescopePrompt' && filetype !=# 'spectre_panel' && filetype !=# 'packer'
 		endif
-		let pre_cursorline = pre_cursorline && buftype !=# 'terminal' && filetype !=# 'alpha'
+		let pre_cursorline = pre_cursorline && buftype !=# 'terminal' && filetype !=# 'alpha' && filetype !=# "notify"
 		let pre_cursorline = pre_cursorline && g:cursorline
 		call setwinvar(a:winnum, '&cursorline', pre_cursorline)
 	endfunction
