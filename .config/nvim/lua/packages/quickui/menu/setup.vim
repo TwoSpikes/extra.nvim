@@ -1,4 +1,4 @@
-if !isdirectory(expand(g:LOCALSHAREPATH)."/site/pack/packer/start/vim-quickui")
+if !has('nvim') || !luaeval("plugin_installed(_A[1])", ["vim-quickui"])
 	finish
 endif
 
@@ -208,18 +208,18 @@ function! RebindMenus()
 				\ [(g:quickui_icons?"󱎸 ":"").s:search_word_using_spectre_label."\tLEAD sw", 'exec "lua require(\"spectre\").open_visual({select_word = true})"', 'Select buffer to edit in current buffer'],
 				\ ["--", '' ],
 				\ ])
-	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/vim-quickui")
+	if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-quickui"])
 		call quickui#menu#install(s:window_label, [
 				\ [(g:quickui_icons?" ":"").s:open_file_in_tab_label."\tCtrl-c c", 'Findfile', 'Open file in new tab'],
 				\ [(g:quickui_icons?" ":"").s:open_file_in_buffer_label."\tCtrl-c C", 'Findfilebuffer', 'Open file in current buffer'],
 				\ ])
 	endif
-	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/neo-tree.nvim")
+	if has('nvim') && luaeval("plugin_installed(_A[1])", ["neo-tree.nvim"])
 		call quickui#menu#install(s:window_label, [
 					\ [(g:quickui_icons?"󰙅 ":"").s:toggle_file_tree_label."\tCtrl-h", 'Neotree', 'Toggles a file tree'],
 					\ ])
 	endif
-	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/telescope.nvim")
+	if has('nvim') && luaeval("plugin_installed(_A[1])", ["telescope.nvim"])
 		call quickui#menu#install(s:window_label, [
 					\ [(g:quickui_icons?"󰥨 ":"").s:telescope_fuzzy_find_label."\tLEAD ff", 'call FuzzyFind()', 'Opens Telescope.nvim find file'],
 					\ ])
@@ -250,7 +250,7 @@ function! RebindMenus()
 				\ [(g:quickui_icons?" ":"").s:open_lazygit_label."\tLEAD z", 'call SelectPosition("lazygit", g:termpos)', 'Opens Lazygit'],
 				\ ])
 	endif
-	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/alpha-nvim")
+	if has('nvim') && luaeval("plugin_installed(_A[1])", ["alpha-nvim"])
 		call quickui#menu#install(s:window_label, [
 				\ [(g:quickui_icons?"󰍜 ":"").s:open_start_menu_label."\tLEAD A", 'call RunAlphaIfNotAlphaRunning()', 'Opens alpha-nvim menu'],
 				\ ])
@@ -271,8 +271,8 @@ function! RebindMenus()
 				\ [(g:quickui_icons?" ":"").s:forward_find_word_label."\t".(g:compatible==#"helix_hard"?"ebg*":"g*"), 'normal! g*', 'Forwardly find word under cursor'],
 				\ [(g:quickui_icons?" ":"").s:backward_find_word_label."\t".(g:compatible==#"helix_hard"?"ebg#":"g#"), 'normal! g#', 'Backwardly find word under cursor'],
 				\ ["--", '' ],
-				\ [(g:quickui_icons?"󰅺 ":"").s:comment_out_label."\tLEAD c", 'call DoCommentOutDefault()', 'Comment out line under cursor'],
-				\ [(g:quickui_icons?"󱗡 ":"").s:uncomment_out_label."\tLEAD C", 'call UncommentOutDefault()', 'Uncomment line under cursor'],
+				\ [(g:quickui_icons?"󰅺 ":"").s:comment_out_label."\tLEAD c", 'call '.(mode() =~# '^n'?'N':'X').'_CommentOutDefault()', 'Comment out line under cursor'],
+				\ [(g:quickui_icons?"󱗡 ":"").s:uncomment_out_label."\tLEAD C", 'call '.(mode() =~# '^n'?'N':'X').'_UncommentOutDefault()', 'Uncomment line under cursor'],
 				\ ["--", '' ],
 				\ [(g:quickui_icons?"󰗧 ":"").s:go_to_multicursor_mode_label."\tCtrl-n", 'call vm#commands#ctrln(1)', 'Go to multicursor mode'],
 				\ [(g:quickui_icons?" ":"").s:show_hlgroup_label."", 'call SynGroup()', 'Show hlgroup name under cursor'],
@@ -305,7 +305,7 @@ function! RebindMenus()
 				\ ["Fold c&urrent buffer\t:Fold", 'Fold', 'Make folds for current buffer'],
 				\ ])
 
-	if isdirectory(expand(g:LOCALSHAREPATH)."/site/pack/packer/start/vim-fugitive")
+	if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-fugitive"])
 		call quickui#menu#install(s:git_label, [
 				\ ["&Commit\tLEAD gc", 'Git commit --verbose', 'Commit using fugitive.vim'],
 				\ ["Commit &all\tLEAD ga", 'Git commit --verbose --all', 'Commit all using fugitive.vim'],
@@ -318,20 +318,27 @@ function! RebindMenus()
 				\ ["&Status\tLEAD gs", 'Git status', 'Show repository status using fugitive.vim'],
 				\ ])
 	endif
-	if isdirectory(expand(g:LOCALSHAREPATH)."/site/pack/packer/start/diffview.nvim")
+	if has('nvim') && luaeval("plugin_installed(_A[1])", ["diffview.nvim"])
 		call quickui#menu#install(s:git_label, [
 				\ ["&View diff\tLEAD gd", 'DiffviewOpen HEAD', 'Show diff'],
 				\ ])
 	endif
 
-	" script inside %{...} will be evaluated and expanded in the string
 	call quickui#menu#install(s:option_label, [
-				\ [(g:quickui_icons?"󰓆 ":"")."Set &Spell %{&spell? 'Off':'On'}", 'set spell!', '%{(&spell?"Disable":"Enable")." spell checking"}'],
-				\ [(g:quickui_icons?"󰆒 ":"")."Set &Paste %{&paste? 'Off':'On'}", 'set paste!'],
+				\ [(g:quickui_icons?"󰓆 ":"")."Set &Spell %{&spell? 'Off':'On'}", 'set spell!', '%{&spell?"Disable":"Enable"} spell checking'],
+				\ [(g:quickui_icons?"󰆒 ":"")."Set &Paste %{&paste? 'Off':'On'}", 'set paste!', 'Obsolete thing'],
 				\ ["--", '' ],
-				\ [(g:quickui_icons?"  ":"").'Set Cursor &Column %{g:cursorcolumn==#v:true?"Off":"On"}', 'let g:cursorcolumn=!g:cursorcolumn|call HandleBuftypeAll()'],
-				\ [(g:quickui_icons?"  ":"").'Set Cursor L&ine %{g:cursorline==#v:true?"Off":"On"}', 'let g:cursorline=!g:cursorline|call HandleBuftypeAll()'],
-				\ [(g:quickui_icons?" ":"").'Set Line &numbers %{g:linenr==#v:true?"Off":"On"}', 'let g:linenr=!g:linenr|if !g:linenr|call PreserveAndDo("call STCNoAll()", v:true, v:true)|else|call PreserveAndDo("call NumbertoggleAll()", v:true, v:true)|endif'],
+				\ [(g:quickui_icons?"  ":"").'Set Cursor &Column %{g:cursorcolumn==#v:true?"Off":"On"}', 'let g:cursorcolumn=!g:cursorcolumn|call HandleBuftypeAll()', '%{g:cursorcolumn?"Disable":"Enable"} current column highlighting'],
+				\ [(g:quickui_icons?"  ":"").'Set Cursor L&ine %{g:cursorline==#v:true?"Off":"On"}', 'let g:cursorline=!g:cursorline|call HandleBuftypeAll()', '%{g:cursorline?"Disable":"Enable"} current line highlighting'],
+				\ ])
+	if exists('g:cursorline_style_supported') && len(g:cursorline_style_supported) ># 1
+		call quickui#menu#install(s:option_label, [
+					\ [(g:quickui_icons?"  ":"").'C&ursor line style: %{g:cursorline_style_supported[g:cursorline_style]}', 'let g:cursorline_style=g:cursorline_style==#len(g:cursorline_style_supported)-1?0:g:cursorline_style+1|call Update_CursorLine_Style()', '%{g:cursorline?"Disable":"Enable"} current line highlighting'],
+					\ ])
+	endif
+	call quickui#menu#install(s:option_label, [
+				\ [(g:quickui_icons?" ":"").'Set Line &numbers %{g:linenr==#v:true?"Off":"On"}', 'let g:linenr=!g:linenr|if !g:linenr|call PreserveAndDo("call STCNoAll()", v:true, v:true)|else|call PreserveAndDo("call NumbertoggleAll()", v:true, v:true)|endif', '%{g:linenr?"Disable":"Enable"} line numbers'],
+				\ [(g:quickui_icons?" ":"").'Line numbers &style: %{g:linenr_style}', 'let g:linenr_style=g:linenr_style==#"relative"?"absolute":"relative"|if g:linenr|call PreserveAndDo("call NumbertoggleAll()", v:true, v:true)|endif', 'Make line numbers %{g:linenr_style==#"absolute"?"relative":"absolute"}'],
 				\ ])
 
 	call quickui#menu#install(s:config_label, [
@@ -355,7 +362,7 @@ function! RebindMenus()
 	endif
 	if filereadable(g:EXNVIM_CONFIG_PATH)
 		call quickui#menu#install(s:config_label, [
-			\ ["Reload e&xnvim config\tLEAD sj", 'let old_tabpagenr=tabpagenr()|call LoadExNvimConfig("'.expand(g:EXNVIM_CONFIG_PATH).'", v:true)|call HandleExNvimConfig()|call HandleBuftypeAll()|exec old_tabpagenr."tabnext"|execute "Showtab"', 'Reload extra.nvim config'],
+			\ ["Reload e&xnvim config\tLEAD sj", 'let old_tabpagenr=tabpagenr()|call LoadExNvimConfig("'.expand(g:EXNVIM_CONFIG_PATH).'", v:true)|call HandleExNvimConfig()|call RehandleExNvimConfig()|call HandleBuftypeAll()|exec old_tabpagenr."tabnext"|execute "Showtab"', 'Reload extra.nvim config'],
 			\ ])
 	endif
 

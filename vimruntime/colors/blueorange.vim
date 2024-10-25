@@ -13,6 +13,9 @@
 hi clear
 let g:colors_name = 'blueorange'
 
+let g:cursorline_style_supported = ["dim", "reverse", "underline"]
+let g:updating_cursorline_supported = v:true
+
 if !exists("CONFIG_PATH")
   g:CONFIG_PATH = "$HOME/.config/nvim"
 endif
@@ -554,16 +557,29 @@ if &t_Co >= 256
     call CopyHighlightGroup("VisualBlue", "Visual")
     hi MatchParen ctermfg=30 ctermbg=NONE cterm=reverse guifg=#008787 guibg=NONE gui=reverse
     hi VisualNOS ctermfg=16 ctermbg=73 cterm=NONE
-    if !exists('g:cursorline_style')
-      let g:cursorline_style = "dim"
+    let cursorline_style_was = exists('g:cursorline_style')
+    if cursorline_style_was
+      let cursorline_style_index = index(g:cursorline_style_supported, g:cursorline_style)
     endif
-    if g:cursorline_style ==# "dim"
-      hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=#002050 gui=NONE
-    elseif g:cursorline_style ==# "reverse"
-      hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
-    elseif g:cursorline_style ==# "underline"
-      hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=underline
+    if !cursorline_style_was || cursorline_style_index ==# -1
+      let g:cursorline_style = 0
+    else
+      let g:cursorline_style = cursorline_style_index
     endif
+    unlet cursorline_style_index
+    function! Update_CursorLine()
+      let cursorline_style = g:cursorline_style_supported[g:cursorline_style]
+      if v:false
+      elseif cursorline_style ==# "dim"
+        hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=#002050 gui=NONE
+      elseif cursorline_style ==# "reverse"
+        hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
+      elseif cursorline_style ==# "underline"
+        hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=underline
+      endif
+    endfunction
+    call Update_CursorLine()
+    unlet cursorline_style_was
     hi CursorColumn ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
     hi Folded ctermfg=15 ctermbg=234 cterm=italic
     hi ColorColumn ctermfg=NONE ctermbg=234 cterm=NONE

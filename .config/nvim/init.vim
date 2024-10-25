@@ -345,15 +345,32 @@ function! ApplyColorscheme(colorscheme)
 endfunction
 call ApplyColorscheme(g:selected_colorscheme)
 
+augroup colorscheme_manage
+	autocmd!
+	function! ColorSchemeManagePre()
+		if exists('g:cursorline_style_supported')
+			if exists('g:cursorline_style')
+				let g:cursorline_style = g:cursorline_style_supported[g:cursorline_style]
+			endif
+			unlet g:cursorline_style_supported
+			if exists('g:updating_cursorline_supported')
+				unlet g:updating_cursorline_supported
+			endif
+		endif
+	endfunction
+	autocmd ColorSchemePre * call ColorSchemeManagePre()
+augroup END
+
 if has('nvim')
 	augroup LineNrForInactive
+		autocmd!
 		function! s:SaveStc(clear_stc, winnr=winnr())
 			execute printf("let g:stc_was_%d = &l:stc", win_getid(a:winnr))
 			if a:clear_stc
 				call setwinvar(a:winnr, '&stc', '')
 			endif
 		endfunction
-		au! WinLeave * call s:SaveStc(v:true)
+		autocmd! WinLeave * call s:SaveStc(v:true)
 		function! s:LoadStc(winnr=winnr())
 			if exists("g:stc_was_"..win_getid(a:winnr))==#1
 				call setwinvar(a:winnr, '&stc', eval("g:stc_was_"..win_getid(a:winnr)))
@@ -361,7 +378,7 @@ if has('nvim')
 				call setwinvar(a:winnr, '&stc', '')
 			endif
 		endfunction
-		au! WinEnter * call s:LoadStc()
+		autocmd! WinEnter * call s:LoadStc()
 	augroup END
 endif
 
@@ -536,6 +553,22 @@ function! HandleExNvimConfig()
 	endif
 endfunction
 call HandleExNvimConfig()
+function! Update_CursorLine_Style()
+	if exists('g:updating_cursorline_supported')
+		call Update_CursorLine()
+	else
+		execute "colorscheme" g:colors_name
+	endif
+endfunction
+function! RehandleExNvimConfig()
+	if exists('g:cursorline_style_supported')
+		let g:cursorline_style = index(g:cursorline_style_supported, g:cursorline_style)
+		if g:cursorline_style ==# -1
+			let g:cursorline_style = 0
+		endif
+		call Update_CursorLine_Style()
+	endif
+endfunction
 
 let mapleader = " "
 
@@ -2448,20 +2481,16 @@ augroup visual
 		let buftype = getwinvar(a:winnum, '&buftype', 'ERROR')
 
 		let pre_cursorcolumn = (mode() !~# "[vVirco]" && mode() !~# "\<c-v>") && !s:fullscreen && filetype !=# 'netrw' && buftype !=# 'terminal' && filetype !=# 'neo-tree' && buftype !=# 'nofile'
-		if exists('g:cursorcolumn')
-			let pre_cursorcolumn = pre_cursorcolumn && g:cursorcolumn
-		endif
+		let pre_cursorcolumn = pre_cursorcolumn && g:cursorcolumn
 		call setwinvar(a:winnum, '&cursorcolumn', pre_cursorcolumn)
 
 		let pre_cursorline = !s:fullscreen
-		if g:cursorline_style ==# "reverse"
+		if exists('g:cursorline_style_supported') && g:cursorline_style_supported[g:cursorline_style] ==# "reverse"
 			let pre_cursorline = pre_cursorline && mode() !~# "[irco]"
 			let pre_cursorline = pre_cursorline && (buftype !=# 'nofile' || filetype ==# 'neo-tree') && filetype !=# 'TelescopePrompt' && filetype !=# 'spectre_panel' && filetype !=# 'packer'
 		endif
 		let pre_cursorline = pre_cursorline && buftype !=# 'terminal' && filetype !=# 'alpha'
-		if exists('g:cursorline')
-			let pre_cursorline = pre_cursorline && g:cursorline
-		endif
+		let pre_cursorline = pre_cursorline && g:cursorline
 		call setwinvar(a:winnum, '&cursorline', pre_cursorline)
 	endfunction
 	au ModeChanged,BufWinEnter * call HandleBuftype(winnr())
