@@ -468,6 +468,8 @@ if &t_Co >= 256
         hi Normal ctermfg=231 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=#000020 gui=NONE
       endif
     endif
+    call CopyHighlightGroup("Normal", "NotifyBackground")
+    hi NotifyBackground ctermbg=18 guibg=#505050
     hi Loading0 ctermfg=0 ctermbg=9 cterm=bold guifg=#303030 guibg=#ff0000 gui=bold
     hi Loading13 ctermfg=0 ctermbg=196 cterm=bold guifg=#303030 guibg=#ff4000 gui=bold
     hi Loading25 ctermfg=0 ctermbg=208 cterm=bold guifg=#303030 guibg=#ff8000 gui=bold
@@ -644,6 +646,8 @@ if &t_Co >= 256
         hi Normal ctermfg=0 ctermbg=231 cterm=NONE guifg=#000000 guibg=#fff8f0 gui=NONE
       endif
     endif
+    call CopyHighlightGroup("Normal", "NotifyBackground")
+    hi NotifyBackground ctermbg=18 guibg=#505050
     hi Loading0 ctermfg=0 ctermbg=9 cterm=bold guifg=#303030 guibg=#ff0000 gui=bold
     hi Loading13 ctermfg=0 ctermbg=196 cterm=bold guifg=#303030 guibg=#ff4000 gui=bold
     hi Loading25 ctermfg=0 ctermbg=208 cterm=bold guifg=#303030 guibg=#ff8000 gui=bold

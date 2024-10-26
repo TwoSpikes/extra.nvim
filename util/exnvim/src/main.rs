@@ -143,7 +143,6 @@ fn install_coc_sh_crutch(
     ::std::fs::set_permissions(orig_cli_file, perms)?;
     Ok(())
 }
-
 fn commit(from: ::std::path::PathBuf, vimruntime: ::std::path::PathBuf, only_copy: bool, program_name: &String) {
     _ = copy_dir_all(from.join(".config/nvim"), "./.config/nvim");
     _ = run_as_superuser_if_needed!(
