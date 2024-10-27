@@ -179,7 +179,7 @@ function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 		let g:background = "dark"
 	endif
 	if !exists('g:quickui_border_style')
-		let g:quickui_border_style = 3
+		let g:quickui_border_style = 4
 	endif
 	if !exists('g:quickui_color_scheme')
 		let g:quickui_color_scheme = "papercol dark"

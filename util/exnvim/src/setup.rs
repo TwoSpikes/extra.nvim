@@ -302,10 +302,11 @@ pub fn setup(home: ::std::path::PathBuf) -> ::std::io::Result<()> {
 	\"open_menu_on_start\": false,
 
 \"_comment_23\":\"Change quickui_border_style\",
-\"_comment_24\":\"1 - Dashed, non-Unicode\",
-\"_comment_25\":\"2 - Solid\",
-\"_comment_26\":\"3 - Double outer border (default)\",
-	\"quickui_border_style\": \"3\",
+\"_comment_24\":\"1 - ASCII\",
+\"_comment_25\":\"2 - Single\",
+\"_comment_26\":\"3 - Double\",
+\"_comment_76\":\"4 - Rounded (default)\",
+	\"quickui_border_style\": \"4\",
 
 \"_comment_27\":\"Change quickui colorscheme\",
 \"_comment_28\":\"Aviable: borland, gruvbox, solarized, papercol dark, papercol light\",
