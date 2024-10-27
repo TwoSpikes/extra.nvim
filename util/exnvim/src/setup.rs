@@ -418,6 +418,9 @@ pub fn setup(home: ::std::path::PathBuf) -> ::std::io::Result<()> {
 
     \"automatically_open_neo_tree_instead_of_netrw\": true,
 
+\"_comment_77\":\"In main menu, start insert mode after pressing `New file`\",
+	\"edit_new_file\": false,
+
 \"_comment_end\":\"Ending field to not put comma every time\"
 }"),
             )

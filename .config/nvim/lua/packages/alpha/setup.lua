@@ -32,7 +32,7 @@ if os.getenv('HOME') ~= nil then
 end
 dashboard.section.buttons.val = {}
 dashboard.section.buttons.val = TableConcat(dashboard.section.buttons.val, {
-	dashboard.button("e", "  "..new_file_label, ":enew <CR>:startinsert<CR>"),
+	dashboard.button("e", "  "..new_file_label, ":enew <CR>"..(vim.g.edit_new_file and ":startinsert<CR>" or "")),
 	dashboard.button("f", "󰥨  "..find_file_label, ":call FuzzyFind()<CR>"),
 	dashboard.button("l", "  "..load_last_session_label, ":SessionLoadLast<CR>"),
 	dashboard.button("t", "  "..open_terminal_label, ":call OpenTerm(\"\")<CR>"),

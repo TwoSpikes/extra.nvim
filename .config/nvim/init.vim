@@ -128,6 +128,7 @@ function! LoadExNvimConfig(path, reload=v:false)
 		\'disable_animations',
 		\'prefer_far_or_mc',
 		\'automatically_open_neo_tree_instead_of_netrw',
+		\'edit_new_file',
 	\]
 	for option in l:option_list
 		if exists('g:exnvim_config["'.option.'"]')
@@ -273,6 +274,9 @@ function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 	endif
 	if !exists('g:automatically_open_neo_tree_instead_of_netrw')
 		let g:automatically_open_neo_tree_instead_of_netrw = v:true
+	endif
+	if !exists('g:edit_new_file')
+		let g:edit_new_file = v:false
 	endif
 endfunction
 call SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
