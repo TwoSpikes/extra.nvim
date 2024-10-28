@@ -50,6 +50,7 @@ execute "
 endfunction
 call Do_V_ge_base_define('ge', 'v:prevcount')
 call Do_V_ge_base_define('G', 'v:count')
+delfunction Do_V_ge_base_define
 
 nnoremap ge G
 nnoremap gs ^
@@ -135,8 +136,6 @@ function! N_DoX()
 endfunction
 nnoremap <expr> x N_DoX()
 nnoremap <expr> X N_DoX()
-xnoremap u ugv
-xnoremap U Ugv
 xnoremap ~ <c-\><c-n><cmd>call Do_V_Tilde()<bar>execute "normal! gv"<bar>let g:pseudo_visual=v:true<bar>execute "Showtab"<cr>
 function! ChangeVisModeBasedOnSelectedText()
 	let g:lx = line('.')
@@ -214,23 +213,18 @@ nnoremap gP <cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCor
 xnoremap gp <esc><cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCorrectPasteMode('$', register)<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>exe"norm! o"<bar>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
 xnoremap gP <esc><cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCorrectPasteMode('0', register)<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>exe"norm! o"<bar>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
 nnoremap c xi
-if !g:use_nvim_cmp
-	if has('nvim')
-		if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/vim-surround")
-			unmap ySS
-			unmap ySs
-			unmap yss
-			unmap yS
-			unmap ys
-			unmap y<c-g>
-		endif
-	endif
+if !g:use_nvim_cmp && has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-surround"])
+	unmap ySS
+	unmap ySs
+	unmap yss
+	unmap yS
+	unmap ys
+	unmap y<c-g>
 endif
 nnoremap y <cmd>let register=v:register<bar>exe"norm! v\"".register."y"<cr>
 nnoremap t<cr> v$
 nnoremap mm %
 xnoremap mm %
-nnoremap <c-c> <cmd>call CommentOutDefault<cr>
 inoremap <c-x> <c-p>
 inoremap <c-p> <c-x>
 nnoremap <a-o> viw
@@ -243,19 +237,15 @@ xnoremap < <gv<cmd>let g:pseudo_visual=v:true<cr>
 xnoremap > >gv<cmd>let g:pseudo_visual=v:true<cr>
 xnoremap t<cr> $
 if !g:use_nvim_cmp
-	if has('nvim')
-		if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/vim-surround")
-			unmap cS
-			unmap cs
-		endif
+	if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-surround"])
+		unmap cS
+		unmap cs
 	endif
 	unmap ci_
 endif
 unmap dd
-if has('nvim')
-	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/vim-surround")
-		unmap ds
-	endif
+if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-surround"])
+	unmap ds
 endif
 let g:pseudo_visual = v:false
 let g:lx=1
@@ -422,7 +412,7 @@ function! MoveRight()
 		echohl Normal
 	endif
 endfunction
-unmap a%
+xunmap a%
 xnoremap <expr> a ReorderRightLeft().MoveRight()."\<esc>a"
 function! V_DoS()
 	if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-quickui"])
@@ -647,7 +637,8 @@ function! V_DoY()
 	endif
 endfunction
 xnoremap y <cmd>call V_DoY()<cr>
-unmap ;
+xunmap ;
+nunmap ;
 nnoremap ; <nop>
 xnoremap ; <esc>
 xnoremap o <esc>o
@@ -695,7 +686,7 @@ xnoremap [<space> mz<esc>O<esc>`z
 nnoremap ]<space> mzo<esc>`z
 xnoremap ]<space> mz<esc>o<esc>`zgv
 nnoremap <c-c> <cmd>call CommentOutDefault()<cr>
-if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/convert.nvim")
+if luaeval("plugin_installed(_A[1])", ["convert.nvim"])
 	unmap <leader>cc
 	unmap <leader>cn
 endif

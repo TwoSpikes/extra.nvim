@@ -349,7 +349,7 @@ function! RebindMenus()
 			\ ["Open ex&nvim config\tLEAD vj", 'call SelectPosition(g:EXNVIM_CONFIG_PATH, g:stdpos)', 'Open '.g:EXNVIM_CONFIG_PATH],
 			\ ["Open &colorschemes\tLEAD vc", 'call SelectPosition($VIMRUNTIME."/colors", g:stdpos)', 'Open colorschemes directory'],
 			\ ["--", '' ],
-			\ ["&Reload init.vim\tLEAD se", 'let old_tabpagenr=tabpagenr()|exec "source ".g:CONFIG_PATH."/init.vim"|exec old_tabpagenr."tabnext"', 'Reload Vim/NeoVim config'],
+			\ ["&Reload init.vim\tLEAD se", 'exec "source" g:CONFIG_PATH."/vim/exnvim/reload.vim"', 'Reload Vim/NeoVim config'],
 			\ ["R&eload plugins list\tLEAD si", 'exec "source ".g:PLUGINS_INSTALL_FILE_PATH', 'Install plugins in '.g:PLUGINS_INSTALL_FILE_PATH],
 			\ ["Rel&oad plugins setup\tLEAD ss", 'exec "source ".g:PLUGINS_SETUP_FILE_PATH', 'Reconfigure plugins'],
 			\ ["Relo&ad lsp setup\tLEAD sl", 'exec "source ".g:LSP_PLUGINS_SETUP_FILE_PATH', 'Reconfigure LSP plugins (deprecated due to coc.nvim)'],
@@ -362,7 +362,7 @@ function! RebindMenus()
 	endif
 	if filereadable(g:EXNVIM_CONFIG_PATH)
 		call quickui#menu#install(s:config_label, [
-			\ ["Reload e&xnvim config\tLEAD sj", 'call LoadExNvimConfig("'.expand(g:EXNVIM_CONFIG_PATH).'", v:true)|call HandleExNvimConfig()|call RehandleExNvimConfig()|call PreserveAndDo("call HandleBuftypeAll()", v:true, v:true)|execute "Showtab"', 'Reload extra.nvim config'],
+					\ ["Reload e&xnvim config\tLEAD sj", 'exec "source" g:CONFIG_PATH."/vim/exnvim/reload_config.vim"', 'Reload extra.nvim config'],
 			\ ])
 	endif
 

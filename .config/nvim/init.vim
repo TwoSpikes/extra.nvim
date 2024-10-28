@@ -49,13 +49,13 @@ if has('nvim')
 	lua vim.loader.enable()
 endif
 
-set statusline=%#Loading0#Loading\ 0%%
-hi Loading0 ctermfg=0 ctermbg=9 cterm=bold guifg=#303030 guibg=#ff0000 gui=bold
-mode
-
 if !has('nvim')
 	set nocompatible
 endif
+
+set statusline=%#Loading0#Loading\ 0%%
+hi Loading0 ctermfg=0 ctermbg=9 cterm=bold guifg=#303030 guibg=#ff0000 gui=bold
+mode
 
 function! SetExNvimConfigPath()
 	if !exists('g:EXNVIM_CONFIG_PATH') || g:EXNVIM_CONFIG_PATH ==# ""
@@ -139,7 +139,7 @@ function! LoadExNvimConfig(path, reload=v:false)
 	endfor
 endfunction
 
-call LoadExNvimConfig(g:EXNVIM_CONFIG_PATH)
+call LoadExNvimConfig(g:EXNVIM_CONFIG_PATH, exists('g:CONFIG_ALREADY_LOADED'))
 
 function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 	" Default values for startup options
@@ -1486,47 +1486,48 @@ noremap <c-t> <cmd>TagbarToggle<cr>
 
 nnoremap <leader>xg <cmd>grep <cword> .<cr>
 
-let s:process_g_but_function_expression = "
+function! RedefineProcessGBut()
+let process_g_but_function_expression = "
 \function! ProcessGBut(button)
 \"
 if !g:disable_animations
 if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
-let s:process_g_but_function_expression .= "
+let process_g_but_function_expression .= "
 \\n	let old_c=col('.')
 \\n	let old_l=line('.')
 \"
 endif
 if g:fast_terminal
-let s:process_g_but_function_expression .= "
+let process_g_but_function_expression .= "
 \\n	if &buftype !=# 'terminal'
 \\n		set lazyredraw
 \\n	endif
 \"
 endif
 if has('nvim')
-let s:process_g_but_function_expression .= "
+let process_g_but_function_expression .= "
 \\n	execute \"lua << EOF
 \\\nlocal button ="
 if g:do_not_save_previous_column_position_when_going_up_or_down&&g:compatible ==# "helix" || g:compatible ==# "helix_hard"
-let s:process_g_but_function_expression .= "\\\"mz`z\\\".."
+let process_g_but_function_expression .= "\\\"mz`z\\\".."
 endif
-let s:process_g_but_function_expression .= "
+let process_g_but_function_expression .= "
 \(vim.v.count == 0 and \'g\".a:button.\"\' or \'\".a:button.\"\')
 \"
 if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
-let s:process_g_but_function_expression .= "
+let process_g_but_function_expression .= "
 \\\nif vim.g.pseudo_visual then
 \\\n    button = \\\"\\<esc>\\\"..button
 \\\nend"
 endif
-let s:process_g_but_function_expression .= "
+let process_g_but_function_expression .= "
 \\\nfor _=1,vim.v.count1,1 do
 \\\nvim.api.nvim_feedkeys(button,\\\"n\\\",false)
 \\\nend
 \\\nEOF\"
 \\n"
 else
-let s:process_g_but_function_expression .= "
+let process_g_but_function_expression .= "
 \\nif v:count ==# 0
 \\nexe \"norm! g\".a:button
 \\nelse
@@ -1534,7 +1535,7 @@ let s:process_g_but_function_expression .= "
 \\nendif
 \\n"
 if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
-let s:process_g_but_function_expression .= "
+let process_g_but_function_expression .= "
 \\nif g:pseudo_visual
 \\n	call feedkeys(\"\\<c-\\>\\<c-n>\")
 \\nendif
@@ -1543,34 +1544,34 @@ endif
 endif
 
 if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
-	let s:process_g_but_function_expression .= "
+	let process_g_but_function_expression .= "
 	\\n	call ReorderRightLeft()
 	\\n	call SavePosition(old_c, old_l, col('.'), line('.'))
 	\"
 endif
 
 if g:fast_terminal
-let s:process_g_but_function_expression .= "
+let process_g_but_function_expression .= "
 \\n	if &buftype !=# 'terminal'
 \\n		set nolazyredraw
 \\n	endif
 \"
 endif
 else
-let s:process_g_but_function_expression .= "
+let process_g_but_function_expression .= "
 \\n	let button=v:count==#0?\"g\".a:button:a:button
 \"
 if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
-let s:process_g_but_function_expression .= "
+let process_g_but_function_expression .= "
 \\n	let old_c=col('.')
 \\n	let old_l=line('.')
 \"
 endif
-let s:process_g_but_function_expression .= "
+let process_g_but_function_expression .= "
 \\n	execute \"norm! \".v:count1.button
 \"
 if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
-let s:process_g_but_function_expression .= "
+let process_g_but_function_expression .= "
 \\n	if g:pseudo_visual
 \\n		call feedkeys(\"\\<c-\\>\\<c-n>\")
 \\n	endif
@@ -1579,9 +1580,11 @@ let s:process_g_but_function_expression .= "
 \"
 endif
 endif
-let s:process_g_but_function_expression .= "
+let process_g_but_function_expression .= "
 \\nendfunction"
-execute s:process_g_but_function_expression
+execute process_g_but_function_expression
+endfunction
+call RedefineProcessGBut()
 
 function! JKWorkaroundAlpha()
 	noremap <buffer> j <cmd>call ProcessGBut('j')<cr>
