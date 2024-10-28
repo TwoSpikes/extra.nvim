@@ -250,3 +250,4 @@ $ exnvim version
 - [codeium.nvim](https://github.com/Exafunction/codeium.vim) (disabled by default)
 - [music-player.vim](https://github.com/TwoSpikes/music-player.vim)
 - [vim-gitgutter](https://github.com/airblade/vim-gitgutter)
+- [hlargs.nvim](https://github.com/m-demare/hlargs.nvim)

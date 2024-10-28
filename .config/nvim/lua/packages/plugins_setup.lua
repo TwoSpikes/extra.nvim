@@ -104,14 +104,21 @@ end
 if plugin_installed("nvim-ts-autotag") then
 	require('packages.ts-autotag.init')
 end
-require('packages.ufo.init')
+if plugin_installed("nvim-ufo") then
+	require('packages.ufo.init')
+end
 if plugin_installed("trouble.nvim") then
 	require('packages.trouble.init')
 end
 if plugin_installed("LuaSnip") then
 	require('packages.luasnip.init')
 end
-require('packages.sneak.init')
+if plugin_installed("vim-sneak") then
+	require('packages.sneak.init')
+end
+if plugin_installed("hlargs.nvim") then
+	require('packages.hlargs.init')
+end
 
 -- ExNvimOptionInComment LUA_REQUIRE_GOTO_PREFIX %CONFIG_PATH%/lua/
 -- ExNvimOptionInComment LUA_REQUIRE_GOTO_PREFIX %LOCALSHAREPATH%/site/pack/packer/start/

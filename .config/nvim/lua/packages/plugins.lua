@@ -581,4 +581,7 @@ return require('packer').startup(function (use)
 	use {
 		'airblade/vim-gitgutter',
 	}
+	use {
+		'm-demare/hlargs.nvim',
+	}
 end)
