@@ -637,7 +637,9 @@ function! V_DoY()
 	endif
 endfunction
 xnoremap y <cmd>call V_DoY()<cr>
-xunmap ;
+if has('nvim')
+	xunmap ;
+endif
 nunmap ;
 nnoremap ; <nop>
 xnoremap ; <esc>
@@ -686,7 +688,7 @@ xnoremap [<space> mz<esc>O<esc>`z
 nnoremap ]<space> mzo<esc>`z
 xnoremap ]<space> mz<esc>o<esc>`zgv
 nnoremap <c-c> <cmd>call CommentOutDefault()<cr>
-if luaeval("plugin_installed(_A[1])", ["convert.nvim"])
+if has('nvim') && luaeval("plugin_installed(_A[1])", ["convert.nvim"])
 	unmap <leader>cc
 	unmap <leader>cn
 endif

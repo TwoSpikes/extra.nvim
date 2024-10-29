@@ -1786,6 +1786,31 @@ function! SelectPosition(cmd, positions)
 endfunction
 set statusline=%#Loading50#Loading\ 50%%
 
+if has('nvim') && luaeval("plugin_installed(_A[1])", ["neo-tree.nvim"])
+	let s:dir_position_left =
+		\{cmd -> 'Neotree position=left '.cmd}
+	let s:dir_position_right =
+		\{cmd -> 'Neotree position=right '.cmd}
+	let s:dir_position_current =
+		\{cmd -> 'Neotree position=current '.cmd}
+	let s:dir_position_float =
+		\{cmd -> 'Neotree position=float '.cmd}
+else
+	let s:dir_position_left =
+		\{cmd -> 'Neotree position=left '.cmd}
+	let s:dir_position_right =
+		\{cmd -> 'Neotree position=right '.cmd}
+	let s:dir_position_current =
+		\{cmd -> 'Explore'.cmd}
+	if g:language ==# 'russian'
+		let s:messagefloating_windows_are_not_supported_in_vim = 'блядь: Плавающие окна не поддерживаются в Vim''е'
+	else
+		let s:messagefloating_windows_are_not_supported_in_vim = 'error: Floating windows are not supported in Vim'
+	endif
+	let s:dir_position_float =
+		\{cmd -> 'echohl ErrorMsg|echomsg "'.s:messagefloating_windows_are_not_supported_in_vim.'"|echohl Normal'.cmd}
+	unlet s:messagefloating_windows_are_not_supported_in_vim
+endif
 if g:language ==# 'russian'
 	let g:stdpos = {
 		\ 'h': {'button_label': '&s:ГорРаздел', 'command': {cmd -> 'split '.cmd}},
@@ -1793,11 +1818,11 @@ if g:language ==# 'russian'
 		\ 'b': {'button_label': '&b:Буффер', 'command': {cmd -> 'e '.cmd}},
 		\ 't': {'button_label': '&t:НовВкладк', 'command': {cmd -> 'tabnew|e '.cmd}},
 	\ }
-	let g:neotreepos = {
-		\ 'l': {'button_label': '&v:Слева', 'command': {cmd -> 'Neotree position=left '.cmd}},
-		\ 'r': {'button_label': '&r:Справа', 'command': {cmd -> 'Neotree position=right '.cmd}},
-		\ 'b': {'button_label': '&b:Буффер', 'command': {cmd -> 'Neotree position=current '.cmd}},
-		\ 'f': {'button_label': '&f:Плавающее', 'command': {cmd -> 'Neotree position=float '.cmd}},
+	let g:dirpos = {
+		\ 'l': {'button_label': '&v:Слева', 'command': s:dir_position_left},
+		\ 'r': {'button_label': '&r:Справа', 'command': s:dir_position_right},
+		\ 'b': {'button_label': '&b:Буффер', 'command': s:dir_position_current},
+		\ 'f': {'button_label': '&f:Плавающее', 'command': s:dir_position_float},
 	\ }
 	let g:termpos = {
 		\ 'h': {'button_label': '&s:ГРазде', 'command': {cmd -> 'split|call OpenTerm("'.cmd.'")'}},
@@ -1813,11 +1838,11 @@ else
 		\ 'b': {'button_label': '&Buffer', 'command': {cmd -> 'e '.cmd}},
 		\ 't': {'button_label': 'New &tab', 'command': {cmd -> 'tabnew|e '.cmd}},
 	\ }
-	let g:neotreepos = {
-		\ 'l': {'button_label': '&v:Left', 'command': {cmd -> 'Neotree position=left '.cmd}},
-		\ 'r': {'button_label': '&Right', 'command': {cmd -> 'Neotree position=right '.cmd}},
-		\ 'b': {'button_label': '&Buffer', 'command': {cmd -> 'Neotree position=current '.cmd}},
-		\ 'f': {'button_label': '&Floating', 'command': {cmd -> 'Neotree position=float '.cmd}},
+	let g:dirpos = {
+		\ 'l': {'button_label': '&v:Left', 'command': s:dir_position_left},
+		\ 'r': {'button_label': '&Right', 'command': s:dir_position_right},
+		\ 'b': {'button_label': '&Buffer', 'command': s:dir_position_current},
+		\ 'f': {'button_label': '&Floating', 'command': s:dir_position_float},
 	\ }
 	let g:termpos = {
 		\ 'h': {'button_label': '&Split', 'command': {cmd -> 'split|call OpenTerm("'.cmd.'")'}},
@@ -1827,6 +1852,10 @@ else
 		\ 'f': {'button_label': '&Floating', 'command': {cmd -> 'FloatermNew '.cmd}},
 	\ }
 endif
+unlet s:dir_position_left
+unlet s:dir_position_right
+unlet s:dir_position_current
+unlet s:dir_position_float
 
 augroup AlphaNvim_CinnamonNvim_JK_Workaround
 	autocmd!
@@ -2183,7 +2212,7 @@ let g:LSP_PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/lsp/plugins.lua
 
 set statusline=%#Loading63#Loading\ 62.5%%
 execute printf('noremap <silent> <leader>ve <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:CONFIG_PATH."/init.vim")
-execute printf("noremap <silent> <leader>se <esc>:so %s<cr>", g:CONFIG_PATH.'/init.vim')
+execute printf("noremap <silent> <leader>se <esc>:so %s<cr>", g:CONFIG_PATH.'/vim/exnvim/reload.vim')
 
 execute printf('noremap <silent> <leader>vi <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:PLUGINS_INSTALL_FILE_PATH)
 execute printf("noremap <silent> <leader>si <esc>:so %s<cr>", g:PLUGINS_INSTALL_FILE_PATH)
@@ -2376,7 +2405,7 @@ endfunction
 noremap <silent> <leader>t <cmd>call SelectPosition($SHELL, g:termpos)<cr>
 
 " COLORSCHEME
-noremap <silent> <leader>vc <cmd>call SelectPosition($VIMRUNTIME."/colors", g:neotreepos)<cr>
+noremap <silent> <leader>vc <cmd>call SelectPosition($VIMRUNTIME."/colors", g:dirpos)<cr>
 noremap <silent> <leader>vC <cmd>set lazyredraw<cr>yy:<c-f>pvf]o0"_dxicolo <esc>$x$x$x$x<cr>jzb<cmd>set nolazyredraw<cr>
 
 noremap <silent> <leader>uc <cmd>CocUpdate<cr>

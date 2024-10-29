@@ -793,11 +793,10 @@ if &t_Co >= 256
     hi FilterMenuLineNr ctermfg=241 ctermbg=NONE cterm=NONE
     hi CocSearch ctermfg=124 ctermbg=NONE cterm=NONE
   endif
-  let &t_Co = ''
   finish
 endif
 
-if v:true
+if v:false
   if &background ==# 'dark'
     hi Normal ctermfg=grey ctermbg=black cterm=NONE
     hi Statusline ctermfg=grey ctermbg=black cterm=bold,reverse
