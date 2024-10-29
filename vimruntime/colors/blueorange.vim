@@ -796,7 +796,7 @@ if &t_Co >= 256
   finish
 endif
 
-if v:false
+if &t_Co >= 8
   if &background ==# 'dark'
     hi Normal ctermfg=grey ctermbg=black cterm=NONE
     hi Statusline ctermfg=grey ctermbg=black cterm=bold,reverse
