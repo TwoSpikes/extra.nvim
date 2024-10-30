@@ -80,6 +80,20 @@ function! ExitVisual()
 		echohl Normal
 	endif
 endfunction
+function! CollapseVisual()
+	if v:false
+	elseif g:visual_mode ==# "char"
+		normal! vv
+	elseif g:visual_mode ==# "line"
+		normal! VV
+	elseif g:visual_mode ==# "block"
+		normal! <c-v><c-v>
+	else
+		echohl ErrorMsg
+		echomsg "extra.nvim: hcm: CollapseVisual: Internal error: Wrong visual mode: ".g:visual_mode
+		echohl Normal
+	endif
+endfunction
 
 set notildeop
 let &whichwrap="b,s,h,l,<,>,~,[,]"
