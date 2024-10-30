@@ -8,6 +8,8 @@
 " *_NPV_*: non-pseudo visual mode action
 " *_PV_*: pseudo visual mode action
 
+let g:sneak_mode = ''
+
 function! Do_V_0()
 	if g:pseudo_visual
 		execute "normal! \<c-\>\<c-n>"

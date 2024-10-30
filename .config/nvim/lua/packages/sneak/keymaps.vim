@@ -10,7 +10,6 @@ if v:true
 	noremap gw <Plug>(Sneak_s)
 	noremap gW <Plug>(Sneak_S)
 else
-	let g:sneak_mode = ''
 	nnoremap f  <cmd>let g:sneak_mode = 'f'<bar>call sneak#wrap('',1,0,1,0)<bar>exec "normal! my"<bar>let g:visual_mode="char"<bar>let g:pseudo_visual=v:true<bar>normal! `'v`y<cr>
 	nnoremap F  <cmd>let g:sneak_mode = 'F'<bar>call sneak#wrap('',1,1,1,0)<bar>exec "normal! my"<bar>let g:visual_mode="char"<bar>let g:pseudo_visual=v:true<bar>normal! `'v`y<cr>
 	nnoremap t  <cmd>let g:sneak_mode = 't'<bar>call sneak#wrap('',1,0,0,0)<bar>exec "normal! my"<bar>let g:visual_mode="char"<bar>let g:pseudo_visual=v:true<bar>normal! `'v`y<cr>
