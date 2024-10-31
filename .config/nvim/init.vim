@@ -2239,7 +2239,11 @@ autocmd BufReadPost *
 
 " MY .nvimrc HELP
 function! ExNvimCheatSheet()
-	echo "
+	let old_bufnr = bufnr()
+	let bufnr = bufadd('help')
+	call bufload(bufnr)
+	execute bufnr.'buffer'
+	call append(line('$'), split("
 	  \Help for my NeoVim config:
 	\\n     By default, \<leader\> (LEAD) is space symbol.
 	\\n     You can change it typing this command in Vim/Neovim:
@@ -2352,7 +2356,14 @@ function! ExNvimCheatSheet()
 	\\n    Author: TwoSpikes (2023 - 2024)
 	\\n    Github repository: https://github.com/TwoSpikes/extra.nvim
 	\\n    Also see: https://github.com/TwoSpikes/dotfiles
-	\"
+	\", "\n"))
+	1delete
+	setlocal nomodified
+	setlocal nomodifiable
+	setlocal buftype=nofile
+	setlocal filetype=book
+	call Numbertoggle('n')
+	execute "noremap <buffer> q <cmd>execute bufnr().\"bwipeout!\"<bar>".old_bufnr."buffer<cr>"
 endfunction
 command! -nargs=0 ExNvimCheatSheet call ExNvimCheatSheet()
 noremap <silent> <leader>? <cmd>ExNvimCheatSheet<cr>

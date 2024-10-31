@@ -5,11 +5,11 @@ endif
 syn clear
 let g:markdown_minlines = 1
 
-set tabstop=2
-set shiftwidth=2
-set wrap
-set linebreak
-set nolist
+setlocal tabstop=2
+setlocal shiftwidth=2
+setlocal wrap
+setlocal linebreak
+setlocal nolist
 
 syn match bookOperator "[\^\-+\*=«»"]"
 syn match bookSpecialChar "[\[\]()\\.,:;{}!?–—]"
