@@ -694,7 +694,7 @@ function! AfterSomeEvent(event, command, delete_when={name -> 'au! '.name})
 endfunction
 let g:please_do_not_close = v:false
 function! MakeThingsThatRequireBeDoneAfterPluginsLoaded()
-	autocmd TermClose * if !g:please_do_not_close && !exists('g:bufnrforranger')|call IfOneWinDo('call OnQuit()')|call AfterSomeEvent('TermLeave', 'call Numbertoggle()')|call IfOneWinDoElse('qall!', 'quit!')|endif
+	autocmd TermClose * if !g:please_do_not_close && !exists('g:bufnrforranger')|call AfterSomeEvent('TermLeave', 'call Numbertoggle()')|exec "confirm quit"|call IfOneWinDo('call OnQuit()')|endif
 endfunction
 
 set nonu
@@ -1675,7 +1675,7 @@ command! -nargs=0 Findfilebuffer call Findfilebuffer()
 noremap <c-c>C <cmd>Findfilebuffer<cr>
 noremap <c-c>% <cmd>split<cr>
 noremap <c-c>" <cmd>vsplit<cr>
-noremap <c-c>w <cmd>quit<cr>
+noremap <c-c>w <cmd>confirm quit<cr>
 for i in range(1, 9)
 	execute "noremap <c-c>".i." <cmd>tabnext ".i."<cr>"
 endfor
@@ -2403,8 +2403,6 @@ function! OpenTerm(cmd)
 		call win_gotoid(prevwinid)
 		wincmd p
 	endif
-	call setline(5, 'lol')
-	set nomodified
 	if a:cmd ==# ""
 		execute printf("terminal %s", $SHELL)
 	else
@@ -2583,8 +2581,8 @@ function! IsNo(string)
 endfunction
 
 " Tab closers
-noremap <silent> q <cmd>q<cr>
-noremap <silent> Q <cmd>q!<cr>
+noremap <silent> q <cmd>confirm quit<cr>
+noremap <silent> Q <cmd>quit!<cr>
 noremap <c-w><c-g> <cmd>echo "Quit"<cr>
 
 " Emacs support
