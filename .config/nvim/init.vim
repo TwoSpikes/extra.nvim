@@ -130,13 +130,26 @@ function! LoadExNvimConfig(path, reload=v:false)
 		\'automatically_open_neo_tree_instead_of_netrw',
 		\'edit_new_file',
 	\]
-	for option in l:option_list
-		if exists('g:exnvim_config["'.option.'"]')
-			if !exists("g:".option) || a:reload
-				execute "let g:".option." = g:exnvim_config[option]"
+	if keys(g:exnvim_config) ==# ['_TYPE', '_VAL']
+		for item in g:exnvim_config['_VAL']
+			let option = item[0]
+			let g:value = item[1]
+			if index(l:option_list, option) !=# -1
+				if !exists("g:".option) || a:reload
+					execute "let g:".option." = g:value"
+				endif
 			endif
-		endif
-	endfor
+		endfor
+		unlet g:value
+	else
+		for option in l:option_list
+			if exists('g:exnvim_config["'.option.'"]')
+				if !exists("g:".option) || a:reload
+					execute "let g:".option." = g:exnvim_config[option]"
+				endif
+			endif
+		endfor
+	endif
 endfunction
 
 call LoadExNvimConfig(g:EXNVIM_CONFIG_PATH, exists('g:CONFIG_ALREADY_LOADED'))
