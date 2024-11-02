@@ -15,6 +15,7 @@ let g:colors_name = 'blueorange'
 
 let g:cursorline_style_supported = ["dim", "reverse", "underline"]
 let g:updating_cursorline_supported = v:true
+let g:updating_cursor_style_supported = v:true
 
 if !exists("CONFIG_PATH")
   g:CONFIG_PATH = "$HOME/.config/nvim"
@@ -62,13 +63,16 @@ hi CursorReplace ctermfg=15 ctermbg=128 cterm=bold guifg=#ffffff guibg=#af00df g
 hi CursorVisual ctermfg=NONE ctermbg=18 cterm=NONE guifg=NONE guibg=#8080f0 gui=bold
 hi CursorCommand ctermfg=16 ctermbg=220 cterm=bold guifg=#000000 guibg=#aaaaaa gui=bold
 hi Cursor guifg=NONE guibg=#ffaf00 gui=NONE cterm=NONE
-if g:cursor_style ==# "block"
-  set guicursor=n-sm:block-blinkwait175-blinkoff150-blinkon175-CursorNormal,v:block-blinkwait175-blinkoff150-blinkon175-CursorVisual,i-ci-ve:block-blinkwait175-blinkoff150-blinkon175-CursorInsert,r-cr:block-blinkwait175-blinkoff150-blinkon175-CursorReplace,o:hor50-CursorNormal,c:block-blinkwait175-blinkoff150-blinkon175-CursorCommand
-elseif g:cursor_style ==# "bar"
-  set guicursor=n-sm:ver25-blinkwait175-blinkoff150-blinkon175-CursorNormal,v:ver25-blinkwait175-blinkoff150-blinkon175-CursorVisual,i-ci-ve:ver25-blinkwait175-blinkoff150-blinkon175-CursorInsert,r-cr:hor25-blinkwait175-blinkoff150-blinkon175-CursorReplace,o:hor50-CursorNormal,c:ver25-blinkwait175-blinkoff150-blinkon175-CursorCommand
-elseif g:cursor_style ==# "underline"
-  set guicursor=n-sm:hor25-blinkwait175-blinkoff150-blinkon175-CursorNormal,v:hor25-blinkwait175-blinkoff150-blinkon175-CursorVisual,i-ci-ve:hor25-blinkwait175-blinkoff150-blinkon175-CursorInsert,r-cr:hor25-blinkwait175-blinkoff150-blinkon175-CursorReplace,o:hor50-CursorNormal,c:hor25-blinkwait175-blinkoff150-blinkon175-CursorCommand
-endif
+function! Update_Cursor_Style()
+  if g:cursor_style ==# "block"
+    set guicursor=n-sm:block-blinkwait175-blinkoff150-blinkon175-CursorNormal,v:block-blinkwait175-blinkoff150-blinkon175-CursorVisual,i-ci-ve:block-blinkwait175-blinkoff150-blinkon175-CursorInsert,r-cr:block-blinkwait175-blinkoff150-blinkon175-CursorReplace,o:hor50-CursorNormal,c:block-blinkwait175-blinkoff150-blinkon175-CursorCommand
+  elseif g:cursor_style ==# "bar"
+    set guicursor=n-sm:ver25-blinkwait175-blinkoff150-blinkon175-CursorNormal,v:ver25-blinkwait175-blinkoff150-blinkon175-CursorVisual,i-ci-ve:ver25-blinkwait175-blinkoff150-blinkon175-CursorInsert,r-cr:hor25-blinkwait175-blinkoff150-blinkon175-CursorReplace,o:hor50-CursorNormal,c:ver25-blinkwait175-blinkoff150-blinkon175-CursorCommand
+  elseif g:cursor_style ==# "underline"
+    set guicursor=n-sm:hor25-blinkwait175-blinkoff150-blinkon175-CursorNormal,v:hor25-blinkwait175-blinkoff150-blinkon175-CursorVisual,i-ci-ve:hor25-blinkwait175-blinkoff150-blinkon175-CursorInsert,r-cr:hor25-blinkwait175-blinkoff150-blinkon175-CursorReplace,o:hor50-CursorNormal,c:hor25-blinkwait175-blinkoff150-blinkon175-CursorCommand
+  endif
+endfunction
+call Update_Cursor_Style()
 " set guicursor=n-v-c:block-Cursor
 " set guicursor+=i:ver100-Cursor
 " set guicursor+=r:hor20-Cursor

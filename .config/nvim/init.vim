@@ -361,6 +361,9 @@ augroup colorscheme_manage
 				unlet g:updating_cursorline_supported
 			endif
 		endif
+		if exists('g:updating_cursor_style_supported')
+			unlet g:updating_cursor_style_supported
+		endif
 	endfunction
 	autocmd ColorSchemePre * call ColorSchemeManagePre()
 augroup END
@@ -694,7 +697,7 @@ function! AfterSomeEvent(event, command, delete_when={name -> 'au! '.name})
 endfunction
 let g:please_do_not_close = v:false
 function! MakeThingsThatRequireBeDoneAfterPluginsLoaded()
-	autocmd TermClose * if !g:please_do_not_close && !exists('g:bufnrforranger')|call AfterSomeEvent('TermLeave', 'call Numbertoggle()')|exec "confirm quit"|call IfOneWinDo('call OnQuit()')|endif
+	autocmd TermClose * if !g:please_do_not_close && !exists('g:bufnrforranger')|call AfterSomeEvent('TermLeave', 'call Numbertoggle()')|call OnQuit()|exec "confirm quit"|call OnQuitDisable()|endif
 endfunction
 
 set nonu
@@ -3486,6 +3489,16 @@ function! OnQuit()
 	\|| g:compatible ==# "helix_hard"
 		call SaveVars()
 	endif
+endfunction
+function! Update_Cursor_Style_wrapper()
+	if exists('g:updating_cursor_style_supported')
+		call Update_Cursor_Style()
+	else
+		execute "colorscheme" g:colors_name
+	endif
+endfunction
+function! OnQuitDisable()
+	call Update_Cursor_Style_wrapper()
 endfunction
 let s:MACRO_IS_ONE_WIN = "
 \	let s = 0
