@@ -77,7 +77,7 @@ function! LoadExNvimConfig(path, reload=v:false)
 		return 1
 	endif
 	let l:exnvim_config_str = join(readfile(a:path, ''), '')
-	silent execute "let g:exnvim_config = json_decode(l:exnvim_config_str)"
+	silent! execute "let g:exnvim_config = json_decode(l:exnvim_config_str)"
 	if type(g:exnvim_config) !=# v:t_dict
 		echohl ErrorMsg
 		echomsg "error: failed to parse extra.nvim config"
@@ -3068,9 +3068,12 @@ function! OpenRanger(path)
 	augroup oncloseranger
 		autocmd! oncloseranger
 		if has('nvim')
-			execute 'autocmd TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.g:bufnrforranger."|if filereadable(filename)==#1|bdelete|let bufnr=bufadd(filename)|call bufload(bufnr)|execute bufnr.'buffer'|call Numbertoggle()|filetype detect|call AfterSomeEvent(\"ModeChanged\", \"doautocmd BufEnter \".expand(\"%\"))|unlet g:bufnrforranger|else|call IfOneWinDo('call OnQuit()')|endif|endif|call delete('".TMPFILE."')|unlet filename"
+			execute 'autocmd TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.g:bufnrforranger."|if v:shell_error!=#0|call OnQuit()|confirm quit|call OnQuitDisable()|endif|if filereadable(filename)==#1|let old_bufnr=bufnr()|enew|execute old_bufnr.\"bdelete\"|unlet old_bufnr|let bufnr=bufadd(filename)|call bufload(bufnr)|execute bufnr.'buffer'|call Numbertoggle()|filetype detect|call AfterSomeEvent(\"ModeChanged\", \"doautocmd BufEnter \".expand(\"%\"))|unlet g:bufnrforranger|else|endif|endif|call delete('".TMPFILE."')|unlet filename"
 		else
 			function! CheckRangerStopped(timer_id, TMPFILE)
+				if !exists('g:bufnrforranger')
+					return
+				endif
 				let bufnr = bufnr()
 				if bufnr ==# g:bufnrforranger && !TermRunning(bufnr)
 					let filename=system("cat ".a:TMPFILE)
@@ -3095,7 +3098,7 @@ function! OpenRanger(path)
 			execute "call timer_start(0, {timer_id -> CheckRangerStopped(timer_id, '".TMPFILE."')}, {'repeat': -1})"
 		endif
 		execute "autocmd BufWinLeave * let f=expand(\"<afile>\")|let n=bufnr(\"^\".f.\"$\")|if n==#".g:bufnrforranger."|unlet f|unlet n|autocmd!oncloseranger|call AfterSomeEvent(\"BufEnter,BufLeave,WinEnter,WinLeave\", \"".g:bufnrforranger."bwipeout!\")|unlet g:bufnrforranger|endif"
-	augroup END
+	augroup iEND
 	unlet TMPFILE
 endfunction
 function! OpenRangerCheck()

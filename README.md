@@ -106,6 +106,9 @@ Like
 $ EXNVIM_CONFIG_PATH=~/dnsjajsbdn/exnvim/ nvim
 ```
 
+> [!Warning]
+> If installing to Vim, remove all non-unique keys
+
 </details>
 
 # Contribution
