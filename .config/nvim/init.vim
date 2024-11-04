@@ -3098,7 +3098,7 @@ function! OpenRanger(path)
 			execute "call timer_start(0, {timer_id -> CheckRangerStopped(timer_id, '".TMPFILE."')}, {'repeat': -1})"
 		endif
 		execute "autocmd BufWinLeave * let f=expand(\"<afile>\")|let n=bufnr(\"^\".f.\"$\")|if n==#".g:bufnrforranger."|unlet f|unlet n|autocmd!oncloseranger|call AfterSomeEvent(\"BufEnter,BufLeave,WinEnter,WinLeave\", \"".g:bufnrforranger."bwipeout!\")|unlet g:bufnrforranger|endif"
-	augroup iEND
+	augroup END
 	unlet TMPFILE
 endfunction
 function! OpenRangerCheck()
