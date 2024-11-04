@@ -3013,7 +3013,7 @@ augroup xdg_open
 			execute "!xdg-open -- ".a:filename
 		endif
 	endfunction
-	autocmd BufEnter *.jpg,*.png,*.jpeg,*.bmp call OpenWithXdg(expand('%'))
+	autocmd BufEnter *.jpg,*.png,*.jpeg,*.bmp if v:vim_did_enter | call OpenWithXdg(Repr_Shell(expand('%'))) | endif
 augroup END
 
 function! TermuxSaveCursorStyle()
