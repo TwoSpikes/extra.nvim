@@ -49,6 +49,8 @@ if has('nvim')
 	lua vim.loader.enable()
 endif
 
+call inputsave()
+
 if !has('nvim')
 	set nocompatible
 endif
@@ -3586,3 +3588,4 @@ autocmd! VimLeavePre * call FixShaDa()
 autocmd! VimEnter * call OnStart()
 autocmd! VimLeave * call OnQuit()
 set statusline=%#Loading100#Loading\ 100%%
+call inputrestore()
