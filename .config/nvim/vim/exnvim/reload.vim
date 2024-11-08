@@ -10,3 +10,4 @@ unlet old_winnr
 unlet old_cmdheight
 call PreserveAndDo("call HandleBuftypeAll()", v:true, v:true)
 execute "Showtab"
+call SetGitBranch()

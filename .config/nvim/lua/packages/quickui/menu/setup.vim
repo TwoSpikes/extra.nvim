@@ -186,8 +186,18 @@ function! RebindMenus()
 				\ ["--", '' ],
 				\ [(g:quickui_icons?"󰆓 ":"").s:save_label."\tCtrl-x s", 'write', 'Save changes in current buffer'],
 				\ [(g:quickui_icons?"󰆔 ":"").s:save_all_label."\tCtrl-x S", 'wall | echo "Saved all buffers"', 'Save changes to all buffers' ],
-				\ [(g:quickui_icons?"󰳻 ":"").s:save_as_label."\tLEAD Ctrl-s", 'call SaveAs()', 'Save current file as ...' ],
-				\ [(g:quickui_icons?"󰳻 ":"").s:save_as_and_edit_label."\tLEAD Ctrl-r", 'call SaveAsAndRename()', 'Save current file as ... and edit it' ],
+				\ ])
+	if exists(':SaveAs')
+		call quickui#menu#install(s:file_label, [
+					\ [(g:quickui_icons?"󰳻 ":"").s:save_as_label."\tLEAD Ctrl-s", 'call SaveAs()', 'Save current file as ...' ],
+					\ ])
+	endif
+	if exists(':SaveAsAndRename')
+		call quickui#menu#install(s:file_label, [
+					\ [(g:quickui_icons?"󰳻 ":"").s:save_as_and_edit_label."\tLEAD Ctrl-r", 'call SaveAsAndRename()', 'Save current file as ... and edit it' ],
+					\ ])
+	endif
+	call quickui#menu#install(s:file_label, [
 				\ ["--", '' ],
 				\ [(g:quickui_icons?"󰚰 ":"").s:update_plugins_label."\tLEAD up", 'lua require("packer").sync()', 'Clear and redraw the screen'],
 				\ [(g:quickui_icons?"󰚰 ":"").s:update_coc_label."\tLEAD uc", 'CocUpdate', 'Update coc.nvim installed language servers'],
@@ -209,10 +219,16 @@ function! RebindMenus()
 				\ ["--", '' ],
 				\ ])
 	if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-quickui"])
-		call quickui#menu#install(s:window_label, [
-				\ [(g:quickui_icons?" ":"").s:open_file_in_tab_label."\tCtrl-c c", 'Findfile', 'Open file in new tab'],
-				\ [(g:quickui_icons?" ":"").s:open_file_in_buffer_label."\tCtrl-c C", 'Findfilebuffer', 'Open file in current buffer'],
-				\ ])
+		if exists(':Findfile')
+			call quickui#menu#install(s:window_label, [
+					\ [(g:quickui_icons?" ":"").s:open_file_in_tab_label."\tCtrl-c c", 'Findfile', 'Open file in new tab'],
+					\ ])
+		endif
+		if exists(':Findfilebuffer')
+			call quickui#menu#install(s:window_label, [
+					\ [(g:quickui_icons?" ":"").s:open_file_in_buffer_label."\tCtrl-c C", 'Findfilebuffer', 'Open file in current buffer'],
+					\ ])
+		endif
 	endif
 	if has('nvim') && luaeval("plugin_installed(_A[1])", ["neo-tree.nvim"])
 		call quickui#menu#install(s:window_label, [
