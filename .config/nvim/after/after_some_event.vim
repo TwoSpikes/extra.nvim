@@ -31,7 +31,9 @@ endfunction
 let g:please_do_not_close = v:false
 
 function! MakeThingsThatRequireBeDoneAfterPluginsLoaded()
-	autocmd TermClose * if !g:please_do_not_close && !exists('g:bufnrforranger')|call AfterSomeEvent('TermLeave', 'call Numbertoggle()')|call OnQuit()|exec "confirm quit"|call OnQuitDisable()|endif
+	if has('nvim')
+		autocmd TermClose * if !g:please_do_not_close && !exists('g:bufnrforranger')|call AfterSomeEvent('TermLeave', 'call Numbertoggle()')|call OnQuit()|exec "confirm quit"|call OnQuitDisable()|endif
+	endif
 endfunction
 call MakeThingsThatRequireBeDoneAfterPluginsLoaded()
 
@@ -44,3 +46,5 @@ augroup Lua_Require_Goto_Workaround
 	autocmd!
 	autocmd FileType lua exec "noremap <buffer> <c-w>f <cmd>call Lua_Require_Goto_Workaround_Wincmd_f()<cr>"
 augroup END
+
+let g:exnvim_fully_loaded += 1

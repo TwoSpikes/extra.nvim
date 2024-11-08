@@ -486,6 +486,7 @@ if &t_Co >= 256
     hi Loading75 ctermfg=0 ctermbg=118 cterm=bold guifg=#303030 guibg=#80ff00 gui=bold
     hi Loading88 ctermfg=0 ctermbg=82 cterm=bold guifg=#303030 guibg=#40ff00 gui=bold
     hi Loading100 ctermfg=0 ctermbg=10 cterm=bold guifg=#303030 guibg=#00ff00 gui=bold
+    hi Loading ctermfg=0 ctermbg=10 cterm=bold guifg=#303030 guibg=#ffff9f gui=bold
     hi NormalNC ctermfg=15 ctermbg=NONE cterm=NONE guifg=#ffefff guibg=#303030 gui=NONE
     hi MsgArea ctermfg=15 ctermbg=NONE cterm=NONE guifg=#c6c6c6 guibg=#000020 gui=NONE
     hi MsgSeparator ctermfg=NONE ctermbg=57 cterm=NONE guifg=NONE guibg=#aff0a0 gui=NONE

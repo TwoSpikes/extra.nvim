@@ -55,9 +55,54 @@ if !has('nvim')
 	set nocompatible
 endif
 
-set statusline=%#Loading0#Loading\ 0%%
 hi Loading0 ctermfg=0 ctermbg=9 cterm=bold guifg=#303030 guibg=#ff0000 gui=bold
+hi Loading13 ctermfg=0 ctermbg=196 cterm=bold guifg=#303030 guibg=#ff4000 gui=bold
+hi Loading25 ctermfg=0 ctermbg=208 cterm=bold guifg=#303030 guibg=#ff8000 gui=bold
+hi Loading38 ctermfg=0 ctermbg=220 cterm=bold guifg=#303030 guibg=#ffc000 gui=bold
+hi Loading50 ctermfg=0 ctermbg=11 cterm=bold guifg=#303030 guibg=#ffff00 gui=bold
+hi Loading63 ctermfg=0 ctermbg=190 cterm=bold guifg=#303030 guibg=#c0ff00 gui=bold
+hi Loading75 ctermfg=0 ctermbg=118 cterm=bold guifg=#303030 guibg=#80ff00 gui=bold
+hi Loading88 ctermfg=0 ctermbg=82 cterm=bold guifg=#303030 guibg=#40ff00 gui=bold
+hi Loading100 ctermfg=0 ctermbg=10 cterm=bold guifg=#303030 guibg=#00ff00 gui=bold
+set statusline=%#Loading0#Loading\ 0%%
 mode
+
+function! SaveVars()
+	if v:false
+	\|| g:last_selected !=# ''
+	\|| g:last_open_term_program !=# ''
+		if !isdirectory(expand(g:LOCALSHAREPATH).'/extra.nvim')
+			call mkdir(expand(g:LOCALSHAREPATH).'/extra.nvim', 'p')
+		endif
+	endif
+	if g:last_selected !=# ''
+		call writefile([g:last_selected], expand(g:LOCALSHAREPATH).'/extra.nvim/last_selected.txt')
+	endif
+	if g:last_open_term_program !=# ''
+		call writefile([g:last_open_term_program], expand(g:LOCALSHAREPATH).'/extra.nvim/last_open_term_program.txt')
+	endif
+endfunction
+let g:termux_cursor_style = "bar"
+function! TermuxLoadCursorStyle()
+	if $TERMUX_VERSION !=# "" && filereadable(expand("~/.termux/termux.properties"))
+		if g:termux_cursor_style ==# 'block'
+			let &guicursor = 'a:block'
+		elseif g:termux_cursor_style ==# 'bar'
+			let &guicursor = 'a:ver25'
+		elseif g:termux_cursor_style ==# 'underline'
+			let &guicursor = 'a:hor25'
+		endif
+	endif
+endfunction
+function! OnQuit()
+	call TermuxLoadCursorStyle()
+	if v:false
+	\|| g:compatible ==# "helix"
+	\|| g:compatible ==# "helix_hard"
+		call SaveVars()
+	endif
+endfunction
+autocmd! VimLeave * call OnQuit()
 
 function! SetExNvimConfigPath()
 	if !exists('g:EXNVIM_CONFIG_PATH') || g:EXNVIM_CONFIG_PATH ==# ""
@@ -307,6 +352,408 @@ function! SetConfigPath()
 endfunction
 call SetConfigPath()
 
+function! HandleExNvimConfig()
+	if g:background ==# "dark"
+		set background=dark
+	elseif g:background ==# "light"
+		set background=light
+	else
+		echohl ErrorMsg
+		if g:language ==# 'russian'
+			echomsg "extra.nvim конфиг: блядь: неправильное значение заднего фона: ".g:background
+		else
+			echomsg "extra.nvim config: Error: wrong background value: ".g:background
+		endif
+		echohl Normal
+
+		let g:background = "dark"
+		set background=dark
+	endif
+
+	if g:language ==# 'auto'
+		if $LANG ==# 'ru_RU.UTF-8' || $TERMUX_LANG ==# 'ru_RU.UTF-8'
+			let g:language = 'russian'
+		else
+			let g:language = 'english'
+		endif
+	endif
+endfunction
+call HandleExNvimConfig()
+function! Update_CursorLine_Style()
+	if exists('g:updating_cursorline_supported')
+		call Update_CursorLine()
+	else
+		execute "colorscheme" g:colors_name
+	endif
+endfunction
+
+function! SetGitBranch()
+	let g:gitbranch = split(system('git rev-parse --abbrev-ref HEAD 2> /dev/null'))
+	if len(g:gitbranch) > 0
+		let g:gitbranch = g:gitbranch[0]
+	else
+		let g:gitbranch = ''
+	endif
+endfunction
+call SetGitBranch()
+function! GetGitBranch()
+	return g:gitbranch
+endfunction
+
+let g:exnvim_fully_loaded = 0
+let g:specloading=" 25 "
+
+let s:custom_mode = ''
+let s:specmode = ''
+function! Showtab()
+	if v:false
+	elseif v:false
+	\|| &filetype ==# 'neo-tree'
+	\|| &filetype ==# 'musicplayer'
+		return bufname('')
+	endif
+	if g:compatible !=# "helix_hard"
+		let stl_name = '%<%t'
+		let stl_name .= '%( %* %#StatusLinemod#%M%R%H%W%)%*'
+	else
+		let stl_name = '%* %<%t'
+		let stl_name .= '%( %#StatusLinemod#%M%R%H%W%)%*'
+	endif
+	if g:compatible !=# "helix_hard"
+		if &columns ># 40
+			let stl_name .= '%( %#StatusLinemod#'
+			let stl_name .= &syntax
+			let stl_name .= '%)%*'
+		endif
+	endif
+	if g:compatible !=# "helix_hard"
+		if &columns ># 45
+			let stl_name .= '%( %#Statuslinemod#'
+			let stl_name .= '%{GetGitBranch()}'
+			let stl_name .= '%)%*'
+		endif
+	endif
+	let mode = mode('lololol')
+	let strmode = ''
+	if mode == 'n'
+		if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
+			let strmode = '%#ModeNorm# '
+		else
+			if g:language ==# 'russian'
+				let strmode = '%#ModeNorm# НОР '
+			else
+				let strmode = '%#ModeNorm# NOR '
+			endif
+		endif
+	elseif mode == 'no'
+		if g:language ==# 'russian'
+			let strmode = 'ЖДУ_ОПЕР '
+		else
+			let strmode = 'OP_PEND '
+		endif
+	elseif mode == 'nov'
+		if g:language ==# 'russian'
+			let strmode = 'визуал ЖДУ_ОПЕР '
+		else
+			let strmode = 'visu OP_PEND '
+		endif
+	elseif mode == 'noV'
+		if g:language ==# 'russian'
+			let strmode = 'виз_лин ЖДУ_ОПЕР '
+		else
+			let strmode = 'vis_line OP_PEND '
+		endif
+	elseif mode == 'noCTRL-v'
+		if g:language ==# 'russian'
+			let strmode = 'виз_блок ЖДУ_ОПЕР '
+		else
+			let strmode = 'vis_block OP_PEND '
+		endif
+	elseif mode == 'niI'
+		if g:language ==# 'russian'
+			let strmode = '^o ВСТ '
+		else
+			let strmode = '^o INS '
+		endif
+	elseif mode == 'niR'
+		if g:language ==# 'russian'
+			let strmode = '^o ЗАМЕНА '
+		else
+			let strmode = '^o REPL '
+		endif
+	elseif mode == 'niV'
+		if g:language ==# 'russian'
+			let strmode = '^o визуал ЗАМЕНА '
+		else
+			let strmode = '^o visu REPL '
+		endif
+	elseif mode == 'nt'
+		if g:language ==# 'russian'
+			let strmode = '%#ModeNorm# НОРМ %#StatuslinestatNormTerm#%#ModeTerm# '
+		else
+			let strmode = '%#ModeNorm# NORM %#StatuslinestatNormTerm#%#ModeTerm# '
+		endif
+	elseif mode == 'ntT'
+		if g:language ==# 'russian'
+			let strmode = '^\^o норм ТЕРМ '
+		else
+			let strmode = '^\^o norm TERM '
+		endif
+	elseif mode == 'v'
+		if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
+			let strmode = '%#ModeVisu# '
+		else
+			if g:pseudo_visual
+				if g:compatible !=# "helix_hard"
+					if g:language ==# 'russian'
+						let strmode = '%#ModeVisu# НОР '
+					else
+						let strmode = '%#ModeVisu# NOR '
+					endif
+				else
+					if g:language ==# 'russian'
+						let strmode = '%#ModeNorm# НОР '
+					else
+						let strmode = '%#ModeNorm# NOR '
+					endif
+				endif
+			else
+				if g:language ==# 'russian'
+					let strmode = '%#ModeVisu# ВЫБ '
+				else
+					let strmode = '%#ModeVisu# SEL '
+				endif
+			endif
+		endif
+	elseif mode == 'V'
+		if g:language ==# 'russian'
+			let strmode = 'ВИЗ_ЛИНИЯ '
+		else
+			let strmode = 'VIS_LINE '
+		endif
+	elseif mode == 'vs'
+		if g:language ==# 'russian'
+			let strmode = '^o визуал ВЫБ '
+		else
+			let strmode = '^o visu SEL '
+		endif
+	elseif mode == 'CTRL-V'
+		if g:language ==# 'russian'
+			let strmode = 'ВИЗ_БЛОК '
+		else
+			let strmode = 'VIS_BLOCK '
+		endif
+	elseif mode == 'CTRL-Vs'
+		if g:language ==# 'russian'
+			let strmode = '^o виз_блок ВЫБ '
+		else
+			let strmode = '^o vis_block SEL '
+		endif
+	elseif mode == 's'
+		if g:language ==# 'russian'
+			let strmode = 'ВЫБ '
+		else
+			let strmode = 'SEL '
+		endif
+	elseif mode == 'S'
+		if g:language ==# 'russian'
+			let strmode = 'ВЫБ ЛИНИЯ'
+		else
+			let strmode = 'SEL LINE '
+		endif
+	elseif mode == "\<c-v>"
+		if g:language ==# 'russian'
+			if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
+				let strmode = '%#ModeVisu#визуал %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
+			else
+				if g:pseudo_visual
+					let strmode = '%#ModeVisu#нор %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
+				else
+					let strmode = '%#ModeVisu#виз %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
+				endif
+			endif
+		else
+			let strmode = '%#ModeVisu#visu %#StatuslinestatVisuBlock#%#ModeBlock# BLOCK '
+		endif
+	elseif mode == 'i'
+		if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
+			let strmode = '%#ModeIns# '
+		else
+			if g:language ==# 'russian'
+				let strmode = '%#ModeIns# ВСТ '
+			else
+				let strmode = '%#ModeIns# INS '
+			endif
+		endif
+	elseif mode == 'ic'
+		if g:language ==# 'russian'
+			let strmode = 'дополн ВСТ '
+		else
+			let strmode = 'compl INS '
+		endif
+	elseif mode == 'ix'
+		if g:language ==# 'russian'
+			let strmode = '%#ModeCom#^x дополн%#ModeIns#ВСТ '
+		else
+			let strmode = '%#ModeCom#^x compl%#ModeIns#INS '
+		endif
+	elseif mode == 'R'
+		let strmode = '%#ModeRepl# '
+	elseif mode == 'Rc'
+		if g:language ==# 'russian'
+			let strmode = 'дополн ЗАМЕНА '
+		else
+			let strmode = 'compl REPL '
+		endif
+	elseif mode == 'Rx'
+		let strmode = '^x compl REPL '
+	elseif mode == 'Rv'
+		if g:language ==# 'russian'
+			let strmode = '%#ModeIns#визуал%*%#ModeRepl#ЗАМЕНА '
+		else
+			let strmode = '%#ModeIns#visu%*%#ModeRepl#REPL '
+		endif
+	elseif mode == 'Rvc'
+		let strmode = 'compl visu REPL '
+	elseif mode == 'Rvx'
+		let strmode = '^x compl visu REPL '
+	elseif mode == 'c'
+		if s:specmode == 'b'
+			if g:language ==# 'russian'
+				let strmode = 'КОМ_БЛОК '
+			else
+				let strmode = 'COM_BLOCK '
+			endif
+		else
+			if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
+				let strmode = '%#ModeCom# '
+			else
+				if g:language ==# 'russian'
+					let strmode = '%#ModeCom# КОМ '
+				else
+					let strmode = '%#ModeCom# COM '
+				endif
+			endif
+		endif
+	elseif mode == 'cv'
+		if g:language ==# 'russian'
+			let strmode = 'EX '
+		else
+			let strmode = 'EX '
+		endif
+	elseif mode == 'r'
+		if g:language ==# 'russian'
+			let strmode = 'НАЖ_ВОЗВР '
+		else
+			let strmode = 'HIT_RET '
+		endif
+	elseif mode == 'rm'
+		if g:language ==# 'russian'
+			let strmode = 'ДАЛЕЕ '
+		else
+			let strmode = 'MORE '
+		endif
+	elseif mode == 'r?'
+		if g:language ==# 'russian'
+			let strmode = 'ПОДТВЕРД '
+		else
+			let strmode = 'CONFIRM '
+		endif
+	elseif mode == '!'
+		if g:language ==# 'russian'
+			let strmode = 'ОБОЛОЧ '
+		else
+			let strmode = 'SHELL '
+		endif
+	elseif mode == 't'
+		let strmode = '%#ModeTerm# '
+	else
+		echohl ErrorMsg
+		if g:language ==# 'russian'
+			echomsg "блядь: Неправильный режим: ".mode()
+		else
+			echomsg "error: Wrong mode: ".mode()
+		endif
+		echohl Normal
+	endif
+	"let stl_time = '%{strftime("%b,%d %H:%M:%S")}'
+	
+	let stl_pos = ''
+	let stl_pos .= '%l:%c'
+	if &columns ># 35
+		let stl_pos .= ' %LL'
+	endif
+
+	let stl_showcmd = '%(%#Statuslinemod#%S%*%)'
+	if g:compatible !=# "helix_hard"
+		let stl_buf = '#%n %p%%'
+	endif
+	let stl_mode_to_put = ''
+	if &columns ># 20
+		let stl_mode_to_put .= strmode
+		let stl_mode_to_put .= s:custom_mode?' '.s:custom_mode:''
+		let stl_mode_to_put .= ''
+	endif
+
+	let s:result = stl_mode_to_put
+	let s:result .= stl_name
+	if g:compatible !=# "helix_hard"
+		if &columns ># 30
+			let &showcmdloc = 'statusline'
+			let s:result .= ' '
+			let s:result .= stl_showcmd
+		else
+			let &showcmdloc = 'last'
+		endif
+	endif
+	let s:result .= '%='
+	let is_macro_recording = reg_recording()
+	if is_macro_recording !=# ''
+		let s:result .= '%#Statusline0mac#'
+		if is_macro_recording =~# '^\u$'
+			let s:result .= '%#Statuslinemac# REC '.is_macro_recording.' '
+		else
+			let s:result .= '%#Statuslinemac# rec '.is_macro_recording.' '
+		endif
+	endif
+	if &columns ># 45
+		if g:compatible !=# "helix_hard"
+			if is_macro_recording !=# ''
+				let s:result .= '%#Statuslinemac1#'
+			else
+				let s:result .= '%#Statuslinestat01#'
+			endif
+			let s:result .= ''
+			let s:result .= '%#Statuslinestat1#'
+		endif
+		let s:result .= ' '
+	endif
+	if &columns ># 30
+		let s:result .= stl_pos
+	endif
+	if g:compatible !=# "helix_hard"
+		if &columns ># 45
+			let s:result .= ' '
+		endif
+		if &columns ># 45
+			let s:result .= '%#Statuslinestat12#'
+			let s:result .= ''
+		endif
+	endif
+	if &columns ># 30
+		if g:compatible !=# "helix_hard"
+				let s:result .= '%#Statuslinestat2# '
+				let s:result .= stl_buf
+		endif
+		let s:result .= ' '
+	endif
+	if g:exnvim_fully_loaded !=# 3
+		let s:result .= '%#Loading#'.g:specloading
+	endif
+	return s:result
+endfunction
+command! -nargs=0 Showtab set stl=%{%Showtab()%}
+
 function! IsHightlightGroupDefined(group)
 	silent! let output = execute('hi '.a:group)
 	return output !~# 'E411:'
@@ -363,195 +810,9 @@ function! ApplyColorscheme(colorscheme)
 	endif
 endfunction
 call ApplyColorscheme(g:selected_colorscheme)
+Showtab
+mode
 
-augroup colorscheme_manage
-	autocmd!
-	function! ColorSchemeManagePre()
-		if exists('g:cursorline_style_supported')
-			if exists('g:cursorline_style')
-				let g:cursorline_style = g:cursorline_style_supported[g:cursorline_style]
-			endif
-			unlet g:cursorline_style_supported
-			if exists('g:updating_cursorline_supported')
-				unlet g:updating_cursorline_supported
-			endif
-		endif
-		if exists('g:updating_cursor_style_supported')
-			unlet g:updating_cursor_style_supported
-		endif
-	endfunction
-	autocmd ColorSchemePre * call ColorSchemeManagePre()
-augroup END
-
-if has('nvim')
-	augroup LineNrForInactive
-		autocmd!
-		function! s:SaveStc(clear_stc, winnr=winnr())
-			execute printf("let g:stc_was_%d = &l:stc", win_getid(a:winnr))
-			if a:clear_stc
-				call setwinvar(a:winnr, '&stc', '')
-			endif
-		endfunction
-		autocmd! WinLeave * call s:SaveStc(v:true)
-		function! s:LoadStc(winnr=winnr())
-			if exists("g:stc_was_"..win_getid(a:winnr))==#1
-				call setwinvar(a:winnr, '&stc', eval("g:stc_was_"..win_getid(a:winnr)))
-			else
-				call setwinvar(a:winnr, '&stc', '')
-			endif
-		endfunction
-		autocmd! WinEnter * call s:LoadStc()
-	augroup END
-endif
-
-function! STCRel(winnr=winnr())
-	if has('nvim')
-		if mode() =~? 'v.*' || mode() ==# "\<c-v>"
-			call setwinvar(a:winnr, '&stc', '%#CursorLineNrVisu#%{%v:relnum?"%#LineNrVisu#":((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:relnum:""):""} ')
-			call CopyHighlightGroup("StatementVisu", "Statement")
-			return
-		endif
-		call setwinvar(a:winnr, '&stc', '%#CursorLineNr#%{%v:relnum?"%#LineNr#":((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:relnum:""):""} ')
-		call CopyHighlightGroup("StatementNorm", "Statement")
-		call s:SaveStc(v:false)
-	else
-		call setwinvar(a:winnr, '&number', v:true)
-		call setwinvar(a:winnr, '&relativenumber', v:true)
-	endif
-endfunction
-function! STCNo(winnr=winnr())
-	if has('nvim')
-		call setwinvar(a:winnr, '&stc', '')
-	endif
-	setlocal nonu nornu
-	call setwinvar(a:winnr, '&number', v:false)
-	call setwinvar(a:winnr, '&relativenumber', v:false)
-endfunction
-function! STCNoAll()
-	tabdo windo call STCNo(winnr())
-endfunction
-
-function! Numbertoggle_stcrel(winnr)
-	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
-		call STCRel(a:winnr)
-	else
-		call STCNo(a:winnr)
-	endif
-endfunction
-function! Numbertoggle(mode='', winnr=winnr())
-	if a:mode =~? 'i' || a:mode =~? 'r' || g:linenr_style ==# 'absolute'
-		call Numbertoggle_stcabs(a:mode, a:winnr)
-	else
-		call Numbertoggle_stcrel(a:winnr)
-	endif
-endfunction
-function! NumbertoggleAll(mode='')
-	tabdo windo call Numbertoggle(a:mode, winnr())
-endfunction
-function! Numbertoggle_no()
-	if has('nvim')
-		set stc=
-	endif
-	set nonu nornu
-endfunction
-
-function! PreserveAndDo(cmd, preserve_tab, preserve_win)
-	if a:preserve_tab
-		let old_tabpagenr = tabpagenr()
-	endif
-	if a:preserve_win
-		let old_winnr = winnr()
-	endif
-	exec a:cmd
-	if a:preserve_tab
-		execute old_tabpagenr 'tabnext'
-	endif
-	if a:preserve_win
-		execute old_winnr 'wincmd w'
-	endif
-endfunction
-
-function! DefineAugroupVisual()
-	augroup Visual
-		autocmd!
-		if g:linenr
-			execute "autocmd! ModeChanged {\<c-v>*,[vV]*}:* call Numbertoggle(mode())"
-			execute "autocmd! ModeChanged *:{\<c-v>*,[vV]*} call Numbertoggle('v')"
-		else
-			autocmd! Visual
-		endif
-	augroup END
-endfunction
-function! DefineAugroupNumbertoggle()
-	augroup numbertoggle
-		autocmd!
-		if g:linenr
-			autocmd InsertLeave * call Numbertoggle('')
-			autocmd InsertEnter * call Numbertoggle(v:insertmode)
-			autocmd BufReadPost,BufEnter,BufLeave,WinLeave,WinEnter * call Numbertoggle()
-			autocmd FileType packer,spectre_panel,man call Numbertoggle()|call HandleBuftype(winnr())
-		else
-			autocmd! numbertoggle
-		endif
-	augroup END
-endfunction
-
-augroup UnfocusFiletype
-	autocmd!
-	autocmd BufWinEnter * if &filetype==#'notify'|wincmd p|endif
-augroup END
-
-function! UpdateShowtabline()
-	let &showtabline = g:showtabline
-endfunction
-
-function! DefineAugroups()
-	call DefineAugroupVisual()
-	call DefineAugroupNumbertoggle()
-endfunction
-function! HandleExNvimConfig()
-	if g:background ==# "dark"
-		set background=dark
-	elseif g:background ==# "light"
-		set background=light
-	else
-		echohl ErrorMsg
-		if g:language ==# 'russian'
-			echomsg "extra.nvim конфиг: блядь: неправильное значение заднего фона: ".g:background
-		else
-			echomsg "extra.nvim config: Error: wrong background value: ".g:background
-		endif
-		echohl Normal
-
-		let g:background = "dark"
-		set background=dark
-	endif
-
-	call DefineAugroups()
-	if !g:linenr
-		call STCNo()
-	else
-		call Numbertoggle()
-	endif
-
-	call UpdateShowtabline()
-
-	if g:language ==# 'auto'
-		if $LANG ==# 'ru_RU.UTF-8' || $TERMUX_LANG ==# 'ru_RU.UTF-8'
-			let g:language = 'russian'
-		else
-			let g:language = 'english'
-		endif
-	endif
-endfunction
-call HandleExNvimConfig()
-function! Update_CursorLine_Style()
-	if exists('g:updating_cursorline_supported')
-		call Update_CursorLine()
-	else
-		execute "colorscheme" g:colors_name
-	endif
-endfunction
 function! RehandleExNvimConfig()
 	if exists('g:cursorline_style_supported')
 		let g:cursorline_style = index(g:cursorline_style_supported, g:cursorline_style)
@@ -563,6 +824,9 @@ function! RehandleExNvimConfig()
 endfunction
 
 let mapleader = " "
+
+let g:specloading=" 50 "
+mode
 
 function! SetLocalSharePath()
 	if !exists('g:LOCALSHAREPATH') || g:LOCALSHAREPATH ==# ''
@@ -594,8 +858,6 @@ endif
 if has('nvim')
 	execute "luafile ".expand(g:CONFIG_PATH)."/lua/lib/vim/plugins.lua"
 endif
-
-set statusline=%#Loading25#Loading\ 25%%
 
 " Random options
 set termguicolors
@@ -680,298 +942,7 @@ set showcmd
 set showcmdloc=statusline
 set laststatus=2
 
-function! SetGitBranch()
-	let s:gitbranch = split(system('git rev-parse --abbrev-ref HEAD 2> /dev/null'))
-	if len(s:gitbranch) > 0
-		let s:gitbranch = s:gitbranch[0]
-	else
-		let s:gitbranch = ''
-	endif
-endfunction
-augroup gitbranch
-	autocmd!
-	autocmd BufEnter,BufLeave * call SetGitBranch()
-augroup END
-function! GetGitBranch()
-	return s:gitbranch
-endfunction
-
-command! -nargs=* Pkg !pkg <args>
-function! DotfilesCommit()
-	cd ~/dotfiles
-	!dotfiles commit --only-copy
-	Git commit --all --verbose
-endfunction
-command! -nargs=0 DotfilesCommit call DotfilesCommit()
-function! ExNvimCommit()
-	cd ~/extra.nvim
-	!exnvim commit --only-copy
-	Git commit --all --verbose
-endfunction
-command! -nargs=0 ExNvimCommit call ExNvimCommit()
-
-function! GenerateExNvimConfig()
-	tabnew
-	if !executable('exnvim')
-		echohl ErrorMsg
-		echomsg "error: exnvim not installed"
-		echohl Normal
-		return
-	endif
-	call OpenTerm('exnvim setup')
-endfunction
-command! -nargs=0 GenerateExNvimConfig call GenerateExNvimConfig()
 nnoremap <leader>G <cmd>GenerateExNvimConfig<cr>
-
-function! MyTabLabel(n)
-	let buflist = tabpagebuflist(a:n)
-	let winnr = tabpagewinnr(a:n)
-	let original_buf_name = bufname(buflist[winnr - 1])
-	let bufnr = bufnr(original_buf_name)
-	let buftype = getbufvar(bufnr, '&buftype')
-	let filetype = getbufvar(bufnr, '&filetype')
-	if v:false
-	elseif buftype ==# "terminal"
-		if g:language ==# 'russian'
-			let buf_name = '[Терм]'
-		else
-			let buf_name = '[Term]'
-		endif
-	elseif filetype ==# "alpha"
-		if g:language ==# 'russian'
-			let buf_name = '[Меню]'
-		else
-			let buf_name = '[Menu]'
-		endif
-	elseif filetype ==# "spectre_panel"
-		if g:language ==# 'russian'
-			let buf_name = '[Spectre]'
-		else
-			let buf_name = '[Spectre]'
-		endif
-	elseif filetype ==# "neo-tree"
-		if g:language ==# 'russian'
-			let buf_name = '[NeoTree]'
-		else
-			let buf_name = '[NeoTree]'
-		endif
-	elseif filetype ==# "TelescopePrompt"
-		if g:language ==# 'russian'
-			let buf_name = '[Телескоп]'
-		else
-			let buf_name = '[Telescope]'
-		endif
-	elseif filetype ==# "gitcommit"
-		if g:language ==# 'russian'
-			let buf_name = '[Коммит]'
-		else
-			let buf_name = '[Commit]'
-		endif
-	elseif v:false
-	\|| filetype ==# "packer"
-		let buf_name = original_buf_name
-	elseif buftype ==# "nofile"
-		if g:language ==# 'russian'
-			let buf_name = '[НеФайл]'
-		else
-			let buf_name = '[NoFile]'
-		endif
-	elseif original_buf_name == ''
-		if g:language ==# 'russian'
-			let buf_name = '[БезИмени]'
-		else
-			let buf_name = '[NoName]'
-		endif
-	else
-		let buf_name = original_buf_name
-		if g:tabline_path ==# "name"
-			return fnamemodify(buf_name, ':t')
-		elseif g:tabline_path ==# "short"
-			return fnamemodify(buf_name, ':~:.')
-		elseif g:tabline_path ==# "shortdir"
-			return fnamemodify(buf_name, ':~:.:gs?\([^/]\)[^/]*/?\1/?')
-		elseif g:tabline_path ==# "full"
-			return fnamemodify(buf_name, ':p')
-		endif
-		echohl ErrorMsg
-		echomsg "extra.nvim: config: error: wrong tabline_path: ".g:tabline_path
-		echohl Normal
-		return 0
-	endif
-	return buf_name
-endfunction
-function! MyTabLine()
-  let s = ''
-  for i in range(tabpagenr('$'))
-    if i + 1 == tabpagenr()
-      let s ..= '%#TabLineSel#'
-    elseif (i - tabpagenr()) % 2 == 0
-		let s ..= '%#TabLine#'
-	elseif i !=# tabpagenr('$') - 1
-		let s ..= '%#TabLineSec#'
-    endif
-
-	if g:tabline_pressable
-		" set the tab page number (for mouse clicks)
-		let s ..= '%' .. (i + 1) .. 'T'
-	endif
-
-	if g:tabline_spacing ==# 'full'
-		let s ..= ' '
-	elseif g:tabline_spacing ==# 'partial'
-		if i !=# tabpagenr()
-			let s ..= ' '
-		endif
-	elseif g:tabline_spacing ==# 'transition'
-		if i ==# tabpagenr()
-			let s ..= '%#TabLineFromSel#'
-		elseif i !=# 0 && i !=# tabpagenr() - 1 && (i - tabpagenr() - 1) % 2 ==# 0
-			let s ..= '%#TabLineToSec#'
-		endif
-		let s ..= ' '
-	endif
-
-    if i + 1 == tabpagenr()
-      let s ..= '%#TabLineSel#'
-    elseif (i - tabpagenr()) % 2 == 0
-		let s ..= '%#TabLine#'
-	else
-		let s ..= '%#TabLineSec#'
-    endif
-	let bufnr = tabpagebuflist(i + 1)[tabpagewinnr(i + 1) - 1]
-	let bufname = bufname(bufnr)
-
-	if g:tabline_icons
-		if v:false
-		elseif getbufvar(bufnr, '&buftype') ==# 'terminal'
-			let s ..= ' '
-		elseif v:false
-		\||isdirectory(bufname)
-		\||getbufvar(bufnr, '&filetype') ==# 'neo-tree'
-			let s ..= ' '
-		elseif fnamemodify(bufname, ':t') ==# 'LICENSE'
-			let s ..= ' '
-		elseif v:false
-		\||getbufvar(bufnr, '&filetype') ==# ''
-		\||getbufvar(bufnr, '&filetype') ==# 'text'
-			let s ..= '󰈙 '
-		elseif getbufvar(bufnr, '&filetype') ==# 'python'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'c'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'cpp'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'vim'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'lua'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'cs'
-			let s ..= '󰌛 '
-		elseif getbufvar(bufnr, '&filetype') ==# 'sh'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'bash'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'rust'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'java'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'scala'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'kotlin'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'ruby'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'ocaml'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'r'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'javascript'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'typescript'
-			let s ..= '󰛦 '
-		elseif v:false
-		\||getbufvar(bufnr, '&filetype') ==# 'javascriptreact'
-		\||getbufvar(bufnr, '&filetype') ==# 'typescriptreact'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'perl'
-			let s ..= ' '
-		elseif v:false
-		\||getbufvar(bufnr, '&filetype') ==# 'jproperties'
-		\||getbufvar(bufnr, '&filetype') ==# 'conf'
-		\||getbufvar(bufnr, '&filetype') ==# 'toml'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'json'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'html'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'css'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'sass'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'd'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'asm'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'r'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'go'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'fortran'
-			let s ..= '󱈚 '
-		elseif getbufvar(bufnr, '&filetype') ==# 'swift'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'php'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'dart'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'haskell'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'erlang'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'julia'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'gitcommit'
-			let s ..= ' '
-		elseif getbufvar(bufnr, '&filetype') ==# 'markdown'
-			let s ..= ' '
-		endif
-	endif
-
-    " the label is made by MyTabLabel()
-    let s ..= '%{MyTabLabel(' .. (i + 1) .. ')}'
-
-	if g:tabline_modified
-		if getbufvar(bufnr, '&modified')
-			let s ..= ' ●'
-		endif
-	endif
-	
-	if g:tabline_spacing ==# 'full'
-		let s ..= ' '
-	elseif g:tabline_spacing ==# 'partial'
-		if i !=# tabpagenr() - 2
-			let s ..= ' '
-		endif
-	elseif g:tabline_spacing ==# 'transition'
-		let s ..= ' '
-		if i ==# tabpagenr() - 2
-			let s ..= '%#TabLineToSel#'
-		elseif i !=# tabpagenr('$') - 1 && i !=# tabpagenr() - 1 && (i - tabpagenr()) % 2 !=# 0
-			let s ..= '%#TabLineFromSec#'
-		endif
-	endif
-  endfor
-
-  " after the last tab fill with TabLineFill and reset tab page nr
-  let s ..= '%#TabLineFill#%T'
-
-	" let s ..= '%=%#TabLine#%999Xclose'
-
-  return s
-endfunction
-if g:compatible !=# "helix_hard"
-	set tabline=%!MyTabLine()
-endif
 
 " Edit options
 set hidden
@@ -1037,14 +1008,8 @@ set smartindent
 set smarttab
 set noexpandtab
 
-command! -nargs=0 SWrap if !&wrap|setl wrap linebreak nolist|else|setl nowrap nolinebreak list|endif
 if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
 	nnoremap <leader>sW <cmd>SWrap<cr>
-endif
-
-if v:version >= 700
-  autocmd BufLeave * let b:winview = winsaveview()
-  autocmd BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 endif
 
 nnoremap <silent> dd ddk
@@ -1054,161 +1019,12 @@ nnoremap <silent> + mz<cmd>let line=getline('.')<bar>call append(line('.'), line
 noremap <silent> J mzJ`z
 noremap <silent> gJ mzgJ`z
 
-let s:fullscreen = v:false
-function! ToggleFullscreen()
-	if !s:fullscreen
-		let s:fullscreen = v:true
-		let s:old_cursorline = &cursorline
-		let s:old_cursorcolumn = &cursorcolumn
-		let s:old_showtabline = &showtabline
-		let s:old_laststatus = &laststatus
-		let s:old_showcmdloc = &showcmdloc
-		let s:old_showmode = &showmode
-		let s:old_ruler = &ruler
-		set nocursorline
-		set nocursorcolumn
-		set showtabline=0
-		set laststatus=0
-		set showcmdloc=last
-		set showmode
-		set ruler
-	else
-		let s:fullscreen = v:false
-		let &cursorline = s:old_cursorline
-		let &cursorcolumn = s:old_cursorcolumn
-		let &showtabline = s:old_showtabline
-		let &laststatus = s:old_laststatus
-		let &showcmdloc = s:old_showcmdloc
-		let &showmode = s:old_showmode
-		let &ruler = s:old_ruler
-		echon ''
-	endif
-endfunction
-command! ToggleFullscreen call ToggleFullscreen()
 noremap <leader><c-f> <cmd>ToggleFullscreen<cr>
 noremap <f3> <cmd>ToggleFullscreen<cr>
 
 noremap <c-t> <cmd>TagbarToggle<cr>
 
 nnoremap <leader>xg <cmd>grep <cword> .<cr>
-
-function! RedefineProcessGBut()
-let process_g_but_function_expression = "
-\function! ProcessGBut(button)
-\"
-if !g:disable_animations
-if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
-let process_g_but_function_expression .= "
-\\n	let old_c=col('.')
-\\n	let old_l=line('.')
-\"
-endif
-if g:fast_terminal
-let process_g_but_function_expression .= "
-\\n	if &buftype !=# 'terminal'
-\\n		set lazyredraw
-\\n	endif
-\"
-endif
-if has('nvim')
-let process_g_but_function_expression .= "
-\\n	execute \"lua << EOF
-\\\nlocal button ="
-if g:do_not_save_previous_column_position_when_going_up_or_down&&g:compatible ==# "helix" || g:compatible ==# "helix_hard"
-let process_g_but_function_expression .= "\\\"mz`z\\\".."
-endif
-let process_g_but_function_expression .= "
-\(vim.v.count == 0 and \'g\".a:button.\"\' or \'\".a:button.\"\')
-\"
-if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
-let process_g_but_function_expression .= "
-\\\nif vim.g.pseudo_visual then
-\\\n    button = \\\"\\<esc>\\\"..button
-\\\nend"
-endif
-let process_g_but_function_expression .= "
-\\\nfor _=1,vim.v.count1,1 do
-\\\nvim.api.nvim_feedkeys(button,\\\"n\\\",false)
-\\\nend
-\\\nEOF\"
-\\n"
-else
-let process_g_but_function_expression .= "
-\\nif v:count ==# 0
-\\nexe \"norm! g\".a:button
-\\nelse
-\\nexe \"norm! \".v:count1.a:button
-\\nendif
-\\n"
-if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
-let process_g_but_function_expression .= "
-\\nif g:pseudo_visual
-\\n	call feedkeys(\"\\<c-\\>\\<c-n>\")
-\\nendif
-\\n"
-endif
-endif
-
-if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
-	let process_g_but_function_expression .= "
-	\\n	call ReorderRightLeft()
-	\\n	call SavePosition(old_c, old_l, col('.'), line('.'))
-	\"
-endif
-
-if g:fast_terminal
-let process_g_but_function_expression .= "
-\\n	if &buftype !=# 'terminal'
-\\n		set nolazyredraw
-\\n	endif
-\"
-endif
-else
-let process_g_but_function_expression .= "
-\\n	let button=v:count==#0?\"g\".a:button:a:button
-\"
-if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
-let process_g_but_function_expression .= "
-\\n	let old_c=col('.')
-\\n	let old_l=line('.')
-\"
-endif
-let process_g_but_function_expression .= "
-\\n	execute \"norm! \".v:count1.button
-\"
-if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
-let process_g_but_function_expression .= "
-\\n	if g:pseudo_visual
-\\n		call feedkeys(\"\\<c-\\>\\<c-n>\")
-\\n	endif
-\\n	call ReorderRightLeft()
-\\n	call SavePosition(old_c, old_l, col('.'), line('.'))
-\"
-endif
-endif
-let process_g_but_function_expression .= "
-\\nendfunction"
-execute process_g_but_function_expression
-endfunction
-call RedefineProcessGBut()
-
-set statusline=%#Loading50#Loading\ 50%%
-
-function! JKWorkaroundAlpha()
-	noremap <buffer> j <cmd>call ProcessGBut('j')<cr>
-	noremap <buffer> k <cmd>call ProcessGBut('k')<cr>
-	if !g:open_cmd_on_up
-		noremap <up> <cmd>call ProcessGBut('k')<cr>
-	endif
-	noremap <down> <cmd>call ProcessGBut('j')<cr>
-endfunction
-function! JKWorkaround()
-	noremap k <cmd>call ProcessGBut('k')<cr>
-	if !isdirectory(g:LOCALSHAREPATH.'/site/pack/packer/start/endscroll.nvim')
-		noremap j <cmd>call ProcessGBut('j')<cr>
-	endif
-endfunction
-call JKWorkaround()
 
 noremap <c-a> 0
 noremap <c-e> $
@@ -1296,11 +1112,6 @@ execute printf('noremap <silent> <leader>sj <cmd>call LoadExNvimConfig("%s", v:t
 if filereadable(expand("~/.dotfiles-script.sh"))
 	noremap <silent> <leader>vb <cmd>call SelectPosition("~/.dotfiles-script.sh", g:stdpos)<cr>
 endif
-
-autocmd BufReadPost *
-     \ if line("'\"") > 0 && line("'\"") <= line("$") |
-     \   execute "normal! g`\"" |
-     \ endif
 
 " FAST COMMANDS
 "noremap ; :
@@ -1418,6 +1229,10 @@ function! X_UncommentOut(comment_string)
 	call Comment_Move_Left(comment)
 	call PV()
 endfunction
+
+let g:specloading=" 75 "
+mode
+
 function! UncommentOutDefault_Define(mode)
 	execute "
 	\function! ".a:mode."_UncommentOutDefault()
@@ -1440,40 +1255,7 @@ nnoremap <leader>c <cmd>call N_CommentOutDefault()<cr>
 xnoremap <leader>c <c-\><c-n><cmd>call X_CommentOutDefault()<cr>
 nnoremap <leader>C <cmd>call N_UncommentOutDefault()<cr>
 xnoremap <leader>C <c-\><c-n><cmd>call X_UncommentOutDefault()<cr>
-augroup netrw
-	autocmd!
-	autocmd filetype netrw setlocal nocursorcolumn | call Numbertoggle()
-augroup END
-augroup neo-tree
-	autocmd!
-	autocmd filetype neo-tree setlocal nocursorcolumn | call Numbertoggle()
-augroup END
-augroup terminal
-	autocmd!
-	if has('nvim')
-		autocmd termopen * setlocal nocursorline nocursorcolumn | call STCNo()
-	endif
-augroup END
-augroup visual
-	function! HandleBuftype(winnum)
-		let filetype = getwinvar(a:winnum, '&filetype', 'ERROR')
-		let buftype = getwinvar(a:winnum, '&buftype', 'ERROR')
 
-		let pre_cursorcolumn = (mode() !~# "[vVirco]" && mode() !~# "\<c-v>") && !s:fullscreen && filetype !=# 'netrw' && buftype !=# 'terminal' && filetype !=# 'neo-tree' && buftype !=# 'nofile'
-		let pre_cursorcolumn = pre_cursorcolumn && g:cursorcolumn
-		call setwinvar(a:winnum, '&cursorcolumn', pre_cursorcolumn)
-
-		let pre_cursorline = !s:fullscreen
-		if exists('g:cursorline_style_supported') && g:cursorline_style_supported[g:cursorline_style] ==# "reverse"
-			let pre_cursorline = pre_cursorline && mode() !~# "[irco]"
-			let pre_cursorline = pre_cursorline && (buftype !=# 'nofile' || filetype ==# 'neo-tree') && filetype !=# 'TelescopePrompt' && filetype !=# 'spectre_panel' && filetype !=# 'packer'
-		endif
-		let pre_cursorline = pre_cursorline && buftype !=# 'terminal' && filetype !=# 'alpha' && filetype !=# "notify"
-		let pre_cursorline = pre_cursorline && g:cursorline
-		call setwinvar(a:winnum, '&cursorline', pre_cursorline)
-	endfunction
-	au ModeChanged,BufWinEnter * call HandleBuftype(winnr())
-augroup END
 function! HandleBuftypeAll()
 	tabdo windo call HandleBuftype(winnr())
 endfunction
@@ -1525,57 +1307,6 @@ noremap <silent> <c-x><c-q> <cmd>qall!<cr>
 noremap <silent> <c-x>s <cmd>w<cr>
 noremap <silent> <c-x>S <cmd>wall<Bar>echohl MsgArea<Bar>echo 'Saved all buffers'<cr>
 noremap <silent> <c-x><c-s> <cmd>w<cr>
-function! Killbuffer()
-	echohl Question
-	if g:language ==# 'russian'
-		let kill_buffer_label = 'Убить буфер'
-	else
-		let kill_buffer_label = 'Kill buffer'
-	endif
-	if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
-		let user_input = input(kill_buffer_label." (Y/n): ")
-		echohl Normal
-	else
-		let choice = quickui#confirm#open(kill_buffer_label, "&Yes\n&No", 1, 'Confirm')
-		if choice ==# 0
-			let user_input = 'n'
-		elseif choice ==# 1
-			let user_input = 'y'
-		else
-			let user_input = 'n'
-		endif
-	endif
-	if user_input ==# '' || IsYes(user_input)
-		call PleaseDoNotCloseIfNotOneWin('bdelete!')
-	elseif !IsNo(user_input)
-		echohl ErrorMsg
-		if g:language ==# 'russian'
-			echo " "
-			echo "Пожалуйста ответь "
-			echohl Title
-			echon "да"
-			echohl ErrorMsg
-			echon " или "
-			echohl Title
-			echon "нет"
-			echohl ErrorMsg
-			echon " или оставь бланк пустым"
-		else
-			echo " "
-			echo "Please answer "
-			echohl Title
-			echon "yes"
-			echohl ErrorMsg
-			echon " or "
-			echohl Title
-			echon "no"
-			echohl ErrorMsg
-			echon " or leave blank empty"
-		endif
-		echohl Normal
-	endif
-endfunction
-command! -nargs=0 Killbuffer call Killbuffer()
 noremap <silent> <c-x>k <cmd>Killbuffer<cr>
 noremap <silent> <c-x>0 <cmd>q<cr>
 noremap <silent> <c-x>1 <cmd>only<cr>
@@ -1590,41 +1321,6 @@ noremap <silent> <c-x>to <cmd>tabnext<cr>
 noremap <silent> <c-x>tO <cmd>tabprevious<cr>
 noremap <silent> <c-x>5 <cmd>echo "Frames are only in Emacs/GNU Emacs"<cr>
 noremap <m-x> :
-let s:select_all_definition = ""
-let s:select_all_definition .= "
-\function! SelectAll()
-\\n	mark y
-\\n	normal! gg
-\\n	let mode = mode()
-\\n	if mode !~# '^v'
-\\n		normal! v
-\\n	else
-\\n		normal! o
-\\n	endif
-\\n	normal! G$
-\\n	echohl MsgArea
-\\n	if g:language ==# 'russian'
-\\n		echomsg 'Предыдущая позиция отмечена как \"y\"'
-\\n	else
-\\n		echomsg 'Previous position marked as \"y\"'
-\\n	endif"
-if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
-let s:select_all_definition .= "
-\\n	if mode !~? '^v'
-\\n		let g:pseudo_visual = v:true
-\\n		Showtab
-\\n	endif
-\\n	let g:visual_mode = \"char\"
-\\n	let g:lx = 1
-\\n	let g:ly = 1
-\\n	let l:l = line('$')
-\\n	let g:rx = l:l
-\\n	let g:ry = len(getline(l:l))
-\\n	call ReorderRightLeft()"
-endif
-let s:select_all_definition .= "
-\\nendfunction"
-exec s:select_all_definition
 noremap <silent> <c-x>h <cmd>call SelectAll()<cr>
 noremap <silent> <c-x><c-h> <cmd>h<cr>
 noremap <silent> <c-x><c-g> <cmd>echo "Quit"<cr>
@@ -1646,7 +1342,6 @@ if g:insert_exit_on_jk
 	inoremap <silent> jK <esc>
 	inoremap <silent> Jk <esc>
 endif
-command! -nargs=* Write write <args>
 
 inoremap <silent> ju <esc>viwUea
 inoremap <silent> ji <esc>viwuea
@@ -1654,90 +1349,6 @@ inoremap <silent> ji <esc>viwuea
 inoremap <silent> ( <cmd>call HandleKeystroke('(')<cr>
 inoremap <silent> [ <cmd>call HandleKeystroke('[')<cr>
 inoremap <silent> { <cmd>call HandleKeystroke('{')<cr>
-let handle_keystroke_function_expression = "
-\function! HandleKeystroke(keystroke)
-\\n	let l = line('.')
-\\n	let line = getline(l)
-\\n	let col = col('.')
-\\n	let prev_c = line[col-2]
-\\n	let c = line[col-1]
-\\n	if a:keystroke ==# \"\\<bs>\"
-\\n		if prev_c ==# '('
-\ && c ==# ')'
-\ || prev_c ==# '{'
-\ && c ==# '}'
-\ || prev_c ==# '['
-\ && c ==# ']'
-\ || prev_c ==# \"'\"
-\ && c ==# \"'\"
-\ || prev_c ==# '\"'
-\ && c ==# '\"'
-\ || prev_c ==# \"`\"
-\ && c ==# \"`\"
-\ || prev_c ==# '<'
-\ && c ==# '>'
-\\n			return \"\\<del>\\<bs>\"
-\\n		else
-\\n			return \"\\<bs>\"
-\\n		endif
-\\n	endif
-\\n	if a:keystroke ==# ')'
-\ && c ==# ')'
-\ || a:keystroke ==# ']'
-\ && c ==# ']'
-\ || a:keystroke ==# '}'
-\ && c ==# '}'
-\ || a:keystroke ==# \"'\"
-\ && c ==# \"'\"
-\ || a:keystroke ==# '\"'
-\ && c ==# '\"'
-\ || a:keystroke ==# \"`\"
-\ && c ==# \"`\"
-\\n		return \"\\<right>\"
-\\n	endif
-\\n	if a:keystroke ==# '\"'
-\	|| a:keystroke ==# \"'\"
-\	|| a:keystroke ==# \"`\"
-\\n		if v:false
-\ || c =~# \"[a-zA-Z0-9]\"
-\ || prev_c =~# \"[a-zA-Z0-9]\"
-\\n			return a:keystroke
-\\n		else
-\\n			return a:keystroke.a:keystroke.\"\\<left>\"
-\\n		endif
-\\n	endif
-\\n	let mode = mode()
-\\n	if v:false
-\\n	elseif a:keystroke ==# '('
-\\n		if c =~# \"[a-zA-Z0-9]\"
-\\n			execute \"normal! i(\\<right>\"
-\\n		else
-\\n			normal! i()
-\\n		endif
-\\n	elseif a:keystroke ==# '['
-\\n		if c =~# \"[a-zA-Z0-9]\"
-\\n			execute \"normal! i[\\<right>\"
-\\n		else
-\\n			normal! i[]
-\\n		endif
-\\n	elseif a:keystroke ==# '{'
-\\n		if c =~# \"[a-zA-Z0-9]\"
-\\n			execute \"normal! i{\\<right>\"
-\\n		else
-\\n			normal! i{}
-\\n		endif
-\\n	else
-\\n		return a:keystroke
-\\n	endif
-\"
-if exists(':Numbertoggle') && exists(':STCAbs')
-let handle_keystroke_function_expression .= "
-\\n	call Numbertoggle(mode)"
-endif
-let handle_keystroke_function_expression .= "
-\\nendfunction"
-execute handle_keystroke_function_expression
-unlet handle_keystroke_function_expression
 inoremap <expr> ) HandleKeystroke(')')
 inoremap <expr> ] HandleKeystroke(']')
 inoremap <expr> } HandleKeystroke('}')
@@ -1769,8 +1380,6 @@ if has('nvim')
 	endif
 endif
 
-set statusline=%#Loading75#Loading\ 75%%
-
 noremap <silent> <leader>so :let &scrolloff = 999 - &scrolloff<cr>
 
 noremap <silent> <f10> <cmd>call ChangeNames()<bar>call RebindMenus()<bar>call quickui#menu#open()<cr>
@@ -1778,265 +1387,15 @@ noremap <silent> <f9> <cmd>call ChangeNames()<bar>call RebindMenus()<bar>call qu
 
 nnoremap <silent> <c-x><c-b> <cmd>call quickui#tools#list_buffer('e')<cr>
 
-augroup on_resized
-	au!
-	au VimResized * mode
-augroup END
-
 let g:floaterm_width = 1.0
 noremap <leader>z <cmd>call SelectPosition('lazygit', g:termpos)<cr>
 noremap <leader>m <cmd>call SelectPosition(g:far_or_mc, g:termpos)<cr>
 
-function! OpenTermProgram()
-	if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-quickui"])
-		let select = quickui#input#open(Pad('Open terminal program:', 40), g:last_open_term_program)
-	else
-		let hcm_select_label = 'Open in terminal'.(g:last_open_term_program!=#''?' (default: '.g:last_open_term_program.')':'').': '
-		let select = input(hcm_select_label)
-		execute "normal! \<esc>"
-	endif
-	if select ==# ''
-		let select = g:last_open_term_program
-	else
-		let g:last_open_term_program = select
-	endif
-	call SelectPosition(select, g:termpos)
-endfunction
 noremap <leader>xx <cmd>call OpenTermProgram()<cr>
-
-function! EnablePagerMode()
-	let s:old_cursorline = &cursorline
-	let s:old_cursorcolumn = &cursorcolumn
-	let s:old_showtabline = &showtabline
-	let s:old_laststatus = &laststatus
-	let s:old_showcmdloc = &showcmdloc
-	let s:old_showmode = &showmode
-	let s:old_ruler = &ruler
-	set nocursorline
-	set nocursorcolumn
-	set showtabline=0
-	set laststatus=0
-	set showcmdloc=last
-	set showmode
-	set ruler
-
-	call feedkeys("\<c-\>\<c-n>")
-endfunction
-function! DisablePagerMode()
-	let s:fullscreen = v:false
-	let &cursorline = s:old_cursorline
-	let &cursorcolumn = s:old_cursorcolumn
-	let &showtabline = s:old_showtabline
-	let &laststatus = s:old_laststatus
-	let &showcmdloc = s:old_showcmdloc
-	let &showmode = s:old_showmode
-	let &ruler = s:old_ruler
-	echon ''
-endfunction
-
-function! TogglePagerMode()
-	if g:PAGER_MODE
-		call DisablePagerMode()
-	else
-		call EnablePagerMode()
-	endif
-	let g:PAGER_MODE = !g:PAGER_MODE
-endfunction
-command! -nargs=0 TogglePagerMode call TogglePagerMode()
-noremap <leader>xp <cmd>TogglePagerMode<cr>
-
-augroup xdg_open
-	autocmd!
-	function! OpenWithXdg(filename)
-		if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
-			echohl Question
-			if g:language ==# 'russian'
-				echon 'Открыть через xdg-open (y/N): '
-			else
-				echon 'Open with xdg-open (y/N): '
-			endif
-			echohl Normal
-			let choice = nr2char(getchar())
-		else
-			if g:language ==# 'russian'
-				let choice = quickui#confirm#open('Открыть через xdg-open?', "&Да\n&Отмена", 1, 'Confirm')
-			else
-				let choice = quickui#confirm#open('Open with xdg-open?', "&OK\n&Cancel", 1, 'Confirm')
-			endif
-			if choice ==# 1
-				let choice = 'y'
-			elseif choice ==# 2
-				let choice = 'n'
-			else
-				let choice = 'n'
-			endif
-		endif
-		if choice ==# 'y'
-		\&&executable('xdg-open') ==# 1
-			execute "!xdg-open -- ".a:filename
-		endif
-	endfunction
-	autocmd BufEnter *.jpg,*.png,*.jpeg,*.bmp if v:vim_did_enter | call OpenWithXdg(Repr_Shell(expand('%'))) | endif
-augroup END
-
-function! TermuxSaveCursorStyle()
-	if $TERMUX_VERSION !=# "" && filereadable(expand("~/.termux/termux.properties"))
-		if !filereadable(expand("~/.cache/extra.nvim/termux/terminal_cursor_style"))
-			let TMPFILE=trim(system(["mktemp", "-u"]))
-			call system(["cp", expand("~/.termux/termux.properties"), TMPFILE])
-			call system(["sed", "-i", "s/ *= */=/", TMPFILE])
-			call system(["sed", "-i", "s/-/_/g", TMPFILE])
-			call system(["chmod", "+x", TMPFILE])
-			call writefile(["echo $terminal_cursor_style"], TMPFILE, "a")
-			let g:termux_cursor_style = trim(system(TMPFILE))
-			if !isdirectory(expand("~/.cache/extra.nvim/termux"))
-				call mkdir(expand("~/.cache/extra.nvim/termux"), "p", 0700)
-			endif
-			call writefile([g:termux_cursor_style], expand("~/.cache/extra.nvim/termux/terminal_cursor_style"), "")
-			call system(["rm", TMPFILE])
-		else
-			let g:termux_cursor_style = trim(readfile(expand("~/.cache/extra.nvim/termux/terminal_cursor_style"))[0])
-		endif
-	elseif $TERMUX_VERSION
-		let g:termux_cursor_style = 'bar'
-	endif
-endfunction
-function! TermuxLoadCursorStyle()
-	if $TERMUX_VERSION !=# "" && filereadable(expand("~/.termux/termux.properties")) && exists("g:termux_cursor_style")
-		if g:termux_cursor_style ==# 'block'
-			let &guicursor = 'a:block'
-		elseif g:termux_cursor_style ==# 'bar'
-			let &guicursor = 'a:ver25'
-		elseif g:termux_cursor_style ==# 'underline'
-			let &guicursor = 'a:hor25'
-		endif
-	endif
-endfunction
-
-" Copied from StackOverflow: https://stackoverflow.com/questions/59583931/vim-how-do-i-determine-the-status-of-a-process-within-a-terminal-tab
-function! TermRunning(buf)
-	return getbufvar(a:buf, '&buftype') !=# 'terminal' ? 0 :
-		\ has('terminal') ? term_getstatus(a:buf) =~# 'running' :
-		\ has('nvim') ? jobwait([getbufvar(a:buf, '&channel')], 0)[0] == -1 :
-		\ 0
-endfunction
-
-function! OpenRanger(path)
-	if has('nvim')
-		let TMPFILE = trim(system(["mktemp", "-u"]))
-	else
-		let TMPFILE = trim(system("mktemp -u"))
-	endif
-	let g:bufnrforranger = OpenTerm("ranger --choosefile=".TMPFILE." ".a:path)
-	augroup oncloseranger
-		autocmd! oncloseranger
-		if has('nvim')
-			execute 'autocmd TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.g:bufnrforranger."|if v:shell_error!=#0|call OnQuit()|confirm quit|call OnQuitDisable()|endif|if filereadable(filename)==#1|let old_bufnr=bufnr()|enew|execute old_bufnr.\"bdelete\"|unlet old_bufnr|let bufnr=bufadd(filename)|call bufload(bufnr)|execute bufnr.'buffer'|call Numbertoggle()|filetype detect|call AfterSomeEvent(\"ModeChanged\", \"doautocmd BufEnter \".expand(\"%\"))|unlet g:bufnrforranger|else|endif|endif|call delete('".TMPFILE."')|unlet filename"
-		else
-			function! CheckRangerStopped(timer_id, TMPFILE)
-				if !exists('g:bufnrforranger')
-					return
-				endif
-				let bufnr = bufnr()
-				if bufnr ==# g:bufnrforranger && !TermRunning(bufnr)
-					let filename=system("cat ".a:TMPFILE)
-					call delete(a:TMPFILE)
-					if filereadable(filename) ==# 1
-						bwipeout!
-						execute 'edit '.filename
-						call Numbertoggle()
-						filetype detect
-						call AfterSomeEvent("ModeChanged", "doautocmd BufEnter ".expand("%"))
-						if exists('g:bufnrforranger')
-							unlet g:bufnrforranger
-						endif
-						call timer_stop(a:timer_id)
-					else
-						call IfOneWinDo('call OnQuit()')
-						quit
-					endif
-					unlet filename
-				endif
-			endfunction
-			execute "call timer_start(0, {timer_id -> CheckRangerStopped(timer_id, '".TMPFILE."')}, {'repeat': -1})"
-		endif
-		execute "autocmd BufWinLeave * let f=expand(\"<afile>\")|let n=bufnr(\"^\".f.\"$\")|if n==#".g:bufnrforranger."|unlet f|unlet n|autocmd!oncloseranger|call AfterSomeEvent(\"BufEnter,BufLeave,WinEnter,WinLeave\", \"".g:bufnrforranger."bwipeout!\")|unlet g:bufnrforranger|endif"
-	augroup END
-	unlet TMPFILE
-endfunction
-function! OpenRangerCheck()
-	if executable('ranger')
-		call OpenRanger('./')
-	else
-		echohl ErrorMsg
-		if g:language ==# 'russian'
-			echomsg "Блядь: Не открывается ranger: не установлен"
-		else
-			echomsg "Error: Cannot open ranger: ranger not installed"
-		endif
-		echohl Normal
-	endif
-endfunction
-nnoremap <leader>r <cmd>call OpenRangerCheck()<cr>
-
-function! RunAlphaIfNotAlphaRunning()
-	if !isdirectory(g:LOCALSHAREPATH.'/site/pack/packer/start/alpha-nvim')
-		echohl ErrorMsg
-		if g:language ==# 'russian'
-			echomsg "Блядь: alpha-nvim не установлен"
-		else
-			echomsg "Error: alpha-nvim is not installed"
-		endif
-		echohl Normal
-		return
-	endif
-	if &filetype !=# 'alpha'
-		Alpha
-	else
-		AlphaRedraw
-		AlphaRemap
-	endif
-endfunction
-if has('nvim') && luaeval("plugin_installed(_A[1])", ["alpha-nvim"])
-	nnoremap <leader>A <cmd>call RunAlphaIfNotAlphaRunning()<cr>
-endif
 
 if has('nvim') && luaeval("plugin_installed(_A[1])", ["neo-tree.nvim"])
 	nnoremap <c-h> <cmd>Neotree<cr>
 endif
-
-function! OpenOnStart()
-	if exists('g:open_menu_on_start')
-		if g:open_menu_on_start ==# v:true
-			call ChangeNames()
-			call RebindMenus()
-			call timer_start(0, {->quickui#menu#open()})
-		endif
-	endif
-
-	if argc()
-		argument 1
-	elseif expand('%') == '' || isdirectory(expand('%'))
-		let to_open = v:true
-		let to_open = to_open && !g:DO_NOT_OPEN_ANYTHING
-		let to_open = to_open && !g:PAGER_MODE
-		if to_open
-			if g:open_on_start ==# 'alpha' && has('nvim') && !isdirectory(expand('%')) && luaeval("plugin_installed(_A[1])", ["alpha-nvim"])
-				Alpha
-			elseif g:open_on_start ==# "explorer" || (!has('nvim') && g:open_on_start ==# 'alpha')
-			\||executable('ranger') !=# 1
-				edit ./
-			elseif g:open_on_start ==# "ranger"
-				if argc() ># 0
-					call OpenRanger(argv(0))
-				else
-					call OpenRanger("./")
-				endif
-			endif
-		endif
-	endif
-	call Numbertoggle()
-endfunction
 
 nnoremap <leader>n <cmd>Neogen<cr>
 
@@ -2152,70 +1511,7 @@ function! AfterUpdatingPlugins()
 	endif
 endfunction
 
-function! PrepareWhichKey()
-	let g:which_key_timeout = 0
-	if filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/which-key.nvim/lua/which-key/util.lua')
-		edit ~/.local/share/nvim/site/pack/packer/start/which-key.nvim/lua/which-key/util.lua
-		if getline(189) =~# 'if not ("nvsxoiRct"):find(mode) then'
-			silent 189,192delete
-			silent write
-		endif
-		bwipeout!
-	endif
-endfunction
-
-function! LoadVars()
-	if filereadable(expand(g:LOCALSHAREPATH).'/extra.nvim/last_selected.txt')
-		let g:last_selected = readfile(expand(g:LOCALSHAREPATH).'/extra.nvim/last_selected.txt')[0]
-	endif
-	if filereadable(expand(g:LOCALSHAREPATH).'/extra.nvim/last_open_term_program.txt')
-		let g:last_open_term_program = readfile(expand(g:LOCALSHAREPATH).'/extra.nvim/last_open_term_program.txt')[0]
-	endif
-endfunction
-function! SaveVars()
-	if v:false
-	\|| g:last_selected !=# ''
-	\|| g:last_open_term_program !=# ''
-		if !isdirectory(expand(g:LOCALSHAREPATH).'/extra.nvim')
-			call mkdir(expand(g:LOCALSHAREPATH).'/extra.nvim', 'p')
-		endif
-	endif
-	if g:last_selected !=# ''
-		call writefile([g:last_selected], expand(g:LOCALSHAREPATH).'/extra.nvim/last_selected.txt')
-	endif
-	if g:last_open_term_program !=# ''
-		call writefile([g:last_open_term_program], expand(g:LOCALSHAREPATH).'/extra.nvim/last_open_term_program.txt')
-	endif
-endfunction
-
-function! OnFirstTime()
-	if !filereadable(expand(g:LOCALSHAREPATH).'/extra.nvim/not_first_time.null')
-		if !isdirectory(expand(g:LOCALSHAREPATH).'/extra.nvim')
-			call mkdir(expand(g:LOCALSHAREPATH).'/extra.nvim', 'p')
-		endif
-		call writefile([], expand(g:LOCALSHAREPATH).'/extra.nvim/not_first_time.null')
-
-		if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
-			if g:language ==# 'russian'
-				echomsg 'Чтобы посмотреть помощь, нажмите SPC-?. Вы больше не увидите это сообщение'
-			else
-				echomsg 'To see help, press SPC-?. You will not see this message again'
-			endif
-		else
-			call quickui#confirm#open('To see help, press SPC-?')
-		endif
-
-		if !filereadable(g:EXNVIM_CONFIG_PATH)
-			GenerateExNvimConfig
-		endif
-	endif
-endfunction
 function! OnStart()
-	if has('nvim')
-		call timer_start(0, {->OpenOnStart()})
-	else
-		call OpenOnStart()
-	endif
 	call SetExNvimConfigPath()
 	call SetLocalSharePath()
 	call SetConfigPath()
@@ -2226,10 +1522,6 @@ function! OnStart()
 			autocmd BufEnter * if isdirectory(expand(expand("%")))|let prev_bufnr=bufnr()|execute "Neotree position=current" expand("%")|execute prev_bufnr."bwipeout!"|endif
 		augroup END
 	endif
-	if has('nvim') && g:enable_which_key
-		call PrepareWhichKey()
-	endif
-	call timer_start(0, {->TermuxSaveCursorStyle()})
 	if filereadable(expand(g:CONFIG_PATH).'/vim/init.vim')
 		execute "source" g:CONFIG_PATH."/vim/init.vim"
 	else
@@ -2240,31 +1532,12 @@ function! OnStart()
 			echomsg "error: unable to find initialization file"
 		endif
 		let g:compatible = "no"
-		call RedefineProcessGBut()
-	endif
-	call DefineAugroups()
-	call UpdateShowtabline()
-	if g:PAGER_MODE
-		call EnablePagerMode()
+		call timer_srart(0, {->RedefineProcessGBut()})
 	endif
 	if has('nvim') && g:compatible !=# "helix_hard" && isdirectory(g:LOCALSHAREPATH.'/site/pack/packer/start/nvim-notify')
 		execute printf('luafile %s', fnamemodify(g:PLUGINS_SETUP_FILE_PATH, ':h').'/noice/setup.lua')
 	endif
-	if v:false
-	\|| g:compatible ==# "helix"
-	\|| g:compatible ==# "helix_hard"
-		call LoadVars()
-	endif
-	call timer_start(0, {->OnFirstTime()})
 	call timer_start(0, {->execute('source '.g:CONFIG_PATH.'/after/init.vim')})
-endfunction
-function! OnQuit()
-	call TermuxLoadCursorStyle()
-	if v:false
-	\|| g:compatible ==# "helix"
-	\|| g:compatible ==# "helix_hard"
-		call SaveVars()
-	endif
 endfunction
 function! Update_Cursor_Style_wrapper()
 	if exists('g:updating_cursor_style_supported')
@@ -2336,6 +1609,13 @@ execute "
 \\n	endif
 \\nendfunction"
 
+autocmd BufReadPost *
+     \ if line("'\"") > 0 && line("'\"") <= line("$") |
+     \   execute "normal! g`\"" |
+     \ endif
+
+let g:specloading=" AFTER "
+
 function! FixShaDa()
 	let g:PAGER_MODE = 0
 	let g:DO_NOT_OPEN_ANYTHING = 0
@@ -2344,6 +1624,4 @@ endfunction
 autocmd! VimLeavePre * call FixShaDa()
 
 autocmd! VimEnter * call OnStart()
-autocmd! VimLeave * call OnQuit()
-set statusline=%#Loading100#Loading\ 100%%
 call inputrestore()
