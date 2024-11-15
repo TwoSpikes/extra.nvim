@@ -1121,7 +1121,7 @@ command! -nargs=0 TogglePagerMode call TogglePagerMode()
 noremap <leader>xp <cmd>TogglePagerMode<cr>
 
 function! TermuxSaveCursorStyle()
-	if $TERMUX_VERSION !=# "" && filereadable(expand("~/.termux/termux.properties"))
+	if $TERMUX_VERSION !=# "" && filereadable(expand("~")."/.termux/termux.properties")
 		if !filereadable(expand("~/.cache/extra.nvim/termux/terminal_cursor_style"))
 			let TMPFILE=trim(system(["mktemp", "-u"]))
 			call system(["cp", expand("~/.termux/termux.properties"), TMPFILE])
@@ -1129,11 +1129,15 @@ function! TermuxSaveCursorStyle()
 			call system(["sed", "-i", "s/-/_/g", TMPFILE])
 			call system(["chmod", "+x", TMPFILE])
 			call writefile(["echo $terminal_cursor_style"], TMPFILE, "a")
-			let g:termux_cursor_style = trim(system(TMPFILE))
-			if !isdirectory(expand("~/.cache/extra.nvim/termux"))
-				call mkdir(expand("~/.cache/extra.nvim/termux"), "p", 0700)
+			let termux_cursor_style = trim(system(TMPFILE))
+			if termux_cursor_style !=# ""
+				let g:termux_cursor_style = termux_cursor_style
+				unlet termux_cursor_style
+				if !isdirectory(expand("~/.cache/extra.nvim/termux"))
+					call mkdir(expand("~/.cache/extra.nvim/termux"), "p", 0700)
+				endif
+				call writefile([g:termux_cursor_style], expand("~/.cache/extra.nvim/termux/terminal_cursor_style"), "")
 			endif
-			call writefile([g:termux_cursor_style], expand("~/.cache/extra.nvim/termux/terminal_cursor_style"), "")
 			call system(["rm", TMPFILE])
 		else
 			let g:termux_cursor_style = trim(readfile(expand("~/.cache/extra.nvim/termux/terminal_cursor_style"))[0])

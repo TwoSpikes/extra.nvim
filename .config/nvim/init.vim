@@ -49,6 +49,7 @@ if has('nvim')
 	lua vim.loader.enable()
 endif
 
+let g:setup_lsp = v:false
 call inputsave()
 
 if !has('nvim')
