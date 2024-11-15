@@ -704,7 +704,7 @@ xnoremap [<space> mz<esc>O<esc>`z
 nnoremap ]<space> mzo<esc>`z
 xnoremap ]<space> mz<esc>o<esc>`zgv
 nnoremap <c-c> <cmd>call CommentOutDefault()<cr>
-if has('nvim') && luaeval("plugin_installed(_A[1])", ["convert.nvim"])
+if has('nvim') && luaeval("plugin_installed(_A[1])", ["convert.nvim"]) && exists('g:convert_keymaps_loaded')
 	unmap <leader>cc
 	unmap <leader>cn
 endif
@@ -763,3 +763,8 @@ nnoremap <leader>xr <cmd>call OpenRangerCheck()<cr>
 nnoremap <leader>k K
 nnoremap <leader>r <Plug>(coc-rename)
 nnoremap <leader><c-c> <cmd>Telescope commands<cr>
+
+nnoremap <c-w>nv <cmd>vsplit<bar>enew<cr>
+nnoremap <c-w>n<c-v> <cmd>vsplit<bar>enew<cr>
+nnoremap <c-w>ns <cmd>split<bar>enew<cr>
+nnoremap <c-w>n<c-s> <cmd>split<bar>enew<cr>

@@ -1,3 +1,26 @@
+function! InitPacker()
+	execute "source ".g:CONFIG_PATH.'/vim/plugins/setup.vim'
+
+	execute printf("luafile %s", g:PLUGINS_INSTALL_FILE_PATH)
+	PackerInstall
+	execute printf("luafile %s", g:PLUGINS_SETUP_FILE_PATH)
+endfunction
+
+set nolazyredraw
+if has('nvim')
+	if executable('git')
+		if !isdirectory(g:LOCALSHAREPATH.."/site/pack/packer/start/packer.nvim")
+			echomsg "Installing packer.nvim"
+			!git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+		endif
+		call InitPacker()
+	else
+		echohl ErrorMsg
+		echomsg "Please install Git"
+		echohl Normal
+	endif
+endif
+
 function! STCRel(winnr=winnr())
 	if has('nvim')
 		if mode() =~? 'v.*' || mode() ==# "\<c-v>"
@@ -1780,3 +1803,202 @@ call OpenOnStart()
 
 let g:exnvim_fully_loaded += 1
 let g:specloading = ' OK '
+" TERMINAL
+
+function! OpenTerm(cmd)
+	if !&modifiable
+		wincmd p
+		let prevwinid = win_getid(winnr(), tabpagenr())
+		wincmd p
+		new
+		wincmd p
+		close
+		wincmd p
+		call win_gotoid(prevwinid)
+		wincmd p
+	endif
+	if a:cmd ==# ""
+		execute printf("terminal %s", $SHELL)
+	else
+		execute printf("terminal %s", a:cmd)
+	endif
+	startinsert
+	return bufnr()
+endfunction
+
+function! Save_WW_and_Do(cmd)
+	let old_whichwrap = &whichwrap
+	let &whichwrap = 'b,s'
+	execute a:cmd
+	let &whichwrap = old_whichwrap
+endfunction
+function! Comment_Move_Left(comment_string)
+	call Save_WW_and_Do('normal! '.Defone(len(a:comment_string)).'h')
+endfunction
+function! Comment_Move_Right(comment_string)
+	call Save_WW_and_Do('normal! '.Defone(len(a:comment_string)).'l')
+endfunction
+function! N_CommentOut(comment_string)
+	let l=line('.')
+	call setline(l, substitute(a:comment_string, '%s', Repr_Vim_Grep(getline(l)), ''))
+	call Comment_Move_Right(substitute(a:comment_string, '%s', '', ''))
+endfunction
+function! X_CommentOut(comment_string)
+	let line_start = getpos("'<")[1]
+	let line_end = getpos("'>")[1]
+	for line in range(line_start, line_end)
+		call setline(line, substitute(a:comment_string, '%s', Repr_Vim_Grep(getline(line)), ''))
+	endfor
+	call Comment_Move_Right(substitute(a:comment_string, '%s', '', ''))
+	call PV()
+endfunction
+function! CommentOutDefault_Define(mode)
+	execute "
+	\function! ".a:mode."_CommentOutDefault()
+	\\n	if &commentstring !=# ''
+	\\n		return ".a:mode."_CommentOut(&commentstring)
+	\\n	else
+	\\n		echohl ErrorMsg
+	\\n		if g:language ==# 'russian'
+	\\n			echo \"Блядь: Комментарии недоступны\"
+	\\n		else
+	\\n			echo \"Error: Comments are not available\"
+	\\n		endif
+	\\n		echohl Normal
+	\\n	endif
+	\\nendfunction"
+endfunction
+call CommentOutDefault_Define('N')
+call CommentOutDefault_Define('X')
+function! DoCommentOutDefault()
+	execute "normal! ".CommentOutDefault()
+endfunction
+function! N_UncommentOut(comment_string)
+	let l=line('.')
+	let line=getline(l)
+	let comment=substitute(a:comment_string, '%s', '', '')
+	call setline(l, substitute(line, comment, '', ''))
+	call Comment_Move_Left(comment)
+endfunction
+function! X_UncommentOut(comment_string)
+	let comment=substitute(a:comment_string, '%s', '', '')
+	for l:idx in range(line("'>")-line("'<")+1)
+		let l = line("'<") + l:idx
+		let line=getline(l)
+		call setline(l, substitute(line, comment, '', ''))
+	endfor
+	call Comment_Move_Left(comment)
+	call PV()
+endfunction
+
+function! UncommentOutDefault_Define(mode)
+	execute "
+	\function! ".a:mode."_UncommentOutDefault()
+	\\n	if &commentstring !=# ''
+	\\n		call ".a:mode."_UncommentOut(&commentstring)
+	\\n	else
+	\\n		echohl ErrorMsg
+	\\n		if g:language ==# 'russian'
+	\\n			echomsg \"Блядь: Комментарии недоступны\"
+	\\n		else
+	\\n			echomsg \"Error: Comments are not available\"
+	\\n		endif
+	\\n		echohl Normal
+	\\n	endif
+	\\nendfunction"
+endfunction
+call UncommentOutDefault_Define('N')
+call UncommentOutDefault_Define('X')
+
+function! HandleBuftypeAll()
+	tabdo windo call HandleBuftype(winnr())
+endfunction
+
+" TELESCOPE
+function! FuzzyFind()
+	lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown({winblend = 0 }))
+endfunction
+
+function! IsYes(string)
+	return v:false
+	\|| a:string =~? '^y *!* *$'
+	\|| a:string =~? '^yes *!* *$'
+	\|| a:string =~? '^yea *!* *$'
+	\|| a:string =~? '^yeah *!* *$'
+	\|| a:string =~? '^yep *!* *$'
+	\|| a:string =~? '^yup *!* *$'
+	\|| a:string =~? '^of *course *!* *$'
+	\|| a:string =~? '^\%(сука*\)* *\%(бля*\%(дь\)\?\)* *\%(кон\%(\%(еч\)\|\%(че\)\)но\? *\)*\%(да* *\)*!* *$'
+	\|| a:string =~? '^\%(сука*\)* *\%(бля*\%(дь\)\?\)* *\%(дыа\? *\)\+!* *$'
+	\|| a:string =~? '^\%(сука*\)* *\%(бля*\%(дь\)\?\)* *офк *!* *$'
+	\|| a:string =~? '^\%(сука*\)* *\%(бля*\%(дь\)\?\)* *офкорз *!* *$'
+endfunction
+function! IsNo(string)
+	return v:false
+	\|| a:string =~? '^n *!* *$'
+	\|| a:string =~? '^no *!* *$'
+	\|| a:string =~? '^nope *!* *$'
+	\|| a:string =~? '^of *course *not\? *!* *$'
+	\|| a:string =~? '^\%(сука *\)*\%(блядь *\)*\%(кон\%(\%(че\)\|\%(еч\)\)но\? *\)*\%(да *\)*нет\? *!* *$'
+endfunction
+
+let g:floaterm_width = 1.0
+
+function! DoPackerUpdate(args)
+	call BeforeUpdatingPlugins()
+	execute "lua require('packer').update(".a:args.")"
+	call AfterUpdatingPlugins()
+endfunction
+if has('nvim')
+	command! -nargs=* PackerUpdate exec "call DoPackerUpdate('".<f-args>."')"
+endif
+function! BeforeUpdatingPlugins()
+	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key")
+		execute "cd ".g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key"
+		execute "!git stash"
+		cd -
+	endif
+endfunction
+function! AfterUpdatingPlugins()
+	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key")
+		execute "cd ".g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key/"
+		execute "!git stash pop"
+		cd -
+	endif
+endfunction
+
+function! SynGroup()
+    let l:s = synID(line('.'), col('.'), 1)
+    echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
+endfunction
+function! SynStack()
+  if !exists("*synstack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunction
+function! WhenceGroup()
+	let l:s = synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
+	execute "verbose hi ".l:s
+endfunction
+
+let s:stc_shrunk = v:false
+function! STCUpd()
+	if &columns ># 40
+		if has('nvim')
+			let &stc = &stc
+		endif
+		if s:stc_shrunk
+			let &stc = s:old_stc
+		endif
+		let s:stc_shrunk = v:false
+	else
+		if s:stc_shrunk
+			let &stc = ''
+		else
+			let s:stc_shrunk = v:true
+			let s:old_stc = &stc
+			let &stc = ''
+		endif
+	endif
+endfunction
