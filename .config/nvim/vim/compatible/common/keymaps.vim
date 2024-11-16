@@ -191,9 +191,9 @@ endif
 inoremap <silent> ju <esc>viwUea
 inoremap <silent> ji <esc>viwuea
 
-inoremap <silent> ( <cmd>call HandleKeystroke('(')<cr>
-inoremap <silent> [ <cmd>call HandleKeystroke('[')<cr>
-inoremap <silent> { <cmd>call HandleKeystroke('{')<cr>
+inoremap <silent> ( <cmd>call HandleKeystroke('(')<bar>call Numbertoggle(v:insertmode)<cr>
+inoremap <silent> [ <cmd>call HandleKeystroke('[')<bar>call Numbertoggle(v:insertmode)<cr>
+inoremap <silent> { <cmd>call HandleKeystroke('{')<bar>call Numbertoggle(v:insertmode)<cr>
 inoremap <expr> ) HandleKeystroke(')')
 inoremap <expr> ] HandleKeystroke(']')
 inoremap <expr> } HandleKeystroke('}')
