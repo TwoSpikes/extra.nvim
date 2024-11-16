@@ -1,4 +1,6 @@
 require('persisted').setup({
+  autostart = true,
+  autoload = false,
   should_autosave = function()
     -- do not autosave if the alpha dashboard is the current filetype
 	return vim.bo.filetype ~= 'alpha'

@@ -3,7 +3,6 @@ function! InitPacker()
 
 	execute printf("luafile %s", g:PLUGINS_INSTALL_FILE_PATH)
 	PackerInstall
-	execute printf("luafile %s", g:PLUGINS_SETUP_FILE_PATH)
 endfunction
 
 set nolazyredraw

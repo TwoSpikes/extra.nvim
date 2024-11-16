@@ -1,3 +1,5 @@
+execute printf("luafile %s", g:PLUGINS_SETUP_FILE_PATH)
+
 exec printf('so %s', g:CONFIG_PATH.'/vim/lib/init.vim')
 exec printf('so %s', g:CONFIG_PATH.'/after/init.vim')
 

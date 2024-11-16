@@ -1091,5 +1091,21 @@ function! FixShaDa()
 endfunction
 autocmd! VimLeavePre * call FixShaDa()
 
+function! PreparePersistedNvim()
+	if filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/persisted.nvim/lua/persisted/init.lua')
+		let bufnr = bufadd(expand('~').'/.local/share/nvim/site/pack/packer/start/persisted.nvim/lua/persisted/init.lua')
+		call bufload(bufnr)
+		execute bufnr."buffer"
+		if getbufline(bufnr, 44)[0] =~# 'if config.autoload and M.allowed_dir() then'
+			call appendbufline(bufnr, 43, '  config = config or {}')
+			silent write
+		endif
+		bwipeout!
+	endif
+endfunction
+if has('nvim')
+	call PreparePersistedNvim()
+endif
+
 autocmd! VimEnter * call OnStart()
 call inputrestore()
