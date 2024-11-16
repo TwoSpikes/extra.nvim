@@ -92,6 +92,7 @@ augroup visual
 		call setwinvar(a:winnum, '&cursorline', pre_cursorline)
 	endfunction
 	au ModeChanged,BufWinEnter * call HandleBuftype(winnr())
+	call HandleBuftype(winnr())
 augroup END
 
 augroup xdg_open

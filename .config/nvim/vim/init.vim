@@ -1,4 +1,6 @@
-execute printf("luafile %s", g:PLUGINS_SETUP_FILE_PATH)
+if has('nvim')
+	execute printf("luafile %s", g:PLUGINS_SETUP_FILE_PATH)
+endif
 
 exec printf('so %s', g:CONFIG_PATH.'/vim/lib/init.vim')
 exec printf('so %s', g:CONFIG_PATH.'/after/init.vim')

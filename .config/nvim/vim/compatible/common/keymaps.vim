@@ -283,7 +283,7 @@ if g:open_cmd_on_up
 	vnoremap <up> :<up>
 endif
 
-if luaeval("plugin_installed(_A[1])", ["vim-fugitive"])
+if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-fugitive"])
 	nnoremap <leader>gc <cmd>Git commit --verbose<cr>
 	nnoremap <leader>ga <cmd>Git commit --verbose --all<cr>
 	nnoremap <leader>gA <cmd>Git commit --verbose --amend<cr>
