@@ -710,26 +710,57 @@ function! Showtab()
 	let s:result .= '%='
 	let is_macro_recording = reg_recording()
 	if is_macro_recording !=# ''
-		let s:result .= '%#Statusline0mac#'
+		let s:result .= '%#Statusline0mac#'
+		if &columns ># 45
+			let s:result .= ''
+		endif
 		if is_macro_recording =~# '^\u$'
 			let s:result .= '%#Statuslinemac# REC '.is_macro_recording.' '
 		else
 			let s:result .= '%#Statuslinemac# rec '.is_macro_recording.' '
 		endif
 	endif
-	if &columns ># 45
-		if g:compatible !=# "helix_hard"
-			if is_macro_recording !=# ''
-				let s:result .= '%#Statuslinemac1#'
-			else
-				let s:result .= '%#Statuslinestat01#'
-			endif
-			let s:result .= ''
-			let s:result .= '%#Statuslinestat1#'
+	let virtual_env = $VIRTUAL_ENV
+	let enough_space_for_pyenv = v:false
+	\|| &columns ># 70
+	\|| is_macro_recording ==# ''
+	\&& &columns ># 65
+	if virtual_env !=# '' && enough_space_for_pyenv
+		let virtual_env = fnamemodify(virtual_env, ':h')
+		let virtual_env = fnamemodify(virtual_env, ':t')
+		if is_macro_recording !=# ''
+			let s:result .= '%#Statuslinemacvenv#'
+		else
+			let s:result .= '%#Statusline0venv#'
 		endif
-		let s:result .= ' '
+		let s:result .= '%#Statuslinevenv# '.virtual_env.' '
 	endif
+	if &columns ># 45
+		if virtual_env !=# '' && enough_space_for_pyenv
+			let s:result .= '%#Statuslinevenv1#'
+		else
+			if g:compatible !=# "helix_hard"
+				if is_macro_recording !=# ''
+					let s:result .= '%#Statuslinemac1#'
+				else
+					let s:result .= '%#Statuslinestat01#'
+				endif
+			endif
+		endif
+		if g:compatible !=# "helix_hard"
+			let s:result .= ''
+		endif
+	endif
+	unlet enough_space_for_pyenv
+	unlet is_macro_recording
+	unlet virtual_env
 	if &columns ># 30
+		if g:compatible !=# "helix_hard"
+			let s:result .= '%#Statuslinestat1#'
+			if &columns ># 45
+				let s:result .= ' '
+			endif
+		endif
 		let s:result .= stl_pos
 	endif
 	if g:compatible !=# "helix_hard"

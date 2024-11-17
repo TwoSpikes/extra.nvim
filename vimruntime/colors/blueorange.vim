@@ -497,8 +497,12 @@ if &t_Co >= 256
     hi SpecialChar ctermfg=41 ctermbg=NONE cterm=NONE guifg=#00df5f guibg=NONE gui=NONE
     hi Statusline ctermfg=18 ctermbg=194 cterm=bold guifg=#ffffff guibg=#3040f7 gui=NONE
     hi Statuslinemod ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#a84000 guibg=#ffff9f gui=reverse,bold
+    hi Statuslinevenv ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#ffff00 guibg=#00a0ff gui=bold
     hi Statuslinemac ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#870000 guibg=#ffffd0 gui=reverse,bold
+    hi Statuslinemacvenv ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#870000 guibg=#00a0ff gui=reverse,bold
     hi Statusline0mac ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#870000 guibg=#3040f7 gui=NONE
+    hi Statusline0venv ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#00a0ff guibg=#3040f7 gui=NONE
+    hi Statuslinevenv1 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#000087 guibg=#00a0ff gui=NONE
     hi Statuslinemac1 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#000087 guibg=#870000 gui=NONE
     hi Statuslinestat1 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#aff0a0 guibg=#000087 gui=NONE
     hi Statuslinestat01 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#000087 guibg=#3040f7 gui=NONE
