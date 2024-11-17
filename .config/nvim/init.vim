@@ -940,7 +940,7 @@ set modelineexpr
 set updatetime=5000
 set timeout
 set timeoutlen=500
-set ttimeout
+set nottimeout
 set ttimeoutlen=750
 
 " Mouse options
