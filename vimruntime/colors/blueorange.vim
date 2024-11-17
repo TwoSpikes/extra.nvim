@@ -491,23 +491,23 @@ if &t_Co >= 256
     hi MsgArea ctermfg=15 ctermbg=NONE cterm=NONE guifg=#c6c6c6 guibg=#000020 gui=NONE
     hi MsgSeparator ctermfg=NONE ctermbg=57 cterm=NONE guifg=NONE guibg=#aff0a0 gui=NONE
     hi Terminal ctermfg=251 ctermbg=NONE cterm=NONE guifg=#c6c6c6 guibg=NONE gui=NONE
-    hi TermCursor ctermfg=57 ctermbg=NONE cterm=reverse guifg=#5fa050 guibg=NONE gui=reverse
-    hi TermCursorNC ctermfg=57 ctermbg=NONE cterm=reverse guifg=#afbf00 guibg=NONE gui=reverse
+    hi TermCursor ctermfg=57 ctermbg=NONE cterm=NONE guifg=NONE guibg=#5fa050 gui=NONE
+    hi TermCursorNC ctermfg=57 ctermbg=NONE cterm=NONE guifg=NONE guibg=#afbf00 gui=NONE
     hi Operator ctermfg=220 ctermbg=NONE cterm=bold guifg=#ffdf00 guibg=NONE gui=bold
     hi SpecialChar ctermfg=41 ctermbg=NONE cterm=NONE guifg=#00df5f guibg=NONE gui=NONE
     hi Statusline ctermfg=18 ctermbg=194 cterm=bold guifg=#ffffff guibg=#3040f7 gui=NONE
-    hi Statuslinemod ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#a84000 guibg=#ffff9f gui=reverse,bold
-    hi Statuslinevenv ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#ffff00 guibg=#00a0ff gui=bold
-    hi Statuslinemac ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#870000 guibg=#ffffd0 gui=reverse,bold
-    hi Statuslinemacvenv ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#870000 guibg=#00a0ff gui=reverse,bold
-    hi Statusline0mac ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#870000 guibg=#3040f7 gui=NONE
-    hi Statusline0venv ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#00a0ff guibg=#3040f7 gui=NONE
-    hi Statuslinevenv1 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#000087 guibg=#00a0ff gui=NONE
-    hi Statuslinemac1 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#000087 guibg=#870000 gui=NONE
-    hi Statuslinestat1 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#aff0a0 guibg=#000087 gui=NONE
+    hi Statuslinemod ctermfg=57 ctermbg=155 cterm=bold guifg=#ffff9f guibg=#a84000 gui=bold
+    hi Statuslinevenv ctermfg=57 ctermbg=155 cterm=bold guifg=#ffff00 guibg=#00a0ff gui=bold
+    hi Statuslinemac ctermfg=57 ctermbg=155 cterm=bold guifg=#ffffd0 guibg=#870000 gui=bold
+    hi Statuslinemacvenv ctermfg=57 ctermbg=155 cterm=bold guifg=#00a0ff guibg=#870000 gui=bold
+    hi Statusline0mac ctermfg=57 ctermbg=155 cterm=bold guifg=#870000 guibg=#3040f7 gui=NONE
+    hi Statusline0venv ctermfg=57 ctermbg=155 cterm=bold guifg=#00a0ff guibg=#3040f7 gui=NONE
+    hi Statuslinevenv1 ctermfg=57 ctermbg=155 cterm=bold guifg=#000087 guibg=#00a0ff gui=NONE
+    hi Statuslinemac1 ctermfg=57 ctermbg=155 cterm=bold, guifg=#000087 guibg=#870000 gui=NONE
+    hi Statuslinestat1 ctermfg=57 ctermbg=155 cterm=bold guifg=#aff0a0 guibg=#000087 gui=NONE
     hi Statuslinestat01 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#000087 guibg=#3040f7 gui=NONE
-    hi Statuslinestat12 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#3040f7 guibg=#000087 gui=NONE
-    hi Statuslinestat2 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#aff0a0 guibg=#3040f7 gui=NONE
+    hi Statuslinestat12 ctermfg=57 ctermbg=155 cterm=bold guifg=#3040f7 guibg=#000087 gui=NONE
+    hi Statuslinestat2 ctermfg=57 ctermbg=155 cterm=bold guifg=#aff0a0 guibg=#3040f7 gui=NONE
     hi StatuslinestatNormTerm ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#5f0000 guibg=#ffdf00 gui=reverse
     hi StatuslinestatVisuBlock ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#000087 guibg=#870000 gui=NONE
 "    hi Statusline ctermfg=17 ctermbg=208 cterm=bold
@@ -531,7 +531,7 @@ if &t_Co >= 256
     hi TabLineFromSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#000070 guibg=#0050a0 gui=NONE
     hi TabLineFill ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#002050 gui=NONE
 "    hi TabLineSel ctermfg=195 ctermbg=18 cterm=bold
-    hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#ffffaf guibg=#0090f0 gui=bold
+    hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold guifg=#ffffaf guibg=#0090f0 gui=bold
     hi ToolbarLine ctermfg=NONE ctermbg=NONE cterm=NONE
     hi ToolbarButton ctermfg=16 ctermbg=231 cterm=NONE
     hi QuickFixLine ctermfg=16 ctermbg=75 cterm=NONE
@@ -585,11 +585,11 @@ if &t_Co >= 256
       let cursorline_style = g:cursorline_style_supported[g:cursorline_style]
       if v:false
       elseif cursorline_style ==# "dim"
-        hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=#002050 gui=NONE
+        hi CursorLine ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=#002050 gui=NONE
       elseif cursorline_style ==# "reverse"
         hi CursorLine ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=NONE gui=NONE
       elseif cursorline_style ==# "underline"
-        hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=underline
+        hi CursorLine ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=NONE gui=underline
       endif
     endfunction
     call Update_CursorLine()
