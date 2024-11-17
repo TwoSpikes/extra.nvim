@@ -88,7 +88,7 @@ execute printf('noremap <silent> <leader>vl <cmd>call SelectPosition("%s", g:std
 execute printf("noremap <silent> <leader>sl <esc>:so %s<cr>", g:LSP_PLUGINS_SETUP_FILE_PATH)
 
 execute printf('noremap <silent> <leader>vj <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:EXNVIM_CONFIG_PATH)
-execute printf('noremap <silent> <leader>sj <cmd>call LoadExNvimConfig("%s", v:true)<cr><cmd>call HandleExNvimConfig()<cr><cmd>call HandleBuftypeAll()<cr>', expand(g:EXNVIM_CONFIG_PATH))
+execute printf('noremap <silent> <leader>sj <cmd>execute "source %s/vim/exnvim/reload_config.vim"<cr>', expand(g:CONFIG_PATH))
 
 " .dotfiles-script.sh FILE
 " See https://github.com/TwoSpikes/dotfiles.git

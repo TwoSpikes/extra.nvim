@@ -503,16 +503,16 @@ if &t_Co >= 256
     hi Statusline0mac ctermfg=57 ctermbg=155 cterm=bold guifg=#870000 guibg=#3040f7 gui=NONE
     hi Statusline0venv ctermfg=57 ctermbg=155 cterm=bold guifg=#00a0ff guibg=#3040f7 gui=NONE
     hi Statuslinevenv1 ctermfg=57 ctermbg=155 cterm=bold guifg=#000087 guibg=#00a0ff gui=NONE
-    hi Statuslinemac1 ctermfg=57 ctermbg=155 cterm=bold, guifg=#000087 guibg=#870000 gui=NONE
+    hi Statuslinemac1 ctermfg=57 ctermbg=155 cterm=bold guifg=#000087 guibg=#870000 gui=NONE
     hi Statuslinestat1 ctermfg=57 ctermbg=155 cterm=bold guifg=#aff0a0 guibg=#000087 gui=NONE
-    hi Statuslinestat01 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#000087 guibg=#3040f7 gui=NONE
+    hi Statuslinestat01 ctermfg=57 ctermbg=155 cterm=bold guifg=#000087 guibg=#3040f7 gui=NONE
     hi Statuslinestat12 ctermfg=57 ctermbg=155 cterm=bold guifg=#3040f7 guibg=#000087 gui=NONE
     hi Statuslinestat2 ctermfg=57 ctermbg=155 cterm=bold guifg=#aff0a0 guibg=#3040f7 gui=NONE
-    hi StatuslinestatNormTerm ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#5f0000 guibg=#ffdf00 gui=reverse
-    hi StatuslinestatVisuBlock ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#000087 guibg=#870000 gui=NONE
+    hi StatuslinestatNormTerm ctermfg=57 ctermbg=155 cterm=bold guifg=#ffdf00 guibg=#5f0000 gui=NONE
+    hi StatuslinestatVisuBlock ctermfg=57 ctermbg=155 cterm=bold guifg=#000087 guibg=#870000 gui=NONE
 "    hi Statusline ctermfg=17 ctermbg=208 cterm=bold
 "    hi StatuslineNC ctermfg=18 ctermbg=195 cterm=reverse
-    hi StatuslineNC ctermfg=17 ctermbg=208 cterm=reverse guifg=#f03000 guibg=#0030af gui=bold
+    hi StatuslineNC ctermfg=17 ctermbg=208 cterm=NONE guifg=#f03000 guibg=#0030af gui=bold
     " hi ModeNorm ctermfg=16 ctermbg=84 cterm=bold guifg=#000000 guibg=#5fff87 gui=bold
     hi ModeNorm ctermfg=220 ctermbg=236 cterm=bold,reverse guifg=#ffdf00 guibg=#000000 gui=bold,reverse
     hi ModeIns ctermfg=15 ctermbg=39 cterm=bold guifg=#ffffff guibg=#00afff gui=bold
@@ -541,7 +541,7 @@ if &t_Co >= 256
     hi CursorLineNrVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#ffffff guibg=#000087 gui=bold
     hi LineNr ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#ffcf00 guibg=#180838 gui=NONE
     hi LineNrIns ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#00cfff guibg=#003050 gui=italic
-    hi LineNrVisu ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#101050 guibg=#608fdf gui=italic,reverse
+    hi LineNrVisu ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#608fdf guibg=#101050 gui=italic
     hi NonText ctermfg=214 ctermbg=NONE cterm=NONE
     hi FoldColumn ctermfg=240 ctermbg=NONE cterm=NONE
     hi EndOfBuffer ctermfg=214 ctermbg=NONE cterm=NONE
@@ -673,8 +673,12 @@ if &t_Co >= 256
     " hi Statusline ctermfg=231 ctermbg=16 cterm=bold
     hi Statusline ctermfg=255 ctermbg=20 cterm=bold guifg=#ffffff guibg=#0080ff gui=NONE
     hi Statuslinemod ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#fff070 guibg=#000000 gui=reverse
+    hi Statuslinevenv ctermfg=57 ctermbg=155 cterm=bold guifg=#ffff00 guibg=#00a0ff gui=bold
     hi Statuslinemac ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#870000 guibg=#ffffd0 gui=reverse,bold
+    hi Statuslinemacvenv ctermfg=57 ctermbg=155 cterm=bold guifg=#00a0ff guibg=#870000 gui=bold
     hi Statusline0mac ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#870000 guibg=#0080ff gui=NONE
+    hi Statusline0venv ctermfg=57 ctermbg=155 cterm=bold guifg=#00a0ff guibg=#0080ff gui=NONE
+    hi Statuslinevenv1 ctermfg=57 ctermbg=155 cterm=bold guifg=#f0a007 guibg=#00a0ff gui=NONE
     hi Statuslinemac1 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#f0a007 guibg=#870000 gui=NONE
     hi Statuslinestat1 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#ffffff guibg=#f0a007 gui=bold
     hi Statuslinestat01 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#f0a007 guibg=#0080ff gui=NONE
@@ -758,11 +762,11 @@ if &t_Co >= 256
       let g:cursorline_style = "dim"
     endif
     if g:cursorline_style ==# "dim"
-      hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=#dfffff gui=NONE
+      hi CursorLine ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=#dfffff gui=NONE
     elseif g:cursorline_style ==# "reverse"
       hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
     elseif g:cursorline_style ==# "underline"
-      hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=underline
+      hi CursorLine ctermfg=NONE ctermbg=NONE cterm=underline guifg=NONE guibg=NONE gui=underline
     endif
     hi CursorColumn ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
     hi Folded ctermfg=243 ctermbg=255 cterm=NONE

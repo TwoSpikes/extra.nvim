@@ -876,10 +876,9 @@ function! SetLocalSharePath()
 endfunction
 call SetLocalSharePath()
 
-if exists('g:CONFIG_ALREADY_LOADED')
-	if g:CONFIG_ALREADY_LOADED
-		call HandleBuftypeAll()
-	endif
+let reloading_config = exists('g:CONFIG_ALREADY_LOADED')
+if reloading_config
+	call HandleBuftypeAll()
 endif
 let g:CONFIG_ALREADY_LOADED = v:true
 
@@ -1113,7 +1112,11 @@ autocmd BufReadPost *
      \   execute "normal! g`\"" |
      \ endif
 
-let g:specloading=" AFTER "
+if !reloading_config
+	let g:specloading=" AFTER "
+else
+	let g:specloading=""
+endif
 
 function! FixShaDa()
 	let g:PAGER_MODE = 0
