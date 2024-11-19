@@ -1,3 +1,13 @@
+augroup RestoreCursor
+    autocmd!
+    autocmd BufReadPost *
+        \ let s:line = line("'\"")
+        \ | if s:line >= 1 && s:line <= line("$") && &filetype !~# 'commit'
+        \      && index(['xxd', 'gitrebase'], &filetype) == -1
+        \ |   execute "normal! g`\""
+        \ | endif
+augroup END
+
 augroup ExNvimOptionsInComment
 	autocmd!
 	autocmd BufEnter * if v:vim_did_enter|call HandleExNvimOptionsInComment()|endif

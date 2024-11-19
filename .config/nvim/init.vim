@@ -1010,6 +1010,24 @@ let g:PLUGINS_INSTALL_FILE_PATH = '~/.config/nvim/lua/packages/plugins.lua'
 let g:PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/plugins_setup.lua'
 let g:LSP_PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/lsp/plugins.lua'
 
+let g:sneak#s_next = 1
+
+function! RestoreCursorFix()
+    let s:line = line("'^")
+    if v:true
+    \&& s:line >= 1
+    \&& s:line <= line("$")
+    \&& &filetype !~# 'commit'
+    \&& index(['xxd', 'gitrebase'], &filetype) == -1
+    	execute "normal! g`^"
+    endif
+endfunction
+
+if argc() >= 1
+	call timer_start(0, {->execute('argument 1')})
+	call timer_start(0, {->execute('call RestoreCursorFix()|delfunction RestoreCursorFix')})
+endif
+
 function! OnStart()
 	call SetExNvimConfigPath()
 	call SetLocalSharePath()
@@ -1107,13 +1125,12 @@ execute "
 \\n	endif
 \\nendfunction"
 
-autocmd BufReadPost *
-     \ if line("'\"") > 0 && line("'\"") <= line("$") |
-     \   execute "normal! g`\"" |
-     \ endif
-
 if !reloading_config
-	let g:specloading=" AFTER "
+	if g:language ==# "russian"
+		let g:specloading=" ПОСЛЕ "
+	else
+		let g:specloading=" AFTER "
+	endif
 else
 	let g:specloading=""
 endif

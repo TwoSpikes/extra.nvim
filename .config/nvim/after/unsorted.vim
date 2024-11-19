@@ -1259,17 +1259,13 @@ if has('nvim') && luaeval("plugin_installed(_A[1])", ["alpha-nvim"])
 endif
 
 function! OpenOnStart()
-	if exists('g:open_menu_on_start')
-		if g:open_menu_on_start ==# v:true
-			call ChangeNames()
-			call RebindMenus()
-			call timer_start(0, {->quickui#menu#open()})
-		endif
+	if g:open_menu_on_start ==# v:true
+		call ChangeNames()
+		call RebindMenus()
+		call timer_start(0, {->quickui#menu#open()})
 	endif
 
-	if argc()
-		argument 1
-	elseif expand('%') == '' || isdirectory(expand('%'))
+	if argc() <= 0 && expand('%') == '' || isdirectory(expand('%'))
 		let to_open = v:true
 		let to_open = to_open && !g:DO_NOT_OPEN_ANYTHING
 		let to_open = to_open && !g:PAGER_MODE

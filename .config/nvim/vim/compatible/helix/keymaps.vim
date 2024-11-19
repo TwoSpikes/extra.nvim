@@ -238,7 +238,16 @@ if !g:use_nvim_cmp && has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-su
 	unmap y<c-g>
 endif
 nnoremap y <cmd>let register=v:register<bar>exe"norm! v\"".register."y"<cr>
-nnoremap t<cr> v$
+function! Do_N_T_Cr()
+	let g:lx = line('.')
+	let g:ly = col('.')
+	execute "normal! v$"
+	let g:rx = line('.')
+	let g:ry = line('.')
+	let g:pseudo_visual = v:true
+	let g:visual_mode = "char"
+endfunction
+nnoremap t<cr> <cmd>call Do_N_T_Cr()<cr>
 nnoremap mm %
 xnoremap mm %
 inoremap <c-x> <c-p>

@@ -27,4 +27,3 @@ else
 	xnoremap gw <cmd>if g:sneak_mode !=# 'gw'<bar>call CollapseVisual()<bar>exec "normal! m`"<bar>endif<bar>let g:sneak_mode = 'gw'<bar>call sneak#wrap('',2,0,2,1)<bar>exec "normal! my"<bar>let g:visual_mode="char"<bar>let g:pseudo_visual=v:true<bar>normal! `'o`y<cr>
 	xnoremap gW <cmd>if g:sneak_mode !=# 'gW'<bar>call CollapseVisual()<bar>exec "normal! m`"<bar>endif<bar>let g:sneak_mode = 'gW'<bar>call sneak#wrap('',2,1,2,1)<bar>exec "normal! my"<bar>let g:visual_mode="char"<bar>let g:pseudo_visual=v:true<bar>normal! `'o`y<cr>
 endif
-let g:sneak#s_next = 1

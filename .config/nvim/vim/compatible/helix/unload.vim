@@ -61,6 +61,7 @@ if !g:use_nvim_cmp && has('nvim')
 	noremap y<c-g> :<c-u>call setreg(v:register, fugitive#Object(@%))<cr>
 endif
 nunmap y
+delfunction Do_N_T_Cr
 nunmap t<cr>
 nunmap mm
 xunmap mm
