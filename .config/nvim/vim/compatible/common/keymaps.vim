@@ -31,7 +31,7 @@ nnoremap <c-j> viwUe<space><esc>
 vnoremap <c-j> iwUe<space>
 inoremap <c-j> <esc>viwUe<esc>a
 
-nnoremap <bs> X
+nnoremap <bs> <cmd>let reg=v:register<bar>if reg==#"\""<bar>let reg="_"<bar>endif<bar>execute "normal! \"".reg."X"<cr>
 noremap <leader><bs> <bs>
 
 noremap <c-c>% <cmd>split<cr>

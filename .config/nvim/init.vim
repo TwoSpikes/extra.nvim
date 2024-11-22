@@ -1158,5 +1158,11 @@ if has('nvim')
 	call PreparePersistedNvim()
 endif
 
+if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
+	if isdirectory(expand(g:LOCALSHAREPATH)."/site/pack/packer/start/vim-gitgutter")
+		call delete(expand(g:LOCALSHAREPATH)."/site/pack/packer/start/vim-gitgutter", "rf")
+	endif
+endif
+
 autocmd! VimEnter * call OnStart()
 call inputrestore()

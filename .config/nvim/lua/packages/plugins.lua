@@ -578,9 +578,11 @@ return require('packer').startup(function (use)
 	use {
 		'TwoSpikes/music-player.vim',
 	}
-	use {
-		'airblade/vim-gitgutter',
-	}
+	if vim.g.compatible ~= "helix" and vim.g.compatible ~= "helix_hard" then
+		use {
+			'airblade/vim-gitgutter',
+		}
+	end
 	use {
 		'm-demare/hlargs.nvim',
 	}

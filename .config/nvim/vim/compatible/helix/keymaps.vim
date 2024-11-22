@@ -303,8 +303,56 @@ nnoremap w <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>execute "normal! v"
 nnoremap e <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>execute "normal! v".v:count1."e"<bar>let g:rx=line('.')<bar>let g:ry=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
 nnoremap b <cmd>let g:rx=line('.')<bar>let g:ry=col('.')<bar>execute "normal! v".v:count1."b"<bar>let g:lx=line('.')<bar>let g:ly=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
 nnoremap W <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>execute "normal! v".v:count1."W"<bar>let g:rx=line('.')<bar>let g:ry=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
-nnoremap E <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>execute "normal! v".v:count1."E"<bar>let g:rx=line('.')<bar>let g:ry=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
-nnoremap B <cmd>let g:rx=line('.')<bar>let g:ry=col('.')<bar>execute "normal! v".v:count1."B"<bar>let g:lx=line('.')<bar>let g:ly=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
+function! N_DoEWhole()
+	let g:pseudo_visual = v:true
+	let g:visual_mode = "char"
+	let g:lx = line('.')
+	let g:ly = col('.')
+	execute "normal! vE"
+	let g:rx = line('.')
+	let g:ry = col('.')
+	if g:ly ># len(getline(g:lx))
+		execute "normal! olo"
+	elseif getline(line('.'))[g:ly] ==# ''
+		execute "normal! ollo"
+	elseif v:false
+	\|| getline(line('.'))[g:ly] ==# ' '
+		execute "normal! olo"
+	elseif v:true
+	\&& g:lx ==# line('.')
+		execute
+	else
+		execute "normal! ollo"
+	endif
+	call ReorderRightLeft()
+	call PrintCoords()
+endfunction
+nnoremap E <cmd>call N_DoEWhole()<cr>
+function! N_DoBWhole()
+	let g:pseudo_visual = v:true
+	let g:visual_mode = "char"
+	let g:rx = line('.')
+	let g:ry = col('.')
+	execute "normal! vB"
+	let g:lx = line('.')
+	let g:ly = col('.')
+	if g:ry ># len(getline(g:rx))
+		execute "normal! oho"
+	elseif getline(line('.'))[g:ry] ==# ''
+	elseif v:false
+	\|| getline(line('.'))[g:ry-2] ==# ' '
+	\|| getline(line('.'))[g:ry-2] ==# "\t"
+		execute "normal! oho"
+	elseif v:true
+	\&& g:rx ==# line('.')
+		execute
+	else
+		execute "normal! ohho"
+	endif
+	call ReorderRightLeft()
+	call PrintCoords()
+endfunction
+nnoremap B <cmd>call N_DoBWhole()<cr>
 unmap <esc>
 function! N_DoV()
 	let g:pseudo_visual=v:false
@@ -315,6 +363,7 @@ function! N_DoV()
 	let g:visual_mode="char"
 endfunction
 nnoremap v v<cmd>call N_DoV()<cr>
+nnoremap gv v<cmd>call N_DoV()<cr>
 function! N_DoVLine()
 	let result = ""
 	let result .= "v"
@@ -391,9 +440,10 @@ function! MoveLeft()
 	elseif v:false
 	\|| g:visual_mode ==# "char"
 	\|| g:visual_mode ==# "block"
-		if v:false
-		\|| c!=#g:ly
-		\|| l!=#g:lx
+		if v:true
+		\&& g:lx>=#g:rx
+		\&& (g:lx!=#g:rx
+		\|| g:ly>=#g:ry)
 			return "o"
 		endif
 		return "oo"
@@ -572,27 +622,61 @@ function! V_DoE()
 endfunction
 xnoremap e <cmd>call V_DoE()<cr>
 function! V_DoEWhole()
+	let old_c = col('.')
+	let old_l = line('.')
 	if g:pseudo_visual
-		execute "normal! \<esc>wviW"
+		execute "normal! ".MoveLeft()."\<esc>lvE"
+		if getline(line('.'))[old_c] ==# ''
+			execute "normal! olo"
+		elseif v:false
+		\|| getline(line('.'))[old_c] ==# ' '
+			execute
+		elseif old_l ==# line('.')
+			execute "normal! oho"
+		else
+			execute "normal! olo"
+		endif
 	else
-		normal! E
+		execute "normal! E"
 	endif
+	call SavePosition(old_c, old_l, col('.'), line('.'))
+	call ReorderRightLeft()
+	call PrintCoords()
 endfunction
 xnoremap E <cmd>call V_DoEWhole()<cr>
 function! V_DoB()
+	let g:rx = line('.')
+	let g:ry = col('.')
 	if g:pseudo_visual
 		execute "normal! \<esc>hviwo"
 	else
 		normal! b
 	endif
+	let g:lx = line('.')
+	let g:ly = col('.')
 endfunction
-xnoremap b <cmd>call V_DoB()<cr>
+xnoremap b <cmd>call V_DoB()<bar>call PrintCoords()<cr>
 function! V_DoBWhole()
+	let old_c = col('.')
+	let old_l = line('.')
 	if g:pseudo_visual
-		execute "normal! \<esc>hviW"
+		execute "normal! ".MoveLeft()."\<esc>hvB"
+		if getline(line('.'))[old_c - 2] ==# ''
+			execute "normal! olo"
+		elseif v:false
+		\|| getline(line('.'))[old_c - 2] ==# ' '
+			execute
+		elseif old_l ==# line('.')
+			execute "normal! olo"
+		else
+			execute "normal! oho"
+		endif
 	else
-		execute "normal! B"
+		execute "normal! E"
 	endif
+	call SavePosition(old_c, old_l, col('.'), line('.'))
+	call ReorderRightLeft()
+	call PrintCoords()
 endfunction
 xnoremap B <cmd>call V_DoBWhole()<cr>
 function! V_DoC()
