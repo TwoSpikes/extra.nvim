@@ -1953,10 +1953,22 @@ function! BeforeUpdatingPlugins()
 		execute "!git stash"
 		cd -
 	endif
+	
+	if isdirectory(g:LOCALSHAREPATH.'/site/pack/packer/start/persisted.nvim')
+		execute "cd ".g:LOCALSHAREPATH."/site/pack/packer/start/persisted.nvim"
+		execute "!git stash"
+		cd -
+	endif
 endfunction
 function! AfterUpdatingPlugins()
 	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key")
 		execute "cd ".g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key/"
+		execute "!git stash pop"
+		cd -
+	endif
+
+	if isdirectory(g:LOCALSHAREPATH.'/site/pack/packer/start/persisted.nvim')
+		execute "cd ".g:LOCALSHAREPATH."/site/pack/packer/start/persisted.nvim"
 		execute "!git stash pop"
 		cd -
 	endif

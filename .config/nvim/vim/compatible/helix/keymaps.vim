@@ -136,7 +136,7 @@ function! V_DoD()
 	let g:ry = col('.')
 	normal! o
 	call ReorderRightLeft()
-	execute "normal! ".MoveLeft()
+	execute "normal! ".MoveLeft(line('.'), col('.'), g:lx, g:ly)
 	normal! o
 	call SetYankMode()
 	execute "normal! \"".register."d"
@@ -325,7 +325,6 @@ function! N_DoEWhole()
 		execute "normal! ollo"
 	endif
 	call ReorderRightLeft()
-	call PrintCoords()
 endfunction
 nnoremap E <cmd>call N_DoEWhole()<cr>
 function! N_DoBWhole()
@@ -350,7 +349,6 @@ function! N_DoBWhole()
 		execute "normal! ohho"
 	endif
 	call ReorderRightLeft()
-	call PrintCoords()
 endfunction
 nnoremap B <cmd>call N_DoBWhole()<cr>
 unmap <esc>
@@ -433,7 +431,7 @@ function! V_DoVBlock()
 endfunction
 xnoremap <c-v> <cmd>call V_DoVBlock()<cr>
 xnoremap <nowait> <esc> <cmd>let g:pseudo_visual=v:true<cr>
-function! MoveLeft()
+function! MoveLeft(x1, y1, x2, y2)
 	let c=col('.')
 	let l=line('.')
 	if v:false
@@ -441,12 +439,12 @@ function! MoveLeft()
 	\|| g:visual_mode ==# "char"
 	\|| g:visual_mode ==# "block"
 		if v:true
-		\&& g:lx>=#g:rx
-		\&& (g:lx!=#g:rx
-		\|| g:ly>=#g:ry)
+		\&& a:x1>=#a:x2
+		\&& (a:x1!=#a:x2
+		\|| a:y1>=#a:y2)
 			return "o"
 		endif
-		return "oo"
+		return ""
 	elseif v:false
 	\|| g:visual_mode ==# "line"
 		if v:false
@@ -461,17 +459,18 @@ function! MoveLeft()
 		echohl Normal
 	endif
 endfunction
-xnoremap <expr> i MoveLeft()."\<esc>i"
-function! MoveRight()
+xnoremap <expr> i MoveLeft(line('.'), col('.'), g:lx, g:ly)."\<esc>i"
+function! MoveRight(x1, x2, y1, y2)
 	let c=col('.')
 	let l=line('.')
 	if v:false
 	elseif v:false
 	\|| g:visual_mode ==# "char"
 	\|| g:visual_mode ==# "block"
-		if v:true
-		\&& c==#g:ly
-		\&& l==#g:lx
+		if v:false
+		\|| a:x1<#a:x2
+		\|| a:x1==#a:x2
+		\&& a:y1<#a:y2
 			return "o"
 		endif
 		return ""
@@ -501,7 +500,7 @@ function! V_DoS()
 	else
 		let g:last_selected = select
 	endif
-	call feedkeys(MoveLeft(), 't')
+	call feedkeys(MoveLeft(line('.'), col('.'), g:lx, g:ly), 't')
 	call ExitVisual()
 	let cnt = count(GetVisualSelection(), select)
 	echomsg "cnt is: ".cnt
@@ -521,7 +520,7 @@ function! V_DoX()
 	let g:ry = col('.')
 	normal! o
 	call ReorderRightLeft()
-	execute "normal! ".MoveLeft()
+	execute "normal! ".MoveLeft(line('.'), col('.'), g:lx, g:ly)
 	normal! o
 	if v:false
 	\|| g:ly !=# 1
@@ -530,6 +529,7 @@ function! V_DoX()
 	else
 		normal! j$
 	endif
+	echomsg "ended"
 endfunction
 xnoremap x <cmd>call V_DoX()<cr>
 function! V_DoXDoNotExtendSubsequentLines()
@@ -540,7 +540,7 @@ function! V_DoXDoNotExtendSubsequentLines()
 	let g:ry = col('.')
 	normal! o
 	call ReorderRightLeft()
-	execute "normal! ".MoveLeft()
+	execute "normal! ".MoveLeft(line('.'), col('.'), g:lx, g:ly)
 	let lx=line('.')
 	let ly=col('.')
 	normal! o
@@ -614,18 +614,29 @@ function! V_DoWWhole()
 endfunction
 xnoremap W <cmd>call V_DoWWhole()<cr>
 function! V_DoE()
+	let old_c = col('.')
+	let old_l = line('.')
 	if g:pseudo_visual
-		execute "normal! \<esc>eviw"
+		execute "normal! ".MoveRight(g:lx, g:ly, g:rx, g:ry)."\<esc>".(charclass(getline(line('.'))[old_c])==#2?"l":"")."ve"
+		if getline(old_l)[old_c] ==# ''
+			execute "normal! ollo"
+		elseif charclass(getline(line('.'))[old_c]) !=# 2
+			execute "normal! olo"
+		else
+			execute
+		endif
 	else
-		normal! e
+		execute "normal! E"
 	endif
+	call SavePosition(old_c, old_l, col('.'), line('.'))
+	call ReorderRightLeft()
 endfunction
 xnoremap e <cmd>call V_DoE()<cr>
 function! V_DoEWhole()
 	let old_c = col('.')
 	let old_l = line('.')
 	if g:pseudo_visual
-		execute "normal! ".MoveLeft()."\<esc>lvE"
+		execute "normal! ".MoveRight(g:lx, g:ly, g:rx, g:ry)."\<esc>lvE"
 		if getline(line('.'))[old_c] ==# ''
 			execute "normal! olo"
 		elseif v:false
@@ -641,7 +652,6 @@ function! V_DoEWhole()
 	endif
 	call SavePosition(old_c, old_l, col('.'), line('.'))
 	call ReorderRightLeft()
-	call PrintCoords()
 endfunction
 xnoremap E <cmd>call V_DoEWhole()<cr>
 function! V_DoB()
@@ -655,12 +665,12 @@ function! V_DoB()
 	let g:lx = line('.')
 	let g:ly = col('.')
 endfunction
-xnoremap b <cmd>call V_DoB()<bar>call PrintCoords()<cr>
+xnoremap b <cmd>call V_DoB()<cr>
 function! V_DoBWhole()
 	let old_c = col('.')
 	let old_l = line('.')
 	if g:pseudo_visual
-		execute "normal! ".MoveLeft()."\<esc>hvB"
+		execute "normal! ".MoveLeft(g:lx, g:ly, g:rx, g:ry)."\<esc>hvB"
 		if getline(line('.'))[old_c - 2] ==# ''
 			execute "normal! olo"
 		elseif v:false
@@ -676,7 +686,6 @@ function! V_DoBWhole()
 	endif
 	call SavePosition(old_c, old_l, col('.'), line('.'))
 	call ReorderRightLeft()
-	call PrintCoords()
 endfunction
 xnoremap B <cmd>call V_DoBWhole()<cr>
 function! V_DoC()
@@ -687,7 +696,7 @@ function! V_DoC()
 	let g:ry = col('.')
 	normal! o
 	call ReorderRightLeft()
-	execute "normal! ".MoveLeft()
+	execute "normal! ".MoveLeft(line('.'), col('.'), g:lx, g:ly)
 	normal! o
 	let rxlen = strlen(getline(g:rx))
 	call SetYankMode()
@@ -713,7 +722,7 @@ function! V_DoY()
 	let g:ry = col('.')
 	normal! o
 	call ReorderRightLeft()
-	execute "normal! ".MoveLeft()
+	execute "normal! ".MoveLeft(line('.'), col('.'), g:lx, g:ly)
 	normal! o
 	call SetYankMode()
 

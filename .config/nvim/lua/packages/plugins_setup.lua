@@ -36,7 +36,7 @@ if plugin_installed("todo-comments.nvim") then
 	require('packages.todo-comments.init')
 end
 if plugin_installed("indent-blankline.nvim") then
- 	require('packages.indent-blankline.init')
+	require('packages.indent-blankline.init')
 end
 if plugin_installed("nvim-dap") then
 	require('packages.dap.init')
@@ -48,7 +48,7 @@ if plugin_installed("gitsigns.nvim") then
 	require('packages.gitsigns.init')
 end
 if plugin_installed("alpha-nvim") then
- 	require('packages.alpha.init')
+	require('packages.alpha.init')
 end
 if plugin_installed("persisted.nvim") then
 	require('packages.persisted.init')

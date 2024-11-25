@@ -237,7 +237,7 @@ function! RebindMenus()
 	endif
 	if has('nvim') && luaeval("plugin_installed(_A[1])", ["telescope.nvim"])
 		call quickui#menu#install(s:window_label, [
-					\ [(g:quickui_icons?"󰥨 ":"").s:telescope_fuzzy_find_label."\tLEAD ff", 'call FuzzyFind()', 'Opens Telescope.nvim find file'],
+					\ [(g:quickui_icons?"󰥨 ":"").s:telescope_fuzzy_find_label."\t".(g:compatible!=#"helix"&&g:compatible!=#"helix_hard"?"LEAD ff":"LEAD f"), 'call FuzzyFind()', 'Opens Telescope.nvim find file'],
 					\ ])
 	endif
 	if executable('ranger')
