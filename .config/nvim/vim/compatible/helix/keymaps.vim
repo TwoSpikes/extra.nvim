@@ -2,11 +2,12 @@
 
 "" LEGEND
 " hcm: Helix compatibility mode
-" Text*: text and any number of symbols after it (template to match function name)
-" Do_V_*, V_Do_*: xnoremap action
+" Do_V_*, V_Do_*, V_Do*: xnoremap action
 " N_Do_*: nnoremap action
 " *_NPV_*: non-pseudo visual mode action
 " *_PV_*: pseudo visual mode action
+" MoveLeft(x1, y1, x2, y2): move to the left of the selection ((x1, y1) — coordinates of the left of the selection, (x2, y2) — coordinates of the right of the selection)
+" MoveRight(x1, x2, y1, y2): move to the right of the selection ((x1, y1) — coordinates of the left of the selection, (x2, y2) — coordinates of the right of the selection)
 
 let g:sneak_mode = ''
 
@@ -300,8 +301,54 @@ function! SavePosition(old_c, old_l, new_c, new_l)
 endfunction
 xnoremap <expr> : g:pseudo_visual?":\<c-u>":":"
 nnoremap w <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>execute "normal! v".v:count1."e"<bar>let g:rx=line('.')<bar>let g:ry=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
-nnoremap e <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>execute "normal! v".v:count1."e"<bar>let g:rx=line('.')<bar>let g:ry=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
-nnoremap b <cmd>let g:rx=line('.')<bar>let g:ry=col('.')<bar>execute "normal! v".v:count1."b"<bar>let g:lx=line('.')<bar>let g:ly=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
+function! N_DoE()
+	let g:pseudo_visual = v:true
+	let g:visual_mode = "char"
+	let g:lx = line('.')
+	let g:ly = col('.')
+	let old_c = col('.')
+	let old_l = line('.')
+	execute "normal! ve"
+	if getline(old_l)[old_c] ==# ''
+		execute "normal! ollo"
+	elseif charclass(getline(line('.'))[old_c]) !=# 2
+		execute "normal! olo"
+	else
+		execute
+	endif
+	let g:rx = line('.')
+	let g:ry = col('.')
+	call SavePosition(old_c, old_l, col('.'), line('.'))
+	call ReorderRightLeft()
+endfunction
+nnoremap e <cmd>call N_DoE()<cr>
+function! N_DoB()
+	let g:pseudo_visual = v:true
+	let g:visual_mode = "char"
+	let g:lx = line('.')
+	let g:ly = col('.')
+	let old_c = col('.')
+	let old_l = line('.')
+	execute "normal! vb"
+	if getline(old_l)[old_c-2] ==# ''
+		execute "normal! ohho"
+	elseif v:false
+	\|| charclass(getline(line('.'))[old_c-1]) !=# 2
+	\&& charclass(getline(line('.'))[old_c-2]) !=# 2
+	\|| charclass(getline(line('.'))[old_c-1]) ==# 0
+		execute
+	elseif charclass(getline(line('.'))[old_c-1]) !=# 2
+		execute "normal! oho"
+	else
+		execute
+	endif
+	let g:rx = line('.')
+	let g:ry = col('.')
+	call SavePosition(old_c, old_l, col('.'), line('.'))
+	call ReorderRightLeft()
+endfunction
+nnoremap b <cmd>call N_DoB()<cr>
+" nnoremap b <cmd>let g:rx=line('.')<bar>let g:ry=col('.')<bar>execute "normal! v".v:count1."b"<bar>let g:lx=line('.')<bar>let g:ly=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
 nnoremap W <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>execute "normal! v".v:count1."W"<bar>let g:rx=line('.')<bar>let g:ry=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
 function! N_DoEWhole()
 	let g:pseudo_visual = v:true
@@ -626,7 +673,7 @@ function! V_DoE()
 			execute
 		endif
 	else
-		execute "normal! E"
+		execute "normal! e"
 	endif
 	call SavePosition(old_c, old_l, col('.'), line('.'))
 	call ReorderRightLeft()
@@ -655,15 +702,22 @@ function! V_DoEWhole()
 endfunction
 xnoremap E <cmd>call V_DoEWhole()<cr>
 function! V_DoB()
-	let g:rx = line('.')
-	let g:ry = col('.')
+	let old_c = col('.')
+	let old_l = line('.')
 	if g:pseudo_visual
-		execute "normal! \<esc>hviwo"
+		execute "normal! ".MoveRight(g:lx, g:ly, g:rx, g:ry)."\<esc>".(charclass(getline(line('.'))[old_c-2])==#2?"h":"")."vb"
+		if getline(old_l)[old_c-2] ==# ''
+			execute "normal! ohho"
+		elseif charclass(getline(old_l)[old_c-2]) !=# 2
+			execute "normal! oho"
+		else
+			execute
+		endif
 	else
-		normal! b
+		execute "normal! b"
 	endif
-	let g:lx = line('.')
-	let g:ly = col('.')
+	call SavePosition(old_c, old_l, col('.'), line('.'))
+	call ReorderRightLeft()
 endfunction
 xnoremap b <cmd>call V_DoB()<cr>
 function! V_DoBWhole()
