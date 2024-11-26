@@ -311,40 +311,43 @@ function! N_DoE()
 	execute "normal! ve"
 	if getline(old_l)[old_c] ==# ''
 		execute "normal! ollo"
-	elseif charclass(getline(line('.'))[old_c]) !=# 2
+	elseif v:false
+	\|| charclass(getline(old_l)[old_c-1]) !=# 2
+	\&& charclass(getline(old_l)[old_c]) !=# 2
+	\|| charclass(getline(old_l)[old_c-1]) ==# 0
+		execute
+	elseif charclass(getline(old_l)[old_c-1]) !=# 2
 		execute "normal! olo"
 	else
 		execute
 	endif
 	let g:rx = line('.')
 	let g:ry = col('.')
-	call SavePosition(old_c, old_l, col('.'), line('.'))
 	call ReorderRightLeft()
 endfunction
 nnoremap e <cmd>call N_DoE()<cr>
 function! N_DoB()
 	let g:pseudo_visual = v:true
 	let g:visual_mode = "char"
-	let g:lx = line('.')
-	let g:ly = col('.')
+	let g:rx = line('.')
+	let g:ry = col('.')
 	let old_c = col('.')
 	let old_l = line('.')
 	execute "normal! vb"
 	if getline(old_l)[old_c-2] ==# ''
 		execute "normal! ohho"
 	elseif v:false
-	\|| charclass(getline(line('.'))[old_c-1]) !=# 2
-	\&& charclass(getline(line('.'))[old_c-2]) !=# 2
-	\|| charclass(getline(line('.'))[old_c-1]) ==# 0
+	\|| charclass(getline(old_l)[old_c-1]) !=# 2
+	\&& charclass(getline(old_l)[old_c-2]) !=# 2
+	\|| charclass(getline(old_l)[old_c-1]) ==# 0
 		execute
-	elseif charclass(getline(line('.'))[old_c-1]) !=# 2
+	elseif charclass(getline(old_l)[old_c-1]) !=# 2
 		execute "normal! oho"
 	else
 		execute
 	endif
-	let g:rx = line('.')
-	let g:ry = col('.')
-	call SavePosition(old_c, old_l, col('.'), line('.'))
+	let g:lx = line('.')
+	let g:ly = col('.')
 	call ReorderRightLeft()
 endfunction
 nnoremap b <cmd>call N_DoB()<cr>
@@ -576,7 +579,6 @@ function! V_DoX()
 	else
 		normal! j$
 	endif
-	echomsg "ended"
 endfunction
 xnoremap x <cmd>call V_DoX()<cr>
 function! V_DoXDoNotExtendSubsequentLines()
@@ -667,7 +669,7 @@ function! V_DoE()
 		execute "normal! ".MoveRight(g:lx, g:ly, g:rx, g:ry)."\<esc>".(charclass(getline(line('.'))[old_c])==#2?"l":"")."ve"
 		if getline(old_l)[old_c] ==# ''
 			execute "normal! ollo"
-		elseif charclass(getline(line('.'))[old_c]) !=# 2
+		elseif charclass(getline(old_l)[old_c]) !=# 2
 			execute "normal! olo"
 		else
 			execute
@@ -705,16 +707,18 @@ function! V_DoB()
 	let old_c = col('.')
 	let old_l = line('.')
 	if g:pseudo_visual
-		execute "normal! ".MoveRight(g:lx, g:ly, g:rx, g:ry)."\<esc>".(charclass(getline(line('.'))[old_c-2])==#2?"h":"")."vb"
+		execute "normal! ".MoveLeft(g:lx, g:ly, g:rx, g:ry)."\<esc>vb"
 		if getline(old_l)[old_c-2] ==# ''
 			execute "normal! ohho"
-		elseif charclass(getline(old_l)[old_c-2]) !=# 2
+		elseif v:false
+		\|| charclass(getline(old_l)[old_c-1]) !=# 2
+		\|| charclass(getline(old_l)[old_c-2]) !=# 2
 			execute "normal! oho"
 		else
 			execute
 		endif
 	else
-		execute "normal! b"
+		execute "normal! e"
 	endif
 	call SavePosition(old_c, old_l, col('.'), line('.'))
 	call ReorderRightLeft()
