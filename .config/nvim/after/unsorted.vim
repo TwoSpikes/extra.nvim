@@ -1188,7 +1188,7 @@ function! OpenRanger(path)
 	augroup oncloseranger
 		autocmd! oncloseranger
 		if has('nvim')
-			execute 'autocmd TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.g:bufnrforranger."|if v:shell_error!=#0|call OnQuit()|confirm quit|call OnQuitDisable()|endif|if filereadable(filename)==#1|let old_bufnr=bufnr()|enew|execute old_bufnr.\"bdelete\"|unlet old_bufnr|let bufnr=bufadd(filename)|call bufload(bufnr)|execute bufnr.'buffer'|call Numbertoggle()|filetype detect|call AfterSomeEvent(\"ModeChanged\", \"doautocmd BufEnter \".expand(\"%\"))|unlet g:bufnrforranger|else|endif|endif|call delete('".TMPFILE."')|unlet filename"
+			execute 'autocmd TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.g:bufnrforranger."|if v:shell_error!=#0|call OnQuit()|quit|call OnQuitDisable()|endif|if filereadable(filename)==#1|let old_bufnr=bufnr()|enew|execute old_bufnr.\"bdelete\"|unlet old_bufnr|let bufnr=bufadd(filename)|call bufload(bufnr)|execute bufnr.'buffer'|call Numbertoggle()|filetype detect|call AfterSomeEvent(\"ModeChanged\", \"doautocmd BufEnter \".expand(\"%\"))|unlet g:bufnrforranger|else|endif|endif|call delete('".TMPFILE."')|unlet filename"
 		else
 			function! CheckRangerStopped(timer_id, TMPFILE)
 				if !exists('g:bufnrforranger')

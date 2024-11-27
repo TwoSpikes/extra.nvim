@@ -661,16 +661,19 @@ function! V_DoWWhole()
 endfunction
 xnoremap W <cmd>call V_DoWWhole()<cr>
 function! V_DoE()
-	let old_c = col('.')
-	let old_l = line('.')
+	let g:lx = line('.')
+	let g:ly = col('.')
 	if g:pseudo_visual
-		execute "normal! ".MoveRight(line('.'), col('.'), g:rx, g:ry)."\<esc>ve"
-		if getline(old_l)[old_c] ==# ''
+		execute "normal! \<esc>ve"
+		if getline(g:lx)[g:ly] ==# ''
 			execute "normal! ollo"
 		elseif v:false
-		\|| charclass(getline(old_l)[old_c]) !=# 2
-		\|| charclass(getline(old_l)[old_c-1]) !=# 2
-		\&& charclass(getline(old_l)[old_c]) ==# 2
+		\|| charclass(getline(g:lx)[g:ly]) !=# 2
+		\&& charclass(getline(g:lx)[g:ly-1]) ==# 2
+		\|| charclass(getline(g:lx)[g:ly-1]) !=# 2
+		\&& charclass(getline(g:lx)[g:ly]) ==# 2
+		\|| charclass(getline(g:lx)[g:ly]) ==# 0
+		\&& charclass(getline(g:lx)[g:ly-1]) !=# 0
 			execute "normal! olo"
 		else
 			execute
@@ -678,7 +681,8 @@ function! V_DoE()
 	else
 		execute "normal! e"
 	endif
-	call SavePosition(old_c, old_l, col('.'), line('.'))
+	let g:rx = line('.')
+	let g:ry = col('.')
 endfunction
 xnoremap e <cmd>call V_DoE()<cr>
 function! V_DoEWhole()
@@ -704,15 +708,17 @@ function! V_DoEWhole()
 endfunction
 xnoremap E <cmd>call V_DoEWhole()<cr>
 function! V_DoB()
-	let old_c = col('.')
-	let old_l = line('.')
+	let g:rx = line('.')
+	let g:ry = col('.')
 	if g:pseudo_visual
-		execute "normal! ".MoveLeft(g:lx, g:ly, g:rx, g:ry)."\<esc>vb"
-		if getline(old_l)[old_c-2] ==# ''
+		execute "normal! \<esc>vb"
+		if getline(g:rx)[g:ry-2] ==# ''
 			execute "normal! ohho"
 		elseif v:false
-		\|| charclass(getline(old_l)[old_c-1]) !=# 2
-		\|| charclass(getline(old_l)[old_c-2]) !=# 2
+		\|| charclass(getline(g:rx)[g:ry-1]) !=# 2
+		\&& charclass(getline(g:rx)[g:ry-2]) ==# 2
+		\|| charclass(getline(g:rx)[g:ry-2]) !=# 2
+		\&& charclass(getline(g:rx)[g:ry-1]) ==# 2
 			execute "normal! oho"
 		else
 			execute
@@ -720,8 +726,8 @@ function! V_DoB()
 	else
 		execute "normal! e"
 	endif
-	call SavePosition(old_c, old_l, col('.'), line('.'))
-	call ReorderRightLeft()
+	let g:lx = line('.')
+	let g:ly = col('.')
 endfunction
 xnoremap b <cmd>call V_DoB()<cr>
 function! V_DoBWhole()

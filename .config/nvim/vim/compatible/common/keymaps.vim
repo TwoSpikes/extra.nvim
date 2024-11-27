@@ -36,7 +36,7 @@ noremap <leader><bs> <bs>
 
 noremap <c-c>% <cmd>split<cr>
 noremap <c-c>" <cmd>vsplit<cr>
-noremap <c-c>w <cmd>confirm quit<cr>
+noremap <c-c>w <cmd>quit<cr>
 for i in range(1, 9)
 	execute "noremap <c-c>".i." <cmd>tabnext ".i."<cr>"
 endfor
@@ -142,12 +142,12 @@ nnoremap <silent> <leader>fr <cmd>lua require('telescope').extensions.recent_fil
 " vnoremap <c-?> <esc>:s/.*/\/\/ \0
 
 " Tab closers
-noremap <silent> q <cmd>confirm quit<cr>
+noremap <silent> q <cmd>quit<cr>
 noremap <silent> Q <cmd>quit!<cr>
 noremap <c-w><c-g> <cmd>echo "Quit"<cr>
 
 " Emacs support
-noremap <silent> <c-x><c-c> <cmd>confirm qall<cr>
+noremap <silent> <c-x><c-c> <cmd>qall<cr>
 noremap <silent> <c-x><c-q> <cmd>qall!<cr>
 noremap <silent> <c-x>s <cmd>w<cr>
 noremap <silent> <c-x>S <cmd>wall<Bar>echohl MsgArea<Bar>echo 'Saved all buffers'<cr>
