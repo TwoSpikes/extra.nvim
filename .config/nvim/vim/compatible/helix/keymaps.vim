@@ -537,7 +537,7 @@ function! MoveRight(x1, x2, y1, y2)
 	endif
 endfunction
 xunmap a%
-xnoremap <expr> a ReorderRightLeft().MoveRight()."\<esc>a"
+xnoremap <expr> a ReorderRightLeft().MoveRight(line('.'), col('.'), g:lx, g:ly)."\<esc>a"
 function! V_DoS()
 	if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-quickui"])
 		let select = quickui#input#open('Select:', g:last_selected)
@@ -666,10 +666,13 @@ function! V_DoE()
 	let old_c = col('.')
 	let old_l = line('.')
 	if g:pseudo_visual
-		execute "normal! ".MoveRight(g:lx, g:ly, g:rx, g:ry)."\<esc>".(charclass(getline(line('.'))[old_c])==#2?"l":"")."ve"
+		execute "normal! ".MoveRight(g:lx, g:ly, g:rx, g:ry)."\<esc>ve"
 		if getline(old_l)[old_c] ==# ''
 			execute "normal! ollo"
-		elseif charclass(getline(old_l)[old_c]) !=# 2
+		elseif v:false
+		\|| charclass(getline(old_l)[old_c]) !=# 2
+		\|| charclass(getline(old_l)[old_c-1]) !=# 2
+		\&& charclass(getline(old_l)[old_c]) ==# 2
 			execute "normal! olo"
 		else
 			execute
