@@ -323,7 +323,6 @@ function! N_DoE()
 	endif
 	let g:rx = line('.')
 	let g:ry = col('.')
-	call ReorderRightLeft()
 endfunction
 nnoremap e <cmd>call N_DoE()<cr>
 function! N_DoB()
@@ -348,7 +347,6 @@ function! N_DoB()
 	endif
 	let g:lx = line('.')
 	let g:ly = col('.')
-	call ReorderRightLeft()
 endfunction
 nnoremap b <cmd>call N_DoB()<cr>
 " nnoremap b <cmd>let g:rx=line('.')<bar>let g:ry=col('.')<bar>execute "normal! v".v:count1."b"<bar>let g:lx=line('.')<bar>let g:ly=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
@@ -488,13 +486,13 @@ function! MoveLeft(x1, y1, x2, y2)
 	elseif v:false
 	\|| g:visual_mode ==# "char"
 	\|| g:visual_mode ==# "block"
-		if v:true
-		\&& a:x1>=#a:x2
-		\&& (a:x1!=#a:x2
-		\|| a:y1>=#a:y2)
+		if v:false
+		\|| a:x1>#a:x2
+		\|| a:x1==#a:x2
+		\&& a:y1>#a:y2
 			return "o"
 		endif
-		return ""
+		return "oo"
 	elseif v:false
 	\|| g:visual_mode ==# "line"
 		if v:false
@@ -510,7 +508,7 @@ function! MoveLeft(x1, y1, x2, y2)
 	endif
 endfunction
 xnoremap <expr> i MoveLeft(line('.'), col('.'), g:lx, g:ly)."\<esc>i"
-function! MoveRight(x1, x2, y1, y2)
+function! MoveRight(x1, y1, x2, y2)
 	let c=col('.')
 	let l=line('.')
 	if v:false
@@ -523,7 +521,7 @@ function! MoveRight(x1, x2, y1, y2)
 		\&& a:y1<#a:y2
 			return "o"
 		endif
-		return ""
+		return "oo"
 	elseif v:false
 	\|| g:visual_mode ==# "line"
 		if l==#g:lx
@@ -537,7 +535,7 @@ function! MoveRight(x1, x2, y1, y2)
 	endif
 endfunction
 xunmap a%
-xnoremap <expr> a ReorderRightLeft().MoveRight(line('.'), col('.'), g:lx, g:ly)."\<esc>a"
+xnoremap <expr> a MoveRight(line('.'), col('.'), g:rx, g:ry)."\<esc>a"
 function! V_DoS()
 	if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-quickui"])
 		let select = quickui#input#open('Select:', g:last_selected)
@@ -666,7 +664,7 @@ function! V_DoE()
 	let old_c = col('.')
 	let old_l = line('.')
 	if g:pseudo_visual
-		execute "normal! ".MoveRight(g:lx, g:ly, g:rx, g:ry)."\<esc>ve"
+		execute "normal! ".MoveRight(line('.'), col('.'), g:rx, g:ry)."\<esc>ve"
 		if getline(old_l)[old_c] ==# ''
 			execute "normal! ollo"
 		elseif v:false
@@ -681,7 +679,6 @@ function! V_DoE()
 		execute "normal! e"
 	endif
 	call SavePosition(old_c, old_l, col('.'), line('.'))
-	call ReorderRightLeft()
 endfunction
 xnoremap e <cmd>call V_DoE()<cr>
 function! V_DoEWhole()
