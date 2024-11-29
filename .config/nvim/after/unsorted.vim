@@ -426,15 +426,42 @@ function! Lua_Require_Goto_Workaround_Wincmd_f()
 			let filename = substitute(filename, '\.', '\/', 'g')
 			let file_found = v:false
 			for i in g:LUA_REQUIRE_GOTO_PREFIX
-				if !filereadable(i.filename.'.lua')
-					let startcol = end
-					continue
+				let has_globbing = v:false
+				for char in i
+					if char ==# '*'
+						let has_globbing = v:true
+						break
+					endif
+				endfor
+				if executable('find') && has_globbing
+					unlet has_globbing
+					let found = systemlist('find ~/ -wholename '.Repr_Shell(i).'/'.Repr_Shell(filename))
+					if len(found) ==# 0
+						let found = systemlist('find ~/ -wholename '.Repr_Shell(i).'/'.Repr_Shell(filename).'.lua')
+					endif
+					if len(found) ==# 0
+						let startcol = end
+						continue
+					endif
+					let foundfilename = found[0]
+				else
+					unlet has_globbing
+					let current_filename = i.'/'.filename.'.lua'
+					if !filereadable(current_filename)
+						let startcol = end
+						continue
+					endif
+					let foundfilename = current_filename
 				endif
-				split
-				let goto_buffer = bufadd(i.filename.'.lua')
-				call bufload(goto_buffer)
-				exec goto_buffer."buffer"
-				normal! `"
+				if isdirectory(foundfilename)
+					execute "Neotree position=right" foundfilename
+				else
+					split
+					let goto_buffer = bufadd(foundfilename)
+					call bufload(goto_buffer)
+					exec goto_buffer."buffer"
+					normal! `"
+				endif
 				let file_found = v:true
 				return
 			endfor
@@ -1794,10 +1821,6 @@ function! OnFirstTime()
 endfunction
 call OnFirstTime()
 
-call OpenOnStart()
-
-let g:exnvim_fully_loaded += 1
-let g:specloading = ' OK '
 " TERMINAL
 
 function! OpenTerm(cmd)
@@ -2009,3 +2032,9 @@ function! STCUpd()
 		endif
 	endif
 endfunction
+
+call OpenOnStart()
+
+let g:exnvim_fully_loaded += 1
+let g:specloading = ' OK '
+doautocmd User ExNvimLoaded

@@ -1023,7 +1023,7 @@ function! RestoreCursorFix()
     endif
 endfunction
 
-if argc() >= 1
+if argc() >=# 1
 	call timer_start(0, {->execute('argument 1')})
 	call timer_start(0, {->execute('call RestoreCursorFix()|delfunction RestoreCursorFix')})
 endif
