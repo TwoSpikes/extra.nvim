@@ -5,25 +5,6 @@ endif
 function! ChangeLanguage()
 	if g:language ==# 'russian'
 		let s:file_label = '&f:Файл'
-		let s:window_label = '&w:Окно'
-		let s:text_label = '&t:Текст'
-		let s:lsp_label = '&LSP'
-		let s:option_label = '&o:Опции'
-		let s:config_label = '&c:Конфиг'
-		let s:help_label = '&h:Помощь'
-		let s:git_label = '&Git'
-	else
-		let s:file_label = '&File'
-		let s:window_label = '&Window'
-		let s:text_label = '&Text'
-		let s:lsp_label = '&LSP'
-		let s:option_label = '&Option'
-		let s:config_label = '&Config'
-		let s:help_label = '&Help'
-		let s:git_label = '&Git'
-	endif
-
-	if g:language ==# 'russian'
 		let s:new_file_label = '&w:Новый файл'
 		let s:close_label = '&o:Закрыть'
 		let s:force_close_label = '&e:Закрыть всё равно'
@@ -40,6 +21,7 @@ function! ChangeLanguage()
 		let s:exit_label = '&x:Выйти'
 		let s:exit_wo_confirm_label = '&m:Выйти всё равно'
 
+		let s:window_label = '&w:Окно'
 		let s:kill_buffer_label = '&u:Убить буффер'
 		let s:select_buffer_label = '&s:Выбрать буффер'
 		let s:search_word_using_spectre_label = '&w:Искать слово в Spectre'
@@ -59,6 +41,7 @@ function! ChangeLanguage()
 		let s:open_lazygit_label = '&g:Открыть lazygit'
 		let s:open_start_menu_label = '&a:Открыть главное меню'
 
+		let s:text_label = '&t:Текст'
 		let s:copy_line_label = '&y:Копировать строку'
 		let s:delete_line_label = '&d:Удалить строку'
 		let s:cut_line_label = '&u:Вырезать строку'
@@ -78,7 +61,40 @@ function! ChangeLanguage()
 		let s:select_all_label = '&s:Выбрать всё'
 		let s:toggle_tagbar_label = 'Переключить &tagbar'
 		let s:generate_annotation_label = '&o:Создать аннотацию'
+
+		let s:lsp_label = '&LSP'
+		let s:git_label = '&Git'
+		let s:option_label = '&o:Опции'
+
+		let s:config_label = '&c:Конфиг'
+		let s:open_init_vim = 'Открыть &init.vim'
+		let s:open_plugins_list = '&p:Открыть список плагинов'
+		let s:open_plugins_setup = '&u:Открыть установки плагинов'
+		let s:open_lsp_settings = 'Открыть настройки L&SP'
+		let s:open_exnvim_config = 'Открыть конфигурацию ex&nvim'
+		let s:open_colorschemes_dir = '&c:Отк.дир-ю с цветов.схемами'
+		let s:reload_init_vim = '&r:Перезагрузить init.vim'
+		let s:reload_plugins_list = '&e:Перезагрузить список плаг.'
+		let s:reload_plugins_setup = '&o:Перезагруз.установки плаг.'
+		let s:reload_lsp_setup = '&a:Перезагрузит.установки LSP'
+		let s:generate_exnvim_config = '&g:Сгенериров.конфигур.exnvim'
+		let s:reload_exnvim_config = 'Перезагруз.конфигурац.e&xnvim'
+
+		let s:help_label = '&h:Помощь'
+		let s:vim_cheatsheet = '&c:Vim шпаргалка'
+		let s:exnvim_cheatsheet = 'Шпаргалка &extra.nvim'
+		let s:tips = '&p:Советы'
+		let s:tutorial = '&t:Руководство'
+		let s:quick_reference = '&q:Краткая справка'
+		let s:summary = '&s:Краткое содержание'
+		let s:intro_screen = '&i:Начальный экран'
+		if has('nvim')
+			let s:vim_version = 'Версия Neo&Vim'
+		else
+			let s:vim_version = 'Версия &Vim'
+		endif
 	else
+		let s:file_label = '&File'
 		let s:new_file_label = 'Ne&w file'
 		let s:close_label = 'Cl&ose'
 		let s:force_close_label = 'Force clos&e'
@@ -95,6 +111,7 @@ function! ChangeLanguage()
 		let s:exit_label = 'E&xit'
 		let s:exit_wo_confirm_label = 'Exit w/o confir&m'
 
+		let s:window_label = '&Window'
 		let s:kill_buffer_label = 'Kill b&uffer'
 		let s:select_buffer_label = '&Select buffer'
 		let s:search_word_using_spectre_label = 'Find &word using Spectre'
@@ -114,6 +131,7 @@ function! ChangeLanguage()
 		let s:open_lazygit_label = 'Open lazy&git'
 		let s:open_start_menu_label = 'Open st&art menu'
 
+		let s:text_label = '&Text'
 		let s:copy_line_label = 'Cop&y line'
 		let s:delete_line_label = '&Delete line'
 		let s:cut_line_label = 'C&ut line'
@@ -133,6 +151,38 @@ function! ChangeLanguage()
 		let s:select_all_label = '&Select all'
 		let s:toggle_tagbar_label = '&Toggle tagbar'
 		let s:generate_annotation_label = 'Generate ann&otation'
+
+		let s:lsp_label = '&LSP'
+		let s:git_label = '&Git'
+		let s:option_label = '&Option'
+
+		let s:config_label = '&Config'
+		let s:open_init_vim = 'Open &init.vim'
+		let s:open_plugins_list = 'Open &plugins list'
+		let s:open_plugins_setup = 'Open plugins set&up'
+		let s:open_lsp_settings = 'Open lsp &settings'
+		let s:open_exnvim_config = 'Open ex&nvim config'
+		let s:open_colorschemes_dir = 'Open &colorschemes dir'
+		let s:reload_init_vim = '&Reload init.vim'
+		let s:reload_plugins_list = 'R&eload plugins list'
+		let s:reload_plugins_setup = 'Rel&oad plugins setup'
+		let s:reload_lsp_setup = 'Relo&ad LSP setup'
+		let s:generate_exnvim_config = '&Generate extra.nvim config'
+		let s:reload_exnvim_config = 'Reload e&xnvim config'
+
+		let s:help_label = '&Help'
+		let s:vim_cheatsheet = 'Vim &cheatsheet'
+		let s:exnvim_cheatsheet = '&extra.nvim cheatsheet'
+		let s:tips = 'Ti&ps'
+		let s:tutorial = '&Tutorial'
+		let s:quick_reference = '&Quick Reference'
+		let s:summary = '&Summary'
+		let s:intro_screen = '&Intro screen'
+		if has('nvim')
+			let s:vim_version = 'NeoVim &version'
+		else
+			let s:vim_version = 'Vim &version'
+		endif
 	endif
 endfunction
 
@@ -360,42 +410,42 @@ function! RebindMenus()
 				\ ])
 
 	call quickui#menu#install(s:config_label, [
-			\ ["Open &init.vim\tLEAD ve", 'call SelectPosition(g:CONFIG_PATH."/init.vim", g:stdpos)', 'Open '.g:CONFIG_PATH.'/init.vim'],
-			\ ["Open &plugins list\tLEAD vi", 'call SelectPosition(g:PLUGINS_INSTALL_FILE_PATH, g:stdpos)', 'Open '.g:PLUGINS_INSTALL_FILE_PATH],
-			\ ["Open plugins set&up\tLEAD vs", 'call SelectPosition(g:PLUGINS_SETUP_FILE_PATH, g:stdpos)', 'Open '.g:PLUGINS_SETUP_FILE_PATH],
-			\ ["Open lsp &settings\tLEAD vl", 'call SelectPosition(g:LSP_PLUGINS_SETUP_FILE_PATH, g:stdpos)', 'Open '.g:LSP_PLUGINS_SETUP_FILE_PATH.' (deprecated due to coc.nvim)'],
-			\ ["Open ex&nvim config\tLEAD vj", 'call SelectPosition(g:EXNVIM_CONFIG_PATH, g:stdpos)', 'Open '.g:EXNVIM_CONFIG_PATH],
-			\ ["Open &colorschemes\tLEAD vc", 'call SelectPosition($VIMRUNTIME."/colors", g:stdpos)', 'Open colorschemes directory'],
+			\ [s:open_init_vim."\tLEAD ve", 'call SelectPosition(g:CONFIG_PATH."/init.vim", g:stdpos)', 'Open '.g:CONFIG_PATH.'/init.vim'],
+			\ [s:open_plugins_list."\tLEAD vi", 'call SelectPosition(g:PLUGINS_INSTALL_FILE_PATH, g:stdpos)', 'Open '.g:PLUGINS_INSTALL_FILE_PATH],
+			\ [s:open_plugins_setup."\tLEAD vs", 'call SelectPosition(g:PLUGINS_SETUP_FILE_PATH, g:stdpos)', 'Open '.g:PLUGINS_SETUP_FILE_PATH],
+			\ [s:open_lsp_settings."\tLEAD vl", 'call SelectPosition(g:LSP_PLUGINS_SETUP_FILE_PATH, g:stdpos)', 'Open '.g:LSP_PLUGINS_SETUP_FILE_PATH.' (deprecated due to coc.nvim)'],
+			\ [s:open_exnvim_config."\tLEAD vj", 'call SelectPosition(g:EXNVIM_CONFIG_PATH, g:stdpos)', 'Open '.g:EXNVIM_CONFIG_PATH],
+			\ [s:open_colorschemes_dir."\tLEAD vc", 'call SelectPosition($VIMRUNTIME."/colors", g:stdpos)', 'Open colorschemes directory'],
 			\ ["--", '' ],
-			\ ["&Reload init.vim\tLEAD se", 'exec "source" g:CONFIG_PATH."/vim/exnvim/reload.vim"', 'Reload Vim/NeoVim config'],
-			\ ["R&eload plugins list\tLEAD si", 'exec "source ".g:PLUGINS_INSTALL_FILE_PATH', 'Install plugins in '.g:PLUGINS_INSTALL_FILE_PATH],
-			\ ["Rel&oad plugins setup\tLEAD ss", 'exec "source ".g:PLUGINS_SETUP_FILE_PATH', 'Reconfigure plugins'],
-			\ ["Relo&ad lsp setup\tLEAD sl", 'exec "source ".g:LSP_PLUGINS_SETUP_FILE_PATH', 'Reconfigure LSP plugins (deprecated due to coc.nvim)'],
+			\ [s:reload_init_vim."\tLEAD se", 'exec "source" g:CONFIG_PATH."/vim/exnvim/reload.vim"', 'Reload Vim/NeoVim config'],
+			\ [s:reload_plugins_list."\tLEAD si", 'exec "source ".g:PLUGINS_INSTALL_FILE_PATH', 'Install plugins in '.g:PLUGINS_INSTALL_FILE_PATH],
+			\ [s:reload_plugins_setup."\tLEAD ss", 'exec "source ".g:PLUGINS_SETUP_FILE_PATH', 'Reconfigure plugins'],
+			\ [s:reload_lsp_setup."\tLEAD sl", 'exec "source ".g:LSP_PLUGINS_SETUP_FILE_PATH', 'Reconfigure LSP plugins (deprecated due to coc.nvim)'],
 			\ ["--", '' ],
 			\ ])
 	if executable('exnvim')
 		call quickui#menu#install(s:config_label, [
-			\ ["&Generate extra.nvim config\tLEAD G", 'GenerateExNvimConfig', 'Regenerate extra.nvim config'],
+			\ [s:generate_exnvim_config."\tLEAD G", 'GenerateExNvimConfig', 'Regenerate extra.nvim config'],
 			\ ])
 	endif
 	if filereadable(g:EXNVIM_CONFIG_PATH)
 		call quickui#menu#install(s:config_label, [
-					\ ["Reload e&xnvim config\tLEAD sj", 'exec "source" g:CONFIG_PATH."/vim/exnvim/reload_config.vim"', 'Reload extra.nvim config'],
+					\ [s:reload_exnvim_config."\tLEAD sj", 'exec "source" g:CONFIG_PATH."/vim/exnvim/reload_config.vim"', 'Reload extra.nvim config'],
 			\ ])
 	endif
 
 	" register HELP menu with weight 10000
 	call quickui#menu#install(s:help_label, [
-				\ ["Vim &cheatsheet", 'help index', ''],
-				\ ["&extra.nvim cheatsheet\tLEAD ?", 'ExNvimCheatSheet', 'extra.nvim cheatsheet'],
-				\ ['Ti&ps', 'help tips', ''],
+				\ [s:vim_cheatsheet, 'help index', ''],
+				\ [s:exnvim_cheatsheet."\tLEAD ?", 'ExNvimCheatSheet', 'extra.nvim cheatsheet'],
+				\ [s:tips, 'help tips', ''],
 				\ ['--',''],
-				\ ["&Tutorial", 'help tutor', ''],
-				\ ['&Quick Reference', 'help quickref', ''],
-				\ ['&Summary', 'help summary', ''],
+				\ [s:tutorial, 'help tutor', ''],
+				\ [s:quick_reference, 'help quickref', ''],
+				\ [s:summary, 'help summary', ''],
 				\ ['--',''],
-				\ ["&Intro screen\t:intro", 'intro', 'Show intro message'],
-				\ ["Vim &version\t:ver", 'version', 'Show Vim version'],
+				\ [s:intro_screen."\t:intro", 'intro', 'Show intro message'],
+				\ [s:vim_version."\t:ver", 'version', 'Show Vim version'],
 				\ ], 10000)
 endfunction
 
