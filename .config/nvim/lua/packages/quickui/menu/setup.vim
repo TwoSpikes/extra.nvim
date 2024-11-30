@@ -2,7 +2,7 @@ if !has('nvim') || !luaeval("plugin_installed(_A[1])", ["vim-quickui"])
 	finish
 endif
 
-function! ChangeNames()
+function! ChangeLanguage()
 	if g:language ==# 'russian'
 		let s:file_label = '&f:Файл'
 		let s:window_label = '&w:Окно'
@@ -134,7 +134,9 @@ function! ChangeNames()
 		let s:toggle_tagbar_label = '&Toggle tagbar'
 		let s:generate_annotation_label = 'Generate ann&otation'
 	endif
+endfunction
 
+function! ChangeNames()
 	if mode() !~# '^n'
 		if g:language ==# 'russian'
 			let s:esc_label = "&r:Выйти в нормальный режим"
@@ -399,6 +401,8 @@ endfunction
 
 " enable to display tips in the cmdline
 let g:quickui_show_tip = 1
+
+call ChangeLanguage()
 
 " hit space twice to open menu
 noremap <space><space> <cmd>call ChangeNames()<cr><cmd>call RebindMenus()<cr><cmd>call quickui#menu#open()<cr>

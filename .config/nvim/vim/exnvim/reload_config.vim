@@ -13,3 +13,4 @@ if has("nvim")
 	exec "lua package.loaded[\"packages.endscroll.setup\"] = nil"
 	exec "lua require(\"packages.endscroll.setup\")"
 endif
+call ChangeLanguage()
