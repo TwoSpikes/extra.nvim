@@ -104,7 +104,7 @@ return require('packer').startup(function (use)
 		'maxmellon/vim-jsx-pretty',
 	}
 	use {
-		'mattn/emmet-vim',
+		'kmoschcau/emmet-vim',
 	}
 	if not vim.g.use_github_copilot == false then
 		use {
