@@ -188,7 +188,7 @@ $ exnvim version
 - [vim-closetag](https://github.com/alvan/vim-closetag)
 - [vim-js](https://github.com/yuezk/vim-js)
 - [vim-jsx-pretty](https://github.com/maxmellon/vim-jsx-pretty)
-- [emmet-vim](https://github.com/mattn/emmet-vim)
+- [emmet-vim](https://github.com/kmoschcau/emmet-vim)
 - [copilot.vim](https://github.com/github/copilot.vim) (disabled by default)
 - [vim-terminator](https://github.com/erietz/vim-terminator)
 - [vim-fugitive](https://github.com/tpope/vim-fugitive)
