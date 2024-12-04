@@ -143,16 +143,40 @@ function! V_DoD()
 	execute "normal! \"".register."d"
 endfunction
 xnoremap d <cmd>call V_DoD()<cr>
-function! N_DoX()
-	let result = ""
-	let result .= "v"
-	let result .= "0o$"
-	let g:pseudo_visual=v:true
-	let g:visual_mode="char"
-	return result
+function! N_DoX_Define()
+let result = "
+\function! N_DoX(count)
+\\n	let g:pseudo_visual=v:true
+\\n	let g:visual_mode=\"char\"
+\\n	normal! 0v
+\\n	let g:lx = line('.')
+\\n	let g:ly = col('.')
+\\n"
+if g:disable_animations ==# v:false
+  let result .= "
+  \	let i=1
+  \\n while i<#a:count
+  \\n	call feedkeys('j', 'n')
+  \\n	let i=i+1
+  \\n endwhile
+  \\n unlet i
+  \"
+else
+  let result .= "
+  \	call feedkeys(a:count>#1?a:count-1.'j':'', 'n')
+  \"
+endif
+let result .= "
+\\n	normal! $
+\\n	let g:rx = line('.')
+\\n	let g:ry = col('.')
+\\nendfunction
+\"
+execute result
 endfunction
-nnoremap <expr> x N_DoX()
-nnoremap <expr> X N_DoX()
+call N_DoX_Define()
+nnoremap x <cmd>call N_DoX(v:count1)<cr>
+nnoremap X <cmd>call N_DoX(v:count1)<cr>
 xnoremap ~ <c-\><c-n><cmd>call Do_V_Tilde()<bar>execute "normal! gv"<bar>let g:pseudo_visual=v:true<bar>execute "Showtab"<cr>
 function! ChangeVisModeBasedOnSelectedText()
 	let g:lx = line('.')
@@ -560,25 +584,55 @@ function! V_DoS()
 	endif
 endfunction
 xnoremap s <cmd>call V_DoS()<cr>
-function! V_DoX()
-	let g:lx = line('.')
-	let g:ly = col('.')
-	normal! o
-	let g:rx = line('.')
-	let g:ry = col('.')
-	normal! o
-	call ReorderRightLeft()
-	execute "normal! ".MoveLeft(line('.'), col('.'), g:lx, g:ly)
-	normal! o
-	if v:false
-	\|| g:ly !=# 1
-	\|| g:ry <# strlen(getline(g:rx))
-		normal! o0o$
-	else
-		normal! j$
-	endif
+function! V_DoX_Define()
+let result = "
+\	function! V_DoX(count, count1)
+\\n		let g:lx = line('.')
+\\n		let g:ly = col('.')
+\\n		normal! o
+\\n		let g:rx = line('.')
+\\n		let g:ry = col('.')
+\\n		normal! o
+\\n		call ReorderRightLeft()
+\\n		execute \"normal! \".MoveLeft(line('.'), col('.'), g:lx, g:ly)
+\\n		normal! o
+\\n		let g=&wrap&&v:count==#0?'g':''
+\\n		let not_full = v:false
+		\|| g:ly !=# 1
+		\|| g:ry ==# strlen(getline(g:rx)) - 1
+\\n		if not_full
+\\n			execute \"normal! o\".g.\"0o\"
+\\n		else
+\\n			normal! j
+\\n		endif
+\\n		let down = g.'j'
+\\n		if a:count1 ># 2 - not_full
+\"
+if g:disable_animations
+let result .= "
+\\n		  call feedkeys((a:count1 - 1).down, 'n')
+\"
+else
+let result .= "
+\\n		  let i=1
+\\n		  while i<#a:count1
+\\n			call feedkeys(down, 'n')
+\\n			let i=i+1
+\\n		  endwhile
+\\n		  unlet i
+\"
+endif
+let result .= "
+\\n		endif
+\\n		unlet not_full
+\\n		unlet down
+\\n		execute \"normal! \".g.\"$\"
+\\n	endfunction
+\"
+execute result
 endfunction
-xnoremap x <cmd>call V_DoX()<cr>
+call V_DoX_Define()
+xnoremap x <cmd>call V_DoX(v:count, v:count1)<cr>
 function! V_DoXDoNotExtendSubsequentLines()
 	let g:lx = line('.')
 	let g:ly = col('.')

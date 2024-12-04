@@ -37,7 +37,10 @@ delfunction PV_x
 delfunction SetYankMode
 delfunction V_DoD
 xunmap d
-delfunction N_DoX
+delfunction N_DoX_Define
+if exists('*N_DoX')
+	delfunction N_DoX
+endif
 nunmap x
 nunmap X
 xunmap ~
@@ -116,7 +119,10 @@ xnoremap a% <Plug>(MatchitVisualTextObject)
 xunmap a
 delfunction V_DoS
 xunmap s
-delfunction V_DoX
+delfunction V_DoX_Define
+if exists('*V_DoX')
+	delfunction V_DoX
+endif
 xunmap x
 delfunction V_DoXDoNotExtendSubsequentLines
 xunmap X
