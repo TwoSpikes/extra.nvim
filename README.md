@@ -120,13 +120,13 @@ $ EXNVIM_CONFIG_PATH=~/dnsjajsbdn/exnvim/ nvim
 
 # Contribution
 
-## Copy configs to this repo and commit
+## Copy config to this repo and commit
 
 ```console
 $ exnvim commit
 ```
 
-### Only copy configs, but not commit:
+### Only copy config, but not commit:
 
 ```console
 $ exnvim commit --only-copy

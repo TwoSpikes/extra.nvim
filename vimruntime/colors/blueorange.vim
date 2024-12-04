@@ -18,7 +18,7 @@ let g:updating_cursorline_supported = v:true
 let g:updating_cursor_style_supported = v:true
 
 if !exists("CONFIG_PATH")
-  g:CONFIG_PATH = "$HOME/.config/nvim"
+  let g:CONFIG_PATH = "$HOME/.config/nvim"
 endif
 
 function! ReturnHighlightTerm(group, term)
