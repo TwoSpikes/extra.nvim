@@ -590,11 +590,11 @@ if &t_Co >= 256
       let cursorline_style = g:cursorline_style_supported[g:cursorline_style]
       if v:false
       elseif cursorline_style ==# "dim"
-        hi CursorLine ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=#002050 gui=NONE
+        hi CursorLine ctermfg=NONE ctermbg=236 cterm=NONE guifg=NONE guibg=#002050 gui=NONE
       elseif cursorline_style ==# "reverse"
-        hi CursorLine ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=NONE gui=NONE
+        hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
       elseif cursorline_style ==# "underline"
-        hi CursorLine ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=NONE gui=underline
+        hi CursorLine ctermfg=NONE ctermbg=NONE cterm=underline guifg=NONE guibg=NONE gui=underline
       endif
     endfunction
     call Update_CursorLine()
