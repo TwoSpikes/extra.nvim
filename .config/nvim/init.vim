@@ -237,6 +237,9 @@ function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 	if !exists('g:linenr_style')
 		let g:linenr_style = v:true
 	endif
+	if !exists('g:open_menu_on_start')
+		let g:open_menu_on_start = v:false
+	endif
 	if !exists('g:background')
 		let g:background = "dark"
 	endif

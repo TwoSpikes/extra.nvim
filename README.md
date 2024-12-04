@@ -110,6 +110,14 @@ $ EXNVIM_CONFIG_PATH=~/dnsjajsbdn/exnvim/ nvim
 
 </details>
 
+## Use colorscheme in clean Vim/NeoVim
+
+```vim
+:set nocompatible
+:set termguicolors
+:colorscheme blueorange
+```
+
 # Contribution
 
 ## Copy configs to this repo and commit

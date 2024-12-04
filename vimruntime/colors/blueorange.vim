@@ -75,6 +75,9 @@ function! Update_Cursor_Style()
     set guicursor=n-sm:hor25-blinkwait175-blinkoff150-blinkon175-CursorNormal,v:hor25-blinkwait175-blinkoff150-blinkon175-CursorVisual,i-ci-ve:hor25-blinkwait175-blinkoff150-blinkon175-CursorInsert,r-cr:hor25-blinkwait175-blinkoff150-blinkon175-CursorReplace,o:hor50-CursorNormal,c:hor25-blinkwait175-blinkoff150-blinkon175-CursorCommand
   endif
 endfunction
+if !exists('g:cursor_style')
+  let g:cursor_style = "block"
+endif
 call Update_Cursor_Style()
 " set guicursor=n-v-c:block-Cursor
 " set guicursor+=i:ver100-Cursor
@@ -469,7 +472,7 @@ if &t_Co >= 256
   if &background ==# 'dark'
     if exists('g:use_transparent_bg')
       if g:use_transparent_bg ==# "always"
-      \||g:use_transparent_bg ==# "dark"
+      \|| g:use_transparent_bg ==# "dark"
         hi Normal ctermfg=231 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=NONE gui=NONE
       else
         hi Normal ctermfg=231 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=#000020 gui=NONE
@@ -580,7 +583,9 @@ if &t_Co >= 256
     else
       let g:cursorline_style = cursorline_style_index
     endif
-    unlet cursorline_style_index
+    if cursorline_style_was
+      unlet cursorline_style_index
+    endif
     function! Update_CursorLine()
       let cursorline_style = g:cursorline_style_supported[g:cursorline_style]
       if v:false
