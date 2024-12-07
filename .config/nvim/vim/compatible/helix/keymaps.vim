@@ -268,7 +268,7 @@ endif
 if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-fugitive"])
 	unmap y<c-g>
 endif
-nnoremap y <cmd>let register=v:register<bar>exe"norm! v"".register."y"<cr>
+nnoremap y <cmd>let register=v:register<bar>exe"norm! v\"".register."y"<cr>
 function! Do_N_T_Cr()
 	let g:lx = line('.')
 	let g:ly = col('.')
