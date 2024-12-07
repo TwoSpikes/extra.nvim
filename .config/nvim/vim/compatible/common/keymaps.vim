@@ -98,7 +98,7 @@ endif
 
 " FAST COMMANDS
 "noremap ; :
-noremap <silent> <leader>: :<c-f>a
+noremap <leader>: :<c-u>'<,'>
 "noremap <leader>= :tabe 
 "noremap <leader>- :e 
 noremap <leader>= <cmd>ec"use \<c-c\>c"<cr>

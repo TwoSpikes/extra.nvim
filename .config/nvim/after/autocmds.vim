@@ -8,6 +8,11 @@ augroup RestoreCursor
         \ | endif
 augroup END
 
+augroup SaveFiletype
+	autocmd!
+	autocmd BufLeave * let g:prev_filetype=&filetype
+augroup END
+
 augroup ExNvimOptionsInComment
 	autocmd!
 	autocmd BufEnter * if v:vim_did_enter|call HandleExNvimOptionsInComment()|endif

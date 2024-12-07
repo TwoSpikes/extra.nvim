@@ -94,10 +94,14 @@ delfunction ReorderRightLeft
 delfunction SavePosition
 xunmap :
 nunmap w
+delfunction N_DoE
 nunmap e
+delfunction N_DoB
 nunmap b
 nunmap W
+delfunction N_DoEWhole
 nunmap E
+delfunction N_DoBWhole
 nunmap B
 noremap <esc> <cmd>let @/=""<cr>
 delfunction N_DoV

@@ -698,6 +698,7 @@ function! ExNvimCheatSheet()
 	\\n SPECIAL:
 	\\n   ; - Switch to command mode (:)
 	\\n   LEAD 1 - Switch to command mode (:)
+	\\n   LEAD : - Switch to visual selection wise command mode (:'<,'>)
 	\\n   LEAD - Show possible keyboard shortcuts
 	\\n   LEAD LEAD or F10 or F9 - Open quickui menu
 	\\n   LEAD CTRL-f or F3 - Toggle fullscreen mode
@@ -790,7 +791,8 @@ function! ExNvimCheatSheet()
 	setlocal buftype=nofile
 	setlocal filetype=book
 	call Numbertoggle('n')
-	execute "noremap <buffer> q <cmd>execute bufnr().\"bwipeout!\"<bar>".old_bufnr."buffer<cr>"
+	let prev_filetype = g:prev_filetype
+	execute "noremap <buffer> q <cmd>execute bufnr().\"bwipeout!\"<bar>".(prev_filetype==#"alpha"?"Alpha":old_bufnr."buffer")."<cr>"
 endfunction
 command! -nargs=0 ExNvimCheatSheet call ExNvimCheatSheet()
 noremap <silent> <leader>? <cmd>ExNvimCheatSheet<cr>
@@ -1764,14 +1766,20 @@ function! JKWorkaroundAlpha()
 	noremap <buffer> j <cmd>call ProcessGBut('j')<cr>
 	noremap <buffer> k <cmd>call ProcessGBut('k')<cr>
 	if !g:open_cmd_on_up
-		noremap <up> <cmd>call ProcessGBut('k')<cr>
+		noremap <buffer> <up> <cmd>call ProcessGBut('k')<cr>
 	endif
-	noremap <down> <cmd>call ProcessGBut('j')<cr>
+	noremap <buffer> <down> <cmd>call ProcessGBut('j')<cr>
 endfunction
 function! JKWorkaround()
 	noremap k <cmd>call ProcessGBut('k')<cr>
+	if !g:open_cmd_on_up
+	  noremap <up> <cmd>call ProcessGBut('j')<cr>
+    endif
 	if !isdirectory(g:LOCALSHAREPATH.'/site/pack/packer/start/endscroll.nvim')
 		noremap j <cmd>call ProcessGBut('j')<cr>
+		if !g:open_cmd_on_up
+		  noremap <down> <cmd>call ProcessGBut('j')<cr>
+		endif
 	endif
 endfunction
 call JKWorkaround()

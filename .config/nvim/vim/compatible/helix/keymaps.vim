@@ -186,16 +186,20 @@ function! ChangeVisModeBasedOnSelectedText()
 	let g:ry = col('.')
 	normal! o
 	call ReorderRightLeft()
-	execute "normal! ".MoveLeft()
+	execute "normal! ".MoveLeft(g:rx, g:ry, g:lx, g:ly)
 	normal! o
 	if v:false
 	\|| g:ly !=# 1
 	\|| g:ry <# strlen(getline(g:rx))
 	else
-		echomsg "YES"
 		if mode() !~# 'V'
-			call feedkeys("V")
+			call feedkeys("V", 'n')
 		endif
+	endif
+	if v:false
+	\|| g:yank_mode ==# "line"
+	\|| g:yank_mode ==# "line_post"
+	  call feedkeys('h', 'n')
 	endif
 endfunction
 function! SimulateCorrectPasteMode(cmd, register)
@@ -260,9 +264,11 @@ if !g:use_nvim_cmp && has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-su
 	unmap yss
 	unmap yS
 	unmap ys
+endif
+if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-fugitive"])
 	unmap y<c-g>
 endif
-nnoremap y <cmd>let register=v:register<bar>exe"norm! v\"".register."y"<cr>
+nnoremap y <cmd>let register=v:register<bar>exe"norm! v"".register."y"<cr>
 function! Do_N_T_Cr()
 	let g:lx = line('.')
 	let g:ly = col('.')
@@ -323,7 +329,7 @@ function! SavePosition(old_c, old_l, new_c, new_l)
 		let g:ry=a:new_c
 	endif
 endfunction
-xnoremap <expr> : g:pseudo_visual?":\<c-u>":":"
+xnoremap : :<c-u>
 nnoremap w <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>execute "normal! v".v:count1."e"<bar>let g:rx=line('.')<bar>let g:ry=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
 function! N_DoE()
 	let g:pseudo_visual = v:true
@@ -770,7 +776,10 @@ function! V_DoB()
 			execute "normal! ohho"
 		elseif v:false
 		\|| charclass(getline(g:rx)[g:ry-1]) !=# 2
-		\&& charclass(getline(g:rx)[g:ry-2]) ==# 2
+		\&& (v:false
+		\|| charclass(getline(g:rx)[g:ry-2]) ==# 2
+		\|| charclass(getline(g:rx)[g:ry-2]) ==# 0
+		\)
 		\|| charclass(getline(g:rx)[g:ry-2]) !=# 2
 		\&& charclass(getline(g:rx)[g:ry-1]) ==# 2
 			execute "normal! oho"
@@ -778,7 +787,7 @@ function! V_DoB()
 			execute
 		endif
 	else
-		execute "normal! e"
+		execute "normal! b"
 	endif
 	let g:lx = line('.')
 	let g:ly = col('.')
@@ -873,9 +882,6 @@ function! V_DoY()
 	endif
 endfunction
 xnoremap y <cmd>call V_DoY()<cr>
-if has('nvim')
-	xunmap ;
-endif
 nunmap ;
 nnoremap ; <nop>
 xnoremap ; <esc>
