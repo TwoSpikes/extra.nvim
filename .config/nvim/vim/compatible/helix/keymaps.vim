@@ -809,7 +809,7 @@ function! V_DoBWhole()
 			execute "normal! oho"
 		endif
 	else
-		execute "normal! E"
+		execute "normal! B"
 	endif
 	call SavePosition(old_c, old_l, col('.'), line('.'))
 	call ReorderRightLeft()
