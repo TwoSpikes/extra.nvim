@@ -291,7 +291,13 @@ nnoremap > >>
 nnoremap < <<
 xnoremap < <gv<cmd>let g:pseudo_visual=v:true<cr>
 xnoremap > >gv<cmd>let g:pseudo_visual=v:true<cr>
-xnoremap t<cr> $
+function! V_DoT_Cr()
+	call CollapseVisual()
+	normal! $
+	let g:pseudo_visual = v:true
+	let g:visual_mode = "char"
+endfunction
+xnoremap t<cr> <cmd>call V_DoT_Cr()<cr>
 if !g:use_nvim_cmp
 	if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-surround"])
 		unmap cS
@@ -888,7 +894,11 @@ endfunction
 xnoremap y <cmd>call V_DoY()<cr>
 nunmap ;
 nnoremap ; <nop>
-xnoremap ; <esc>
+if !has('nvim') || !luaeval("plugin_installed(_A[1])", ["vim-sneak"])
+	xnoremap ; <esc>
+else
+	xnoremap ; <esc><cmd>call timer_start(0, {->sneak#cancel()})<cr>
+endif
 xnoremap o <esc>o
 xnoremap O <esc>O
 xnoremap <leader>xo o<cmd>call ReorderRightLeft()<cr>

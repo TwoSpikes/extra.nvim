@@ -78,6 +78,7 @@ nunmap >
 nunmap <
 xunmap <
 xunmap >
+delfunction V_DoT_Cr
 xunmap t<cr>
 if !g:use_nvim_cmp
 	if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-surround"])
