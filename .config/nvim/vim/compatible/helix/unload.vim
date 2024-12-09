@@ -121,6 +121,9 @@ xunmap i
 delfunction MoveRight
 xnoremap a% <Plug>(MatchitVisualTextObject)
 xunmap a
+if exists('*V_DoSneak_S')
+	delfunction V_DoSneak_S
+endif
 delfunction V_DoS
 xunmap s
 delfunction V_DoX_Define

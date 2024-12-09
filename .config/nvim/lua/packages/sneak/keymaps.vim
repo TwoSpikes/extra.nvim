@@ -22,7 +22,21 @@ else
 	xnoremap F  <cmd>if g:sneak_mode !=# 'F' && g:sneak_mode !=# 'f'<bar>call CollapseVisual()<bar>exec "normal! m`"<bar>endif<bar>let g:sneak_mode='F'<bar>call sneak#wrap('',1,1,1,0)<bar>exec "normal! my"<bar>let g:visual_mode="char"<bar>let g:pseudo_visual=v:true<bar>execute "normal! ``o`y"<cr>
 	xnoremap t  <cmd>if g:sneak_mode !=# 't' && g:sneak_mode !=# 'T'<bar>call CollapseVisual()<bar>exec "normal! m`"<bar>endif<bar>let g:sneak_mode = 't'<bar>call sneak#wrap('',1,0,0,0)<bar>exec "normal! my"<bar>let g:visual_mode="char"<bar>let g:pseudo_visual=v:true<bar>execute "normal! `'o`y"<cr>
 	xnoremap T  <cmd>if g:sneak_mode !=# 'T' && g:sneak_mode !=# 't'<bar>call CollapseVisual()<bar>exec "normal! m`"<bar>endif<bar>let g:sneak_mode = 'T'<bar>call sneak#wrap('',1,1,0,0)<bar>exec "normal! my"<bar>let g:visual_mode="char"<bar>let g:pseudo_visual=v:true<bar>execute "normal! `'o`y"<cr>
-	xnoremap s  <cmd>if g:sneak_mode !=# 's' && g:sneak_mode !=# 'S'<bar>call CollapseVisual()<bar>exec "normal! m`"<bar>endif<bar>let g:sneak_mode = 's'<bar>call sneak#wrap('',2,0,2,1)<bar>exec "normal! my"<bar>let g:visual_mode="char"<bar>let g:pseudo_visual=v:true<bar>execute "normal! `'o`y"<cr>
+	function! V_DoSneak_S()
+	  if v:true
+	  \&& g:sneak_mode !=# 's'
+	  \&& g:sneak_mode !=# 'S'
+		call CollapseVisual()
+		exec "normal! m`"
+	  endif
+	  let g:sneak_mode = 's'
+	  call sneak#wrap('',2,0,2,1)
+	  exec "normal! my"
+	  let g:visual_mode="char"
+	  let g:pseudo_visual=v:true
+	  execute "normal! `'o`y"
+	endfunction
+	xnoremap s  <cmd>call V_DoSneak_S()<cr>
 	xnoremap S  <cmd>if g:sneak_mode !=# 'S' && g:sneak_mode !=# 's'<bar>call CollapseVisual()<bar>exec "normal! m`"<bar>endif<bar>let g:sneak_mode = 'S'<bar>call sneak#wrap('',2,1,2,1)<bar>exec "normal! my"<bar>let g:visual_mode="char"<bar>let g:pseudo_visual=v:true<bar>execute "normal! `'o`y"<cr>
 	xnoremap gw <cmd>if g:sneak_mode !=# 'gw' && g:sneak_mode !=# 'gW'<bar>call CollapseVisual()<bar>exec "normal! m`"<bar>endif<bar>let g:sneak_mode = 'gw'<bar>call sneak#wrap('',2,0,2,1)<bar>exec "normal! my"<bar>let g:visual_mode="char"<bar>let g:pseudo_visual=v:true<bar>execute "normal! `'o`y"<cr>
 	xnoremap gW <cmd>if g:sneak_mode !=# 'gW' && g:sneak_mode !=# 'gw'<bar>call CollapseVisual()<bar>exec "normal! m`"<bar>endif<bar>let g:sneak_mode = 'gW'<bar>call sneak#wrap('',2,1,2,1)<bar>exec "normal! my"<bar>let g:visual_mode="char"<bar>let g:pseudo_visual=v:true<bar>execute "normal! `'o`y"<cr>

@@ -567,6 +567,10 @@ endfunction
 xunmap a%
 xnoremap <expr> a MoveRight(line('.'), col('.'), g:rx, g:ry)."\<esc>a"
 function! V_DoS()
+	if exists('#sneak#CursorMoved') && g:sneak_mode ==# 's'
+		call V_DoSneak_S()
+		return
+	endif
 	if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-quickui"])
 		let select = quickui#input#open('Select:', g:last_selected)
 	else
