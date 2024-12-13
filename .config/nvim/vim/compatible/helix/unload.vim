@@ -2,6 +2,7 @@ unlet g:pseudo_visual
 unlet g:yank_mode
 unlet g:visual_mode
 unlet g:sneak_mode
+unlet g:first_sneak
 
 unlet g:lx
 unlet g:ly

@@ -897,7 +897,7 @@ nnoremap ; <nop>
 if !has('nvim') || !luaeval("plugin_installed(_A[1])", ["vim-sneak"])
 	xnoremap ; <esc>
 else
-	xnoremap ; <esc><cmd>call timer_start(0, {->sneak#cancel()})<cr>
+	xnoremap ; <esc><cmd>call timer_start(0, {->SneakCancel()})<cr>
 endif
 xnoremap o <esc>o
 xnoremap O <esc>O
