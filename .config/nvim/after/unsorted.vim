@@ -1848,6 +1848,10 @@ function! OpenTerm(cmd)
 	else
 		execute printf("terminal %s", a:cmd)
 	endif
+	if !has('nvim')
+	  wincmd k
+	  wincmd c
+	endif
 	startinsert
 	return bufnr()
 endfunction

@@ -12,5 +12,8 @@ if has("nvim")
 	exec "lua require(\"packages.alpha.setup\")"
 	exec "lua package.loaded[\"packages.endscroll.setup\"] = nil"
 	exec "lua require(\"packages.endscroll.setup\")"
+
+	if luaeval("plugin_installed(_A[1])", ["vim-quickui"])
+		call ChangeLanguage()
+	endif
 endif
-call ChangeLanguage()
