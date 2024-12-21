@@ -1,22 +1,3 @@
-exec "source" g:CONFIG_PATH."/vim/compatible/unload.vim"
-call LoadExNvimConfig(g:EXNVIM_CONFIG_PATH, v:true)
-call HandleExNvimConfig()
-call RehandleExNvimConfig()
-call PreserveAndDo("call HandleBuftypeAll()", v:true, v:true)
-execute "Showtab"
-execute "source" g:CONFIG_PATH."/vim/compatible/init.vim"
-call RedefineProcessGBut()
-call ApplyColorscheme(g:selected_colorscheme)
-if has("nvim")
-	exec "lua package.loaded[\"packages.alpha.setup\"] = nil"
-	exec "lua require(\"packages.alpha.setup\")"
-	exec "lua package.loaded[\"packages.endscroll.setup\"] = nil"
-	exec "lua require(\"packages.endscroll.setup\")"
-
-	if luaeval("plugin_installed(_A[1])", ["vim-quickui"])
-		call ChangeLanguage()
-	endif
-	if luaeval("plugin_installed(_A[1])", ["vim-sneak"])
-		execute "source" g:CONFIG_PATH."/lua/packages/sneak/keymaps.vim"
-	endif
-endif
+execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload_config.vim'
+execute 'source' g:CONFIG_PATH.'/vim/exnvim/load_config.vim'
+execute 'source' g:CONFIG_PATH.'/vim/exnvim/rehandle_config.vim'
