@@ -648,6 +648,7 @@ let result .= "
 execute result
 endfunction
 call V_DoX_Define()
+delfunction V_DoX_Define
 xnoremap x <cmd>call V_DoX(v:count, v:count1)<cr>
 function! V_DoXDoNotExtendSubsequentLines()
 	let g:lx = line('.')

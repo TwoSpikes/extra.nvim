@@ -1,8 +1,6 @@
 unlet g:pseudo_visual
 unlet g:yank_mode
 unlet g:visual_mode
-unlet g:sneak_mode
-unlet g:first_sneak
 
 unlet g:lx
 unlet g:ly
@@ -79,8 +77,55 @@ nunmap >
 nunmap <
 xunmap <
 xunmap >
-delfunction V_DoT_Cr
-xunmap t<cr>
+if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-sneak"])
+	delfunction SneakCancel
+	if maparg('f<Esc>', 'x') !=# ''
+		xunmap f<esc>
+		xunmap F<esc>
+	endif
+	if maparg('t<Esc>', 'x') !=# ''
+		xunmap t<esc>
+		xunmap T<esc>
+	endif
+	if maparg('s<Esc>', 'x') !=# ''
+		xunmap s<esc>
+		xunmap S<esc>
+		xunmap gw<esc>
+		xunmap gW<esc>
+	endif
+	if maparg('t<Cr>', 'x') !=# ''
+		xunmap t<cr>
+	endif
+	delfunction V_DoT_Cr
+	if maparg('<esc>', 'n') =~# "'s'\\.'neak#cancel'"
+		silent! unmap <esc>
+	endif
+	nunmap f<esc>
+	nunmap F<esc>
+	nunmap t<esc>
+	nunmap T<esc>
+	nunmap s<esc>
+	nunmap S<esc>
+	nunmap gw<esc>
+	nunmap gW<esc>
+	autocmd! Sneak_Esc_Workaround *
+	nunmap f
+	nunmap F
+	nunmap t
+	nunmap T
+	nunmap s
+	nunmap S
+	xunmap f
+	xunmap F
+	xunmap t
+	xunmap T
+	delfunction V_DoSneak_S
+	delfunction V_DoSneak_Gw
+	xunmap s
+	xunmap S
+	unlet g:sneak_mode
+	unlet g:first_sneak
+endif
 if !g:use_nvim_cmp
 	if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-surround"])
 		noremap cS <Plug>CSurround
@@ -123,15 +168,8 @@ xunmap i
 delfunction MoveRight
 xnoremap a% <Plug>(MatchitVisualTextObject)
 xunmap a
-if exists('*V_DoSneak_S')
-	delfunction V_DoSneak_S
-endif
 delfunction V_DoS
-xunmap s
-delfunction V_DoX_Define
-if exists('*V_DoX')
-	delfunction V_DoX
-endif
+delfunction V_DoX
 xunmap x
 delfunction V_DoXDoNotExtendSubsequentLines
 xunmap X
@@ -159,8 +197,6 @@ delfunction V_DoY
 xunmap y
 nunmap ;
 xunmap ;
-xnoremap ; <Plug>Sneak_;
-nnoremap ; <Plug>Sneak_;
 xunmap o
 xunmap O
 xunmap <leader>xo

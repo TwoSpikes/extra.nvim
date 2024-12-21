@@ -1773,7 +1773,7 @@ endfunction
 function! JKWorkaround()
 	noremap k <cmd>call ProcessGBut('k')<cr>
 	if !g:open_cmd_on_up
-	  noremap <up> <cmd>call ProcessGBut('j')<cr>
+	  noremap <up> <cmd>call ProcessGBut('k')<cr>
     endif
 	if !isdirectory(g:LOCALSHAREPATH.'/site/pack/packer/start/endscroll.nvim')
 		noremap j <cmd>call ProcessGBut('j')<cr>
