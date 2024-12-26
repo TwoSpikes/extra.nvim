@@ -2045,6 +2045,32 @@ function! STCUpd()
 	endif
 endfunction
 
+function! Remove(a)
+	if a:a!=#''
+		let e=delete(a:a)
+	else
+		let e=delete(expand('%'))
+	endif
+	if a:a!=#''
+		let f=a:a
+	else
+		if expand('%')!=#''
+			let f=expand('%')
+		else
+			let f="empty file"
+		endif
+	endif
+	if e==#0
+		echohl Title
+		echo "remove success: ".f
+	else
+		echohl ErrorMsg
+		echomsg "remove error: ".f
+	endif
+	echohl Normal
+endfunction
+command! -nargs=? -complete=arglist Rm call Remove(expand("<args>"))
+
 call OpenOnStart()
 
 let g:exnvim_fully_loaded += 1
