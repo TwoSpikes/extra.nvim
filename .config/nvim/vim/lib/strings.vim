@@ -49,7 +49,7 @@ function! Repr_Vim_Grep(string)
 			\|| char ==# 't'
 				let result .= '\\'.char
 			else
-				let result .= '\'.char
+				let result .= '\\'.char
 			endif
 			let state = 'norm'
 		else

@@ -944,7 +944,6 @@ nnoremap [<space> mzO<esc>`z
 xnoremap [<space> mz<esc>O<esc>`z
 nnoremap ]<space> mzo<esc>`z
 xnoremap ]<space> mz<esc>o<esc>`zgv
-nnoremap <c-c> <cmd>call CommentOutDefault()<cr>
 if has('nvim') && luaeval("plugin_installed(_A[1])", ["convert.nvim"]) && exists('g:convert_keymaps_loaded')
 	unmap <leader>cc
 	unmap <leader>cn
