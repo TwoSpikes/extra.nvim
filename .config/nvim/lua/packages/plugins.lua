@@ -586,4 +586,7 @@ return require('packer').startup(function (use)
 	use {
 		'm-demare/hlargs.nvim',
 	}
+	use {
+		'danilamihailov/beacon.nvim',
+	}
 end)
