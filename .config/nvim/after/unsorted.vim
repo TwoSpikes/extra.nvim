@@ -2081,7 +2081,7 @@ function! Remove(a)
 	endif
 	echohl Normal
 endfunction
-command! -nargs=? -complete=arglist Rm call Remove(expand("<args>"))
+command! -nargs=? -complete=file Rm call Remove(expand("<args>"))
 
 call OpenOnStart()
 
