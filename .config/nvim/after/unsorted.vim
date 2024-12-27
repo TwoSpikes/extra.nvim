@@ -2046,26 +2046,38 @@ function! STCUpd()
 endfunction
 
 function! Remove(a)
+	let v:errmsg=""
 	if a:a!=#''
-		let e=delete(a:a)
-	else
-		let e=delete(expand('%'))
-	endif
-	if a:a!=#''
+		let g:exnvim_tmp=a:a
+		call execute(['unsilent call delete(g:exnvim_tmp)', 'let g:exnvim_tmp=v:errmsg'], "silent!")
+		let e=g:exnvim_tmp
+		unlet g:exnvim_tmp
 		let f=a:a
 	else
-		if expand('%')!=#''
-			let f=expand('%')
+		let f=expand('%')
+		if filereadable(f)
+			call execute(['unsilent call delete(expand(''%''))', 'let g:exnvim_tmp=v:errmsg'], "silent!")
+			let e=g:exnvim_tmp
+			unlet g:exnvim_tmp
 		else
-			let f="empty file"
+			let e='no such file'
 		endif
 	endif
-	if e==#0
+	if f!=#''
+		let f=fnamemodify(expand('%'), ':t')
+	else
+		let f="empty filename"
+	endif
+	if e==#""
 		echohl Title
 		echo "remove success: ".f
 	else
 		echohl ErrorMsg
-		echomsg "remove error: ".f
+		if f!=#"empty filename"
+			echomsg "remove error: ".f.": ".e
+		else
+			echomsg "remove error: ".f
+		endif
 	endif
 	echohl Normal
 endfunction
