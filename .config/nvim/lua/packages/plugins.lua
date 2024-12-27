@@ -589,4 +589,7 @@ return require('packer').startup(function (use)
 	use {
 		'danilamihailov/beacon.nvim',
 	}
+	use {
+		'RaafatTurki/hex.nvim',
+	}
 end)

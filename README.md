@@ -261,3 +261,5 @@ $ exnvim version
 - [music-player.vim](https://github.com/TwoSpikes/music-player.vim)
 - [vim-gitgutter](https://github.com/airblade/vim-gitgutter)
 - [hlargs.nvim](https://github.com/m-demare/hlargs.nvim)
+- [beacon.nvim](https://github.com/danilamihailov/beacon.nvim)
+- [hex.nvim](https://github.com/RaafatTurki/hex.nvim)
