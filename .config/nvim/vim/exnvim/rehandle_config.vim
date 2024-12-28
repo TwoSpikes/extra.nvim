@@ -18,3 +18,4 @@ if has("nvim")
 		execute "source" g:CONFIG_PATH."/lua/packages/sneak/keymaps.vim"
 	endif
 endif
+call SetMouse()

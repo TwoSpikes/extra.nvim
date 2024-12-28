@@ -4,6 +4,13 @@ endif
 
 function! ChangeLanguage()
 	if g:language ==# 'russian'
+		let s:off = 'Выкл.'
+		let s:on = 'Вкл.'
+		let s:disable = 'Выключить'
+		let s:enable = 'Включить'
+		let s:make_relative = 'относительными'
+		let s:make_absolute = 'абсолютными'
+
 		let s:file_label = '&f:Файл'
 		let s:new_file_label = '&w:Новый файл'
 		let s:close_label = '&o:Закрыть'
@@ -64,7 +71,15 @@ function! ChangeLanguage()
 
 		let s:lsp_label = '&LSP'
 		let s:git_label = '&Git'
+
 		let s:option_label = '&o:Опции'
+		let s:set_spell = '&s:Проверка орфографии'
+		let s:set_paste = '&p:Режим вставки'
+		let s:set_cursor_column = '&c:Подсветка колонки'
+		let s:set_cursor_line = '&i:Подсветка линии'
+		let s:cursor_line_style = '&u:Стиль подсветки линии'
+		let s:set_line_numbers = '&n:Номера строк'
+		let s:line_numbers_style = '&s:Стиль номеров строк'
 
 		let s:config_label = '&c:Конфиг'
 		let s:open_init_vim = 'Открыть &init.vim'
@@ -94,6 +109,13 @@ function! ChangeLanguage()
 			let s:vim_version = 'Версия &Vim'
 		endif
 	else
+		let s:off = 'Off'
+		let s:on = 'On'
+		let s:disable = 'Disable'
+		let s:enable = 'Enable'
+		let s:make_relative = 'relative'
+		let s:make_absolute = 'absolute'
+
 		let s:file_label = '&File'
 		let s:new_file_label = 'Ne&w file'
 		let s:close_label = 'Cl&ose'
@@ -154,7 +176,15 @@ function! ChangeLanguage()
 
 		let s:lsp_label = '&LSP'
 		let s:git_label = '&Git'
+
 		let s:option_label = '&Option'
+		let s:set_spell = 'Set &Spell'
+		let s:set_paste = 'Set &Paste'
+		let s:set_cursor_column = 'Set Cursor &Column'
+		let s:set_cursor_line = 'Set Cursor L&ine'
+		let s:cursor_line_style = 'C&ursor line style'
+		let s:set_line_numbers = 'Set Line &numbers'
+		let s:line_numbers_style = 'Line numbers &style'
 
 		let s:config_label = '&Config'
 		let s:open_init_vim = 'Open &init.vim'
@@ -393,20 +423,20 @@ function! RebindMenus()
 	endif
 
 	call quickui#menu#install(s:option_label, [
-				\ [(g:quickui_icons?"󰓆 ":"")."Set &Spell %{&spell? 'Off':'On'}", 'set spell!', '%{&spell?"Disable":"Enable"} spell checking'],
-				\ [(g:quickui_icons?"󰆒 ":"")."Set &Paste %{&paste? 'Off':'On'}", 'set paste!', 'Obsolete thing'],
+				\ [(g:quickui_icons?"󰓆 ":"").s:set_spell." %{&spell?\"".s:off."\":\"".s:on."\"}", 'set spell!', "%{&spell?\"".s:disable."\":\"".s:enable."\"} spell checking"],
+				\ [(g:quickui_icons?"󰆒 ":"").s:set_paste." %{&paste?\"".s:off."\":\"".s:on."\"}", 'set paste!', 'Obsolete thing'],
 				\ ["--", '' ],
-				\ [(g:quickui_icons?"  ":"").'Set Cursor &Column %{g:cursorcolumn==#v:true?"Off":"On"}', 'let g:cursorcolumn=!g:cursorcolumn|call PreserveAndDo("call HandleBuftypeAll()", v:true, v:true)', '%{g:cursorcolumn?"Disable":"Enable"} current column highlighting'],
-				\ [(g:quickui_icons?"  ":"").'Set Cursor L&ine %{g:cursorline==#v:true?"Off":"On"}', 'let g:cursorline=!g:cursorline|call PreserveAndDo("call HandleBuftypeAll()", v:true, v:true)', '%{g:cursorline?"Disable":"Enable"} current line highlighting'],
+				\ [(g:quickui_icons?"  ":"").s:set_cursor_column." %{g:cursorcolumn?\"".s:off."\":\"".s:on."\"}", 'let g:cursorcolumn=!g:cursorcolumn|call PreserveAndDo("call HandleBuftypeAll()", v:true, v:true)', "%{g:cursorcolumn?\"".s:disable."\":\"".s:enable."\"} current column highlighting"],
+				\ [(g:quickui_icons?"  ":"").s:set_cursor_line." %{g:cursorline?\"".s:off."\":\"".s:on."\"}", 'let g:cursorline=!g:cursorline|call PreserveAndDo("call HandleBuftypeAll()", v:true, v:true)', "%{g:cursorline?\"".s:disable."\":\"".s:enable."\"} current line highlighting"],
 				\ ])
 	if exists('g:cursorline_style_supported') && len(g:cursorline_style_supported) ># 1
 		call quickui#menu#install(s:option_label, [
-					\ [(g:quickui_icons?"  ":"").'C&ursor line style: %{g:cursorline_style_supported[g:cursorline_style]}', 'let g:cursorline_style=g:cursorline_style==#len(g:cursorline_style_supported)-1?0:g:cursorline_style+1|call Update_CursorLine_Style()', '%{g:cursorline?"Disable":"Enable"} current line highlighting'],
+					\ [(g:quickui_icons?"  ":"").s:cursor_line_style.': %{g:cursorline_style_supported[g:cursorline_style]}', 'let g:cursorline_style=g:cursorline_style==#len(g:cursorline_style_supported)-1?0:g:cursorline_style+1|call Update_CursorLine_Style()', "%{g:cursorline?\"".s:disable."\":\"".s:enable."\"} current line highlighting"],
 					\ ])
 	endif
 	call quickui#menu#install(s:option_label, [
-				\ [(g:quickui_icons?" ":"").'Set Line &numbers %{g:linenr==#v:true?"Off":"On"}', 'let g:linenr=!g:linenr|if !g:linenr|call PreserveAndDo("call STCNoAll()", v:true, v:true)|else|call PreserveAndDo("call NumbertoggleAll(mode())", v:true, v:true)|endif', '%{g:linenr?"Disable":"Enable"} line numbers'],
-				\ [(g:quickui_icons?" ":"").'Line numbers &style: %{g:linenr_style}', 'let g:linenr_style=g:linenr_style==#"relative"?"absolute":"relative"|if g:linenr|call PreserveAndDo("call NumbertoggleAll(mode())", v:true, v:true)|endif', 'Make line numbers %{g:linenr_style==#"absolute"?"relative":"absolute"}'],
+				\ [(g:quickui_icons?" ":"").s:set_line_numbers." %{g:linenr?\"".s:off."\":\"".s:on."\"}", 'let g:linenr=!g:linenr|if !g:linenr|call PreserveAndDo("call STCNoAll()", v:true, v:true)|else|call PreserveAndDo("call NumbertoggleAll(mode())", v:true, v:true)|endif', "%{g:linenr?\"".s:disable."\":\"".s:enable."\"} line numbers"],
+				\ [(g:quickui_icons?" ":"").s:line_numbers_style.': %{g:linenr_style}', 'let g:linenr_style=g:linenr_style==#"relative"?"absolute":"relative"|if g:linenr|call PreserveAndDo("call NumbertoggleAll(mode())", v:true, v:true)|endif', "Make line numbers %{g:linenr_style==#\"absolute\"?\"".s:make_relative."\":\"".s:make_absolute."\"}"],
 				\ ])
 
 	call quickui#menu#install(s:config_label, [

@@ -225,7 +225,6 @@ nunmap [<space>
 xunmap [<space>
 nunmap ]<space>
 xunmap ]<space>
-nunmap <c-c>
 if luaeval("plugin_installed(_A[1])", ["convert.nvim"])
 	exec "source" g:CONFIG_PATH."/lua/packages/convert/keymaps.vim"
 	xnoremap <leader>c <c-\><c-n><cmd>call X_CommentOutDefault()<cr>

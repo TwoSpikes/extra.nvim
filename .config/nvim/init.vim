@@ -978,11 +978,14 @@ set ttimeoutlen=750
 
 " Mouse options
 set cursorlineopt=screenline,number
-if g:enable_mouse
-	set mouse=a
-else
-	set mouse=
-endif
+function! SetMouse()
+	if g:enable_mouse
+		set mouse=a
+	else
+		set mouse=
+	endif
+endfunction
+call SetMouse()
 let &mousefocus = g:mouse_focus
 set nomousehide
 set mousemodel=popup_setpos
