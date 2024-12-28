@@ -107,10 +107,6 @@ function! PV()
 	normal! gv
 	let g:pseudo_visual = v:true
 endfunction
-function! PV_x()
-	execute "normal! ".N_DoX()
-	let g:pseudo_visual = v:true
-endfunction
 function! SetYankMode()
 	if v:false
 	elseif v:false
@@ -157,7 +153,7 @@ if g:disable_animations ==# v:false
   \	let i=1
   \\n while i<#a:count
   \\n	call feedkeys('j', 'n')
-  \\n	let i=i+1
+  \\n	let i+=1
   \\n endwhile
   \\n unlet i
   \"
@@ -633,7 +629,7 @@ let result .= "
 \\n		  let i=1
 \\n		  while i<#a:count1
 \\n			call feedkeys(down, 'n')
-\\n			let i=i+1
+\\n			let i+=1
 \\n		  endwhile
 \\n		  unlet i
 \"
@@ -672,21 +668,13 @@ function! V_DoXDoNotExtendSubsequentLines()
 endfunction
 xnoremap X <cmd>call V_DoXDoNotExtendSubsequentLines()<cr>
 function! V_DoH(c)
+	let i=0
 	if g:pseudo_visual
-		execute "normal! \<esc>"
-		let i=0
-		while i<#a:c
-			normal! h
-			let i+=1
-		endwhile
+		execute "normal! \<esc>".a:c.'h'
 	else
 		let old_l=line('.')
 		let old_c=col('.')
-		let i=0
-		while i<#a:c
-			normal! h
-			let i+=1
-		endwhile
+		execute 'normal!' a:c.'l'
 		call ReorderRightLeft()
 		call SavePosition(old_c, old_l, col('.'), line('.'))
 	endif
@@ -695,20 +683,11 @@ xnoremap h <cmd>call V_DoH(v:count1)<cr>
 xnoremap <left> <cmd>call V_DoH(v:count1)<cr>
 function! V_DoL(c)
 	if g:pseudo_visual
-		execute "normal! \<esc>"
-		let i=0
-		while i<#a:c
-			normal! l
-			let i+=1
-		endwhile
+		execute "normal! \<esc>".a:c.'l'
 	else
 		let old_c = col('.')
 		let old_l = line('.')
-		let i=0
-		while i<#a:c
-			normal! l
-			let i+=1
-		endwhile
+		execute 'normal!' a:c.'l'
 		call ReorderRightLeft()
 		call SavePosition(old_c, old_l, col('.'), line('.'))
 	endif

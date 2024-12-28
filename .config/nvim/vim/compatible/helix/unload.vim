@@ -32,7 +32,6 @@ delfunction CollapseVisual
 
 nunmap d
 delfunction PV
-delfunction PV_x
 delfunction SetYankMode
 delfunction V_DoD
 xunmap d

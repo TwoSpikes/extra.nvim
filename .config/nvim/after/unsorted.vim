@@ -1900,6 +1900,7 @@ function! CommentOutDefault_Define(mode)
 endfunction
 call CommentOutDefault_Define('N')
 call CommentOutDefault_Define('X')
+delfunction CommentOutDefault_Define
 function! DoCommentOutDefault()
 	execute "normal! ".CommentOutDefault()
 endfunction
@@ -1939,6 +1940,7 @@ function! UncommentOutDefault_Define(mode)
 endfunction
 call UncommentOutDefault_Define('N')
 call UncommentOutDefault_Define('X')
+delfunction UncommentOutDefault_Define
 
 function! HandleBuftypeAll()
 	tabdo windo call HandleBuftype(winnr())
