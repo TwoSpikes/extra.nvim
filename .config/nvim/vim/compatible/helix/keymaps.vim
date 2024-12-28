@@ -668,7 +668,6 @@ function! V_DoXDoNotExtendSubsequentLines()
 endfunction
 xnoremap X <cmd>call V_DoXDoNotExtendSubsequentLines()<cr>
 function! V_DoH(c)
-	let i=0
 	if g:pseudo_visual
 		execute "normal! \<esc>".a:c.'h'
 	else
