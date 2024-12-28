@@ -70,10 +70,12 @@ call timer_start(s:SCROLL_UPDATE_TIME, {->STCUpd()}, {'repeat': -1})
 execute printf("noremap <ScrollWheelDown> %s<c-e>", s:SCROLL_MOUSE_DOWN_FACTOR)
 execute printf("noremap <ScrollWheelUp> %s<c-y>", s:SCROLL_MOUSE_UP_FACTOR)
 
-noremap <silent> <leader>st <cmd>lua require('spectre').toggle()<cr><cmd>call Numbertoggle()<cr>
-nnoremap <silent> <leader>sw <cmd>lua require('spectre').open_visual({select_word = true})<cr><cmd>call Numbertoggle()<cr>
-vnoremap <silent> <leader>sw <cmd>lua require('spectre').open_visual()<cr><cmd>call Numbertoggle()<cr>
-noremap <silent> <leader>sp <cmd>lua require('spectre').open_file_search({select_word = true})<cr><cmd>call Numbertoggle()<cr>
+if executable('rg')
+	noremap <silent> <leader>st <cmd>lua require('spectre').toggle()<cr><cmd>call Numbertoggle()<cr>
+	nnoremap <silent> <leader>sw <cmd>lua require('spectre').open_visual({select_word = true})<cr><cmd>call Numbertoggle()<cr>
+	vnoremap <silent> <leader>sw <cmd>lua require('spectre').open_visual()<cr><cmd>call Numbertoggle()<cr>
+	noremap <silent> <leader>sp <cmd>lua require('spectre').open_file_search({select_word = true})<cr><cmd>call Numbertoggle()<cr>
+endif
 
 execute printf('noremap <silent> <leader>ve <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:CONFIG_PATH."/init.vim")
 execute printf("noremap <silent> <leader>se <esc>:so %s<cr>", g:CONFIG_PATH.'/vim/exnvim/reload.vim')
@@ -209,8 +211,12 @@ noremap <silent> <f9> <cmd>call ChangeNames()<bar>call RebindMenus()<bar>call qu
 
 nnoremap <silent> <c-x><c-b> <cmd>call quickui#tools#list_buffer('e')<cr>
 
-noremap <leader>z <cmd>call SelectPosition('lazygit', g:termpos)<cr>
-noremap <leader>m <cmd>call SelectPosition(g:far_or_mc, g:termpos)<cr>
+if executable('lazygit')
+	noremap <leader>z <cmd>call SelectPosition('lazygit', g:termpos)<cr>
+endif
+if executable('far') || executable('far2l') || executable('mc')
+	noremap <leader>m <cmd>call SelectPosition(g:far_or_mc, g:termpos)<cr>
+endif
 
 noremap <leader>xx <cmd>call OpenTermProgram()<cr>
 
