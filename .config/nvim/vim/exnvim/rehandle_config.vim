@@ -6,11 +6,18 @@ execute "source" g:CONFIG_PATH."/vim/compatible/init.vim"
 call RedefineProcessGBut()
 call ApplyColorscheme(g:selected_colorscheme)
 if has("nvim")
-	exec "lua package.loaded[\"packages.alpha.setup\"] = nil"
-	exec "lua require(\"packages.alpha.setup\")"
-	exec "lua package.loaded[\"packages.endscroll.setup\"] = nil"
-	exec "lua require(\"packages.endscroll.setup\")"
-
+	if luaeval("plugin_installed(_A[1])", ["alpha-nvim"])
+		exec "lua package.loaded[\"packages.alpha.setup\"] = nil"
+		exec "lua require(\"packages.alpha.setup\")"
+		if &filetype ==# "alpha"
+			AlphaRedraw
+			AlphaRemap
+		endif
+	endif
+	if luaeval("plugin_installed(_A[1])", ["endscroll.nvim"])
+		exec "lua package.loaded[\"packages.endscroll.setup\"] = nil"
+		exec "lua require(\"packages.endscroll.setup\")"
+	endif
 	if luaeval("plugin_installed(_A[1])", ["vim-quickui"])
 		call ChangeLanguage()
 	endif
@@ -19,3 +26,4 @@ if has("nvim")
 	endif
 endif
 call SetMouse()
+

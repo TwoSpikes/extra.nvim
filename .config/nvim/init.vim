@@ -200,7 +200,10 @@ function! LoadExNvimConfig(path, reload=v:false)
 	endif
 endfunction
 
-call LoadExNvimConfig(g:EXNVIM_CONFIG_PATH, exists('g:CONFIG_ALREADY_LOADED'))
+let reloading_config = exists('g:CONFIG_ALREADY_LOADED')
+let g:CONFIG_ALREADY_LOADED = v:true
+
+call LoadExNvimConfig(g:EXNVIM_CONFIG_PATH, reloading_config)
 
 function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 	" Default values for startup options
@@ -879,11 +882,9 @@ function! SetLocalSharePath()
 endfunction
 call SetLocalSharePath()
 
-let reloading_config = exists('g:CONFIG_ALREADY_LOADED')
 if reloading_config
 	call HandleBuftypeAll()
 endif
-let g:CONFIG_ALREADY_LOADED = v:true
 
 if $PREFIX == ""
 	call setenv('PREFIX', '/usr/')

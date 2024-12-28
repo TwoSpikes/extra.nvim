@@ -297,7 +297,13 @@ function! RebindMenus()
 	call quickui#menu#install(s:window_label, [
 				\ [(g:quickui_icons?"󱂥 ":"").s:kill_buffer_label."\tCtrl-x k", 'Killbuffer', 'Completely removes the current buffer'],
 				\ [(g:quickui_icons?" ":"").s:select_buffer_label."\tCtrl-x Ctrl-b", 'call quickui#tools#list_buffer("e")', 'Select buffer to edit in current buffer'],
-				\ [(g:quickui_icons?"󱎸 ":"").s:search_word_using_spectre_label."\tLEAD sw", 'exec "lua require(\"spectre\").open_visual({select_word = true})"', 'Select buffer to edit in current buffer'],
+				\ ])
+	if executable('rg')
+		call quickui#menu#install(s:window_label, [
+					\ [(g:quickui_icons?"󱎸 ":"").s:search_word_using_spectre_label."\tLEAD sw", 'exec "lua require(\"spectre\").open_visual({select_word = true})"', 'Select buffer to edit in current buffer'],
+					\ ])
+	endif
+	call quickui#menu#install(s:window_label, [
 				\ ["--", '' ],
 				\ ])
 	if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-quickui"])

@@ -1,3 +1,6 @@
+let reloading=exists('g:COMPATIBLE_ALREADY_LOADED')
+let g:COMPATIBLE_ALREADY_LOADED = v:true
+
 " Random options
 set termguicolors
 set encoding=utf-8
@@ -12,7 +15,9 @@ set eventignore=
 set noexrc
 set fillchars=
 set fixendofline
-set cmdheight=1
+if !reloading
+	set cmdheight=1
+endif
 set smoothscroll
 
 " Bell signal options

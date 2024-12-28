@@ -52,9 +52,15 @@ dashboard.section.buttons.val = TableConcat(dashboard.section.buttons.val, {
 	dashboard.button("q", "  "..quit_neovim_label, ":qa<CR>"),
 })
 if vim.g.enable_fortune then
-	local handle = io.popen('fortune')
-	local fortune = handle:read("*a")
-	handle:close()
-	dashboard.section.footer.val = fortune
+	if dashboard.section.footer.val == "" then
+		local handle = io.popen('fortune')
+		local fortune = handle:read("*a")
+		handle:close()
+		dashboard.section.footer.val = fortune
+	end
+else
+	if dashboard.section.footer.val then
+		dashboard.section.footer.val = ""
+	end
 end
 alpha.setup(dashboard.opts)

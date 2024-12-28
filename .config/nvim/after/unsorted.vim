@@ -335,7 +335,7 @@ unlet s:dir_position_right
 unlet s:dir_position_current
 unlet s:dir_position_float
 
-let g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT = [$HOME]
+let g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT = [$HOME.'/']
 let g:LUA_REQUIRE_GOTO_PREFIX = g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT
 function! Lua_Require_Goto_Workaround_Wincmd_f()
 	if !filereadable(expand(g:LOCALSHAREPATH).'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
