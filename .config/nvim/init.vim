@@ -924,7 +924,7 @@ function! OnStart()
 	call SetExNvimConfigPath()
 	call SetLocalSharePath()
 	call SetConfigPath()
-	if has('nvim') && luaeval("plugin_installed(_A[1])", ["neo-tree.nvim"]) && g:automatically_open_neo_tree_instead_of_netrw
+	if has('nvim') && PluginInstalled("neo-tree.nvim") && g:automatically_open_neo_tree_instead_of_netrw
 		autocmd! FileExplorer *
 		augroup auto_neo_tree
 			autocmd!
@@ -943,7 +943,7 @@ function! OnStart()
 		let g:compatible = "no"
 		call timer_srart(0, {->RedefineProcessGBut()})
 	endif
-	if has('nvim') && g:compatible !=# "helix_hard" && isdirectory(g:LOCALSHAREPATH.'/site/pack/packer/start/nvim-notify')
+	if has('nvim') && g:compatible !=# "helix_hard" && luaeval("plugin_installed(_A[1])", ["nvim-notify"])
 		call timer_start(0, {->execute(printf('luafile %s', fnamemodify(g:PLUGINS_SETUP_FILE_PATH, ':h').'/noice/setup.lua'))})
 	endif
 endfunction
@@ -1055,6 +1055,14 @@ if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
 		call delete(expand(g:LOCALSHAREPATH)."/site/pack/packer/start/vim-gitgutter", "rf")
 	endif
 endif
+
+function! PluginInstalled(name)
+	silent! let a=luaeval('require("'.a:name.'")')
+	if type(a) ==# v:t_dict
+		return 1
+	endif
+	return a!=#0
+endfunction
 
 autocmd! VimEnter * call OnStart()
 call inputrestore()

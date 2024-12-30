@@ -1,8 +1,7 @@
-function! InitPacker()
+function! InitPckr()
 	execute "source ".g:CONFIG_PATH.'/vim/plugins/setup.vim'
 
 	execute printf("luafile %s", g:PLUGINS_INSTALL_FILE_PATH)
-	PackerInstall
 endfunction
 
 set nolazyredraw
@@ -12,7 +11,7 @@ if has('nvim')
 			echomsg "Installing packer.nvim"
 			!git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 		endif
-		call InitPacker()
+		call InitPckr()
 	else
 		echohl ErrorMsg
 		echomsg "Please install Git"

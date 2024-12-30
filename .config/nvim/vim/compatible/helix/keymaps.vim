@@ -673,7 +673,7 @@ function! V_DoH(c)
 	else
 		let old_l=line('.')
 		let old_c=col('.')
-		execute 'normal!' a:c.'l'
+		execute 'normal!' a:c.'h'
 		call ReorderRightLeft()
 		call SavePosition(old_c, old_l, col('.'), line('.'))
 	endif

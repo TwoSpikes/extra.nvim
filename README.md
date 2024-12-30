@@ -73,6 +73,9 @@ Installation
 $ git clone https://github.com/TwoSpikes/extra.nvim extra.nvim
 $ cd extra.nvim
 $ cargo install --path util/exnvim
+$ cd
+$ patch -p0 < ~/extra.nvim/.config/nvim/patch/*
+$ cd -
 $ exnvim install
 $ exnvim setup
 ```
@@ -161,11 +164,11 @@ $ exnvim version
 - [Vim](https://www.vim.org/)
 - [Vim docs](https://vimdoc.sourceforge.net/)
 - [helix](https://helix-editor.com/)
-- [packer.nvim](https://github.com/wbthomason/packer.nvim)
 - [Git](https://git-scm.com/)
 
 # Plug-ins used
 
+- [pckr.nvim](https://github.com/TwoSpikes/pckr.nvim)
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 - [plenary.nvim](https://github.com/nvim-lua/plenary.nvim)
 - [mason.nvim](https://github.com/williamboman/mason.nvim)
