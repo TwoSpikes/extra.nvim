@@ -1,4 +1,20 @@
-vim.cmd('packadd packer.nvim')
+require('lib.lists.contains')
+require('lib.lists.compare')
+
+plugins_were_installed = vim.fn.readdir(vim.g.LOCALSHAREPATH..'/site/pack/pckr/opt')
+local function patch(pluginname)
+	if vim.fn.isdirectory(vim.fn.eval('$HOME')..'/.cache/nvim/patched-plugins/'..pluginname) == 1 then
+		return
+	end
+	if vim.fn.isdirectory(vim.g.LOCALSHAREPATH..'/site/pack/pckr/opt/'..pluginname) == 0 then
+		return
+	end
+	if equals(vim.fn.readdir(vim.g.LOCALSHAREPATH..'/site/pack/pckr/opt/'..pluginname), {}) then
+		return
+	end
+	vim.cmd("!cd>/dev/null;patch -p0 < ~/.config/nvim/patch/"..pluginname..'.patch;cd ->/dev/null')
+	vim.fn.mkdir(vim.fn.eval('$HOME')..'/.cache/nvim/patched-plugins/'..pluginname, 'p')
+end
 
 local function bootstrap_pckr()
   local pckr_path = vim.fn.stdpath("data") .. "/pckr/pckr.nvim"
@@ -13,9 +29,7 @@ local function bootstrap_pckr()
       pckr_path
     })
 
-    vim.cmd [[cd]]
-    vim.cmd [[!patch < ~/.config/nvim/patch/pckr.nvim.patch]]
-    vim.cmd [[cd -]]
+    vim.cmd([[!cd>/dev/null;patch -p0 < ~/.config/nvim/patch/pckr.nvim.patch;cd ->/dev/null]])
   end
 
   vim.opt.rtp:prepend(pckr_path)
@@ -31,6 +45,9 @@ pckr.add({
         requires = {
             { 'nvim-lua/plenary.nvim' },
         },
+		config_pre = function()
+			patch('telescope.nvim')
+		end,
     };
     {
         'williamboman/mason.nvim',
@@ -200,12 +217,6 @@ pckr.add({
 			{
 				"mfussenegger/nvim-dap",
 			},
-			{
-				'nvim-telescope/telescope.nvim',
-				requires = {
-					{ 'nvim-lua/plenary.nvim' },
-				},
-			}
 		}
 	};
 	{
@@ -246,8 +257,6 @@ pckr.add({
 				"mfussenegger/nvim-dap",
 			}
 		},
-		opts = function()
-    end,
     config = 'packages.metals.init'
 	};
 	{
@@ -255,12 +264,21 @@ pckr.add({
 	};
 	{
 		'hrsh7th/cmp-buffer',
+		config_pre = function()
+			patch('cmp-buffer')
+		end,
 	};
 	{
 		'hrsh7th/cmp-path',
+		config_pre = function()
+			patch('cmp-path')
+		end,
 	};
 	{
 		'hrsh7th/cmp-cmdline',
+		config_pre = function()
+			patch('cmp-cmdline')
+		end,
 	};
 	{
 		'hrsh7th/nvim-cmp',
@@ -319,11 +337,6 @@ pckr.add({
 	};
 	{
 		'smartpde/telescope-recent-files',
-		requires = {
-			{
-				'nvim-telescope/telescope.nvim',
-			}
-		}
 	};
 });
 if vim.g.compatible ~= "helix_hard" then

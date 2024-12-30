@@ -931,8 +931,11 @@ function! OnStart()
 			autocmd BufEnter * if isdirectory(expand(expand("%")))|let prev_bufnr=bufnr()|execute "Neotree position=current" expand("%")|execute prev_bufnr."bwipeout!"|endif
 		augroup END
 	endif
+	if has('nvim')
+		execute printf("luafile %s", g:PLUGINS_SETUP_FILE_PATH)
+	endif
 	if filereadable(expand(g:CONFIG_PATH).'/vim/init.vim')
-		call timer_start(0, {->execute("source ".g:CONFIG_PATH."/vim/init.vim")})
+		execute 'source' g:CONFIG_PATH.'/vim/init.vim'
 	else
 		echohl ErrorMsg
 		if g:language ==# 'russian'
@@ -943,7 +946,7 @@ function! OnStart()
 		let g:compatible = "no"
 		call timer_srart(0, {->RedefineProcessGBut()})
 	endif
-	if has('nvim') && g:compatible !=# "helix_hard" && luaeval("plugin_installed(_A[1])", ["nvim-notify"])
+	if has('nvim') && g:compatible !=# "helix_hard" && PluginInstalled('notify')
 		call timer_start(0, {->execute(printf('luafile %s', fnamemodify(g:PLUGINS_SETUP_FILE_PATH, ':h').'/noice/setup.lua'))})
 	endif
 endfunction
@@ -1035,8 +1038,8 @@ endfunction
 autocmd! VimLeavePre * call FixShaDa()
 
 function! PreparePersistedNvim()
-	if filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/persisted.nvim/lua/persisted/init.lua')
-		let bufnr = bufadd(expand('~').'/.local/share/nvim/site/pack/packer/start/persisted.nvim/lua/persisted/init.lua')
+	if filereadable(g:LOCALSHAREPATH.'/site/pack/pckr/opt/persisted.nvim/lua/persisted/init.lua')
+		let bufnr = bufadd(expand('~').'/.local/share/nvim/site/pack/pckr/opt/persisted.nvim/lua/persisted/init.lua')
 		call bufload(bufnr)
 		execute bufnr."buffer"
 		if getbufline(bufnr, 44)[0] =~# 'if config.autoload and M.allowed_dir() then'
@@ -1050,9 +1053,12 @@ if has('nvim')
 	call PreparePersistedNvim()
 endif
 
+function! PluginExists(name)
+	return isdirectory(g:LOCALSHAREPATH.'/site/pack/pckr/opt/'.a:name)
+endfunction
 if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
-	if isdirectory(expand(g:LOCALSHAREPATH)."/site/pack/packer/start/vim-gitgutter")
-		call delete(expand(g:LOCALSHAREPATH)."/site/pack/packer/start/vim-gitgutter", "rf")
+	if PluginExists('vim-gitgutter')
+		PluginDelete('vim-gitgutter')
 	endif
 endif
 
@@ -1063,6 +1069,20 @@ function! PluginInstalled(name)
 	endif
 	return a!=#0
 endfunction
+function! PluginDelete(name)
+	call delete(expand(g:LOCALSHAREPATH)."/site/pack/pckr/opt/".a:name, "rf")
+endfunction
 
-autocmd! VimEnter * call OnStart()
+function! InitPckr()
+	execute "source ".g:CONFIG_PATH.'/vim/plugins/setup.vim'
+
+	if has('nvim')
+		execute printf("luafile %s", g:PLUGINS_INSTALL_FILE_PATH)
+	endif
+endfunction
+
+set nolazyredraw
+call InitPckr()
+
+autocmd VimEnter * call OnStart()
 call inputrestore()

@@ -1,0 +1,17 @@
+--- .local/share/nvim/site/pack/pckr/opt/telescope.nvim/lua/telescope/pickers.lua	2024-12-30 19:12:23.954029367 +0300
++++ .local/share/nvim/site/pack/pckr/opt/telescope.nvim/lua/telescope/pickers.lua	2024-12-30 19:13:33.242029341 +0300
+@@ -2,6 +2,9 @@
+ 
+ local a = vim.api
+ 
++if not plugin_installed('plenary') then
++	goto exit
++end
+ local async = require "plenary.async"
+ local await_schedule = async.util.scheduler
+ local channel = require("plenary.async.control").channel
+@@ -1727,3 +1730,4 @@
+ pickers._Picker = Picker
+ 
+ return pickers
++::exit::

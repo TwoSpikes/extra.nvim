@@ -254,14 +254,14 @@ nnoremap gP <cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCor
 xnoremap gp <esc><cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCorrectPasteMode('$', register)<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>exe"norm! o"<bar>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
 xnoremap gP <esc><cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCorrectPasteMode('0', register)<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>exe"norm! o"<bar>if g:compatible==#"helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
 nnoremap c xi
-if !g:use_nvim_cmp && has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-surround"])
+if !g:use_nvim_cmp && has('nvim') && PluginExists('vim-surround')
 	unmap ySS
 	unmap ySs
 	unmap yss
 	unmap yS
 	unmap ys
 endif
-if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-fugitive"])
+if has('nvim') && PluginExists('vim-fugitive')
 	unmap y<c-g>
 endif
 nnoremap y <cmd>let register=v:register<bar>exe"norm! v\"".register."y"<cr>
@@ -295,14 +295,14 @@ function! V_DoT_Cr()
 endfunction
 xnoremap t<cr> <cmd>call V_DoT_Cr()<cr>
 if !g:use_nvim_cmp
-	if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-surround"])
+	if has('nvim') && PluginExists('vim-surround')
 		unmap cS
 		unmap cs
 	endif
 	unmap ci_
 endif
 unmap dd
-if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-surround"])
+if has('nvim') && PluginExists('vim-surround')
 	unmap ds
 endif
 let g:pseudo_visual = v:false
@@ -573,7 +573,7 @@ function! V_DoS()
 		call V_DoSneak_S()
 		return
 	endif
-	if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-quickui"])
+	if has('nvim') && PluginExists('vim-quickui')
 		let select = quickui#input#open('Select:', g:last_selected)
 	else
 		let hcm_select_label = 'select'.(g:last_selected!=#''?' (default: '.g:last_selected.')':'').':'
@@ -873,7 +873,7 @@ endfunction
 xnoremap y <cmd>call V_DoY()<cr>
 nunmap ;
 nnoremap ; <nop>
-if !has('nvim') || !luaeval("plugin_installed(_A[1])", ["vim-sneak"])
+if !has('nvim') || !PluginInstalled('sneak')
 	xnoremap ; <esc>
 else
 	xnoremap ; <esc><cmd>call timer_start(0, {->SneakCancel()})<cr>
@@ -922,7 +922,7 @@ nnoremap [<space> mzO<esc>`z
 xnoremap [<space> mz<esc>O<esc>`z
 nnoremap ]<space> mzo<esc>`z
 xnoremap ]<space> mz<esc>o<esc>`zgv
-if has('nvim') && luaeval("plugin_installed(_A[1])", ["convert.nvim"]) && exists('g:convert_keymaps_loaded')
+if has('nvim') && PluginInstalled('convert') && exists('g:convert_keymaps_loaded')
 	unmap <leader>cc
 	unmap <leader>cn
 endif

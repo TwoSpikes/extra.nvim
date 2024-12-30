@@ -73,11 +73,9 @@ Installation
 $ git clone https://github.com/TwoSpikes/extra.nvim extra.nvim
 $ cd extra.nvim
 $ cargo install --path util/exnvim
-$ cd
-$ patch -p0 < ~/extra.nvim/.config/nvim/patch/*
-$ cd -
 $ exnvim install
 $ exnvim setup
+$ nvim
 ```
 
 ### Extra step for Vim

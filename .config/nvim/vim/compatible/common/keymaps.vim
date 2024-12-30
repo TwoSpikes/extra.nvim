@@ -106,7 +106,7 @@ noremap <leader>: :<c-u>'<,'>
 noremap <leader>= <cmd>ec"use \<c-c\>c"<cr>
 noremap <leader>- <cmd>ec"use \<c-c\>C"<cr>
 noremap <leader>1 :!
-nnoremap <leader>up <cmd>lua require('packer').sync()<cr>
+nnoremap <leader>up <cmd>Pckr sync<cr>
 
 " QUOTES AROUND (DEPRECATED BECAUSE OF surround.vim)
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>
@@ -220,7 +220,7 @@ endif
 
 noremap <leader>xx <cmd>call OpenTermProgram()<cr>
 
-if has('nvim') && luaeval("plugin_installed(_A[1])", ["neo-tree.nvim"])
+if has('nvim') && PluginInstalled('neo-tree')
 	nnoremap <c-h> <cmd>Neotree<cr>
 endif
 
@@ -289,7 +289,7 @@ if g:open_cmd_on_up
 	vnoremap <up> :<up>
 endif
 
-if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-fugitive"])
+if has('nvim') && PluginExists('vim-fugitive')
 	nnoremap <leader>gc <cmd>Git commit --verbose<cr>
 	nnoremap <leader>ga <cmd>Git commit --verbose --all<cr>
 	nnoremap <leader>gA <cmd>Git commit --verbose --amend<cr>

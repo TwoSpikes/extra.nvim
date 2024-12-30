@@ -60,7 +60,7 @@ function! DefineAugroupNumbertoggle()
 			autocmd InsertLeave * call Numbertoggle('')
 			autocmd InsertEnter * call Numbertoggle(v:insertmode)
 			autocmd BufReadPost,BufEnter,BufLeave,WinLeave,WinEnter * call Numbertoggle()
-			autocmd FileType packer,spectre_panel,man call Numbertoggle()|call HandleBuftype(winnr())
+			autocmd FileType pckr,spectre_panel,man call Numbertoggle()|call HandleBuftype(winnr())
 		else
 			autocmd! numbertoggle
 		endif
@@ -100,7 +100,7 @@ augroup visual
 		let pre_cursorline = !g:fullscreen
 		if exists('g:cursorline_style_supported') && g:cursorline_style_supported[g:cursorline_style] ==# "reverse"
 			let pre_cursorline = pre_cursorline && mode() !~# "[irco]"
-			let pre_cursorline = pre_cursorline && (buftype !=# 'nofile' || filetype ==# 'neo-tree') && filetype !=# 'TelescopePrompt' && filetype !=# 'spectre_panel' && filetype !=# 'packer'
+			let pre_cursorline = pre_cursorline && (buftype !=# 'nofile' || filetype ==# 'neo-tree') && filetype !=# 'TelescopePrompt' && filetype !=# 'spectre_panel' && filetype !=# 'pckr'
 		endif
 		let pre_cursorline = pre_cursorline && buftype !=# 'terminal' && filetype !=# 'alpha' && filetype !=# "notify"
 		let pre_cursorline = pre_cursorline && g:cursorline
@@ -113,7 +113,7 @@ augroup END
 augroup xdg_open
 	autocmd!
 	function! OpenWithXdg(filename)
-		if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
+		if !PluginExists('vim-quickui')
 			echohl Question
 			if g:language ==# 'russian'
 				echon 'Открыть через xdg-open (y/N): '

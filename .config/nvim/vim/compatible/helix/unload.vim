@@ -76,7 +76,7 @@ nunmap >
 nunmap <
 xunmap <
 xunmap >
-if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-sneak"])
+if has('nvim') && PluginInstalled('sneak')
 	delfunction SneakCancel
 	if maparg('f<Esc>', 'x') !=# ''
 		xunmap f<esc>
@@ -126,14 +126,14 @@ if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-sneak"])
 	unlet g:first_sneak
 endif
 if !g:use_nvim_cmp
-	if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-surround"])
+	if has('nvim') && PluginExists('vim-surround')
 		noremap cS <Plug>CSurround
 		noremap cs <Plug>Csurround
 	endif
 	nnoremap ci_ yiwct_
 endif
 nnoremap <silent> dd ddk
-if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-surround"])
+if has('nvim') && PluginExists('vim-surround')
 	noremap ds <Plug>Dsurround
 endif
 delfunction ReorderRightLeft
@@ -224,7 +224,7 @@ nunmap [<space>
 xunmap [<space>
 nunmap ]<space>
 xunmap ]<space>
-if luaeval("plugin_installed(_A[1])", ["convert.nvim"])
+if PluginInstalled('convert')
 	exec "source" g:CONFIG_PATH."/lua/packages/convert/keymaps.vim"
 	xnoremap <leader>c <c-\><c-n><cmd>call X_CommentOutDefault()<cr>
 	nnoremap <leader>c <cmd>call N_CommentOutDefault()<cr>

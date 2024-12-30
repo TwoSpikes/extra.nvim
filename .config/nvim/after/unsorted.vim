@@ -1,24 +1,3 @@
-function! InitPckr()
-	execute "source ".g:CONFIG_PATH.'/vim/plugins/setup.vim'
-
-	execute printf("luafile %s", g:PLUGINS_INSTALL_FILE_PATH)
-endfunction
-
-set nolazyredraw
-if has('nvim')
-	if executable('git')
-		if !isdirectory(g:LOCALSHAREPATH.."/site/pack/packer/start/packer.nvim")
-			echomsg "Installing packer.nvim"
-			!git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
-		endif
-		call InitPckr()
-	else
-		echohl ErrorMsg
-		echomsg "Please install Git"
-		echohl Normal
-	endif
-endif
-
 function! STCRel(winnr=winnr())
 	if has('nvim')
 		if mode() =~? 'v.*' || mode() ==# "\<c-v>"
@@ -47,7 +26,7 @@ function! STCNoAll()
 endfunction
 
 function! Numbertoggle_stcrel(winnr)
-	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
+	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'pckr' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
 		call STCRel(a:winnr)
 	else
 		call STCNo(a:winnr)
@@ -95,7 +74,7 @@ if exists('*Pad')
 		endif
 	endfunction
 	function! Numbertoggle_stcabs(mode='', winnr=winnr())
-		if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'packer' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
+		if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'pckr' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
 			call STCAbs(a:mode, a:winnr)
 		else
 			call STCNo(a:winnr)
@@ -107,7 +86,7 @@ if exists('*Pad')
 		else
 			let find_file_label = 'Find file: '
 		endif
-		if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
+		if !PluginExists('vim-quickui')
 			echohl Question
 			let filename = input(find_file_label)
 			echohl Normal
@@ -116,7 +95,7 @@ if exists('*Pad')
 		endif
 		if filename !=# ''
 			set lazyredraw
-			if luaeval("plugin_installed(_A[1])", ["neo-tree.nvim"]) && isdirectory(expand(filename))
+			if has('nvim') && PluginInstalled("neo-tree") && isdirectory(expand(filename))
 				tabedit
 				execute printf("Neotree position=current %s", filename)
 			else
@@ -133,7 +112,7 @@ if exists('*Pad')
 		else
 			let find_file_label = 'Find file (open in buffer): '
 		endif
-		if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
+		if !PluginExists('vim-quickui')
 			echohl Question
 			let filename = input(find_file_label)
 			echohl Normal
@@ -143,7 +122,7 @@ if exists('*Pad')
 			set nolazyredraw
 		endif
 		if filename !=# ''
-			if luaeval("plugin_installed(_A[1])", ["neo-tree.nvim"]) && isdirectory(expand(filename))
+			if has('nvim') && PluginInstalled("neo-tree") && isdirectory(expand(filename))
 				execute printf("Neotree position=current %s", filename)
 			else
 				execute printf("edit %s", filename)
@@ -154,7 +133,7 @@ if exists('*Pad')
 	noremap <c-c>C <cmd>Findfilebuffer<cr>
 
 	function! SaveAsBase(command, invitation)
-		if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
+		if !PluginExists('vim-quickui')
 			echohl Question
 			let filename = input(a:invitation)
 			echohl Normal
@@ -216,7 +195,7 @@ call FarOrMc()
 
 function! SelectPosition(cmd, positions)
 	while v:true
-		if !has('nvim')||!filereadable(expand('~/.local/share/nvim/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim'))
+		if !has('nvim')||!PluginExists('vim-quickui')
 			echohl Question
 			if g:language ==# 'russian'
 				let select_position_label = 'Выберите позицию %s: '
@@ -263,7 +242,7 @@ function! SelectPosition(cmd, positions)
 	endwhile
 endfunction
 
-if has('nvim') && luaeval("plugin_installed(_A[1])", ["neo-tree.nvim"])
+if has('nvim') && PluginInstalled('neo-tree')
 	let s:dir_position_left =
 		\{cmd -> 'Neotree position=left '.cmd}
 	let s:dir_position_right =
@@ -337,7 +316,7 @@ unlet s:dir_position_float
 let g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT = [$HOME.'/']
 let g:LUA_REQUIRE_GOTO_PREFIX = g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT
 function! Lua_Require_Goto_Workaround_Wincmd_f()
-	if !filereadable(expand(g:LOCALSHAREPATH).'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
+	if !PluginExists('vim-quickui')
 		echohl Question
 		if g:language ==# 'russian'
 			let lua_require_goto_workaround_wincmd_f_dialogue_label = 'Выберите способ перехода %s: '
@@ -722,7 +701,7 @@ function! ExNvimCheatSheet()
 	\\n   Q - Quit window without saving
 	\\n   LEAD r - Open ranger to select file to edit
 	\\n   LEAD CTRL-s - \"Save as\" dialogue
-	\\n   LEAD up - Update plugins using packer.nvim
+	\\n   LEAD up - Update plugins using pckr.nvim
 	\\n   LEAD uc - Update coc.nvim language servers
 	\\n   LEAD ut - Update nvim-treesitter parsers
 	\\n   LEAD sw - Find work under cursor using nvim-spectre
@@ -944,7 +923,7 @@ function! Killbuffer()
 	else
 		let kill_buffer_label = 'Kill buffer'
 	endif
-	if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
+	if !PluginExists('vim-quickui')
 		let user_input = input(kill_buffer_label." (Y/n): ")
 		echohl Normal
 	else
@@ -1114,7 +1093,7 @@ execute handle_keystroke_function_expression
 unlet handle_keystroke_function_expression
 
 function! OpenTermProgram()
-	if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-quickui"])
+	if has('nvim') && PluginInstalled('vim-quickui')
 		let select = quickui#input#open(Pad('Open terminal program:', 40), g:last_open_term_program)
 	else
 		let hcm_select_label = 'Open in terminal'.(g:last_open_term_program!=#''?' (default: '.g:last_open_term_program.')':'').': '
@@ -1265,7 +1244,7 @@ endfunction
 nnoremap <leader>r <cmd>call OpenRangerCheck()<cr>
 
 function! RunAlphaIfNotAlphaRunning()
-	if !isdirectory(g:LOCALSHAREPATH.'/site/pack/packer/start/alpha-nvim')
+	if !PluginInstalled('alpha')
 		echohl ErrorMsg
 		if g:language ==# 'russian'
 			echomsg "Блядь: alpha-nvim не установлен"
@@ -1282,7 +1261,7 @@ function! RunAlphaIfNotAlphaRunning()
 		AlphaRemap
 	endif
 endfunction
-if has('nvim') && luaeval("plugin_installed(_A[1])", ["alpha-nvim"])
+if has('nvim') && PluginInstalled('alpha-nvim')
 	nnoremap <leader>A <cmd>call RunAlphaIfNotAlphaRunning()<cr>
 endif
 
@@ -1298,7 +1277,7 @@ function! OpenOnStart()
 		let to_open = to_open && !g:DO_NOT_OPEN_ANYTHING
 		let to_open = to_open && !g:PAGER_MODE
 		if to_open
-			if g:open_on_start ==# 'alpha' && has('nvim') && !isdirectory(expand('%')) && luaeval("plugin_installed(_A[1])", ["alpha-nvim"])
+			if g:open_on_start ==# 'alpha' && has('nvim') && !isdirectory(expand('%')) && PluginInstalled('alpha')
 				Alpha
 			elseif g:open_on_start ==# "explorer" || (!has('nvim') && g:open_on_start ==# 'alpha')
 			\||executable('ranger') !=# 1
@@ -1396,7 +1375,7 @@ function! MyTabLabel(n)
 			let buf_name = '[Commit]'
 		endif
 	elseif v:false
-	\|| filetype ==# "packer"
+	\|| filetype ==# "pckr"
 		let buf_name = original_buf_name
 	elseif buftype ==# "nofile"
 		if g:language ==# 'russian'
@@ -1774,7 +1753,7 @@ function! JKWorkaround()
 	if !g:open_cmd_on_up
 	  noremap <up> <cmd>call ProcessGBut('k')<cr>
     endif
-	if !isdirectory(g:LOCALSHAREPATH.'/site/pack/packer/start/endscroll.nvim')
+	if !PluginInstalled('endscroll')
 		noremap j <cmd>call ProcessGBut('j')<cr>
 		if !g:open_cmd_on_up
 		  noremap <down> <cmd>call ProcessGBut('j')<cr>
@@ -1791,8 +1770,8 @@ endif
 
 function! PrepareWhichKey()
 	let g:which_key_timeout = 0
-	if filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/which-key.nvim/lua/which-key/util.lua')
-		edit ~/.local/share/nvim/site/pack/packer/start/which-key.nvim/lua/which-key/util.lua
+	if filereadable(g:LOCALSHAREPATH.'/site/pack/pckr/opt/which-key.nvim/lua/which-key/util.lua')
+		edit ~/.local/share/nvim/site/pack/pckr/opt/which-key.nvim/lua/which-key/util.lua
 		if getline(189) =~# 'if not ("nvsxoiRct"):find(mode) then'
 			silent 189,192delete
 			silent write
@@ -1811,7 +1790,7 @@ function! OnFirstTime()
 		endif
 		call writefile([], expand(g:LOCALSHAREPATH).'/extra.nvim/not_first_time.null')
 
-		if !filereadable(g:LOCALSHAREPATH.'/site/pack/packer/start/vim-quickui/autoload/quickui/confirm.vim')
+		if !PluginExists('vim-quickui')
 			if g:language ==# 'russian'
 				echomsg 'Чтобы посмотреть помощь, нажмите SPC-?. Вы больше не увидите это сообщение'
 			else
@@ -1975,36 +1954,36 @@ endfunction
 
 let g:floaterm_width = 1.0
 
-function! DoPackerUpdate(args)
+function! DoPackerUpdate()
 	call BeforeUpdatingPlugins()
-	execute "lua require('packer').update(".a:args.")"
+	Pckr sync
 	call AfterUpdatingPlugins()
 endfunction
 if has('nvim')
-	command! -nargs=* PackerUpdate exec "call DoPackerUpdate('".<f-args>."')"
+	command! -nargs=0 PackerUpdate exec "call DoPackerUpdate()"
 endif
 function! BeforeUpdatingPlugins()
-	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key")
-		execute "cd ".g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key"
+	if PluginExists('which-key.nvim')
+		execute "cd ".g:LOCALSHAREPATH."/site/pack/pckr/opt/which-key.nvim/lua/which-key"
 		execute "!git stash"
 		cd -
 	endif
 	
-	if isdirectory(g:LOCALSHAREPATH.'/site/pack/packer/start/persisted.nvim')
-		execute "cd ".g:LOCALSHAREPATH."/site/pack/packer/start/persisted.nvim"
+	if PluginExists('persisted.nvim')
+		execute "cd ".g:LOCALSHAREPATH."/site/pack/pckr/opt/persisted.nvim"
 		execute "!git stash"
 		cd -
 	endif
 endfunction
 function! AfterUpdatingPlugins()
-	if isdirectory(g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key")
-		execute "cd ".g:LOCALSHAREPATH."/site/pack/packer/start/which-key.nvim/lua/which-key/"
+	if PluginExists('which-key.nvim')
+		execute "cd ".g:LOCALSHAREPATH."/site/pack/pckr/opt/which-key.nvim/lua/which-key/"
 		execute "!git stash pop"
 		cd -
 	endif
 
-	if isdirectory(g:LOCALSHAREPATH.'/site/pack/packer/start/persisted.nvim')
-		execute "cd ".g:LOCALSHAREPATH."/site/pack/packer/start/persisted.nvim"
+	if PluginExists('persisted.nvim')
+		execute "cd ".g:LOCALSHAREPATH."/site/pack/pckr/start/persisted.nvim"
 		execute "!git stash pop"
 		cd -
 	endif

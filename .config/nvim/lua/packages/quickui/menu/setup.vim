@@ -1,4 +1,4 @@
-if !has('nvim') || !luaeval("plugin_installed(_A[1])", ["vim-quickui"])
+if !has('nvim') || !PluginExists('vim-quickui')
 	finish
 endif
 
@@ -281,7 +281,7 @@ function! RebindMenus()
 	endif
 	call quickui#menu#install(s:file_label, [
 				\ ["--", '' ],
-				\ [(g:quickui_icons?"󰚰 ":"").s:update_plugins_label."\tLEAD up", 'lua require("packer").sync()', 'Clear and redraw the screen'],
+				\ [(g:quickui_icons?"󰚰 ":"").s:update_plugins_label."\tLEAD up", 'Pckr sync', 'Clear and redraw the screen'],
 				\ [(g:quickui_icons?"󰚰 ":"").s:update_coc_label."\tLEAD uc", 'CocUpdate', 'Update coc.nvim installed language servers'],
 				\ [(g:quickui_icons?"󰚰 ":"").s:update_treesitter_label."\tLEAD ut", 'TSUpdate', 'Update installed TreeSitter parsers'],
 				\ ["--", '' ],
@@ -306,7 +306,7 @@ function! RebindMenus()
 	call quickui#menu#install(s:window_label, [
 				\ ["--", '' ],
 				\ ])
-	if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-quickui"])
+	if has('nvim') && PluginExists('vim-quickui')
 		if exists(':Findfile')
 			call quickui#menu#install(s:window_label, [
 					\ [(g:quickui_icons?" ":"").s:open_file_in_tab_label."\tCtrl-c c", 'Findfile', 'Open file in new tab'],
@@ -318,12 +318,12 @@ function! RebindMenus()
 					\ ])
 		endif
 	endif
-	if has('nvim') && luaeval("plugin_installed(_A[1])", ["neo-tree.nvim"])
+	if has('nvim') && PluginInstalled('neo-tree')
 		call quickui#menu#install(s:window_label, [
 					\ [(g:quickui_icons?"󰙅 ":"").s:toggle_file_tree_label."\tCtrl-h", 'Neotree', 'Toggles a file tree'],
 					\ ])
 	endif
-	if has('nvim') && luaeval("plugin_installed(_A[1])", ["telescope.nvim"])
+	if has('nvim') && PluginInstalled('telescope')
 		call quickui#menu#install(s:window_label, [
 					\ [(g:quickui_icons?"󰥨 ":"").s:telescope_fuzzy_find_label."\t".(g:compatible!=#"helix"&&g:compatible!=#"helix_hard"?"LEAD ff":"LEAD f"), 'call FuzzyFind()', 'Opens Telescope.nvim find file'],
 					\ ])
@@ -354,7 +354,7 @@ function! RebindMenus()
 				\ [(g:quickui_icons?" ":"").s:open_lazygit_label."\tLEAD z", 'call SelectPosition("lazygit", g:termpos)', 'Opens Lazygit'],
 				\ ])
 	endif
-	if has('nvim') && luaeval("plugin_installed(_A[1])", ["alpha-nvim"])
+	if has('nvim') && PluginInstalled('alpha')
 		call quickui#menu#install(s:window_label, [
 				\ [(g:quickui_icons?"󰍜 ":"").s:open_start_menu_label."\tLEAD A", 'call RunAlphaIfNotAlphaRunning()', 'Opens alpha-nvim menu'],
 				\ ])
@@ -409,7 +409,7 @@ function! RebindMenus()
 				\ ["Fold c&urrent buffer\t:Fold", 'Fold', 'Make folds for current buffer'],
 				\ ])
 
-	if has('nvim') && luaeval("plugin_installed(_A[1])", ["vim-fugitive"])
+	if has('nvim') && PluginExists('vim-fugitive')
 		call quickui#menu#install(s:git_label, [
 				\ ["&Commit\tLEAD gc", 'Git commit --verbose', 'Commit using fugitive.vim'],
 				\ ["Commit &all\tLEAD ga", 'Git commit --verbose --all', 'Commit all using fugitive.vim'],
@@ -422,7 +422,7 @@ function! RebindMenus()
 				\ ["&Status\tLEAD gs", 'Git status', 'Show repository status using fugitive.vim'],
 				\ ])
 	endif
-	if has('nvim') && luaeval("plugin_installed(_A[1])", ["diffview.nvim"])
+	if has('nvim') && PluginExists('diffview.nvim')
 		call quickui#menu#install(s:git_label, [
 				\ ["&View diff\tLEAD gd", 'DiffviewOpen HEAD', 'Show diff'],
 				\ ])

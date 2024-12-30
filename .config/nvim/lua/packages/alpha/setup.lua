@@ -38,7 +38,7 @@ dashboard.section.buttons.val = TableConcat(dashboard.section.buttons.val, {
 	dashboard.button("t", "  "..open_terminal_label, ":call OpenTerm(\"\")<CR>"),
 	dashboard.button("r", "󰚰  "..recently_opened_files_label, ":lua require('telescope').extensions.recent_files.pick()<CR>"),
 })
-if vim.fn.isdirectory(vim.g.LOCALSHAREPATH.."/site/pack/packer/start/neo-tree.nvim") == 1 then
+if plugin_installed('neo-tree') then
 	dashboard.section.buttons.val = TableConcat(dashboard.section.buttons.val, {
 		dashboard.button("h", "󰙅  "..open_nerdtree_label, ":Neotree<CR>:silent only<CR>")
 	})

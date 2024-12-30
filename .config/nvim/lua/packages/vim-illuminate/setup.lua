@@ -17,7 +17,7 @@ require('illuminate').configure({
 		'dirvish',
 		'fugitive',
 		'TelescopePrompt',
-		'packer',
+		'pckr',
 		'spectre_panel',
 	},
 	-- filetypes_allowlist: filetypes to illuminate, this is overridden by filetypes_denylist
