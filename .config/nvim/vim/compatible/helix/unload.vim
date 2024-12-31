@@ -139,6 +139,8 @@ endif
 delfunction ReorderRightLeft
 delfunction SavePosition
 xunmap :
+xunmap /
+xunmap ?
 nunmap w
 delfunction N_DoE
 nunmap e

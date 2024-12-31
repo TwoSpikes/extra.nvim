@@ -75,7 +75,6 @@ $ cd extra.nvim
 $ cargo install --path util/exnvim
 $ exnvim install
 $ exnvim setup
-$ nvim
 ```
 
 ### Extra step for Vim

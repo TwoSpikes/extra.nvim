@@ -331,7 +331,9 @@ function! SavePosition(old_c, old_l, new_c, new_l)
 		let g:ry=a:new_c
 	endif
 endfunction
-xnoremap : :<c-u>
+xnoremap : mz<esc>`z:<c-u>
+xnoremap / mz<esc>`z/
+xnoremap ? mz<esc>`z?
 nnoremap w <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>execute "normal! v".v:count1."e"<bar>let g:rx=line('.')<bar>let g:ry=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
 function! N_DoE()
 	let g:pseudo_visual = v:true
