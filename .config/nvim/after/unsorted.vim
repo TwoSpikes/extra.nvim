@@ -759,7 +759,7 @@ function! ExNvimCheatSheet()
 	\\n    g. - See :h g;
 	\\n    gw - See :h sneak|50
 	\\n  ABOUT:
-	\\n    Author: TwoSpikes (2023 - 2024)
+	\\n    Author: TwoSpikes (2023 - 2025)
 	\\n    Github repository: https://github.com/TwoSpikes/extra.nvim
 	\\n    Also see: https://github.com/TwoSpikes/dotfiles
 	\", "\n"))
@@ -1809,7 +1809,7 @@ call OnFirstTime()
 
 " TERMINAL
 
-function! OpenTerm(cmd)
+function! OpenTerm(cmd, after={->execute('')})
 	if !&modifiable
 		wincmd p
 		let prevwinid = win_getid(winnr(), tabpagenr())
@@ -1822,14 +1822,15 @@ function! OpenTerm(cmd)
 		wincmd p
 	endif
 	if a:cmd ==# ""
-		execute printf("terminal %s", $SHELL)
+		terminal
 	else
-		execute printf("terminal %s", a:cmd)
+		execute 'terminal' a:cmd
 	endif
 	if !has('nvim')
 	  wincmd k
 	  wincmd c
 	endif
+	call call(a:after, [])
 	startinsert
 	return bufnr()
 endfunction
@@ -1840,16 +1841,56 @@ function! Save_WW_and_Do(cmd)
 	execute a:cmd
 	let &whichwrap = old_whichwrap
 endfunction
-function! Comment_Move_Left(comment_string)
-	call Save_WW_and_Do('normal! '.Defone(len(a:comment_string)).'h')
+function! N_Comment_Move_Left(comment_string)
+	let comment_string_len = Defone(len(a:comment_string))
+	call Save_WW_and_Do('normal! '.comment_string_len.'h')
 endfunction
-function! Comment_Move_Right(comment_string)
-	call Save_WW_and_Do('normal! '.Defone(len(a:comment_string)).'l')
+function! N_Comment_Move_Right(comment_string)
+	let comment_string_len = Defone(len(a:comment_string))
+	call Save_WW_and_Do('normal! '.comment_string_len.'l')
 endfunction
+function! X_Comment_Move_Left_Define()
+let x_comment_move_left_function_expression = ""
+let x_comment_move_left_function_expression .= "
+\function! X_Comment_Move_Left(comment_string)
+\\n	let comment_string_len = Defone(len(a:comment_string))
+\\n	call Save_WW_and_Do('normal! '.comment_string_len.'ho'.comment_string_len.'ho')
+\"
+if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
+let x_comment_move_left_function_expression .= "
+\\n	let g:pseudo_visual = v:true
+\"
+endif
+let x_comment_move_left_function_expression .= "
+\\nendfunction
+\"
+execute x_comment_move_left_function_expression
+endfunction
+call X_Comment_Move_Left_Define()
+delfunction X_Comment_Move_Left_Define
+function! X_Comment_Move_Right_Define()
+let x_comment_move_right_function_expression = ""
+let x_comment_move_right_function_expression .= "
+\function! X_Comment_Move_Right(comment_string)
+\\n	let comment_string_len = Defone(len(a:comment_string))
+\\n	call Save_WW_and_Do('normal! '.comment_string_len.'lo'.comment_string_len.'lo')
+\"
+if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
+let x_comment_move_right_function_expression .= "
+\\n	let g:pseudo_visual = v:true
+\"
+endif
+let x_comment_move_right_function_expression .= "
+\\nendfunction
+\"
+execute x_comment_move_right_function_expression
+endfunction
+call X_Comment_Move_Right_Define()
+delfunction X_Comment_Move_Right_Define
 function! N_CommentOut(comment_string)
 	let l=line('.')
 	call setline(l, substitute(a:comment_string, '%s', Repr_Vim_Grep(getline(l)), ''))
-	call Comment_Move_Right(substitute(a:comment_string, '%s', '', ''))
+	call N_Comment_Move_Right(substitute(a:comment_string, '%s', '', ''))
 endfunction
 function! X_CommentOut(comment_string)
 	let line_start = getpos("'<")[1]
@@ -1857,8 +1898,8 @@ function! X_CommentOut(comment_string)
 	for line in range(line_start, line_end)
 		call setline(line, substitute(a:comment_string, '%s', Repr_Vim_Grep(getline(line)), ''))
 	endfor
-	call Comment_Move_Right(substitute(a:comment_string, '%s', '', ''))
-	call PV()
+	normal! gv
+	call X_Comment_Move_Right(substitute(a:comment_string, '%s', '', ''))
 endfunction
 function! CommentOutDefault_Define(mode)
 	execute "
@@ -1887,17 +1928,17 @@ function! N_UncommentOut(comment_string)
 	let line=getline(l)
 	let comment=substitute(a:comment_string, '%s', '', '')
 	call setline(l, substitute(line, comment, '', ''))
-	call Comment_Move_Left(comment)
+	call N_Comment_Move_Left(comment)
 endfunction
 function! X_UncommentOut(comment_string)
 	let comment=substitute(a:comment_string, '%s', '', '')
-	for l:idx in range(line("'>")-line("'<")+1)
-		let l = line("'<") + l:idx
+	for idx in range(line("'>")-line("'<")+1)
+		let l = line("'<") + idx
 		let line=getline(l)
 		call setline(l, substitute(line, comment, '', ''))
 	endfor
-	call Comment_Move_Left(comment)
-	call PV()
+	normal! gv
+	call X_Comment_Move_Left(comment)
 endfunction
 
 function! UncommentOutDefault_Define(mode)

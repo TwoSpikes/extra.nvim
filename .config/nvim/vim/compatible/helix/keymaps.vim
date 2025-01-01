@@ -374,7 +374,9 @@ function! N_DoB()
 	\&& charclass(getline(old_l)[old_c-2]) !=# 2
 	\|| charclass(getline(old_l)[old_c-1]) ==# 0
 		execute
-	elseif charclass(getline(old_l)[old_c-1]) !=# 2
+	elseif v:false
+	\|| charclass(getline(old_l)[old_c-1]) !=# 2
+	\|| charclass(getline(old_l)[old_c-2]) ==# 0
 		execute "normal! oho"
 	else
 		execute
@@ -398,7 +400,7 @@ function! N_DoEWhole()
 	elseif getline(line('.'))[g:ly] ==# ''
 		execute "normal! ollo"
 	elseif v:false
-	\|| getline(line('.'))[g:ly] ==# ' '
+	\|| charclass(getline(line('.'))[g:ly]) ==# 0
 		execute "normal! olo"
 	elseif v:true
 	\&& g:lx ==# line('.')
@@ -421,8 +423,8 @@ function! N_DoBWhole()
 		execute "normal! oho"
 	elseif getline(line('.'))[g:ry] ==# ''
 	elseif v:false
-	\|| getline(line('.'))[g:ry-2] ==# ' '
-	\|| getline(line('.'))[g:ry-2] ==# "\t"
+	\|| charclass(getline(line('.'))[g:ry-2]) ==# 0
+	\&& charclass(getline(line('.'))[g:ry-1]) !=# 0
 		execute "normal! oho"
 	elseif v:true
 	\&& g:rx ==# line('.')
@@ -740,7 +742,8 @@ function! V_DoEWhole()
 	let old_c = col('.')
 	let old_l = line('.')
 	if g:pseudo_visual
-		execute "normal! ".MoveRight(g:lx, g:ly, g:rx, g:ry)."\<esc>lvE"
+		execute "normal! ".MoveRight(old_l, old_c, g:rx, g:ry)."\<esc>lvE"
+"		execute "normal! ".MoveRight(g:lx, g:ly, g:rx, g:ry)."\<esc>lvE"
 		if getline(line('.'))[old_c] ==# ''
 			execute "normal! olo"
 		elseif v:false
