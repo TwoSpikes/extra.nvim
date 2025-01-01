@@ -644,8 +644,19 @@ endfunction
 
 " MY .nvimrc HELP
 function! ExNvimCheatSheet()
+	if @% ==# 'EXTRA.NVIM help'
+		execute bufnr()."bwipeout!"
+		if g:prev_prev_filetype==#"alpha"
+			Alpha
+		else
+			execute g:prev_prev_bufnr."buffer"
+		endif
+		return
+	endif
 	let old_bufnr = bufnr()
-	let bufnr = bufadd('help')
+	let g:prev_prev_bufnr = old_bufnr
+	let g:prev_prev_filetype = &filetype
+	let bufnr = bufadd('EXTRA.NVIM help')
 	call bufload(bufnr)
 	execute bufnr.'buffer'
 	call append(line('$'), split("
@@ -762,6 +773,7 @@ function! ExNvimCheatSheet()
 	\\n    Author: TwoSpikes (2023 - 2025)
 	\\n    Github repository: https://github.com/TwoSpikes/extra.nvim
 	\\n    Also see: https://github.com/TwoSpikes/dotfiles
+	\\n    (Press `CTRL-w f` to open links)
 	\", "\n"))
 	1delete
 	setlocal nomodified

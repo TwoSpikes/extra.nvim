@@ -196,8 +196,9 @@ delfunction V_DoC
 xunmap c
 delfunction V_DoY
 xunmap y
-nunmap ;
 xunmap ;
+delfunction N_DoSemicolon
+nunmap ;
 xunmap o
 xunmap O
 xunmap <leader>xo

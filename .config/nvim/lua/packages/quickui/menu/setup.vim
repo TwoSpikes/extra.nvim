@@ -94,6 +94,8 @@ function! ChangeLanguage()
 		let s:reload_lsp_setup = '&a:Перезагрузит.установки LSP'
 		let s:generate_exnvim_config = '&g:Сгенериров.конфигур.exnvim'
 		let s:reload_exnvim_config = 'Перезагруз.конфигурац.e&xnvim'
+		let s:open_termux_config = 'Открыть конфигурац.&Termux'
+		let s:reload_termux_config = 'Перезагруз.конфигурац.Ter&mux'
 
 		let s:help_label = '&h:Помощь'
 		let s:vim_cheatsheet = '&c:Vim шпаргалка'
@@ -199,6 +201,8 @@ function! ChangeLanguage()
 		let s:reload_lsp_setup = 'Relo&ad LSP setup'
 		let s:generate_exnvim_config = '&Generate extra.nvim config'
 		let s:reload_exnvim_config = 'Reload e&xnvim config'
+		let s:open_termux_config = 'Open &Termux config'
+		let s:reload_termux_config = 'Reload Ter&mux config'
 
 		let s:help_label = '&Help'
 		let s:vim_cheatsheet = 'Vim &cheatsheet'
@@ -265,7 +269,7 @@ function! RebindMenus()
 				\ [(g:quickui_icons?"󰈙 ":"").s:new_file_label."\t:new", 'new', 'Creates a new buffer'],
 				\ [(g:quickui_icons?" ":"").s:close_label."\tq", 'quit', 'Closes the current window'],
 				\ [(g:quickui_icons?" ":"").s:force_close_label."\tQ", 'quit!', 'Closes the current window without saving changes'],
-				\ ["--", '' ],
+				\ ["--", ''],
 				\ [(g:quickui_icons?"󰆓 ":"").s:save_label."\tCtrl-x s", 'write', 'Save changes in current buffer'],
 				\ [(g:quickui_icons?"󰆔 ":"").s:save_all_label."\tCtrl-x S", 'wall | echo "Saved all buffers"', 'Save changes to all buffers' ],
 				\ ])
@@ -280,16 +284,16 @@ function! RebindMenus()
 					\ ])
 	endif
 	call quickui#menu#install(s:file_label, [
-				\ ["--", '' ],
+				\ ["--", ''],
 				\ [(g:quickui_icons?"󰚰 ":"").s:update_plugins_label."\tLEAD up", 'Pckr sync', 'Clear and redraw the screen'],
 				\ [(g:quickui_icons?"󰚰 ":"").s:update_coc_label."\tLEAD uc", 'CocUpdate', 'Update coc.nvim installed language servers'],
 				\ [(g:quickui_icons?"󰚰 ":"").s:update_treesitter_label."\tLEAD ut", 'TSUpdate', 'Update installed TreeSitter parsers'],
-				\ ["--", '' ],
+				\ ["--", ''],
 				\ [(g:quickui_icons?" ":"").s:redraw_screen_label."\tCtrl-l", 'mode', 'Clear and redraw the screen'],
 				\ [(g:quickui_icons?" ":"").s:hide_highlightings_label."\tLEAD d", 'nohlsearch', 'Hide search highlightings'],
 				\ [(g:quickui_icons?" ":"").s:esc_label."\tesc", s:esc_command, 'Stop searching'],
 				\ [(g:quickui_icons?"󰊓 ":"").s:toggle_fullscreen_label."\tLEAD Ctrl-f", 'ToggleFullscreen', 'Toggle fullscreen mode'],
-				\ ["--", '' ],
+				\ ["--", ''],
 				\ [(g:quickui_icons?"󰅗 ":"").s:exit_label."\tCtrl-x Ctrl-c", 'confirm qall', 'Close Vim/NeoVim softly'],
 				\ [(g:quickui_icons?"󰅗 ":"").s:exit_wo_confirm_label."\tCtrl-x Ctrl-q", 'qall!', 'Close Vim/NeoVim without saving'],
 				\ ])
@@ -304,7 +308,7 @@ function! RebindMenus()
 					\ ])
 	endif
 	call quickui#menu#install(s:window_label, [
-				\ ["--", '' ],
+				\ ["--", ''],
 				\ ])
 	if has('nvim') && PluginExists('vim-quickui')
 		if exists(':Findfile')
@@ -335,13 +339,13 @@ function! RebindMenus()
 	endif
 	call quickui#menu#install(s:window_label, [
 				\ [(g:quickui_icons?"󰚰 ":"").s:recently_opened_files_label."\tLEAD fr", 'lua require("telescope").extensions.recent_files.pick()', 'Show menu to select file from recently opened'],
-				\ ["--", '' ],
+				\ ["--", ''],
 				\ [(g:quickui_icons?" ":"").s:make_window_only_label."\tCtrl-x 1", 'only', 'Hide all but current window'],
 				\ [(g:quickui_icons?" ":"").s:previous_window_label."\tCtrl-x o", 'exec "normal! \<c-w>w"', 'Go to previous window'],
 				\ [(g:quickui_icons?" ":"").s:next_window_label."\tCtrl-x O", 'exec "normal! \<c-w>W"', 'Go to next window'],
 				\ [(g:quickui_icons?" ":"").s:horizontally_split_label."\tCtrl-x 2", 'split', 'Horizontally split current window'],
 				\ [(g:quickui_icons?" ":"").s:vertically_split_label."\tCtrl-x 3", 'vsplit', 'Vertically split current window'],
-				\ ["--", '' ],
+				\ ["--", ''],
 				\ [(g:quickui_icons?" ":"").s:open_terminal_label."\tLEAD t", 'call SelectPosition("", g:termpos)', 'Opens a terminal'],
 				\ ])
 	if executable('mc') || executable('far') || executable('far2l')
@@ -369,15 +373,15 @@ function! RebindMenus()
 				\ [(g:quickui_icons?"󰆒 ":"").s:paste_before_label."\tP", 'normal! P', 'Paste copyied text before the cursor'],
 				\ [(g:quickui_icons?"  ":"").s:join_lines_label."\tJ", 'join', 'Join current and next line and put between them a space'],
 				\ [(g:quickui_icons?"  ":"").s:force_join_lines_label."\tgJ", 'normal! p', 'Join current and next line and leave blanks as it is'],
-				\ ["--", '' ],
+				\ ["--", ''],
 				\ [(g:quickui_icons?" ":"").s:forward_find_whole_word_label."\t".(g:compatible==#"helix_hard"?"eb*":"*"), 'normal! *', 'Forwardly find whole word under cursor'],
 				\ [(g:quickui_icons?" ":"").s:backward_find_whole_word_label."\t".(g:compatible==#"helix_hard"?"eb#":"#"), 'normal! #', 'Backwardly find whole word under cursor'],
 				\ [(g:quickui_icons?" ":"").s:forward_find_word_label."\t".(g:compatible==#"helix_hard"?"ebg*":"g*"), 'normal! g*', 'Forwardly find word under cursor'],
 				\ [(g:quickui_icons?" ":"").s:backward_find_word_label."\t".(g:compatible==#"helix_hard"?"ebg#":"g#"), 'normal! g#', 'Backwardly find word under cursor'],
-				\ ["--", '' ],
+				\ ["--", ''],
 				\ [(g:quickui_icons?"󰅺 ":"").s:comment_out_label."\tLEAD c", 'call '.(mode() =~# '^n'?'N':'X').'_CommentOutDefault()', 'Comment out line under cursor'],
 				\ [(g:quickui_icons?"󱗡 ":"").s:uncomment_out_label."\tLEAD C", 'call '.(mode() =~# '^n'?'N':'X').'_UncommentOutDefault()', 'Uncomment line under cursor'],
-				\ ["--", '' ],
+				\ ["--", ''],
 				\ [(g:quickui_icons?"󰗧 ":"").s:go_to_multicursor_mode_label."\tCtrl-n", 'call vm#commands#ctrln(1)', 'Go to multicursor mode'],
 				\ [(g:quickui_icons?" ":"").s:show_hlgroup_label."", 'call SynGroup()', 'Show hlgroup name under cursor'],
 				\ [(g:quickui_icons?" ":"").s:whence_hlgroup_label, 'call WhenceGroup()', 'Show whence hlgroup under cursor came'],
@@ -431,7 +435,7 @@ function! RebindMenus()
 	call quickui#menu#install(s:option_label, [
 				\ [(g:quickui_icons?"󰓆 ":"").s:set_spell." %{&spell?\"".s:off."\":\"".s:on."\"}", 'set spell!', "%{&spell?\"".s:disable."\":\"".s:enable."\"} spell checking"],
 				\ [(g:quickui_icons?"󰆒 ":"").s:set_paste." %{&paste?\"".s:off."\":\"".s:on."\"}", 'set paste!', 'Obsolete thing'],
-				\ ["--", '' ],
+				\ ["--", ''],
 				\ [(g:quickui_icons?"  ":"").s:set_cursor_column." %{g:cursorcolumn?\"".s:off."\":\"".s:on."\"}", 'let g:cursorcolumn=!g:cursorcolumn|call PreserveAndDo("call HandleBuftypeAll()", v:true, v:true)', "%{g:cursorcolumn?\"".s:disable."\":\"".s:enable."\"} current column highlighting"],
 				\ [(g:quickui_icons?"  ":"").s:set_cursor_line." %{g:cursorline?\"".s:off."\":\"".s:on."\"}", 'let g:cursorline=!g:cursorline|call PreserveAndDo("call HandleBuftypeAll()", v:true, v:true)', "%{g:cursorline?\"".s:disable."\":\"".s:enable."\"} current line highlighting"],
 				\ ])
@@ -451,13 +455,13 @@ function! RebindMenus()
 			\ [s:open_plugins_setup."\tLEAD vs", 'call SelectPosition(g:PLUGINS_SETUP_FILE_PATH, g:stdpos)', 'Open '.g:PLUGINS_SETUP_FILE_PATH],
 			\ [s:open_lsp_settings."\tLEAD vl", 'call SelectPosition(g:LSP_PLUGINS_SETUP_FILE_PATH, g:stdpos)', 'Open '.g:LSP_PLUGINS_SETUP_FILE_PATH.' (deprecated due to coc.nvim)'],
 			\ [s:open_exnvim_config."\tLEAD vj", 'call SelectPosition(g:EXNVIM_CONFIG_PATH, g:stdpos)', 'Open '.g:EXNVIM_CONFIG_PATH],
-			\ [s:open_colorschemes_dir."\tLEAD vc", 'call SelectPosition($VIMRUNTIME."/colors", g:stdpos)', 'Open colorschemes directory'],
-			\ ["--", '' ],
+			\ [s:open_colorschemes_dir."\tLEAD vc", 'call SelectPosition($VIMRUNTIME."/colors", g:dirpos)', 'Open colorschemes directory'],
+			\ ["--", ''],
 			\ [s:reload_init_vim."\tLEAD se", 'exec "source" g:CONFIG_PATH."/vim/exnvim/reload.vim"', 'Reload Vim/NeoVim config'],
 			\ [s:reload_plugins_list."\tLEAD si", 'exec "source ".g:PLUGINS_INSTALL_FILE_PATH', 'Install plugins in '.g:PLUGINS_INSTALL_FILE_PATH],
 			\ [s:reload_plugins_setup."\tLEAD ss", 'exec "source ".g:PLUGINS_SETUP_FILE_PATH', 'Reconfigure plugins'],
 			\ [s:reload_lsp_setup."\tLEAD sl", 'exec "source ".g:LSP_PLUGINS_SETUP_FILE_PATH', 'Reconfigure LSP plugins (deprecated due to coc.nvim)'],
-			\ ["--", '' ],
+			\ ["--", ''],
 			\ ])
 	if executable('exnvim')
 		call quickui#menu#install(s:config_label, [
@@ -467,6 +471,13 @@ function! RebindMenus()
 	if filereadable(g:EXNVIM_CONFIG_PATH)
 		call quickui#menu#install(s:config_label, [
 					\ [s:reload_exnvim_config."\tLEAD sj", 'exec "source" g:CONFIG_PATH."/vim/exnvim/reload_config.vim"', 'Reload extra.nvim config'],
+			\ ])
+	endif
+	if $TERMUX_VERSION !=# ""
+		call quickui#menu#install(s:config_label, [
+					\ ["--", ''],
+					\ [s:open_termux_config, 'call SelectPosition(g:TERMUX_CONFIG_PATH, g:stdpos)', 'Open '.g:TERMUX_CONFIG_PATH],
+					\ [s:reload_termux_config, '!termux-reload-settings', 'Reload '.g:TERMUX_CONFIG_PATH],
 			\ ])
 	endif
 

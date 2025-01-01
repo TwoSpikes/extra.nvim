@@ -877,12 +877,30 @@ function! V_DoY()
 endfunction
 xnoremap y <cmd>call V_DoY()<cr>
 nunmap ;
-nnoremap ; <nop>
 if !has('nvim') || !PluginInstalled('sneak')
 	xnoremap ; <esc>
 else
 	xnoremap ; <esc><cmd>call timer_start(0, {->SneakCancel()})<cr>
 endif
+function! N_DoSemicolon()
+	if !&modifiable
+		return
+	endif
+	let linenr = line('.')
+	let col = col('$')
+	let line = getline(linenr)
+	let len = len(line)
+	if len <# 1
+		normal! A;
+		return
+	endif
+	if line[len-1] !=# ';'
+		normal! A;
+	else
+		call setline(linenr, substitute(line, ';\+$', '', ''))
+	endif
+endfunction
+nnoremap ; mz<cmd>call N_DoSemicolon()<cr>`z
 xnoremap o <esc>o
 xnoremap O <esc>O
 xnoremap <leader>xo o<cmd>call ReorderRightLeft()<cr>

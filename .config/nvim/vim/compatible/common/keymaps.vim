@@ -134,6 +134,9 @@ xnoremap <leader>c <c-\><c-n><cmd>call X_CommentOutDefault()<cr>
 nnoremap <leader>C <cmd>call N_UncommentOutDefault()<cr>
 xnoremap <leader>C <c-\><c-n><cmd>call X_UncommentOutDefault()<cr>
 
+nnoremap <leader>A <cmd>call RunAlphaIfNotAlphaRunning()<cr>
+xnoremap <leader>A <c-\><c-n><cmd>call RunAlphaIfNotAlphaRunning()<cr>
+
 nnoremap <silent> <leader>ff <cmd>call FuzzyFind()<cr>
 nnoremap <silent> <leader>fg :lua require('telescope.builtin').live_grep(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
 nnoremap <silent> <leader>fb :lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>

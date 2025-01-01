@@ -117,6 +117,16 @@ function! SetExNvimConfigPath()
 endfunction
 call SetExNvimConfigPath()
 
+function! SetTermuxConfigPath()
+	if !exists('g:TERMUX_CONFIG_PATH') || g:TERMUX_CONFIG_PATH ==# ""
+		if $TERMUX_VERSION !=# ""
+			let g:TERMUX_CONFIG_DIRECTORY = expand('$HOME').'/.termux'
+			let g:TERMUX_CONFIG_PATH = g:TERMUX_CONFIG_DIRECTORY.'/termux.properties'
+		endif
+	endif
+endfunction
+call SetTermuxConfigPath()
+
 function! LoadExNvimConfig(path, reload=v:false)
 	if !filereadable(a:path)
 		echohl ErrorMsg
