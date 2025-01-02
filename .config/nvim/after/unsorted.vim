@@ -1600,7 +1600,6 @@ if g:compatible !=# "helix_hard"
 	set tabline=%!MyTabLine()
 endif
 
-command! -nargs=* Pkg !pkg <args>
 function! DotfilesCommit()
 	cd ~/dotfiles
 	!dotfiles commit --only-copy
