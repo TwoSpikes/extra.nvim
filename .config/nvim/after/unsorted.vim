@@ -26,7 +26,7 @@ function! STCNoAll()
 endfunction
 
 function! Numbertoggle_stcrel(winnr)
-	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'pckr' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
+	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'pckr' && &filetype !=# 'pkgman' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
 		call STCRel(a:winnr)
 	else
 		call STCNo(a:winnr)
@@ -74,7 +74,7 @@ if exists('*Pad')
 		endif
 	endfunction
 	function! Numbertoggle_stcabs(mode='', winnr=winnr())
-		if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'pckr' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
+		if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'pckr' && &filetype !=# 'pkgman' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
 			call STCAbs(a:mode, a:winnr)
 		else
 			call STCNo(a:winnr)
@@ -1386,13 +1386,25 @@ function! MyTabLabel(n)
 	elseif v:false
 	\|| filetype ==# "pckr"
 		let buf_name = original_buf_name
+	elseif buftype ==# "pkgman"
+		if g:language ==# 'russian'
+			let buf_name = '[ПакМенедж]'
+		else
+			let buf_name = '[PkgManag]'
+		endif
+	elseif original_buf_name ==# "EXTRA.NVIM help"
+		if g:language ==# 'russian'
+			let buf_name = '[Помощь]'
+		else
+			let buf_name = '[Help]'
+		endif
 	elseif buftype ==# "nofile"
 		if g:language ==# 'russian'
 			let buf_name = '[НеФайл]'
 		else
 			let buf_name = '[NoFile]'
 		endif
-	elseif original_buf_name == ''
+	elseif original_buf_name ==# ''
 		if g:language ==# 'russian'
 			let buf_name = '[БезИмени]'
 		else
@@ -1419,12 +1431,12 @@ endfunction
 function! MyTabLine()
   let s = ''
   for i in range(tabpagenr('$'))
-    if i + 1 == tabpagenr()
-      let s ..= '%#TabLineSel#'
+    if i + 1 ==# tabpagenr()
+      let s .= '%#TabLineSel#'
     elseif (i - tabpagenr()) % 2 == 0
-		let s ..= '%#TabLine#'
+		let s .= '%#TabLine#'
 	elseif i !=# tabpagenr('$') - 1
-		let s ..= '%#TabLineSec#'
+		let s .= '%#TabLineSec#'
     endif
 
 	if g:tabline_pressable

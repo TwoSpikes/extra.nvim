@@ -263,3 +263,4 @@ $ exnvim version
 - [hlargs.nvim](https://github.com/m-demare/hlargs.nvim)
 - [beacon.nvim](https://github.com/danilamihailov/beacon.nvim)
 - [hex.nvim](https://github.com/RaafatTurki/hex.nvim)
+- [pkgman.nvim](https://github.com/TwoSpikes/pkgman.nvim)

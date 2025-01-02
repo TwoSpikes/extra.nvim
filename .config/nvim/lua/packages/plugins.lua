@@ -534,5 +534,8 @@ pckr.add({
 	{
 		'RaafatTurki/hex.nvim',
 	};
+	{
+		'TwoSpikes/pkgman.nvim',
+	};
 });
 
