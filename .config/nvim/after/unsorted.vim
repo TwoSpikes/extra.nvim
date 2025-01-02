@@ -1,17 +1,15 @@
 function! STCRel(winnr=winnr())
-	if has('nvim')
-		if mode() =~? 'v.*' || mode() ==# "\<c-v>"
-			call setwinvar(a:winnr, '&stc', '%#CursorLineNrVisu#%{%v:relnum?"%#LineNrVisu#":((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:relnum:""):""} ')
-			call CopyHighlightGroup("StatementVisu", "Statement")
-			return
-		endif
-		call setwinvar(a:winnr, '&stc', '%#CursorLineNr#%{%v:relnum?"%#LineNr#":((v:virtnum <= 0)?v:lnum:"")%}%=%{v:relnum?((v:virtnum <= 0)?v:relnum:""):""} ')
-		call CopyHighlightGroup("StatementNorm", "Statement")
-		call s:SaveStc(v:false)
-	else
-		call setwinvar(a:winnr, '&number', v:true)
-		call setwinvar(a:winnr, '&relativenumber', v:true)
+	if mode() =~? 'v.*' || mode() ==# "\<c-v>"
+		call CopyHighlightGroup('CursorLineNrVisu', 'CursorLineNr')
+		call CopyHighlightGroup('LineNrVisu', 'LineNr')
+		call CopyHighlightGroup("StatementVisu", "Statement")
+		return
 	endif
+	call CopyHighlightGroup('CursorLineNrNorm', 'CursorLineNr')
+	call CopyHighlightGroup('LineNrNorm', 'LineNr')
+	call CopyHighlightGroup("StatementNorm", "Statement")
+	call setwinvar(a:winnr, '&number', v:true)
+	call setwinvar(a:winnr, '&relativenumber', v:true)
 endfunction
 function! STCNo(winnr=winnr())
 	if has('nvim')
@@ -52,26 +50,27 @@ endfunction
 if exists('*Pad')
 	noremap <silent> <c-x><c-f> <cmd>Findfilebuffer<cr>
 	function! STCAbs(actual_mode, winnr=winnr())
-		if has('nvim')
-			if a:actual_mode ==# '' || a:actual_mode =~? 'n'
-				call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNr#".((v:virtnum <= 0)?Pad(v:lnum,len(line("$"))+&foldcolumn):"")%}%{%v:relnum?"%#LineNr#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
-				call CopyHighlightGroup("StatementNorm", "Statement")
-				return
-			endif
-			if a:actual_mode =~? 'r'
-				call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNrRepl#".Pad((v:virtnum <= 0)?v:lnum:"",len(line("$"))+&foldcolumn)%}%{%v:relnum?"%#LineNrIns#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
-				return
-			endif
-			if a:actual_mode =~? 'v' && getwinvar(a:winnr, '&modifiable')
-				call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNrVisu#".((v:virtnum <= 0)?Pad(v:lnum,len(line("$"))+&foldcolumn):"")%}%{%v:relnum?"%#LineNrVisu#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
-				return
-			endif
-			call setwinvar(a:winnr, '&stc', '%{%v:relnum?"":"%#CursorLineNrIns#".Pad((v:virtnum <= 0)?v:lnum:"", len(line("$"))+&foldcolumn)%}%{%v:relnum?"%#LineNrIns#%=".((v:virtnum <= 0)?v:lnum:""):""%} ')
-			call CopyHighlightGroup("StatementIns", "Statement")
-		else
-			call setwinvar(a:winnr, '&number', v:true)
-			call setwinvar(a:winnr, '&relativenumber', v:false)
+		if a:actual_mode ==# '' || a:actual_mode =~? 'n'
+			call CopyHighlightGroup('CursorLineNrNorm', 'CursorLineNr')
+			call CopyHighlightGroup('LineNrNorm', 'LineNr')
+			call CopyHighlightGroup("StatementNorm", "Statement")
+			return
 		endif
+		if a:actual_mode =~? 'r'
+			call CopyHighlightGroup('CursorLineNrRepl', 'CursorLineNr')
+			call CopyHighlightGroup('LineNrIns', 'LineNr')
+			return
+		endif
+		if a:actual_mode =~? 'v' && getwinvar(a:winnr, '&modifiable')
+			call CopyHighlightGroup('CursorLineNrVisu', 'CursorLineNr')
+			call CopyHighlightGroup('LineNrVisu', 'LineNr')
+			return
+		endif
+		call setwinvar(a:winnr, '&number', v:true)
+		call setwinvar(a:winnr, '&relativenumber', v:false)
+		call CopyHighlightGroup('CursorLineNrIns', 'CursorLineNr')
+		call CopyHighlightGroup('LineNrIns', 'LineNr')
+		call CopyHighlightGroup("StatementIns", "Statement")
 	endfunction
 	function! Numbertoggle_stcabs(mode='', winnr=winnr())
 		if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'pckr' && &filetype !=# 'pkgman' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr

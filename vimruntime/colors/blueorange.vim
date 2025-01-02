@@ -55,9 +55,7 @@ function! CopyHighlightGroup(src, dst)
     let gui = "NONE"
   endif
   exec printf("hi %s ctermfg=%s ctermbg=%s cterm=%s guifg=%s", a:dst, ctermfg, ctermbg, cterm, guifg)
-  if has('gui')
-    exec printf("hi %s guibg=%s gui=%s", a:dst, ctermfg, ctermbg, cterm, guifg, guibg, gui)
-  endif
+  exec printf("hi %s guibg=%s gui=%s", a:dst, guibg, gui)
 endfunction
 
 hi CursorNormal guifg=NONE guibg=#ffaf00 gui=NONE cterm=NONE
@@ -538,11 +536,13 @@ if &t_Co >= 256
     hi ToolbarLine ctermfg=NONE ctermbg=NONE cterm=NONE
     hi ToolbarButton ctermfg=16 ctermbg=231 cterm=NONE
     hi QuickFixLine ctermfg=16 ctermbg=75 cterm=NONE
-    hi CursorLineNr ctermfg=220 ctermbg=236 cterm=bold,reverse guifg=#ffdf00 guibg=#000000 gui=bold,reverse
+    hi CursorLineNrNorm ctermfg=236 ctermbg=220 cterm=bold guifg=#000000 guibg=#ffdf00 gui=bold
+    call CopyHighlightGroup("CursorLineNrNorm", "CursorLineNr")
     hi CursorLineNrIns ctermfg=15 ctermbg=39 cterm=bold guifg=#ffffff guibg=#00afff gui=bold
     hi CursorLineNrRepl ctermfg=15 ctermbg=128 cterm=bold guifg=#ffffff guibg=#af00df gui=bold
     hi CursorLineNrVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#ffffff guibg=#000087 gui=bold
-    hi LineNr ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#ffcf00 guibg=#180838 gui=NONE
+    hi LineNrNorm ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#ffcf00 guibg=#180838 gui=NONE
+    call CopyHighlightGroup("LineNrNorm", "LineNr")
     hi LineNrIns ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#00cfff guibg=#003050 gui=italic
     hi LineNrVisu ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#608fdf guibg=#101050 gui=italic
     hi NonText ctermfg=214 ctermbg=NONE cterm=NONE

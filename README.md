@@ -29,15 +29,11 @@ Screenshots
 - Internet connection (to download plugins)
 - [Nerd Fonts](https://www.nerdfonts.com) (or some symbols will look like squares ("not found" symbol))
 
-### If installing to Vim
+## Dependencies
 
-- `vim` package
-- `vim-runtime` package (it is often already installed as a `vim` dependency)
-
-### If installing to NeoVim
-
-- `neovim` package
-
+- `neovim` or `vim`
+- `nodejs` (for `coc.nvim`)
+- `jq` (for `coc.nvim`)
 
 > [!Warning]
 > It works better in NeoVim, and packer.nvim does not work in version of Vim/NeoVim without Lua.

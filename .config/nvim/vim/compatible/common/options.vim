@@ -43,8 +43,7 @@ set foldmethod=marker
 set foldnestmax=15
 set foldcolumn=0
 
-set nonu
-set nornu
+set signcolumn=auto
 
 " Menus options
 set showcmd
@@ -80,7 +79,7 @@ set maxfuncdepth=50
 set maxmempattern=500
 set history=10000
 set modelineexpr
-set updatetime=5000
+set updatetime=300
 set timeout
 set timeoutlen=500
 set nottimeout
@@ -117,4 +116,3 @@ set shiftwidth=4
 set smartindent
 set smarttab
 set noexpandtab
-

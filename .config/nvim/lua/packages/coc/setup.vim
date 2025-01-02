@@ -1,14 +1,4 @@
-function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Use <c-space> to trigger completion
-if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
-else
-  inoremap <silent><expr> <c-@> coc#refresh()
-endif
+filetype plugin on
 
 " Use tab for trigger completion with characters ahead and navigate
 " NOTE: There's always complete item selected by default, you may want to enable
@@ -26,11 +16,24 @@ inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
+" GoTo code navigation
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
@@ -51,13 +54,11 @@ endfunction
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Symbol renaming
-nmap <leader>Rn <Plug>(coc-rename)
+nmap <leader>rn <Plug>(coc-rename)
 
 " Formatting selected code
-if !g:use_nvim_cmp
-	xmap <leader>f  <Plug>(coc-format-selected)
-	nmap <leader>f  <Plug>(coc-format-selected)
-endif
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
 
 augroup mygroup
   autocmd!
@@ -80,23 +81,23 @@ nmap <leader>as  <Plug>(coc-codeaction-source)
 nmap <leader>qf  <Plug>(coc-fix-current)
 
 " Remap keys for applying refactor code actions
-nmap <silent> <leader>Re <Plug>(coc-codeaction-refactor)
-xmap <silent> <leader>R  <Plug>(coc-codeaction-refactor-selected)
-nmap <silent> <leader>R  <Plug>(coc-codeaction-refactor-selected)
+nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)
+xmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
+nmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
 
 " Run the Code Lens action on the current line
-nmap <leader>Ll  <Plug>(coc-codelens-action)
+nmap <leader>cl  <Plug>(coc-codelens-action)
 
 " Map function and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server
-if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
-	xmap if <Plug>(coc-funcobj-i)
-	omap if <Plug>(coc-funcobj-i)
-	xmap af <Plug>(coc-funcobj-a)
-	omap af <Plug>(coc-funcobj-a)
-	xmap ac <Plug>(coc-classobj-a)
-	omap ac <Plug>(coc-classobj-a)
-endif
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
 
 " Remap <C-f> and <C-b> to scroll float windows/popups
 if has('nvim-0.4.0') || has('patch-8.2.0750')
@@ -108,10 +109,10 @@ if has('nvim-0.4.0') || has('patch-8.2.0750')
   vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 endif
 
-" Use LEAD ss for selections ranges
+" Use CTRL-S for selections ranges
 " Requires 'textDocument/selectionRange' support of language server
-nnoremap <silent> <leader>ss <Plug>(coc-range-select)
-xnoremap <silent> <leader>ss <Plug>(coc-range-select)
+nmap <silent> <C-s> <Plug>(coc-range-select)
+xmap <silent> <C-s> <Plug>(coc-range-select)
 
 " Add `:Format` command to format current buffer
 command! -nargs=0 Format :call CocActionAsync('format')
@@ -129,18 +130,18 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 " Mappings for CoCList
 " Show all diagnostics
-nnoremap <silent><nowait> <leader>a  :<C-u>CocList diagnostics<cr>
+nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
 " Manage extensions
-nnoremap <silent><nowait> <leader>e  :<C-u>CocList extensions<cr>
+nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
 " Show commands
-nnoremap <silent> <leader>Lc  :<C-u>CocList commands<cr>
+nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
 " Find symbol of current document
-nnoremap <silent><nowait> <leader>o  :<C-u>CocList outline<cr>
+nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
 " Search workspace symbols
-nnoremap <silent><nowait> <leader>S  :<C-u>CocList -I symbols<cr>
+nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
 " Do default action for next item
-nnoremap <silent><nowait> <leader>j  :<C-u>CocNext<CR>
+nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 " Do default action for previous item
-nnoremap <silent><nowait> <leader>k  :<C-u>CocPrev<CR>
+nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
-nnoremap <silent><nowait> <leader>p  :<C-u>CocListResume<CR>
+nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
