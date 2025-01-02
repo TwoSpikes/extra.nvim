@@ -313,7 +313,7 @@ unlet s:dir_position_right
 unlet s:dir_position_current
 unlet s:dir_position_float
 
-let g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT = [$HOME.'/']
+let g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT = [g:LOCALSHAREPATH.'/site/pack/pckr/opt/*/lua/%FILE%.lua', g:LOCALSHAREPATH.'/site/pack/pckr/opt/*/lua/%FILE%/init.lua']
 let g:LUA_REQUIRE_GOTO_PREFIX = g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT
 function! Lua_Require_Goto_Workaround_Wincmd_f()
 	if !PluginExists('vim-quickui')
@@ -413,10 +413,8 @@ function! Lua_Require_Goto_Workaround_Wincmd_f()
 				endfor
 				if executable('find') && has_globbing
 					unlet has_globbing
-					let found = systemlist('find ~/ -wholename '.Repr_Shell(i).'/'.Repr_Shell(filename))
-					if len(found) ==# 0
-						let found = systemlist('find ~/ -wholename '.Repr_Shell(i).'/'.Repr_Shell(filename).'.lua')
-					endif
+					let current_filename = Repr_Shell(substitute(Repr_Vim_Grep(i), '%FILE%', filename, 'g'))
+					let found = systemlist('find ~/ -wholename '.current_filename)
 					if len(found) ==# 0
 						let startcol = end
 						continue
@@ -424,7 +422,7 @@ function! Lua_Require_Goto_Workaround_Wincmd_f()
 					let foundfilename = found[0]
 				else
 					unlet has_globbing
-					let current_filename = i.'/'.filename.'.lua'
+					let current_filename = substitute(Repr_Vim_Grep(i), '%FILE%', filename, 'g')
 					if !filereadable(current_filename)
 						let startcol = end
 						continue
@@ -446,7 +444,9 @@ function! Lua_Require_Goto_Workaround_Wincmd_f()
 			echohl ErrorMsg
 			echomsg "file not found, editing a new file"
 			echohl Normal
-			let goto_buffer = bufadd(g:LUA_REQUIRE_GOTO_PREFIX[0].filename.'.lua')
+			let fname = g:LUA_REQUIRE_GOTO_PREFIX[0]
+			let fname = substitute(Repr_Vim_Grep(fname), '%FILE%', filename, 'g')
+			let goto_buffer = bufadd(fname)
 			call bufload(goto_buffer)
 			exec goto_buffer."buffer"
 			normal! `"
@@ -548,7 +548,11 @@ function! HandleExNvimOptionsInComment()
 							let wrong_var = v:true
 							break
 						endif
-						execute "let option_calculated .= expand(g:".varname.")"
+						if varname ==# 'FILE'
+							let option_calculated .= '%FILE%'
+						else
+							execute "let option_calculated .= expand(g:".varname.")"
+						endif
 					endif
 				elseif vartype ==# 'shell'
 					echohl ErrorMsg
@@ -644,21 +648,13 @@ endfunction
 
 " MY .nvimrc HELP
 function! ExNvimCheatSheet()
-	if @% ==# 'EXTRA.NVIM help'
-		execute bufnr()."bwipeout!"
-		if g:prev_prev_filetype==#"alpha"
-			Alpha
-		else
-			execute g:prev_prev_bufnr."buffer"
-		endif
-		return
-	endif
 	let old_bufnr = bufnr()
-	let g:prev_prev_bufnr = old_bufnr
-	let g:prev_prev_filetype = &filetype
 	let bufnr = bufadd('EXTRA.NVIM help')
 	call bufload(bufnr)
 	execute bufnr.'buffer'
+	if !&modifiable
+		return
+	endif
 	call append(line('$'), split("
 	  \Help for my NeoVim config:
 	\\n     By default, \<leader\> (LEAD) is space symbol.
@@ -783,6 +779,7 @@ function! ExNvimCheatSheet()
 	call Numbertoggle('n')
 	let prev_filetype = g:prev_filetype
 	execute "noremap <buffer> q <cmd>execute bufnr().\"bwipeout!\"<bar>".(prev_filetype==#"alpha"?"Alpha":old_bufnr."buffer")."<cr>"
+	execute "noremap <buffer> <leader>? <cmd>execute bufnr().\"bwipeout!\"<bar>".(prev_filetype==#"alpha"?"Alpha":old_bufnr."buffer")."<cr>"
 endfunction
 command! -nargs=0 ExNvimCheatSheet call ExNvimCheatSheet()
 noremap <silent> <leader>? <cmd>ExNvimCheatSheet<cr>
