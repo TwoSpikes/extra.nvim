@@ -34,6 +34,14 @@ Screenshots
 - `neovim` or `vim`
 - `nodejs` (for `coc.nvim`)
 - `jq` (for `coc.nvim`)
+- `git` (for `pckr.nvim`)
+- `grep`
+- `ripgrep` (Optional, for `nvim-spectre`)
+- `tree-sitter` (Optional)
+- `ranger` (Optional)
+- `lazygit` (Optional)
+- `mc`, `far` or `far2l` (Optional)
+- `ctags` (Optional)
 
 > [!Warning]
 > It works better in NeoVim, and packer.nvim does not work in version of Vim/NeoVim without Lua.

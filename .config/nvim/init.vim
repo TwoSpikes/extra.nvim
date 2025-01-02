@@ -1063,12 +1063,15 @@ if has('nvim')
 	call PreparePersistedNvim()
 endif
 
+function! PluginDelete(name)
+	call delete(expand(g:LOCALSHAREPATH)."/site/pack/pckr/opt/".a:name, "rf")
+endfunction
 function! PluginExists(name)
 	return isdirectory(g:LOCALSHAREPATH.'/site/pack/pckr/opt/'.a:name)
 endfunction
 if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
 	if PluginExists('vim-gitgutter')
-		PluginDelete('vim-gitgutter')
+		call PluginDelete('vim-gitgutter')
 	endif
 endif
 
@@ -1078,9 +1081,6 @@ function! PluginInstalled(name)
 		return 1
 	endif
 	return a!=#0
-endfunction
-function! PluginDelete(name)
-	call delete(expand(g:LOCALSHAREPATH)."/site/pack/pckr/opt/".a:name, "rf")
 endfunction
 
 function! InitPckr()
