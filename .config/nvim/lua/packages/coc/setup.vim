@@ -1,5 +1,9 @@
 filetype plugin on
 
+augroup exnvim_coc_nvim
+	autocmd!
+augroup END
+
 " Use tab for trigger completion with characters ahead and navigate
 " NOTE: There's always complete item selected by default, you may want to enable
 " no select by `"suggest.noselect": true` in your configuration file
@@ -50,8 +54,10 @@ function! ShowDocumentation()
   endif
 endfunction
 
-" Highlight the symbol and its references when holding the cursor
-autocmd CursorHold * silent call CocActionAsync('highlight')
+augroup exnvim_coc_nvim
+	" Highlight the symbol and its references when holding the cursor
+	autocmd CursorHold * silent call CocActionAsync('highlight')
+augroup END
 
 " Symbol renaming
 nmap <leader>Rn <Plug>(coc-rename)
@@ -62,8 +68,7 @@ if !g:use_nvim_cmp
 	nmap <leader>f  <Plug>(coc-format-selected)
 endif
 
-augroup mygroup
-  autocmd!
+augroup exnvim_coc_nvim
   " Setup formatexpr specified filetype(s)
   autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
   " Update signature help on jump placeholder

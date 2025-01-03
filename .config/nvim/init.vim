@@ -802,7 +802,7 @@ function! Showtab()
 endfunction
 command! -nargs=0 Showtab set stl=%{%Showtab()%}
 
-function! IsHightlightGroupDefined(group)
+function! IsHighlightGroupDefined(group)
 	silent! let output = execute('hi '.a:group)
 	return output !~# 'E411:'
 endfunction
@@ -847,13 +847,13 @@ function! CopyHighlightGroup(src, dst)
 endfunction
 function! ApplyColorscheme(colorscheme)
 	execute "colorscheme ".a:colorscheme
-	if !IsHightlightGroupDefined('StatementNorm')
+	if !IsHighlightGroupDefined('StatementNorm')
 		call CopyHighlightGroup('Statement', 'StatementNorm')
 	endif
-	if !IsHightlightGroupDefined('StatementIns')
+	if !IsHighlightGroupDefined('StatementIns')
 		call CopyHighlightGroup('Statement', 'StatementIns')
 	endif
-	if !IsHightlightGroupDefined('StatementVisu')
+	if !IsHighlightGroupDefined('StatementVisu')
 		call CopyHighlightGroup('Statement', 'StatementVisu')
 	endif
 endfunction
@@ -1045,7 +1045,10 @@ function! FixShaDa()
 	let g:DO_NOT_OPEN_ANYTHING = 0
 	let g:LUA_REQUIRE_GOTO_PREFIX = g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT
 endfunction
-autocmd! VimLeavePre * call FixShaDa()
+augroup exnvim_fix_sha_da
+	autocmd!
+	autocmd VimLeavePre * call FixShaDa()
+augroup END
 
 function! PreparePersistedNvim()
 	if filereadable(g:LOCALSHAREPATH.'/site/pack/pckr/opt/persisted.nvim/lua/persisted/init.lua')

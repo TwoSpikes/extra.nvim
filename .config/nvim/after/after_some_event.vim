@@ -32,7 +32,10 @@ let g:please_do_not_close = v:false
 
 function! MakeThingsThatRequireBeDoneAfterPluginsLoaded()
 	if has('nvim')
-		autocmd TermClose * if !g:please_do_not_close && !exists('g:bufnrforranger')|call AfterSomeEvent('TermLeave', 'call Numbertoggle()')|if v:event.status ==# 0|call OnQuit()|exec "confirm quit"|call OnQuitDisable()|endif|endif
+		augroup exnvim_term_closed
+			autocmd!
+			autocmd TermClose * if !g:please_do_not_close && !exists('g:bufnrforranger')|call AfterSomeEvent('TermLeave', 'call Numbertoggle()')|if v:event.status ==# 0|call OnQuit()|exec "confirm quit"|call OnQuitDisable()|endif|endif
+		augroup END
 	endif
 endfunction
 call MakeThingsThatRequireBeDoneAfterPluginsLoaded()

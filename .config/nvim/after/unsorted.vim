@@ -47,38 +47,38 @@ function! Numbertoggle_no()
 	set nonu nornu
 endfunction
 
+function! STCAbs(actual_mode, winnr=winnr())
+	if a:actual_mode ==# '' || a:actual_mode =~? 'n'
+		call CopyHighlightGroup('CursorLineNrNorm', 'CursorLineNr')
+		call CopyHighlightGroup('LineNrNorm', 'LineNr')
+		call CopyHighlightGroup("StatementNorm", "Statement")
+		return
+	endif
+	if a:actual_mode =~? 'r'
+		call CopyHighlightGroup('CursorLineNrRepl', 'CursorLineNr')
+		call CopyHighlightGroup('LineNrIns', 'LineNr')
+		return
+	endif
+	if a:actual_mode =~? 'v' && getwinvar(a:winnr, '&modifiable')
+		call CopyHighlightGroup('CursorLineNrVisu', 'CursorLineNr')
+		call CopyHighlightGroup('LineNrVisu', 'LineNr')
+		return
+	endif
+	call setwinvar(a:winnr, '&number', v:true)
+	call setwinvar(a:winnr, '&relativenumber', v:false)
+	call CopyHighlightGroup('CursorLineNrIns', 'CursorLineNr')
+	call CopyHighlightGroup('LineNrIns', 'LineNr')
+	call CopyHighlightGroup("StatementIns", "Statement")
+endfunction
+function! Numbertoggle_stcabs(mode='', winnr=winnr())
+	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'pckr' && &filetype !=# 'pkgman' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
+		call STCAbs(a:mode, a:winnr)
+	else
+		call STCNo(a:winnr)
+	endif
+endfunction	
 if exists('*Pad')
 	noremap <silent> <c-x><c-f> <cmd>Findfilebuffer<cr>
-	function! STCAbs(actual_mode, winnr=winnr())
-		if a:actual_mode ==# '' || a:actual_mode =~? 'n'
-			call CopyHighlightGroup('CursorLineNrNorm', 'CursorLineNr')
-			call CopyHighlightGroup('LineNrNorm', 'LineNr')
-			call CopyHighlightGroup("StatementNorm", "Statement")
-			return
-		endif
-		if a:actual_mode =~? 'r'
-			call CopyHighlightGroup('CursorLineNrRepl', 'CursorLineNr')
-			call CopyHighlightGroup('LineNrIns', 'LineNr')
-			return
-		endif
-		if a:actual_mode =~? 'v' && getwinvar(a:winnr, '&modifiable')
-			call CopyHighlightGroup('CursorLineNrVisu', 'CursorLineNr')
-			call CopyHighlightGroup('LineNrVisu', 'LineNr')
-			return
-		endif
-		call setwinvar(a:winnr, '&number', v:true)
-		call setwinvar(a:winnr, '&relativenumber', v:false)
-		call CopyHighlightGroup('CursorLineNrIns', 'CursorLineNr')
-		call CopyHighlightGroup('LineNrIns', 'LineNr')
-		call CopyHighlightGroup("StatementIns", "Statement")
-	endfunction
-	function! Numbertoggle_stcabs(mode='', winnr=winnr())
-		if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'pckr' && &filetype !=# 'pkgman' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
-			call STCAbs(a:mode, a:winnr)
-		else
-			call STCNo(a:winnr)
-		endif
-	endfunction	
 	function! Findfile()
 		if g:language ==# 'russian'
 			let find_file_label = 'Найти файл: '

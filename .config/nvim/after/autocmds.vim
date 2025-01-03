@@ -46,8 +46,11 @@ function! DefineAugroupVisual()
 	augroup Visual
 		autocmd!
 		if g:linenr
-			execute "autocmd! ModeChanged {\<c-v>*,[vV]*}:* call Numbertoggle(mode())"
-			execute "autocmd! ModeChanged *:{\<c-v>*,[vV]*} call Numbertoggle('v')"
+			augroup exnvim_mode_changed_numbertoggle
+				autocmd!
+				execute "autocmd ModeChanged {\<c-v>*,[vV]*}:* call Numbertoggle(mode())"
+				execute "autocmd ModeChanged *:{\<c-v>*,[vV]*} call Numbertoggle('v')"
+			augroup END
 		else
 			autocmd! Visual
 		endif
@@ -106,41 +109,44 @@ augroup visual
 		let pre_cursorline = pre_cursorline && g:cursorline
 		call setwinvar(a:winnum, '&cursorline', pre_cursorline)
 	endfunction
-	au ModeChanged,BufWinEnter * call HandleBuftype(winnr())
-	call HandleBuftype(winnr())
 augroup END
+augroup exnvim_handle_buftype
+	autocmd!
+	autocmd ModeChanged,BufWinEnter * call HandleBuftype(winnr())
+augroup END
+call HandleBuftype(winnr())
 
+function! OpenWithXdg(filename)
+	if !PluginExists('vim-quickui')
+		echohl Question
+		if g:language ==# 'russian'
+			echon 'Открыть через xdg-open (y/N): '
+		else
+			echon 'Open with xdg-open (y/N): '
+		endif
+		echohl Normal
+		let choice = nr2char(getchar())
+	else
+		if g:language ==# 'russian'
+			let choice = quickui#confirm#open('Открыть через xdg-open?', "&Да\n&Отмена", 1, 'Confirm')
+		else
+			let choice = quickui#confirm#open('Open with xdg-open?', "&OK\n&Cancel", 1, 'Confirm')
+		endif
+		if choice ==# 1
+			let choice = 'y'
+		elseif choice ==# 2
+			let choice = 'n'
+		else
+			let choice = 'n'
+		endif
+	endif
+	if choice ==# 'y'
+	\&&executable('xdg-open') ==# 1
+		execute "!xdg-open -- ".a:filename
+	endif
+endfunction
 augroup xdg_open
 	autocmd!
-	function! OpenWithXdg(filename)
-		if !PluginExists('vim-quickui')
-			echohl Question
-			if g:language ==# 'russian'
-				echon 'Открыть через xdg-open (y/N): '
-			else
-				echon 'Open with xdg-open (y/N): '
-			endif
-			echohl Normal
-			let choice = nr2char(getchar())
-		else
-			if g:language ==# 'russian'
-				let choice = quickui#confirm#open('Открыть через xdg-open?', "&Да\n&Отмена", 1, 'Confirm')
-			else
-				let choice = quickui#confirm#open('Open with xdg-open?', "&OK\n&Cancel", 1, 'Confirm')
-			endif
-			if choice ==# 1
-				let choice = 'y'
-			elseif choice ==# 2
-				let choice = 'n'
-			else
-				let choice = 'n'
-			endif
-		endif
-		if choice ==# 'y'
-		\&&executable('xdg-open') ==# 1
-			execute "!xdg-open -- ".a:filename
-		endif
-	endfunction
 	autocmd BufEnter *.jpg,*.png,*.jpeg,*.bmp if v:vim_did_enter | call OpenWithXdg(Repr_Shell(expand('%'))) | endif
 augroup END
 

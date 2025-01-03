@@ -303,3 +303,5 @@ if has('nvim') && PluginExists('vim-fugitive')
 	nnoremap <leader>gm <cmd>Git reset --mixed<cr>
 	nnoremap <leader>gs <cmd>Git status<cr>
 endif
+
+noremap z00 <cmd>execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload.vim'<cr>
