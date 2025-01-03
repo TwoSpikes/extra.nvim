@@ -312,7 +312,6 @@ if PluginExists('coc.nvim')
 	delcommand CocUpdateSync
 	delcommand CocWatch
 endif
-delfunction PluginExists
 if PluginInstalled('colorizer')
 	delcommand ColorizerAttachToBuffer
 	delcommand ColorizerDetachFromBuffer
@@ -327,4 +326,105 @@ if PluginInstalled('convert')
 	delcommand ConvertFindCurrent
 	delcommand ConvertFindNext
 endif
+if PluginInstalled('dap')
+	delcommand DapClearBreakpoints
+	delcommand DapContinue
+	delcommand DapDisconnect
+	delcommand DapEval
+	delcommand DapNew
+	delcommand DapRestartFrame
+	delcommand DapSetLogLevel
+	delcommand DapShowLog
+	delcommand DapStepInto
+	delcommand DapStepOut
+	delcommand DapStepOver
+	delcommand DapTerminate
+	delcommand DapToggleBreakpoint
+	delcommand DapToggleRepl
+endif
+if PluginInstalled('diffview')
+	delcommand DiffviewClose
+	delcommand DiffviewFileHistory
+	delcommand DiffviewFocusFiles
+	delcommand DiffviewLog
+	delcommand DiffviewOpen
+	delcommand DiffviewRefresh
+	delcommand DiffviewToggleFiles
+endif
+delcommand DotfilesCommit
+if PluginExists('emmet-vim')
+	delcommand Emmet
+	delcommand EmmetInstall
+endif
+delcommand ExNvimCheatSheet
+delcommand ExNvimCommit
+if filereadable(expand(g:CONFIG_PATH.'/vim/xterm-color-table.vim'))
+	delcommand Exct
+endif
+if PluginExists('vim-floaterm')
+	delcommand FloatermFirst
+	delcommand FloatermHide
+	delcommand FloatermKill
+	delcommand FloatermLast
+	delcommand FloatermNew
+	delcommand FloatermNext
+	delcommand FloatermPrev
+	delcommand FloatermSend
+	delcommand FloatermShow
+	delcommand FloatermToggle
+	delcommand FloatermUpdate
+endif
+if PluginExists('coc.nvim')
+	delcommand Fold
+	delcommand Format
+endif
+if PluginExists('vim-fugitive')
+	delcommand GBrowse
+	delcommand GDelete
+	delcommand GMove
+	delcommand GRemove
+	delcommand GRename
+	delcommand GUnlink
+	delcommand Gbrowse
+	delcommand GcLog
+	delcommand Gcd
+	delcommand Gclog
+	delcommand Gdelete
+	delcommand Gdiffsplit
+	delcommand Gdrop
+	delcommand Ge
+	delcommand Gedit
+	delcommand Ggrep
+	delcommand Ghdiffsplit
+	delcommand Git
+endif
+delcommand GenerateExNvimConfig
+if PluginInstalled('gitsigns')
+	delcommand Gitsigns
+endif
 delfunction PluginInstalled
+if PluginExists('vim-fugitive')
+	delcommand GlLog
+	delcommand Glcd
+	delcommand Glgrep
+	delcommand Gllog
+	delcommand Gmove
+endif
+if PluginExists('goyo.vim')
+	delcommand Goyo
+endif
+if PluginExists('vim-fugitive')
+	delcommand Gpedit
+	delcommand Gr
+	delcommand Gread
+	delcommand Gremove
+	delcommand Grename
+	delcommand Gsplit
+	delcommand Gtabedit
+	delcommand Gvdiffsplit
+	delcommand Gvsplit
+	delcommand Gw
+	delcommand Gwq
+	delcommand Gwrite
+endif
+delfunction PluginExists

@@ -1,8 +1,7 @@
 require('lib.lists.compare')
 
 function plugin_installed(name)
-	local a=pcall(require, name)
-	return a
+	return pcall(require, name)
 end
 function plugin_exists(name)
 	return vim.fn.PluginExists(name) == 1
