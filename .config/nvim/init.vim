@@ -103,7 +103,10 @@ function! OnQuit()
 		call SaveVars()
 	endif
 endfunction
-autocmd! VimLeave * call OnQuit()
+augroup exnvim_vim_leave
+	autocmd!
+	autocmd VimLeave * call OnQuit()
+augroup END
 
 function! SetExNvimConfigPath()
 	if !exists('g:EXNVIM_CONFIG_PATH') || g:EXNVIM_CONFIG_PATH ==# ""
@@ -934,7 +937,7 @@ function! OnStart()
 	call SetExNvimConfigPath()
 	call SetLocalSharePath()
 	call SetConfigPath()
-	if has('nvim') && PluginInstalled("neo-tree.nvim") && g:automatically_open_neo_tree_instead_of_netrw
+	if has('nvim') && PluginInstalled("neo-tree") && g:automatically_open_neo_tree_instead_of_netrw
 		autocmd! FileExplorer *
 		augroup auto_neo_tree
 			autocmd!
@@ -1078,12 +1081,11 @@ if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
 	endif
 endif
 
+execute 'luafile' g:CONFIG_PATH.'/lua/lib/vim/plugins.lua'
+
 function! PluginInstalled(name)
-	silent! let a=luaeval('require("'.a:name.'")')
-	if type(a) ==# v:t_dict
-		return 1
-	endif
-	return a!=#0
+	let a = luaeval('plugin_installed(_A[1])', [a:name])
+	return a
 endfunction
 
 function! InitPckr()

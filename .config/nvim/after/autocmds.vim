@@ -160,7 +160,7 @@ if v:version >= 700
   autocmd BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 endif
 
-augroup gitbranch
+augroup exnvim_gitbranch
 	autocmd!
 	autocmd BufEnter,BufLeave * call SetGitBranch()
 augroup END

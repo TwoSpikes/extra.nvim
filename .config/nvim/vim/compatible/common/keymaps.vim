@@ -66,7 +66,7 @@ let s:SCROLL_MOUSE_DOWN_FACTOR = s:SCROLL_DOWN_FACTOR
 execute printf("noremap <silent> <expr> <c-Y> \"%s<c-e>\"", s:SCROLL_C_E_FACTOR)
 execute printf("noremap <silent> <expr> <c-y> \"%s<c-y>\"", s:SCROLL_C_Y_FACTOR)
 let s:SCROLL_UPDATE_TIME = 1000
-call timer_start(s:SCROLL_UPDATE_TIME, {->STCUpd()}, {'repeat': -1})
+let g:exnvim_stc_timer = timer_start(s:SCROLL_UPDATE_TIME, {->STCUpd()}, {'repeat': -1})
 execute printf("noremap <ScrollWheelDown> %s<c-e>", s:SCROLL_MOUSE_DOWN_FACTOR)
 execute printf("noremap <ScrollWheelUp> %s<c-y>", s:SCROLL_MOUSE_UP_FACTOR)
 

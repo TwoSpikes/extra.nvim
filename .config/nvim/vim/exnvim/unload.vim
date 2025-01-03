@@ -6,6 +6,7 @@ if g:exnvim_fully_loaded !=# 3
 endif
 
 execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload_config.vim'
+
 autocmd! AlphaNvim_CinnamonNvim_JK_Workaround *
 augroup! AlphaNvim_CinnamonNvim_JK_Workaround
 autocmd! exnvim_term_closed *
@@ -131,6 +132,7 @@ delfunction MatchEnable
 set tabline=
 delfunction MyTabLabel
 delfunction MyTabLine
+nunmap <leader>c
 delfunction N_CommentOut
 delfunction N_CommentOutDefault
 delfunction N_Comment_Move_Left
@@ -146,8 +148,183 @@ delfunction NumbertoggleAll
 delfunction Numbertoggle_no
 delfunction Numbertoggle_stcabs
 delfunction Numbertoggle_stcrel
+delfunction OnFirstTime
+autocmd! exnvim_vim_leave *
+augroup! exnvim_vim_leave
+delfunction OnQuit
+delfunction OnQuitDisable
+delfunction OnStart
+delfunction OpenOnStart
+delfunction OpenRanger
+delfunction OpenRangerCheck
+unmap <leader>t
+delfunction OpenTerm
+unmap <leader>xx
+delfunction OpenTermProgram
+delfunction OpenWithXdg
+delfunction Pad
+delfunction Pad_middle
+delfunction PleaseDoNotCloseIfNotOneWin
+delfunction PleaseDoNotCloseIfOneWin
+delfunction PleaseDoNotCloseWrapper
+delfunction PluginDelete
+unmap <leader>vs
+unmap <leader>ve
+unmap <leader>vi
+unmap <leader>vl
+unmap <leader>vj
+unmap <leader>vc
+unmap <leader>vb
+delfunction SelectPosition
+delfunction SaveAsBase
+delfunction SaveAs
+delfunction SaveAsAndRename
+delfunction PrePad
+delfunction PreparePersistedNvim
+delfunction PrepareWhichKey
+delfunction PreserveAndDo
+delfunction RebindMenus
+delfunction RedefineProcessGBut
+delfunction RehandleExNvimConfig
+delfunction Remove
+delfunction Repr_Shell
+delfunction Repr_Vim_Grep
+delfunction RestoreCursorFix
+delfunction ReturnHighlightTerm
+delfunction RunAlphaIfNotAlphaRunning
+delfunction STCAbs
+delfunction STCNo
+delfunction STCNoAll
 nunmap k
 ounmap k
 vunmap k
+nunmap <up>
+ounmap <up>
+vunmap <up>
 delfunction ProcessGBut
 delfunction STCRel
+call timer_stop(g:exnvim_stc_timer)
+unlet g:exnvim_stc_timer
+delfunction STCUpd
+delfunction SaveVars
+delfunction Save_WW_and_Do
+unmap <c-x>h
+delfunction SelectAll
+delfunction SetConfigPath
+delfunction SetDefaultValuesForStartupOptionsAndExNvimConfigOptions
+delfunction SetExNvimConfigPath
+autocmd! exnvim_gitbranch *
+augroup! exnvim_gitbranch
+delfunction SetGitBranch
+delfunction SetLocalSharePath
+delfunction SetMouse
+delfunction SetTermuxConfigPath
+if PluginExists('coc.nvim')
+	delfunction ShowDocumentation
+endif
+delfunction Showtab
+delfunction StartsWith
+delfunction SynGroup
+delfunction SynStack
+delfunction TermRunning
+delfunction TermuxLoadCursorStyle
+delfunction TermuxSaveCursorStyle
+unmap <leader><c-f>
+delfunction ToggleFullscreen
+unmap <leader>xp
+delfunction TogglePagerMode
+delfunction Trim
+delfunction Update_CursorLine
+delfunction Update_CursorLine_Style
+delfunction Update_Cursor_Style
+delfunction Update_Cursor_Style_wrapper
+nunmap <c-n>
+xunmap <c-n>
+nunmap <Plug>(VM-Find-Under)
+xunmap <Plug>(VM-Find-Subword-Under)
+delfunction vm#commands#ctrln
+delfunction vm#themes#statusline
+delfunction VMInfos
+delfunction WhenceGroup
+xunmap <leader>c
+delfunction X_CommentOut
+delfunction X_CommentOutDefault
+delfunction X_Comment_Move_Left
+delfunction X_Comment_Move_Right
+delfunction X_UncommentOut
+delfunction X_UncommentOutDefault
+
+delcommand Alpha
+delcommand AlphaRedraw
+delcommand AlphaRemap
+if PluginInstalled('bqf')
+	delcommand BqfAutoToggle
+endif
+if PluginExists('rust.vim')
+	delcommand Cargo
+	delcommand Cbench
+	delcommand Cbuild
+	delcommand Ccheck
+	delcommand Cclean
+	delcommand Cdoc
+	delcommand Cinit
+	delcommand Cinstall
+	delcommand Cnew
+	delcommand Cpublish
+	delcommand Crun
+	delcommand Cruntarget
+	delcommand Csearch
+	delcommand Ctest
+	delcommand Cupdate
+endif
+if PluginExists('vim-closetag')
+	delcommand CloseTagDisableBuffer
+	delcommand CloseTagEnableBuffer
+	delcommand CloseTagToggleBuffer
+endif
+if PluginInstalled('cmp')
+	delcommand CmpStatus
+endif
+if PluginExists('coc.nvim')
+	delcommand CocCommand
+	delcommand CocConfig
+	delcommand CocDiagnostics
+	delcommand CocDisable
+	delcommand CocEnable
+	delcommand CocFirst
+	delcommand CocInfo
+	delcommand CocInstall
+	delcommand CocLast
+	delcommand CocList
+	delcommand CocListCancel
+	delcommand CocListResume
+	delcommand CocLocalConfig
+	delcommand CocNext
+	delcommand CocOpenLog
+	delcommand CocOutline
+	delcommand CocPrev
+	delcommand CocPrintErrors
+	delcommand CocRestart
+	delcommand CocSearch
+	delcommand CocStart
+	delcommand CocUninstall
+	delcommand CocUpdate
+	delcommand CocUpdateSync
+	delcommand CocWatch
+endif
+delfunction PluginExists
+if PluginInstalled('colorizer')
+	delcommand ColorizerAttachToBuffer
+	delcommand ColorizerDetachFromBuffer
+	delcommand ColorizerReloadAllBuffers
+	delcommand ColorizerToggle
+endif
+if PluginInstalled('conform')
+	delcommand ConformInfo
+endif
+if PluginInstalled('convert')
+	delcommand ConvertAll
+	delcommand ConvertFindCurrent
+	delcommand ConvertFindNext
+endif
+delfunction PluginInstalled

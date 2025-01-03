@@ -76,7 +76,7 @@ nunmap >
 nunmap <
 xunmap <
 xunmap >
-if has('nvim') && PluginInstalled('sneak')
+if has('nvim') && PluginExists('vim-sneak')
 	delfunction SneakCancel
 	if maparg('f<Esc>', 'x') !=# ''
 		xunmap f<esc>
