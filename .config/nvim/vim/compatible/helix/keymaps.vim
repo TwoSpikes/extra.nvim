@@ -950,13 +950,6 @@ if has('nvim') && PluginInstalled('convert') && exists('g:convert_keymaps_loaded
 	unmap <leader>cn
 endif
 
-if !g:use_nvim_cmp
-	unmap <leader>fr
-	unmap <leader>fh
-	unmap <leader>fb
-	unmap <leader>fg
-	unmap <leader>ff
-endif
 nnoremap <leader>f <cmd>call FuzzyFind()<cr>
 nnoremap <leader>F <cmd>call FuzzyFind()<cr>
 nnoremap <leader>b <cmd>call quickui#tools#list_buffer('e')<cr>

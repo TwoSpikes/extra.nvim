@@ -456,7 +456,7 @@ function! Showtab()
 	let mode = mode('lololol')
 	let strmode = ''
 	if mode == 'n'
-		if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
+		if g:compatible ==# "no"
 			let strmode = '%#ModeNorm# '
 		else
 			if g:language ==# 'russian'
@@ -520,7 +520,7 @@ function! Showtab()
 			let strmode = '^\^o norm TERM '
 		endif
 	elseif mode == 'v'
-		if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
+		if g:compatible ==# "no"
 			let strmode = '%#ModeVisu# '
 		else
 			if g:pseudo_visual
@@ -583,7 +583,7 @@ function! Showtab()
 		endif
 	elseif mode == "\<c-v>"
 		if g:language ==# 'russian'
-			if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
+			if g:compatible ==# "no"
 				let strmode = '%#ModeVisu#визуал %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
 			else
 				if g:pseudo_visual
@@ -596,7 +596,7 @@ function! Showtab()
 			let strmode = '%#ModeVisu#visu %#StatuslinestatVisuBlock#%#ModeBlock# BLOCK '
 		endif
 	elseif mode == 'i'
-		if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
+		if g:compatible ==# "no"
 			let strmode = '%#ModeIns# '
 		else
 			if g:language ==# 'russian'
@@ -645,7 +645,7 @@ function! Showtab()
 				let strmode = 'COM_BLOCK '
 			endif
 		else
-			if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
+			if g:compatible ==# "no"
 				let strmode = '%#ModeCom# '
 			else
 				if g:language ==# 'russian'

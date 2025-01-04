@@ -63,7 +63,6 @@ let s:SCROLL_C_E_FACTOR = s:SCROLL_UP_FACTOR
 let s:SCROLL_C_Y_FACTOR = s:SCROLL_DOWN_FACTOR
 let s:SCROLL_MOUSE_UP_FACTOR = s:SCROLL_UP_FACTOR
 let s:SCROLL_MOUSE_DOWN_FACTOR = s:SCROLL_DOWN_FACTOR
-execute printf("noremap <silent> <expr> <c-Y> \"%s<c-e>\"", s:SCROLL_C_E_FACTOR)
 execute printf("noremap <silent> <expr> <c-y> \"%s<c-y>\"", s:SCROLL_C_Y_FACTOR)
 let s:SCROLL_UPDATE_TIME = 1000
 let g:exnvim_stc_timer = timer_start(s:SCROLL_UPDATE_TIME, {->STCUpd()}, {'repeat': -1})
@@ -101,10 +100,8 @@ endif
 " FAST COMMANDS
 "noremap ; :
 noremap <leader>: :<c-u>'<,'>
-"noremap <leader>= :tabe 
-"noremap <leader>- :e 
-noremap <leader>= <cmd>ec"use \<c-c\>c"<cr>
-noremap <leader>- <cmd>ec"use \<c-c\>C"<cr>
+noremap <leader>= :tabe 
+noremap <leader>- :e 
 noremap <leader>1 :!
 nnoremap <leader>up <cmd>Pckr sync<cr>
 
@@ -116,7 +113,6 @@ vnoremap <leader>' iw<esc>a'<esc>bi'<esc>v
 
 " SPECIAL
 nnoremap ci_ yiwct_
-noremap <silent> <leader>d <cmd>nohlsearch<cr>
 nnoremap <silent> <esc> <cmd>let @/ = ""<cr>
 inoremap <c-c> <c-c><cmd>call Numbertoggle()<cr>
 
@@ -137,12 +133,6 @@ xnoremap <leader>C <c-\><c-n><cmd>call X_UncommentOutDefault()<cr>
 nnoremap <leader>A <cmd>call RunAlphaIfNotAlphaRunning()<cr>
 xnoremap <leader>A <c-\><c-n><cmd>call RunAlphaIfNotAlphaRunning()<cr>
 
-nnoremap <silent> <leader>ff <cmd>call FuzzyFind()<cr>
-nnoremap <silent> <leader>fg :lua require('telescope.builtin').live_grep(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
-nnoremap <silent> <leader>fb :lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
-nnoremap <silent> <leader>fh :lua require('telescope.builtin').help_tags(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
-nnoremap <silent> <leader>fr <cmd>lua require('telescope').extensions.recent_files.pick()<CR>
-
 " vnoremap <c-/> <esc>v:q:s/.*/# \0
 " vnoremap <c-?> <esc>:s/.*/\/\/ \0
 
@@ -151,7 +141,7 @@ noremap <silent> q <cmd>quit<cr>
 noremap <silent> Q <cmd>quit!<cr>
 noremap <c-w><c-g> <cmd>echo "Quit"<cr>
 
-" Emacs support
+" Emacs-like keymaps
 noremap <silent> <c-x><c-c> <cmd>qall<cr>
 noremap <silent> <c-x><c-q> <cmd>qall!<cr>
 noremap <silent> <c-x>s <cmd>w<cr>
@@ -217,7 +207,10 @@ nnoremap <silent> <c-x><c-b> <cmd>call quickui#tools#list_buffer('e')<cr>
 if executable('lazygit')
 	noremap <leader>z <cmd>call SelectPosition('lazygit', g:termpos)<cr>
 endif
-if executable('far') || executable('far2l') || executable('mc')
+if v:false
+\|| executable('far')
+\|| executable('far2l')
+\|| executable('mc')
 	noremap <leader>m <cmd>call SelectPosition(g:far_or_mc, g:termpos)<cr>
 endif
 

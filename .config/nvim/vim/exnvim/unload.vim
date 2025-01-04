@@ -6,6 +6,10 @@ if g:exnvim_fully_loaded !=# 3
 endif
 
 execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload_config.vim'
+let g:compatible = "common"
+
+execute 'source' g:CONFIG_PATH.'/vim/compatible/common/unload.vim'
+let g:compatible = "empty"
 
 autocmd! AlphaNvim_CinnamonNvim_JK_Workaround *
 augroup! AlphaNvim_CinnamonNvim_JK_Workaround
@@ -60,7 +64,6 @@ if exists('*Pad')
 	unmap <c-c>c
 	delcommand Findfile
 	delfunction Findfile
-	unmap <c-x><c-f>
 	unmap <c-c>C
 	delcommand Findfilebuffer
 	delfunction Findfilebuffer
@@ -132,7 +135,6 @@ delfunction MatchEnable
 set tabline=
 delfunction MyTabLabel
 delfunction MyTabLine
-nunmap <leader>c
 delfunction N_CommentOut
 delfunction N_CommentOutDefault
 delfunction N_Comment_Move_Left
@@ -157,9 +159,7 @@ delfunction OnStart
 delfunction OpenOnStart
 delfunction OpenRanger
 delfunction OpenRangerCheck
-unmap <leader>t
 delfunction OpenTerm
-unmap <leader>xx
 delfunction OpenTermProgram
 delfunction OpenWithXdg
 delfunction Pad
@@ -168,17 +168,11 @@ delfunction PleaseDoNotCloseIfNotOneWin
 delfunction PleaseDoNotCloseIfOneWin
 delfunction PleaseDoNotCloseWrapper
 delfunction PluginDelete
-unmap <leader>vs
-unmap <leader>ve
-unmap <leader>vi
-unmap <leader>vl
-unmap <leader>vj
-unmap <leader>vc
-unmap <leader>vb
 delfunction SelectPosition
 delfunction SaveAsBase
 delfunction SaveAs
 delfunction SaveAsAndRename
+delcommand Killbuffer
 delfunction PrePad
 delfunction PreparePersistedNvim
 delfunction PrepareWhichKey
@@ -208,7 +202,6 @@ unlet g:exnvim_stc_timer
 delfunction STCUpd
 delfunction SaveVars
 delfunction Save_WW_and_Do
-unmap <c-x>h
 delfunction SelectAll
 delfunction SetConfigPath
 delfunction SetDefaultValuesForStartupOptionsAndExNvimConfigOptions
@@ -229,7 +222,6 @@ delfunction SynStack
 delfunction TermRunning
 delfunction TermuxLoadCursorStyle
 delfunction TermuxSaveCursorStyle
-unmap <leader><c-f>
 delfunction ToggleFullscreen
 unmap <leader>xp
 delfunction TogglePagerMode
@@ -246,7 +238,6 @@ delfunction vm#commands#ctrln
 delfunction vm#themes#statusline
 delfunction VMInfos
 delfunction WhenceGroup
-xunmap <leader>c
 delfunction X_CommentOut
 delfunction X_CommentOutDefault
 delfunction X_Comment_Move_Left
@@ -402,7 +393,6 @@ delcommand GenerateExNvimConfig
 if PluginInstalled('gitsigns')
 	delcommand Gitsigns
 endif
-delfunction PluginInstalled
 if PluginExists('vim-fugitive')
 	delcommand GlLog
 	delcommand Glcd
@@ -427,4 +417,37 @@ if PluginExists('vim-fugitive')
 	delcommand Gwq
 	delcommand Gwrite
 endif
+if PluginInstalled('hex')
+	delcommand HexAssemble
+	delcommand HexDump
+	delcommand HexToggle
+endif
+if PluginInstalled('illuminate')
+	delcommand IlluminateDebug
+	delcommand IlluminatePause
+	delcommand IlluminatePauseBuf
+	delcommand IlluminateResume
+	delcommand IlluminateResumeBuf
+	delcommand IlluminateToggle
+	delcommand IlluminateToggleBuf
+endif
+if PluginInstalled('jdtls')
+	delcommand JdtShowLogs
+	delcommand JdtWipeDataAndRestart
+endif
+if PluginExists('limelight.vim')
+	delcommand Limelight
+endif
 delfunction PluginExists
+if PluginInstalled('lspconfig')
+	delcommand LspInfo
+	delcommand LspLog
+	delcommand LspRestart
+	delcommand LspStart
+	delcommand LspStop
+endif
+if PluginInstalled('luasnip')
+	delcommand LuaSnipListAvailable
+	delcommand LuaSnipUnlinkCurrent
+endif
+delfunction PluginInstalled

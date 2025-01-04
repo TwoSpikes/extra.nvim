@@ -1,6 +1,4 @@
-if v:true
-\&& g:compatible !=# "helix"
-\&& g:compatible !=# "helix_hard"
+if g:compatible ==# "no"
 	noremap f  <Plug>Sneak_f
 	noremap F  <Plug>Sneak_F
 	noremap t  <Plug>Sneak_t
@@ -12,7 +10,10 @@ if v:true
 
 	xnoremap ; <Plug>Sneak_;
 	nnoremap ; <Plug>Sneak_;
-else
+endif
+if v:false
+\|| g:compatible ==# "helix"
+\|| g:compatible ==# "helix_hard"
 	function! SneakCancel() abort
 		xnoremap f<esc> <cmd><cr>
 		xnoremap F<esc> <cmd><cr>

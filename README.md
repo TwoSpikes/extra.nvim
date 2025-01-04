@@ -34,7 +34,7 @@ Screenshots
 - `neovim` or `vim`
 - `nodejs` (for `coc.nvim`)
 - `jq` (for `coc.nvim`)
-- `git` (for `pckr.nvim`)
+- `git` (to download plugins)
 - `grep`
 - `ripgrep` (Optional, for `nvim-spectre`)
 - `tree-sitter` (Optional)
@@ -44,7 +44,10 @@ Screenshots
 - `ctags` (Optional)
 
 > [!Warning]
-> It works better in NeoVim, and packer.nvim does not work in version of Vim/NeoVim without Lua.
+> First run may be longer
+
+> [!Warning]
+> It works better in NeoVim, and pckr.nvim does not work in version of Vim/NeoVim without Lua.
 
 > [!Note]
 > Press `SPACE ?` to see help

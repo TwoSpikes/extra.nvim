@@ -97,7 +97,7 @@ nmap <leader>Ll  <Plug>(coc-codelens-action)
 
 " Map function and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server
-if g:compatible !=# "helix" && g:compatible !=# "helix_hard"
+if g:compatible ==# "no"
 	xmap if <Plug>(coc-funcobj-i)
 	omap if <Plug>(coc-funcobj-i)
 	xmap af <Plug>(coc-funcobj-a)

@@ -1,8 +1,15 @@
-unmap f
-unmap F
-unmap t
-unmap T
-unmap s
-unmap S
-unmap gw
-unmap gW
+nunmap <leader>sW
+
+nunmap <c-w>n
+nunmap <c-w><c-n>
+
+nunmap ~
+xunmap ~
+
+unmap <leader>d
+
+nunmap <leader>ff
+nunmap <leader>fg
+nunmap <leader>fb
+nunmap <leader>fh
+nunmap <leader>fr
