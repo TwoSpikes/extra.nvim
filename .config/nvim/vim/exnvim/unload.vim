@@ -29,6 +29,7 @@ if PluginExists('coc.nvim')
 	augroup! exnvim_coc_nvim
 	delfunction CheckBackspace
 	delfunction CocAction
+	delcommand OR
 	delfunction CocActionAsync
 	delfunction CocHasProvider
 	delfunction CocLocations
@@ -41,6 +42,8 @@ if PluginExists('coc.nvim')
 	delfunction CocRequestAsync
 	delfunction CocTagFunc
 endif
+autocmd! exnvim_colorscheme *
+augroup! exnvim_colorscheme
 delfunction ColorSchemeManagePre
 delfunction ColorTable
 delfunction Contains
@@ -145,6 +148,8 @@ autocmd! numbertoggle *
 augroup! numbertoggle
 autocmd! exnvim_mode_changed_numbertoggle *
 augroup! exnvim_mode_changed_numbertoggle
+autocmd! neo-tree *
+augroup! neo-tree
 delfunction Numbertoggle
 delfunction NumbertoggleAll
 delfunction Numbertoggle_no
@@ -169,9 +174,11 @@ delfunction PleaseDoNotCloseIfOneWin
 delfunction PleaseDoNotCloseWrapper
 delfunction PluginDelete
 delfunction SelectPosition
-delfunction SaveAsBase
+delcommand SaveAs
+delcommand SaveAsAndRename
 delfunction SaveAs
 delfunction SaveAsAndRename
+delfunction SaveAsBase
 delcommand Killbuffer
 delfunction PrePad
 delfunction PreparePersistedNvim
@@ -351,6 +358,9 @@ delcommand ExNvimCheatSheet
 delcommand ExNvimCommit
 if filereadable(expand(g:CONFIG_PATH.'/vim/xterm-color-table.vim'))
 	delcommand Exct
+	delcommand Oxct
+	delcommand Sxct
+	delcommand Txct
 endif
 if PluginExists('vim-floaterm')
 	delcommand FloatermFirst
@@ -438,7 +448,6 @@ endif
 if PluginExists('limelight.vim')
 	delcommand Limelight
 endif
-delfunction PluginExists
 if PluginInstalled('lspconfig')
 	delcommand LspInfo
 	delcommand LspLog
@@ -449,5 +458,72 @@ endif
 if PluginInstalled('luasnip')
 	delcommand LuaSnipListAvailable
 	delcommand LuaSnipUnlinkCurrent
+endif
+if PluginExists('vim-man')
+	delcommand Man
+	delcommand Sman
+	delcommand Mangrep
+endif
+delcommand Mason
+if PluginInstalled('neogen')
+	delcommand Neogen
+endif
+if PluginInstalled('neo-tree')
+	delcommand Neotree
+endif
+if PluginInstalled('noice')
+	delcommand Noice
+	delcommand NoiceAll
+	delcommand NoiceConfig
+	delcommand NoiceDebug
+	delcommand NoiceDisable
+	delcommand NoiceDismiss
+	delcommand NoiceEnable
+	delcommand NoiceErrors
+	delcommand NoiceFzf
+	delcommand NoiceHistory
+	delcommand NoiceLast
+	delcommand NoiceLog
+	delcommand NoicePick
+	delcommand NoiceRoutes
+	delcommand NoiceStats
+	delcommand NoiceTelescope
+	delcommand NoiceViewstats
+endif
+if PluginInstalled('notify')
+	delcommand Notifications
+	delcommand NotificationsClear
+endif
+if PluginInstalled('null-ls')
+	delcommand NullLsInfo
+	delcommand NullLsLog
+endif
+delcommand PackerUpdate
+if PluginInstalled('pckr')
+	delcommand Pckr
+endif
+if PluginInstalled('plenary')
+	delcommand PlenaryBustedDirectory
+	delcommand PlenaryBustedFile
+endif
+if PluginExists('vim-quickui')
+	delcommand QuickUI
+endif
+delfunction PluginExists
+delcommand Rm
+delcommand SWrap
+if PluginInstalled('persisted')
+	delcommand SessionDelete
+	delcommand SessionLoad
+	delcommand SessionLoadLast
+	delcommand SessionSave
+	delcommand SessionSelect
+	delcommand SessionStart
+	delcommand SessionStop
+	delcommand SessionToggle
+endif
+delcommand Showtab
+if PluginInstalled('spectre')
+	delcommand Spectre
 endif
 delfunction PluginInstalled

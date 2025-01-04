@@ -1772,7 +1772,7 @@ function! JKWorkaround()
 	if !g:open_cmd_on_up
 	  noremap <up> <cmd>call ProcessGBut('k')<cr>
     endif
-	if !PluginInstalled('endscroll')
+	if !has('nvim') || !PluginInstalled('endscroll')
 		noremap j <cmd>call ProcessGBut('j')<cr>
 		if !g:open_cmd_on_up
 		  noremap <down> <cmd>call ProcessGBut('j')<cr>
@@ -2127,4 +2127,4 @@ call OpenOnStart()
 
 let g:exnvim_fully_loaded += 1
 let g:specloading = ' OK '
-doautocmd User ExNvimLoaded
+silent! doautocmd User ExNvimLoaded

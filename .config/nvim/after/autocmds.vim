@@ -39,7 +39,10 @@ augroup colorscheme_manage
 			unlet g:updating_cursor_style_supported
 		endif
 	endfunction
-	autocmd ColorSchemePre * call ColorSchemeManagePre()
+	augroup exnvim_colorscheme
+		autocmd!
+		autocmd ColorSchemePre * call ColorSchemeManagePre()
+	augroup END
 augroup END
 
 function! DefineAugroupVisual()

@@ -1081,8 +1081,6 @@ if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
 	endif
 endif
 
-execute 'luafile' g:CONFIG_PATH.'/lua/lib/vim/plugins.lua'
-
 function! PluginInstalled(name)
 	let a = luaeval('plugin_installed(_A[1])', [a:name])
 	return a
