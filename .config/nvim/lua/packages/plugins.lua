@@ -336,7 +336,7 @@ pckr.add({
 		'smartpde/telescope-recent-files',
 	};
 });
-if vim.g.compatible ~= "helix_hard" then
+if vim.fn.match(vim.g.compatible, "^helix_hard") == -1 then
 	pckr.add({
 		'https://github.com/folke/noice.nvim',
 		requires = {
@@ -515,7 +515,7 @@ pckr.add({
 		'TwoSpikes/music-player.vim',
 	};
 });
-if vim.g.compatible ~= "helix" and vim.g.compatible ~= "helix_hard" then
+if vim.fn.match(vim.g.compatible, '^helix') == -1 then
 	pckr.add({
 		'airblade/vim-gitgutter',
 	});

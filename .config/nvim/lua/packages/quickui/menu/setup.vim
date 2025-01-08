@@ -329,12 +329,12 @@ function! RebindMenus()
 	endif
 	if has('nvim') && PluginInstalled('telescope')
 		call quickui#menu#install(s:window_label, [
-					\ [(g:quickui_icons?"󰥨 ":"").s:telescope_fuzzy_find_label."\t".(g:compatible==#"helix"||g:compatible==#"helix_hard"?"LEAD f":"LEAD ff"), 'call FuzzyFind()', 'Opens Telescope.nvim find file'],
+					\ [(g:quickui_icons?"󰥨 ":"").s:telescope_fuzzy_find_label."\t".(g:compatible=~#"^helix"?"LEAD f":"LEAD ff"), 'call FuzzyFind()', 'Opens Telescope.nvim find file'],
 					\ ])
 	endif
 	if executable('ranger')
 		call quickui#menu#install(s:window_label, [
-					\ [(g:quickui_icons?" ":"").s:open_file_using_ranger_label."\t".(g:compatible==#"helix"||g:compatible==#"helix_hard"?"LEAD xr":"LEAD r"), 'call OpenRangerCheck()', 'Opens ranger to select file to open'],
+					\ [(g:quickui_icons?" ":"").s:open_file_using_ranger_label."\t".(g:compatible=~#"^helix"?"LEAD xr":"LEAD r"), 'call OpenRangerCheck()', 'Opens ranger to select file to open'],
 					\ ])
 	endif
 	call quickui#menu#install(s:window_label, [
@@ -366,18 +366,18 @@ function! RebindMenus()
 
 	" items containing tips, tips will display in the cmdline
 	call quickui#menu#install(s:text_label, [
-				\ [(g:quickui_icons?"󰆏 ":"").s:copy_line_label."\t".(g:compatible==#"helix"||g:compatible==#"helix_hard"?"xy":"yy"), 'yank', 'Copy the line where cursor is located'],
-				\ [(g:quickui_icons?"󰆴 ":"").s:delete_line_label."\t".(g:compatible==#"helix"||g:compatible==#"helix_hard"?"x\"_d":"sd"), 'delete x', 'Delete the line where cursor is located'],
-				\ [(g:quickui_icons?"󰆐 ":"").s:cut_line_label."\t".(g:compatible==#"helix"||g:compatible==#"helix_hard"?"xd":"dd"), 'delete _', 'Cut the line where cursor is located'],
+				\ [(g:quickui_icons?"󰆏 ":"").s:copy_line_label."\t".(g:compatible=~#"^helix"?"xy":"yy"), 'yank', 'Copy the line where cursor is located'],
+				\ [(g:quickui_icons?"󰆴 ":"").s:delete_line_label."\t".(g:compatible=~#"^helix"?"x\"_d":"sd"), 'delete x', 'Delete the line where cursor is located'],
+				\ [(g:quickui_icons?"󰆐 ":"").s:cut_line_label."\t".(g:compatible=~#"^helix"?"xd":"dd"), 'delete _', 'Cut the line where cursor is located'],
 				\ [(g:quickui_icons?"󰆒 ":"").s:paste_after_label."\tp", 'normal! p', 'Paste copyied text after the cursor'],
 				\ [(g:quickui_icons?"󰆒 ":"").s:paste_before_label."\tP", 'normal! P', 'Paste copyied text before the cursor'],
 				\ [(g:quickui_icons?"  ":"").s:join_lines_label."\tJ", 'join', 'Join current and next line and put between them a space'],
 				\ [(g:quickui_icons?"  ":"").s:force_join_lines_label."\tgJ", 'normal! p', 'Join current and next line and leave blanks as it is'],
 				\ ["--", ''],
-				\ [(g:quickui_icons?" ":"").s:forward_find_whole_word_label."\t".(g:compatible==#"helix_hard"?"eb*":"*"), 'normal! *', 'Forwardly find whole word under cursor'],
-				\ [(g:quickui_icons?" ":"").s:backward_find_whole_word_label."\t".(g:compatible==#"helix_hard"?"eb#":"#"), 'normal! #', 'Backwardly find whole word under cursor'],
-				\ [(g:quickui_icons?" ":"").s:forward_find_word_label."\t".(g:compatible==#"helix_hard"?"ebg*":"g*"), 'normal! g*', 'Forwardly find word under cursor'],
-				\ [(g:quickui_icons?" ":"").s:backward_find_word_label."\t".(g:compatible==#"helix_hard"?"ebg#":"g#"), 'normal! g#', 'Backwardly find word under cursor'],
+				\ [(g:quickui_icons?" ":"").s:forward_find_whole_word_label."\t".(g:compatible=~#"^helix_hard"?"eb*":"*"), 'normal! *', 'Forwardly find whole word under cursor'],
+				\ [(g:quickui_icons?" ":"").s:backward_find_whole_word_label."\t".(g:compatible=~#"^helix_hard"?"eb#":"#"), 'normal! #', 'Backwardly find whole word under cursor'],
+				\ [(g:quickui_icons?" ":"").s:forward_find_word_label."\t".(g:compatible=~#"^helix_hard"?"ebg*":"g*"), 'normal! g*', 'Forwardly find word under cursor'],
+				\ [(g:quickui_icons?" ":"").s:backward_find_word_label."\t".(g:compatible=~#"^helix_hard"?"ebg#":"g#"), 'normal! g#', 'Backwardly find word under cursor'],
 				\ ["--", ''],
 				\ [(g:quickui_icons?"󰅺 ":"").s:comment_out_label."\tLEAD c", 'call '.(mode() =~# '^n'?'N':'X').'_CommentOutDefault()', 'Comment out line under cursor'],
 				\ [(g:quickui_icons?"󱗡 ":"").s:uncomment_out_label."\tLEAD C", 'call '.(mode() =~# '^n'?'N':'X').'_UncommentOutDefault()', 'Uncomment line under cursor'],
@@ -385,7 +385,7 @@ function! RebindMenus()
 				\ [(g:quickui_icons?"󰗧 ":"").s:go_to_multicursor_mode_label."\tCtrl-n", 'call vm#commands#ctrln(1)', 'Go to multicursor mode'],
 				\ [(g:quickui_icons?" ":"").s:show_hlgroup_label."", 'call SynGroup()', 'Show hlgroup name under cursor'],
 				\ [(g:quickui_icons?" ":"").s:whence_hlgroup_label, 'call WhenceGroup()', 'Show whence hlgroup under cursor came'],
-				\ [(g:quickui_icons?"󰒆 ":"").s:select_all_label."\t".(g:compatible==#"helix"||g:compatible==#"helix_hard"?"%":"Ctrl-x h"), 'call SelectAll()', 'Paste copyied text after the cursor'],
+				\ [(g:quickui_icons?"󰒆 ":"").s:select_all_label."\t".(g:compatible=~#"^helix"?"%":"Ctrl-x h"), 'call SelectAll()', 'Paste copyied text after the cursor'],
 				\ [(g:quickui_icons?" ":"").s:toggle_tagbar_label."\tCtrl-t", 'TagbarToggle', 'Toggles tagbar'],
 				\ [(g:quickui_icons?" ":"").s:generate_annotation_label."\tLEAD n", 'Neogen', 'Generate Neogen annotation (:h neogen)'],
 				\ ])

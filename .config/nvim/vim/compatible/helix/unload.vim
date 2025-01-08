@@ -216,7 +216,7 @@ delfunction V_DoRedo
 xunmap U
 unmap <a-.>
 unmap %
-if g:compatible ==# "helix_hard"
+if g:compatible =~# "^helix_hard"
 	nunmap *
 	unmap q
 	unmap Q

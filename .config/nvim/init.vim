@@ -97,9 +97,7 @@ function! TermuxLoadCursorStyle()
 endfunction
 function! OnQuit()
 	call TermuxLoadCursorStyle()
-	if v:false
-	\|| g:compatible ==# "helix"
-	\|| g:compatible ==# "helix_hard"
+	if g:compatible =~# "^helix"
 		call SaveVars()
 	endif
 endfunction
@@ -432,21 +430,21 @@ function! Showtab()
 	\|| &filetype ==# 'musicplayer'
 		return bufname('')
 	endif
-	if g:compatible !=# "helix_hard"
+	if g:compatible !~# "^helix_hard"
 		let stl_name = '%<%t'
 		let stl_name .= '%( %* %#StatusLinemod#%M%R%H%W%)%*'
 	else
 		let stl_name = '%* %<%t'
 		let stl_name .= '%( %#StatusLinemod#%M%R%H%W%)%*'
 	endif
-	if g:compatible !=# "helix_hard"
+	if g:compatible !~# "^helix_hard"
 		if &columns ># 40
 			let stl_name .= '%( %#StatusLinemod#'
 			let stl_name .= &syntax
 			let stl_name .= '%)%*'
 		endif
 	endif
-	if g:compatible !=# "helix_hard"
+	if g:compatible !~# "^helix_hard"
 		if &columns ># 45
 			let stl_name .= '%( %#Statuslinemod#'
 			let stl_name .= '%{GetGitBranch()}'
@@ -524,7 +522,7 @@ function! Showtab()
 			let strmode = '%#ModeVisu# '
 		else
 			if g:pseudo_visual
-				if g:compatible !=# "helix_hard"
+				if g:compatible !~# "^helix_hard"
 					if g:language ==# 'russian'
 						let strmode = '%#ModeVisu# НОР '
 					else
@@ -705,7 +703,7 @@ function! Showtab()
 	endif
 
 	let stl_showcmd = '%(%#Statuslinemod#%S%*%)'
-	if g:compatible !=# "helix_hard"
+	if g:compatible !~# "^helix_hard"
 		let stl_buf = '#%n %p%%'
 	endif
 	let stl_mode_to_put = ''
@@ -717,7 +715,7 @@ function! Showtab()
 
 	let s:result = stl_mode_to_put
 	let s:result .= stl_name
-	if g:compatible !=# "helix_hard"
+	if g:compatible !~# "^helix_hard"
 		if &columns ># 30
 			let &showcmdloc = 'statusline'
 			let s:result .= ' '
@@ -758,7 +756,7 @@ function! Showtab()
 		if virtual_env !=# '' && enough_space_for_pyenv
 			let s:result .= '%#Statuslinevenv1#'
 		else
-			if g:compatible !=# "helix_hard"
+			if g:compatible !~# "^helix_hard"
 				if is_macro_recording !=# ''
 					let s:result .= '%#Statuslinemac1#'
 				else
@@ -766,7 +764,7 @@ function! Showtab()
 				endif
 			endif
 		endif
-		if g:compatible !=# "helix_hard"
+		if g:compatible !~# "^helix_hard"
 			let s:result .= ''
 		endif
 	endif
@@ -774,7 +772,7 @@ function! Showtab()
 	unlet is_macro_recording
 	unlet virtual_env
 	if &columns ># 30
-		if g:compatible !=# "helix_hard"
+		if g:compatible !~# "^helix_hard"
 			let s:result .= '%#Statuslinestat1#'
 			if &columns ># 45
 				let s:result .= ' '
@@ -782,7 +780,7 @@ function! Showtab()
 		endif
 		let s:result .= stl_pos
 	endif
-	if g:compatible !=# "helix_hard"
+	if g:compatible !~# "^helix_hard"
 		if &columns ># 45
 			let s:result .= ' '
 		endif
@@ -792,7 +790,7 @@ function! Showtab()
 		endif
 	endif
 	if &columns ># 30
-		if g:compatible !=# "helix_hard"
+		if g:compatible !~# "^helix_hard"
 				let s:result .= '%#Statuslinestat2# '
 				let s:result .= stl_buf
 		endif
@@ -900,7 +898,7 @@ if reloading_config
 endif
 
 if $PREFIX == ""
-	call setenv('PREFIX', '/usr/')
+	call setenv('PREFIX', '/usr')
 endif
 
 if has('nvim')
@@ -959,7 +957,7 @@ function! OnStart()
 		let g:compatible = "no"
 		call timer_srart(0, {->RedefineProcessGBut()})
 	endif
-	if has('nvim') && g:compatible !=# "helix_hard" && PluginInstalled('notify')
+	if has('nvim') && g:compatible !~# "^helix_hard" && PluginInstalled('notify')
 		call timer_start(0, {->execute(printf('luafile %s', fnamemodify(g:PLUGINS_SETUP_FILE_PATH, ':h').'/noice/setup.lua'))})
 	endif
 endfunction
@@ -1075,16 +1073,17 @@ endfunction
 function! PluginExists(name)
 	return isdirectory(g:LOCALSHAREPATH.'/site/pack/pckr/opt/'.a:name)
 endfunction
-if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
+if g:compatible =~# "^helix"
 	if PluginExists('vim-gitgutter')
 		call PluginDelete('vim-gitgutter')
 	endif
 endif
 
-function! PluginInstalled(name)
-	let a = luaeval('plugin_installed(_A[1])', [a:name])
-	return a
-endfunction
+if has('nvim')
+	function! PluginInstalled(name)
+		return luaeval('plugin_installed(_A[1])', [a:name])
+	endfunction
+endif
 
 function! InitPckr()
 	execute "source ".g:CONFIG_PATH.'/vim/plugins/setup.vim'

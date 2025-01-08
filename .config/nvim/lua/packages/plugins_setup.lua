@@ -57,14 +57,14 @@ end
 if plugin_installed("neogen") then
 	require('packages.neogen.init')
 end
-if vim.g.compatible ~= "helix" and vim.g.compatible ~= "helix_hard" and plugin_installed("yanky") then
+if vim.fn.match(vim.g.compatible, "^helix") == -1 and plugin_installed("yanky") then
 	require('packages.yanky.init')
 end
 if plugin_installed("lint") then
 	require('packages.nvim-lint.init')
 end
 if plugin_installed("noice") then
-	if vim.g.compatible ~= "helix_hard" then
+	if vim.fn.match(vim.g.compatible, "^helix_hard") == -1 then
 		require('packages.noice.init')
 	else
 		if plugin_exists('noice.nvim') then

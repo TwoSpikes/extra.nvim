@@ -64,6 +64,20 @@ function! Repr_Vim_Grep(string)
 	return result
 endfunction
 
+function! Repr_Vim_Grep_Sub(string)
+	let result = ''
+	for char in a:string
+		if char ==# '\'
+			let result .= '\\'
+		elseif char ==# '&'
+			let result .= '\&'
+		else
+			let result .= char
+		endif
+	endfor
+	return result
+endfunction
+
 function! Repr_Shell(string)
 	let result = ''
 	let state = 'norm'
@@ -113,6 +127,10 @@ function! Repr_Shell(string)
 				let result .= '\>'
 			elseif char ==# '|'
 				let result .= '\|'
+			elseif char ==# ';'
+				let result .= '\;'
+			elseif char ==# "\n"
+				let result .= '\\n'
 			else
 				let result .= char
 			endif

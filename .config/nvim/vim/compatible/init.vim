@@ -1,8 +1,7 @@
 if v:false
 \|| g:compatible ==# "common"
 \|| g:compatible ==# "no"
-\|| g:compatible ==# "helix"
-\|| g:compatible ==# "helix_hard"
+\|| g:compatible =~# "^helix"
 	exec printf('so %s', g:CONFIG_PATH.'/vim/compatible/common/load.vim')
 endif
 
@@ -11,8 +10,6 @@ if v:false
 	exec printf('so %s', g:CONFIG_PATH.'/vim/compatible/no/load.vim')
 endif
 
-if v:false
-\|| g:compatible ==# "helix"
-\|| g:compatible ==# "helix_hard"
+if g:compatible =~# "helix"
 	exec printf('so %s', g:CONFIG_PATH.'/vim/compatible/helix/init.vim')
 endif

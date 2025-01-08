@@ -775,6 +775,7 @@ function! ExNvimCheatSheet()
 	setlocal nomodifiable
 	setlocal buftype=nofile
 	setlocal filetype=book
+	setlocal undolevels=-1
 	call Numbertoggle('n')
 	let prev_filetype = g:prev_filetype
 	execute "noremap <buffer> q <cmd>execute bufnr().\"bwipeout!\"<bar>".(prev_filetype==#"alpha"?"Alpha":old_bufnr."buffer")."<cr>"
@@ -994,7 +995,7 @@ let s:select_all_definition .= "
 \\n	else
 \\n		echomsg 'Previous position marked as \"y\"'
 \\n	endif"
-if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
+if g:compatible =~# "^helix"
 let s:select_all_definition .= "
 \\n	if mode !~? '^v'
 \\n		let g:pseudo_visual = v:true
@@ -1310,9 +1311,7 @@ function! LoadVars()
 	endif
 endfunction
 
-if v:false
-\|| g:compatible ==# "helix"
-\|| g:compatible ==# "helix_hard"
+if g:compatible =~# "^helix"
 	call LoadVars()
 endif
 
@@ -1596,7 +1595,7 @@ function! MyTabLine()
 
   return s
 endfunction
-if g:compatible !=# "helix_hard"
+if g:compatible !~# "^helix_hard"
 	set tabline=%!MyTabLine()
 endif
 
@@ -1664,7 +1663,7 @@ let process_g_but_function_expression = "
 \function! ProcessGBut(button)
 \"
 if !g:disable_animations
-if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
+if g:compatible =~# "^helix"
 let process_g_but_function_expression .= "
 \\n	let old_c=col('.')
 \\n	let old_l=line('.')
@@ -1681,13 +1680,19 @@ if has('nvim')
 let process_g_but_function_expression .= "
 \\n	execute \"lua << EOF
 \\\nlocal button ="
-if g:do_not_save_previous_column_position_when_going_up_or_down&&g:compatible ==# "helix" || g:compatible ==# "helix_hard"
-let process_g_but_function_expression .= "\\\"mz`z\\\".."
+if v:false
+\|| (v:true
+\&& g:do_not_save_previous_column_position_when_going_up_or_down
+\&& g:compatible =~# "^helix"
+\&& g:compatible !~# "^helix_hard"
+\&& v:true)
+\|| g:compatible =~# "^helix_hard"
+	let process_g_but_function_expression .= "\\\"mz`z\\\".."
 endif
 let process_g_but_function_expression .= "
 \(vim.v.count == 0 and \'g\".a:button.\"\' or \'\".a:button.\"\')
 \"
-if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
+if g:compatible =~# "^helix"
 let process_g_but_function_expression .= "
 \\\nif vim.g.pseudo_visual then
 \\\n    button = \\\"\\<esc>\\\"..button
@@ -1707,7 +1712,7 @@ let process_g_but_function_expression .= "
 \\nexe \"norm! \".v:count1.a:button
 \\nendif
 \\n"
-if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
+if g:compatible =~# "^helix"
 let process_g_but_function_expression .= "
 \\nif g:pseudo_visual
 \\n	call feedkeys(\"\\<c-\\>\\<c-n>\")
@@ -1716,7 +1721,7 @@ let process_g_but_function_expression .= "
 endif
 endif
 
-if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
+if g:compatible =~# "^helix"
 	let process_g_but_function_expression .= "
 	\\n	call ReorderRightLeft()
 	\\n	call SavePosition(old_c, old_l, col('.'), line('.'))
@@ -1734,7 +1739,7 @@ else
 let process_g_but_function_expression .= "
 \\n	let button=v:count==#0?\"g\".a:button:a:button
 \"
-if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
+if g:compatible =~# "^helix"
 let process_g_but_function_expression .= "
 \\n	let old_c=col('.')
 \\n	let old_l=line('.')
@@ -1743,7 +1748,7 @@ endif
 let process_g_but_function_expression .= "
 \\n	execute \"norm! \".v:count1.button
 \"
-if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
+if g:compatible =~# "^helix"
 let process_g_but_function_expression .= "
 \\n	if g:pseudo_visual
 \\n		call feedkeys(\"\\<c-\\>\\<c-n>\")
@@ -1875,7 +1880,7 @@ let x_comment_move_left_function_expression .= "
 \\n	let comment_string_len = Defone(len(a:comment_string))
 \\n	call Save_WW_and_Do('normal! '.comment_string_len.'ho'.comment_string_len.'ho')
 \"
-if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
+if g:compatible =~# "^helix"
 let x_comment_move_left_function_expression .= "
 \\n	let g:pseudo_visual = v:true
 \"
@@ -1894,7 +1899,7 @@ let x_comment_move_right_function_expression .= "
 \\n	let comment_string_len = Defone(len(a:comment_string))
 \\n	call Save_WW_and_Do('normal! '.comment_string_len.'lo'.comment_string_len.'lo')
 \"
-if g:compatible ==# "helix" || g:compatible ==# "helix_hard"
+if g:compatible =~# "^helix"
 let x_comment_move_right_function_expression .= "
 \\n	let g:pseudo_visual = v:true
 \"
@@ -1908,7 +1913,7 @@ call X_Comment_Move_Right_Define()
 delfunction X_Comment_Move_Right_Define
 function! N_CommentOut(comment_string)
 	let l=line('.')
-	call setline(l, substitute(a:comment_string, '%s', Repr_Vim_Grep(getline(l)), ''))
+	call setline(l, substitute(a:comment_string, '%s', Repr_Vim_Grep_Sub(getline(l)), ''))
 	call N_Comment_Move_Right(substitute(a:comment_string, '%s', '', ''))
 endfunction
 function! X_CommentOut(comment_string)

@@ -1,6 +1,4 @@
-if v:false
-\|| g:compatible ==# "helix"
-\|| g:compatible ==# "helix_hard"
+if g:compatible =~# "^helix"
 	exec printf('so %s', g:CONFIG_PATH.'/vim/compatible/helix/unload.vim')
 endif
 if g:compatible ==# "no"
