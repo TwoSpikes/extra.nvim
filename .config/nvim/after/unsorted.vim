@@ -711,7 +711,7 @@ function! ExNvimCheatSheet()
 	\\n   LEAD uc - Update coc.nvim language servers
 	\\n   LEAD ut - Update nvim-treesitter parsers
 	\\n   LEAD sw - Find work under cursor using nvim-spectre
-	\\n   LEAD t - \"Open Terminal\" dialogue
+	\\n   LEAD . - \"Open Terminal\" dialogue
 	\\n   LEAD m - \"Open Far/MC\" dialogue
 	\\n   LEAD z - \"Open lazygit\" dialogue
 	\\n   CTRL-t - Toggle ctags tagbar

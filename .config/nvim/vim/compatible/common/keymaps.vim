@@ -116,7 +116,7 @@ nnoremap ci_ yiwct_
 nnoremap <silent> <esc> <cmd>let @/ = ""<cr>
 inoremap <c-c> <c-c><cmd>call Numbertoggle()<cr>
 
-noremap <silent> <leader>t <cmd>call SelectPosition($SHELL, g:termpos)<cr>
+noremap <silent> <leader>. <cmd>call SelectPosition($SHELL, g:termpos)<cr>
 
 " COLORSCHEME
 noremap <silent> <leader>vc <cmd>call SelectPosition($VIMRUNTIME."/colors", g:dirpos)<cr>

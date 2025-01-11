@@ -346,7 +346,7 @@ function! RebindMenus()
 				\ [(g:quickui_icons?" ":"").s:horizontally_split_label."\tCtrl-x 2", 'split', 'Horizontally split current window'],
 				\ [(g:quickui_icons?" ":"").s:vertically_split_label."\tCtrl-x 3", 'vsplit', 'Vertically split current window'],
 				\ ["--", ''],
-				\ [(g:quickui_icons?" ":"").s:open_terminal_label."\tLEAD t", 'call SelectPosition("", g:termpos)', 'Opens a terminal'],
+				\ [(g:quickui_icons?" ":"").s:open_terminal_label."\tLEAD .", 'call SelectPosition("", g:termpos)', 'Opens a terminal'],
 				\ ])
 	if executable('mc') || executable('far') || executable('far2l')
 		call quickui#menu#install(s:window_label, [

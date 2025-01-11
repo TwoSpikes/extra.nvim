@@ -86,7 +86,7 @@ nunmap ci_
 nunmap <esc>
 iunmap <c-c>
 
-unmap <leader>t
+unmap <leader>.
 
 unmap <leader>vc
 unmap <leader>vC
