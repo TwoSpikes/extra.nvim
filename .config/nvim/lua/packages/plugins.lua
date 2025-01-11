@@ -533,5 +533,8 @@ pckr.add({
 	{
 		'TwoSpikes/pkgman.nvim',
 	};
+	{
+		'TwoSpikes/ani-cli.nvim',
+	};
 });
 

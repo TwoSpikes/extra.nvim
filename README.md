@@ -271,3 +271,4 @@ $ exnvim version
 - [beacon.nvim](https://github.com/danilamihailov/beacon.nvim)
 - [hex.nvim](https://github.com/RaafatTurki/hex.nvim)
 - [pkgman.nvim](https://github.com/TwoSpikes/pkgman.nvim)
+- [ani-cli.nvim](https://github.com/TwoSpikes/ani-cli.nvim)
