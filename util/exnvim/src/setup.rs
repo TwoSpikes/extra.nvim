@@ -421,6 +421,8 @@ pub fn setup(home: ::std::path::PathBuf) -> ::std::io::Result<()> {
 \"_comment\":\"In main menu, start insert mode after pressing `New file`\",
 	\"edit_new_file\": false,
 
+    \"ani_cli_options\": \"\",
+
 \"_comment\":\"Ending field to not put comma every time\"
 }"),
             )

@@ -298,8 +298,8 @@ if has('nvim') && PluginExists('vim-fugitive')
 endif
 
 if has('nvim') && PluginExists('ani-cli.nvim')
-	noremap <leader>xa <cmd>Ani -c<cr>
-	noremap <leader>xA <cmd>Ani<cr>
+	noremap <leader>xa <cmd>execute "Ani ".g:ani_cli_options." -c"<cr>
+	noremap <leader>xA <cmd>execute "Ani ".g:ani_cli_options<cr>
 endif
 
 noremap <leader>xP <cmd>TogglePagerMode<cr>

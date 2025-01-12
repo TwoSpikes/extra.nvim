@@ -188,6 +188,7 @@ function! LoadExNvimConfig(path, reload=v:false)
 		\'prefer_far_or_mc',
 		\'automatically_open_neo_tree_instead_of_netrw',
 		\'edit_new_file',
+		\'ani_cli_options',
 	\]
 	if keys(g:exnvim_config) ==# ['_TYPE', '_VAL']
 		for item in g:exnvim_config['_VAL']
@@ -355,6 +356,9 @@ function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 	endif
 	if !exists('g:edit_new_file')
 		let g:edit_new_file = v:false
+	endif
+	if !exists('g:ani_cli_options')
+		let g:ani_cli_options = ""
 	endif
 endfunction
 call SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
