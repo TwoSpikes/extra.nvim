@@ -33,7 +33,7 @@ set incsearch
 set magic
 
 " Fold options
-set foldclose=all
+set foldclose=
 set foldenable
 set foldexpr=0
 set foldignore=#

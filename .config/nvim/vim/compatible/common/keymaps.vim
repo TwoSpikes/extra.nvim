@@ -297,4 +297,11 @@ if has('nvim') && PluginExists('vim-fugitive')
 	nnoremap <leader>gs <cmd>Git status<cr>
 endif
 
+if has('nvim') && PluginExists('ani-cli.nvim')
+	noremap <leader>xa <cmd>Ani -c<cr>
+	noremap <leader>xA <cmd>Ani<cr>
+endif
+
+noremap <leader>xP <cmd>TogglePagerMode<cr>
+
 noremap z00 <cmd>execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload.vim'<cr>

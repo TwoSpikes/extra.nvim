@@ -1156,7 +1156,6 @@ function! TogglePagerMode()
 	let g:PAGER_MODE = !g:PAGER_MODE
 endfunction
 command! -nargs=0 TogglePagerMode call TogglePagerMode()
-noremap <leader>xp <cmd>TogglePagerMode<cr>
 
 function! TermuxSaveCursorStyle()
 	if $TERMUX_VERSION !=# "" && filereadable(expand("~")."/.termux/termux.properties")
