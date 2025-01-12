@@ -1,19 +1,14 @@
 require('lib.lists.contains')
 require('lib.lists.compare')
 
-plugins_were_installed = vim.fn.readdir(vim.g.LOCALSHAREPATH..'/site/pack/pckr/opt')
-local function patch(pluginname)
-	if vim.fn.isdirectory(vim.fn.eval('$HOME')..'/.cache/nvim/patched-plugins/'..pluginname) == 1 then
-		return
+local function patch_plugin(pluginname)
+	local patch_name
+	if vim.fn.isdirectory(vim.fn.expand('~/.config/nvim/patch/')..pluginname) == 1 then
+		patch_name = pluginname..'/*.patch'
+	else
+		patch_name = pluginname..'.patch'
 	end
-	if vim.fn.isdirectory(vim.g.LOCALSHAREPATH..'/site/pack/pckr/opt/'..pluginname) == 0 then
-		return
-	end
-	if equals(vim.fn.readdir(vim.g.LOCALSHAREPATH..'/site/pack/pckr/opt/'..pluginname), {}) then
-		return
-	end
-	vim.cmd("!cd>/dev/null;patch -p0 < ~/.config/nvim/patch/"..pluginname..'.patch;cd ->/dev/null')
-	vim.fn.mkdir(vim.fn.eval('$HOME')..'/.cache/nvim/patched-plugins/'..pluginname, 'p')
+	vim.cmd("!cd>/dev/null;patch -p0 < ~/.config/nvim/patch/"..patch_name..';cd ->/dev/null')
 end
 
 local function bootstrap_pckr()
@@ -25,11 +20,14 @@ local function bootstrap_pckr()
       'clone',
 	  '--depth=1',
       "--filter=blob:none",
-      'https://github.com/TwoSpikes/pckr.nvim',
+      'https://github.com/lewis6991/pckr.nvim',
       pckr_path
     })
 
-    vim.cmd([[!cd>/dev/null;patch -p0 < ~/.config/nvim/patch/pckr.nvim.patch;cd ->/dev/null]])
+	local dirs = vim.fn.readdir(vim.fn.expand('~/.config/nvim/patch/pckr.nvim'))
+	for i, dir in ipairs(dirs) do
+		vim.cmd('!cd>/dev/null;patch -p0 < ~/.config/nvim/patch/pckr.nvim/'..dir..';cd ->/dev/null')
+	end
   end
 
   vim.opt.rtp:prepend(pckr_path)
@@ -45,8 +43,8 @@ pckr.add({
         requires = {
             { 'nvim-lua/plenary.nvim' },
         },
-		config_pre = function()
-			patch('telescope.nvim')
+		run = function()
+			patch_plugin('telescope.nvim')
 		end,
     };
     {
@@ -75,7 +73,7 @@ pckr.add({
 	};
     {
 		'nvim-treesitter/nvim-treesitter',
-		{run = ':TSUpdate'}
+		run = ':TSUpdate',
 	};
     {
 		'nvim-treesitter/playground',
@@ -117,8 +115,11 @@ pckr.add({
 });
 if not vim.g.use_nvim_cmp then
 	pckr.add({
-		'neoclide/coc.nvim',
-		branch = 'release',
+		{
+			'neoclide/coc.nvim',
+			branch = 'master',
+			run = 'npm ci',
+		}
 	});
 end
 pckr.add({
@@ -149,7 +150,9 @@ pckr.add({
 });
 if not vim.g.use_github_copilot == false then
 	pckr.add({
-		'github/copilot.vim',
+		{
+			'github/copilot.vim',
+		}
 	});
 end
 pckr.add({
@@ -202,10 +205,6 @@ pckr.add({
 			{
 				"mfussenegger/nvim-dap",
 			},
-			{
-				'nvim-treesitter/nvim-treesitter',
-				{run = ':TSUpdate'}
-			}
 		}
 	};
 	{
@@ -261,20 +260,20 @@ pckr.add({
 	};
 	{
 		'hrsh7th/cmp-buffer',
-		config_pre = function()
-			patch('cmp-buffer')
+		run = function()
+			patch_plugin('cmp-buffer')
 		end,
 	};
 	{
 		'hrsh7th/cmp-path',
-		config_pre = function()
-			patch('cmp-path')
+		run = function()
+			patch_plugin('cmp-path')
 		end,
 	};
 	{
 		'hrsh7th/cmp-cmdline',
-		config_pre = function()
-			patch('cmp-cmdline')
+		run = function()
+			patch_plugin('cmp-cmdline')
 		end,
 	};
 	{
@@ -497,10 +496,6 @@ pckr.add({
 				run = function()
 					vim.fn['fzf#install']()
 				end,
-			},
-			{
-				'nvim-treesitter/nvim-treesitter',
-				run = ':TSUpdate',
 			},
 		},
 	};
