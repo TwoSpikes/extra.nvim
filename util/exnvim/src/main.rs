@@ -143,16 +143,23 @@ fn install_coc_sh_crutch(
     ::std::fs::set_permissions(orig_cli_file, perms)?;
     Ok(())
 }
+macro_rules! theme_path {
+    ($theme_name: expr, $vimruntime: ident) => {
+        format!("{rtp}/colors/{theme_name}.vim",
+            rtp = $vimruntime
+                .to_str()
+                .expect("Cannot convert path to str"),
+            theme_name = $theme_name,
+        ).as_str()
+    };
+}
 fn commit(from: ::std::path::PathBuf, vimruntime: ::std::path::PathBuf, only_copy: bool, program_name: &String) {
     _ = copy_dir_all(from.join(".config/nvim"), "./.config/nvim");
     _ = run_as_superuser_if_needed!(
         "cp",
         &[
-            format!("{}/colors/blueorange.vim",
-                vimruntime
-                    .to_str()
-                    .expect("Cannot convert path to str"),
-            ).as_str(),
+            theme_path!("blueorange", vimruntime),
+            theme_path!("exnvim_base", vimruntime),
             "./vimruntime/colors/",
         ]
     );

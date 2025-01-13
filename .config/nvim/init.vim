@@ -852,6 +852,9 @@ function! CopyHighlightGroup(src, dst)
 endfunction
 function! ApplyColorscheme(colorscheme)
 	execute "colorscheme ".a:colorscheme
+	if a:colorscheme !=# "exnvim_base"
+		colorscheme exnvim_base
+	endif
 	if !IsHighlightGroupDefined('StatementNorm')
 		call CopyHighlightGroup('Statement', 'StatementNorm')
 	endif

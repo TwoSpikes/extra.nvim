@@ -22,7 +22,7 @@ end
 
 local alpha = require('alpha')
 local dashboard = require('alpha.themes.dashboard')
-dashboard.section.header.val = 'extra.nvim'
+dashboard.section.header.val = 'EXTRA.NVIM'
 if os.getenv('HOME') ~= nil then
 	if vim.fn.executable('exnvim') == 1 then
 		local readfile = io.popen('exnvim version')
@@ -30,6 +30,7 @@ if os.getenv('HOME') ~= nil then
 		readfile:close()
 	end
 end
+dashboard.section.header.opts.hl = "ExNvimLogo"
 dashboard.section.buttons.val = {}
 dashboard.section.buttons.val = TableConcat(dashboard.section.buttons.val, {
 	dashboard.button("e", "  "..new_file_label, ":enew <CR>"..(vim.g.edit_new_file and ":startinsert<CR>" or "")),

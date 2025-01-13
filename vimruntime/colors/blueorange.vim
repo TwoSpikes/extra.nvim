@@ -610,7 +610,7 @@ if &t_Co >= 256
     hi Constant ctermfg=213 ctermbg=NONE cterm=NONE
     hi String ctermfg=222 ctermbg=NONE cterm=NONE
     hi Identifier ctermfg=NONE ctermbg=NONE cterm=NONE
-    hi StatementNorm ctermfg=228 ctermbg=NONE cterm=NONE guifg=#bd6a00 guibg=NONE gui=NONE
+    hi StatementNorm ctermfg=228 ctermbg=NONE cterm=NONE guifg=#ffdd00 guibg=NONE gui=NONE
     hi StatementIns ctermfg=220 ctermbg=NONE cterm=NONE guifg=#00c0ff guibg=NONE gui=NONE
     hi StatementVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#608fdf guibg=NONE gui=NONE
     call CopyHighlightGroup("StatementNorm", "Statement")
@@ -623,8 +623,8 @@ if &t_Co >= 256
         hi Keyword cterm=NONE gui=NONE
       endif
     endif
-    hi Type ctermfg=77 ctermbg=NONE cterm=NONE
-    hi PreProc ctermfg=116 ctermbg=NONE cterm=NONE
+    hi Type ctermfg=77 ctermbg=NONE cterm=NONE guifg=#ddaa00 guibg=NONE gui=NONE
+    hi PreProc ctermfg=116 ctermbg=NONE cterm=NONE guifg=#00dddd guibg=NONE gui=NONE
     hi Special ctermfg=105 ctermbg=NONE cterm=bold
     hi Underlined ctermfg=NONE ctermbg=NONE cterm=underline
     hi Title ctermfg=228 ctermbg=NONE cterm=bold guifg=#ffff87 guibg=NONE gui=NONE
@@ -727,10 +727,12 @@ if &t_Co >= 256
     call CopyHighlightGroup("StatementNorm", "Statement")
     hi QuickFixLine ctermfg=231 ctermbg=32 cterm=NONE
     hi CursorLineNr ctermfg=236 ctermbg=220 cterm=bold guifg=#ffffff guibg=#ffaf00 gui=bold
+	  hi CursorLineNrNorm ctermfg=236 ctermbg=220 cterm=bold guifg=#000000 guibg=#ffdf00 gui=bold
     hi CursorLineNrIns ctermfg=15 ctermbg=39 cterm=bold guifg=#ffffff guibg=#00afff gui=bold
     hi CursorLineNrRepl ctermfg=15 ctermbg=128 cterm=bold guifg=#ffffff guibg=#af00df gui=bold
     hi CursorLineNrVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#ffffff guibg=#000087 gui=bold
-    hi LineNr ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#000000 guibg=#ffffa0 gui=italic
+    hi LineNrNorm ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#000000 guibg=#ffffa0 gui=italic
+    call CopyHighlightGroup("LineNrNorm", "LineNr")
     hi LineNrIns ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#c0ffff guibg=#000000 gui=italic,reverse
     hi LineNrVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#000000 guibg=#b0cfff gui=italic
     hi NonText ctermfg=247 ctermbg=NONE cterm=NONE
@@ -784,7 +786,7 @@ if &t_Co >= 256
     hi Constant ctermfg=127 ctermbg=NONE cterm=NONE
     hi String ctermfg=130 ctermbg=NONE cterm=NONE
     hi Identifier ctermfg=NONE ctermbg=NONE cterm=NONE
-    hi Type ctermfg=28 ctermbg=NONE cterm=NONE
+    hi Type ctermfg=28 ctermbg=NONE cterm=NONE guifg=#ffaa00 guibg=NONE gui=NONE
     hi PreProc ctermfg=23 ctermbg=NONE cterm=NONE
     hi Special ctermfg=30 ctermbg=NONE cterm=NONE
     hi Underlined ctermfg=NONE ctermbg=NONE cterm=underline
