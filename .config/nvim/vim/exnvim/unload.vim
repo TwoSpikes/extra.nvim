@@ -230,7 +230,6 @@ delfunction TermRunning
 delfunction TermuxLoadCursorStyle
 delfunction TermuxSaveCursorStyle
 delfunction ToggleFullscreen
-unmap <leader>xp
 delfunction TogglePagerMode
 delfunction Trim
 delfunction Update_CursorLine

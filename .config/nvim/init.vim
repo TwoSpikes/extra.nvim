@@ -49,7 +49,6 @@ if has('nvim')
 	lua vim.loader.enable()
 endif
 
-let g:setup_lsp = v:false
 call inputsave()
 
 if !has('nvim')
@@ -57,14 +56,6 @@ if !has('nvim')
 endif
 
 hi Loading0 ctermfg=0 ctermbg=9 cterm=bold guifg=#303030 guibg=#ff0000 gui=bold
-hi Loading13 ctermfg=0 ctermbg=196 cterm=bold guifg=#303030 guibg=#ff4000 gui=bold
-hi Loading25 ctermfg=0 ctermbg=208 cterm=bold guifg=#303030 guibg=#ff8000 gui=bold
-hi Loading38 ctermfg=0 ctermbg=220 cterm=bold guifg=#303030 guibg=#ffc000 gui=bold
-hi Loading50 ctermfg=0 ctermbg=11 cterm=bold guifg=#303030 guibg=#ffff00 gui=bold
-hi Loading63 ctermfg=0 ctermbg=190 cterm=bold guifg=#303030 guibg=#c0ff00 gui=bold
-hi Loading75 ctermfg=0 ctermbg=118 cterm=bold guifg=#303030 guibg=#80ff00 gui=bold
-hi Loading88 ctermfg=0 ctermbg=82 cterm=bold guifg=#303030 guibg=#40ff00 gui=bold
-hi Loading100 ctermfg=0 ctermbg=10 cterm=bold guifg=#303030 guibg=#00ff00 gui=bold
 set statusline=%#Loading0#Loading\ 0%%
 mode
 
@@ -234,6 +225,9 @@ function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 	if !exists('g:use_transparent_bg')
 		let g:use_transparent_bg = "dark"
 	endif
+	if !exists('g:setup_lsp')
+		let g:setup_lsp = v:false
+	endif
 	if !exists('g:use_italic_style')
 		let g:use_italic_style = v:true
 	endif
@@ -363,6 +357,10 @@ function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 endfunction
 call SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 
+hi Loading25 ctermfg=0 ctermbg=208 cterm=bold guifg=#303030 guibg=#ff8000 gui=bold
+set statusline=%#Loading25#Loading\ 25%%
+mode
+
 function! SetConfigPath()
 	if !exists('g:CONFIG_PATH') || g:CONFIG_PATH ==# ""
 		if !exists('$VIM_CONFIG_PATH')
@@ -423,7 +421,7 @@ function! GetGitBranch()
 endfunction
 
 let g:exnvim_fully_loaded = 0
-let g:specloading=" 25 "
+let g:specloading=" 50 "
 
 let s:custom_mode = ''
 let s:specmode = ''
@@ -805,7 +803,8 @@ function! Showtab()
 	endif
 	return s:result
 endfunction
-command! -nargs=0 Showtab set stl=%{%Showtab()%}
+colorscheme exnvim_base
+command! -nargs=0 Showtab set statusline=%{%Showtab()%}
 
 function! IsHighlightGroupDefined(group)
 	silent! let output = execute('hi '.a:group)
@@ -850,22 +849,55 @@ function! CopyHighlightGroup(src, dst)
 	execute printf("hi %s guibg=%s", a:dst, guibg)
 	execute printf("hi %s gui=%s", a:dst, gui)
 endfunction
-function! ApplyColorscheme(colorscheme)
-	execute "colorscheme ".a:colorscheme
-	if a:colorscheme !=# "exnvim_base"
-		colorscheme exnvim_base
-	endif
-	if !IsHighlightGroupDefined('StatementNorm')
-		call CopyHighlightGroup('Statement', 'StatementNorm')
-	endif
-	if !IsHighlightGroupDefined('StatementIns')
-		call CopyHighlightGroup('Statement', 'StatementIns')
-	endif
-	if !IsHighlightGroupDefined('StatementVisu')
-		call CopyHighlightGroup('Statement', 'StatementVisu')
-	endif
-endfunction
-call ApplyColorscheme(g:selected_colorscheme)
+let g:specloading=" 75 "
+mode
+autocmd ColorScheme * 
+\	if expand('<amatch>') !=# "exnvim_base"
+\|		runtime colors/exnvim_base.vim
+\|	endif
+\|	if !IsHighlightGroupDefined('StatementNorm')
+\|		call CopyHighlightGroup('Statement', 'StatementNorm')
+\|	endif
+\|	if !IsHighlightGroupDefined('StatementIns')
+\|		call CopyHighlightGroup('Statement', 'StatementIns')
+\|	endif
+\|	if !IsHighlightGroupDefined('StatementVisu')
+\|		call CopyHighlightGroup('Statement', 'StatementVisu')
+\|	endif
+\|	if !IsHighlightGroupDefined('LineNrNorm')
+\|		call CopyHighlightGroup('LineNr', 'LineNrNorm')
+\|	endif
+\|	if !IsHighlightGroupDefined('LineNrVisu')
+\|		call CopyHighlightGroup('LineNr', 'LineNrVisu')
+\|	endif
+\|	if !IsHighlightGroupDefined('LineNrIns')
+\|		call CopyHighlightGroup('LineNr', 'LineNrIns')
+\|	endif
+\|	if !IsHighlightGroupDefined('CursorLineNrNorm')
+\|		call CopyHighlightGroup('CursorLineNr', 'CursorLineNrNorm')
+\|	endif
+\|	if !IsHighlightGroupDefined('CursorLineNrIns')
+\|		call CopyHighlightGroup('Cursor', 'CursorLineNrIns')
+\|	endif
+\|	if !IsHighlightGroupDefined('CursorLineNrRepl')
+\|		call CopyHighlightGroup('Cursor', 'CursorLineNrRepl')
+\|	endif
+\|	if !IsHighlightGroupDefined('ModeIns')
+\|		call CopyHighlightGroup('Cursor', 'ModeIns')
+\|	endif
+\|	if !IsHighlightGroupDefined('ModeNorm')
+\|		call CopyHighlightGroup('CursorLineNr', 'ModeNorm')
+\|	endif
+\|	if !IsHighlightGroupDefined('ModeVisu')
+\|		call CopyHighlightGroup('Visual', 'ModeVisu')
+\|	endif
+\|	if !IsHighlightGroupDefined('ModeRepl')
+\|		call CopyHighlightGroup('CursorLineNrRepl', 'ModeRepl')
+\|	endif
+\|	if !IsHighlightGroupDefined('CursorLineNrVisu')
+\|		call CopyHighlightGroup('Visual', 'CursorLineNrVisu')
+\|	endif
+execute 'colorscheme' g:selected_colorscheme
 Showtab
 mode
 
@@ -878,9 +910,6 @@ function! RehandleExNvimConfig()
 		call Update_CursorLine_Style()
 	endif
 endfunction
-
-let g:specloading=" 50 "
-mode
 
 let mapleader = " "
 
@@ -911,9 +940,6 @@ endif
 if has('nvim')
 	execute "luafile ".expand(g:CONFIG_PATH)."/lua/lib/vim/plugins.lua"
 endif
-
-let g:specloading=" 75 "
-mode
 
 " NVIMRC FILE
 let g:PLUGINS_INSTALL_FILE_PATH = '~/.config/nvim/lua/packages/plugins.lua'
@@ -968,6 +994,8 @@ function! OnStart()
 		call timer_start(0, {->execute(printf('luafile %s', fnamemodify(g:PLUGINS_SETUP_FILE_PATH, ':h').'/noice/setup.lua'))})
 	endif
 endfunction
+let g:specloading=" 87 "
+mode
 function! Update_Cursor_Style_wrapper()
 	if exists('g:updating_cursor_style_supported')
 		call Update_Cursor_Style()

@@ -478,16 +478,6 @@ if &t_Co >= 256
     endif
     call CopyHighlightGroup("Normal", "NotifyBackground")
     hi NotifyBackground ctermbg=18 guibg=#505050
-    hi Loading0 ctermfg=0 ctermbg=9 cterm=bold guifg=#303030 guibg=#ff0000 gui=bold
-    hi Loading13 ctermfg=0 ctermbg=196 cterm=bold guifg=#303030 guibg=#ff4000 gui=bold
-    hi Loading25 ctermfg=0 ctermbg=208 cterm=bold guifg=#303030 guibg=#ff8000 gui=bold
-    hi Loading38 ctermfg=0 ctermbg=220 cterm=bold guifg=#303030 guibg=#ffc000 gui=bold
-    hi Loading50 ctermfg=0 ctermbg=11 cterm=bold guifg=#303030 guibg=#ffff00 gui=bold
-    hi Loading63 ctermfg=0 ctermbg=190 cterm=bold guifg=#303030 guibg=#c0ff00 gui=bold
-    hi Loading75 ctermfg=0 ctermbg=118 cterm=bold guifg=#303030 guibg=#80ff00 gui=bold
-    hi Loading88 ctermfg=0 ctermbg=82 cterm=bold guifg=#303030 guibg=#40ff00 gui=bold
-    hi Loading100 ctermfg=0 ctermbg=10 cterm=bold guifg=#303030 guibg=#00ff00 gui=bold
-    hi Loading ctermfg=0 ctermbg=10 cterm=bold guifg=#303030 guibg=#ffff9f gui=bold
     hi NormalNC ctermfg=15 ctermbg=NONE cterm=NONE guifg=#ffefff guibg=#303030 gui=NONE
     hi MsgArea ctermfg=15 ctermbg=NONE cterm=NONE guifg=#c6c6c6 guibg=#000020 gui=NONE
     hi MsgSeparator ctermfg=NONE ctermbg=57 cterm=NONE guifg=NONE guibg=#aff0a0 gui=NONE
@@ -665,15 +655,6 @@ if &t_Co >= 256
     endif
     call CopyHighlightGroup("Normal", "NotifyBackground")
     hi NotifyBackground ctermbg=18 guibg=#505050
-    hi Loading0 ctermfg=0 ctermbg=9 cterm=bold guifg=#303030 guibg=#ff0000 gui=bold
-    hi Loading13 ctermfg=0 ctermbg=196 cterm=bold guifg=#303030 guibg=#ff4000 gui=bold
-    hi Loading25 ctermfg=0 ctermbg=208 cterm=bold guifg=#303030 guibg=#ff8000 gui=bold
-    hi Loading38 ctermfg=0 ctermbg=220 cterm=bold guifg=#303030 guibg=#ffc000 gui=bold
-    hi Loading50 ctermfg=0 ctermbg=11 cterm=bold guifg=#303030 guibg=#ffff00 gui=bold
-    hi Loading63 ctermfg=0 ctermbg=190 cterm=bold guifg=#303030 guibg=#c0ff00 gui=bold
-    hi Loading75 ctermfg=0 ctermbg=118 cterm=bold guifg=#303030 guibg=#80ff00 gui=bold
-    hi Loading88 ctermfg=0 ctermbg=82 cterm=bold guifg=#303030 guibg=#40ff00 gui=bold
-    hi Loading100 ctermfg=0 ctermbg=10 cterm=bold guifg=#303030 guibg=#00ff00 gui=bold
     hi MsgArea ctermfg=0 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=#505050 gui=reverse
     " hi Statusline ctermfg=231 ctermbg=16 cterm=bold
     hi Statusline ctermfg=255 ctermbg=20 cterm=bold guifg=#ffffff guibg=#0080ff gui=NONE
