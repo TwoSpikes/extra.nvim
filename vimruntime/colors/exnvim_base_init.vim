@@ -1,6 +1,6 @@
 function! IsHighlightGroupDefined(group)
 	silent! let output = execute('hi '.a:group)
-	return output !~# 'E411:'
+	return output !~# 'E411:' && output !~# 'cleared'
 endfunction
 function! ReturnHighlightTerm(group, term)
    " Store output of group to variable
@@ -39,7 +39,9 @@ function! CopyHighlightGroup(src, dst)
 	execute printf("hi %s cterm=%s", a:dst, cterm)
 	execute printf("hi %s guifg=%s", a:dst, guifg)
 	execute printf("hi %s guibg=%s", a:dst, guibg)
-	execute printf("hi %s gui=%s", a:dst, gui)
+	if has('nvim') || has('gui')
+		execute printf("hi %s gui=%s", a:dst, gui)
+	endif
 endfunction
 
 augroup ExNvim_ColorScheme_After
