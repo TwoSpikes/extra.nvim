@@ -55,7 +55,7 @@ function! CopyHighlightGroup(src, dst)
     let gui = "NONE"
   endif
   exec printf("hi %s ctermfg=%s ctermbg=%s cterm=%s guifg=%s guibg=%s", a:dst, ctermfg, ctermbg, cterm, guifg, guibg)
-  if has('nvim') || has('gui')
+  if has('nvim') || has('gui_running')
     exec printf("hi %s gui=%s", a:dst, gui)
   endif
 endfunction

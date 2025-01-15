@@ -76,6 +76,7 @@ function! SaveVars()
 endfunction
 let g:termux_cursor_style = "bar"
 function! TermuxLoadCursorStyle()
+	let g:old_guicursor = &guicursor
 	if $TERMUX_VERSION !=# "" && filereadable(expand("~/.termux/termux.properties"))
 		if g:termux_cursor_style ==# 'block'
 			let &guicursor = 'a:block'
@@ -846,7 +847,9 @@ function! CopyHighlightGroup(src, dst)
 	execute printf("hi %s cterm=%s", a:dst, cterm)
 	execute printf("hi %s guifg=%s", a:dst, guifg)
 	execute printf("hi %s guibg=%s", a:dst, guibg)
-	execute printf("hi %s gui=%s", a:dst, gui)
+	if has('nvim') || has('gui_running')
+		execute printf("hi %s gui=%s", a:dst, gui)
+	endif
 endfunction
 Showtab
 mode
@@ -954,7 +957,8 @@ function! Update_Cursor_Style_wrapper()
 	endif
 endfunction
 function! OnQuitDisable()
-	call Update_Cursor_Style_wrapper()
+	let &guicursor = g:old_guicursor
+	unlet g:old_guicursor
 endfunction
 let s:MACRO_IS_ONE_WIN = "
 \	let s = 0

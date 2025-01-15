@@ -39,7 +39,7 @@ function! CopyHighlightGroup(src, dst)
 	execute printf("hi %s cterm=%s", a:dst, cterm)
 	execute printf("hi %s guifg=%s", a:dst, guifg)
 	execute printf("hi %s guibg=%s", a:dst, guibg)
-	if has('nvim') || has('gui')
+	if has('nvim') || has('gui_running')
 		execute printf("hi %s gui=%s", a:dst, gui)
 	endif
 endfunction
