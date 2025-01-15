@@ -17,7 +17,6 @@ autocmd! exnvim_term_closed *
 augroup! exnvim_term_closed
 delfunction AfterSomeEvent
 delfunction AfterUpdatingPlugins
-delfunction ApplyColorscheme
 delfunction BeforeUpdatingPlugins
 if has('nvim')
 	delfunction ChangeLanguage

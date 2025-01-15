@@ -803,13 +803,10 @@ function! Showtab()
 	endif
 	return s:result
 endfunction
-colorscheme exnvim_base
 command! -nargs=0 Showtab set statusline=%{%Showtab()%}
 
-function! IsHighlightGroupDefined(group)
-	silent! let output = execute('hi '.a:group)
-	return output !~# 'E411:'
-endfunction
+let g:specloading=" 75 "
+mode
 function! ReturnHighlightTerm(group, term)
    " Store output of group to variable
    let output = execute('hi ' . a:group)
@@ -817,6 +814,8 @@ function! ReturnHighlightTerm(group, term)
    " Find the term we're looking for
    return matchstr(output, a:term.'=\zs\S*')
 endfunction
+runtime colors/exnvim_base_init.vim
+execute 'colorscheme' g:selected_colorscheme
 function! CopyHighlightGroup(src, dst)
 	let ctermfg = ReturnHighlightTerm(a:src, "ctermfg")
 	if ctermfg ==# ""
@@ -849,55 +848,6 @@ function! CopyHighlightGroup(src, dst)
 	execute printf("hi %s guibg=%s", a:dst, guibg)
 	execute printf("hi %s gui=%s", a:dst, gui)
 endfunction
-let g:specloading=" 75 "
-mode
-autocmd ColorScheme * 
-\	if expand('<amatch>') !=# "exnvim_base"
-\|		runtime colors/exnvim_base.vim
-\|	endif
-\|	if !IsHighlightGroupDefined('StatementNorm')
-\|		call CopyHighlightGroup('Statement', 'StatementNorm')
-\|	endif
-\|	if !IsHighlightGroupDefined('StatementIns')
-\|		call CopyHighlightGroup('Statement', 'StatementIns')
-\|	endif
-\|	if !IsHighlightGroupDefined('StatementVisu')
-\|		call CopyHighlightGroup('Statement', 'StatementVisu')
-\|	endif
-\|	if !IsHighlightGroupDefined('LineNrNorm')
-\|		call CopyHighlightGroup('LineNr', 'LineNrNorm')
-\|	endif
-\|	if !IsHighlightGroupDefined('LineNrVisu')
-\|		call CopyHighlightGroup('LineNr', 'LineNrVisu')
-\|	endif
-\|	if !IsHighlightGroupDefined('LineNrIns')
-\|		call CopyHighlightGroup('LineNr', 'LineNrIns')
-\|	endif
-\|	if !IsHighlightGroupDefined('CursorLineNrNorm')
-\|		call CopyHighlightGroup('CursorLineNr', 'CursorLineNrNorm')
-\|	endif
-\|	if !IsHighlightGroupDefined('CursorLineNrIns')
-\|		call CopyHighlightGroup('Cursor', 'CursorLineNrIns')
-\|	endif
-\|	if !IsHighlightGroupDefined('CursorLineNrRepl')
-\|		call CopyHighlightGroup('Cursor', 'CursorLineNrRepl')
-\|	endif
-\|	if !IsHighlightGroupDefined('ModeIns')
-\|		call CopyHighlightGroup('Cursor', 'ModeIns')
-\|	endif
-\|	if !IsHighlightGroupDefined('ModeNorm')
-\|		call CopyHighlightGroup('CursorLineNr', 'ModeNorm')
-\|	endif
-\|	if !IsHighlightGroupDefined('ModeVisu')
-\|		call CopyHighlightGroup('Visual', 'ModeVisu')
-\|	endif
-\|	if !IsHighlightGroupDefined('ModeRepl')
-\|		call CopyHighlightGroup('CursorLineNrRepl', 'ModeRepl')
-\|	endif
-\|	if !IsHighlightGroupDefined('CursorLineNrVisu')
-\|		call CopyHighlightGroup('Visual', 'CursorLineNrVisu')
-\|	endif
-execute 'colorscheme' g:selected_colorscheme
 Showtab
 mode
 
