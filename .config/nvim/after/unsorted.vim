@@ -2126,6 +2126,24 @@ function! Remove(a)
 	echohl Normal
 endfunction
 command! -nargs=? -complete=file Rm call Remove(expand("<args>"))
+function! Md(dir)
+	if isdirectory(fnamemodify(a:dir, 'p'))
+		echohl ErrorMsg
+		echomsg "extra.nvim: Md: directort already exists"
+		echohl Normal
+		return
+	endif
+	silent! let result = mkdir(a:dir, 'p')
+	if result ==# 0
+		echohl ErrorMsg
+		echomsg "extra.nvim: error: Md: ".v:errmsg
+		echohl Normal
+		return
+	endif
+	execute 'chdir' a:dir
+	echomsg fnamemodify(a:dir, ':~:.')
+endfunction
+command! -nargs=1 -complete=file Md call Md("<args>")
 
 call OpenOnStart()
 
