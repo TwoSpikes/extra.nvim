@@ -2129,7 +2129,7 @@ command! -nargs=? -complete=file Rm call Remove(expand("<args>"))
 function! Md(dir)
 	if isdirectory(fnamemodify(a:dir, 'p'))
 		echohl ErrorMsg
-		echomsg "extra.nvim: Md: directort already exists"
+		echomsg "extra.nvim: Md: directory already exists"
 		echohl Normal
 		return
 	endif
