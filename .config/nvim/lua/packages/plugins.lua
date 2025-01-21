@@ -184,9 +184,6 @@ pckr.add({
 			'nvim-lua/plenary.nvim',
 		}
 	};
-	{
-		'lukas-reineke/indent-blankline.nvim',
-	};
 
 	{
 		"rcarriga/nvim-dap-ui",
@@ -530,6 +527,9 @@ pckr.add({
 	};
 	{
 		'TwoSpikes/ani-cli.nvim',
+	};
+	{
+		'TwoSpikes/hlchunk.nvim',
 	};
 });
 

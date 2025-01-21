@@ -125,6 +125,9 @@ end
 if plugin_installed("hex") then
 	require('packages.hex.init')
 end
+if plugin_installed("hlchunk") then
+	require('packages.hlchunk.init')
+end
 
 -- ExNvimOptionInComment LUA_REQUIRE_GOTO_PREFIX %CONFIG_PATH%/lua/%FILE%.lua
 -- ExNvimOptionInComment LUA_REQUIRE_GOTO_PREFIX %LOCALSHAREPATH%/site/pack/pckr/opt/*/lua/%FILE%.lua
