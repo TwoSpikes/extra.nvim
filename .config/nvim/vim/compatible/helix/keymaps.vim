@@ -125,6 +125,12 @@ function! SetYankMode()
 	endif
 endfunction
 function! V_DoD()
+	if !&modifiable
+		echohl ErrorMsg
+		echomsg "extra.nvim: V_DoD: file is not modifiable"
+		echohl Normal
+		return
+	endif
 	let register = v:register
 	let g:lx = line('.')
 	let g:ly = col('.')
@@ -810,6 +816,12 @@ function! V_DoBWhole()
 endfunction
 xnoremap B <cmd>call V_DoBWhole()<cr>
 function! V_DoC()
+	if !&modifiable
+		echohl ErrorMsg
+		echomsg "extra.nvim: V_DoC: file is not modifiable"
+		echohl Normal
+		return
+	endif
 	let g:lx = line('.')
 	let g:ly = col('.')
 	normal! o
