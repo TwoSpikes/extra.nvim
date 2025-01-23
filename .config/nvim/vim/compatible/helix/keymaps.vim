@@ -340,7 +340,28 @@ endfunction
 xnoremap : mz<esc>`z:<c-u>
 xnoremap / mz<esc>`z/
 xnoremap ? mz<esc>`z?
-nnoremap w <cmd>let g:lx=line('.')<bar>let g:ly=col('.')<bar>execute "normal! v".v:count1."e"<bar>let g:rx=line('.')<bar>let g:ry=col('.')<cr><cmd>let g:pseudo_visual = v:true<cr><cmd>let g:visual_mode="char"<cr><cmd>call ReorderRightLeft()<cr>
+function! N_DoW()
+	let g:pseudo_visual = v:true
+	let g:visual_mode="char"
+	let g:lx = line('.')
+	let g:ly = col('.')
+	let old_c = col('.')
+	let old_l = line('.')
+	if v:false
+	\|| charclass(getline(old_l)[old_c-1]) ==# 0
+	\&& charclass(getline(old_l)[old_c]) !=# 0
+	\|| charclass(getline(old_l)[old_c-1]) ==# 2
+	\&& charclass(getline(old_l)[old_c]) !=# 2
+	\|| charclass(getline(old_l)[old_c-1]) !=# 2
+	\&& charclass(getline(old_l)[old_c]) ==# 2
+	\|| old_c ==# col('$')
+		normal! l
+	endif
+	normal! vwh
+	let g:rx = line('.')
+	let g:ry = col('.')
+endfunction
+nnoremap w <cmd>call N_DoW()<cr>
 function! N_DoE()
 	let g:pseudo_visual = v:true
 	let g:visual_mode = "char"
@@ -704,11 +725,27 @@ endfunction
 xnoremap l <cmd>call V_DoL(v:count1)<cr>
 xnoremap <right> <cmd>call V_DoL(v:count1)<cr>
 function! V_DoW()
+	let g:lx = line('.')
+	let g:ly = col('.')
 	if g:pseudo_visual
-		execute "normal! \<esc>wviw"
-	else
-		normal! w
+		execute "normal! \<esc>"
 	endif
+	if v:false
+	\|| charclass(getline(g:lx)[g:ly-1]) ==# 0
+	\&& charclass(getline(g:lx)[g:ly]) !=# 0
+	\|| charclass(getline(g:lx)[g:ly-1]) ==# 2
+	\&& charclass(getline(g:lx)[g:ly]) !=# 2
+	\|| charclass(getline(g:lx)[g:ly-1]) !=# 2
+	\&& charclass(getline(g:lx)[g:ly]) ==# 2
+	\|| g:ly ==# col('$')
+		normal! l
+	endif
+	if g:pseudo_visual
+		normal! v
+	endif
+	normal! wh
+	let g:rx = line('.')
+	let g:ry = col('.')
 endfunction
 xnoremap w <cmd>call V_DoW()<cr>
 function! V_DoWWhole()
