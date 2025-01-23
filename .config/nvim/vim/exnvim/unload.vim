@@ -13,10 +13,19 @@ let g:compatible = "empty"
 
 autocmd! AlphaNvim_CinnamonNvim_JK_Workaround *
 augroup! AlphaNvim_CinnamonNvim_JK_Workaround
-autocmd! exnvim_term_closed *
-augroup! exnvim_term_closed
+if has('nvim')
+	autocmd! exnvim_term_closed *
+	augroup! exnvim_term_closed
+endif
 delfunction AfterSomeEvent
 delfunction AfterUpdatingPlugins
+if PluginExists('ani-cli.nvim')
+	delcommand Ani
+	delfunction AniCli
+	if exists('g:ANI_CLI_TO_EXIT')
+		unlet g:ANI_CLI_TO_EXIT
+	endif
+endif
 delfunction BeforeUpdatingPlugins
 if has('nvim')
 	delfunction ChangeLanguage
@@ -120,7 +129,9 @@ delfunction HandleKeystroke
 delfunction IfOneWinDo
 delfunction IfOneWinDoElse
 delfunction InitPckr
-delfunction IsHighlightGroupDefined
+if exists('*IsHighlightGroupDefined')
+	delfunction IsHighlightGroupDefined
+endif
 delfunction IsNo
 delfunction IsOneWin
 delfunction IsYes
@@ -131,7 +142,9 @@ delfunction LoadExNvimConfig
 delfunction LoadVars
 delfunction Lua_Require_Goto_Workaround_Wincmd_f
 delfunction MakeThingsThatRequireBeDoneAfterPluginsLoaded
-delfunction Mason_better
+if exists('*Mason_better')
+	delfunction Mason_better
+endif
 delfunction MatchDisable
 delfunction MatchEnable
 set tabline=
@@ -149,6 +162,8 @@ autocmd! exnvim_mode_changed_numbertoggle *
 augroup! exnvim_mode_changed_numbertoggle
 autocmd! neo-tree *
 augroup! neo-tree
+autocmd! netrw *
+augroup! netrw
 delfunction Numbertoggle
 delfunction NumbertoggleAll
 delfunction Numbertoggle_no
@@ -167,7 +182,9 @@ delfunction OpenTerm
 delfunction OpenTermProgram
 delfunction OpenWithXdg
 delfunction Pad
-delfunction Pad_middle
+if exists('*Pad_middle')
+	delfunction Pad_middle
+endif
 delfunction PleaseDoNotCloseIfNotOneWin
 delfunction PleaseDoNotCloseIfOneWin
 delfunction PleaseDoNotCloseWrapper
@@ -183,7 +200,9 @@ delfunction PrePad
 delfunction PreparePersistedNvim
 delfunction PrepareWhichKey
 delfunction PreserveAndDo
-delfunction RebindMenus
+if PluginExists('vim-quickui')
+	delfunction RebindMenus
+endif
 delfunction RedefineProcessGBut
 delfunction RehandleExNvimConfig
 delfunction Remove
@@ -228,20 +247,32 @@ delfunction SynStack
 delfunction TermRunning
 delfunction TermuxLoadCursorStyle
 delfunction TermuxSaveCursorStyle
+delcommand ToggleFullscreen
 delfunction ToggleFullscreen
+delcommand TogglePagerMode
 delfunction TogglePagerMode
 delfunction Trim
-delfunction Update_CursorLine
-delfunction Update_CursorLine_Style
-delfunction Update_Cursor_Style
-delfunction Update_Cursor_Style_wrapper
-nunmap <c-n>
-xunmap <c-n>
-nunmap <Plug>(VM-Find-Under)
-xunmap <Plug>(VM-Find-Subword-Under)
-delfunction vm#commands#ctrln
-delfunction vm#themes#statusline
-delfunction VMInfos
+if exists('*Update_CursorLine')
+	delfunction Update_CursorLine
+endif
+if exists('*Update_CursorLine_Style')
+	delfunction Update_CursorLine_Style
+endif
+if exists('*Update_Cursor_Style')
+	delfunction Update_Cursor_Style
+endif
+if exists('*Update_Cursor_Style_wrapper')
+	delfunction Update_Cursor_Style_wrapper
+endif
+if PluginExists('vim-visual-multi')
+	nunmap <c-n>
+	xunmap <c-n>
+	nunmap <Plug>(VM-Find-Under)
+	xunmap <Plug>(VM-Find-Subword-Under)
+	delfunction vm#commands#ctrln
+	delfunction vm#themes#statusline
+	delfunction VMInfos
+endif
 delfunction WhenceGroup
 delfunction X_CommentOut
 delfunction X_CommentOutDefault
@@ -250,9 +281,11 @@ delfunction X_Comment_Move_Right
 delfunction X_UncommentOut
 delfunction X_UncommentOutDefault
 
-delcommand Alpha
-delcommand AlphaRedraw
-delcommand AlphaRemap
+if PluginInstalled('alpha')
+	delcommand Alpha
+	delcommand AlphaRedraw
+	delcommand AlphaRemap
+endif
 if PluginInstalled('bqf')
 	delcommand BqfAutoToggle
 endif
@@ -359,6 +392,7 @@ if filereadable(expand(g:CONFIG_PATH.'/vim/xterm-color-table.vim'))
 	delcommand Oxct
 	delcommand Sxct
 	delcommand Txct
+	delcommand Vxct
 endif
 if PluginExists('vim-floaterm')
 	delcommand FloatermFirst
@@ -462,7 +496,9 @@ if PluginExists('vim-man')
 	delcommand Sman
 	delcommand Mangrep
 endif
-delcommand Mason
+if PluginInstalled('mason')
+	delcommand Mason
+endif
 if PluginInstalled('neogen')
 	delcommand Neogen
 endif
@@ -496,7 +532,9 @@ if PluginInstalled('null-ls')
 	delcommand NullLsInfo
 	delcommand NullLsLog
 endif
-delcommand PackerUpdate
+if exists('*PackerUpdate')
+	delcommand PackerUpdate
+endif
 if PluginInstalled('pckr')
 	delcommand Pckr
 endif
@@ -507,7 +545,6 @@ endif
 if PluginExists('vim-quickui')
 	delcommand QuickUI
 endif
-delfunction PluginExists
 delcommand Rm
 delcommand SWrap
 if PluginInstalled('persisted')
@@ -524,4 +561,106 @@ delcommand Showtab
 if PluginInstalled('spectre')
 	delcommand Spectre
 endif
+if PluginInstalled('nvim-treesitter')
+	delcommand TSBufDisable
+	delcommand TSBufEnable
+	delcommand TSBufToggle
+	delcommand TSCaptureUnderCursor
+	delcommand TSConfigInfo
+	delcommand TSDisable
+	delcommand TSEditQuery
+	delcommand TSEditQueryUserAfter
+	delcommand TSEnable
+	delcommand TSHighlightCapturesUnderCursor
+	delcommand TSInstall
+	delcommand TSInstallFromGrammar
+	delcommand TSInstallInfo
+	delcommand TSInstallSync
+	delcommand TSModuleInfo
+	delcommand TSNodeUnderCursor
+	delcommand TSPlaygroundToggle
+	delcommand TSToggle
+	delcommand TSUninstall
+	delcommand TSUpdate
+	delcommand TSUpdateSync
+endif
+if PluginExists('tagbar')
+	delcommand Tagbar
+	delcommand TagbarClose
+	delcommand TagbarCurrentTag
+	delcommand TagbarDebug
+	delcommand TagbarDebugEnd
+	delcommand TagbarForceUpdate
+	delcommand TagbarGetTypeConfig
+	delcommand TagbarJump
+	delcommand TagbarJumpNext
+	delcommand TagbarJumpPrev
+	delcommand TagbarOpen
+	delcommand TagbarOpenAutoClose
+	delcommand TagbarSetFoldlevel
+	delcommand TagbarShowTag
+	delcommand TagbarToggle
+	delcommand TagbarTogglePause
+endif
+if PluginInstalled('todo-comments')
+	delcommand TodoTelescope
+endif
+if PluginInstalled('telescope')
+	delcommand Telescope
+endif
+if PluginExists('vim-terminator')
+	delcommand TerminatorOpenTerminal
+	delcommand TerminatorOutputBufferClose
+	delcommand TerminatorOutputBufferToggle
+	delcommand TerminatorRunAltCmd
+	delcommand TerminatorRunFileInOutputBuffer
+	delcommand TerminatorRunFileInTerminal
+	delcommand TerminatorRunPartOfFileInOutputBuffer
+	delcommand TerminatorRunPartOfFileInTerminal
+	delcommand TerminatorSendDelimiterToTerminal
+	delcommand TerminatorSendSelectionToTerminal
+	delcommand TerminatorSendToTerminal
+	delcommand TerminatorStartREPL
+	delcommand TerminatorStopRun
+endif
+if PluginExists('vim-man')
+	delcommand Tman
+endif
+if PluginInstalled('todo-comments')
+	delcommand TodoFzfLua
+	delcommand TodoLocList
+	delcommand TodoQuickFix
+	delcommand TodoTrouble
+endif
+if PluginInstalled('trouble')
+	delcommand Trouble
+endif
+if PluginExists('vim-visual-multi')
+	delcommand VMClear
+	delcommand VMDebug
+	delcommand VMFromSearch
+	delcommand VMLive
+	delcommand VMRegisters
+	delcommand VMSearch
+	delcommand VMTheme
+endif
+if PluginExists('vital.vim')
+	delcommand Vitalize
+endif
+if PluginExists('vim-man')
+	delcommand Vman
+endif
+if PluginExists('vim-vsnip')
+	delcommand VsnipOpen
+	delcommand VsnipOpenEdit
+	delcommand VsnipOpenSplit
+	delcommand VsnipOpenVsplit
+	delcommand VsnipYank
+endif
+if PluginInstalled('which-key')
+	delcommand WhichKey
+endif
+delcommand Write
 delfunction PluginInstalled
+delfunction PluginExists
+

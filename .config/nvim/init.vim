@@ -1072,6 +1072,10 @@ if has('nvim')
 	function! PluginInstalled(name)
 		return luaeval('plugin_installed(_A[1])', [a:name])
 	endfunction
+else
+	function! PluginInstalled(name)
+		return v:false
+	endfunction
 endif
 
 function! InitPckr()
