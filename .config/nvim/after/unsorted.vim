@@ -2145,6 +2145,179 @@ function! Md(dir)
 endfunction
 command! -nargs=1 -complete=file Md call Md("<args>")
 
+let g:exnvim_sh_funcs = {}
+function! ShSource(file=expand("%"))
+	if !executable('bash')
+		echohl ErrorMsg
+		echomsg "extra.nvim: bash is not installed"
+		echohl Normal
+		return
+	endif
+	if a:file ==# ""
+		let file = expand("%")
+	else
+		let file = a:file
+	endif
+	let separation_key = GetRandomName(20)
+	let env = trim(system('bash --noprofile --norc -c ". '.expand(file).'>/dev/null 2>&1;env;echo '.separation_key.';declare -f"'))
+	if v:shell_error !=# 0
+		echohl ErrorMsg
+		echomsg "extra.nvim: ShSource: something went wrong"
+		echohl Normal
+		return
+	endif
+	let env = split(env, "\n")
+	let i = 0
+	for item in env
+		if item ==# separation_key
+			unlet separation_key
+			break
+		endif
+		let i += 1
+		let akqjwbsu = matchlist(item, '^\([a-zA-Z0-9_]\+\)=\(.*\)$')
+		let varname = akqjwbsu[1]
+		let value = akqjwbsu[2]
+		unlet akqjwbsu
+		if v:false
+		\|| varname ==# "SHELL"
+		\|| varname ==# "COLORTERM"
+		\|| varname ==# "HISTCONTROL"
+		\|| varname ==# "HISTSIZE"
+		\|| varname ==# "PREFIX"
+		\|| varname ==# "ANDROID_ART_ROOT"
+		\|| varname ==# "COC_DATA_HOME"
+		\|| varname ==# "TERMUX_APP_PID"
+		\|| varname ==# "ANDROID_TZDATA_ROOT"
+		\|| varname ==# "ANDROID_ROOT"
+		\|| varname ==# "XDG_CONFIG_HOME"
+		\|| varname ==# "TERMUX_MAIN_PACKAGE_FORMAT"
+		\|| varname ==# "_"
+			continue
+		endif
+		call setenv(varname, value)
+	endfor
+	if exists('separation_key')
+		echohl ErrorMsg
+		echomsg "extra.nvim: ShSource: something went wrong"
+		echohl Normal
+		return
+	endif
+	let env = env[i+1:]
+	unlet i
+	let funcname = v:null
+	let funcval = ""
+	for item in env
+		if item =~# '^[a-zA-Z0-9]\+ () $'
+			let funcname = matchlist(item, '^\([a-zA-Z0-9]\+\) () $')[1]
+			continue
+		endif
+		if item ==# "{ "
+			let funcval = ""
+			continue
+		endif
+		if item ==# "}"
+			let g:exnvim_sh_funcs[funcname] = funcval
+			continue
+		endif
+		let funcval .= item[4:]."\n"
+	endfor
+endfunction
+command! -nargs=? -complete=file ShSource call ShSource("<args>")
+function! ShFunction(funcname)
+	echomsg g:exnvim_sh_funcs[a:funcname]
+endfunction
+command! -nargs=1 -complete=file ShFunction call ShFunction("<args>")
+function! ShRun(funcname)
+	let funcval = g:exnvim_sh_funcs[a:funcname]
+	let funcval = split(funcval, "\n")
+	let funcval = join(funcval, '')
+	let separation_key = GetRandomName(20)
+	let env = trim(system('bash --noprofile --norc -c '.Repr_Shell(funcval, v:false).'">/dev/null 2>&1;env;echo '.separation_key.';declare -f"'))
+	let current_env = trim(system('env'))
+	let current_env = split(current_env, "\n")
+	let current_envs = []
+	for var in current_env
+		let current_envs += [matchlist(var, '^\([a-zA-Z0-9_]\+\)=\(.*\)$')[1]]
+	endfor
+	unlet current_env
+	if v:shell_error ==# 2
+		echohl ErrorMsg
+		echomsg "extra.nvim: ShRun: syntax error"
+		echohl Normal
+		return
+	elseif v:shell_error !=# 0
+		echohl ErrorMsg
+		echomsg "extra.nvim: ShRun: something went wrong: errcode ".v:shell_error
+		echohl Normal
+		return
+	endif
+	let env = split(env, "\n")
+	let envs = []
+	let i = 0
+	for item in env
+		if item ==# separation_key
+			unlet separation_key
+			break
+		endif
+		let i += 1
+		let avwuqvq = matchlist(item, '^\([a-zA-Z0-9_]\+\)=\(.*\)$')
+		let varname = avwuqvq[1]
+		let envs += [varname]
+		let value = avwuqvq[2]
+		unlet avwuqvq
+		if v:false
+		\|| varname ==# "SHELL"
+		\|| varname ==# "COLORTERM"
+		\|| varname ==# "HISTCONTROL"
+		\|| varname ==# "HISTSIZE"
+		\|| varname ==# "PREFIX"
+		\|| varname ==# "ANDROID_ART_ROOT"
+		\|| varname ==# "COC_DATA_HOME"
+		\|| varname ==# "TERMUX_APP_PID"
+		\|| varname ==# "ANDROID_TZDATA_ROOT"
+		\|| varname ==# "ANDROID_ROOT"
+		\|| varname ==# "XDG_CONFIG_HOME"
+		\|| varname ==# "TERMUX_MAIN_PACKAGE_FORMAT"
+		\|| varname ==# "_"
+			continue
+		endif
+		call setenv(varname, value)
+	endfor
+	for var in current_envs
+		if index(envs, var) ==# -1
+			execute "unlet $".var
+		endif
+	endfor
+	unlet envs
+	unlet current_envs
+	if exists('separation_key')
+		echohl ErrorMsg
+		echomsg "extra.nvim: ShRun: something went wrong"
+		echohl Normal
+		return
+	endif
+	let env = env[i+1:]
+	unlet i
+	let funcname = v:null
+	let funcval = ""
+	for item in env
+		if item =~# '^[a-zA-Z0-9]\+ () $'
+			let funcname = matchlist(item, '^\([a-zA-Z0-9]\+\) () $')[1]
+			continue
+		endif
+		if item ==# "{ "
+			let funcval = ""
+			continue
+		endif
+		if item ==# "}"
+			let g:exnvim_sh_funcs[funcname] = funcval
+			continue
+		endif
+		let funcval .= item[4:]."\n"
+	endfor
+endfunction
+command! -nargs=1 -complete=file ShRun call ShRun("<args>")
+
 call OpenOnStart()
 
 let g:exnvim_fully_loaded += 1

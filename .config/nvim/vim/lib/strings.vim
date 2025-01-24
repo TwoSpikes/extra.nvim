@@ -78,7 +78,7 @@ function! Repr_Vim_Grep_Sub(string)
 	return result
 endfunction
 
-function! Repr_Shell(string)
+function! Repr_Shell(string, transform_newlines=v:true)
 	let result = ''
 	let state = 'norm'
 	for char in a:string
@@ -129,7 +129,7 @@ function! Repr_Shell(string)
 				let result .= '\|'
 			elseif char ==# ';'
 				let result .= '\;'
-			elseif char ==# "\n"
+			elseif char ==# "\n" && a:transform_newlines
 				let result .= '\\n'
 			else
 				let result .= char

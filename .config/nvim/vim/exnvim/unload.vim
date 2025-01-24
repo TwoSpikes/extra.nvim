@@ -195,6 +195,7 @@ delcommand SaveAsAndRename
 delfunction SaveAs
 delfunction SaveAsAndRename
 delfunction SaveAsBase
+delcommand ShSource
 delcommand Killbuffer
 delfunction PrePad
 delfunction PreparePersistedNvim
@@ -499,6 +500,7 @@ endif
 if PluginInstalled('mason')
 	delcommand Mason
 endif
+delcommand Md
 if PluginInstalled('neogen')
 	delcommand Neogen
 endif
@@ -657,10 +659,9 @@ if PluginExists('vim-vsnip')
 	delcommand VsnipOpenVsplit
 	delcommand VsnipYank
 endif
+delfunction PluginExists
 if PluginInstalled('which-key')
 	delcommand WhichKey
 endif
-delcommand Write
 delfunction PluginInstalled
-delfunction PluginExists
-
+delcommand Write

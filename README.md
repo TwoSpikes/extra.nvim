@@ -32,6 +32,7 @@ Screenshots
 ## Dependencies
 
 - `neovim` or `vim`
+- [`bash`](https://git.savannah.gnu.org/cgit/bash.git/) >=2.0
 - `nodejs` (for `coc.nvim`)
 - `jq` (for `coc.nvim`)
 - `git` (to download plugins)
@@ -123,6 +124,37 @@ $ EXNVIM_CONFIG_PATH=~/dnsjajsbdn/exnvim/ nvim
 :set nocompatible
 :set termguicolors
 :colorscheme blueorange
+```
+
+## `:ShSource`, `:ShFunction`, `:ShRun`
+
+### `:ShSource`
+
+Source the current [bash](https://git.savannah.gnu.org/cgit/bash.git/) script
+
+### `:ShSource FILE`
+
+Source a [bash](https://git.savannah.gnu.org/cgit/bash.git/) script FILE
+
+### `:ShFunction FUNC`
+
+Show [bash](https://git.savannah.gnu.org/cgit/bash.git/) function FUNC
+
+### `:ShRun FUNC`
+
+Run [bash](https://git.savannah.gnu.org/cgit/bash.git/) function FUNC
+
+### Example
+
+You can you these commands, for example, to activate and deactivate [Python](https://github.com/python/cpython) virtual environments
+
+```
+:cd django_project
+:e venv/bin/activate
+:ShSource
+:echo "You activated pyvenv"
+:ShRun deactivate
+:echo "You deactivated pyvenv"
 ```
 
 # Contribution
