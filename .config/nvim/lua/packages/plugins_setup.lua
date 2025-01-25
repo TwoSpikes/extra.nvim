@@ -116,7 +116,7 @@ end
 if plugin_exists("vim-sneak") then
 	require('packages.sneak.init')
 end
-if plugin_installed("hlargs") and false then
+if plugin_installed("hlargs") then
 	require('packages.hlargs.init')
 end
 if plugin_installed("beacon") then

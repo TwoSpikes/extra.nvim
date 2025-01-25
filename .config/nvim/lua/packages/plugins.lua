@@ -512,12 +512,12 @@ if vim.fn.match(vim.g.compatible, '^helix') == -1 then
 		'airblade/vim-gitgutter',
 	});
 end
--- 	{
--- 		'm-demare/hlargs.nvim',
--- 	};
 pckr.add({
 	{
 		'danilamihailov/beacon.nvim',
+	};
+	{
+		'm-demare/hlargs.nvim',
 	};
 	{
 		'RaafatTurki/hex.nvim',
