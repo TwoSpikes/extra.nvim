@@ -2,268 +2,302 @@ if !has('nvim') || !PluginExists('vim-quickui')
 	finish
 endif
 
-function! ChangeLanguage()
-	if g:language ==# 'russian'
-		let s:off = 'Выкл.'
-		let s:on = 'Вкл.'
-		let s:disable = 'Выключить'
-		let s:enable = 'Включить'
-		let s:make_relative = 'относительными'
-		let s:make_absolute = 'абсолютными'
+function! ChangeLanguage(namespace_name='system', language=g:language)
+	let function_name_base = 'ChangeLanguage_'.a:namespace_name
 
-		let s:file_label = '&f:Файл'
-		let s:new_file_label = '&w:Новый файл'
-		let s:close_label = '&o:Закрыть'
-		let s:force_close_label = '&e:Закрыть всё равно'
-		let s:save_label = '&s:Сохранить'
-		let s:save_all_label = '&a:Сохранить всё'
-		let s:save_as_label = '&v:Сохранить как'
-		let s:save_as_and_edit_label = '&i:Сохранить как и зайти'
-		let s:update_plugins_label = '&p:Обновить плагины'
-		let s:update_coc_label = "&c:Обновить coc lsp'ы"
-		let s:update_treesitter_label = '&t:Обновить TreeSitter'
-		let s:redraw_screen_label = '&n:Перерисовать экран'
-		let s:hide_highlightings_label = '&d:Скрыть подсвечивание'
-		let s:toggle_fullscreen_label = '&f:Переключ.полноэкр.реж.'
-		let s:exit_label = '&x:Выйти'
-		let s:exit_wo_confirm_label = '&m:Выйти всё равно'
+	call call(function_name_base, [])
 
-		let s:window_label = '&w:Окно'
-		let s:kill_buffer_label = '&u:Убить буффер'
-		let s:select_buffer_label = '&s:Выбрать буффер'
-		let s:search_word_using_spectre_label = '&w:Искать слово в Spectre'
-		let s:open_file_in_tab_label = '&t:Открыть файл в нов.вкл.'
-		let s:open_file_in_buffer_label = '&b:Открыть файл а буффере'
-		let s:toggle_file_tree_label = '&f:Переключ.дерево файлов'
-		let s:telescope_fuzzy_find_label = '&z:Поиск Telescope'
-		let s:open_file_using_ranger_label = '&r:Открыть файл в ranger'
-		let s:recently_opened_files_label = '&c:Недавно открытые файлы'
-		let s:make_window_only_label = '&m:Закрыть остальные окна'
-		let s:previous_window_label = '&p:Предыдущее окно'
-		let s:next_window_label = '&n:Следующее окно'
-		let s:horizontally_split_label = '&i:Горизонтальный сплит'
-		let s:vertically_split_label = '&v:Вертикальный сплит'
-		let s:open_terminal_label = '&o:Открыть терминал'
-		let s:open_far_mc_label = '&e:Открыть Far/Mc'
-		let s:open_lazygit_label = '&g:Открыть lazygit'
-		let s:open_start_menu_label = '&a:Открыть главное меню'
+	if !exists('*'.function_name_base)
+		echohl ErrorMsg
+		echomsg "extra.nvim: ChangeLanguage: no such namespace: ".a:namespace_name
+		echohl Normal
+		return
+	endif
 
-		let s:text_label = '&t:Текст'
-		let s:copy_line_label = '&y:Копировать строку'
-		let s:delete_line_label = '&d:Удалить строку'
-		let s:cut_line_label = '&u:Вырезать строку'
-		let s:paste_after_label = '&p:Вставить после'
-		let s:paste_before_label = '&e:Вставить перед'
-		let s:join_lines_label = '&n:Соединить строки'
-		let s:force_join_lines_label = '&r:Соединить строки!'
-		let s:forward_find_whole_word_label = '&f:Искать вперёд <слово>'
-		let s:backward_find_whole_word_label = '&b:Искать назад <слово>'
-		let s:forward_find_word_label = '&r:Искать вперёд слово'
-		let s:backward_find_word_label = '&a:Искать назад слово'
-		let s:comment_out_label = '&c:Закомментировать'
-		let s:uncomment_out_label = '&u:Раскомментировать'
-		let s:go_to_multicursor_mode_label = '&m:Режим мультикурсора'
-		let s:show_hlgroup_label = 'Показать hl&group'
-		let s:whence_hlgroup_label = '&w:Откуда hlgroup'
-		let s:select_all_label = '&s:Выбрать всё'
-		let s:toggle_tagbar_label = 'Переключить &tagbar'
-		let s:generate_annotation_label = '&o:Создать аннотацию'
-
-		let s:lsp_label = '&LSP'
-		let s:git_label = '&Git'
-
-		let s:option_label = '&o:Опции'
-		let s:set_spell = '&s:Проверка орфографии'
-		let s:set_paste = '&p:Режим вставки'
-		let s:set_cursor_column = '&c:Подсветка колонки'
-		let s:set_cursor_line = '&i:Подсветка линии'
-		let s:cursor_line_style = '&u:Стиль подсветки линии'
-		let s:set_line_numbers = '&n:Номера строк'
-		let s:line_numbers_style = '&s:Стиль номеров строк'
-
-		let s:config_label = '&c:Конфиг'
-		let s:open_init_vim = 'Открыть &init.vim'
-		let s:open_plugins_list = '&p:Открыть список плагинов'
-		let s:open_plugins_setup = '&u:Открыть установки плагинов'
-		let s:open_lsp_settings = 'Открыть настройки L&SP'
-		let s:open_exnvim_config = 'Открыть конфигурацию ex&nvim'
-		let s:open_colorschemes_dir = '&c:Отк.дир-ю с цветов.схемами'
-		let s:reload_init_vim = '&r:Перезагрузить init.vim'
-		let s:reload_plugins_list = '&e:Перезагрузить список плаг.'
-		let s:reload_plugins_setup = '&o:Перезагруз.установки плаг.'
-		let s:reload_lsp_setup = '&a:Перезагрузит.установки LSP'
-		let s:generate_exnvim_config = '&g:Сгенериров.конфигур.exnvim'
-		let s:reload_exnvim_config = 'Перезагруз.конфигурац.e&xnvim'
-		let s:open_termux_config = 'Открыть конфигурац.&Termux'
-		let s:reload_termux_config = 'Перезагруз.конфигурац.Ter&mux'
-
-		let s:help_label = '&h:Помощь'
-		let s:vim_cheatsheet = '&c:Vim шпаргалка'
-		let s:exnvim_cheatsheet = 'Шпаргалка &extra.nvim'
-		let s:tips = '&p:Советы'
-		let s:tutorial = '&t:Руководство'
-		let s:quick_reference = '&q:Краткая справка'
-		let s:summary = '&s:Краткое содержание'
-		let s:intro_screen = '&i:Начальный экран'
-		if has('nvim')
-			let s:vim_version = 'Версия Neo&Vim'
-		else
-			let s:vim_version = 'Версия &Vim'
-		endif
+	if exists('*'.function_name_base.'_'.a:language)
+		let language = a:language
 	else
-		let s:off = 'Off'
-		let s:on = 'On'
-		let s:disable = 'Disable'
-		let s:enable = 'Enable'
-		let s:make_relative = 'relative'
-		let s:make_absolute = 'absolute'
+		let language = 'english'
+	endif
+	let function_name = function_name_base.'_'.language
+	unlet function_name_base
 
-		let s:file_label = '&File'
-		let s:new_file_label = 'Ne&w file'
-		let s:close_label = 'Cl&ose'
-		let s:force_close_label = 'Force clos&e'
-		let s:save_label = '&Save'
-		let s:save_all_label = 'Save &all'
-		let s:save_as_label = 'Sa&ve as'
-		let s:save_as_and_edit_label = 'Save as and ed&it'
-		let s:update_plugins_label = 'Update &plugins'
-		let s:update_coc_label = 'Update &coc servers'
-		let s:update_treesitter_label = 'Update &TreeSitter'
-		let s:redraw_screen_label = 'Redraw scree&n'
-		let s:hide_highlightings_label = 'Hi&de highlightings'
-		let s:toggle_fullscreen_label = 'Toggle &fullscreen'
-		let s:exit_label = 'E&xit'
-		let s:exit_wo_confirm_label = 'Exit w/o confir&m'
+	call call(function_name, [])
+endfunction
 
-		let s:window_label = '&Window'
-		let s:kill_buffer_label = 'Kill b&uffer'
-		let s:select_buffer_label = '&Select buffer'
-		let s:search_word_using_spectre_label = 'Find &word using Spectre'
-		let s:open_file_in_tab_label = 'Open file in &tab'
-		let s:open_file_in_buffer_label = 'Open file in &buffer'
-		let s:toggle_file_tree_label = 'Toggle &file tree'
-		let s:telescope_fuzzy_find_label = 'Telescope fu&zzy find'
-		let s:open_file_using_ranger_label = 'Open file using &ranger'
-		let s:recently_opened_files_label = 'Re&cently opened files'
-		let s:make_window_only_label = '&Make window only'
-		let s:previous_window_label = '&Previous window'
-		let s:next_window_label = '&Next window'
-		let s:horizontally_split_label = 'Hor&izontally split'
-		let s:vertically_split_label = '&Vertically split'
-		let s:open_terminal_label = '&Open terminal'
-		let s:open_far_mc_label = 'Op&en Far/Mc'
-		let s:open_lazygit_label = 'Open lazy&git'
-		let s:open_start_menu_label = 'Open st&art menu'
-
-		let s:text_label = '&Text'
-		let s:copy_line_label = 'Cop&y line'
-		let s:delete_line_label = '&Delete line'
-		let s:cut_line_label = 'C&ut line'
-		let s:paste_after_label = '&Paste after'
-		let s:paste_before_label = 'Past&e before'
-		let s:join_lines_label = 'Joi&n lines'
-		let s:force_join_lines_label = 'Fo&rce join lines'
-		let s:forward_find_whole_word_label = '&Forward find <word>'
-		let s:backward_find_whole_word_label = '&Backward find <word>'
-		let s:forward_find_word_label = 'Fo&rward find word'
-		let s:backward_find_word_label = 'B&ackward find word'
-		let s:comment_out_label = '&Comment out'
-		let s:uncomment_out_label = '&Uncomment out'
-		let s:go_to_multicursor_mode_label = 'Go to &multicursor mode'
-		let s:show_hlgroup_label = 'Show hl&group'
-		let s:whence_hlgroup_label = '&Whence hlgroup'
-		let s:select_all_label = '&Select all'
-		let s:toggle_tagbar_label = '&Toggle tagbar'
-		let s:generate_annotation_label = 'Generate ann&otation'
-
-		let s:lsp_label = '&LSP'
-		let s:git_label = '&Git'
-
-		let s:option_label = '&Option'
-		let s:set_spell = 'Set &Spell'
-		let s:set_paste = 'Set &Paste'
-		let s:set_cursor_column = 'Set Cursor &Column'
-		let s:set_cursor_line = 'Set Cursor L&ine'
-		let s:cursor_line_style = 'C&ursor line style'
-		let s:set_line_numbers = 'Set Line &numbers'
-		let s:line_numbers_style = 'Line numbers &style'
-
-		let s:config_label = '&Config'
-		let s:open_init_vim = 'Open &init.vim'
-		let s:open_plugins_list = 'Open &plugins list'
-		let s:open_plugins_setup = 'Open plugins set&up'
-		let s:open_lsp_settings = 'Open lsp &settings'
-		let s:open_exnvim_config = 'Open ex&nvim config'
-		let s:open_colorschemes_dir = 'Open &colorschemes dir'
-		let s:reload_init_vim = '&Reload init.vim'
-		let s:reload_plugins_list = 'R&eload plugins list'
-		let s:reload_plugins_setup = 'Rel&oad plugins setup'
-		let s:reload_lsp_setup = 'Relo&ad LSP setup'
-		let s:generate_exnvim_config = '&Generate extra.nvim config'
-		let s:reload_exnvim_config = 'Reload e&xnvim config'
-		let s:open_termux_config = 'Open &Termux config'
-		let s:reload_termux_config = 'Reload Ter&mux config'
-
-		let s:help_label = '&Help'
-		let s:vim_cheatsheet = 'Vim &cheatsheet'
-		let s:exnvim_cheatsheet = '&extra.nvim cheatsheet'
-		let s:tips = 'Ti&ps'
-		let s:tutorial = '&Tutorial'
-		let s:quick_reference = '&Quick Reference'
-		let s:summary = '&Summary'
-		let s:intro_screen = '&Intro screen'
-		if has('nvim')
-			let s:vim_version = 'NeoVim &version'
+function! ChangeLanguage_system()
+	if mode() !~# '^n'
+		let s:esc_command = 'exec "normal! \<c-\>\<c-n>"'
+	else
+		if exists('g:Vm') && g:Vm['buffer'] !=# 0
+			let s:esc_command = b:VM_Selection.Vars.noh."call vm#reset()"
+		elseif @/ !=# ""
+			let s:esc_command = 'let @/ = ""'
 		else
-			let s:vim_version = 'Vim &version'
+			let s:esc_command = "normal! \<esc>"
 		endif
 	endif
 endfunction
 
-function! ChangeNames()
-	if mode() !~# '^n'
-		if g:language ==# 'russian'
-			let s:esc_label = "&r:Выйти в нормальный режим"
-		else
-			let s:esc_label = "Go to No&rmal mode"
-		endif
-		let s:esc_command = 'exec "normal! \<c-\>\<c-n>"'
-		return
+function! ChangeLanguage_system_english()
+	let s:off = 'Off'
+	let s:on = 'On'
+	let s:disable = 'Disable'
+	let s:enable = 'Enable'
+	let s:make_relative = 'relative'
+	let s:make_absolute = 'absolute'
+
+	let s:file_label = '&File'
+	let s:new_file_label = 'Ne&w file'
+	let s:close_label = 'Cl&ose'
+	let s:force_close_label = 'Force clos&e'
+	let s:save_label = '&Save'
+	let s:save_all_label = 'Save &all'
+	let s:save_as_label = 'Sa&ve as'
+	let s:save_as_and_edit_label = 'Save as and ed&it'
+	let s:update_plugins_label = 'Update &plugins'
+	let s:update_coc_label = 'Update &coc servers'
+	let s:update_treesitter_label = 'Update &TreeSitter'
+	let s:redraw_screen_label = 'Redraw scree&n'
+	let s:hide_highlightings_label = 'Hi&de highlightings'
+	let s:toggle_fullscreen_label = 'Toggle &fullscreen'
+	let s:exit_label = 'E&xit'
+	let s:exit_wo_confirm_label = 'Exit w/o confir&m'
+
+	let s:window_label = '&Window'
+	let s:kill_buffer_label = 'Kill b&uffer'
+	let s:select_buffer_label = '&Select buffer'
+	let s:search_word_using_spectre_label = 'Find &word using Spectre'
+	let s:open_file_in_tab_label = 'Open file in &tab'
+	let s:open_file_in_buffer_label = 'Open file in &buffer'
+	let s:toggle_file_tree_label = 'Toggle &file tree'
+	let s:telescope_fuzzy_find_label = 'Telescope fu&zzy find'
+	let s:open_file_using_ranger_label = 'Open file using &ranger'
+	let s:recently_opened_files_label = 'Re&cently opened files'
+	let s:make_window_only_label = '&Make window only'
+	let s:previous_window_label = '&Previous window'
+	let s:next_window_label = '&Next window'
+	let s:horizontally_split_label = 'Hor&izontally split'
+	let s:vertically_split_label = '&Vertically split'
+	let s:open_terminal_label = '&Open terminal'
+	let s:open_far_mc_label = 'Op&en Far/Mc'
+	let s:open_lazygit_label = 'Open lazy&git'
+	let s:open_start_menu_label = 'Open st&art menu'
+
+	let s:text_label = '&Text'
+	let s:copy_line_label = 'Cop&y line'
+	let s:delete_line_label = '&Delete line'
+	let s:cut_line_label = 'C&ut line'
+	let s:paste_after_label = '&Paste after'
+	let s:paste_before_label = 'Past&e before'
+	let s:join_lines_label = 'Joi&n lines'
+	let s:force_join_lines_label = 'Fo&rce join lines'
+	let s:forward_find_whole_word_label = '&Forward find <word>'
+	let s:backward_find_whole_word_label = '&Backward find <word>'
+	let s:forward_find_word_label = 'Fo&rward find word'
+	let s:backward_find_word_label = 'B&ackward find word'
+	let s:comment_out_label = '&Comment out'
+	let s:uncomment_out_label = '&Uncomment out'
+	let s:go_to_multicursor_mode_label = 'Go to &multicursor mode'
+	let s:show_hlgroup_label = 'Show hl&group'
+	let s:whence_hlgroup_label = '&Whence hlgroup'
+	let s:select_all_label = '&Select all'
+	let s:toggle_tagbar_label = '&Toggle tagbar'
+	let s:generate_annotation_label = 'Generate ann&otation'
+
+	let s:lsp_label = '&LSP'
+	let s:git_label = '&Git'
+
+	let s:option_label = '&Option'
+	let s:set_spell = 'Set &Spell'
+	let s:set_paste = 'Set &Paste'
+	let s:set_cursor_column = 'Set Cursor &Column'
+	let s:set_cursor_line = 'Set Cursor L&ine'
+	let s:cursor_line_style = 'C&ursor line style'
+	let s:set_line_numbers = 'Set Line &numbers'
+	let s:line_numbers_style = 'Line numbers &style'
+
+	let s:config_label = '&Config'
+	let s:open_init_vim = 'Open &init.vim'
+	let s:open_plugins_list = 'Open &plugins list'
+	let s:open_plugins_setup = 'Open plugins set&up'
+	let s:open_lsp_settings = 'Open lsp &settings'
+	let s:open_exnvim_config = 'Open ex&nvim config'
+	let s:open_colorschemes_dir = 'Open &colorschemes dir'
+	let s:reload_init_vim = '&Reload init.vim'
+	let s:reload_plugins_list = 'R&eload plugins list'
+	let s:reload_plugins_setup = 'Rel&oad plugins setup'
+	let s:reload_lsp_setup = 'Relo&ad LSP setup'
+	let s:generate_exnvim_config = '&Generate extra.nvim config'
+	let s:reload_exnvim_config = 'Reload e&xnvim config'
+	let s:open_termux_config = 'Open &Termux config'
+	let s:reload_termux_config = 'Reload Ter&mux config'
+
+	let s:help_label = '&Help'
+	let s:vim_cheatsheet = 'Vim &cheatsheet'
+	let s:exnvim_cheatsheet = '&extra.nvim cheatsheet'
+	let s:tips = 'Ti&ps'
+	let s:tutorial = '&Tutorial'
+	let s:quick_reference = '&Quick Reference'
+	let s:summary = '&Summary'
+	let s:intro_screen = '&Intro screen'
+	if has('nvim')
+		let s:vim_version = 'NeoVim &version'
 	else
-		if exists('g:Vm')
-			if g:Vm['buffer'] !=# 0
-				if g:language ==# 'russian'
-					let s:esc_label = "&r:Выйти из мультикурсора"
-				else
-					let s:esc_label = "Exit multicu&rsor"
-				endif
-				let s:esc_command = b:VM_Selection.Vars.noh."call vm#reset()"
-				return
-			endif
-		endif
-		if @/ !=# ""
-			if g:language ==# 'russian'
-				let s:esc_label = "&r:Остановить поиск"
-			else
-				let s:esc_label = "Stop sea&rching"
-			endif
-			let s:esc_command = 'let @/ = ""'
-			return
-		endif
-		if g:language ==# 'russian'
-			let s:esc_label = "&r:Останов.текущ.команду"
+		let s:vim_version = 'Vim &version'
+	endif
+	if mode() !~# '^n'
+		let s:esc_label = "Go to No&rmal mode"
+	else
+		if exists('g:Vm') && g:Vm['buffer'] !=# 0
+			let s:esc_label = "Exit multicu&rsor"
+		elseif @/ !=# ""
+			let s:esc_label = "Stop sea&rching"
 		else
 			let s:esc_label = "Stop cu&rrent command"
 		endif
-		let s:esc_command = "normal! \<esc>"
-		return
 	endif
 endfunction
 
-function! RebindMenus()
+function! ChangeLanguage_system_russian()
+	let s:off = 'Выкл.'
+	let s:on = 'Вкл.'
+	let s:disable = 'Выключить'
+	let s:enable = 'Включить'
+	let s:make_relative = 'относительными'
+	let s:make_absolute = 'абсолютными'
+
+	let s:file_label = '&f:Файл'
+	let s:new_file_label = '&w:Новый файл'
+	let s:close_label = '&o:Закрыть'
+	let s:force_close_label = '&e:Закрыть всё равно'
+	let s:save_label = '&s:Сохранить'
+	let s:save_all_label = '&a:Сохранить всё'
+	let s:save_as_label = '&v:Сохранить как'
+	let s:save_as_and_edit_label = '&i:Сохранить как и зайти'
+	let s:update_plugins_label = '&p:Обновить плагины'
+	let s:update_coc_label = "&c:Обновить coc lsp'ы"
+	let s:update_treesitter_label = '&t:Обновить TreeSitter'
+	let s:redraw_screen_label = '&n:Перерисовать экран'
+	let s:hide_highlightings_label = '&d:Скрыть подсвечивание'
+	let s:toggle_fullscreen_label = '&f:Переключ.полноэкр.реж.'
+	let s:exit_label = '&x:Выйти'
+	let s:exit_wo_confirm_label = '&m:Выйти всё равно'
+
+	let s:window_label = '&w:Окно'
+	let s:kill_buffer_label = '&u:Убить буффер'
+	let s:select_buffer_label = '&s:Выбрать буффер'
+	let s:search_word_using_spectre_label = '&w:Искать слово в Spectre'
+	let s:open_file_in_tab_label = '&t:Открыть файл в нов.вкл.'
+	let s:open_file_in_buffer_label = '&b:Открыть файл а буффере'
+	let s:toggle_file_tree_label = '&f:Переключ.дерево файлов'
+	let s:telescope_fuzzy_find_label = '&z:Поиск Telescope'
+	let s:open_file_using_ranger_label = '&r:Открыть файл в ranger'
+	let s:recently_opened_files_label = '&c:Недавно открытые файлы'
+	let s:make_window_only_label = '&m:Закрыть остальные окна'
+	let s:previous_window_label = '&p:Предыдущее окно'
+	let s:next_window_label = '&n:Следующее окно'
+	let s:horizontally_split_label = '&i:Горизонтальный сплит'
+	let s:vertically_split_label = '&v:Вертикальный сплит'
+	let s:open_terminal_label = '&o:Открыть терминал'
+	let s:open_far_mc_label = '&e:Открыть Far/Mc'
+	let s:open_lazygit_label = '&g:Открыть lazygit'
+	let s:open_start_menu_label = '&a:Открыть главное меню'
+
+	let s:text_label = '&t:Текст'
+	let s:copy_line_label = '&y:Копировать строку'
+	let s:delete_line_label = '&d:Удалить строку'
+	let s:cut_line_label = '&u:Вырезать строку'
+	let s:paste_after_label = '&p:Вставить после'
+	let s:paste_before_label = '&e:Вставить перед'
+	let s:join_lines_label = '&n:Соединить строки'
+	let s:force_join_lines_label = '&r:Соединить строки!'
+	let s:forward_find_whole_word_label = '&f:Искать вперёд <слово>'
+	let s:backward_find_whole_word_label = '&b:Искать назад <слово>'
+	let s:forward_find_word_label = '&r:Искать вперёд слово'
+	let s:backward_find_word_label = '&a:Искать назад слово'
+	let s:comment_out_label = '&c:Закомментировать'
+	let s:uncomment_out_label = '&u:Раскомментировать'
+	let s:go_to_multicursor_mode_label = '&m:Режим мультикурсора'
+	let s:show_hlgroup_label = 'Показать hl&group'
+	let s:whence_hlgroup_label = '&w:Откуда hlgroup'
+	let s:select_all_label = '&s:Выбрать всё'
+	let s:toggle_tagbar_label = 'Переключить &tagbar'
+	let s:generate_annotation_label = '&o:Создать аннотацию'
+
+	let s:lsp_label = '&LSP'
+	let s:git_label = '&Git'
+
+	let s:option_label = '&o:Опции'
+	let s:set_spell = '&s:Проверка орфографии'
+	let s:set_paste = '&p:Режим вставки'
+	let s:set_cursor_column = '&c:Подсветка колонки'
+	let s:set_cursor_line = '&i:Подсветка линии'
+	let s:cursor_line_style = '&u:Стиль подсветки линии'
+	let s:set_line_numbers = '&n:Номера строк'
+	let s:line_numbers_style = '&s:Стиль номеров строк'
+
+	let s:config_label = '&c:Конфиг'
+	let s:open_init_vim = 'Открыть &init.vim'
+	let s:open_plugins_list = '&p:Открыть список плагинов'
+	let s:open_plugins_setup = '&u:Открыть установки плагинов'
+	let s:open_lsp_settings = 'Открыть настройки L&SP'
+	let s:open_exnvim_config = 'Открыть конфигурацию ex&nvim'
+	let s:open_colorschemes_dir = '&c:Отк.дир-ю с цветов.схемами'
+	let s:reload_init_vim = '&r:Перезагрузить init.vim'
+	let s:reload_plugins_list = '&e:Перезагрузить список плаг.'
+	let s:reload_plugins_setup = '&o:Перезагруз.установки плаг.'
+	let s:reload_lsp_setup = '&a:Перезагрузит.установки LSP'
+	let s:generate_exnvim_config = '&g:Сгенериров.конфигур.exnvim'
+	let s:reload_exnvim_config = 'Перезагруз.конфигурац.e&xnvim'
+	let s:open_termux_config = 'Открыть конфигурац.&Termux'
+	let s:reload_termux_config = 'Перезагруз.конфигурац.Ter&mux'
+
+	let s:help_label = '&h:Помощь'
+	let s:vim_cheatsheet = '&c:Vim шпаргалка'
+	let s:exnvim_cheatsheet = 'Шпаргалка &extra.nvim'
+	let s:tips = '&p:Советы'
+	let s:tutorial = '&t:Руководство'
+	let s:quick_reference = '&q:Краткая справка'
+	let s:summary = '&s:Краткое содержание'
+	let s:intro_screen = '&i:Начальный экран'
+	if has('nvim')
+		let s:vim_version = 'Версия Neo&Vim'
+	else
+		let s:vim_version = 'Версия &Vim'
+	endif
+	if mode() !~# '^n'
+		let s:esc_label = "&r:Выйти в нормальный режим"
+	else
+		if exists('g:Vm') && g:Vm['buffer'] !=# 0
+			let s:esc_label = "&r:Выйти из мультикурсора"
+		elseif @/ !=# ""
+			let s:esc_label = "&r:Остановить поиск"
+		else
+			let s:esc_label = "&r:Останов.текущ.команду"
+		endif
+	endif
+endfunction
+
+function! RebindMenus(namespace_name='system')
+	call quickui#menu#switch(a:namespace_name)
+
 	" clear all the menus
 	call quickui#menu#reset()
 
+	let function_name = 'RebindMenus_'.a:namespace_name
+
+	if !exists('*'.function_name)
+		echohl ErrorMsg
+		echomsg "extra.nvim: RebindMenus: no such namespace: ".a:namespace_name
+		echohl Normal
+		return
+	endif
+
+	call call(function_name, [])
+endfunction
+
+function! RebindMenus_system()
 	" install a 'File' menu, use [text, command] to represent an item.
 	call quickui#menu#install(s:file_label, [
 				\ [(g:quickui_icons?"󰈙 ":"").s:new_file_label."\t:new", 'new', 'Creates a new buffer'],
@@ -437,7 +471,7 @@ function! RebindMenus()
 	if has('nvim') && PluginExists('vim-fugitive')
 		call quickui#menu#install(s:git_label, [
 				\ ["--", ''],
-				\ ["C&lone\tLEAD gC", 'GitClone', 'Clone a repository with specific URL'],
+				\ ["Cl&one\tLEAD gC", 'GitClone', 'Clone a repository with specific URL'],
 				\ ["Clone depth=&1\tLEAD g1", 'GitClone --depth=1', 'Clone a repository with specific URL'],
 				\ ["Clone &recursively\tLEAD gR", 'GitClone --recursive', 'Clone a repository with specific URL'],
 				\ ["Clone r&ecursively depth=1\tLEAD g2", 'GitClone --depth=1 --recursive', 'Clone a repository with specific URL'],
@@ -514,4 +548,4 @@ let g:quickui_show_tip = 1
 call ChangeLanguage()
 
 " hit space twice to open menu
-noremap <space><space> <cmd>call ChangeNames()<cr><cmd>call RebindMenus()<cr><cmd>call quickui#menu#open()<cr>
+noremap <space><space> <cmd>call RebindMenus()<bar>call quickui#menu#open()<cr>

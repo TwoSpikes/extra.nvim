@@ -4,7 +4,7 @@ call PreserveAndDo("call HandleBuftypeAll()", v:true, v:true)
 execute "Showtab"
 execute "source" g:CONFIG_PATH."/vim/compatible/init.vim"
 call RedefineProcessGBut()
-call ApplyColorscheme(g:selected_colorscheme)
+execute 'colorscheme' g:selected_colorscheme
 if has("nvim")
 	if PluginInstalled('alpha')
 		exec "lua package.loaded[\"packages.alpha.setup\"] = nil"

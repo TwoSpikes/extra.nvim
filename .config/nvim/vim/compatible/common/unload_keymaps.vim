@@ -245,9 +245,14 @@ if has('nvim') && PluginExists('vim-fugitive')
 	nunmap <leader>gp
 	nunmap <leader>gP
 	nunmap <leader>gr
-	nunmap <leader>gR
+	nunmap <leader>gh
 	nunmap <leader>gm
 	nunmap <leader>gs
+	nunmap <leader>gi
+	nunmap <leader>gC
+	nunmap <leader>g1
+	nunmap <leader>gR
+	nunmap <leader>g2
 endif
 
 if has('nvim') && PluginExists('ani-cli.nvim')

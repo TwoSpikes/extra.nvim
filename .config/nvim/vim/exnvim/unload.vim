@@ -28,6 +28,8 @@ if PluginExists('ani-cli.nvim')
 endif
 delfunction BeforeUpdatingPlugins
 if has('nvim')
+	delfunction ChangeLanguage_system_english
+	delfunction ChangeLanguage_system_russian
 	delfunction ChangeLanguage
 	unmap <leader><leader>
 	delfunction ChangeNames
@@ -202,6 +204,7 @@ delfunction PreparePersistedNvim
 delfunction PrepareWhichKey
 delfunction PreserveAndDo
 if PluginExists('vim-quickui')
+	delfunction RebindMenus_system
 	delfunction RebindMenus
 endif
 delfunction RedefineProcessGBut
