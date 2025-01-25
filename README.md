@@ -151,9 +151,9 @@ You can you these commands, for example, to activate and deactivate [Python](htt
 ```
 :cd django_project
 :e venv/bin/activate
-:ShSource
+:ShSo
 :echo "You activated pyvenv"
-:ShRun deactivate
+:ShR deactivate
 :echo "You deactivated pyvenv"
 ```
 

@@ -292,9 +292,14 @@ if has('nvim') && PluginExists('vim-fugitive')
 	nnoremap <leader>gp <cmd>Git pull<cr>
 	nnoremap <leader>gP <cmd>Git push<cr>
 	nnoremap <leader>gr <cmd>Git reset --soft<cr>
-	nnoremap <leader>gR <cmd>Git reset --hard<cr>
+	nnoremap <leader>gh <cmd>Git reset --hard<cr>
 	nnoremap <leader>gm <cmd>Git reset --mixed<cr>
 	nnoremap <leader>gs <cmd>Git status<cr>
+	nnoremap <leader>gi <cmd>Git init<cr>
+	nnoremap <leader>gC <cmd>GitClone<cr>
+	nnoremap <leader>g1 <cmd>GitClone --depth=1<cr>
+	nnoremap <leader>gR <cmd>GitClone --recursive<cr>
+	nnoremap <leader>g2 <cmd>GitClone --depth=1 --recursive<cr>
 endif
 
 if has('nvim') && PluginExists('ani-cli.nvim')

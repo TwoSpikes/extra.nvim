@@ -418,17 +418,29 @@ function! RebindMenus()
 				\ ["&Commit\tLEAD gc", 'Git commit --verbose', 'Commit using fugitive.vim'],
 				\ ["Commit &all\tLEAD ga", 'Git commit --verbose --all', 'Commit all using fugitive.vim'],
 				\ ["Commit a&mend\tLEAD gA", 'Git commit --verbose --amend', 'Amend commit using fugitive.vim'],
+				\ ["--", ''],
 				\ ["P&ull\tLEAD gp", 'Git pull', 'Pull repository using fugitive.vim'],
 				\ ["&Push\tLEAD gP", 'Git push', 'Push repository using fugitive.vim'],
 				\ ["&Reset soft\tLEAD gr", 'Git reset --soft', 'Reset repository using fugitive.vim'],
-				\ ["Reset har&d\tLEAD gR", 'Git reset --hard', 'Hardly reset repository using fugitive.vim'],
+				\ ["Reset har&d\tLEAD gh", 'Git reset --hard', 'Hardly reset repository using fugitive.vim'],
 				\ ["Reset mi&xed\tLEAD gm", 'Git reset --mixed', 'Mixed reset repository using fugitive.vim'],
+				\ ["--", ''],
 				\ ["&Status\tLEAD gs", 'Git status', 'Show repository status using fugitive.vim'],
+				\ ["&Init\tLEAD gi", 'Git init', 'Initialize empty Git repository'],
 				\ ])
 	endif
 	if has('nvim') && PluginExists('diffview.nvim')
 		call quickui#menu#install(s:git_label, [
 				\ ["&View diff\tLEAD gd", 'DiffviewOpen HEAD', 'Show diff'],
+				\ ])
+	endif
+	if has('nvim') && PluginExists('vim-fugitive')
+		call quickui#menu#install(s:git_label, [
+				\ ["--", ''],
+				\ ["C&lone\tLEAD gC", 'GitClone', 'Clone a repository with specific URL'],
+				\ ["Clone depth=&1\tLEAD g1", 'GitClone --depth=1', 'Clone a repository with specific URL'],
+				\ ["Clone &recursively\tLEAD gR", 'GitClone --recursive', 'Clone a repository with specific URL'],
+				\ ["Clone r&ecursively depth=1\tLEAD g2", 'GitClone --depth=1 --recursive', 'Clone a repository with specific URL'],
 				\ ])
 	endif
 

@@ -2318,6 +2318,36 @@ function! ShRun(funcname)
 endfunction
 command! -nargs=1 -complete=file ShRun call ShRun("<args>")
 
+function! GitClone(args)
+	if !has('nvim')
+		echohl ErrorMsg
+		echomsg "extra.nvim: GitClone: please use NeoVim"
+		echohl Normal
+		return
+	endif
+	if !PluginExists('vim-fugitive')
+		echohl ErrorMsg
+		echomsg "extra.nvim: GitClone: install vim-fugitive"
+		echohl Normal
+		return
+	endif
+	if v:true
+	\|| has('nvim') && PluginInstalled('noice')
+	\|| (v:true
+	\||		!has('nvim')
+	\||		!PluginInstalled('noice')
+	\|| v:true)
+	\&& !exists('g:quickui_version')
+		let url = input('Select URL:')
+		let destination = input('Select destination (empty: curr.dir):')
+	else
+		let url = quickui#input#open('Select URL:')
+		let destination = quickui#input#open('Select destination (empty: curr.dir):')
+	endif
+	execute 'Git' 'clone' url a:args destination
+endfunction
+command! -nargs=? -complete=file GitClone call GitClone("<args>")
+
 call OpenOnStart()
 
 let g:exnvim_fully_loaded += 1
