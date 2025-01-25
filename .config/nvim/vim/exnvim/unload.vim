@@ -30,9 +30,9 @@ delfunction BeforeUpdatingPlugins
 if has('nvim')
 	delfunction ChangeLanguage_system_english
 	delfunction ChangeLanguage_system_russian
+	delfunction ChangeLanguage_system
 	delfunction ChangeLanguage
 	unmap <leader><leader>
-	delfunction ChangeNames
 endif
 if PluginExists('coc.nvim')
 	autocmd! exnvim_coc_nvim *

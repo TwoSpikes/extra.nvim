@@ -1275,7 +1275,6 @@ endif
 
 function! OpenOnStart()
 	if g:open_menu_on_start ==# v:true
-		call ChangeNames()
 		call RebindMenus()
 		call timer_start(0, {->quickui#menu#open()})
 	endif
