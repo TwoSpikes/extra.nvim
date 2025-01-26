@@ -326,7 +326,7 @@ function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 		let g:use_codeium = v:false
 	endif
 	if !exists('g:open_cmd_on_up')
-		let g:open_cmd_on_up = v:false
+		let g:open_cmd_on_up = "no"
 	endif
 	if !exists('g:insert_exit_on_jk')
 		let g:insert_exit_on_jk = v:true

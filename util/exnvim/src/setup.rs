@@ -400,7 +400,11 @@ pub fn setup(home: ::std::path::PathBuf) -> ::std::io::Result<()> {
 
     \"use_codeium\": false,
 
-    \"open_cmd_on_up\": false,
+\"_comment\":\"When pressing <Up> key\",
+\"_comment\":\"    no — move up in buffer (default)\",
+\"_comment\":\"    insert — insert last command in cmdline\",
+\"_comment\":\"    run — execute last command\",
+    \"open_cmd_on_up\": \"no\",
 
     \"insert_exit_on_jk\": true,
     \"insert_exit_on_jk_save\": true,

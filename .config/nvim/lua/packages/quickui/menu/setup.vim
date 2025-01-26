@@ -181,8 +181,8 @@ function! ChangeLanguage_system_russian()
 	let s:save_as_label = '&v:Сохранить как'
 	let s:save_as_and_edit_label = '&i:Сохранить как и зайти'
 	let s:update_plugins_label = '&p:Обновить плагины'
-	let s:update_coc_label = "&c:Обновить coc lsp'ы"
-	let s:update_treesitter_label = '&t:Обновить TreeSitter'
+	let s:update_coc_label = "Обновить &coc lsp'ы"
+	let s:update_treesitter_label = 'Обновить &TreeSitter'
 	let s:redraw_screen_label = '&n:Перерисовать экран'
 	let s:hide_highlightings_label = '&d:Скрыть подсвечивание'
 	let s:toggle_fullscreen_label = '&f:Переключ.полноэкр.реж.'

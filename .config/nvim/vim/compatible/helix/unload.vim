@@ -138,9 +138,6 @@ if has('nvim') && PluginExists('vim-surround')
 endif
 delfunction ReorderRightLeft
 delfunction SavePosition
-xunmap :
-xunmap /
-xunmap ?
 delfunction N_DoW
 nunmap w
 delfunction N_DoE

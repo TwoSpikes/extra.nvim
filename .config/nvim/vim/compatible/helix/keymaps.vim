@@ -337,9 +337,6 @@ function! SavePosition(old_c, old_l, new_c, new_l)
 		let g:ry=a:new_c
 	endif
 endfunction
-xnoremap : mz<esc>`z:<c-u>
-xnoremap / mz<esc>`z/
-xnoremap ? mz<esc>`z?
 function! N_DoW()
 	let g:pseudo_visual = v:true
 	let g:visual_mode="char"

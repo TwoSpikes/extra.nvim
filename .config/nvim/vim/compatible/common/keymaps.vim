@@ -98,7 +98,15 @@ if filereadable(expand("~/.dotfiles-script.sh"))
 endif
 
 " FAST COMMANDS
-"noremap ; :
+if g:open_cmd_on_up ==# "insert"
+	nnoremap <up> :<up>
+	xnoremap <up> mz<esc>`z:<up>
+elseif g:open_cmd_on_up ==# "run"
+	nnoremap <up> :<up><cr>
+	xnoremap <up> mz<esc>`z:<up><cr>
+else
+	xnoremap <up> mz<esc>`z:
+endif
 noremap <leader>: :<c-u>'<,'>
 noremap <leader>= :tabe 
 noremap <leader>- :e 
@@ -282,10 +290,6 @@ nnoremap <c-w>\| <cmd>execute v:count1."wincmd \|"<cr>
 
 nnoremap <c-p> :<up>
 vnoremap <c-p> :<up>
-if g:open_cmd_on_up
-	nnoremap <up> :<up>
-	vnoremap <up> :<up>
-endif
 
 if has('nvim') && PluginExists('vim-fugitive')
 	nnoremap <leader>gc <cmd>Git commit --verbose<cr>

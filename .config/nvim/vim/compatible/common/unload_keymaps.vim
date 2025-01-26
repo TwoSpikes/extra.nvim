@@ -76,6 +76,13 @@ if filereadable(expand("~/.dotfiles-script.sh"))
 	unmap <leader>vb
 endif
 
+if v:false
+\|| g:open_cmd_on_up ==# "insert"
+\|| g:open_cmd_on_up ==# "run"
+	nunmap <up>
+endif
+xunmap <up>
+
 unmap <leader>:
 unmap <leader>=
 unmap <leader>-

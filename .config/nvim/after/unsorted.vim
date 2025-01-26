@@ -1773,12 +1773,12 @@ function! JKWorkaroundAlpha()
 endfunction
 function! JKWorkaround()
 	noremap k <cmd>call ProcessGBut('k')<cr>
-	if !g:open_cmd_on_up
+	if g:open_cmd_on_up ==# "no"
 	  noremap <up> <cmd>call ProcessGBut('k')<cr>
     endif
 	if !has('nvim') || !PluginInstalled('endscroll')
 		noremap j <cmd>call ProcessGBut('j')<cr>
-		if !g:open_cmd_on_up
+		if g:open_cmd_on_up ==# "no"
 		  noremap <down> <cmd>call ProcessGBut('j')<cr>
 		endif
 	endif
