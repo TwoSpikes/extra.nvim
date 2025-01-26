@@ -3,23 +3,27 @@ if !has('nvim') || !PluginExists('vim-quickui')
 endif
 
 function! ChangeLanguage(namespace_name='system', language=g:language)
-	let function_name_base = 'ChangeLanguage_'.a:namespace_name
-
-	call call(function_name_base, [])
-
-	if !exists('*'.function_name_base)
+	if !exists('*RebindMenus_'.a:namespace_name)
 		echohl ErrorMsg
 		echomsg "extra.nvim: ChangeLanguage: no such namespace: ".a:namespace_name
 		echohl Normal
 		return
 	endif
 
-	if exists('*'.function_name_base.'_'.a:language)
+	let function_name_base = 'ChangeLanguage_'.a:namespace_name
+
+	if exists('*'.function_name_base)
+		call call(function_name_base, [])
+	endif
+
+	let function_name_base .= '_'
+
+	if exists('*'.function_name_base.a:language)
 		let language = a:language
 	else
 		let language = 'english'
 	endif
-	let function_name = function_name_base.'_'.language
+	let function_name = function_name_base.language
 	unlet function_name_base
 
 	call call(function_name, [])
@@ -73,14 +77,15 @@ function! ChangeLanguage_system_english()
 	let s:toggle_file_tree_label = 'Toggle &file tree'
 	let s:telescope_fuzzy_find_label = 'Telescope fu&zzy find'
 	let s:open_file_using_ranger_label = 'Open file using &ranger'
-	let s:recently_opened_files_label = 'Re&cently opened files'
+	let s:recently_opened_files_label = 'Recentl&y opened files'
 	let s:make_window_only_label = '&Make window only'
 	let s:previous_window_label = '&Previous window'
 	let s:next_window_label = '&Next window'
 	let s:horizontally_split_label = 'Hor&izontally split'
 	let s:vertically_split_label = '&Vertically split'
 	let s:open_terminal_label = '&Open terminal'
-	let s:open_far_mc_label = 'Op&en Far/Mc'
+	let s:open_terminal_program_label = 'Op&en terminal program'
+	let s:open_far_mc_label = 'Open Far/M&c'
 	let s:open_lazygit_label = 'Open lazy&git'
 	let s:open_start_menu_label = 'Open st&art menu'
 
@@ -193,14 +198,15 @@ function! ChangeLanguage_system_russian()
 	let s:toggle_file_tree_label = '&f:Переключ.дерево файлов'
 	let s:telescope_fuzzy_find_label = '&z:Поиск Telescope'
 	let s:open_file_using_ranger_label = '&r:Открыть файл в ranger'
-	let s:recently_opened_files_label = '&c:Недавно открытые файлы'
+	let s:recently_opened_files_label = '&y:Недавно открытые файлы'
 	let s:make_window_only_label = '&m:Закрыть остальные окна'
 	let s:previous_window_label = '&p:Предыдущее окно'
 	let s:next_window_label = '&n:Следующее окно'
 	let s:horizontally_split_label = '&i:Горизонтальный сплит'
 	let s:vertically_split_label = '&v:Вертикальный сплит'
 	let s:open_terminal_label = '&o:Открыть терминал'
-	let s:open_far_mc_label = '&e:Открыть Far/Mc'
+	let s:open_terminal_program_label = '&e:Откр.прог.в терминале'
+	let s:open_far_mc_label = 'Открыть Far/M&c'
 	let s:open_lazygit_label = '&g:Открыть lazygit'
 	let s:open_start_menu_label = '&a:Открыть главное меню'
 
@@ -277,6 +283,26 @@ function! ChangeLanguage_system_russian()
 			let s:esc_label = "&r:Останов.текущ.команду"
 		endif
 	endif
+endfunction
+
+function! ChangeLanguage_extra_english()
+	let s:extra_label = 'E&xtra'
+	let s:toggle_pager_mode_label = 'Toggle &pager mode'
+	let s:toggle_soft_wrap_label = 'Toggle soft &wrap'
+
+	let s:tools_label = '&Tools'
+	let s:search_anime_label = '&Search anime'
+	let s:watch_anime_from_history_label = '&Watch anime from history'
+endfunction
+
+function! ChangeLanguage_extra_russian()
+	let s:extra_label = '&x:Дополнительно'
+	let s:toggle_pager_mode_label = 'Переключ.режим &pager''а'
+	let s:toggle_soft_wrap_label = '&w:Перекл.перенос по словам'
+
+	let s:tools_label = '&t:Инструменты'
+	let s:search_anime_label = '&s:Искать аниме'
+	let s:watch_anime_from_history_label = '&w:Смотреть аниме из истории'
 endfunction
 
 function! RebindMenus(namespace_name='system')
@@ -381,6 +407,7 @@ function! RebindMenus_system()
 				\ [(g:quickui_icons?" ":"").s:vertically_split_label."\tCtrl-x 3", 'vsplit', 'Vertically split current window'],
 				\ ["--", ''],
 				\ [(g:quickui_icons?" ":"").s:open_terminal_label."\tLEAD .", 'call SelectPosition("", g:termpos)', 'Opens a terminal'],
+				\ [(g:quickui_icons?" ":"").s:open_terminal_program_label."\tLEAD xx", 'call OpenTermProgram()', 'Opens a terminal program'],
 				\ ])
 	if executable('mc') || executable('far') || executable('far2l')
 		call quickui#menu#install(s:window_label, [
@@ -527,7 +554,6 @@ function! RebindMenus_system()
 			\ ])
 	endif
 
-	" register HELP menu with weight 10000
 	call quickui#menu#install(s:help_label, [
 				\ [s:vim_cheatsheet, 'help index', ''],
 				\ [s:exnvim_cheatsheet."\tLEAD ?", 'ExNvimCheatSheet', 'extra.nvim cheatsheet'],
@@ -542,10 +568,23 @@ function! RebindMenus_system()
 				\ ], 10000)
 endfunction
 
+function! RebindMenus_extra()
+	call quickui#menu#install(s:extra_label, [
+			\ [s:toggle_pager_mode_label."\tLEAD xP", 'TogglePagerMode', 'Toggle pager mode'],
+			\ [s:toggle_soft_wrap_label."\t:SWrap", 'SWrap', 'Toggle soft text wrapping'],
+		  \ ])
+
+	call quickui#menu#install(s:tools_label, [
+			\ [s:search_anime_label."\tLEAD xA", 'execute "Ani" g:ani_cli_options', 'Search and watch anime'],
+			\ [s:watch_anime_from_history_label."\tLEAD xa", 'execute "Ani" "-c" g:ani_cli_options', 'Continue watching anime from history'],
+		  \ ])
+endfunction
+
 " enable to display tips in the cmdline
 let g:quickui_show_tip = 1
 
-call ChangeLanguage()
+call ChangeLanguage('system')
+call ChangeLanguage('extra')
 
-" hit space twice to open menu
-noremap <space><space> <cmd>call RebindMenus()<bar>call quickui#menu#open()<cr>
+noremap <leader><space> <cmd>call RebindMenus()<bar>call quickui#menu#open()<cr>
+noremap <leader>x<space> <cmd>call RebindMenus('extra')<bar>call quickui#menu#open()<cr>

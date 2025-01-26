@@ -200,7 +200,9 @@ inoremap <expr> <bs> HandleKeystroke("\<bs>")
 noremap <silent> <leader>so :let &scrolloff = 999 - &scrolloff<cr>
 
 noremap <silent> <f10> <cmd>call RebindMenus()<bar>call quickui#menu#open()<cr>
+noremap <silent> <s-f10> <cmd>call RebindMenus('extra')<bar>call quickui#menu#open()<cr>
 noremap <silent> <f9> <cmd>call RebindMenus()<bar>call quickui#menu#open()<cr>
+noremap <silent> <s-f9> <cmd>call RebindMenus('extra')<bar>call quickui#menu#open()<cr>
 
 nnoremap <silent> <c-x><c-b> <cmd>call quickui#tools#list_buffer('e')<cr>
 

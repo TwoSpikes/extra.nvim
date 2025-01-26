@@ -684,7 +684,8 @@ function! ExNvimCheatSheet()
 	\\n   LEAD 1 - Switch to command mode (:)
 	\\n   LEAD : - Switch to visual selection wise command mode (:'<,'>)
 	\\n   LEAD - Show possible keyboard shortcuts
-	\\n   LEAD LEAD or F10 or F9 - Open quickui menu
+	\\n   LEAD SPACE or F10 or F9 - Open quickui menu
+	\\n   LEAD x SPACE or S-F10 or S-F9 - Open extra quickui menu
 	\\n   LEAD CTRL-f or F3 - Toggle fullscreen mode
 	\\n   INSERT: jk - Exit from Insert Mode and save
 	\\n   INSERT: jK - Exit from Insert Mode
@@ -2284,7 +2285,7 @@ function! ShRun(funcname)
 	endfor
 	for var in current_envs
 		if index(envs, var) ==# -1
-			execute "unlet $".var
+			call setenv(var, v:null)
 		endif
 	endfor
 	unlet envs
