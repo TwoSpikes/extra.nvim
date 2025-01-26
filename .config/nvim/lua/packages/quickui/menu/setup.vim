@@ -583,8 +583,12 @@ endfunction
 " enable to display tips in the cmdline
 let g:quickui_show_tip = 1
 
-call ChangeLanguage('system')
-call ChangeLanguage('extra')
+function! ChangeLanguageAll()
+	call ChangeLanguage('system')
+	call ChangeLanguage('extra')
+endfunction
+
+call ChangeLanguageAll()
 
 noremap <leader><space> <cmd>call RebindMenus()<bar>call quickui#menu#open()<cr>
 noremap <leader>x<space> <cmd>call RebindMenus('extra')<bar>call quickui#menu#open()<cr>

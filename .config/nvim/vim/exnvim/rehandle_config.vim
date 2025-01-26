@@ -19,11 +19,10 @@ if has("nvim")
 		exec "lua require(\"packages.endscroll.setup\")"
 	endif
 	if PluginExists('vim-quickui')
-		call ChangeLanguage()
+		call ChangeLanguageAll()
 	endif
 	if PluginInstalled('sneak')
 		execute "source" g:CONFIG_PATH."/lua/packages/sneak/keymaps.vim"
 	endif
 endif
 call SetMouse()
-
