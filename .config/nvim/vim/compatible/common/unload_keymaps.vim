@@ -269,6 +269,8 @@ endif
 
 unmap <leader>xi
 
+unmap <leader>xm
+
 unmap <leader>xP
 
 unmap z00

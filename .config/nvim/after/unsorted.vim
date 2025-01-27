@@ -2367,6 +2367,12 @@ function! InvertPdf(src, dst=v:null)
 		else
 			let src = quickui#input#open('Select source file: ')
 		endif
+		if len(src) ==# 0
+			echohl ErrorMsg
+			echomsg "extra.nvim: InvertPdf: cancelled by user"
+			echohl Normal
+			return
+		endif
 	else
 		let src = a:src
 	endif

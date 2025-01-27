@@ -315,6 +315,8 @@ endif
 
 noremap <leader>xi <cmd>call InvertPdf(expand("%"))<cr>
 
+noremap <leader>xm <cmd>Telescope git_status<cr>
+
 noremap <leader>xP <cmd>TogglePagerMode<cr>
 
 noremap z00 <cmd>execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload.vim'<cr>
