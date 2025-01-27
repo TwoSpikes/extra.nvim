@@ -293,6 +293,7 @@ function! ChangeLanguage_extra_english()
 	let s:tools_label = '&Tools'
 	let s:search_anime_label = '&Search anime'
 	let s:watch_anime_from_history_label = '&Watch anime from history'
+	let s:invert_pdf_label = 'Invert &pdf'
 endfunction
 
 function! ChangeLanguage_extra_russian()
@@ -303,6 +304,7 @@ function! ChangeLanguage_extra_russian()
 	let s:tools_label = '&t:Инструменты'
 	let s:search_anime_label = '&s:Искать аниме'
 	let s:watch_anime_from_history_label = '&w:Смотреть аниме из истории'
+	let s:invert_pdf_label = 'Инвертировать &pdf'
 endfunction
 
 function! RebindMenus(namespace_name='system')
@@ -577,6 +579,7 @@ function! RebindMenus_extra()
 	call quickui#menu#install(s:tools_label, [
 			\ [s:search_anime_label."\tLEAD xA", 'execute "Ani" g:ani_cli_options', 'Search and watch anime'],
 			\ [s:watch_anime_from_history_label."\tLEAD xa", 'execute "Ani" "-c" g:ani_cli_options', 'Continue watching anime from history'],
+			\ [s:invert_pdf_label."\tLEAD xi", 'call InvertPdf(expand("%"))', 'Invert colors in current pdf file'],
 		  \ ])
 endfunction
 

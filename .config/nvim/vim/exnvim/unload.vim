@@ -119,6 +119,8 @@ set stl=
 delfunction GetGitBranch
 delfunction GetRandomName
 delfunction GetVisualSelection
+delcommand GitClone
+delfunction GitClone
 autocmd! exnvim_handle_buftype *
 augroup! exnvim_handle_buftype
 delfunction HandleBuftype
@@ -131,6 +133,8 @@ delfunction HandleKeystroke
 delfunction IfOneWinDo
 delfunction IfOneWinDoElse
 delfunction InitPckr
+delcommand InvertPdf
+delfunction InvertPdf
 if exists('*IsHighlightGroupDefined')
 	delfunction IsHighlightGroupDefined
 endif
@@ -244,6 +248,12 @@ delfunction SetTermuxConfigPath
 if PluginExists('coc.nvim')
 	delfunction ShowDocumentation
 endif
+delcommand ShFunction
+delfunction ShFunction
+delcommand ShRun
+delfunction ShRun
+delcommand ShSource
+delfunction ShSource
 delfunction Showtab
 delfunction StartsWith
 delfunction SynGroup

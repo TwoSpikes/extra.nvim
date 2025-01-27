@@ -267,6 +267,8 @@ if has('nvim') && PluginExists('ani-cli.nvim')
 	unmap <leader>xA
 endif
 
+unmap <leader>xi
+
 unmap <leader>xP
 
 unmap z00

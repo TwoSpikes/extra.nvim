@@ -313,6 +313,8 @@ if has('nvim') && PluginExists('ani-cli.nvim')
 	noremap <leader>xA <cmd>execute "Ani ".g:ani_cli_options<cr>
 endif
 
+noremap <leader>xi <cmd>call InvertPdf(expand("%"))<cr>
+
 noremap <leader>xP <cmd>TogglePagerMode<cr>
 
 noremap z00 <cmd>execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload.vim'<cr>

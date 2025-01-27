@@ -2348,6 +2348,38 @@ function! GitClone(args)
 endfunction
 command! -nargs=? -complete=file GitClone call GitClone("<args>")
 
+function! InvertPdf(src, dst=v:null)
+	if !executable('gs')
+		echohl ErrorMsg
+		echomsg "extra.nvim: InvertPdf: please install ghostscript"
+		echohl Normal
+		return
+	endif
+	if len(a:src) ==# 0
+		if v:true
+		\|| has('nvim') && PluginInstalled('noice')
+		\|| (v:true
+		\||		!has('nvim')
+		\||		!PluginInstalled('noice')
+		\|| v:true)
+		\&& !exists('g:quickui_version')
+			let src = input('Select source file:')
+		else
+			let src = quickui#input#open('Select source file: ')
+		endif
+	else
+		let src = a:src
+	endif
+	if a:dst ==# v:null
+		let dst = substitute(src, '\.pdf$', '_inverted.pdf', '')
+	else
+		let dst = a:dst
+	endif
+	split
+	call OpenTerm('gs -o '.Repr_Shell(dst).' -sDEVICE=pdfwrite -c \{1\ exch\ sub\}\{1\ exch\ sub\}\{1\ exch\ sub\}\{1\ exch\ sub\}\ setcolortransfer -f '.Repr_Shell(src))
+endfunction
+command! -nargs=* -complete=file InvertPdf call InvertPdf("<f-args>")
+
 call OpenOnStart()
 
 let g:exnvim_fully_loaded += 1
