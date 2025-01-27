@@ -111,7 +111,9 @@ function! ChangeLanguage_system_english()
 	let s:generate_annotation_label = 'Generate ann&otation'
 
 	let s:lsp_label = '&LSP'
+
 	let s:git_label = '&Git'
+	let s:show_git_modified_label = 'Modified &Git files'
 
 	let s:option_label = '&Option'
 	let s:set_spell = 'Set &Spell'
@@ -232,7 +234,9 @@ function! ChangeLanguage_system_russian()
 	let s:generate_annotation_label = '&o:Создать аннотацию'
 
 	let s:lsp_label = '&LSP'
+
 	let s:git_label = '&Git'
+	let s:show_git_modified_label = 'Модифицированные &Git файлы'
 
 	let s:option_label = '&o:Опции'
 	let s:set_spell = '&s:Проверка орфографии'
@@ -294,7 +298,6 @@ function! ChangeLanguage_extra_english()
 	let s:search_anime_label = '&Search anime'
 	let s:watch_anime_from_history_label = '&Watch anime from history'
 	let s:invert_pdf_label = 'Invert &pdf'
-	let s:show_git_modified_label = 'Modified &Git files'
 endfunction
 
 function! ChangeLanguage_extra_russian()
@@ -306,7 +309,6 @@ function! ChangeLanguage_extra_russian()
 	let s:search_anime_label = '&s:Искать аниме'
 	let s:watch_anime_from_history_label = '&w:Смотреть аниме из истории'
 	let s:invert_pdf_label = 'Инвертировать &pdf'
-	let s:show_git_modified_label = 'Модифицированные &Git файлы'
 endfunction
 
 function! RebindMenus(namespace_name='system')
@@ -508,13 +510,18 @@ function! RebindMenus_system()
 				\ ["Clone r&ecursively depth=1\tLEAD g2", 'GitClone --depth=1 --recursive', 'Clone a repository with specific URL'],
 				\ ])
 	endif
+	if has('nvim') && PluginInstalled('telescope')
+		call quickui#menu#install(s:git_label, [
+			\ [s:show_git_modified_label."\tLEAD g*", 'Telescope git_status', 'Show git modified files'],
+			\ ])
+	endif
 
 	call quickui#menu#install(s:option_label, [
 				\ [(g:quickui_icons?"󰓆 ":"").s:set_spell." %{&spell?\"".s:off."\":\"".s:on."\"}", 'set spell!', "%{&spell?\"".s:disable."\":\"".s:enable."\"} spell checking"],
 				\ [(g:quickui_icons?"󰆒 ":"").s:set_paste." %{&paste?\"".s:off."\":\"".s:on."\"}", 'set paste!', 'Obsolete thing'],
 				\ ["--", ''],
-				\ [(g:quickui_icons?"  ":"").s:set_cursor_column." %{g:cursorcolumn?\"".s:off."\":\"".s:on."\"}", 'let g:cursorcolumn=!g:cursorcolumn|call PreserveAndDo("call HandleBuftypeAll()", v:true, v:true)', "%{g:cursorcolumn?\"".s:disable."\":\"".s:enable."\"} current column highlighting"],
-				\ [(g:quickui_icons?"  ":"").s:set_cursor_line." %{g:cursorline?\"".s:off."\":\"".s:on."\"}", 'let g:cursorline=!g:cursorline|call PreserveAndDo("call HandleBuftypeAll()", v:true, v:true)', "%{g:cursorline?\"".s:disable."\":\"".s:enable."\"} current line highlighting"],
+				\ [(g:quickui_icons?"  ":"").s:set_cursor_column." %{g:cursorcolumn?\"".s:off."\":\"".s:on."\"}", 'let g:cursorcolumn=!g:cursorcolumn|call PreserveAndDo("call HandleBuftypeAll()")', "%{g:cursorcolumn?\"".s:disable."\":\"".s:enable."\"} current column highlighting"],
+				\ [(g:quickui_icons?"  ":"").s:set_cursor_line." %{g:cursorline?\"".s:off."\":\"".s:on."\"}", 'let g:cursorline=!g:cursorline|call PreserveAndDo("call HandleBuftypeAll()")', "%{g:cursorline?\"".s:disable."\":\"".s:enable."\"} current line highlighting"],
 				\ ])
 	if exists('g:cursorline_style_supported') && len(g:cursorline_style_supported) ># 1
 		call quickui#menu#install(s:option_label, [
@@ -522,8 +529,8 @@ function! RebindMenus_system()
 					\ ])
 	endif
 	call quickui#menu#install(s:option_label, [
-				\ [(g:quickui_icons?" ":"").s:set_line_numbers." %{g:linenr?\"".s:off."\":\"".s:on."\"}", 'let g:linenr=!g:linenr|if !g:linenr|call PreserveAndDo("call STCNoAll()", v:true, v:true)|else|call PreserveAndDo("call NumbertoggleAll(mode())", v:true, v:true)|endif', "%{g:linenr?\"".s:disable."\":\"".s:enable."\"} line numbers"],
-				\ [(g:quickui_icons?" ":"").s:line_numbers_style.': %{g:linenr_style}', 'let g:linenr_style=g:linenr_style==#"relative"?"absolute":"relative"|if g:linenr|call PreserveAndDo("call NumbertoggleAll(mode())", v:true, v:true)|endif', "Make line numbers %{g:linenr_style==#\"absolute\"?\"".s:make_relative."\":\"".s:make_absolute."\"}"],
+				\ [(g:quickui_icons?" ":"").s:set_line_numbers." %{g:linenr?\"".s:off."\":\"".s:on."\"}", 'let g:linenr=!g:linenr|if !g:linenr|call PreserveAndDo("call STCNoAll()")|else|call PreserveAndDo("call NumbertoggleAll(mode())")|endif', "%{g:linenr?\"".s:disable."\":\"".s:enable."\"} line numbers"],
+				\ [(g:quickui_icons?" ":"").s:line_numbers_style.': %{g:linenr_style}', 'let g:linenr_style=g:linenr_style==#"relative"?"absolute":"relative"|if g:linenr|call PreserveAndDo("call NumbertoggleAll(mode())")|endif', "Make line numbers %{g:linenr_style==#\"absolute\"?\"".s:make_relative."\":\"".s:make_absolute."\"}"],
 				\ ])
 
 	call quickui#menu#install(s:config_label, [
@@ -582,7 +589,6 @@ function! RebindMenus_extra()
 			\ [s:search_anime_label."\tLEAD xA", 'execute "Ani" g:ani_cli_options', 'Search and watch anime'],
 			\ [s:watch_anime_from_history_label."\tLEAD xa", 'execute "Ani" "-c" g:ani_cli_options', 'Continue watching anime from history'],
 			\ [s:invert_pdf_label."\tLEAD xi", 'call InvertPdf(expand("%"))', 'Invert colors in current pdf file'],
-			\ [s:show_git_modified_label."\tLEAD xm", 'Telescope git_status', 'Show git modified files'],
 		  \ ])
 endfunction
 

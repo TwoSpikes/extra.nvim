@@ -52,23 +52,19 @@ function! STCAbs(actual_mode, winnr=winnr())
 		call CopyHighlightGroup('CursorLineNrNorm', 'CursorLineNr')
 		call CopyHighlightGroup('LineNrNorm', 'LineNr')
 		call CopyHighlightGroup("StatementNorm", "Statement")
-		return
-	endif
-	if a:actual_mode =~? 'r'
+	elseif a:actual_mode =~? 'r'
 		call CopyHighlightGroup('CursorLineNrRepl', 'CursorLineNr')
 		call CopyHighlightGroup('LineNrIns', 'LineNr')
-		return
-	endif
-	if a:actual_mode =~? 'v' && getwinvar(a:winnr, '&modifiable')
+	elseif a:actual_mode =~? 'v' && getwinvar(a:winnr, '&modifiable')
 		call CopyHighlightGroup('CursorLineNrVisu', 'CursorLineNr')
 		call CopyHighlightGroup('LineNrVisu', 'LineNr')
-		return
+	else
+		call CopyHighlightGroup('CursorLineNrIns', 'CursorLineNr')
+		call CopyHighlightGroup('LineNrIns', 'LineNr')
+		call CopyHighlightGroup("StatementIns", "Statement")
 	endif
 	call setwinvar(a:winnr, '&number', v:true)
 	call setwinvar(a:winnr, '&relativenumber', v:false)
-	call CopyHighlightGroup('CursorLineNrIns', 'CursorLineNr')
-	call CopyHighlightGroup('LineNrIns', 'LineNr')
-	call CopyHighlightGroup("StatementIns", "Statement")
 endfunction
 function! Numbertoggle_stcabs(mode='', winnr=winnr())
 	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'pckr' && &filetype !=# 'pkgman' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
@@ -1314,20 +1310,10 @@ if g:compatible =~# "^helix"
 	call LoadVars()
 endif
 
-function! PreserveAndDo(cmd, preserve_tab, preserve_win)
-	if a:preserve_tab
-		let old_tabpagenr = tabpagenr()
-	endif
-	if a:preserve_win
-		let old_winnr = winnr()
-	endif
-	exec a:cmd
-	if a:preserve_tab
-		execute old_tabpagenr 'tabnext'
-	endif
-	if a:preserve_win
-		execute old_winnr 'wincmd w'
-	endif
+function! PreserveAndDo(cmd)
+	let old_winid = win_getid()
+	execute a:cmd
+	call win_gotoid(old_winid)
 endfunction
 
 let &showtabline = g:showtabline

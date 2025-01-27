@@ -93,7 +93,7 @@ end
 if plugin_installed("conform") then
 	require('packages.conform.init')
 end
-require('packages.convert.init')
+-- require('packages.convert.init')
 if vim.g.enable_nvim_treesitter_context then
 	require('packages.treesitter-context.init')
 else

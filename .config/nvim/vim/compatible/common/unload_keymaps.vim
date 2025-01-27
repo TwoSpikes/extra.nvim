@@ -269,7 +269,7 @@ endif
 
 unmap <leader>xi
 
-unmap <leader>xm
+unmap <leader>g*
 
 unmap <leader>xP
 

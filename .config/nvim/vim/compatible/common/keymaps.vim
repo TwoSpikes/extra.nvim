@@ -315,7 +315,7 @@ endif
 
 noremap <leader>xi <cmd>call InvertPdf(expand("%"))<cr>
 
-noremap <leader>xm <cmd>Telescope git_status<cr>
+noremap <leader>g* <cmd>Telescope git_status<cr>
 
 noremap <leader>xP <cmd>TogglePagerMode<cr>
 

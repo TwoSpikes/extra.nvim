@@ -1,5 +1,6 @@
-" My theme based on Lunaperche
+" This theme is based on `Lunaperche` theme:
 
+" Lunaperche original description:
 " Name:         Perchè il sole a Milano? Portofino? Dimmi la luna perchè?  
 " Description:  White(perchè il sole)/Black(la luna perchè?) background colorscheme.
 " Author:       Maxim Kim <habamax@gmail.com>
@@ -233,8 +234,8 @@ if &background ==# 'dark'
   hi Visual guifg=#ffffff guibg=#005f87 gui=NONE cterm=NONE
   hi MatchParen guifg=#c5e7c5 guibg=#000000 gui=reverse cterm=reverse
   hi VisualNOS guifg=#000000 guibg=#5fafaf gui=NONE cterm=NONE
-  hi CursorLine guifg=NONE guibg=#262626 gui=NONE cterm=NONE
-  hi CursorColumn guifg=NONE guibg=#262626 gui=NONE cterm=NONE
+  hi CursorLine guifg=NONE guibg=#262626 gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
+  hi CursorColumn guifg=NONE guibg=#262626 gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
   hi Folded guifg=#767676 guibg=#1c1c1c gui=NONE cterm=NONE
   hi ColorColumn guifg=NONE guibg=#1c1c1c gui=NONE cterm=NONE
   hi SpellBad guifg=NONE guibg=NONE guisp=#ff5f5f gui=undercurl ctermfg=NONE ctermbg=NONE cterm=NONE

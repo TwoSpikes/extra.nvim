@@ -1,6 +1,6 @@
 call HandleExNvimConfig()
 call RehandleExNvimConfig()
-call PreserveAndDo("call HandleBuftypeAll()", v:true, v:true)
+call PreserveAndDo("call HandleBuftypeAll()")
 execute "Showtab"
 execute "source" g:CONFIG_PATH."/vim/compatible/init.vim"
 call RedefineProcessGBut()

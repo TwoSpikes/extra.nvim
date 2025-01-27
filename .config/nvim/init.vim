@@ -882,10 +882,6 @@ function! SetLocalSharePath()
 endfunction
 call SetLocalSharePath()
 
-if reloading_config
-	call HandleBuftypeAll()
-endif
-
 if $PREFIX == ""
 	call setenv('PREFIX', '/usr')
 endif
@@ -1009,22 +1005,6 @@ augroup exnvim_fix_sha_da
 	autocmd!
 	autocmd VimLeavePre * call FixShaDa()
 augroup END
-
-function! PreparePersistedNvim()
-	if filereadable(g:LOCALSHAREPATH.'/site/pack/pckr/opt/persisted.nvim/lua/persisted/init.lua')
-		let bufnr = bufadd(expand('~').'/.local/share/nvim/site/pack/pckr/opt/persisted.nvim/lua/persisted/init.lua')
-		call bufload(bufnr)
-		execute bufnr."buffer"
-		if getbufline(bufnr, 44)[0] =~# 'if config.autoload and M.allowed_dir() then'
-			call appendbufline(bufnr, 43, '  config = config or {}')
-			silent write
-		endif
-		bwipeout!
-	endif
-endfunction
-if has('nvim')
-	call PreparePersistedNvim()
-endif
 
 function! PluginDelete(name)
 	call delete(expand(g:LOCALSHAREPATH)."/site/pack/pckr/opt/".a:name, "rf")
