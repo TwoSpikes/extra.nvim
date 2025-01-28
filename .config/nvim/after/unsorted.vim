@@ -81,22 +81,22 @@ if exists('*Pad')
 		else
 			let find_file_label = 'Find file: '
 		endif
-		if !PluginExists('vim-quickui')
-			echohl Question
-			let filename = input(find_file_label)
+		echohl Question
+		let filename = input(find_file_label, fnamemodify(expand("%"), ":~:.:h").'/', "file")
+		echohl Normal
+
+		if len(filename) ==# 0
+			echohl ErrorMsg
+			echomsg "extra.nvim: Findfile: cancelled by user"
 			echohl Normal
-		else
-			let filename = quickui#input#open(Pad(find_file_label, g:pad_amount_confirm_dialogue), fnamemodify(expand('%'), ':~:.'))
+			return
 		endif
-		if filename !=# ''
-			set lazyredraw
-			if has('nvim') && PluginInstalled("neo-tree") && isdirectory(expand(filename))
-				tabedit
-				execute printf("Neotree position=current %s", filename)
-			else
-				execute printf("tabedit %s", filename)
-			endif
-			set nolazyredraw
+
+		if has('nvim') && PluginInstalled("neo-tree") && isdirectory(expand(filename))
+			tabedit
+			execute "Neotree" "position=current" filename
+		else
+			execute "tabedit" filename
 		endif
 	endfunction
 	command! -nargs=0 Findfile call Findfile()
@@ -107,21 +107,21 @@ if exists('*Pad')
 		else
 			let find_file_label = 'Find file (open in buffer): '
 		endif
-		if !PluginExists('vim-quickui')
-			echohl Question
-			let filename = input(find_file_label)
+		echohl Question
+		let filename = input(find_file_label, fnamemodify(expand("%"), ":~:.:h").'/', "file")
+		echohl Normal
+
+		if len(filename) ==# 0
+			echohl ErrorMsg
+			echomsg "extra.nvim: Findfile: cancelled by user"
 			echohl Normal
-		else
-			set lazyredraw
-			let filename = quickui#input#open(Pad(find_file_label, g:pad_amount_confirm_dialogue), fnamemodify(expand('%'), ':~:.'))
-			set nolazyredraw
+			return
 		endif
-		if filename !=# ''
-			if has('nvim') && PluginInstalled("neo-tree") && isdirectory(expand(filename))
-				execute printf("Neotree position=current %s", filename)
-			else
-				execute printf("edit %s", filename)
-			endif
+
+		if has('nvim') && PluginInstalled("neo-tree") && isdirectory(expand(filename))
+			execute "Neotree" "position=current" filename
+		else
+			execute "edit" filename
 		endif
 	endfunction
 	command! -nargs=0 Findfilebuffer call Findfilebuffer()
@@ -2344,10 +2344,10 @@ function! InvertPdf(src, dst=v:null)
 	if len(a:src) ==# 0
 		if v:true
 		\|| has('nvim') && PluginInstalled('noice')
-		\|| (v:true
+		\|| (v:false
 		\||		!has('nvim')
 		\||		!PluginInstalled('noice')
-		\|| v:true)
+		\|| v:false)
 		\&& !exists('g:quickui_version')
 			let src = input('Select source file:')
 		else
