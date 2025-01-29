@@ -967,8 +967,6 @@ function! PleaseDoNotCloseWrapper(cmd, cond=v:true)
 		let g:please_do_not_close_always = v:false
 	endif
 endfunction
-let g:please_do_not_close = []
-let g:please_do_not_close_always = v:false
 execute "
 \function! PleaseDoNotCloseIfOneWin(cmd)
 \\n".s:MACRO_IS_ONE_WIN."

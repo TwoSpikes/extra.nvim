@@ -1,3 +1,8 @@
+if has('nvim')
+	let g:please_do_not_close = []
+	let g:please_do_not_close_always = v:false
+endif
+
 function! STCRel(winnr=winnr())
 	if mode() =~? 'v.*' || mode() ==# "\<c-v>"
 		call CopyHighlightGroup('CursorLineNrVisu', 'CursorLineNr')

@@ -3,12 +3,16 @@ require('lib.lists.compare')
 
 local function patch_plugin(pluginname)
 	local patch_name
-	if vim.fn.isdirectory(vim.fn.expand('~/.config/nvim/patch/')..pluginname) == 1 then
-		patch_name = pluginname..'/*.patch'
+	local path = vim.fn.expand('~/.config/nvim/patch/')..pluginname
+	if vim.fn.isdirectory(path) == 1 then
+		local patches = vim.fn.readdir(path)
+		for i, patch in ipairs(patches) do
+			vim.cmd("!cd>/dev/null;patch -p0 < ~/.config/nvim/patch/"..pluginname..'/'..patch..';cd ->/dev/null')
+		end
 	else
 		patch_name = pluginname..'.patch'
+		vim.cmd("!cd>/dev/null;patch -p0 < ~/.config/nvim/patch/"..patch_name..';cd ->/dev/null')
 	end
-	vim.cmd("!cd>/dev/null;patch -p0 < ~/.config/nvim/patch/"..patch_name..';cd ->/dev/null')
 end
 
 local function bootstrap_pckr()
@@ -111,6 +115,9 @@ pckr.add({
 	};
 	{
 		'skywind3000/vim-quickui',
+		run = function()
+			patch_plugin('vim-quickui')
+		end,
 	};
 });
 if not vim.g.use_nvim_cmp then
