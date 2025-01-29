@@ -181,6 +181,7 @@ function! LoadExNvimConfig(path, reload=v:false)
 		\'automatically_open_neo_tree_instead_of_netrw',
 		\'edit_new_file',
 		\'ani_cli_options',
+		\'cd_after_git_clone',
 	\]
 	if keys(g:exnvim_config) ==# ['_TYPE', '_VAL']
 		for item in g:exnvim_config['_VAL']
@@ -354,6 +355,9 @@ function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 	endif
 	if !exists('g:ani_cli_options')
 		let g:ani_cli_options = ""
+	endif
+	if !exists('g:cd_after_git_clone')
+		let g:cd_after_git_clone = v:true
 	endif
 endfunction
 call SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
@@ -954,35 +958,37 @@ execute "
 \\n		execute a:cmd2
 \\n	endif
 \\nendfunction"
-function! PleaseDoNotCloseWrapper(cmd, cond)
+function! PleaseDoNotCloseWrapper(cmd, cond=v:true)
 	if a:cond
-		let g:please_do_not_close = v:true
+		let g:please_do_not_close_always = v:true
 	endif
 	execute a:cmd
 	if a:cond
-		let g:please_do_not_close = v:false
+		let g:please_do_not_close_always = v:false
 	endif
 endfunction
+let g:please_do_not_close = []
+let g:please_do_not_close_always = v:false
 execute "
 \function! PleaseDoNotCloseIfOneWin(cmd)
 \\n".s:MACRO_IS_ONE_WIN."
 \\n	if s ==# 1
-\\n		let g:please_do_not_close = v:true
+\\n		let g:please_do_not_close_always = v:true
 \\n	endif
 \\n	execute a:cmd
 \\n	if s ==# 1
-\\n		let g:please_do_not_close = v:false
+\\n		let g:please_do_not_close_always = v:false
 \\n	endif
 \\nendfunction"
 execute "
 \function! PleaseDoNotCloseIfNotOneWin(cmd)
 \\n".s:MACRO_IS_ONE_WIN."
 \\n	if s !=# 1
-\\n		let g:please_do_not_close = v:true
+\\n		let g:please_do_not_close_always = v:true
 \\n	endif
 \\n	execute a:cmd
 \\n	if s !=# 1
-\\n		let g:please_do_not_close = v:false
+\\n		let g:please_do_not_close_always = v:false
 \\n	endif
 \\nendfunction"
 

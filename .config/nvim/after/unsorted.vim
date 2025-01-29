@@ -1818,7 +1818,7 @@ call OnFirstTime()
 
 " TERMINAL
 
-function! OpenTerm(cmd, after={->execute('')})
+function! OpenTerm(cmd, after=v:null, do_not_close=v:false, after_close=v:null, after_close_autocommand_group_title='exnvim_open_term')
 	if !&modifiable
 		wincmd p
 		let prevwinid = win_getid(winnr(), tabpagenr())
@@ -1839,7 +1839,19 @@ function! OpenTerm(cmd, after={->execute('')})
 	  wincmd k
 	  wincmd c
 	endif
-	call call(a:after, [])
+	let id = win_getid()
+	if a:do_not_close
+		let g:please_do_not_close += [id]
+	endif
+	if a:after_close !=# v:null
+		execute 'augroup' a:after_close_autocommand_group_title
+			autocmd!
+			execute 'autocmd' 'TermClose' '*' a:after_close(id, a:after_close_autocommand_group_title)
+		augroup END
+	endif
+	if a:after !=# v:null
+		call call(a:after, [])
+	endif
 	startinsert
 	return bufnr()
 endfunction
@@ -2330,7 +2342,15 @@ function! GitClone(args)
 		let url = quickui#input#open('Select URL:')
 		let destination = quickui#input#open('Select destination (empty: curr.dir):')
 	endif
-	execute 'Git' 'clone' url a:args destination
+	split
+	if has('nvim') && g:cd_after_git_clone
+		if len(destination) ==# 0
+			let destination = getcwd().'/'.split(url, '/')[-1]
+		endif
+		call OpenTerm('git clone '.Repr_Shell(url).' '.Repr_Shell(a:args).' '.Repr_Shell(destination), v:null, v:true, {id, augroup_name -> 'if win_getid()==#'.id.'|if v:event["status"] ==# 0|execute "cd" "'.destination.'"|quit|endif|autocmd! '.augroup_name.'|endif'}, 'exnvim_git_clone')
+	else
+		call OpenTerm('git clone '.Repr_Shell(url).' '.Repr_Shell(a:args).' '.Repr_Shell(destination), v:null, v:false)
+	endif
 endfunction
 command! -nargs=? -complete=file GitClone call GitClone("<args>")
 

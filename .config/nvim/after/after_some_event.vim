@@ -28,13 +28,24 @@ endfunction
 function! AfterSomeEvent(event, command, delete_when={name -> 'au! '.name})
 	call GenerateTemporaryAutocmd(a:event, '*', a:command, a:delete_when)
 endfunction
-let g:please_do_not_close = v:false
+
+function! ShouldIClose(id=win_getid())
+	if g:please_do_not_close_always
+		return v:false
+	endif
+	let index = index(g:please_do_not_close, a:id)
+	let should = index ==# -1
+	if !should
+		call remove(g:please_do_not_close, index)
+	endif
+	return should
+endfunction
 
 function! MakeThingsThatRequireBeDoneAfterPluginsLoaded()
 	if has('nvim')
 		augroup exnvim_term_closed
 			autocmd!
-			autocmd TermClose * if !g:please_do_not_close && !exists('g:bufnrforranger')|call AfterSomeEvent('TermLeave', 'call Numbertoggle()')|if v:event.status ==# 0|call OnQuit()|exec "confirm quit"|call OnQuitDisable()|endif|endif
+			autocmd TermClose * if ShouldIClose() && !exists('g:bufnrforranger')|call AfterSomeEvent('TermLeave', 'call Numbertoggle()')|if v:event.status ==# 0|call OnQuit()|exec "confirm quit"|call OnQuitDisable()|endif|endif
 		augroup END
 	endif
 endfunction

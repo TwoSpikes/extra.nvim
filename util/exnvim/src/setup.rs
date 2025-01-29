@@ -426,6 +426,8 @@ pub fn setup(home: ::std::path::PathBuf) -> ::std::io::Result<()> {
 	\"edit_new_file\": false,
 
     \"ani_cli_options\": \"\",
+    
+    \"cd_after_git_clone\": true,
 
 \"_comment\":\"Ending field to not put comma every time\"
 }"),
