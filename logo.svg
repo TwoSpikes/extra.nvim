@@ -1,0 +1,85 @@
+<svg>
+    <defs>
+        <g id="x back">
+            <polygon points="37.5,87 45,87 50,75 55,87 62.5,87 55,70   62.5,53 55,53 50,65 45,53 37.5,53 45,70 37.5,87" fill="#00a0ff" />
+        </g>
+        <g id="x front">
+            <polygon points="35,89.5 42.5,89.5 47.5,77.5 52.5,89.5 60,89.5 52.5,72.5 60,55.5 52.5,55.5 47.5,67.5 42.5,55.5 35,55.5 42.5,72.5 35,89.5" fill="#0080ff" />
+        </g>
+        
+        <g id="e_vert_bar">
+            <rect width=8 height=38 />
+        </g>
+        <g id="e_horiz_bar">
+            <rect width=17 height=8 />
+        </g>
+        <g id="e_horiz_bar_l">
+            <rect width=5 height=8 />
+        </g>
+        <g id="e_horiz_bar_r">
+            <rect width=12 height=8 />
+        </g>
+        <g id="e">
+            <use xlink:href="#e_horiz_bar"
+                x=33 y=48 fill="#ff6200"
+                transform="rotate(3)" />
+            
+            <use xlink:href="#x back" />
+            
+            <use xlink:href="#e_vert_bar"
+                x=25 y=48 fill="#ff6200"
+                transform="rotate(3)" />
+            <use xlink:href="#e_horiz_bar"
+                x=33 y=63 fill="#ff6200"
+                transform="rotate(3)" />
+            <use xlink:href="#e_horiz_bar"
+                x=33 y=78 fill="#ff6200"
+                transform="rotate(3)" />
+            
+            <use xlink:href="#e_horiz_bar"
+                x=30.5 y=49 fill="#ff8000"
+                transform="rotate(3)"
+                opacity=0.7 />
+            <use xlink:href="#e_horiz_bar"
+                x=30.5 y=64 fill="#ff8000"
+                transform="rotate(3)"
+                opacity=0.7 />
+            <use xlink:href="#e_horiz_bar_r"
+                x=33 y=50 fill="#ff9800"
+                transform="rotate(3)"
+                opacity=0.9 />
+                
+            <use xlink:href="#x front"
+                opacity=0.85 />
+            
+            <use xlink:href="#e_vert_bar"
+                x=22.5 y=49 fill="#ff8000"
+                transform="rotate(3)"
+                opacity=0.7 />
+            <use xlink:href="#e_horiz_bar_l"
+                x=28 y=50 fill="#ff9800"
+                transform="rotate(3)"
+                opacity=0.9 />
+            <use xlink:href="#e_horiz_bar"
+                x=30.5 y=79 fill="#ff8000"
+                transform="rotate(3)"
+                opacity=0.7 />
+            
+            <use xlink:href="#e_vert_bar"
+                x=20 y=50 fill="#ff9800"
+                transform="rotate(3)"
+                opacity=0.9 />
+            <use xlink:href="#e_horiz_bar"
+                x=28 y=65 fill="#ff9800"
+                transform="rotate(3)"
+                opacity=0.9 />
+            <use xlink:href="#e_horiz_bar"
+                x=28 y=80 fill="#ff9800"
+                transform="rotate(3)"
+                opacity=0.9 />
+        </g>
+    </defs>
+    <rect x=7.5 y=40 width=62.5 height=62.5 fill=black />
+    <use xlink:href="#e" />
+    <use xlink:href="#x" />
+</svg>

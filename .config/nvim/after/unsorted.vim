@@ -1104,12 +1104,18 @@ execute handle_keystroke_function_expression
 unlet handle_keystroke_function_expression
 
 function! OpenTermProgram()
-	if has('nvim') && PluginInstalled('vim-quickui')
-		let select = quickui#input#open(Pad('Open terminal program:', 40), g:last_open_term_program)
-	else
+	if v:true
+	\|| has('nvim') && PluginInstalled('noice')
+	\|| (v:true
+	\||		!has('nvim')
+	\||		!PluginInstalled('noice')
+	\|| v:true)
+	\&& !exists('g:quickui_version')
 		let hcm_select_label = 'Open in terminal'.(g:last_open_term_program!=#''?' (default: '.g:last_open_term_program.')':'').': '
-		let select = input(hcm_select_label)
+		let select = input(hcm_select_label, '', 'file')
 		execute "normal! \<esc>"
+	else
+		let select = quickui#input#open(Pad('Open terminal program:', 40), g:last_open_term_program)
 	endif
 	if select ==# ''
 		let select = g:last_open_term_program
@@ -2342,7 +2348,7 @@ function! GitClone(args)
 	\|| v:true)
 	\&& !exists('g:quickui_version')
 		let url = input('Select URL:')
-		let destination = input('Select destination (empty: curr.dir):')
+		let destination = input('Select destination (empty: curr.dir):', '', 'file')
 	else
 		let url = quickui#input#open('Select URL:')
 		let destination = quickui#input#open('Select destination (empty: curr.dir):')

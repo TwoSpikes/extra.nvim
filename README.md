@@ -1,6 +1,6 @@
 # Extra.nvim
 
-<img src=https://i.imgur.com/ZmdjS8i.png />
+<img src="./logo.svg" />
 
 ## What is this?
 
