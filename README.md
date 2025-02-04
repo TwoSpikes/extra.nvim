@@ -1,6 +1,9 @@
 # Extra.nvim
 
-<img src="./logo.svg" />
+<img src="https://i.imgur.com/xawbJ1B.jpeg" />
+
+> [!Note]
+> Logo was made in svg. It is located in `./logo.htm`
 
 ## What is this?
 
