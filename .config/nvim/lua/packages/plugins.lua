@@ -538,5 +538,8 @@ pckr.add({
 	{
 		'TwoSpikes/hlchunk.nvim',
 	};
+	{
+		'jinzhongjia/LspUI.nvim',
+	};
 });
 

@@ -307,3 +307,4 @@ $ exnvim version
 - [hex.nvim](https://github.com/RaafatTurki/hex.nvim)
 - [pkgman.nvim](https://github.com/TwoSpikes/pkgman.nvim)
 - [ani-cli.nvim](https://github.com/TwoSpikes/ani-cli.nvim)
+- [LspUI.nvim](jinzhongjia/LspUI.nvim)
