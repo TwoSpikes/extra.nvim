@@ -522,6 +522,9 @@ end
 pckr.add({
 	{
 		'danilamihailov/beacon.nvim',
+		run = function()
+			patch_plugin('beacon.nvim')
+		end,
 	};
 	{
 		'm-demare/hlargs.nvim',

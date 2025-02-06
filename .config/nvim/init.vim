@@ -182,6 +182,7 @@ function! LoadExNvimConfig(path, reload=v:false)
 		\'edit_new_file',
 		\'ani_cli_options',
 		\'cd_after_git_clone',
+		\'show_ascii_logo',
 	\]
 	if keys(g:exnvim_config) ==# ['_TYPE', '_VAL']
 		for item in g:exnvim_config['_VAL']
@@ -358,6 +359,9 @@ function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 	endif
 	if !exists('g:cd_after_git_clone')
 		let g:cd_after_git_clone = v:true
+	endif
+	if !exists('g:show_ascii_logo')
+		let g:show_ascii_logo = v:true
 	endif
 endfunction
 call SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()

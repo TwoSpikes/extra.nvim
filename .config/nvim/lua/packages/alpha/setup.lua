@@ -22,11 +22,19 @@ end
 
 local alpha = require('alpha')
 local dashboard = require('alpha.themes.dashboard')
-dashboard.section.header.val = 'EXTRA.NVIM'
+if vim.g.show_ascii_logo then
+	dashboard.section.header.val = vim.fn.readfile(vim.fn.expand(vim.g.CONFIG_PATH)..'/logo/logo.txt')
+else
+	dashboard.section.header.val = 'extra.nvim'
+end
 if os.getenv('HOME') ~= nil then
 	if vim.fn.executable('exnvim') == 1 then
 		local readfile = io.popen('exnvim version')
-		dashboard.section.header.val = dashboard.section.header.val .. ' ' .. readfile:read()
+		if vim.g.show_ascii_logo then
+			table.insert(dashboard.section.header.val, readfile:read())
+		else
+			dashboard.section.header.val = dashboard.section.header.val .. ' ' .. readfile:read()
+		end
 		readfile:close()
 	end
 end
