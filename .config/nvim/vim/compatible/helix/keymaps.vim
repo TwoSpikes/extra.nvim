@@ -108,18 +108,13 @@ function! PV()
 	let g:pseudo_visual = v:true
 endfunction
 function! SetYankMode()
+	let lend=len(getline(g:lx))+1
+	let rend=len(getline(g:rx))+1
 	if v:false
 	elseif v:false
-	\|| g:ly ==# len(getline(g:lx))+1
-	\&& g:ry ==# len(getline(g:rx))+1
+	\|| g:ly ==# 1
+	\&& g:ry ==# rend
 		let g:yank_mode = "line"
-	elseif v:true
-	\&& (v:false
-	\|| g:ry ==# len(getline(g:rx))
-	\|| g:ry ==# len(getline(g:rx))+1
-	\|| v:false)
-	\&& g:ly ==# 1
-		let g:yank_mode = "line_post"
 	else
 		let g:yank_mode = "char"
 	endif
@@ -210,7 +205,14 @@ function! SimulateCorrectPasteMode(cmd, register)
 	\|| g:yank_mode ==# 'char'
 		if v:false
 		elseif a:cmd ==# '$'
-			let paste_cmd = 'p'
+			if col('.') ==# col('$')
+				if line('.') ==# line('$')
+					call append(line('.'), '')
+				endif
+				let paste_cmd = 'j0P'
+			else
+				let paste_cmd = 'p'
+			endif
 		elseif a:cmd ==# '0'
 			let paste_cmd = 'P'
 		else
@@ -219,22 +221,14 @@ function! SimulateCorrectPasteMode(cmd, register)
 			echohl Normal
 		endif
 	elseif g:yank_mode ==# "line"
-		execute "normal! ".a:cmd
 		if v:false
 		elseif a:cmd ==# '$'
-			let paste_cmd = 'p'
-		elseif a:cmd ==# '0'
-			let paste_cmd = 'P'
-		else
-			echohl ErrorMsg
-			echomsg "extra.nvim: hcm: SimulateCorrectPasteMode: Internal error: wrong a:cmd: ".a:cmd
-			echohl Normal
-		endif
-	elseif g:yank_mode ==# "line_post"
-		if v:false
-		elseif a:cmd ==# '$'
-			execute "normal! j0"
-			let paste_cmd = 'P'
+			if line('.') ==# line('$')
+				call append(line('.'), '')
+				let paste_cmd = "jP\<bs>"
+			else
+				let paste_cmd = 'j0P'
+			endif
 		elseif a:cmd ==# '0'
 			execute "normal! 0"
 			let paste_cmd = 'P'
@@ -249,7 +243,21 @@ function! SimulateCorrectPasteMode(cmd, register)
 		echohl Normal
 	endif
 
+	let the_user_is_an_incredible_idiot_and_is_doing_some_crazy_stuff = g:yank_mode ==# "line" && a:cmd ==# '$' && line('.') + 1 ==# line('$')
+
 	execute "normal! \"".a:register.paste_cmd
+
+	if the_user_is_an_incredible_idiot_and_is_doing_some_crazy_stuff
+		let old_start = getpos("'[")
+		let old_end = getpos("']")
+		let old_end[1] -= 1
+		let old_end[2] = len(getline(old_end[1])) + 1
+		undojoin | execute "normal! G$a\<bs>\<c-\>\<c-n>"
+		call setpos("'[", old_start)
+		unlet old_start
+		call setpos("']", old_end)
+		unlet old_end
+	endif
 endfunction
 nnoremap p <cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCorrectPasteMode('$', register)<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>if g:compatible=~#"^helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
 nnoremap P <cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCorrectPasteMode('0', register)<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>if g:compatible=~#"^helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
