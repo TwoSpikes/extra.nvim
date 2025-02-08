@@ -306,6 +306,12 @@ nnoremap <a-o> viw
 nnoremap <a-.> ;
 xnoremap R "_dP
 function! Do_N_R_define()
+	let defer_expression = "
+	\\n call cursor(old_position)
+	\\n	let &guicursor=old_guicursor
+	\\n	unlet old_guicursor
+	\\n	unlet old_position
+	\"
 	let result = "
 	\function! Do_N_R(count)
 	\\n	let old_position=getpos('.')[1:]
@@ -314,6 +320,7 @@ function! Do_N_R_define()
 	\\n	if col('.') ==# col('$')
 	\\n		let c=getchar()
 	\\n		if c ==# 27
+	\".defer_expression."
 	\\n			return
 	\\n		endif
 	\\n		let wl=winline()
@@ -352,10 +359,7 @@ function! Do_N_R_define()
 	\\n		unlet c
 	\\n		call inputrestore()
 	\\n	endif
-	\\n call cursor(old_position)
-	\\n	let &guicursor=old_guicursor
-	\\n	unlet old_guicursor
-	\\n	unlet old_position
+	\".defer_expression."
 	\\nendfunction
 	\"
 	execute result
