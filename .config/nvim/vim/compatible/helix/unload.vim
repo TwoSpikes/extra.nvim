@@ -30,6 +30,7 @@ xunmap gg
 delfunction ExitVisual
 delfunction CollapseVisual
 
+delfunction Do_N_D
 nunmap d
 delfunction PV
 delfunction SetYankMode

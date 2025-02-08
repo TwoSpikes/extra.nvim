@@ -102,7 +102,16 @@ set notildeop
 let &whichwrap="b,s,h,l,<,>,~,[,]"
 set virtualedit=onemore
 
-nnoremap d x
+function! Do_N_D(count)
+	if col('.') ==# col('$')
+		normal! mz
+		join!
+		normal! `z
+	else
+		execute "normal! ".a:count."x"
+	endif
+endfunction
+nnoremap d <cmd>call Do_N_D(v:count1)<cr>
 function! PV()
 	normal! gv
 	let g:pseudo_visual = v:true
@@ -267,7 +276,7 @@ nnoremap gp <cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCor
 nnoremap gP <cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCorrectPasteMode('0', register)<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>exe"norm! o"<bar>if g:compatible=~#"^helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
 xnoremap gp <esc><cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCorrectPasteMode('$', register)<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>exe"norm! o"<bar>if g:compatible=~#"^helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
 xnoremap gP <esc><cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCorrectPasteMode('0', register)<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>exe"norm! o"<bar>if g:compatible=~#"^helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
-nnoremap c xi
+nnoremap c <cmd>call Do_N_D(v:count1)<cr>i
 if !g:use_nvim_cmp && has('nvim') && PluginExists('vim-surround')
 	unmap ySS
 	unmap ySs
@@ -299,7 +308,7 @@ xnoremap R "_dP
 function! Do_N_R_define()
 	let result = "
 	\function! Do_N_R(count)
-	\\n	let old_position=string(getpos('.')[1:])[1:-2]
+	\\n	let old_position=getpos('.')[1:]
 	\\n	let old_guicursor=&guicursor
 	\\n	let &guicursor='a:block-blinkwait175-blinkoff150-blinkon175-CursorReplace'
 	\\n	if col('.') ==# col('$')
@@ -307,16 +316,18 @@ function! Do_N_R_define()
 	\\n		if c ==# 27
 	\\n			return
 	\\n		endif
+	\\n		let wl=winline()
 	\\n		call append(line('.'), nr2char(c))
 	\\n		unlet c
 	\\n		if line('.') ==# line('$') - 1
 	\\n			join!
-	\\n			if winline() + 1 ==# winheight(winnr())
-	\\n				normal! \<c-y>
-	\\n			endif
 	\\n		else
 	\\n			,+2join!
 	\\n		endif
+	\\n		if winheight(winnr()) - wl <# &scrolloff
+	\\n			normal! \<c-y>
+	\\n		endif
+	\\n		unlet wl
 	\\n	else
 	\\n		let c=getchar()
 	\\n		if c ==# 27
@@ -341,7 +352,7 @@ function! Do_N_R_define()
 	\\n		unlet c
 	\\n		call inputrestore()
 	\\n	endif
-	\\n execute 'call cursor('.old_position.')'
+	\\n call cursor(old_position)
 	\\n	let &guicursor=old_guicursor
 	\\n	unlet old_guicursor
 	\\n	unlet old_position
