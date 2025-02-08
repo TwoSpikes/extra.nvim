@@ -302,14 +302,21 @@ function! Do_N_R_define()
 	\\n	let old_position=string(getpos('.')[1:])[1:-2]
 	\\n	let old_guicursor=&guicursor
 	\\n	let &guicursor='a:block-blinkwait175-blinkoff150-blinkon175-CursorReplace'
-	\\n	if col('.') ==# col('$') && line('.') !=# line('$')
+	\\n	if col('.') ==# col('$')
 	\\n		let c=getchar()
 	\\n		if c ==# 27
 	\\n			return
 	\\n		endif
 	\\n		call append(line('.'), nr2char(c))
 	\\n		unlet c
-	\\n		,+2join!
+	\\n		if line('.') ==# line('$') - 1
+	\\n			join!
+	\\n			if winline() + 1 ==# winheight(winnr())
+	\\n				normal! \<c-y>
+	\\n			endif
+	\\n		else
+	\\n			,+2join!
+	\\n		endif
 	\\n	else
 	\\n		let c=getchar()
 	\\n		if c ==# 27
@@ -320,7 +327,7 @@ function! Do_N_R_define()
 	\"
 	if has('nvim')
 		let result .= "
-		\\n		call nvim_buf_set_text(bufnr(), line('.')-1, col('.')-1, line('.')-1, col('.')+a:count-1, [repeat(c, a:count)])
+		\\n		silent! call nvim_buf_set_text(bufnr(), line('.')-1, col('.')-1, line('.')-1, col('.')+a:count-1, [repeat(c, a:count)])
 		\"
 	else
 		let result .= "
