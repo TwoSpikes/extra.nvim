@@ -71,6 +71,8 @@ iunmap <c-p>
 nunmap <a-o>
 nunmap <a-.>
 xunmap R
+delfunction Do_N_R
+nunmap r
 nunmap ~
 nunmap >
 nunmap <

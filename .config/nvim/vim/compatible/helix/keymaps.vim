@@ -296,6 +296,55 @@ inoremap <c-p> <c-x>
 nnoremap <a-o> viw
 nnoremap <a-.> ;
 xnoremap R "_dP
+function! Do_N_R_define()
+	let result = "
+	\function! Do_N_R(count)
+	\\n	let old_position=string(getpos('.')[1:])[1:-2]
+	\\n	let old_guicursor=&guicursor
+	\\n	let &guicursor='a:block-blinkwait175-blinkoff150-blinkon175-CursorReplace'
+	\\n	if col('.') ==# col('$') && line('.') !=# line('$')
+	\\n		let c=getchar()
+	\\n		if c ==# 27
+	\\n			return
+	\\n		endif
+	\\n		call append(line('.'), nr2char(c))
+	\\n		unlet c
+	\\n		,+2join!
+	\\n	else
+	\\n		let c=getchar()
+	\\n		if c ==# 27
+	\\n			return
+	\\n		endif
+	\\n		let c=nr2char(c)
+	\\n		call inputsave()
+	\"
+	if has('nvim')
+		let result .= "
+		\\n		call nvim_buf_set_text(bufnr(), line('.')-1, col('.')-1, line('.')-1, col('.')+a:count-1, [repeat(c, a:count)])
+		\"
+	else
+		let result .= "
+		\\n		let line=getline(line('.'))
+		\\n		let line=line[:col('.')-2].repeat(c, a:count).line[col('.')+a:count-1:]
+		\\n		call setline(line('.'), line)
+		\\n		unlet line
+		\"
+	endif
+	let result .= "
+	\\n		unlet c
+	\\n		call inputrestore()
+	\\n	endif
+	\\n execute 'call cursor('.old_position.')'
+	\\n	let &guicursor=old_guicursor
+	\\n	unlet old_guicursor
+	\\n	unlet old_position
+	\\nendfunction
+	\"
+	execute result
+endfunction
+call Do_N_R_define()
+delfunction Do_N_R_define
+nnoremap r <cmd>call Do_N_R(v:count1)<cr>
 nnoremap ~ <cmd>call Do_N_Tilde()<cr>
 nnoremap > >>
 nnoremap < <<

@@ -20,6 +20,7 @@ require('illuminate').configure({
 		'pckr',
 		'spectre_panel',
 		'pkgman',
+		'alpha',
 	},
 	-- filetypes_allowlist: filetypes to illuminate, this is overridden by filetypes_denylist
 	-- You must set filetypes_denylist = {} to override the defaults to allow filetypes_allowlist to take effect

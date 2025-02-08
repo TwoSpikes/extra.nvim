@@ -111,12 +111,12 @@ fn install(
         &[
             "-r",
             "./vimruntime",
-            format!("{}{}",
-                vimruntime
-                    .to_str()
-                    .expect("Cannot convert path to str"),
+            format!(
+                "{}{}",
+                vimruntime.to_str().expect("Cannot convert path to str"),
                 "/*",
-            ).as_str(),
+            )
+            .as_str(),
         ]
     );
 
@@ -127,12 +127,11 @@ fn install(
     }
 }
 
-fn install_coc_sh_crutch(
-    home: ::std::path::PathBuf,
-    force: bool,
-) -> ::std::io::Result<()> {
+fn install_coc_sh_crutch(home: ::std::path::PathBuf, force: bool) -> ::std::io::Result<()> {
     let coc_sh_crutch_file = home.join(".config/coc/extensions/node_modules/coc-sh/node_modules/bash-language-server/out/cli.js_crutch");
-    let orig_cli_file = home.join(".config/coc/extensions/node_modules/coc-sh/node_modules/bash-language-server/out/cli.js");
+    let orig_cli_file = home.join(
+        ".config/coc/extensions/node_modules/coc-sh/node_modules/bash-language-server/out/cli.js",
+    );
     if !force && coc_sh_crutch_file.exists() {
         return Ok(());
     }
@@ -145,15 +144,20 @@ fn install_coc_sh_crutch(
 }
 macro_rules! theme_path {
     ($theme_name: expr, $vimruntime: ident) => {
-        format!("{rtp}/colors/{theme_name}.vim",
-            rtp = $vimruntime
-                .to_str()
-                .expect("Cannot convert path to str"),
+        format!(
+            "{rtp}/colors/{theme_name}.vim",
+            rtp = $vimruntime.to_str().expect("Cannot convert path to str"),
             theme_name = $theme_name,
-        ).as_str()
+        )
+        .as_str()
     };
 }
-fn commit(from: ::std::path::PathBuf, vimruntime: ::std::path::PathBuf, only_copy: bool, program_name: &String) {
+fn commit(
+    from: ::std::path::PathBuf,
+    vimruntime: ::std::path::PathBuf,
+    only_copy: bool,
+    program_name: &String,
+) {
     _ = copy_dir_all(from.join(".config/nvim"), "./.config/nvim");
     _ = run_as_superuser_if_needed!(
         "cp",
@@ -167,11 +171,11 @@ fn commit(from: ::std::path::PathBuf, vimruntime: ::std::path::PathBuf, only_cop
     _ = run_as_superuser_if_needed!(
         "cp",
         &[
-            format!("{}/syntax/book.vim",
-                vimruntime
-                    .to_str()
-                    .expect("Cannot convert path to str"),
-            ).as_str(),
+            format!(
+                "{}/syntax/book.vim",
+                vimruntime.to_str().expect("Cannot convert path to str"),
+            )
+            .as_str(),
             "./vimruntime/syntax/",
         ]
     );
@@ -184,12 +188,9 @@ fn commit(from: ::std::path::PathBuf, vimruntime: ::std::path::PathBuf, only_cop
         {
             Ok(_) => (),
             Err(e) => {
-                eprintln!("{}: error: Cannot commit: {}",
-                    program_name,
-                    e
-                );
+                eprintln!("{}: error: Cannot commit: {}", program_name, e);
                 ::std::process::exit(2);
-            },
+            }
         }
     } else {
         ()
@@ -206,7 +207,10 @@ fn main() {
     let program_name = &args.nth(0).expect("cannot get program name");
 
     if args.len() == 0 {
-        eprintln!("{}: Not enough arguments: expected 1, found 0", program_name);
+        eprintln!(
+            "{}: Not enough arguments: expected 1, found 0",
+            program_name
+        );
         usage!(program_name);
         ::std::process::exit(1);
     }
@@ -214,15 +218,9 @@ fn main() {
     #[allow(non_camel_case_types)]
     enum State {
         NONE,
-        INSTALL {
-            with_coc_sh_crutch: bool,
-        },
-        INSTALL_COC_SH_CRUTCH {
-            force: bool,
-        },
-        COMMIT {
-            only_copy: bool,
-        },
+        INSTALL { with_coc_sh_crutch: bool },
+        INSTALL_COC_SH_CRUTCH { force: bool },
+        COMMIT { only_copy: bool },
         SETUP,
         VERSION,
     }
@@ -234,32 +232,26 @@ fn main() {
                 eprintln!("Cannot get first command line argument");
                 ::std::process::exit(1);
             }
-        }.as_str() {
-            "help"|"--help"|"-h" => {
+        }
+        .as_str()
+        {
+            "help" | "--help" | "-h" => {
                 usage!(program_name);
                 ::std::process::exit(0);
-            },
-            "commit" => {
-                match state {
-                    State::NONE => {
-                        state = State::COMMIT {
-                            only_copy: false,
-                        };
-                    },
-                    _ => {
-                        eprintln!("Cannot use subcommand while using another subcommand");
-                        usage!(program_name);
-                        ::std::process::exit(1);
-                    },
+            }
+            "commit" => match state {
+                State::NONE => {
+                    state = State::COMMIT { only_copy: false };
+                }
+                _ => {
+                    eprintln!("Cannot use subcommand while using another subcommand");
+                    usage!(program_name);
+                    ::std::process::exit(1);
                 }
             },
             "--only-copy" | "-o" => match state {
-                State::COMMIT {
-                    only_copy: _,
-                } => {
-                    state = State::COMMIT {
-                        only_copy: true,
-                    };
+                State::COMMIT { only_copy: _ } => {
+                    state = State::COMMIT { only_copy: true };
                 }
                 _ => {
                     eprintln!("This option can only be used with `commit` subcommand");
@@ -268,12 +260,8 @@ fn main() {
                 }
             },
             "++only-copy" | "+o" => match state {
-                State::COMMIT {
-                    only_copy: _,
-                } => {
-                    state = State::COMMIT {
-                        only_copy: false,
-                    };
+                State::COMMIT { only_copy: _ } => {
+                    state = State::COMMIT { only_copy: false };
                 }
                 _ => {
                     println!("This option can only be used with `commit` subcommand");
@@ -281,21 +269,19 @@ fn main() {
                     ::std::process::exit(1);
                 }
             },
-            "install" => {
-                match state {
-                    State::NONE => {
-                        state = State::INSTALL {
-                            with_coc_sh_crutch: true,
-                        };
-                    },
-                    _ => {
-                        eprintln!("Cannot use subcommand while using another subcommand");
-                        usage!(program_name);
-                        ::std::process::exit(1);
-                    },
+            "install" => match state {
+                State::NONE => {
+                    state = State::INSTALL {
+                        with_coc_sh_crutch: true,
+                    };
+                }
+                _ => {
+                    eprintln!("Cannot use subcommand while using another subcommand");
+                    usage!(program_name);
+                    ::std::process::exit(1);
                 }
             },
-            "--without-coc-sh-crutch"|"-w" => match state {
+            "--without-coc-sh-crutch" | "-w" => match state {
                 State::INSTALL {
                     with_coc_sh_crutch: _,
                 } => {
@@ -309,7 +295,7 @@ fn main() {
                     ::std::process::exit(1);
                 }
             },
-            "++without-coc-sh-crutch"|"+W" => match state {
+            "++without-coc-sh-crutch" | "+W" => match state {
                 State::INSTALL {
                     with_coc_sh_crutch: _,
                 } => {
@@ -323,70 +309,58 @@ fn main() {
                     ::std::process::exit(1);
                 }
             },
-            "install-coc-sh-crutch" => {
-                match state {
-                    State::NONE => {
-                        state = State::INSTALL_COC_SH_CRUTCH {
-                            force: false,
-                        };
-                    },
-                    _ => {
-                        eprintln!("Cannot use subcommand while using another subcommand");
-                        usage!(program_name);
-                        ::std::process::exit(1);
-                    },
-                }
-            },
-            "--force"|"-f" => match state {
-                State::INSTALL_COC_SH_CRUTCH {
-                    force: _,
-                } => {
-                    state = State::INSTALL_COC_SH_CRUTCH {
-                        force: true,
-                    };
+            "install-coc-sh-crutch" => match state {
+                State::NONE => {
+                    state = State::INSTALL_COC_SH_CRUTCH { force: false };
                 }
                 _ => {
-                    eprintln!("This option can only be used with `install-coc-sh-crutch` subcommand");
+                    eprintln!("Cannot use subcommand while using another subcommand");
                     usage!(program_name);
                     ::std::process::exit(1);
                 }
             },
-            "++force"|"+f" => match state {
-                State::INSTALL_COC_SH_CRUTCH {
-                    force: _,
-                } => {
-                    state = State::INSTALL_COC_SH_CRUTCH {
-                        force: false,
-                    };
+            "--force" | "-f" => match state {
+                State::INSTALL_COC_SH_CRUTCH { force: _ } => {
+                    state = State::INSTALL_COC_SH_CRUTCH { force: true };
                 }
                 _ => {
-                    eprintln!("This option can only be used with `install-coc-sh-crutch` subcommand");
+                    eprintln!(
+                        "This option can only be used with `install-coc-sh-crutch` subcommand"
+                    );
                     usage!(program_name);
                     ::std::process::exit(1);
                 }
             },
-            "setup" => {
-                match state {
-                    State::NONE => {
-                        state = State::SETUP;
-                    },
-                    _ => {
-                        eprintln!("Cannot use subcommand while using another subcommand");
-                        usage!(program_name);
-                        ::std::process::exit(1);
-                    },
+            "++force" | "+f" => match state {
+                State::INSTALL_COC_SH_CRUTCH { force: _ } => {
+                    state = State::INSTALL_COC_SH_CRUTCH { force: false };
+                }
+                _ => {
+                    eprintln!(
+                        "This option can only be used with `install-coc-sh-crutch` subcommand"
+                    );
+                    usage!(program_name);
+                    ::std::process::exit(1);
                 }
             },
-            "version"|"--version"|"-V" => {
-                match state {
-                    State::NONE => {
-                        state = State::VERSION;
-                    },
-                    _ => {
-                        eprintln!("Cannot use subcommand while using another subcommand");
-                        usage!(program_name);
-                        ::std::process::exit(1);
-                    },
+            "setup" => match state {
+                State::NONE => {
+                    state = State::SETUP;
+                }
+                _ => {
+                    eprintln!("Cannot use subcommand while using another subcommand");
+                    usage!(program_name);
+                    ::std::process::exit(1);
+                }
+            },
+            "version" | "--version" | "-V" => match state {
+                State::NONE => {
+                    state = State::VERSION;
+                }
+                _ => {
+                    eprintln!("Cannot use subcommand while using another subcommand");
+                    usage!(program_name);
+                    ::std::process::exit(1);
                 }
             },
             &_ => {
@@ -402,7 +376,7 @@ fn main() {
         None => {
             eprintln!("{}: error: Cannot get home directory", program_name);
             ::std::process::exit(1);
-        },
+        }
     };
     let is_termux: bool = ::std::env::var("TERMUX_VERSION").is_ok();
     let vimruntime = if ::which::which("nvim").is_ok() {
@@ -425,32 +399,28 @@ fn main() {
         State::NONE => {
             eprintln!("{}: Internal error: No action provided", program_name);
             ::std::process::exit(1);
-        },
-        State::INSTALL {
-            with_coc_sh_crutch,
-        } => {
+        }
+        State::INSTALL { with_coc_sh_crutch } => {
             match install(home, vimruntime, with_coc_sh_crutch) {
                 Ok(()) => (),
                 Err(e) => {
                     eprintln!("{}: Failed to install: {}", program_name, e);
                     ::std::process::exit(2);
-                },
+                }
             };
-        },
-        State::INSTALL_COC_SH_CRUTCH {
-            force,
-        } => {
+        }
+        State::INSTALL_COC_SH_CRUTCH { force } => {
             match install_coc_sh_crutch(home, force) {
                 Ok(()) => (),
                 Err(e) => {
                     eprintln!("{}: Failed to install coc-sh crutch: {}", program_name, e);
                     ::std::process::exit(2);
-                },
+                }
             };
-        },
-        State::COMMIT {only_copy} => {
+        }
+        State::COMMIT { only_copy } => {
             _ = commit(home, vimruntime, only_copy, program_name);
-        },
+        }
         State::SETUP => {
             match crate::setup::setup(home) {
                 Ok(()) => (),
@@ -459,9 +429,9 @@ fn main() {
                     ::std::process::exit(2);
                 }
             };
-        },
+        }
         State::VERSION => {
             version();
-        },
+        }
     }
 }
