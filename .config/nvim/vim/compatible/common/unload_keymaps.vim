@@ -94,6 +94,7 @@ nunmap <esc>
 iunmap <c-c>
 
 unmap <leader>.
+unmap <leader>%
 
 unmap <leader>vc
 unmap <leader>vC
@@ -178,7 +179,8 @@ if v:false
 	unmap <leader>m
 endif
 
-unmap <leader>xx
+unmap <leader>x.
+unmap <leader>x%
 
 if has('nvim') && PluginInstalled('neo-tree')
 	nunmap <c-h>
@@ -262,7 +264,7 @@ if has('nvim') && PluginExists('vim-fugitive')
 	nunmap <leader>g2
 endif
 
-if has('nvim') && PluginExists('ani-cli.nvim')
+if PluginExists('ani-cli.nvim')
 	unmap <leader>xa
 	unmap <leader>xA
 endif
@@ -272,5 +274,9 @@ unmap <leader>xi
 unmap <leader>g*
 
 unmap <leader>xP
+
+if PluginInstalled('activate')
+	unmap <leader>xp
+endif
 
 unmap z00

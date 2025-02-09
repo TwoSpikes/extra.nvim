@@ -125,6 +125,7 @@ nnoremap <silent> <esc> <cmd>let @/ = ""<cr>
 inoremap <c-c> <c-c><cmd>call Numbertoggle()<cr>
 
 noremap <silent> <leader>. <cmd>call SelectPosition($SHELL, g:termpos)<cr>
+noremap <silent> <leader>% <cmd>call SelectPosition($SHELL, g:termpos, fnamemodify(expand("%"), ":h"))<cr>
 
 " COLORSCHEME
 noremap <silent> <leader>vc <cmd>call SelectPosition($VIMRUNTIME."/colors", g:dirpos)<cr>
@@ -224,7 +225,8 @@ if v:false
 	noremap <leader>m <cmd>call SelectPosition(g:far_or_mc, g:termpos)<cr>
 endif
 
-noremap <leader>xx <cmd>call OpenTermProgram()<cr>
+noremap <leader>x. <cmd>call OpenTermProgram()<cr>
+noremap <leader>x% <cmd>call OpenTermProgram(fnamemodify(expand('%'), ':h'))<cr>
 
 if has('nvim') && PluginInstalled('neo-tree')
 	nnoremap <c-h> <cmd>Neotree<cr>
@@ -308,7 +310,7 @@ if has('nvim') && PluginExists('vim-fugitive')
 	nnoremap <leader>g2 <cmd>GitClone --depth=1 --recursive<cr>
 endif
 
-if has('nvim') && PluginExists('ani-cli.nvim')
+if PluginExists('ani-cli.nvim')
 	noremap <leader>xa <cmd>execute "Ani ".g:ani_cli_options." -c"<cr>
 	noremap <leader>xA <cmd>execute "Ani ".g:ani_cli_options<cr>
 endif
@@ -318,5 +320,9 @@ noremap <leader>xi <cmd>call InvertPdf(expand("%"))<cr>
 noremap <leader>g* <cmd>Telescope git_status<cr>
 
 noremap <leader>xP <cmd>TogglePagerMode<cr>
+
+if PluginInstalled('activate')
+	noremap <leader>xp <cmd>lua require('activate').list_plugins()<cr>
+endif
 
 noremap z00 <cmd>execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload.vim'<cr>

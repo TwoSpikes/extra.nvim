@@ -193,7 +193,7 @@ function! FarOrMc()
 endfunction
 call FarOrMc()
 
-function! SelectPosition(cmd, positions)
+function! SelectPosition(cmd, positions, cd=getcwd())
 	while v:true
 		if !has('nvim')||!PluginExists('vim-quickui')
 			echohl Question
@@ -227,7 +227,11 @@ function! SelectPosition(cmd, positions)
 			continue
 		endif
 		if exists('a:positions[position]')
+			let old_cd=getcwd()
+			call chdir(a:cd)
 			execute a:positions[position]['command'](a:cmd)
+			call chdir(old_cd)
+			unlet old_cd
 		else
 			echohl ErrorMsg
 			if g:language ==# 'russian'
@@ -1103,7 +1107,7 @@ let handle_keystroke_function_expression .= "
 execute handle_keystroke_function_expression
 unlet handle_keystroke_function_expression
 
-function! OpenTermProgram()
+function! OpenTermProgram(cd=getcwd())
 	if v:true
 	\|| has('nvim') && PluginInstalled('noice')
 	\|| (v:true
@@ -1122,7 +1126,10 @@ function! OpenTermProgram()
 	else
 		let g:last_open_term_program = select
 	endif
+	let old_cd=getcwd()
+	call chdir(a:cd)
 	call SelectPosition(select, g:termpos)
+	call chdir(old_cd)
 endfunction
 
 function! EnablePagerMode()
