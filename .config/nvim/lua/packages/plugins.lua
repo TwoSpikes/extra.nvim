@@ -544,5 +544,13 @@ pckr.add({
 	{
 		'jinzhongjia/LspUI.nvim',
 	};
+	{
+		'Thiago4532/mdmath.nvim',
+		requires = {
+			{
+				'nvim-treesitter/nvim-treesitter'
+			},
+		},
+	}
 });
 

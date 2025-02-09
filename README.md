@@ -308,3 +308,4 @@ $ exnvim version
 - [pkgman.nvim](https://github.com/TwoSpikes/pkgman.nvim)
 - [ani-cli.nvim](https://github.com/TwoSpikes/ani-cli.nvim)
 - [LspUI.nvim](jinzhongjia/LspUI.nvim)
+- [mdmath.nvim](Thiago4532/mdmath.nvim)
