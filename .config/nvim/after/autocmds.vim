@@ -91,7 +91,7 @@ augroup END
 augroup terminal
 	autocmd!
 	if has('nvim')
-		autocmd termopen * setlocal nocursorline nocursorcolumn | call STCNo()
+		autocmd termopen * setlocal nocursorline nocursorcolumn | call NoNu()
 	endif
 augroup END
 augroup visual

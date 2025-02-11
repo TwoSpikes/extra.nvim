@@ -9,8 +9,6 @@
 " MoveLeft(x1, y1, x2, y2): move to the left of the selection ((x1, y1) — coordinates of the left of the selection, (x2, y2) — coordinates of the right of the selection)
 " MoveRight(x1, x2, y1, y2): move to the right of the selection ((x1, y1) — coordinates of the left of the selection, (x2, y2) — coordinates of the right of the selection)
 
-let g:sneak_mode = ''
-
 function! Do_V_0()
 	if g:pseudo_visual
 		execute "normal! \<c-\>\<c-n>"

@@ -3,7 +3,7 @@ if has('nvim')
 	let g:please_do_not_close_always = v:false
 endif
 
-function! STCRel(winnr=winnr())
+function! RelNu(winnr=winnr())
 	if mode() =~? 'v.*' || mode() ==# "\<c-v>"
 		call CopyHighlightGroup('CursorLineNrVisu', 'CursorLineNr')
 		call CopyHighlightGroup('LineNrVisu', 'LineNr')
@@ -16,43 +16,33 @@ function! STCRel(winnr=winnr())
 	call setwinvar(a:winnr, '&number', v:true)
 	call setwinvar(a:winnr, '&relativenumber', v:true)
 endfunction
-function! STCNo(winnr=winnr())
-	if has('nvim')
-		call setwinvar(a:winnr, '&stc', '')
-	endif
-	setlocal nonu nornu
+function! NoNu(winnr=winnr())
 	call setwinvar(a:winnr, '&number', v:false)
 	call setwinvar(a:winnr, '&relativenumber', v:false)
 endfunction
-function! STCNoAll()
-	tabdo windo call STCNo(winnr())
+function! NoNuAll()
+	tabdo windo call NoNu(winnr())
 endfunction
 
-function! Numbertoggle_stcrel(winnr)
+function! Numbertoggle_RelNu(winnr)
 	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'pckr' && &filetype !=# 'pkgman' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
-		call STCRel(a:winnr)
+		call RelNu(a:winnr)
 	else
-		call STCNo(a:winnr)
+		call NoNu(a:winnr)
 	endif
 endfunction
 function! Numbertoggle(mode='', winnr=winnr())
 	if a:mode =~? 'i' || a:mode =~? 'r' || g:linenr_style ==# 'absolute'
-		call Numbertoggle_stcabs(a:mode, a:winnr)
+		call Numbertoggle_AbsNu(a:mode, a:winnr)
 	else
-		call Numbertoggle_stcrel(a:winnr)
+		call Numbertoggle_RelNu(a:winnr)
 	endif
 endfunction
 function! NumbertoggleAll(mode='')
 	tabdo windo call Numbertoggle(a:mode, winnr())
 endfunction
-function! Numbertoggle_no()
-	if has('nvim')
-		set stc=
-	endif
-	set nonu nornu
-endfunction
 
-function! STCAbs(actual_mode, winnr=winnr())
+function! AbsNu(actual_mode, winnr=winnr())
 	if a:actual_mode ==# '' || a:actual_mode =~? 'n'
 		call CopyHighlightGroup('CursorLineNrNorm', 'CursorLineNr')
 		call CopyHighlightGroup('LineNrNorm', 'LineNr')
@@ -71,15 +61,14 @@ function! STCAbs(actual_mode, winnr=winnr())
 	call setwinvar(a:winnr, '&number', v:true)
 	call setwinvar(a:winnr, '&relativenumber', v:false)
 endfunction
-function! Numbertoggle_stcabs(mode='', winnr=winnr())
+function! Numbertoggle_AbsNu(mode='', winnr=winnr())
 	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'pckr' && &filetype !=# 'pkgman' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
-		call STCAbs(a:mode, a:winnr)
+		call AbsNu(a:mode, a:winnr)
 	else
-		call STCNo(a:winnr)
+		call NoNu(a:winnr)
 	endif
 endfunction	
 if exists('*Pad')
-	noremap <silent> <c-x><c-f> <cmd>Findfilebuffer<cr>
 	function! Findfile()
 		if g:language ==# 'russian'
 			let find_file_label = 'Найти файл: '
@@ -130,6 +119,7 @@ if exists('*Pad')
 		endif
 	endfunction
 	command! -nargs=0 Findfilebuffer call Findfilebuffer()
+	noremap <c-x><c-f> <cmd>Findfilebuffer<cr>
 	noremap <c-c>C <cmd>Findfilebuffer<cr>
 
 	function! SaveAsBase(command, invitation)
@@ -157,8 +147,8 @@ if exists('*Pad')
 	noremap <leader><c-s> <cmd>SaveAs<cr>
 	noremap <leader><c-r> <cmd>SaveAsAndRename<cr>
 else
-	function! Numbertoggle_stcabs(mode='', winnr=winnr())
-		call STCNo(a:winnr)
+	function! Numbertoggle_AbsNu(mode='', winnr=winnr())
+		call NoNu(a:winnr)
 	endfunction	
 endif
 
@@ -195,7 +185,7 @@ call FarOrMc()
 
 function! SelectPosition(cmd, positions, cd=getcwd())
 	while v:true
-		if !has('nvim')||!PluginExists('vim-quickui')
+		if !PluginExists('vim-quickui')
 			echohl Question
 			if g:language ==# 'russian'
 				let select_position_label = 'Выберите позицию %s: '
@@ -246,7 +236,7 @@ function! SelectPosition(cmd, positions, cd=getcwd())
 	endwhile
 endfunction
 
-if has('nvim') && PluginInstalled('neo-tree')
+if PluginInstalled('neo-tree')
 	let s:dir_position_left =
 		\{cmd -> 'Neotree position=left '.cmd}
 	let s:dir_position_right =
@@ -1097,12 +1087,6 @@ let handle_keystroke_function_expression = "
 \\n	else
 \\n		return a:keystroke
 \\n	endif
-\"
-if exists(':Numbertoggle') && exists(':STCAbs')
-let handle_keystroke_function_expression .= "
-\\n	call Numbertoggle(mode)"
-endif
-let handle_keystroke_function_expression .= "
 \\nendfunction"
 execute handle_keystroke_function_expression
 unlet handle_keystroke_function_expression
@@ -1284,20 +1268,20 @@ function! RunAlphaIfNotAlphaRunning()
 		AlphaRemap
 	endif
 endfunction
-if has('nvim') && PluginInstalled('alpha-nvim')
+if PluginInstalled('alpha-nvim')
 	nnoremap <leader>A <cmd>call RunAlphaIfNotAlphaRunning()<cr>
 endif
 
 function! OpenOnStart()
-	if g:open_menu_on_start ==# v:true
+	if g:open_menu_on_start
 		call RebindMenus()
-		call timer_start(0, {->quickui#menu#open()})
+		call timer_start(0, {-> quickui#menu#open()})
 	endif
 
 	if argc() <= 0 && expand('%') == '' || isdirectory(expand('%'))
-		let to_open = v:true
-		let to_open = to_open && !g:DO_NOT_OPEN_ANYTHING
-		let to_open = to_open && !g:PAGER_MODE
+		let to_open = 1
+		let to_open *= !g:DO_NOT_OPEN_ANYTHING
+		let to_open *= !g:PAGER_MODE
 		if to_open
 			if g:open_on_start ==# 'alpha' && has('nvim') && !isdirectory(expand('%')) && PluginInstalled('alpha')
 				Alpha
@@ -1780,7 +1764,7 @@ function! JKWorkaround()
 	if g:open_cmd_on_up ==# "no"
 	  noremap <up> <cmd>call ProcessGBut('k')<cr>
     endif
-	if !has('nvim') || !PluginInstalled('endscroll')
+	if !PluginInstalled('endscroll')
 		noremap j <cmd>call ProcessGBut('j')<cr>
 		if g:open_cmd_on_up ==# "no"
 		  noremap <down> <cmd>call ProcessGBut('j')<cr>
@@ -1790,7 +1774,7 @@ endfunction
 call JKWorkaround()
 
 if !g:linenr
-	call STCNo()
+	call NoNu()
 else
 	call Numbertoggle()
 endif
@@ -2084,27 +2068,6 @@ function! WhenceGroup()
 	execute "verbose hi ".l:s
 endfunction
 
-let s:stc_shrunk = v:false
-function! STCUpd()
-	if &columns ># 40
-		if has('nvim')
-			let &stc = &stc
-		endif
-		if s:stc_shrunk
-			let &stc = s:old_stc
-		endif
-		let s:stc_shrunk = v:false
-	else
-		if s:stc_shrunk
-			let &stc = ''
-		else
-			let s:stc_shrunk = v:true
-			let s:old_stc = &stc
-			let &stc = ''
-		endif
-	endif
-endfunction
-
 function! Remove(a)
 	let v:errmsg=""
 	if a:a!=#''
@@ -2382,10 +2345,8 @@ function! InvertPdf(src, dst=v:null)
 	if len(a:src) ==# 0
 		if v:true
 		\|| has('nvim') && PluginInstalled('noice')
-		\|| (v:false
-		\||		!has('nvim')
-		\||		!PluginInstalled('noice')
-		\|| v:false)
+		\|| !has('nvim')
+		\&& !PluginInstalled('noice')
 		\&& !exists('g:quickui_version')
 			let src = input('Select source file:')
 		else

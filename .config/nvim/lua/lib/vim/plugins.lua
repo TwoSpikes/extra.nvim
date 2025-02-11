@@ -11,6 +11,9 @@ function plugin_delete(name)
 end
 function TSParserNotInstalled(name)
 	local timer = vim.uv.new_timer()
+	if name == "sh" then
+		name = "bash"
+	end
 	timer:start(0, 0, vim.schedule_wrap(function() 
 		require('nvim-treesitter.install').commands.TSInstall['run'](name)
 	end))

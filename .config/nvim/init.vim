@@ -1,15 +1,14 @@
 #!/bin/env -S nvim -u
 
-" Main file of Vim/NeoVim config
+" Main file of my Vim/NeoVim config
 
 " plugin: plug-in
 " ExNvim, exnvim: extra.nvim
 " stc: statuscolumn
 " linenr: line numbers
-" STCRel: enable stc with relative linenr (template for function name)
-" STCAbs: enable stc with absolute linenr (template for function name)
-" STCNo: disable stc (template for function name)
-" STCUpd: update stc (template for function name)
+" RelNu: enable relative line numbers (function)
+" AbsNu: enable absolute line numbers (function)
+" NoNu: disable line numbers (function)
 " autocmd: autocommand
 " augroup: autocmd group
 " buf: buffer

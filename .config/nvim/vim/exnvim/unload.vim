@@ -172,9 +172,8 @@ autocmd! netrw *
 augroup! netrw
 delfunction Numbertoggle
 delfunction NumbertoggleAll
-delfunction Numbertoggle_no
-delfunction Numbertoggle_stcabs
-delfunction Numbertoggle_stcrel
+delfunction Numbertoggle_AbsNu
+delfunction Numbertoggle_RelNu
 delfunction OnFirstTime
 autocmd! exnvim_vim_leave *
 augroup! exnvim_vim_leave
@@ -219,9 +218,9 @@ delfunction Repr_Vim_Grep
 delfunction RestoreCursorFix
 delfunction ReturnHighlightTerm
 delfunction RunAlphaIfNotAlphaRunning
-delfunction STCAbs
-delfunction STCNo
-delfunction STCNoAll
+delfunction AbsNu
+delfunction NoNu
+delfunction NoNuAll
 nunmap k
 ounmap k
 vunmap k
@@ -229,10 +228,9 @@ nunmap <up>
 ounmap <up>
 vunmap <up>
 delfunction ProcessGBut
-delfunction STCRel
+delfunction RelNu
 call timer_stop(g:exnvim_stc_timer)
 unlet g:exnvim_stc_timer
-delfunction STCUpd
 delfunction SaveVars
 delfunction Save_WW_and_Do
 delfunction SelectAll

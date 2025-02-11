@@ -556,7 +556,7 @@ function! RebindMenus_system()
 					\ ])
 	endif
 	call quickui#menu#install(s:option_label, [
-				\ [(g:quickui_icons?" ":"").s:set_line_numbers." %{g:linenr?\"".s:off."\":\"".s:on."\"}", 'let g:linenr=!g:linenr|if !g:linenr|call PreserveAndDo("call STCNoAll()")|else|call PreserveAndDo("call NumbertoggleAll(mode())")|endif', "%{g:linenr?\"".s:disable."\":\"".s:enable."\"} line numbers"],
+				\ [(g:quickui_icons?" ":"").s:set_line_numbers." %{g:linenr?\"".s:off."\":\"".s:on."\"}", 'let g:linenr=!g:linenr|if !g:linenr|call PreserveAndDo("call NoNuAll()")|else|call PreserveAndDo("call NumbertoggleAll(mode())")|endif', "%{g:linenr?\"".s:disable."\":\"".s:enable."\"} line numbers"],
 				\ [(g:quickui_icons?" ":"").s:line_numbers_style_label.': %{g:linenr_style}', 'let g:linenr_style=g:linenr_style==#"relative"?"absolute":"relative"|if g:linenr|call PreserveAndDo("call NumbertoggleAll(mode())")|endif', "Make line numbers %{g:linenr_style==#\"absolute\"?\"".s:make_relative."\":\"".s:make_absolute."\"}"],
 				\ [(g:quickui_icons?"󰅲 ":"").s:show_pair_brackets_label.': %{len(&matchpairs)!=#0?"'.s:on.'":"'.s:off.'"}', 'if len(&matchpairs)!=#0|let g:old_matchpairs=&matchpairs|let &matchpairs=""|else|let &matchpairs=g:old_matchpairs|endif|doautocmd matchparen WinEnter', "Make line numbers %{g:linenr_style==#\"absolute\"?\"".s:make_relative."\":\"".s:make_absolute."\"}"],
 				\ ])
