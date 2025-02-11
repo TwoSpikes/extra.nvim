@@ -1,0 +1,11 @@
+--- .local/share/nvim/site/pack/pckr/opt/vim-quickui/autoload/quickui/style.1.vim	2025-02-11 15:41:30.196138254 +0300
++++ .local/share/nvim/site/pack/pckr/opt/vim-quickui/autoload/quickui/style.vim	2025-02-11 15:43:43.640138203 +0300
+@@ -12,7 +12,7 @@
+ "----------------------------------------------------------------------
+ let g:quickui#style#border = get(g:, 'quickui#style#border', 1)
+ 
+-let g:quickui#style#tip_head = '[tip]'
++let g:quickui#style#tip_head = '%#QuickTip# TIP %*'
+ 
+ let g:quickui#style#preview_w = 85
+ let g:quickui#style#preview_h = 10

@@ -5,3 +5,4 @@ if g:show_ascii_logo
 else
 	hi ExNvimLogo gui=bold,italic
 endif
+hi QuickTip ctermfg=202 ctermbg=85 cterm=bold guifg=#ffff9f guibg=#0f8fff gui=bold

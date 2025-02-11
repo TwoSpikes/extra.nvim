@@ -125,7 +125,8 @@ function! ChangeLanguage_system_english()
 	let s:set_cursor_line = 'Set Cursor L&ine'
 	let s:cursor_line_style = 'C&ursor line style'
 	let s:set_line_numbers = 'Set Line &numbers'
-	let s:line_numbers_style = 'Line numbers &style'
+	let s:line_numbers_style_label = 'Line numbers &style'
+	let s:show_pair_brackets_label = 'Show p&air brackets'
 
 	let s:config_label = '&Config'
 	let s:open_init_vim = 'Open &init.vim'
@@ -251,7 +252,8 @@ function! ChangeLanguage_system_russian()
 	let s:set_cursor_line = '&i:Подсветка линии'
 	let s:cursor_line_style = '&u:Стиль подсветки линии'
 	let s:set_line_numbers = '&n:Номера строк'
-	let s:line_numbers_style = '&s:Стиль номеров строк'
+	let s:line_numbers_style_label = '&s:Стиль номеров строк'
+	let s:show_pair_brackets_label = '&a:Показать парные скобки'
 
 	let s:config_label = '&c:Конфиг'
 	let s:open_init_vim = 'Открыть &init.vim'
@@ -555,7 +557,8 @@ function! RebindMenus_system()
 	endif
 	call quickui#menu#install(s:option_label, [
 				\ [(g:quickui_icons?" ":"").s:set_line_numbers." %{g:linenr?\"".s:off."\":\"".s:on."\"}", 'let g:linenr=!g:linenr|if !g:linenr|call PreserveAndDo("call STCNoAll()")|else|call PreserveAndDo("call NumbertoggleAll(mode())")|endif', "%{g:linenr?\"".s:disable."\":\"".s:enable."\"} line numbers"],
-				\ [(g:quickui_icons?" ":"").s:line_numbers_style.': %{g:linenr_style}', 'let g:linenr_style=g:linenr_style==#"relative"?"absolute":"relative"|if g:linenr|call PreserveAndDo("call NumbertoggleAll(mode())")|endif', "Make line numbers %{g:linenr_style==#\"absolute\"?\"".s:make_relative."\":\"".s:make_absolute."\"}"],
+				\ [(g:quickui_icons?" ":"").s:line_numbers_style_label.': %{g:linenr_style}', 'let g:linenr_style=g:linenr_style==#"relative"?"absolute":"relative"|if g:linenr|call PreserveAndDo("call NumbertoggleAll(mode())")|endif', "Make line numbers %{g:linenr_style==#\"absolute\"?\"".s:make_relative."\":\"".s:make_absolute."\"}"],
+				\ [(g:quickui_icons?"󰅲 ":"").s:show_pair_brackets_label.': %{len(&matchpairs)!=#0?"'.s:on.'":"'.s:off.'"}', 'if len(&matchpairs)!=#0|let g:old_matchpairs=&matchpairs|let &matchpairs=""|else|let &matchpairs=g:old_matchpairs|endif|doautocmd matchparen WinEnter', "Make line numbers %{g:linenr_style==#\"absolute\"?\"".s:make_relative."\":\"".s:make_absolute."\"}"],
 				\ ])
 
 	call quickui#menu#install(s:config_label, [

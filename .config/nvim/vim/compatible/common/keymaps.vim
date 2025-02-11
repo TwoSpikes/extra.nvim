@@ -153,11 +153,11 @@ noremap <c-w><c-g> <cmd>echo "Quit"<cr>
 " Emacs-like keymaps
 noremap <silent> <c-x><c-c> <cmd>qall<cr>
 noremap <silent> <c-x><c-q> <cmd>qall!<cr>
-noremap <silent> <c-x>s <cmd>w<cr>
+noremap <silent> <c-x>s <cmd>write<cr>
 noremap <silent> <c-x>S <cmd>wall<Bar>echohl MsgArea<Bar>echo 'Saved all buffers'<cr>
 noremap <silent> <c-x><c-s> <cmd>w<cr>
 noremap <silent> <c-x>k <cmd>Killbuffer<cr>
-noremap <silent> <c-x>0 <cmd>q<cr>
+noremap <silent> <c-x>0 <cmd>quit<cr>
 noremap <silent> <c-x>1 <cmd>only<cr>
 noremap <silent> <c-x>2 <cmd>split<cr>
 noremap <silent> <c-x>3 <cmd>vsplit<cr>
