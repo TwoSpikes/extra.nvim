@@ -77,7 +77,13 @@ pckr.add({
 	};
     {
 		'nvim-treesitter/nvim-treesitter',
-		run = ':TSUpdate',
+		run = function()
+			patch_plugin('nvim-treesitter')
+			local timer = vim.uv.new_timer()
+			vim.defer_fn(function()
+				vim.cmd([[TSUpdate]])
+			end, 0)
+		end,
 	};
     {
 		'nvim-treesitter/playground',

@@ -1,0 +1,21 @@
+--- .local/share/nvim/site/pack/pckr/opt/nvim-treesitter/lua/nvim-treesitter/install.lua	2025-02-11 16:58:29.366395344 +0300
++++ .local/share/nvim/site/pack/pckr/opt/nvim-treesitter/lua/nvim-treesitter/install.lua	2025-02-11 17:03:19.086395234 +0300
+@@ -198,7 +198,9 @@
+   end
+   if i == #cmd_list + 1 then
+     finished_commands = finished_commands + 1
+-    return print(get_job_status() .. " " .. success_message)
++    local a = print(get_job_status() .. " " .. success_message)
++    vim.cmd([[doautocmd User TSInstallSuccess]])
++    return a
+   end
+ 
+   local attr = cmd_list[i]
+@@ -454,6 +456,7 @@
+ 
+   if with_sync then
+     if iter_cmd_sync(command_list) == true then
++      vim.cmd[[doautocmd User TSInstallSuccess]]
+       print("Treesitter parser for " .. lang .. " has been installed")
+     end
+   else
