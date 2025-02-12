@@ -1,0 +1,18 @@
+--- .local/share/nvim/site/pack/pckr/opt/vim-illuminate/lua/illuminate/engine.lua	2025-02-12 15:02:07.385884435 +0300
++++ .local/share/nvim/site/pack/pckr/opt/vim-illuminate/lua/illuminate/engine.lua	2025-02-12 15:05:24.513884360 +0300
+@@ -189,13 +189,10 @@
+         if not ok then
+             local time = vim.loop.hrtime()
+             if #error_timestamps == 5 then
+-                vim.notify(
+-                    'vim-illuminate: An internal error has occured: ' .. vim.inspect(ok) .. vim.inspect(err),
+-                    vim.log.levels.ERROR,
+-                    {}
+-                )
+                 M.stop()
+                 stop_timer(timer)
++                TSParserNotInstalled(vim.o.filetype)
++                vim.cmd([[autocmd User TSInstallSuccess lua require('illuminate').resume()]])
+             elseif #error_timestamps == 0 or time - error_timestamps[#error_timestamps] < 500000000 then
+                 table.insert(error_timestamps, time)
+             else

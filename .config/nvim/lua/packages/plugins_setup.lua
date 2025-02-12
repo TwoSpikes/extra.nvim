@@ -94,7 +94,7 @@ if plugin_installed("conform") then
 	require('packages.conform.init')
 end
 require('packages.convert.init')
-if vim.g.enable_nvim_treesitter_context then
+if vim.g.enable_nvim_treesitter_context and plugin_installed('treesitter-context') then
 	require('packages.treesitter-context.init')
 else
 	if plugin_exists('nvim-treesitter-context') then

@@ -87,6 +87,9 @@ pckr.add({
 	};
     {
 		'nvim-treesitter/playground',
+		run = function()
+			patch_plugin('nvim-treesitter-playground')
+		end,
 	};
 	{
 		'weizheheng/nvim-workbench',
@@ -190,6 +193,9 @@ pckr.add({
 	};
 	{
 		'RRethy/vim-illuminate',
+		run = function()
+			patch_plugin('vim-illuminate')
+		end,
 	};
 	{
 		'folke/todo-comments.nvim',
@@ -463,7 +469,12 @@ pckr.add({
 });
 if vim.g.enable_nvim_treesitter_context then
 	pckr.add({
-		'nvim-treesitter/nvim-treesitter-context',
+		{
+			'nvim-treesitter/nvim-treesitter-context',
+			run = function()
+				patch_plugin('nvim-treesitter-context')
+			end,
+		}
 	});
 end
 pckr.add({
