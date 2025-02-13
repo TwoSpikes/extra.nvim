@@ -124,7 +124,7 @@ nnoremap <silent> <esc> <cmd>let @/ = ""<cr>
 inoremap <c-c> <c-c><cmd>call Numbertoggle()<cr>
 
 noremap <silent> <leader>. <cmd>call SelectPosition($SHELL, g:termpos)<cr>
-noremap <silent> <leader>% <cmd>call SelectPosition($SHELL, g:termpos, fnamemodify(expand("%"), ":h"))<cr>
+noremap <silent> <leader>% <cmd>call SelectPosition($SHELL, g:termpos, fnamemodify(expand("%:p"), ":h"))<cr>
 
 " COLORSCHEME
 noremap <silent> <leader>vc <cmd>call SelectPosition($VIMRUNTIME."/colors", g:dirpos)<cr>
@@ -225,7 +225,7 @@ if v:false
 endif
 
 noremap <leader>x. <cmd>call OpenTermProgram()<cr>
-noremap <leader>x% <cmd>call OpenTermProgram(fnamemodify(expand('%'), ':h'))<cr>
+noremap <leader>x% <cmd>call OpenTermProgram(fnamemodify(expand('%:p'), ':h'))<cr>
 
 if has('nvim') && PluginInstalled('neo-tree')
 	nnoremap <c-h> <cmd>Neotree<cr>
@@ -323,5 +323,7 @@ noremap <leader>xP <cmd>TogglePagerMode<cr>
 if PluginInstalled('activate')
 	noremap <leader>xp <cmd>lua require('activate').list_plugins()<cr>
 endif
+
+noremap <leader><right> <cmd>call chdir(fnamemodify(expand('%:p'), ':h'))<bar>pwd<cr>
 
 noremap z00 <cmd>execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload.vim'<cr>

@@ -76,7 +76,7 @@ if exists('*Pad')
 			let find_file_label = 'Find file: '
 		endif
 		echohl Question
-		let filename = input(find_file_label, fnamemodify(expand("%"), ":~:.:h").'/', "file")
+		let filename = input(find_file_label, fnamemodify(expand("%:p"), ":~:.:h").'/', "file")
 		echohl Normal
 
 		if len(filename) ==# 0
@@ -102,7 +102,7 @@ if exists('*Pad')
 			let find_file_label = 'Find file (open in buffer): '
 		endif
 		echohl Question
-		let filename = input(find_file_label, fnamemodify(expand("%"), ":~:.:h").'/', "file")
+		let filename = input(find_file_label, fnamemodify(expand("%:p"), ":~:.:h").'/', "file")
 		echohl Normal
 
 		if len(filename) ==# 0
@@ -128,7 +128,7 @@ if exists('*Pad')
 			let filename = input(a:invitation)
 			echohl Normal
 		else
-			let filename = quickui#input#open(Pad(a:invitation, g:pad_amount_confirm_dialogue), fnamemodify(expand('%'), ':~:.'))
+			let filename = quickui#input#open(Pad(a:invitation, g:pad_amount_confirm_dialogue), fnamemodify(expand('%:p'), ':~:.'))
 		endif
 		if filename !=# ''
 			set lazyredraw

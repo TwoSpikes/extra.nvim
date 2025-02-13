@@ -46,13 +46,11 @@
 
 if has('nvim')
 	lua vim.loader.enable()
+else
+	set nocompatible
 endif
 
 call inputsave()
-
-if !has('nvim')
-	set nocompatible
-endif
 
 hi Loading0 ctermfg=0 ctermbg=9 cterm=bold guifg=#303030 guibg=#ff0000 gui=bold
 set statusline=%#Loading0#Loading\ 0%%
@@ -1043,5 +1041,11 @@ function! InitPckr()
 	endif
 endfunction
 
-autocmd VimEnter * call timer_start(0, {->execute('source '.g:CONFIG_PATH.'/after/init.vim')})
+if filereadable(expand(g:CONFIG_PATH).'/after/init.vim')
+	autocmd VimEnter * call timer_start(0, {->execute('source '.g:CONFIG_PATH.'/after/init.vim')})
+else
+	let g:exnvim_fully_loaded = 3
+	let g:specloading = ' OK '
+	silent! doautocmd User ExNvimLoaded
+endif
 call inputrestore()

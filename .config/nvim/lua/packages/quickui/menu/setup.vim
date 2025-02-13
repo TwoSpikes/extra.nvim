@@ -88,6 +88,7 @@ function! ChangeLanguage_system_english()
 	let s:open_terminal_in_current_file_dir_label = 'Terminal in curr&.file dir'
 	let s:open_terminal_program_label = 'Op&en terminal program'
 	let s:open_in_current_file_dir_label = 'Open in curr&-t file dir'
+	let s:cd_into_current_file_dir_label = 'c&d into curr-t file dir'
 	let s:open_far_mc_label = 'Open Far/M&c'
 	let s:open_lazygit_label = 'Open lazy&git'
 	let s:open_start_menu_label = 'Open st&art menu'
@@ -215,6 +216,7 @@ function! ChangeLanguage_system_russian()
 	let s:open_terminal_in_current_file_dir_label = 'Терминал в директ&.текущ.файла'
 	let s:open_terminal_program_label = '&e:Откр.прог.в терминале'
 	let s:open_in_current_file_dir_label = 'Откр.в дир&-и текущ.файла'
+	let s:cd_into_current_file_dir_label = 'c&d-шнуться в дир-ю тек. файла'
 	let s:open_far_mc_label = 'Открыть Far/M&c'
 	let s:open_lazygit_label = '&g:Открыть lazygit'
 	let s:open_start_menu_label = '&a:Открыть главное меню'
@@ -428,9 +430,10 @@ function! RebindMenus_system()
 				\ [(g:quickui_icons?" ":"").s:vertically_split_label."\tCtrl-x 3", 'vsplit', 'Vertically split current window'],
 				\ ["--", ''],
 				\ [(g:quickui_icons?" ":"").s:open_terminal_label."\tLEAD .", 'call SelectPosition("", g:termpos)', 'Opens a terminal'],
-				\ [(g:quickui_icons?" ":"").s:open_terminal_in_current_file_dir_label."\tLEAD %", 'call SelectPosition("", g:termpos, fnamemodify(expand("%"), ":h"))', 'Opens a terminal program in current file''s directory'],
+				\ [(g:quickui_icons?" ":"").s:open_terminal_in_current_file_dir_label."\tLEAD %", 'call SelectPosition("", g:termpos, fnamemodify(expand("%:p"), ":h"))', 'Opens a terminal program in current file''s directory'],
 				\ [(g:quickui_icons?" ":"").s:open_terminal_program_label."\tLEAD x.", 'call OpenTermProgram()', 'Opens a terminal program'],
-				\ [(g:quickui_icons?" ":"").s:open_in_current_file_dir_label."\tLEAD x%", 'call OpenTermProgram(fnamemodify(expand("%"), ":h"))', 'Opens a terminal program'],
+				\ [(g:quickui_icons?" ":"").s:open_in_current_file_dir_label."\tLEAD x%", 'call OpenTermProgram(fnamemodify(expand("%:p"), ":h"))', 'Opens a terminal program in current file''s directory'],
+				\ [(g:quickui_icons?"󱧮 ":"").s:cd_into_current_file_dir_label."\tLEAD RT", 'call chdir(fnamemodify(expand("%:p"), ":h"))|pwd', 'Change directory to current file''s directory'],
 				\ ])
 	if v:false
 	\|| executable('mc')
