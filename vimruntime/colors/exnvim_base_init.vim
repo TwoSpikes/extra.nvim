@@ -92,4 +92,7 @@ augroup ExNvim_ColorScheme_After
 	\|	if !IsHighlightGroupDefined('CursorLineNrVisu')
 	\|		call CopyHighlightGroup('Visual', 'CursorLineNrVisu')
 	\|	endif
+	\|  if !IsHighlightGroupDefined('ModeCom')
+	\|      call CopyHighlightGroup('Question', 'ModeCom')
+	\|  endif
 augroup END

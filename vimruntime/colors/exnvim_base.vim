@@ -6,3 +6,6 @@ else
 	hi ExNvimLogo gui=bold,italic
 endif
 hi QuickTip ctermfg=202 ctermbg=85 cterm=bold guifg=#ffff9f guibg=#0f8fff gui=bold
+if !IsHighlightGroupDefined('Statuslinemod')
+	hi Statuslinemod guifg=#f0f0ff guibg=#0080a0 gui=bold
+endif
