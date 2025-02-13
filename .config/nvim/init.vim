@@ -448,7 +448,7 @@ function! Showtab()
 	if g:compatible !~# "^helix_hard"
 		if &columns ># 40
 			let stl_name .= '%( %#StatusLinemod#'
-			let stl_name .= &syntax
+			let stl_name .= &filetype
 			let stl_name .= '%)%*'
 		endif
 	endif
