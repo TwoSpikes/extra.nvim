@@ -183,7 +183,7 @@ function! FarOrMc()
 endfunction
 call FarOrMc()
 
-function! SelectPosition(cmd, positions, cd=getcwd())
+function! SelectPosition(cmd, positions, cd=v:null)
 	while v:true
 		if !PluginExists('vim-quickui')
 			echohl Question
@@ -217,11 +217,15 @@ function! SelectPosition(cmd, positions, cd=getcwd())
 			continue
 		endif
 		if exists('a:positions[position]')
-			let old_cd=getcwd()
-			call chdir(a:cd)
+			if a:cd !=# v:null
+				let old_cd=getcwd()
+				call chdir(a:cd)
+			endif
 			execute a:positions[position]['command'](a:cmd)
-			call chdir(old_cd)
-			unlet old_cd
+			if a:cd !=# v:null
+				call chdir(old_cd)
+				unlet old_cd
+			endif
 		else
 			echohl ErrorMsg
 			if g:language ==# 'russian'
