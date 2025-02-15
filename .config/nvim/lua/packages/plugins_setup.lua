@@ -18,15 +18,9 @@ require('packages.quickui.init')
 vim.cmd('exec printf("so %s/lua/packages/mason.vim", g:CONFIG_PATH)')
 if plugin_exists('coc.nvim') then
 	if vim.g.use_nvim_cmp then
-		plugin_delete('coc.nvim')
 		require('packages.nvim-cmp.init')
 	else
 		require('packages.coc.init')
-	end
-end
-if not vim.g.use_codeium then
-	if plugin_exists('codeium.vim') then
-		plugin_delete('codeium.vim')
 	end
 end
 if plugin_installed("illuminate") then
@@ -66,10 +60,6 @@ end
 if plugin_installed("noice") then
 	if vim.fn.match(vim.g.compatible, "^helix_hard") == -1 then
 		require('packages.noice.init')
-	else
-		if plugin_exists('noice.nvim') then
-			plugin_delete('noice.nvim')
-		end
 	end
 end
 if plugin_installed("edgy") then
@@ -96,10 +86,6 @@ end
 require('packages.convert.init')
 if vim.g.enable_nvim_treesitter_context and plugin_installed('treesitter-context') then
 	require('packages.treesitter-context.init')
-else
-	if plugin_exists('nvim-treesitter-context') then
-		plugin_delete('nvim-treesitter-context')
-	end
 end
 if plugin_installed("nvim-ts-autotag") then
 	require('packages.ts-autotag.init')
@@ -136,5 +122,5 @@ if plugin_installed("mdmath") then
 end
 
 -- ExNvimOptionInComment LUA_REQUIRE_GOTO_PREFIX %CONFIG_PATH%/lua/%FILE%.lua
--- ExNvimOptionInComment LUA_REQUIRE_GOTO_PREFIX %LOCALSHAREPATH%/site/pack/pckr/opt/*/lua/%FILE%.lua
--- ExNvimOptionInComment LUA_REQUIRE_GOTO_PREFIX %LOCALSHAREPATH%/site/pack/pckr/opt/*/lua/%FILE%/init.lua
+-- ExNvimOptionInComment LUA_REQUIRE_GOTO_PREFIX %LOCALSHAREPATH%/lazy/*/lua/%FILE%.lua
+-- ExNvimOptionInComment LUA_REQUIRE_GOTO_PREFIX %LOCALSHAREPATH%/lazy/*/lua/%FILE%/init.lua

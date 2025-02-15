@@ -64,7 +64,6 @@ delfunction DefineAugroups
 delfunction Defone
 delfunction DisablePagerMode
 delfunction DoCommentOutDefault
-delfunction DoPackerUpdate
 delfunction Do_N_Tilde
 delfunction Do_V_Tilde
 delfunction DotfilesCommit
@@ -386,6 +385,7 @@ if PluginInstalled('diffview')
 	delcommand DiffviewToggleFiles
 endif
 delcommand DotfilesCommit
+delcommand EnableHLChunk
 if PluginExists('emmet-vim')
 	delcommand Emmet
 	delcommand EmmetInstall
@@ -492,6 +492,9 @@ if PluginInstalled('lspconfig')
 	delcommand LspStart
 	delcommand LspStop
 endif
+if PluginInstalled('LspUI')
+	delcommand LspUI
+endif
 if PluginInstalled('luasnip')
 	delcommand LuaSnipListAvailable
 	delcommand LuaSnipUnlinkCurrent
@@ -505,6 +508,9 @@ if PluginInstalled('mason')
 	delcommand Mason
 endif
 delcommand Md
+if PluginExists('mdmath.nvim')
+	delcommand MdMath
+endif
 if PluginInstalled('neogen')
 	delcommand Neogen
 endif
@@ -526,6 +532,7 @@ if PluginInstalled('noice')
 	delcommand NoiceLog
 	delcommand NoicePick
 	delcommand NoiceRoutes
+	delcommand NoiceSnacks
 	delcommand NoiceStats
 	delcommand NoiceTelescope
 	delcommand NoiceViewstats
@@ -538,11 +545,8 @@ if PluginInstalled('null-ls')
 	delcommand NullLsInfo
 	delcommand NullLsLog
 endif
-if exists('*PackerUpdate')
-	delcommand PackerUpdate
-endif
-if PluginInstalled('pckr')
-	delcommand Pckr
+if PluginInstalled('lazy')
+	delcommand Lazy
 endif
 if PluginInstalled('plenary')
 	delcommand PlenaryBustedDirectory
@@ -669,3 +673,7 @@ if PluginInstalled('which-key')
 endif
 delfunction PluginInstalled
 delcommand Write
+
+unlet g:CONFIG_ALREADY_LOADED
+
+noremap z01 <cmd>execute 'source' g:CONFIG_PATH.'/vim/exnvim/reload.vim'<cr>

@@ -15,52 +15,47 @@ local function patch_plugin(pluginname)
 	end
 end
 
-local function bootstrap_pckr()
-  local pckr_path = vim.fn.stdpath("data") .. "/pckr/pckr.nvim"
+local function bootstrap_lazy()
+  local lazy_path = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
-  if not (vim.uv or vim.loop).fs_stat(pckr_path) then
+  if not (vim.uv or vim.loop).fs_stat(lazy_path) then
     vim.fn.system({
       'git',
       'clone',
 	  '--depth=1',
       "--filter=blob:none",
-      'https://github.com/lewis6991/pckr.nvim',
-      pckr_path
+      'https://github.com/folke/lazy.nvim.git',
+      lazy_path
     })
-
-	local dirs = vim.fn.readdir(vim.fn.expand('~/.config/nvim/patch/pckr.nvim'))
-	for i, dir in ipairs(dirs) do
-		vim.cmd('!cd>/dev/null;patch -p0 < ~/.config/nvim/patch/pckr.nvim/'..dir..';cd ->/dev/null')
-	end
   end
 
-  vim.opt.rtp:prepend(pckr_path)
+  vim.opt.rtp:prepend(lazy_path)
 end
 
-bootstrap_pckr();
+bootstrap_lazy();
 
-local pckr = require('pckr')
+local lazy = require('lazy');
 
-pckr.add({
+local plugins = {
 	{
 		'nvim-telescope/telescope.nvim',
         requires = {
             { 'nvim-lua/plenary.nvim' },
         },
-		run = function()
+		build = function()
 			patch_plugin('telescope.nvim')
 		end,
-    };
-    {
+	},
+	{
         'williamboman/mason.nvim',
-    };
-    {
+	},
+	{
         'williamboman/mason-lspconfig.nvim',
-    };
-    {
+	},
+	{
 		'neovim/nvim-lspconfig',
-	};
-    {
+	},
+	{
         'RishabhRD/lspactions',
         branch = 'master',
         requires = {
@@ -71,138 +66,128 @@ pckr.add({
                 },
             },
         },
-    };
+	},
 	{
 		'rcarriga/nvim-notify',
-	};
-    {
+	},
+	{
 		'nvim-treesitter/nvim-treesitter',
-		run = function()
+		build = function()
 			patch_plugin('nvim-treesitter')
 			local timer = vim.uv.new_timer()
 			vim.defer_fn(function()
 				vim.cmd([[TSUpdate]])
 			end, 0)
 		end,
-	};
-    {
+	},
+	{
 		'nvim-treesitter/playground',
-		run = function()
+		build = function()
 			patch_plugin('nvim-treesitter-playground')
 		end,
-	};
+	},
 	{
 		'weizheheng/nvim-workbench',
-	};
+	},
 	{
 		'norcalli/nvim-colorizer.lua',
-	};
+	},
 	{
 		'prichrd/netrw.nvim',
-	};
+	},
 	{
 		"windwp/nvim-autopairs",
 	-- 	config = function() require("nvim-autopairs").setup {} end
-	};
+	},
 	{
 		"folke/which-key.nvim",
-	};
+	},
 	{
 		"kwkarlwang/bufresize.nvim",
-	};
+	},
 	{
 		'junegunn/goyo.vim',
-	};
+	},
 	{
 		'junegunn/limelight.vim',
-	};
+	},
 	{
 		'rust-lang/rust.vim',
-	};
+	},
 	{
 		'preservim/tagbar',
-	};
+	},
 	{
 		'skywind3000/vim-quickui',
-		run = function()
+		build = function()
 			patch_plugin('vim-quickui')
 		end,
-	};
-});
-if not vim.g.use_nvim_cmp then
-	pckr.add({
-		{
-			'neoclide/coc.nvim',
-			branch = 'master',
-			run = 'npm ci',
-		}
-	});
-end
-pckr.add({
+	},
+	{
+		'neoclide/coc.nvim',
+		branch = 'master',
+		build = 'npm ci',
+		enabled = not vim.g.use_nvim_cmp,
+	},
 	{
 		'neoclide/vim-jsx-improve',
-	};
+	},
 	{
 		'voldikss/vim-floaterm',
-	};
+	},
 	{
 		'https://github.com/vim-utils/vim-man',
-	};
+	},
 	{
 		'tpope/vim-surround',
-	};
+	},
 	{
 		'alvan/vim-closetag',
-	};
+	},
 	{
 		'yuezk/vim-js',
-	};
+	},
 	{
 		'maxmellon/vim-jsx-pretty',
-	};
+	},
 	{
 		'kmoschcau/emmet-vim',
-	};
-});
-if not vim.g.use_github_copilot == false then
-	pckr.add({
-		{
-			'github/copilot.vim',
-		}
-	});
-end
-pckr.add({
+	},
+	{
+		'github/copilot.vim',
+		enabled = vim.g.use_github_copilot,
+	},
 	{
 		'erietz/vim-terminator',
-	};
+	},
 	{
 		'tpope/vim-fugitive',
-	};
+	},
 	{
 		'mg979/vim-visual-multi',
 		branch = 'master',
-	};
+	},
 	{
 		'vim-jp/vital.vim',
-	};
+	},
 	{
 		'nvim-pack/nvim-spectre',
 		requires = {
 			'nvim-lua/plenary.nvim',
 		}
-	};
+	},
 	{
 		'RRethy/vim-illuminate',
-		run = function()
+		build = function()
 			patch_plugin('vim-illuminate')
 		end,
-	};
+	},
 	{
 		'folke/todo-comments.nvim',
 		requires = {
 			'nvim-lua/plenary.nvim',
 		}
-	};
+	},
 
 	{
 		"rcarriga/nvim-dap-ui",
@@ -214,7 +199,7 @@ pckr.add({
 				"nvim-neotest/nvim-nio",
 			}
 		}
-	};
+	},
 	{
 		"theHamsta/nvim-dap-virtual-text",
 		requires = {
@@ -222,7 +207,7 @@ pckr.add({
 				"mfussenegger/nvim-dap",
 			},
 		}
-	};
+	},
 	{
 		'nvim-telescope/telescope-dap.nvim',
 		requires = {
@@ -230,7 +215,7 @@ pckr.add({
 				"mfussenegger/nvim-dap",
 			},
 		}
-	};
+	},
 	{
 		'mfussenegger/nvim-dap-python',
 		requires = {
@@ -238,7 +223,7 @@ pckr.add({
 				"mfussenegger/nvim-dap",
 			}
 		}
-	};
+	},
 	{
 		'leoluz/nvim-dap-go',
 		requires = {
@@ -246,7 +231,7 @@ pckr.add({
 				"mfussenegger/nvim-dap",
 			}
 		}
-	};
+	},
 	{
 		'mfussenegger/nvim-jdtls',
 		requires = {
@@ -254,62 +239,74 @@ pckr.add({
 				"mfussenegger/nvim-dap",
 			}
 		}
-	};
+	},
 	{
-		'scalameta/nvim-metals',
-		requires = {
-			{
-				'nvim-lua/plenary.nvim'
-			},
-			{
-				"j-hui/fidget.nvim",
-				opts = {},
-			},
-			{
-				"mfussenegger/nvim-dap",
-			}
+		"scalameta/nvim-metals",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
 		},
-    config = 'packages.metals.init'
-	};
+		ft = { "scala", "sbt", "java" },
+		opts = function()
+			local metals_config = require("metals").bare_config()
+			metals_config.on_attach = function(client, bufnr)
+				-- your on_attach function
+			end
+
+			return metals_config
+		end,
+		config = function(self, metals_config)
+			local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = self.ft,
+				callback = function()
+					require("metals").initialize_or_attach(metals_config)
+				end,
+				group = nvim_metals_group,
+			})
+		end
+	},
 	{
 		'hrsh7th/cmp-nvim-lsp',
-	};
+	},
 	{
 		'hrsh7th/cmp-buffer',
-		run = function()
+		build = function()
 			patch_plugin('cmp-buffer')
 		end,
-	};
+	},
 	{
 		'hrsh7th/cmp-path',
-		run = function()
+		build = function()
 			patch_plugin('cmp-path')
 		end,
-	};
+	},
 	{
 		'hrsh7th/cmp-cmdline',
-		run = function()
+		build = function()
 			patch_plugin('cmp-cmdline')
 		end,
-	};
+	},
 	{
 		'hrsh7th/nvim-cmp',
-	};
+	},
 	{
 		'hrsh7th/cmp-vsnip',
-	};
+	},
 	{
 		'hrsh7th/vim-vsnip',
-	};
+	},
 	{
 		'lewis6991/gitsigns.nvim',
-	};
+	},
 	{
 		'goolord/alpha-nvim',
-	};
+		dependencies = {
+			'nvim-tree/nvim-web-devicons'
+		},
+	},
 	{
 		'olimorris/persisted.nvim',
-	};
+	},
 	{
 		'Julian/lean.nvim',
 		event = { 'BufReadPre *.lean', 'BufNewFile *.lean' },
@@ -325,46 +322,40 @@ pckr.add({
 			},
 			mappings = true,
 		}
-	};
+	},
 	{
 		'tommcdo/vim-lion',
-	};
-})
-if os.getenv('TERMUX_VERSION') == nil then
-	pckr.add({
-		'lyokha/vim-xkbswitch',
-	});
-end
-pckr.add({
+	},
+	{
+	'lyokha/vim-xkbswitch',
+	enabled = os.getenv('TERMUX_VERSION') == nil,
+};
 	{
 		"danymat/neogen",
 		-- Uncomment next line if you want to follow only stable versions
 		-- tag = "*"
-	};
+	},
 	{
 		'https://github.com/folke/yanky.nvim',
-	};
+	},
 	{
 		'https://github.com/mfussenegger/nvim-lint',
-	};
+	},
 	{
 		'smartpde/telescope-recent-files',
-	};
-});
-if vim.fn.match(vim.g.compatible, "^helix_hard") == -1 then
-	pckr.add({
-		'https://github.com/folke/noice.nvim',
-		requires = {
-			{
-				'MunifTanjim/nui.nvim',
-			},
-			{
-				'rcarriga/nvim-notify',
-			},
-		}
-	});
-end
-pckr.add({
+	},
+	{
+	'https://github.com/folke/noice.nvim',
+	requires = {
+		{
+			'MunifTanjim/nui.nvim',
+		},
+		{
+			'rcarriga/nvim-notify',
+		},
+	},
+	enabled = vim.fn.match(vim.g.compatible, '^helix_hard') == -1,
+};
 	{
 		'https://github.com/folke/edgy.nvim',
 		opts = {
@@ -435,10 +426,10 @@ pckr.add({
 			  "neo-tree",
 			},
 		},
-	};
+	},
 	{
 		'echasnovski/mini.bracketed',
-	};
+	},
 	{
 		'nvim-neo-tree/neo-tree.nvim',
 		branch = "v3.x",
@@ -447,120 +438,104 @@ pckr.add({
 		  "MunifTanjim/nui.nvim",
 		  "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
 		}
-	};
+	},
 	{
 		'TwoSpikes/endscroll.nvim',
-	};
+	},
 	{
 		'declancm/cinnamon.nvim',
-	};
+	},
 	{
 		'nvimtools/none-ls.nvim',
-		requires = {
+		dependencies = {
 			'nvimtools/none-ls-extras.nvim',
 		}
-	};
+	},
 	{
 		'stevearc/conform.nvim',
-	};
+	},
 	{
 		'cjodo/convert.nvim',
-	};
-});
-if vim.g.enable_nvim_treesitter_context then
-	pckr.add({
-		{
-			'nvim-treesitter/nvim-treesitter-context',
-			run = function()
-				patch_plugin('nvim-treesitter-context')
-			end,
-		}
-	});
-end
-pckr.add({
+	},
+	{
+		'nvim-treesitter/nvim-treesitter-context',
+		build = function()
+			patch_plugin('nvim-treesitter-context')
+		end,
+		enabled = vim.g.enable_nvim_treesitter_context,
+	},
 	{
 		'windwp/nvim-ts-autotag',
-	};
+	},
 	{
 		'kevinhwang91/nvim-ufo',
-		requires = {
+		dependencies = {
 			'kevinhwang91/promise-async',
 		}
-	};
+	},
 	{
 		'sindrets/diffview.nvim',
-	};
+	},
 	{
 		'folke/trouble.nvim',
-	};
+	},
 	{
 		"L3MON4D3/LuaSnip",
 		-- follow latest release.
-		tag = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
-		-- install jsregexp (optional!:).
-		run = "make install_jsregexp",
-		requires = {
-			{
-				'rafamadriz/friendly-snippets',
-			}
-		},
-	};
+		version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+		-- install jsregexp (optional!).
+		build = "make install_jsregexp"
+	},
 	{
 		'justinmk/vim-sneak',
-	};
+	},
 	{
 		'kevinhwang91/nvim-bqf',
 		ft = 'qf',
 		requires = {
 			{
 				'junegunn/fzf',
-				run = function()
+				build = function()
 					vim.fn['fzf#install']()
 				end,
 			},
 		},
-	};
-});
-if vim.g.use_codeium then
-	pckr.add({
+	},
+	{
 		'Exafunction/codeium.vim',
-	});
-end
-pckr.add({
+		enabled = vim.g.use_codeium,
+	},
 	{
 		'TwoSpikes/music-player.vim',
-	};
-});
-if vim.fn.match(vim.g.compatible, '^helix') == -1 then
-	pckr.add({
-		'airblade/vim-gitgutter',
-	});
-end
-pckr.add({
+	},
+	{
+	'airblade/vim-gitgutter',
+	enabled = vim.fn.match(vim.g.compatible, '^helix') == -1,
+	},
 	{
 		'danilamihailov/beacon.nvim',
-		run = function()
+		build = function()
 			patch_plugin('beacon.nvim')
 		end,
-	};
+	},
 	{
 		'm-demare/hlargs.nvim',
-	};
+	},
 	{
 		'RaafatTurki/hex.nvim',
-	};
+	},
 	{
 		'TwoSpikes/pkgman.nvim',
-	};
+	},
 	{
 		'TwoSpikes/ani-cli.nvim',
-	};
+	},
 	{
 		'TwoSpikes/hlchunk.nvim',
-	};
+	},
 	{
 		'jinzhongjia/LspUI.nvim',
-	};
+	},
 	{
 		'Thiago4532/mdmath.nvim',
 		requires = {
@@ -568,10 +543,10 @@ pckr.add({
 				'nvim-treesitter/nvim-treesitter'
 			},
 		},
-	};
+	},
 	{
 		'https://github.com/roobert/activate.nvim',
-	};
+	},
 	{
 		'abecodes/tabout.nvim',
 		config = function()
@@ -596,6 +571,15 @@ pckr.add({
                 exclude = {} -- tabout will ignore these filetypes
             }
         end,
-	}
-});
+	},
+};
 
+lazy.setup({
+	spec = plugins,
+	install = {
+		colorscheme = { "blueorange" }
+	},
+	checker = {
+		enabled = true,
+	},
+})

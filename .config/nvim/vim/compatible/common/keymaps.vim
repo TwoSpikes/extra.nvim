@@ -110,7 +110,6 @@ noremap <leader>: :<c-u>'<,'>
 noremap <leader>= :tabe 
 noremap <leader>- :e 
 noremap <leader>1 :!
-nnoremap <leader>up <cmd>Pckr sync<cr>
 
 " QUOTES AROUND (DEPRECATED BECAUSE OF surround.vim)
 nnoremap <leader>" viw<esc>a"<esc>bi"<esc>
@@ -215,7 +214,7 @@ noremap <silent> <s-f9> <cmd>call RebindMenus('extra')<bar>call quickui#menu#ope
 nnoremap <silent> <c-x><c-b> <cmd>call quickui#tools#list_buffer('e')<cr>
 
 if executable('lazygit')
-	noremap <leader>z <cmd>call SelectPosition('lazygit', g:termpos)<cr>
+	noremap <leader>xz <cmd>call SelectPosition('lazygit', g:termpos)<cr>
 endif
 if v:false
 \|| executable('far')
@@ -325,5 +324,7 @@ if PluginInstalled('activate')
 endif
 
 noremap <leader><right> <cmd>call chdir(fnamemodify(expand('%:p'), ':h'))<bar>pwd<cr>
+
+noremap <leader>z <cmd>Lazy<cr>
 
 noremap z00 <cmd>execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload.vim'<cr>

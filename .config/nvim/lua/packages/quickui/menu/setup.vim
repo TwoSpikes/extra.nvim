@@ -59,7 +59,7 @@ function! ChangeLanguage_system_english()
 	let s:save_all_label = 'Save &all'
 	let s:save_as_label = 'Sa&ve as'
 	let s:save_as_and_edit_label = 'Save as and ed&it'
-	let s:update_plugins_label = 'Update &plugins'
+	let s:lazy_plugin_manager_label = 'Lazy plugin manager'
 	let s:update_coc_label = 'Update &coc servers'
 	let s:update_treesitter_label = 'Update &TreeSitter'
 	let s:download_plugins_label = 'Download pl&ugins'
@@ -187,7 +187,7 @@ function! ChangeLanguage_system_russian()
 	let s:save_all_label = '&a:Сохранить всё'
 	let s:save_as_label = '&v:Сохранить как'
 	let s:save_as_and_edit_label = '&i:Сохранить как и зайти'
-	let s:update_plugins_label = '&p:Обновить плагины'
+	let s:lazy_plugin_manager_label = 'Менеджер плагинов La&zy'
 	let s:update_coc_label = "Обновить &coc lsp'ы"
 	let s:update_treesitter_label = 'Обновить &TreeSitter'
 	let s:download_plugins_label = '&u:Скачать плагины'
@@ -361,7 +361,7 @@ function! RebindMenus_system()
 	endif
 	call quickui#menu#install(s:file_label, [
 				\ ["--", ''],
-				\ [(g:quickui_icons?"󰚰 ":"").s:update_plugins_label."\tLEAD up", 'Pckr sync', 'Clear and redraw the screen'],
+				\ [(g:quickui_icons?"󰚰 ":"").s:lazy_plugin_manager_label."\tLEAD z", 'Pckr sync', 'Clear and redraw the screen'],
 				\ [(g:quickui_icons?"󰚰 ":"").s:update_coc_label."\tLEAD uc", 'CocUpdate', 'Update coc.nvim installed language servers'],
 				\ [(g:quickui_icons?"󰚰 ":"").s:update_treesitter_label."\tLEAD ut", 'TSUpdate', 'Update installed TreeSitter parsers'],
 				\ ])
@@ -452,7 +452,7 @@ function! RebindMenus_system()
 	endif
 	if executable('lazygit')
 		call quickui#menu#install(s:window_label, [
-				\ [(g:quickui_icons?" ":"").s:open_lazygit_label."\tLEAD z", 'call SelectPosition("lazygit", g:termpos)', 'Opens Lazygit'],
+				\ [(g:quickui_icons?" ":"").s:open_lazygit_label."\tLEAD xz", 'call SelectPosition("lazygit", g:termpos)', 'Opens Lazygit'],
 				\ ])
 	endif
 	if PluginInstalled('alpha')
@@ -572,10 +572,10 @@ function! RebindMenus_system()
 			\ [s:open_exnvim_config."\tLEAD vj", 'call SelectPosition(g:EXNVIM_CONFIG_PATH, g:stdpos)', 'Open '.g:EXNVIM_CONFIG_PATH],
 			\ [s:open_colorschemes_dir."\tLEAD vc", 'call SelectPosition($VIMRUNTIME."/colors", g:dirpos)', 'Open colorschemes directory'],
 			\ ["--", ''],
-			\ [s:reload_init_vim."\tLEAD se", 'exec "source" g:CONFIG_PATH."/vim/exnvim/reload.vim"', 'Reload Vim/NeoVim config'],
-			\ [s:reload_plugins_list."\tLEAD si", 'exec "source ".g:PLUGINS_INSTALL_FILE_PATH', 'Install plugins in '.g:PLUGINS_INSTALL_FILE_PATH],
-			\ [s:reload_plugins_setup."\tLEAD ss", 'exec "source ".g:PLUGINS_SETUP_FILE_PATH', 'Reconfigure plugins'],
-			\ [s:reload_lsp_setup."\tLEAD sl", 'exec "source ".g:LSP_PLUGINS_SETUP_FILE_PATH', 'Reconfigure LSP plugins (deprecated due to coc.nvim)'],
+			\ [s:reload_init_vim."\tLEAD se", 'execute "source" g:CONFIG_PATH."/vim/exnvim/reload.vim"', 'Reload Vim/NeoVim config'],
+			\ [s:reload_plugins_list."\tLEAD si", 'execute "source ".g:PLUGINS_INSTALL_FILE_PATH', 'Install plugins in '.g:PLUGINS_INSTALL_FILE_PATH],
+			\ [s:reload_plugins_setup."\tLEAD ss", 'execute "source ".g:PLUGINS_SETUP_FILE_PATH', 'Reconfigure plugins'],
+			\ [s:reload_lsp_setup."\tLEAD sl", 'execute "source ".g:LSP_PLUGINS_SETUP_FILE_PATH', 'Reconfigure LSP plugins (deprecated due to coc.nvim)'],
 			\ ["--", ''],
 			\ ])
 	if executable('exnvim')

@@ -1,5 +1,5 @@
---- .local/share/nvim/site/pack/pckr/opt/nvim-treesitter-context/plugin/treesitter-context.lua	2025-02-12 14:43:20.673884865 +0300
-+++ .local/share/nvim/site/pack/pckr/opt/nvim-treesitter-context/plugin/treesitter-context.lua	2025-02-12 14:43:40.333884857 +0300
+--- .local/share/nvim/lazy/nvim-treesitter-context/plugin/treesitter-context.lua	2025-02-12 14:43:20.673884865 +0300
++++ .local/share/nvim/lazy/nvim-treesitter-context/plugin/treesitter-context.lua	2025-02-12 14:43:40.333884857 +0300
 @@ -1 +1,5 @@
 +if not plugin_installed('treesitter-context') then
 +	goto exit

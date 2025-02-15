@@ -1012,10 +1012,10 @@ augroup exnvim_fix_sha_da
 augroup END
 
 function! PluginDelete(name)
-	call delete(expand(g:LOCALSHAREPATH)."/site/pack/pckr/opt/".a:name, "rf")
+	call delete(expand(g:LOCALSHAREPATH)."/lazy/".a:name, "rf")
 endfunction
 function! PluginExists(name)
-	return isdirectory(g:LOCALSHAREPATH.'/site/pack/pckr/opt/'.a:name)
+	return isdirectory(g:LOCALSHAREPATH.'/lazy/'.a:name)
 endfunction
 if g:compatible =~# "^helix"
 	if PluginExists('vim-gitgutter')

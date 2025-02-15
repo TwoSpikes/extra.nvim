@@ -1,5 +1,5 @@
---- .local/share/nvim/site/pack/pckr/opt/telescope.nvim/lua/telescope/pickers.lua	2025-02-12 14:33:54.101885081 +0300
-+++ .local/share/nvim/site/pack/pckr/opt/telescope.nvim/lua/telescope/pickers.lua	2025-02-12 14:34:20.629885071 +0300
+--- .local/share/nvim/lazy/telescope.nvim/lua/telescope/pickers.lua	2025-02-12 14:33:54.101885081 +0300
++++ .local/share/nvim/lazy/telescope.nvim/lua/telescope/pickers.lua	2025-02-12 14:34:20.629885071 +0300
 @@ -2,6 +2,10 @@
  
  local a = vim.api

@@ -17,7 +17,7 @@ require('illuminate').configure({
 		'dirvish',
 		'fugitive',
 		'TelescopePrompt',
-		'pckr',
+		'lazy',
 		'spectre_panel',
 		'pkgman',
 		'alpha',

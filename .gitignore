@@ -1,4 +1,4 @@
 *~
 util/exnvim/target/
 util/exnvim/Cargo.lock
-.config/nvim/plugin/packer_compiled.lua
+.config/nvim/lazy-lock.json

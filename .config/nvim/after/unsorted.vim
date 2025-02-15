@@ -25,7 +25,7 @@ function! NoNuAll()
 endfunction
 
 function! Numbertoggle_RelNu(winnr)
-	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'pckr' && &filetype !=# 'pkgman' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
+	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'lazy' && &filetype !=# 'pkgman' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
 		call RelNu(a:winnr)
 	else
 		call NoNu(a:winnr)
@@ -62,7 +62,7 @@ function! AbsNu(actual_mode, winnr=winnr())
 	call setwinvar(a:winnr, '&relativenumber', v:false)
 endfunction
 function! Numbertoggle_AbsNu(mode='', winnr=winnr())
-	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'pckr' && &filetype !=# 'pkgman' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
+	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'lazy' && &filetype !=# 'pkgman' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
 		call AbsNu(a:mode, a:winnr)
 	else
 		call NoNu(a:winnr)
@@ -311,7 +311,7 @@ unlet s:dir_position_right
 unlet s:dir_position_current
 unlet s:dir_position_float
 
-let g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT = [g:LOCALSHAREPATH.'/site/pack/pckr/opt/*/lua/%FILE%.lua', g:LOCALSHAREPATH.'/site/pack/pckr/opt/*/lua/%FILE%/init.lua']
+let g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT = [g:LOCALSHAREPATH.'/lazy/*/lua/%FILE%.lua', g:LOCALSHAREPATH.'/lazy/*/lua/%FILE%/init.lua']
 let g:LUA_REQUIRE_GOTO_PREFIX = g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT
 function! Lua_Require_Goto_Workaround_Wincmd_f()
 	if !PluginExists('vim-quickui')
@@ -663,6 +663,7 @@ function! ExNvimCheatSheet()
 	\\n     Where symbol is your symbol (type quotes literally)
 	\\n  GLOBAL HELP:
 	\\n    LEAD ? - Show this help message
+	\\n    LEAD z - Open Lazy package manager
 	\\n CONFIGS:
 	\\n    LEAD ve - Open init.vim
 	\\n    LEAD se  - Reload init.vim
@@ -707,13 +708,12 @@ function! ExNvimCheatSheet()
 	\\n   Q - Quit window without saving
 	\\n   LEAD r - Open ranger to select file to edit
 	\\n   LEAD CTRL-s - \"Save as\" dialogue
-	\\n   LEAD up - Update plugins using pckr.nvim
 	\\n   LEAD uc - Update coc.nvim language servers
 	\\n   LEAD ut - Update nvim-treesitter parsers
 	\\n   LEAD sw - Find work under cursor using nvim-spectre
 	\\n   LEAD . - \"Open Terminal\" dialogue
 	\\n   LEAD m - \"Open Far/MC\" dialogue
-	\\n   LEAD z - \"Open lazygit\" dialogue
+	\\n   LEAD xz - \"Open lazygit\" dialogue
 	\\n   CTRL-t - Toggle ctags tagbar
 	\\n Tmux-like keybindings:
 	\\n   CTRL-c c - Find file
@@ -768,7 +768,7 @@ function! ExNvimCheatSheet()
 	\\n    Author: TwoSpikes (2023 - 2025)
 	\\n    Github repository: https://github.com/TwoSpikes/extra.nvim
 	\\n    Also see: https://github.com/TwoSpikes/dotfiles
-	\\n    (Press `CTRL-w f` to open links)
+	\\n    (Press `gx` to open links)
 	\", "\n"))
 	1delete
 	setlocal nomodified
@@ -1373,8 +1373,8 @@ function! MyTabLabel(n)
 			let buf_name = '[Commit]'
 		endif
 	elseif v:false
-	\|| filetype ==# "pckr"
-		let buf_name = original_buf_name
+	\|| filetype ==# "lazy"
+		let buf_name = '[Lazy]'
 	elseif buftype ==# "pkgman"
 		if g:language ==# 'russian'
 			let buf_name = '[ПакМенедж]'
@@ -1783,21 +1783,6 @@ else
 	call Numbertoggle()
 endif
 
-function! PrepareWhichKey()
-	let g:which_key_timeout = 0
-	if filereadable(g:LOCALSHAREPATH.'/site/pack/pckr/opt/which-key.nvim/lua/which-key/util.lua')
-		edit ~/.local/share/nvim/site/pack/pckr/opt/which-key.nvim/lua/which-key/util.lua
-		if getline(189) =~# 'if not ("nvsxoiRct"):find(mode) then'
-			silent 189,192delete
-			silent write
-		endif
-		bwipeout!
-	endif
-endfunction
-if has('nvim') && g:enable_which_key
-	call PrepareWhichKey()
-endif
-
 function! OnFirstTime()
 	if !filereadable(expand(g:LOCALSHAREPATH).'/extra.nvim/not_first_time.null')
 		if !isdirectory(expand(g:LOCALSHAREPATH).'/extra.nvim')
@@ -2021,41 +2006,6 @@ function! IsNo(string)
 endfunction
 
 let g:floaterm_width = 1.0
-
-function! DoPackerUpdate()
-	call BeforeUpdatingPlugins()
-	Pckr sync
-	call AfterUpdatingPlugins()
-endfunction
-if has('nvim')
-	command! -nargs=0 PackerUpdate exec "call DoPackerUpdate()"
-endif
-function! BeforeUpdatingPlugins()
-	if PluginExists('which-key.nvim')
-		execute "cd ".g:LOCALSHAREPATH."/site/pack/pckr/opt/which-key.nvim/lua/which-key"
-		execute "!git stash"
-		cd -
-	endif
-	
-	if PluginExists('persisted.nvim')
-		execute "cd ".g:LOCALSHAREPATH."/site/pack/pckr/opt/persisted.nvim"
-		execute "!git stash"
-		cd -
-	endif
-endfunction
-function! AfterUpdatingPlugins()
-	if PluginExists('which-key.nvim')
-		execute "cd ".g:LOCALSHAREPATH."/site/pack/pckr/opt/which-key.nvim/lua/which-key/"
-		execute "!git stash pop"
-		cd -
-	endif
-
-	if PluginExists('persisted.nvim')
-		execute "cd ".g:LOCALSHAREPATH."/site/pack/pckr/start/persisted.nvim"
-		execute "!git stash pop"
-		cd -
-	endif
-endfunction
 
 function! SynGroup()
     let l:s = synID(line('.'), col('.'), 1)

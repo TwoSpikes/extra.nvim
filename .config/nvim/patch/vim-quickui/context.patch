@@ -1,5 +1,5 @@
---- .local/share/nvim/site/pack/pckr/opt/vim-quickui/autoload/quickui/context.vim	2025-01-29 20:51:49.126182113 +0300
-+++ .local/share/nvim/site/pack/pckr/opt/vim-quickui/autoload/quickui/context.vim	2025-01-29 20:54:17.274182056 +0300
+--- .local/share/nvim/lazy/vim-quickui/autoload/quickui/context.vim	2025-01-29 20:51:49.126182113 +0300
++++ .local/share/nvim/lazy/vim-quickui/autoload/quickui/context.vim	2025-01-29 20:54:17.274182056 +0300
 @@ -228,9 +228,11 @@
  					let help = '' . ((head != '')? (head . ' ') : '') . help
  				endif

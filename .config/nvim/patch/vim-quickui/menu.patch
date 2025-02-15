@@ -1,5 +1,5 @@
---- .local/share/nvim/site/pack/pckr/opt/vim-quickui/autoload/quickui/menu.vim	2025-01-29 21:01:24.106181893 +0300
-+++ .local/share/nvim/site/pack/pckr/opt/vim-quickui/autoload/quickui/menu.vim	2025-01-29 21:05:42.362181795 +0300
+--- .local/share/nvim/lazy/vim-quickui/autoload/quickui/menu.vim	2025-01-29 21:01:24.106181893 +0300
++++ .local/share/nvim/lazy/vim-quickui/autoload/quickui/menu.vim	2025-01-29 21:05:42.362181795 +0300
 @@ -775,9 +775,7 @@
  		endif
  	endwhile

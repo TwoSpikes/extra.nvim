@@ -1,5 +1,5 @@
---- .local/share/nvim/site/pack/pckr/opt/vim-illuminate/lua/illuminate/engine.lua	2025-02-12 15:02:07.385884435 +0300
-+++ .local/share/nvim/site/pack/pckr/opt/vim-illuminate/lua/illuminate/engine.lua	2025-02-12 15:05:24.513884360 +0300
+--- .local/share/nvim/lazy/vim-illuminate/lua/illuminate/engine.lua	2025-02-12 15:02:07.385884435 +0300
++++ .local/share/nvim/lazy/vim-illuminate/lua/illuminate/engine.lua	2025-02-12 15:05:24.513884360 +0300
 @@ -189,13 +189,10 @@
          if not ok then
              local time = vim.loop.hrtime()

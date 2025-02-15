@@ -51,7 +51,7 @@ Screenshots
 > First run may be longer
 
 > [!Warning]
-> It works better in NeoVim, and pckr.nvim does not work in version of Vim/NeoVim without Lua.
+> It works better in NeoVim, and lazy.nvim does not work in version of Vim/NeoVim without Lua.
 
 > [!Note]
 > Press `SPACE ?` to see help
@@ -207,7 +207,7 @@ $ exnvim version
 
 # Plug-ins used
 
-- [pckr.nvim](https://github.com/TwoSpikes/pckr.nvim)
+- [lazy.nvim](https://github.com/folke/lazy.nvim)
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 - [plenary.nvim](https://github.com/nvim-lua/plenary.nvim)
 - [mason.nvim](https://github.com/williamboman/mason.nvim)

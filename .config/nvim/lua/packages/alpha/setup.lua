@@ -8,6 +8,7 @@ if vim.g.language == 'russian' then
 	recently_opened_files_label = 'Предыдущие открытые файлы'
 	open_nerdtree_label = 'Открыть Neo-tree.nvim'
 	open_ranger_label = 'Открыть ranger'
+	lazy_package_manager_label = 'Менеджер плагинов Lazy'
 	quit_neovim_label = 'Выйти из NeoVim'
 else
 	new_file_label = 'New file'
@@ -17,6 +18,7 @@ else
 	recently_opened_files_label = 'Recently opened files'
 	open_nerdtree_label = 'Open Neo-tree.nvim'
 	open_ranger_label = 'Open Ranger'
+	lazy_package_manager_label = 'Lazy package manager'
 	quit_neovim_label = 'Quit NeoVim'
 end
 
@@ -58,7 +60,8 @@ if vim.fn.executable('ranger') == 1 then
 	})
 end
 dashboard.section.buttons.val = TableConcat(dashboard.section.buttons.val, {
-	dashboard.button("q", "  "..quit_neovim_label, ":qa<CR>"),
+	dashboard.button("z", "󰒲  "..lazy_package_manager_label, ":Lazy<CR>"),
+	dashboard.button("q", "  "..quit_neovim_label, ":qa<CR>"),
 })
 if vim.g.enable_fortune then
 	if dashboard.section.footer.val == "" then
