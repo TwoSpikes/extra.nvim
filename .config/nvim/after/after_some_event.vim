@@ -18,15 +18,19 @@ function! GetRandomName(length)
 	unlet r
 	return name
 endfunction
-function! GenerateTemporaryAutocmd(event, pattern, command, delete_when)
-	let random_name = GetRandomName(20)
-	exec 'augroup '.random_name
+function! GenerateTemporaryAutocmd(event, pattern, command, delete_when, group=v:null)
+	if a:group ==# v:null
+		let name = GetRandomName(20)
+	else
+		let name = a:group
+	endif
+	exec 'augroup '.name
 		autocmd!
-		execute "autocmd ".a:event." ".a:pattern." ".a:command."|".a:delete_when(random_name)
+		execute "autocmd ".a:event." ".a:pattern." ".a:command."|".a:delete_when(name)
 	augroup END
 endfunction
-function! AfterSomeEvent(event, command, delete_when={name -> 'au! '.name})
-	call GenerateTemporaryAutocmd(a:event, '*', a:command, a:delete_when)
+function! AfterSomeEvent(event, command, delete_when={name -> 'au! '.name}, group=v:null)
+	call GenerateTemporaryAutocmd(a:event, '*', a:command, a:delete_when, a:group)
 endfunction
 
 function! ShouldIClose(id=win_getid())
@@ -53,7 +57,7 @@ call MakeThingsThatRequireBeDoneAfterPluginsLoaded()
 
 augroup AlphaNvim_CinnamonNvim_JK_Workaround
 	autocmd!
-	autocmd FileType alpha call JKWorkaroundAlpha()  | call AfterSomeEvent('BufLeave', 'call JKWorkaround()')
+	autocmd FileType alpha call JKWorkaroundAlpha()  | call AfterSomeEvent('BufLeave', 'call JKWorkaround()', {name -> 'au! '.name}, 'AlphaNvim_CinnamonNvim_JK_Workaround')
 augroup END
 
 augroup Lua_Require_Goto_Workaround

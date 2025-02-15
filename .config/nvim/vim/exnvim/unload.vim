@@ -200,10 +200,8 @@ delcommand SaveAsAndRename
 delfunction SaveAs
 delfunction SaveAsAndRename
 delfunction SaveAsBase
-delcommand ShSource
 delcommand Killbuffer
 delfunction PrePad
-delfunction PreparePersistedNvim
 delfunction PrepareWhichKey
 delfunction PreserveAndDo
 if PluginExists('vim-quickui')
@@ -224,13 +222,8 @@ delfunction NoNuAll
 nunmap k
 ounmap k
 vunmap k
-nunmap <up>
-ounmap <up>
-vunmap <up>
 delfunction ProcessGBut
 delfunction RelNu
-call timer_stop(g:exnvim_stc_timer)
-unlet g:exnvim_stc_timer
 delfunction SaveVars
 delfunction Save_WW_and_Do
 delfunction SelectAll
