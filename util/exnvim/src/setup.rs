@@ -431,6 +431,8 @@ pub fn setup(home: ::std::path::PathBuf) -> ::std::io::Result<()> {
 
     \"show_ascii_logo\": true,
 
+    \"enable_scrollview\": true,
+
 \"_comment\":\"Ending field to not put comma every time\"
 }"),
             )

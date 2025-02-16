@@ -180,6 +180,7 @@ function! LoadExNvimConfig(path, reload=v:false)
 		\'ani_cli_options',
 		\'cd_after_git_clone',
 		\'show_ascii_logo',
+		\'enable_scrollview',
 	\]
 	if keys(g:exnvim_config) ==# ['_TYPE', '_VAL']
 		for item in g:exnvim_config['_VAL']
@@ -359,6 +360,9 @@ function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 	endif
 	if !exists('g:show_ascii_logo')
 		let g:show_ascii_logo = v:true
+	endif
+	if !exists('g:enable_scrollview')
+		let g:enable_scrollview = v:true
 	endif
 endfunction
 call SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()

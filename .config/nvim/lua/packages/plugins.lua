@@ -15,6 +15,20 @@ local function patch_plugin(pluginname)
 	end
 end
 
+function unpatch_plugin(pluginname)
+	local patch_name
+	local path = vim.fn.expand('~/.config/nvim/patch/')..pluginname
+	if vim.fn.isdirectory(path) == 1 then
+		local patches = vim.fn.readdir(path)
+		for i, patch in ipairs(patches) do
+			vim.cmd("silent !cd>/dev/null;patch -p0 -R < ~/.config/nvim/patch/"..pluginname..'/'..patch..';cd ->/dev/null')
+		end
+	else
+		patch_name = pluginname..'.patch'
+		vim.cmd("silent !cd>/dev/null;patch -p0 -R < ~/.config/nvim/patch/"..patch_name..';cd ->/dev/null')
+	end
+end
+
 local function bootstrap_lazy()
   local lazy_path = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
@@ -29,6 +43,8 @@ local function bootstrap_lazy()
     })
   end
 
+  patch_plugin('lazy.nvim')
+
   vim.opt.rtp:prepend(lazy_path)
 end
 
@@ -38,12 +54,21 @@ local lazy = require('lazy');
 
 local plugins = {
 	{
+		'folke/lazy.nvim',
+		unbuild = function()
+			unpatch_plugin('lazy.nvim')
+		end,
+	},
+	{
 		'nvim-telescope/telescope.nvim',
-        requires = {
+        dependencies = {
             { 'nvim-lua/plenary.nvim' },
         },
 		build = function()
 			patch_plugin('telescope.nvim')
+		end,
+		unbuild = function()
+			unpatch_plugin('telescope.nvim')
 		end,
 	},
 	{
@@ -58,10 +83,10 @@ local plugins = {
 	{
         'RishabhRD/lspactions',
         branch = 'master',
-        requires = {
+        dependencies = {
             {
                 'nvim-lua/popup.nvim',
-                requires = {
+                dependencies = {
                     'nvim-lua/plenary.nvim',
                 },
             },
@@ -79,11 +104,17 @@ local plugins = {
 				vim.cmd([[TSUpdate]])
 			end, 0)
 		end,
+		unbuild = function()
+			unpatch_plugin('nvim-treesitter')
+		end,
 	},
 	{
 		'nvim-treesitter/playground',
 		build = function()
 			patch_plugin('nvim-treesitter-playground')
+		end,
+		unbuild = function()
+			unpatch_plugin('nvim-treesitter-playground')
 		end,
 	},
 	{
@@ -94,10 +125,6 @@ local plugins = {
 	},
 	{
 		'prichrd/netrw.nvim',
-	},
-	{
-		"windwp/nvim-autopairs",
-	-- 	config = function() require("nvim-autopairs").setup {} end
 	},
 	{
 		"folke/which-key.nvim",
@@ -121,6 +148,9 @@ local plugins = {
 		'skywind3000/vim-quickui',
 		build = function()
 			patch_plugin('vim-quickui')
+		end,
+		unbuild = function()
+			unpatch_plugin('vim-quickui')
 		end,
 	},
 	{
@@ -172,7 +202,7 @@ local plugins = {
 	},
 	{
 		'nvim-pack/nvim-spectre',
-		requires = {
+		dependencies = {
 			'nvim-lua/plenary.nvim',
 		}
 	},
@@ -181,17 +211,20 @@ local plugins = {
 		build = function()
 			patch_plugin('vim-illuminate')
 		end,
+		unbuild = function()
+			unpatch_plugin('vim-illuminate')
+		end,
 	},
 	{
 		'folke/todo-comments.nvim',
-		requires = {
+		dependencies = {
 			'nvim-lua/plenary.nvim',
 		}
 	},
 
 	{
 		"rcarriga/nvim-dap-ui",
-		requires = {
+		dependencies = {
 			{
 				"mfussenegger/nvim-dap",
 			},
@@ -202,7 +235,7 @@ local plugins = {
 	},
 	{
 		"theHamsta/nvim-dap-virtual-text",
-		requires = {
+		dependencies = {
 			{
 				"mfussenegger/nvim-dap",
 			},
@@ -210,7 +243,7 @@ local plugins = {
 	},
 	{
 		'nvim-telescope/telescope-dap.nvim',
-		requires = {
+		dependencies = {
 			{
 				"mfussenegger/nvim-dap",
 			},
@@ -218,7 +251,7 @@ local plugins = {
 	},
 	{
 		'mfussenegger/nvim-dap-python',
-		requires = {
+		dependencies = {
 			{
 				"mfussenegger/nvim-dap",
 			}
@@ -226,7 +259,7 @@ local plugins = {
 	},
 	{
 		'leoluz/nvim-dap-go',
-		requires = {
+		dependencies = {
 			{
 				"mfussenegger/nvim-dap",
 			}
@@ -234,7 +267,7 @@ local plugins = {
 	},
 	{
 		'mfussenegger/nvim-jdtls',
-		requires = {
+		dependencies = {
 			{
 				"mfussenegger/nvim-dap",
 			}
@@ -273,17 +306,26 @@ local plugins = {
 		build = function()
 			patch_plugin('cmp-buffer')
 		end,
+		unbuild = function()
+			unpatch_plugin('cmp-buffer')
+		end,
 	},
 	{
 		'hrsh7th/cmp-path',
 		build = function()
 			patch_plugin('cmp-path')
 		end,
+		unbuild = function()
+			unpatch_plugin('cmp-path')
+		end,
 	},
 	{
 		'hrsh7th/cmp-cmdline',
 		build = function()
 			patch_plugin('cmp-cmdline')
+		end,
+		unbuild = function()
+			unpatch_plugin('cmp-cmdline')
 		end,
 	},
 	{
@@ -311,7 +353,7 @@ local plugins = {
 		'Julian/lean.nvim',
 		event = { 'BufReadPre *.lean', 'BufNewFile *.lean' },
 
-		requires = {
+		dependencies = {
 			'neovim/nvim-lspconfig',
 			'nvim-lua/plenary.nvim',
 		},
@@ -327,9 +369,9 @@ local plugins = {
 		'tommcdo/vim-lion',
 	},
 	{
-	'lyokha/vim-xkbswitch',
-	enabled = os.getenv('TERMUX_VERSION') == nil,
-};
+		'lyokha/vim-xkbswitch',
+		enabled = os.getenv('TERMUX_VERSION') == nil,
+	};
 	{
 		"danymat/neogen",
 		-- Uncomment next line if you want to follow only stable versions
@@ -345,17 +387,17 @@ local plugins = {
 		'smartpde/telescope-recent-files',
 	},
 	{
-	'https://github.com/folke/noice.nvim',
-	requires = {
-		{
-			'MunifTanjim/nui.nvim',
+		'https://github.com/folke/noice.nvim',
+		dependencies = {
+			{
+				'MunifTanjim/nui.nvim',
+			},
+			{
+				'rcarriga/nvim-notify',
+			},
 		},
-		{
-			'rcarriga/nvim-notify',
-		},
-	},
-	enabled = vim.fn.match(vim.g.compatible, '^helix_hard') == -1,
-};
+		enabled = vim.fn.match(vim.g.compatible, '^helix_hard') == -1,
+	};
 	{
 		'https://github.com/folke/edgy.nvim',
 		opts = {
@@ -433,10 +475,10 @@ local plugins = {
 	{
 		'nvim-neo-tree/neo-tree.nvim',
 		branch = "v3.x",
-		requires = { 
+		dependencies = { 
 		  "nvim-lua/plenary.nvim",
 		  "MunifTanjim/nui.nvim",
-		  "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
+-- 		  "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
 		}
 	},
 	{
@@ -461,6 +503,9 @@ local plugins = {
 		'nvim-treesitter/nvim-treesitter-context',
 		build = function()
 			patch_plugin('nvim-treesitter-context')
+		end,
+		unbuild = function()
+			unpatch_plugin('nvim-treesitter-context')
 		end,
 		enabled = vim.g.enable_nvim_treesitter_context,
 	},
@@ -492,7 +537,7 @@ local plugins = {
 	{
 		'kevinhwang91/nvim-bqf',
 		ft = 'qf',
-		requires = {
+		dependencies = {
 			{
 				'junegunn/fzf',
 				build = function()
@@ -517,6 +562,9 @@ local plugins = {
 		build = function()
 			patch_plugin('beacon.nvim')
 		end,
+		unbuild = function()
+			unpatch_plugin('beacon.nvim')
+		end,
 	},
 	{
 		'm-demare/hlargs.nvim',
@@ -538,7 +586,7 @@ local plugins = {
 	},
 	{
 		'Thiago4532/mdmath.nvim',
-		requires = {
+		dependencies = {
 			{
 				'nvim-treesitter/nvim-treesitter'
 			},
@@ -572,6 +620,10 @@ local plugins = {
             }
         end,
 	},
+	{
+		'https://github.com/dstein64/nvim-scrollview',
+		enabled = vim.g.enable_scrollview,
+	},
 };
 
 lazy.setup({
@@ -580,6 +632,6 @@ lazy.setup({
 		colorscheme = { "blueorange" }
 	},
 	checker = {
-		enabled = true,
+		enabled = false,
 	},
 })
