@@ -1,31 +1,29 @@
 require('lib.lists.contains')
 require('lib.lists.compare')
 
-local function patch_plugin(pluginname)
-	local patch_name
+function patch_plugin(pluginname)
 	local path = vim.fn.expand('~/.config/nvim/patch/')..pluginname
 	if vim.fn.isdirectory(path) == 1 then
 		local patches = vim.fn.readdir(path)
 		for i, patch in ipairs(patches) do
-			vim.cmd("!cd>/dev/null;patch -p0 < ~/.config/nvim/patch/"..pluginname..'/'..patch..';cd ->/dev/null')
+			vim.cmd("silent !cd>/dev/null;patch -p0 -r - < ~/.config/nvim/patch/"..pluginname..'/'..patch..';cd ->/dev/null')
 		end
 	else
-		patch_name = pluginname..'.patch'
-		vim.cmd("!cd>/dev/null;patch -p0 < ~/.config/nvim/patch/"..patch_name..';cd ->/dev/null')
+		local patch_name = pluginname..'.patch'
+		vim.cmd("silent !cd>/dev/null;patch -p0 -r - < ~/.config/nvim/patch/"..patch_name..';cd ->/dev/null')
 	end
 end
 
 function unpatch_plugin(pluginname)
-	local patch_name
 	local path = vim.fn.expand('~/.config/nvim/patch/')..pluginname
 	if vim.fn.isdirectory(path) == 1 then
 		local patches = vim.fn.readdir(path)
 		for i, patch in ipairs(patches) do
-			vim.cmd("silent !cd>/dev/null;patch -p0 -R < ~/.config/nvim/patch/"..pluginname..'/'..patch..';cd ->/dev/null')
+			vim.cmd("silent !cd>/dev/null;patch -p0 -R -r - < ~/.config/nvim/patch/"..pluginname..'/'..patch..';cd ->/dev/null')
 		end
 	else
-		patch_name = pluginname..'.patch'
-		vim.cmd("silent !cd>/dev/null;patch -p0 -R < ~/.config/nvim/patch/"..patch_name..';cd ->/dev/null')
+		local patch_name = pluginname..'.patch'
+		vim.cmd("silent !cd>/dev/null;patch -p0 -R -r - < ~/.config/nvim/patch/"..patch_name..";cd ->/dev/null")
 	end
 end
 
@@ -55,7 +53,10 @@ local lazy = require('lazy');
 local plugins = {
 	{
 		'folke/lazy.nvim',
-		unbuild = function()
+		patch = function()
+			patch_plugin('lazy.nvim')
+		end,
+		unpatch = function()
 			unpatch_plugin('lazy.nvim')
 		end,
 	},
@@ -64,12 +65,6 @@ local plugins = {
         dependencies = {
             { 'nvim-lua/plenary.nvim' },
         },
-		build = function()
-			patch_plugin('telescope.nvim')
-		end,
-		unbuild = function()
-			unpatch_plugin('telescope.nvim')
-		end,
 	},
 	{
         'williamboman/mason.nvim',
@@ -97,25 +92,9 @@ local plugins = {
 	},
 	{
 		'nvim-treesitter/nvim-treesitter',
-		build = function()
-			patch_plugin('nvim-treesitter')
-			local timer = vim.uv.new_timer()
-			vim.defer_fn(function()
-				vim.cmd([[TSUpdate]])
-			end, 0)
-		end,
-		unbuild = function()
-			unpatch_plugin('nvim-treesitter')
-		end,
 	},
 	{
 		'nvim-treesitter/playground',
-		build = function()
-			patch_plugin('nvim-treesitter-playground')
-		end,
-		unbuild = function()
-			unpatch_plugin('nvim-treesitter-playground')
-		end,
 	},
 	{
 		'weizheheng/nvim-workbench',
@@ -146,10 +125,10 @@ local plugins = {
 	},
 	{
 		'skywind3000/vim-quickui',
-		build = function()
+		patch = function()
 			patch_plugin('vim-quickui')
 		end,
-		unbuild = function()
+		unpatch = function()
 			unpatch_plugin('vim-quickui')
 		end,
 	},
@@ -208,10 +187,10 @@ local plugins = {
 	},
 	{
 		'RRethy/vim-illuminate',
-		build = function()
+		patch = function()
 			patch_plugin('vim-illuminate')
 		end,
-		unbuild = function()
+		unpatch = function()
 			unpatch_plugin('vim-illuminate')
 		end,
 	},
@@ -303,30 +282,12 @@ local plugins = {
 	},
 	{
 		'hrsh7th/cmp-buffer',
-		build = function()
-			patch_plugin('cmp-buffer')
-		end,
-		unbuild = function()
-			unpatch_plugin('cmp-buffer')
-		end,
 	},
 	{
 		'hrsh7th/cmp-path',
-		build = function()
-			patch_plugin('cmp-path')
-		end,
-		unbuild = function()
-			unpatch_plugin('cmp-path')
-		end,
 	},
 	{
 		'hrsh7th/cmp-cmdline',
-		build = function()
-			patch_plugin('cmp-cmdline')
-		end,
-		unbuild = function()
-			unpatch_plugin('cmp-cmdline')
-		end,
 	},
 	{
 		'hrsh7th/nvim-cmp',
@@ -501,10 +462,10 @@ local plugins = {
 	},
 	{
 		'nvim-treesitter/nvim-treesitter-context',
-		build = function()
+		patch = function()
 			patch_plugin('nvim-treesitter-context')
 		end,
-		unbuild = function()
+		unpatch = function()
 			unpatch_plugin('nvim-treesitter-context')
 		end,
 		enabled = vim.g.enable_nvim_treesitter_context,
@@ -541,7 +502,7 @@ local plugins = {
 			{
 				'junegunn/fzf',
 				build = function()
-					vim.fn['fzf#install']()
+					vim.fn.system('install')
 				end,
 			},
 		},
@@ -554,17 +515,11 @@ local plugins = {
 		'TwoSpikes/music-player.vim',
 	},
 	{
-	'airblade/vim-gitgutter',
-	enabled = vim.fn.match(vim.g.compatible, '^helix') == -1,
+		'airblade/vim-gitgutter',
+		enabled = vim.fn.match(vim.g.compatible, '^helix') == -1,
 	},
 	{
 		'danilamihailov/beacon.nvim',
-		build = function()
-			patch_plugin('beacon.nvim')
-		end,
-		unbuild = function()
-			unpatch_plugin('beacon.nvim')
-		end,
 	},
 	{
 		'm-demare/hlargs.nvim',

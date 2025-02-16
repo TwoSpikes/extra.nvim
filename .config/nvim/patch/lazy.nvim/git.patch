@@ -1,8 +1,8 @@
---- .local/share/nvim/lazy/lazy.nvim/lua/lazy/manage/task/git.lua	2025-02-16 17:21:28.837421699 +0300
-+++ .local/share/nvim/lazy/lazy.nvim/lua/lazy/manage/task/git.lua	2025-02-16 17:23:16.777421657 +0300
-@@ -272,6 +272,14 @@
-   end,
- }
+--- .local/share/nvim/lazy/lazy.nvim/lua/lazy/manage/task/git.lua	2025-02-16 19:32:06.593418709 +0300
++++ .local/share/nvim/lazy/lazy.nvim/lua/lazy/manage/task/git.lua	2025-02-16 19:34:08.177418662 +0300
+@@ -22,6 +22,29 @@
+   end
+ end
  
 +local function get_build_file(plugin)
 +  for _, path in ipairs({ "build.lua", "build/init.lua" }) do
@@ -11,17 +11,32 @@
 +    end
 +  end
 +end
++function cmd(task, build)
++  if task.plugin.build ~= "rockspec" then
++    Loader.load(task.plugin, { task = "build" })
++  end
++  local cmd = vim.api.nvim_parse_cmd(build:sub(2), {}) --[[@as vim.api.keyset.cmd]]
++  task:log(vim.api.nvim_cmd(cmd, { output = true }))
++end
++function shell(task, build)
++  local shell = vim.env.SHELL or vim.o.shell
++  local shell_args = shell:find("cmd.exe", 1, true) and "/c" or "-c"
 +
- -- fetches all needed origin branches
- M.fetch = {
-   skip = function(plugin)
-@@ -280,6 +288,39 @@
++  task:spawn(shell, {
++    args = { shell_args, build },
++    cwd = task.plugin.dir,
++  })
++end
+ function throttle.wait()
+   if not Config.options.git.throttle.enabled then
+     return
+@@ -283,6 +316,40 @@
  
    ---@async
    run = function(self)
 +    vim.cmd([[silent! runtime plugin/rplugin.vim]])
 +
-+    local builders = self.plugin.unbuild
++    local builders = self.plugin.unpatch
 +
 +    -- Skip if `build` is set to `false`
 +    if builders == false then
@@ -39,7 +54,7 @@
 +        elseif build == "rockspec" then
 +          Rocks.build(self)
 +        elseif build:sub(1, 1) == ":" then
-+          B.cmd(self, build)
++          cmd(self, build)
 +        elseif build:match("%.lua$") then
 +          local file = self.plugin.dir .. "/" .. build
 +          local chunk, err = loadfile(file)
@@ -48,10 +63,53 @@
 +          end
 +          chunk()
 +        else
-+          B.shell(self, build)
++          shell(self, build)
 +        end
 +      end
 +    end
++    local commit_amount_before = vim.fn.str2nr(vim.fn.system('git rev-list --count --all'))
      throttle.wait()
      local args = {
        "fetch",
+@@ -329,6 +393,41 @@
+       on_exit = function(ok)
+         if ok then
+           self.plugin._.last_check = vim.uv.now()
++    vim.defer_fn(function()
++      vim.cmd([[silent! runtime plugin/rplugin.vim]])
++
++      local builders = self.plugin.patch
++
++      -- Skip if `build` is set to `false`
++      if builders == false then
++        return
++      end
++
++      builders = builders or get_build_file(self.plugin)
++
++      if builders then
++        builders = type(builders) == "table" and builders or { builders }
++        ---@cast builders (string|fun(LazyPlugin))[]
++        for _, build in ipairs(builders) do
++          if type(build) == "function" then
++            build(self.plugin)
++          elseif build == "rockspec" then
++            Rocks.build(self)
++          elseif build:sub(1, 1) == ":" then
++            cmd(self, build)
++          elseif build:match("%.lua$") then
++            local file = self.plugin.dir .. "/" .. build
++            local chunk, err = loadfile(file)
++            if not chunk or err then
++              error(err)
++            end
++            chunk()
++          else
++            shell(self, build)
++          end
++        end
++      end
++    end, 0)
+         end
+       end,
+     })
