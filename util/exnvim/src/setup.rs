@@ -409,7 +409,7 @@ pub fn setup(home: ::std::path::PathBuf) -> ::std::io::Result<()> {
     \"insert_exit_on_jk\": true,
     \"insert_exit_on_jk_save\": true,
 
-    \"selected_colorscheme\": \"blueorange\",
+    \"selected_colorscheme\": \"hecker\",
 
     \"disable_cinnamon\": false,
     \"disable_animations\": false,

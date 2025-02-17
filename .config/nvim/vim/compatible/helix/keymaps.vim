@@ -315,12 +315,12 @@ function! Do_N_R_define()
 	\\n	let old_position=getpos('.')[1:]
 	\\n	let old_guicursor=&guicursor
 	\\n	let &guicursor='a:block-blinkwait175-blinkoff150-blinkon175-CursorReplace'
-	\\n	if col('.') ==# col('$')
-	\\n		let c=getchar()
-	\\n		if c ==# 27
+	\\n	let c=getchar()
+	\\n	if c ==# 27
 	\".defer_expression."
-	\\n			return
-	\\n		endif
+	\\n		return
+	\\n	endif
+	\\n	if col('.') ==# col('$')
 	\\n		let wl=winline()
 	\\n		call append(line('.'), nr2char(c))
 	\\n		unlet c
@@ -334,10 +334,6 @@ function! Do_N_R_define()
 	\\n		endif
 	\\n		unlet wl
 	\\n	else
-	\\n		let c=getchar()
-	\\n		if c ==# 27
-	\\n			return
-	\\n		endif
 	\\n		let c=nr2char(c)
 	\\n		call inputsave()
 	\"

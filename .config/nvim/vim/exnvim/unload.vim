@@ -18,7 +18,6 @@ if has('nvim')
 	augroup! exnvim_term_closed
 endif
 delfunction AfterSomeEvent
-delfunction AfterUpdatingPlugins
 if PluginExists('ani-cli.nvim')
 	delcommand Ani
 	delfunction AniCli
@@ -26,7 +25,6 @@ if PluginExists('ani-cli.nvim')
 		unlet g:ANI_CLI_TO_EXIT
 	endif
 endif
-delfunction BeforeUpdatingPlugins
 if has('nvim')
 	delfunction ChangeLanguage_system_english
 	delfunction ChangeLanguage_system_russian
@@ -201,7 +199,6 @@ delfunction SaveAsAndRename
 delfunction SaveAsBase
 delcommand Killbuffer
 delfunction PrePad
-delfunction PrepareWhichKey
 delfunction PreserveAndDo
 if PluginExists('vim-quickui')
 	delfunction RebindMenus_system

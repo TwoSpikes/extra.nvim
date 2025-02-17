@@ -14,6 +14,9 @@ function TSParserNotInstalled(name)
 	if name == "sh" then
 		name = "bash"
 	end
+	if name == "jproperties" then
+		name = "properties"
+	end
 	timer:start(0, 0, vim.schedule_wrap(function() 
 		require('nvim-treesitter.install').commands.TSInstall['run'](name)
 	end))

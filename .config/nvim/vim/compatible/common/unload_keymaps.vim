@@ -87,7 +87,6 @@ unmap <leader>:
 unmap <leader>=
 unmap <leader>-
 unmap <leader>1
-nunmap <leader>up
 
 nunmap ci_
 nunmap <esc>

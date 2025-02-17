@@ -49,7 +49,7 @@ function! AbsNu(actual_mode, winnr=winnr())
 		call CopyHighlightGroup("StatementNorm", "Statement")
 	elseif a:actual_mode =~? 'r'
 		call CopyHighlightGroup('CursorLineNrRepl', 'CursorLineNr')
-		call CopyHighlightGroup('LineNrIns', 'LineNr')
+		call CopyHighlightGroup('LineNrRepl', 'LineNr')
 	elseif a:actual_mode =~? 'v' && getwinvar(a:winnr, '&modifiable')
 		call CopyHighlightGroup('CursorLineNrVisu', 'CursorLineNr')
 		call CopyHighlightGroup('LineNrVisu', 'LineNr')
@@ -2019,6 +2019,12 @@ function! SynStack()
 endfunction
 function! WhenceGroup()
 	let l:s = synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
+	if len(l:s) ==# 0
+		echohl ErrorMsg
+		echomsg "Hlgroup name not found!"
+		echohl Normal
+		return
+	endif
 	execute "verbose hi ".l:s
 endfunction
 

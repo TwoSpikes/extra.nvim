@@ -335,7 +335,7 @@ function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 		let g:insert_exit_on_jk_save = v:true
 	endif
 	if !exists('g:selected_colorscheme')
-		let g:selected_colorscheme = "blueorange"
+		let g:selected_colorscheme = "hecker"
 	endif
 	if !exists('g:disable_cinnamon')
 		let g:disable_cinnamon = v:false
