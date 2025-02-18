@@ -720,6 +720,7 @@ if &t_Co >= 256
     call CopyHighlightGroup("LineNrNorm", "LineNr")
     hi LineNrIns ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#c0ffff guibg=#000000 gui=italic,reverse
     hi LineNrVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#000000 guibg=#b0cfff gui=italic
+    hi LineNrRepl ctermfg=220 ctermbg=236 cterm=bold,italic guifg=#000000 guibg=#ffd0ff gui=italic
     hi NonText ctermfg=247 ctermbg=NONE cterm=NONE
     hi FoldColumn ctermfg=247 ctermbg=NONE cterm=NONE
     hi EndOfBuffer ctermfg=247 ctermbg=NONE cterm=NONE
