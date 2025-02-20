@@ -361,7 +361,7 @@ function! RebindMenus_system()
 	endif
 	call quickui#menu#install(s:file_label, [
 				\ ["--", ''],
-				\ [(g:quickui_icons?"󰚰 ":"").s:lazy_plugin_manager_label."\tLEAD z", 'Pckr sync', 'Clear and redraw the screen'],
+				\ [(g:quickui_icons?"󰚰 ":"").s:lazy_plugin_manager_label."\tLEAD z", 'Lazy', 'Open "lazy.nvim" plugin manager'],
 				\ [(g:quickui_icons?"󰚰 ":"").s:update_coc_label."\tLEAD uc", 'CocUpdate', 'Update coc.nvim installed language servers'],
 				\ [(g:quickui_icons?"󰚰 ":"").s:update_treesitter_label."\tLEAD ut", 'TSUpdate', 'Update installed TreeSitter parsers'],
 				\ ])
