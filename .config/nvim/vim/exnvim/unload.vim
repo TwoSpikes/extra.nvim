@@ -8,7 +8,7 @@ endif
 execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload_config.vim'
 let g:compatible = "common"
 
-execute 'source' g:CONFIG_PATH.'/vim/compatible/common/unload.vim'
+execute 'source' g:CONFIG_PATH.'/vim/compatible/common/unload/unload.vim'
 let g:compatible = "empty"
 
 autocmd! AlphaNvim_CinnamonNvim_JK_Workaround *
