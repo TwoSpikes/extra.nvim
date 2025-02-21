@@ -748,6 +748,7 @@ if &t_Co >= 256
     hi debugBreakpoint ctermfg=23 ctermbg=NONE cterm=reverse
     " hi Visual ctermfg=231 ctermbg=67 cterm=NONE
     hi VisualDim ctermfg=NONE ctermbg=18 cterm=NONE guifg=NONE guibg=#fff0a0 gui=NONE
+    hi PseudoVisual ctermfg=NONE ctermbg=18 cterm=NONE guifg=NONE guibg=#c0ffc0 gui=NONE
     hi VisualReversed ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
     call CopyHighlightGroup("VisualDim", "Visual")
     hi MatchParen ctermfg=30 ctermbg=231 cterm=reverse

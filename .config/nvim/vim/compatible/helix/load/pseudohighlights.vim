@@ -1,8 +1,4 @@
 function! AddPseudoSelection(x1=getpos("'<")[1], y1=getpos("'<")[2], x2=getpos("'>")[1], y2=getpos("'>")[2], ns_name='hcm_main_pseudo_highlight', hlgroup='PseudoVisual')
-	echomsg "a:x1:".a:x1
-	echomsg "a:x2:".a:x2
-	echomsg "a:y1:".a:y1
-	echomsg "a:y2:".a:y2
 	let ns_id = nvim_create_namespace(a:ns_name)
 	let bufnr = bufnr()
 	let i = a:x1
@@ -25,6 +21,7 @@ function! AddPseudoSelection(x1=getpos("'<")[1], y1=getpos("'<")[2], x2=getpos("
 	let s:hcm_main_pseudo_highlight['bufnr'] = bufnr
 	unlet bufnr
 	let s:hcm_main_pseudo_highlight['pos'] = [a:x1, a:y1, a:x2, a:y2]
+	let s:hcm_main_pseudo_highlight['dir'] = line('.')==#a:x2&&col('.')==#a:y2
 endfunction
 
 function! GoToPseudoSelection(pseudo_selection)
@@ -35,6 +32,9 @@ function! GoToPseudoSelection(pseudo_selection)
 	call cursor(pos[0], pos[1])
 	normal! v
 	call cursor(pos[2], pos[3])
+	if !s:hcm_main_pseudo_highlight['dir']
+		normal! o
+	endif
 endfunction
 
 function! V_Do_Colon(mode)
