@@ -1071,6 +1071,24 @@ endif
 
 noremap : :<c-u>
 
+function! V_Do_CtrlU()
+	if g:pseudo_visual
+		execute "normal! \<c-\>\<c-n>"
+	endif
+	execute "normal! \<c-u>"
+endfunction
+xnoremap <c-u> <cmd>call V_Do_CtrlU()<cr>
+
+if !PluginInstalled('endscroll')
+	function! V_Do_CtrlD()
+		if g:pseudo_visual
+			execute "normal! \<c-\>\<c-n>"
+		endif
+		execute "normal! \<c-d>"
+	endfunction
+	xnoremap <c-u> <cmd>call V_Do_CtrlD()<cr>
+endif
+
 nnoremap <leader>f <cmd>call FuzzyFind()<cr>
 nnoremap <leader>F <cmd>call FuzzyFind()<cr>
 nnoremap <leader>b <cmd>call quickui#tools#list_buffer('e')<cr>

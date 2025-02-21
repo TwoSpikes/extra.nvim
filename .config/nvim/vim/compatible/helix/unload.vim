@@ -234,6 +234,16 @@ if PluginInstalled('convert')
 	nnoremap <leader>c <cmd>call N_CommentOutDefault()<cr>
 endif
 
+unmap :
+
+delfunction V_Do_CtrlU
+xunmap <c-u>
+
+if !PluginInstalled('endscroll')
+	delfunction V_Do_CtrlD
+	xunmap <c-d>
+endif
+
 nunmap <leader>f
 if !g:use_nvim_cmp
 	nnoremap <silent> <leader>fr <cmd>lua require('telescope').extensions.recent_files.pick()<cr>
