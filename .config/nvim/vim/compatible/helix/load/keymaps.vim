@@ -275,16 +275,26 @@ nnoremap gP <cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCor
 xnoremap gp <esc><cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCorrectPasteMode('$', register)<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>exe"norm! o"<bar>if g:compatible=~#"^helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
 xnoremap gP <esc><cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCorrectPasteMode('0', register)<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>exe"norm! o"<bar>if g:compatible=~#"^helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
 nnoremap c <cmd>call Do_N_D(v:count1)<cr>i
-if !g:use_nvim_cmp && has('nvim') && PluginExists('vim-surround')
-	unmap ySS
-	unmap ySs
-	unmap yss
-	unmap yS
-	unmap ys
-endif
-if has('nvim') && PluginExists('vim-fugitive')
+
+if len(maparg("y\<c-g>")) !=# 0
 	unmap y<c-g>
 endif
+if len(maparg('ySS')) !=# 0
+	unmap ySS
+endif
+if len(maparg('ySs')) !=# 0
+	unmap ySs
+endif
+if len(maparg('yss')) !=# 0
+	unmap yss
+endif
+if len(maparg('yS')) !=# 0
+	unmap yS
+endif
+if len(maparg('ys')) !=# 0
+	unmap ys
+endif
+
 nnoremap y <cmd>let register=v:register<bar>exe"norm! v\"".register."y"<cr>
 function! Do_N_T_Cr()
 	let g:lx = line('.')
@@ -373,15 +383,19 @@ function! V_DoT_Cr()
 	let g:visual_mode = "char"
 endfunction
 xnoremap t<cr> <cmd>call V_DoT_Cr()<cr>
-if !g:use_nvim_cmp
-	if has('nvim') && PluginExists('vim-surround')
-		unmap cS
-		unmap cs
-	endif
+if maparg('cS')
+	unmap cS
+endif
+if maparg('cs')
+	unmap cs
+endif
+if maparg('ci_')
 	unmap ci_
 endif
-unmap dd
-if has('nvim') && PluginExists('vim-surround')
+if maparg('dd')
+	unmap dd
+endif
+if maparg('ds')
 	unmap ds
 endif
 let g:pseudo_visual = v:false
@@ -667,7 +681,9 @@ function! MoveRight(x1, y1, x2, y2)
 		echohl Normal
 	endif
 endfunction
-xunmap a%
+if maparg('a%')
+	unmap a%
+endif
 xnoremap <expr> a MoveRight(line('.'), col('.'), g:rx, g:ry)."\<esc>a"
 function! V_DoS()
 	if exists('#sneak#CursorMoved') && g:sneak_mode ==# 's'
@@ -1064,12 +1080,14 @@ nnoremap [<space> mzO<esc>`z
 xnoremap [<space> mz<esc>O<esc>`z
 nnoremap ]<space> mzo<esc>`z
 xnoremap ]<space> mz<esc>o<esc>`zgv
-if has('nvim') && PluginInstalled('convert') && exists('g:convert_keymaps_loaded')
+if maparg('<leader>cc')
 	unmap <leader>cc
+endif
+if maparg('<leader>cn')
 	unmap <leader>cn
 endif
 
-noremap : :<c-u>
+noremap : <cmd>let mode=mode()<cr><c-\><c-n><cmd>call V_Do_Colon(mode)<cr>:<c-u>
 
 function! V_Do_CtrlU()
 	if g:pseudo_visual

@@ -1,1 +1,1 @@
-execute "source ".expand(g:CONFIG_PATH)."/vim/compatible/no/keymaps.vim"
+execute "source ".expand(g:CONFIG_PATH)."/vim/compatible/no/load/keymaps.vim"

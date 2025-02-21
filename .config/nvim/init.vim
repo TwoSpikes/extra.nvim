@@ -1047,6 +1047,9 @@ endfunction
 
 if filereadable(expand(g:CONFIG_PATH).'/after/init.vim')
 	autocmd VimEnter * call timer_start(0, {->execute('source '.g:CONFIG_PATH.'/after/init.vim')})
+	if v:vim_did_enter
+		doautocmd VimEnter
+	endif
 else
 	let g:exnvim_fully_loaded = 3
 	let g:specloading = ' OK '
