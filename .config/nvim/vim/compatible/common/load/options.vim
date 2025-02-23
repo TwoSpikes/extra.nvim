@@ -2,7 +2,6 @@ let reloading=exists('g:COMPATIBLE_ALREADY_LOADED')
 let g:COMPATIBLE_ALREADY_LOADED = v:true
 
 " Random options
-set termguicolors
 set encoding=utf-8
 set helpheight=10
 set splitbelow

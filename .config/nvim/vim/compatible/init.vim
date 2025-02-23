@@ -1,3 +1,7 @@
+if g:compatible ==# "empty"
+	finish
+endif
+
 if v:false
 \|| g:compatible ==# "common"
 \|| g:compatible ==# "no"

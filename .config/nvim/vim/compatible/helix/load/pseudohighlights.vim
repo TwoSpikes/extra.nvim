@@ -35,6 +35,7 @@ function! GoToPseudoSelection(pseudo_selection)
 	if !s:hcm_main_pseudo_highlight['dir']
 		normal! o
 	endif
+	unlet s:hcm_main_pseudo_highlight
 endfunction
 
 function! V_Do_Colon(mode)

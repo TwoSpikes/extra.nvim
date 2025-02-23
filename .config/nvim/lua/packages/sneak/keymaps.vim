@@ -11,7 +11,7 @@ if g:compatible ==# "no"
 	xnoremap ; <Plug>Sneak_;
 	nnoremap ; <Plug>Sneak_;
 endif
-if g:compatible =~# "helix"
+if g:compatible =~# "^helix"
 	function! SneakCancel() abort
 		xnoremap f<esc> <cmd><cr>
 		xnoremap F<esc> <cmd><cr>

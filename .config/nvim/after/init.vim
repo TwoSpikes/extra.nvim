@@ -13,6 +13,7 @@ function! OnStart()
 		augroup END
 	endif
 	if has('nvim')
+		set termguicolors
 		execute printf("luafile %s", g:PLUGINS_SETUP_FILE_PATH)
 	endif
 	if filereadable(expand(g:CONFIG_PATH).'/vim/init.vim')

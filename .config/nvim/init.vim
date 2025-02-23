@@ -466,14 +466,14 @@ function! Showtab()
 	let mode = mode('lololol')
 	let strmode = ''
 	if mode == 'n'
-		if g:compatible ==# "no"
-			let strmode = '%#ModeNorm# '
-		else
+		if g:compatible =~# '^helix'
 			if g:language ==# 'russian'
 				let strmode = '%#ModeNorm# НОР '
 			else
 				let strmode = '%#ModeNorm# NOR '
 			endif
+		else
+			let strmode = '%#ModeNorm# '
 		endif
 	elseif mode == 'no'
 		if g:language ==# 'russian'
@@ -530,9 +530,7 @@ function! Showtab()
 			let strmode = '^\^o norm TERM '
 		endif
 	elseif mode == 'v'
-		if g:compatible ==# "no"
-			let strmode = '%#ModeVisu# '
-		else
+		if g:compatible =~# '^helix'
 			if g:pseudo_visual
 				if g:compatible !~# "^helix_hard"
 					if g:language ==# 'russian'
@@ -554,6 +552,8 @@ function! Showtab()
 					let strmode = '%#ModeVisu# SEL '
 				endif
 			endif
+		else
+			let strmode = '%#ModeVisu# '
 		endif
 	elseif mode == 'V'
 		if g:language ==# 'russian'
@@ -593,27 +593,27 @@ function! Showtab()
 		endif
 	elseif mode == "\<c-v>"
 		if g:language ==# 'russian'
-			if g:compatible ==# "no"
-				let strmode = '%#ModeVisu#визуал %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
-			else
+			if g:compatible =~# '^helix'
 				if g:pseudo_visual
 					let strmode = '%#ModeVisu#нор %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
 				else
 					let strmode = '%#ModeVisu#виз %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
 				endif
+			else
+				let strmode = '%#ModeVisu#визуал %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
 			endif
 		else
 			let strmode = '%#ModeVisu#visu %#StatuslinestatVisuBlock#%#ModeBlock# BLOCK '
 		endif
 	elseif mode == 'i'
-		if g:compatible ==# "no"
-			let strmode = '%#ModeIns# '
-		else
+		if g:compatible =~# '^helix'
 			if g:language ==# 'russian'
 				let strmode = '%#ModeIns# ВСТ '
 			else
 				let strmode = '%#ModeIns# INS '
 			endif
+		else
+			let strmode = '%#ModeIns# '
 		endif
 	elseif mode == 'ic'
 		if g:language ==# 'russian'
@@ -655,14 +655,14 @@ function! Showtab()
 				let strmode = 'COM_BLOCK '
 			endif
 		else
-			if g:compatible ==# "no"
-				let strmode = '%#ModeCom# '
-			else
+			if g:compatible =~# '^helix'
 				if g:language ==# 'russian'
 					let strmode = '%#ModeCom# КОМ '
 				else
 					let strmode = '%#ModeCom# COM '
 				endif
+			else
+				let strmode = '%#ModeCom# '
 			endif
 		endif
 	elseif mode == 'cv'
@@ -1045,6 +1045,7 @@ function! InitPckr()
 	endif
 endfunction
 
+let g:exnvim_fully_loaded = 0
 if filereadable(expand(g:CONFIG_PATH).'/after/init.vim')
 	autocmd VimEnter * call timer_start(0, {->execute('source '.g:CONFIG_PATH.'/after/init.vim')})
 	if v:vim_did_enter

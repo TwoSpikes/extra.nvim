@@ -35,6 +35,8 @@ endif
 if PluginExists('coc.nvim')
 	autocmd! exnvim_coc_nvim *
 	augroup! exnvim_coc_nvim
+	autocmd! coc_nvim *
+	augroup! coc_nvim
 	delfunction CheckBackspace
 	delfunction CocAction
 	delcommand OR
@@ -182,6 +184,8 @@ delfunction OpenRanger
 delfunction OpenRangerCheck
 delfunction OpenTerm
 delfunction OpenTermProgram
+autocmd! xdg_open *
+augroup! xdg_open
 delfunction OpenWithXdg
 delfunction Pad
 if exists('*Pad_middle')
@@ -270,8 +274,12 @@ if PluginExists('vim-visual-multi')
 	xunmap <c-n>
 	nunmap <Plug>(VM-Find-Under)
 	xunmap <Plug>(VM-Find-Subword-Under)
-	delfunction vm#commands#ctrln
-	delfunction vm#themes#statusline
+	if exists('*vm#commands#ctrln')
+		delfunction vm#commands#ctrln
+	endif
+	if exists('*vm#themes#statusline')
+		delfunction vm#themes#statusline
+	endif
 	delfunction VMInfos
 endif
 delfunction WhenceGroup
@@ -283,6 +291,7 @@ delfunction X_UncommentOut
 delfunction X_UncommentOutDefault
 
 if PluginInstalled('alpha')
+	execute "lua package.loaded['alpha'] = nil"
 	delcommand Alpha
 	delcommand AlphaRedraw
 	delcommand AlphaRemap
@@ -313,6 +322,8 @@ if PluginExists('vim-closetag')
 	delcommand CloseTagToggleBuffer
 endif
 if PluginInstalled('cmp')
+	autocmd! ___cmp___ *
+	augroup! ___cmp___
 	delcommand CmpStatus
 endif
 if PluginExists('coc.nvim')
@@ -357,6 +368,8 @@ if PluginInstalled('convert')
 	delcommand ConvertFindNext
 endif
 if PluginInstalled('dap')
+	autocmd! dap.exit *
+	augroup! dap.exit
 	delcommand DapClearBreakpoints
 	delcommand DapContinue
 	delcommand DapDisconnect
@@ -467,6 +480,7 @@ if PluginInstalled('hex')
 	delcommand HexToggle
 endif
 if PluginInstalled('illuminate')
+	autocmd! vim_illuminate_v2_augroup
 	delcommand IlluminateDebug
 	delcommand IlluminatePause
 	delcommand IlluminatePauseBuf
@@ -493,6 +507,8 @@ if PluginInstalled('LspUI')
 	delcommand LspUI
 endif
 if PluginInstalled('luasnip')
+	autocmd! luasnip *
+	augroup! luasnip
 	delcommand LuaSnipListAvailable
 	delcommand LuaSnipUnlinkCurrent
 endif
@@ -515,6 +531,8 @@ if PluginInstalled('neo-tree')
 	delcommand Neotree
 endif
 if PluginInstalled('noice')
+	autocmd! noice.message *
+	augroup! noice.message
 	delcommand Noice
 	delcommand NoiceAll
 	delcommand NoiceConfig
@@ -533,10 +551,15 @@ if PluginInstalled('noice')
 	delcommand NoiceStats
 	delcommand NoiceTelescope
 	delcommand NoiceViewstats
+	lua require('noice').disable()
+	execute "lua package.loaded['noice'] = nil"
 endif
 if PluginInstalled('notify')
 	delcommand Notifications
 	delcommand NotificationsClear
+	execute "lua package.loaded['notify'] = nil"
+	lua vim.notify = vim.oldnotify
+	lua vim.oldnotify = nil
 endif
 if PluginInstalled('null-ls')
 	delcommand NullLsInfo
@@ -664,13 +687,51 @@ if PluginExists('vim-vsnip')
 	delcommand VsnipOpenVsplit
 	delcommand VsnipYank
 endif
-delfunction PluginExists
 if PluginInstalled('which-key')
+	execute "lua package.loaded['which-key'] = nil"
+	autocmd! wk *
+	augroup! wk
 	delcommand WhichKey
 endif
-delfunction PluginInstalled
 delcommand Write
 
+if PluginInstalled('edgy')
+	execute "lua package.loaded['edgy'] = nil"
+endif
+if PluginInstalled('mini.bracketed')
+	autocmd! MiniBracketed *
+	augroup! MiniBracketed
+endif
+if PluginInstalled('nvim-ts-autotag')
+	execute "lua package.loaded['nvim-ts-autotag'] = nil"
+	autocmd! nvim_ts_xmltag *
+	augroup! nvim_ts_xmltag
+endif
+if PluginInstalled('hlargs')
+	execute "lua package.loaded['hlargs'] = nil"
+	autocmd! Hlargs *
+	augroup! Hlargs
+endif
+if PluginInstalled('lazy')
+	execute "lua package.loaded['lazy'] = nil"
+	autocmd! lazy_handler_event *
+	augroup! lazy_handler_event
+	unlet g:lazy_did_setup
+endif
+if PluginInstalled('beacon')
+	execute "lua package.loaded['beacon'] = nil"
+	autocmd! beacon_group *
+	augroup! beacon_group
+endif
+delfunction PluginInstalled
+if PluginExists('music-player.vim')
+	autocmd! music_player_track_switching *
+	augroup! music_player_track_switching
+endif
+delfunction PluginExists
+
 unlet g:CONFIG_ALREADY_LOADED
+unlet g:exnvim_fully_loaded
+unlet g:compatible
 
 noremap z01 <cmd>execute 'source' g:CONFIG_PATH.'/vim/exnvim/reload.vim'<cr>
