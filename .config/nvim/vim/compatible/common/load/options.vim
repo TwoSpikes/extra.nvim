@@ -62,7 +62,6 @@ endif
 set display=lastline
 set fcs=lastline:>
 set listchars=tab:>\ ,trail:_,nbsp:+
-set shortmess=filmnrxwsWItCF
 set showtabline=2
 set noshowmode
 set confirm

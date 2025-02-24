@@ -1,1 +1,1 @@
-vim.cmd([[exec printf("so %s", g:CONFIG_PATH."/lua/packages/convert/keymaps.vim")]])
+vim.cmd([[exec printf("so %s", stdpath('config')."/lua/packages/convert/keymaps.vim")]])

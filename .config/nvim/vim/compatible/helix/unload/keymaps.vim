@@ -229,7 +229,7 @@ xunmap [<space>
 nunmap ]<space>
 xunmap ]<space>
 if PluginInstalled('convert')
-	exec "source" g:CONFIG_PATH."/lua/packages/convert/keymaps.vim"
+	exec "source" stdpath('config')."/lua/packages/convert/keymaps.vim"
 	xnoremap <leader>c <c-\><c-n><cmd>call X_CommentOutDefault()<cr>
 	nnoremap <leader>c <cmd>call N_CommentOutDefault()<cr>
 endif

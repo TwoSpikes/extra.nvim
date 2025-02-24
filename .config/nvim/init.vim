@@ -50,25 +50,21 @@ else
 	set nocompatible
 endif
 
-call inputsave()
-
-hi Loading0 ctermfg=0 ctermbg=9 cterm=bold guifg=#303030 guibg=#ff0000 gui=bold
-set statusline=%#Loading0#Loading\ 0%%
-mode
+set shortmess=filmnrxwsWItCF
 
 function! SaveVars()
 	if v:false
 	\|| g:last_selected !=# ''
 	\|| g:last_open_term_program !=# ''
-		if !isdirectory(expand(g:LOCALSHAREPATH).'/extra.nvim')
-			call mkdir(expand(g:LOCALSHAREPATH).'/extra.nvim', 'p')
+		if !isdirectory(expand(stdpath("data")).'/extra.nvim')
+			call mkdir(expand(stdpath("data")).'/extra.nvim', 'p')
 		endif
 	endif
 	if g:last_selected !=# ''
-		call writefile([g:last_selected], expand(g:LOCALSHAREPATH).'/extra.nvim/last_selected.txt')
+		call writefile([g:last_selected], expand(stdpath("data")).'/extra.nvim/last_selected.txt')
 	endif
 	if g:last_open_term_program !=# ''
-		call writefile([g:last_open_term_program], expand(g:LOCALSHAREPATH).'/extra.nvim/last_open_term_program.txt')
+		call writefile([g:last_open_term_program], expand(stdpath("data")).'/extra.nvim/last_open_term_program.txt')
 	endif
 endfunction
 let g:termux_cursor_style = "bar"
@@ -366,21 +362,6 @@ function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 	endif
 endfunction
 call SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
-
-hi Loading25 ctermfg=0 ctermbg=208 cterm=bold guifg=#303030 guibg=#ff8000 gui=bold
-set statusline=%#Loading25#Loading\ 25%%
-mode
-
-function! SetConfigPath()
-	if !exists('g:CONFIG_PATH') || g:CONFIG_PATH ==# ""
-		if !exists('$VIM_CONFIG_PATH')
-			let g:CONFIG_PATH = "$HOME/.config/nvim"
-		else
-			let g:CONFIG_PATH = $VIM_CONFIG_PATH
-		endif
-	endif
-endfunction
-call SetConfigPath()
 
 function! HandleExNvimConfig()
 	if g:background ==# "dark"
@@ -815,8 +796,6 @@ function! Showtab()
 endfunction
 command! -nargs=0 Showtab set statusline=%{%Showtab()%}
 
-let g:specloading=" 75 "
-mode
 function! ReturnHighlightTerm(group, term)
    " Store output of group to variable
    let output = execute('hi ' . a:group)
@@ -861,7 +840,6 @@ function! CopyHighlightGroup(src, dst)
 	endif
 endfunction
 Showtab
-mode
 
 function! RehandleExNvimConfig()
 	if exists('g:cursorline_style_supported')
@@ -875,28 +853,12 @@ endfunction
 
 let mapleader = " "
 
-function! SetLocalSharePath()
-	if !exists('g:LOCALSHAREPATH') || g:LOCALSHAREPATH ==# ''
-		if !exists('$VIM_LOCALSHAREPATH')
-			if has('nvim')
-				let g:LOCALSHAREPATH = '~/.local/share/nvim'
-			else
-				let g:LOCALSHAREPATH = '~/.local/share/vim'
-			endif
-			let g:LOCALSHAREPATH = expand(g:LOCALSHAREPATH)
-		else
-			let g:LOCALSHAREPATH = $VIM_LOCALSHAREPATH
-		endif
-	endif
-endfunction
-call SetLocalSharePath()
-
 if $PREFIX == ""
 	call setenv('PREFIX', '/usr')
 endif
 
 if has('nvim')
-	execute "luafile ".expand(g:CONFIG_PATH)."/lua/lib/vim/plugins.lua"
+	execute "luafile ".expand(stdpath('config'))."/lua/lib/vim/plugins.lua"
 endif
 
 " NVIMRC FILE
@@ -922,79 +884,6 @@ if argc() >=# 1
 	call timer_start(0, {->execute('call RestoreCursorFix()|delfunction RestoreCursorFix')})
 endif
 
-let g:specloading=" 87 "
-mode
-function! Update_Cursor_Style_wrapper()
-	if exists('g:updating_cursor_style_supported')
-		call Update_Cursor_Style()
-	else
-		execute "colorscheme" g:colors_name
-	endif
-endfunction
-function! OnQuitDisable()
-	let &guicursor = g:old_guicursor
-	unlet g:old_guicursor
-endfunction
-let s:MACRO_IS_ONE_WIN = "
-\	let s = 0
-\\n	let t = 1
-\\n	while s <=# 1 && t <=# tabpagenr()
-\\n		let s += tabpagewinnr(t, '$')
-\\n		let t += 1
-\\n	endwhile"
-execute "
-\function! IsOneWin()
-\\n".s:MACRO_IS_ONE_WIN."
-\\n	return s ==# 1
-\\nendfunction"
-execute "
-\function! IfOneWinDo(cmd)
-\\n".s:MACRO_IS_ONE_WIN."
-\\n	if s ==# 1
-\\n		execute a:cmd
-\\n	endif
-\\nendfunction"
-execute "
-\function! IfOneWinDoElse(cmd1, cmd2)
-\\n".s:MACRO_IS_ONE_WIN."
-\\n	if s ==# 1
-\\n		execute a:cmd1
-\\n	else
-\\n		execute a:cmd2
-\\n	endif
-\\nendfunction"
-function! PleaseDoNotCloseWrapper(cmd, cond=v:true)
-	if a:cond
-		let g:please_do_not_close_always = v:true
-	endif
-	execute a:cmd
-	if a:cond
-		let g:please_do_not_close_always = v:false
-	endif
-endfunction
-execute "
-\function! PleaseDoNotCloseIfOneWin(cmd)
-\\n".s:MACRO_IS_ONE_WIN."
-\\n	if s ==# 1
-\\n		let g:please_do_not_close_always = v:true
-\\n	endif
-\\n	execute a:cmd
-\\n	if s ==# 1
-\\n		let g:please_do_not_close_always = v:false
-\\n	endif
-\\nendfunction"
-execute "
-\function! PleaseDoNotCloseIfNotOneWin(cmd)
-\\n".s:MACRO_IS_ONE_WIN."
-\\n	if s !=# 1
-\\n		let g:please_do_not_close_always = v:true
-\\n	endif
-\\n	execute a:cmd
-\\n	if s !=# 1
-\\n		let g:please_do_not_close_always = v:false
-\\n	endif
-\\nendfunction"
-
 if !reloading_config
 	if g:language ==# "russian"
 		let g:specloading=" ПОСЛЕ "
@@ -1016,10 +905,10 @@ augroup exnvim_fix_sha_da
 augroup END
 
 function! PluginDelete(name)
-	call delete(expand(g:LOCALSHAREPATH)."/lazy/".a:name, "rf")
+	call delete(expand(stdpath("data"))."/lazy/".a:name, "rf")
 endfunction
 function! PluginExists(name)
-	return isdirectory(g:LOCALSHAREPATH.'/lazy/'.a:name)
+	return isdirectory(stdpath("data").'/lazy/'.a:name)
 endfunction
 if g:compatible =~# "^helix"
 	if PluginExists('vim-gitgutter')
@@ -1038,7 +927,7 @@ else
 endif
 
 function! InitPckr()
-	execute "source ".g:CONFIG_PATH.'/vim/plugins/setup.vim'
+	execute "source ".stdpath('config').'/vim/plugins/setup.vim'
 
 	if has('nvim')
 		execute printf("luafile %s", g:PLUGINS_INSTALL_FILE_PATH)
@@ -1046,8 +935,8 @@ function! InitPckr()
 endfunction
 
 let g:exnvim_fully_loaded = 0
-if filereadable(expand(g:CONFIG_PATH).'/after/init.vim')
-	autocmd VimEnter * call timer_start(0, {->execute('source '.g:CONFIG_PATH.'/after/init.vim')})
+if filereadable(expand(stdpath('config')).'/after/init.vim')
+	autocmd VimEnter * call timer_start(0, {->execute('source '.stdpath('config').'/after/init.vim')})
 	if v:vim_did_enter
 		doautocmd VimEnter
 	endif
@@ -1056,4 +945,3 @@ else
 	let g:specloading = ' OK '
 	silent! doautocmd User ExNvimLoaded
 endif
-call inputrestore()

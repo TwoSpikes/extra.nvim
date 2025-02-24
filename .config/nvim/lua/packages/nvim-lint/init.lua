@@ -1,2 +1,2 @@
 require('packages.nvim-lint.setup')
-vim.cmd[[exec printf('so %s', g:CONFIG_PATH.'/lua/packages/nvim-lint/autocmds.vim')]]
+vim.cmd[[exec printf('so %s', stdpath('config').'/lua/packages/nvim-lint/autocmds.vim')]]

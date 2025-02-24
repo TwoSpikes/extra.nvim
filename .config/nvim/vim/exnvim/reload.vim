@@ -1,6 +1,6 @@
 let old_winid = win_getid()
 
-execute 'source' g:CONFIG_PATH.'/init.vim'
+execute 'source' stdpath('config').'/init.vim'
 
 call win_gotoid(old_winid)
 execute "Showtab"

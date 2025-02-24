@@ -1,2 +1,2 @@
 require('packages.conform.setup')
-vim.cmd([[exec printf("so %s", g:CONFIG_PATH.'/lua/packages/conform/keymaps.vim')]])
+vim.cmd([[exec printf("so %s", stdpath('config').'/lua/packages/conform/keymaps.vim')]])

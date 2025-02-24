@@ -5,10 +5,10 @@ if g:exnvim_fully_loaded !=# 3
 	finish
 endif
 
-execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload_config.vim'
+execute 'source' stdpath('config').'/vim/exnvim/unload_config.vim'
 let g:compatible = "common"
 
-execute 'source' g:CONFIG_PATH.'/vim/compatible/common/unload/unload.vim'
+execute 'source' stdpath('config').'/vim/compatible/common/unload/unload.vim'
 let g:compatible = "empty"
 
 autocmd! AlphaNvim_CinnamonNvim_JK_Workaround *
@@ -402,7 +402,7 @@ if PluginExists('emmet-vim')
 endif
 delcommand ExNvimCheatSheet
 delcommand ExNvimCommit
-if filereadable(expand(g:CONFIG_PATH.'/vim/xterm-color-table.vim'))
+if filereadable(expand(stdpath('config').'/vim/xterm-color-table.vim'))
 	delcommand Exct
 	delcommand Oxct
 	delcommand Sxct
@@ -734,4 +734,4 @@ unlet g:CONFIG_ALREADY_LOADED
 unlet g:exnvim_fully_loaded
 unlet g:compatible
 
-noremap z01 <cmd>execute 'source' g:CONFIG_PATH.'/vim/exnvim/reload.vim'<cr>
+noremap z01 <cmd>execute 'source' stdpath('config').'/vim/exnvim/reload.vim'<cr>

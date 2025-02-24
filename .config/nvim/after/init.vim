@@ -3,8 +3,6 @@ function! OnStart()
 	call InitPckr()
 
 	call SetExNvimConfigPath()
-	call SetLocalSharePath()
-	call SetConfigPath()
 	if has('nvim') && PluginInstalled("neo-tree") && g:automatically_open_neo_tree_instead_of_netrw
 		autocmd! FileExplorer *
 		augroup auto_neo_tree
@@ -16,8 +14,8 @@ function! OnStart()
 		set termguicolors
 		execute printf("luafile %s", g:PLUGINS_SETUP_FILE_PATH)
 	endif
-	if filereadable(expand(g:CONFIG_PATH).'/vim/init.vim')
-		execute 'source' g:CONFIG_PATH.'/vim/init.vim'
+	if filereadable(expand(stdpath('config')).'/vim/init.vim')
+		execute 'source' stdpath('config').'/vim/init.vim'
 	else
 		echohl ErrorMsg
 		if g:language ==# 'russian'
@@ -34,6 +32,7 @@ function! OnStart()
 endfunction
 call OnStart()
 
-execute "source" g:CONFIG_PATH."/after/after_some_event.vim"
-execute "source" g:CONFIG_PATH."/after/unsorted.vim"
-execute "source" g:CONFIG_PATH."/after/autocmds.vim"
+execute "source" stdpath('config')."/after/useless_functions.vim"
+execute "source" stdpath('config')."/after/after_some_event.vim"
+execute "source" stdpath('config')."/after/unsorted.vim"
+execute "source" stdpath('config')."/after/autocmds.vim"

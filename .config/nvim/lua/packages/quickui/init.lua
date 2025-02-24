@@ -1,3 +1,2 @@
-vim.cmd('exec printf("so %s/lua/packages/quickui/setup.vim", g:CONFIG_PATH)')
+vim.cmd('exec printf("so %s/lua/packages/quickui/setup.vim", stdpath("config"))')
 require('packages.quickui.menu.init')
-
