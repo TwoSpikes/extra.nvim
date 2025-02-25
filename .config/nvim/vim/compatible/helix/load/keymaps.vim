@@ -383,19 +383,13 @@ function! V_DoT_Cr()
 	let g:visual_mode = "char"
 endfunction
 xnoremap t<cr> <cmd>call V_DoT_Cr()<cr>
-if maparg('cS')
+if len(maparg('cS')) !=# 0
 	unmap cS
 endif
-if maparg('cs')
+if len(maparg('cs')) !=# 0
 	unmap cs
 endif
-if maparg('ci_')
-	unmap ci_
-endif
-if maparg('dd')
-	unmap dd
-endif
-if maparg('ds')
+if len(maparg('ds')) !=# 0
 	unmap ds
 endif
 let g:pseudo_visual = v:false
@@ -681,7 +675,7 @@ function! MoveRight(x1, y1, x2, y2)
 		echohl Normal
 	endif
 endfunction
-if maparg('a%')
+if len(maparg('a%')) !=# 0
 	unmap a%
 endif
 xnoremap <expr> a MoveRight(line('.'), col('.'), g:rx, g:ry)."\<esc>a"
@@ -1080,10 +1074,10 @@ nnoremap [<space> mzO<esc>`z
 xnoremap [<space> mz<esc>O<esc>`z
 nnoremap ]<space> mzo<esc>`z
 xnoremap ]<space> mz<esc>o<esc>`zgv
-if maparg('<leader>cc')
+if len(maparg('<leader>cc')) !=# 0
 	unmap <leader>cc
 endif
-if maparg('<leader>cn')
+if len(maparg('<leader>cn')) !=# 0
 	unmap <leader>cn
 endif
 
@@ -1109,7 +1103,6 @@ endif
 
 nnoremap <leader>f <cmd>call FuzzyFind()<cr>
 nnoremap <leader>F <cmd>call FuzzyFind()<cr>
-nnoremap <leader>b <cmd>call quickui#tools#list_buffer('e')<cr>
 nnoremap <leader>j <cmd>jumps<cr>
 nnoremap <leader>s <cmd>TagbarToggle<cr>
 nnoremap <leader>S <cmd>TagbarToggle<cr>

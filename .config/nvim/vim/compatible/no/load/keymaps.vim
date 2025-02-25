@@ -1,5 +1,8 @@
 nnoremap <leader>sW <cmd>SWrap<cr>
 
+nnoremap <silent> dd ddk
+nnoremap ci_ yiwct_
+
 nnoremap <c-w>n <cmd>execute v:count1."wincmd n"<cr>
 nnoremap <c-w><c-n> <cmd>execute v:count1."wincmd n"<cr>
 

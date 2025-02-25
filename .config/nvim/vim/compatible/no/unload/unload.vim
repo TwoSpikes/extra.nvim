@@ -1,5 +1,8 @@
 nunmap <leader>sW
 
+nunmap dd
+nunmap ci_
+
 nunmap <c-w>n
 nunmap <c-w><c-n>
 

@@ -383,7 +383,7 @@ function! RebindMenus_system()
 
 	call quickui#menu#install(s:window_label, [
 				\ [(g:quickui_icons?"󱂥 ":"").s:kill_buffer_label."\tCtrl-x k", 'Killbuffer', 'Completely removes the current buffer'],
-				\ [(g:quickui_icons?" ":"").s:select_buffer_label."\tCtrl-x Ctrl-b", 'call quickui#tools#list_buffer("e")', 'Select buffer to edit in current buffer'],
+				\ [(g:quickui_icons?" ":"").s:select_buffer_label."\tLEAD b", 'call quickui#tools#list_buffer("e")', 'Select buffer to edit in current buffer'],
 				\ ])
 	if executable('rg')
 		call quickui#menu#install(s:window_label, [

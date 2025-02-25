@@ -133,7 +133,6 @@ if !g:use_nvim_cmp
 		noremap cS <Plug>CSurround
 		noremap cs <Plug>Csurround
 	endif
-	nnoremap ci_ yiwct_
 endif
 nnoremap <silent> dd ddk
 if has('nvim') && PluginExists('vim-surround')
@@ -253,7 +252,6 @@ if !g:use_nvim_cmp
 	nnoremap <silent> <leader>ff <cmd>call FuzzyFind()<cr>
 endif
 nunmap <leader>F
-nunmap <leader>b
 nunmap <leader>j
 nunmap <leader>s
 nunmap <leader>S

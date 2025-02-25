@@ -88,7 +88,6 @@ unmap <leader>=
 unmap <leader>-
 unmap <leader>1
 
-nunmap ci_
 nunmap <esc>
 iunmap <c-c>
 
@@ -166,7 +165,7 @@ unmap <leader>so
 unmap <f10>
 unmap <f9>
 
-nunmap <c-x><c-b>
+nunmap <leader>b
 
 if executable('lazygit')
 	unmap <leader>z

@@ -1,6 +1,5 @@
 nnoremap <leader>G <cmd>GenerateExNvimConfig<cr>
 
-nnoremap <silent> dd ddk
 nnoremap <silent> - dd
 nnoremap <silent> + mz<cmd>let line=getline('.')<bar>call append(line('.'), line)<cr>`zj
 
@@ -118,8 +117,7 @@ vnoremap <leader>" iw<esc>a"<esc>bi"<esc>v
 vnoremap <leader>' iw<esc>a'<esc>bi'<esc>v
 
 " SPECIAL
-nnoremap ci_ yiwct_
-nnoremap <silent> <esc> <cmd>let @/ = ""<cr>
+nnoremap <silent> <esc> <cmd>let @/ = ""<bar>nohlsearch<cr>
 inoremap <c-c> <c-c><cmd>call Numbertoggle()<cr>
 
 noremap <silent> <leader>. <cmd>call SelectPosition($SHELL, g:termpos)<cr>
@@ -211,7 +209,7 @@ noremap <silent> <s-f10> <cmd>call RebindMenus('extra')<bar>call quickui#menu#op
 noremap <silent> <f9> <cmd>call RebindMenus()<bar>call quickui#menu#open()<cr>
 noremap <silent> <s-f9> <cmd>call RebindMenus('extra')<bar>call quickui#menu#open()<cr>
 
-nnoremap <silent> <c-x><c-b> <cmd>call quickui#tools#list_buffer('e')<cr>
+nnoremap <leader>b <cmd>call quickui#tools#list_buffer('e')<cr>
 
 if executable('lazygit')
 	noremap <leader>xz <cmd>call SelectPosition('lazygit', g:termpos)<cr>
