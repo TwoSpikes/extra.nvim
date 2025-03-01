@@ -1,3 +1,92 @@
+" Copied from StackOverflow: https://stackoverflow.com/questions/59583931/vim-how-do-i-determine-the-status-of-a-process-within-a-terminal-tab
+function! TermRunning(buf)
+	return getbufvar(a:buf, '&buftype') !=# 'terminal' ? 0 :
+		\ has('terminal') ? term_getstatus(a:buf) =~# 'running' :
+		\ has('nvim') ? jobwait([getbufvar(a:buf, '&channel')], 0)[0] == -1 :
+		\ 0
+endfunction
+
+function! OpenRanger(path)
+	if has('nvim')
+		let TMPFILE = trim(system(["mktemp", "-u"]))
+	else
+		let TMPFILE = trim(system("mktemp -u"))
+	endif
+	let g:bufnrforranger = OpenTerm("ranger --choosefile=".TMPFILE." ".a:path)
+	augroup oncloseranger
+		autocmd! oncloseranger
+		if has('nvim')
+			execute 'autocmd TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.g:bufnrforranger."|if v:shell_error!=#0|call OnQuit()|quit|call OnQuitDisable()|endif|if filereadable(filename)==#1|let old_bufnr=bufnr()|enew|execute old_bufnr.\"bdelete\"|unlet old_bufnr|let bufnr=bufadd(filename)|call bufload(bufnr)|execute bufnr.'buffer'|call Numbertoggle()|filetype detect|call AfterSomeEvent(\"ModeChanged\", \"doautocmd BufEnter \".expand(\"%\"))|unlet g:bufnrforranger|else|endif|endif|call delete('".TMPFILE."')|unlet filename"
+		else
+			function! CheckRangerStopped(timer_id, TMPFILE)
+				if !exists('g:bufnrforranger')
+					return
+				endif
+				let bufnr = bufnr()
+				if bufnr ==# g:bufnrforranger && !TermRunning(bufnr)
+					let filename=system("cat ".a:TMPFILE)
+					call delete(a:TMPFILE)
+					if filereadable(filename) ==# 1
+						bwipeout!
+						execute 'edit '.filename
+						call Numbertoggle()
+						filetype detect
+						call AfterSomeEvent("ModeChanged", "doautocmd BufEnter ".expand("%"))
+						if exists('g:bufnrforranger')
+							unlet g:bufnrforranger
+						endif
+						call timer_stop(a:timer_id)
+					else
+						call IfOneWinDo('call OnQuit()')
+						quit
+					endif
+					unlet filename
+				endif
+			endfunction
+			execute "call timer_start(0, {timer_id -> CheckRangerStopped(timer_id, '".TMPFILE."')}, {'repeat': -1})"
+		endif
+		execute "autocmd BufWinLeave * let f=expand(\"<afile>\")|let n=bufnr(\"^\".f.\"$\")|if n==#".g:bufnrforranger."|unlet f|unlet n|autocmd!oncloseranger|call AfterSomeEvent(\"BufEnter,BufLeave,WinEnter,WinLeave\", \"".g:bufnrforranger."bwipeout!\")|unlet g:bufnrforranger|endif"
+	augroup END
+	unlet TMPFILE
+endfunction
+function! OpenOnStart()
+	if g:open_menu_on_start
+		call RebindMenus()
+		call timer_start(0, {-> quickui#menu#open()})
+	endif
+
+	if argc() <= 0 && expand('%') == '' || isdirectory(expand('%'))
+		let to_open = 1
+		let to_open *= !g:DO_NOT_OPEN_ANYTHING
+		let to_open *= !g:PAGER_MODE
+		if to_open
+			if g:open_on_start ==# 'alpha' && has('nvim') && !isdirectory(expand('%')) && PluginInstalled('alpha')
+				Alpha
+			elseif g:open_on_start ==# "explorer" || (!has('nvim') && g:open_on_start ==# 'alpha')
+			\||executable('ranger') !=# 1
+				edit ./
+			elseif g:open_on_start ==# "ranger"
+				if argc() ># 0
+					call OpenRanger(argv(0))
+				else
+					call OpenRanger("./")
+				endif
+			endif
+		endif
+	endif
+endfunction
+
+function! JKWorkaroundAlpha()
+	noremap <buffer> j <cmd>call ProcessGBut('j')<cr>
+	noremap <buffer> k <cmd>call ProcessGBut('k')<cr>
+	if !g:open_cmd_on_up
+		noremap <buffer> <up> <cmd>call ProcessGBut('k')<cr>
+	endif
+	noremap <buffer> <down> <cmd>call ProcessGBut('j')<cr>
+endfunction
+call OpenOnStart()
+mode
+
 if has('nvim')
 	let g:please_do_not_close = []
 	let g:please_do_not_close_always = v:false
@@ -1160,85 +1249,6 @@ function! TogglePagerMode()
 endfunction
 command! -nargs=0 TogglePagerMode call TogglePagerMode()
 
-function! TermuxSaveCursorStyle()
-	if $TERMUX_VERSION !=# "" && filereadable(expand("~")."/.termux/termux.properties")
-		if !filereadable(expand("~/.cache/extra.nvim/termux/terminal_cursor_style"))
-			let TMPFILE=trim(system(["mktemp", "-u"]))
-			call system(["cp", expand("~/.termux/termux.properties"), TMPFILE])
-			call system(["sed", "-i", "s/ *= */=/", TMPFILE])
-			call system(["sed", "-i", "s/-/_/g", TMPFILE])
-			call system(["chmod", "+x", TMPFILE])
-			call writefile(["echo $terminal_cursor_style"], TMPFILE, "a")
-			let termux_cursor_style = trim(system(TMPFILE))
-			if termux_cursor_style !=# ""
-				let g:termux_cursor_style = termux_cursor_style
-				unlet termux_cursor_style
-				if !isdirectory(expand("~/.cache/extra.nvim/termux"))
-					call mkdir(expand("~/.cache/extra.nvim/termux"), "p", 0700)
-				endif
-				call writefile([g:termux_cursor_style], expand("~/.cache/extra.nvim/termux/terminal_cursor_style"), "")
-			endif
-			call system(["rm", TMPFILE])
-		else
-			let g:termux_cursor_style = trim(readfile(expand("~/.cache/extra.nvim/termux/terminal_cursor_style"))[0])
-		endif
-	elseif $TERMUX_VERSION
-		let g:termux_cursor_style = 'bar'
-	endif
-endfunction
-call TermuxSaveCursorStyle()
-
-" Copied from StackOverflow: https://stackoverflow.com/questions/59583931/vim-how-do-i-determine-the-status-of-a-process-within-a-terminal-tab
-function! TermRunning(buf)
-	return getbufvar(a:buf, '&buftype') !=# 'terminal' ? 0 :
-		\ has('terminal') ? term_getstatus(a:buf) =~# 'running' :
-		\ has('nvim') ? jobwait([getbufvar(a:buf, '&channel')], 0)[0] == -1 :
-		\ 0
-endfunction
-
-function! OpenRanger(path)
-	if has('nvim')
-		let TMPFILE = trim(system(["mktemp", "-u"]))
-	else
-		let TMPFILE = trim(system("mktemp -u"))
-	endif
-	let g:bufnrforranger = OpenTerm("ranger --choosefile=".TMPFILE." ".a:path)
-	augroup oncloseranger
-		autocmd! oncloseranger
-		if has('nvim')
-			execute 'autocmd TermClose * let filename=system("cat '.TMPFILE.'")|if bufnr()==#'.g:bufnrforranger."|if v:shell_error!=#0|call OnQuit()|quit|call OnQuitDisable()|endif|if filereadable(filename)==#1|let old_bufnr=bufnr()|enew|execute old_bufnr.\"bdelete\"|unlet old_bufnr|let bufnr=bufadd(filename)|call bufload(bufnr)|execute bufnr.'buffer'|call Numbertoggle()|filetype detect|call AfterSomeEvent(\"ModeChanged\", \"doautocmd BufEnter \".expand(\"%\"))|unlet g:bufnrforranger|else|endif|endif|call delete('".TMPFILE."')|unlet filename"
-		else
-			function! CheckRangerStopped(timer_id, TMPFILE)
-				if !exists('g:bufnrforranger')
-					return
-				endif
-				let bufnr = bufnr()
-				if bufnr ==# g:bufnrforranger && !TermRunning(bufnr)
-					let filename=system("cat ".a:TMPFILE)
-					call delete(a:TMPFILE)
-					if filereadable(filename) ==# 1
-						bwipeout!
-						execute 'edit '.filename
-						call Numbertoggle()
-						filetype detect
-						call AfterSomeEvent("ModeChanged", "doautocmd BufEnter ".expand("%"))
-						if exists('g:bufnrforranger')
-							unlet g:bufnrforranger
-						endif
-						call timer_stop(a:timer_id)
-					else
-						call IfOneWinDo('call OnQuit()')
-						quit
-					endif
-					unlet filename
-				endif
-			endfunction
-			execute "call timer_start(0, {timer_id -> CheckRangerStopped(timer_id, '".TMPFILE."')}, {'repeat': -1})"
-		endif
-		execute "autocmd BufWinLeave * let f=expand(\"<afile>\")|let n=bufnr(\"^\".f.\"$\")|if n==#".g:bufnrforranger."|unlet f|unlet n|autocmd!oncloseranger|call AfterSomeEvent(\"BufEnter,BufLeave,WinEnter,WinLeave\", \"".g:bufnrforranger."bwipeout!\")|unlet g:bufnrforranger|endif"
-	augroup END
-	unlet TMPFILE
-endfunction
 function! OpenRangerCheck()
 	if executable('ranger')
 		call OpenRanger('./')
@@ -1275,33 +1285,6 @@ endfunction
 if PluginInstalled('alpha-nvim')
 	nnoremap <leader>A <cmd>call RunAlphaIfNotAlphaRunning()<cr>
 endif
-
-function! OpenOnStart()
-	if g:open_menu_on_start
-		call RebindMenus()
-		call timer_start(0, {-> quickui#menu#open()})
-	endif
-
-	if argc() <= 0 && expand('%') == '' || isdirectory(expand('%'))
-		let to_open = 1
-		let to_open *= !g:DO_NOT_OPEN_ANYTHING
-		let to_open *= !g:PAGER_MODE
-		if to_open
-			if g:open_on_start ==# 'alpha' && has('nvim') && !isdirectory(expand('%')) && PluginInstalled('alpha')
-				Alpha
-			elseif g:open_on_start ==# "explorer" || (!has('nvim') && g:open_on_start ==# 'alpha')
-			\||executable('ranger') !=# 1
-				edit ./
-			elseif g:open_on_start ==# "ranger"
-				if argc() ># 0
-					call OpenRanger(argv(0))
-				else
-					call OpenRanger("./")
-				endif
-			endif
-		endif
-	endif
-endfunction
 
 function! LoadVars()
 	if filereadable(expand(stdpath("data")).'/extra.nvim/last_selected.txt')
@@ -1755,14 +1738,6 @@ execute process_g_but_function_expression
 endfunction
 call RedefineProcessGBut()
 
-function! JKWorkaroundAlpha()
-	noremap <buffer> j <cmd>call ProcessGBut('j')<cr>
-	noremap <buffer> k <cmd>call ProcessGBut('k')<cr>
-	if !g:open_cmd_on_up
-		noremap <buffer> <up> <cmd>call ProcessGBut('k')<cr>
-	endif
-	noremap <buffer> <down> <cmd>call ProcessGBut('j')<cr>
-endfunction
 function! JKWorkaround()
 	noremap k <cmd>call ProcessGBut('k')<cr>
 	if g:open_cmd_on_up ==# "no"
@@ -2331,7 +2306,33 @@ function! InvertPdf(src, dst=v:null)
 endfunction
 command! -nargs=* -complete=file InvertPdf call InvertPdf("<f-args>")
 
-call OpenOnStart()
+function! TermuxSaveCursorStyle()
+	if $TERMUX_VERSION !=# "" && filereadable(expand("~")."/.termux/termux.properties")
+		if !filereadable(expand("~/.cache/extra.nvim/termux/terminal_cursor_style"))
+			let TMPFILE=trim(system(["mktemp", "-u"]))
+			call system(["cp", expand("~/.termux/termux.properties"), TMPFILE])
+			call system(["sed", "-i", "s/ *= */=/", TMPFILE])
+			call system(["sed", "-i", "s/-/_/g", TMPFILE])
+			call system(["chmod", "+x", TMPFILE])
+			call writefile(["echo $terminal_cursor_style"], TMPFILE, "a")
+			let termux_cursor_style = trim(system(TMPFILE))
+			if termux_cursor_style !=# ""
+				let g:termux_cursor_style = termux_cursor_style
+				unlet termux_cursor_style
+				if !isdirectory(expand("~/.cache/extra.nvim/termux"))
+					call mkdir(expand("~/.cache/extra.nvim/termux"), "p", 0700)
+				endif
+				call writefile([g:termux_cursor_style], expand("~/.cache/extra.nvim/termux/terminal_cursor_style"), "")
+			endif
+			call system(["rm", TMPFILE])
+		else
+			let g:termux_cursor_style = trim(readfile(expand("~/.cache/extra.nvim/termux/terminal_cursor_style"))[0])
+		endif
+	elseif $TERMUX_VERSION
+		let g:termux_cursor_style = 'bar'
+	endif
+endfunction
+call TermuxSaveCursorStyle()
 
 let g:exnvim_fully_loaded += 1
 let g:specloading = ' OK '

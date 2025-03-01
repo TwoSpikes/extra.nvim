@@ -130,7 +130,6 @@ augroup! ExNvimOptionsInComment
 delfunction HandleExNvimOptionsInComment
 delfunction HandleKeystroke
 delfunction IfOneWinDo
-delfunction IfOneWinDoElse
 delfunction InitPckr
 delcommand InvertPdf
 delfunction InvertPdf
@@ -138,7 +137,6 @@ if exists('*IsHighlightGroupDefined')
 	delfunction IsHighlightGroupDefined
 endif
 delfunction IsNo
-delfunction IsOneWin
 delfunction IsYes
 delfunction JKWorkaround
 delfunction JKWorkaroundAlpha
@@ -191,9 +189,6 @@ delfunction Pad
 if exists('*Pad_middle')
 	delfunction Pad_middle
 endif
-delfunction PleaseDoNotCloseIfNotOneWin
-delfunction PleaseDoNotCloseIfOneWin
-delfunction PleaseDoNotCloseWrapper
 delfunction PluginDelete
 delfunction SelectPosition
 delcommand SaveAs
@@ -227,13 +222,11 @@ delfunction RelNu
 delfunction SaveVars
 delfunction Save_WW_and_Do
 delfunction SelectAll
-delfunction SetConfigPath
 delfunction SetDefaultValuesForStartupOptionsAndExNvimConfigOptions
 delfunction SetExNvimConfigPath
 autocmd! exnvim_gitbranch *
 augroup! exnvim_gitbranch
 delfunction SetGitBranch
-delfunction SetLocalSharePath
 delfunction SetMouse
 delfunction SetTermuxConfigPath
 if PluginExists('coc.nvim')
