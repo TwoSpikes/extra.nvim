@@ -52,7 +52,7 @@ endfunction
 function! OpenOnStart()
 	if g:open_menu_on_start
 		call RebindMenus()
-		call timer_start(0, {-> quickui#menu#open()})
+		autocmd User ExNvimLoaded call timer_start(50, {->quickui#menu#nvim_open_menu({"name": "system", "next": 1})})
 	endif
 
 	if argc() <= 0 && expand('%') == '' || isdirectory(expand('%'))
@@ -67,9 +67,9 @@ function! OpenOnStart()
 				edit ./
 			elseif g:open_on_start ==# "ranger"
 				if argc() ># 0
-					call OpenRanger(argv(0))
+					call timer_start(0, {->OpenRanger(argv(0))})
 				else
-					call OpenRanger("./")
+					call timer_start(0, {->OpenRanger("./")})
 				endif
 			endif
 		endif

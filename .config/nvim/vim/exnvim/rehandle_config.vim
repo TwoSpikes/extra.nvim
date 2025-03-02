@@ -26,3 +26,13 @@ if has("nvim")
 	endif
 endif
 call SetMouse()
+
+if !g:linenr
+	call NoNu()
+elseif g:linenr_style ==# "absolute"
+	call AbsNu(mode())
+else
+	call RelNu()
+endif
+
+let g:quickui#style#border = g:quickui_border_style

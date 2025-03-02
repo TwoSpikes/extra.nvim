@@ -14,8 +14,10 @@ if vim.g.enable_which_key and plugin_installed("which-key") then
 	require('packages.which-key.init')
 end
 --require('packages.bufresize.init')
-require('packages.quickui.init')
 vim.cmd('exec printf("so %s/lua/packages/mason.vim", stdpath("config"))')
+if plugin_exists('vim-quickui') then
+	require('packages.quickui.menu.init')
+end
 if plugin_exists('coc.nvim') then
 	if vim.g.use_nvim_cmp then
 		require('packages.nvim-cmp.init')

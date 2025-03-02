@@ -1,5 +1,14 @@
---- .local/share/nvim/lazy/vim-quickui/autoload/quickui/menu.vim	2025-01-29 21:01:24.106181893 +0300
-+++ .local/share/nvim/lazy/vim-quickui/autoload/quickui/menu.vim	2025-01-29 21:05:42.362181795 +0300
+--- /data/data/com.termux/files/home/.local/share/nvim/lazy/vim-quickui/autoload/quickui/menu.1.vim	2025-03-02 16:15:10.146651010 +0300
++++ /data/data/com.termux/files/home/.local/share/nvim/lazy/vim-quickui/autoload/quickui/menu.vim	2025-03-02 16:21:56.214650855 +0300
+@@ -724,7 +724,7 @@
+ 	let s:cmenu.hotkey = s:cmenu.inst.hotkey
+ 	let s:cmenu.state = 1
+ 	let s:cmenu.context = -1
+-	let s:cmenu.next = 0
++	let s:cmenu.next = get(a:opts, 'next', 0)
+ 	let keymap = quickui#utils#keymap()
+ 	let s:cmenu.keymap = keymap
+ 	let s:cmenu.script = ''
 @@ -775,9 +775,7 @@
  		endif
  	endwhile
