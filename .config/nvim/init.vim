@@ -904,11 +904,27 @@ augroup exnvim_fix_sha_da
 	autocmd VimLeavePre * call FixShaDa()
 augroup END
 
+function! SetLocalSharePath()
+	if !exists('g:LOCALSHAREPATH') || g:LOCALSHAREPATH ==# ""
+		if !exists('$VIM_LOCALSHAREPATH')
+			if has('nvim')
+				let g:LOCALSHAREPATH = '~/.local/share/nvim'
+			else
+				let g:LOCALSHAREPATH = '~/.local/share/vim'
+			endif
+			let g:LOCALSHAREPATH = expand(g:LOCALSHAREPATH)
+		else
+			let g:LOCALSHAREPATH = expand($VIM_LOCALSHAREPATH)
+		endif
+	endif
+endfunction
+call SetLocalSharePath()
+
 function! PluginDelete(name)
-	call delete(expand(stdpath("data"))."/lazy/".a:name, "rf")
+	call delete(g:LOCALSHAREPATH."/lazy/".a:name, "rf")
 endfunction
 function! PluginExists(name)
-	return isdirectory(stdpath("data").'/lazy/'.a:name)
+	return isdirectory(g:LOCALSHAREPATH.'/lazy/'.a:name)
 endfunction
 if g:compatible =~# "^helix"
 	if PluginExists('vim-gitgutter')
@@ -926,17 +942,21 @@ else
 	endfunction
 endif
 
-function! InitPckr()
-	execute "source ".stdpath('config').'/vim/plugins/setup.vim'
-
-	if has('nvim')
-		execute printf("luafile %s", g:PLUGINS_INSTALL_FILE_PATH)
+function! SetConfigPath()
+	if !exists('g:CONFIG_PATH') || g:CONFIG_PATH ==# ""
+		if !exists('$VIM_CONFIG_PATH')
+			let g:CONFIG_PATH = expand('$HOME')."/.config/nvim"
+		else
+			let g:CONFIG_PATH = $VIM_CONFIG_PATH
+		endif
 	endif
+	let g:CONFIG_PATH = expand(g:CONFIG_PATH)
 endfunction
+call SetConfigPath()
 
 let g:exnvim_fully_loaded = 0
-if filereadable(expand(stdpath('config')).'/after/init.vim')
-	autocmd VimEnter * call timer_start(0, {->execute('source '.stdpath('config').'/after/init.vim')})
+if filereadable(g:CONFIG_PATH.'/after/init.vim')
+	autocmd VimEnter * call timer_start(0, {->execute('source '.g:CONFIG_PATH.'/after/init.vim')})
 	if v:vim_did_enter
 		doautocmd VimEnter
 	endif

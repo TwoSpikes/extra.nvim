@@ -74,6 +74,8 @@ nunmap <a-.>
 xunmap R
 delfunction Do_N_R
 nunmap r
+delfunction Do_V_R
+xunmap r
 nunmap ~
 nunmap >
 nunmap <

@@ -74,8 +74,8 @@ if executable('rg')
 	noremap <silent> <leader>sp <cmd>lua require('spectre').open_file_search({select_word = true})<cr><cmd>call Numbertoggle()<cr>
 endif
 
-execute printf('noremap <silent> <leader>ve <cmd>call SelectPosition("%s", g:stdpos)<cr>', stdpath('config')."/init.vim")
-execute printf("noremap <silent> <leader>se <esc>:so %s<cr>", stdpath('config').'/vim/exnvim/reload.vim')
+execute printf('noremap <silent> <leader>ve <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:CONFIG_PATH."/init.vim")
+execute printf("noremap <silent> <leader>se <esc>:so %s<cr>", g:CONFIG_PATH.'/vim/exnvim/reload.vim')
 
 execute printf('noremap <silent> <leader>vi <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:PLUGINS_INSTALL_FILE_PATH)
 execute printf("noremap <silent> <leader>si <esc>:so %s<cr>", g:PLUGINS_INSTALL_FILE_PATH)
@@ -87,7 +87,7 @@ execute printf('noremap <silent> <leader>vl <cmd>call SelectPosition("%s", g:std
 execute printf("noremap <silent> <leader>sl <esc>:so %s<cr>", g:LSP_PLUGINS_SETUP_FILE_PATH)
 
 execute printf('noremap <silent> <leader>vj <cmd>call SelectPosition("%s", g:stdpos)<cr>', g:EXNVIM_CONFIG_PATH)
-execute printf('noremap <silent> <leader>sj <cmd>execute "source %s/vim/exnvim/reload_config.vim"<cr>', expand(stdpath('config')))
+execute printf('noremap <silent> <leader>sj <cmd>execute "source %s/vim/exnvim/reload_config.vim"<cr>', g:CONFIG_PATH)
 
 " .dotfiles-script.sh FILE
 " See https://github.com/TwoSpikes/dotfiles.git

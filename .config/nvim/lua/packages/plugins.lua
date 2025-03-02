@@ -92,6 +92,12 @@ local plugins = {
 	},
 	{
 		'nvim-treesitter/nvim-treesitter',
+		patch = function()
+			patch_plugin('nvim-treesitter')
+		end,
+		unpatch = function()
+			unpatch_plugin('nvim-treesitter')
+		end,
 	},
 	{
 		'nvim-treesitter/playground',
@@ -462,12 +468,6 @@ local plugins = {
 	},
 	{
 		'nvim-treesitter/nvim-treesitter-context',
-		patch = function()
-			patch_plugin('nvim-treesitter-context')
-		end,
-		unpatch = function()
-			unpatch_plugin('nvim-treesitter-context')
-		end,
 		enabled = vim.g.enable_nvim_treesitter_context,
 	},
 	{
@@ -541,9 +541,16 @@ local plugins = {
 	},
 	{
 		'Thiago4532/mdmath.nvim',
+		enabled = vim.fn.has('gui_running'),
 		dependencies = {
 			{
-				'nvim-treesitter/nvim-treesitter'
+				'nvim-treesitter/nvim-treesitter',
+				patch = function()
+					patch_plugin('nvim-treesitter')
+				end,
+				unpatch = function()
+					unpatch_plugin('nvim-treesitter')
+				end,
 			},
 		},
 	},

@@ -1,3 +1,11 @@
+function! InitPckr()
+	execute "source ".g:CONFIG_PATH.'/vim/plugins/setup.vim'
+
+	if has('nvim')
+		execute printf("luafile %s", g:PLUGINS_INSTALL_FILE_PATH)
+	endif
+endfunction
+
 function! OnStart()
 	set nolazyredraw
 	call InitPckr()
@@ -10,12 +18,12 @@ function! OnStart()
 			autocmd BufEnter * if isdirectory(expand(expand("%")))|let prev_bufnr=bufnr()|execute "Neotree position=current" expand("%")|execute prev_bufnr."bwipeout!"|endif
 		augroup END
 	endif
+	set termguicolors
 	if has('nvim')
-		set termguicolors
 		execute printf("luafile %s", g:PLUGINS_SETUP_FILE_PATH)
 	endif
-	if filereadable(expand(stdpath('config')).'/vim/init.vim')
-		execute 'source' stdpath('config').'/vim/init.vim'
+	if filereadable(g:CONFIG_PATH.'/vim/init.vim')
+		execute 'source' g:CONFIG_PATH.'/vim/init.vim'
 	else
 		echohl ErrorMsg
 		if g:language ==# 'russian'
@@ -32,7 +40,7 @@ function! OnStart()
 endfunction
 call OnStart()
 
-execute "source" stdpath('config')."/after/useless_functions.vim"
-execute "source" stdpath('config')."/after/after_some_event.vim"
-execute "source" stdpath('config')."/after/unsorted.vim"
-execute "source" stdpath('config')."/after/autocmds.vim"
+execute "source" g:CONFIG_PATH."/after/useless_functions.vim"
+execute "source" g:CONFIG_PATH."/after/after_some_event.vim"
+execute "source" g:CONFIG_PATH."/after/unsorted.vim"
+execute "source" g:CONFIG_PATH."/after/autocmds.vim"

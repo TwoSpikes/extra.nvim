@@ -1,8 +1,0 @@
---- .local/share/nvim/lazy/cmp-buffer/after/plugin/cmp_buffer.lua	2024-12-30 14:11:32.043836163 +0300
-+++ .local/share/nvim/lazy/cmp-buffer/after/plugin/cmp_buffer.lua	2024-12-30 14:12:28.095836142 +0300
-@@ -1 +1,5 @@
-+if not plugin_installed('cmp') then
-+	goto exit
-+end
- require('cmp').register_source('buffer', require('cmp_buffer'))
-+::exit::

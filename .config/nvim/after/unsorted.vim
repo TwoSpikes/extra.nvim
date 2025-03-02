@@ -400,7 +400,7 @@ unlet s:dir_position_right
 unlet s:dir_position_current
 unlet s:dir_position_float
 
-let g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT = [stdpath("data").'/lazy/*/lua/%FILE%.lua', stdpath("data").'/lazy/*/lua/%FILE%/init.lua']
+let g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT = [g:LOCALSHAREPATH.'/lazy/*/lua/%FILE%.lua', g:LOCALSHAREPATH.'/lazy/*/lua/%FILE%/init.lua']
 let g:LUA_REQUIRE_GOTO_PREFIX = g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT
 function! Lua_Require_Goto_Workaround_Wincmd_f()
 	if !PluginExists('vim-quickui')
@@ -1759,11 +1759,11 @@ else
 endif
 
 function! OnFirstTime()
-	if !filereadable(expand(stdpath("data")).'/extra.nvim/not_first_time.null')
-		if !isdirectory(expand(stdpath("data")).'/extra.nvim')
-			call mkdir(expand(stdpath("data")).'/extra.nvim', 'p')
+	if !filereadable(g:LOCALSHAREPATH.'/extra.nvim/not_first_time.null')
+		if !isdirectory(g:LOCALSHAREPATH.'/extra.nvim')
+			call mkdir(g:LOCALSHAREPATH.'/extra.nvim', 'p')
 		endif
-		call writefile([], expand(stdpath("data")).'/extra.nvim/not_first_time.null')
+		call writefile([], g:LOCALSHAREPATH.'/extra.nvim/not_first_time.null')
 
 		if !PluginExists('vim-quickui')
 			if g:language ==# 'russian'

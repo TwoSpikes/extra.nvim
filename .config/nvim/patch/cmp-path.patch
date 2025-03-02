@@ -1,8 +1,0 @@
---- .local/share/nvim/lazy/cmp-path/after/plugin/cmp_path.lua	2024-12-30 12:59:28.743837812 +0300
-+++ .local/share/nvim/lazy/cmp-path/after/plugin/cmp_path.lua	2024-12-30 14:16:47.915836043 +0300
-@@ -1 +1,5 @@
-+if not plugin_installed('cmp') then
-+	goto exit
-+end
- require('cmp').register_source('path', require('cmp_path').new())
-+::exit::

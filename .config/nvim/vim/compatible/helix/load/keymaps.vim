@@ -371,6 +371,25 @@ endfunction
 call Do_N_R_define()
 delfunction Do_N_R_define
 nnoremap r <cmd>call Do_N_R(v:count1)<cr>
+function! Do_V_R(count)
+	let old_position=getpos('.')[1:]
+	let old_guicursor=&guicursor
+	let &guicursor='a:block-blinkwait175-blinkoff150-blinkon175-CursorReplace'
+	let c=getchar()
+	if c ==# 27
+		call cursor(old_position)
+		let &guicursor=old_guicursor
+		unlet old_guicursor
+		unlet old_position
+		return
+	endif
+	execute 'normal! r'.nr2char(c)
+	call cursor(old_position)
+	let &guicursor=old_guicursor
+	unlet old_guicursor
+	unlet old_position
+endfunction
+xnoremap r <cmd>call Do_V_R(v:count1)<cr>
 nnoremap ~ <cmd>call Do_N_Tilde()<cr>
 nnoremap > >>
 nnoremap < <<
