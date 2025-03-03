@@ -137,9 +137,6 @@ local plugins = {
 		unpatch = function()
 			unpatch_plugin('vim-quickui')
 		end,
-		build = function()
-			vim.cmd[[echomsg "Kek"]]
-		end,
 	},
 	{
 		'neoclide/coc.nvim',

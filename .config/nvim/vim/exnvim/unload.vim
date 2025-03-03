@@ -726,5 +726,8 @@ delfunction PluginExists
 unlet g:CONFIG_ALREADY_LOADED
 unlet g:exnvim_fully_loaded
 unlet g:compatible
+if exists('g:already_patched')
+	unlet g:already_patched
+endif
 
 noremap z01 <cmd>execute 'source' stdpath('config').'/vim/exnvim/reload.vim'<cr>
