@@ -1,0 +1,18 @@
+--- .local/share/nvim/lazy/lazy.nvim/lua/lazy/manage/init.lua	2025-03-03 10:57:15.920456517 +0300
++++ .local/share/nvim/lazy/lazy.nvim/lua/lazy/manage/init.lua	2025-03-03 10:58:49.220456482 +0300
+@@ -178,6 +178,7 @@
+ 
+ ---@param opts? ManagerOpts
+ function M.build(opts)
++  vim.g.already_patched = nil
+   opts = M.opts(opts, { mode = "build" })
+   return M.run({
+     pipeline = { { "plugin.build", force = true } },
+@@ -189,6 +190,7 @@
+ 
+ ---@param opts? ManagerOpts
+ function M.sync(opts)
++  vim.g.already_patched = nil
+   opts = M.opts(opts)
+   if opts.clear then
+     M.clear()

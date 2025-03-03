@@ -1,5 +1,5 @@
---- .local/share/nvim/lazy/lazy.nvim/lua/lazy/manage/task/git.lua	2025-02-16 19:32:06.593418709 +0300
-+++ .local/share/nvim/lazy/lazy.nvim/lua/lazy/manage/task/git.lua	2025-02-16 19:34:08.177418662 +0300
+--- .local/share/nvim/lazy/lazy.nvim/lua/lazy/manage/task/git.lua	2025-03-03 09:20:29.900542069 +0300
++++ .local/share/nvim/lazy/lazy.nvim/lua/lazy/manage/task/git.lua	2025-03-03 09:54:18.923778259 +0300
 @@ -22,6 +22,29 @@
    end
  end
@@ -30,10 +30,11 @@
  function throttle.wait()
    if not Config.options.git.throttle.enabled then
      return
-@@ -283,6 +316,40 @@
+@@ -280,6 +303,40 @@
  
    ---@async
    run = function(self)
++    vim.g.already_patched = nil
 +    vim.cmd([[silent! runtime plugin/rplugin.vim]])
 +
 +    local builders = self.plugin.unpatch
@@ -67,11 +68,10 @@
 +        end
 +      end
 +    end
-+    local commit_amount_before = vim.fn.str2nr(vim.fn.system('git rev-list --count --all'))
      throttle.wait()
      local args = {
        "fetch",
-@@ -329,6 +393,41 @@
+@@ -299,6 +356,42 @@
        on_exit = function(ok)
          if ok then
            self.plugin._.last_check = vim.uv.now()
@@ -88,6 +88,7 @@
 +      builders = builders or get_build_file(self.plugin)
 +
 +      if builders then
++        vim.g.already_patched = true
 +        builders = type(builders) == "table" and builders or { builders }
 +        ---@cast builders (string|fun(LazyPlugin))[]
 +        for _, build in ipairs(builders) do

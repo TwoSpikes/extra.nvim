@@ -1,0 +1,44 @@
+--- .local/share/nvim/lazy/lazy.nvim/lua/lazy/manage/task/plugin.lua	2025-03-03 09:41:58.499059851 +0300
++++ .local/share/nvim/lazy/lazy.nvim/lua/lazy/manage/task/plugin.lua	2025-03-03 10:49:53.772456686 +0300
+@@ -49,6 +49,41 @@
+   end,
+   ---@async
+   run = function(self)
++    if not vim.g.already_patched then
++      vim.cmd([[silent! runtime plugin/rplugin.vim]])
++
++      local builders = self.plugin.patch
++
++      -- Skip if `build` is set to `false`
++      if builders == false then
++        return
++      end
++
++      builders = builders or get_build_file(self.plugin)
++
++      if builders then
++        builders = type(builders) == "table" and builders or { builders }
++        ---@cast builders (string|fun(LazyPlugin))[]
++        for _, build in ipairs(builders) do
++          if type(build) == "function" then
++            build(self.plugin)
++          elseif build == "rockspec" then
++            Rocks.build(self)
++          elseif build:sub(1, 1) == ":" then
++            cmd(self, build)
++          elseif build:match("%.lua$") then
++            local file = self.plugin.dir .. "/" .. build
++            local chunk, err = loadfile(file)
++            if not chunk or err then
++              error(err)
++            end
++            chunk()
++          else
++            shell(self, build)
++          end
++        end
++      end
++    end
+     vim.cmd([[silent! runtime plugin/rplugin.vim]])
+ 
+     local builders = self.plugin.build

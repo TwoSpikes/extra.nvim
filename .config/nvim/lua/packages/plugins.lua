@@ -39,9 +39,9 @@ local function bootstrap_lazy()
       'https://github.com/folke/lazy.nvim.git',
       lazy_path
     })
-  end
 
-  patch_plugin('lazy.nvim')
+    patch_plugin('lazy.nvim')
+  end
 
   vim.opt.rtp:prepend(lazy_path)
 end
@@ -136,6 +136,9 @@ local plugins = {
 		end,
 		unpatch = function()
 			unpatch_plugin('vim-quickui')
+		end,
+		build = function()
+			vim.cmd[[echomsg "Kek"]]
 		end,
 	},
 	{
