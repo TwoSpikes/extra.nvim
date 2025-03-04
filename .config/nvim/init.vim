@@ -177,6 +177,7 @@ function! LoadExNvimConfig(path, reload=v:false)
 		\'cd_after_git_clone',
 		\'show_ascii_logo',
 		\'enable_scrollview',
+		\'show_user_name',
 	\]
 	if keys(g:exnvim_config) ==# ['_TYPE', '_VAL']
 		for item in g:exnvim_config['_VAL']
@@ -359,6 +360,9 @@ function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 	endif
 	if !exists('g:enable_scrollview')
 		let g:enable_scrollview = v:true
+	endif
+	if !exists('g:show_user_name')
+		let g:show_user_name = "short"
 	endif
 endfunction
 call SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
@@ -789,6 +793,27 @@ function! Showtab()
 		endif
 		let s:result .= ' '
 	endif
+	let username = $USER
+	if len(username) ==# 0
+		let username = $USERNAME
+	endif
+	if len(username) ==# 0
+		let username = trim(system('whoami'))
+	endif
+	if g:show_user_name ==# "short"
+		if username ==# "root"
+			let s:result .= '%#Error# R '
+		endif
+	elseif g:show_user_name ==# "full"
+		if username ==# "root"
+			let s:result .= '%#Error# root '
+		elseif len(username) !=# 0
+			let s:result .= '%#Statuslinestat1# '.username.' '
+		else
+			let s:result .= '%#Statuslinestat1# N/A '
+		endif
+	endif
+	unlet username
 	if g:exnvim_fully_loaded !=# 3
 		let s:result .= '%#Loading#'.g:specloading
 	endif

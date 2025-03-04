@@ -433,6 +433,14 @@ pub fn setup(home: ::std::path::PathBuf) -> ::std::io::Result<()> {
 
     \"enable_scrollview\": true,
 
+\"_comment\":\"Show user name at the right of statusline\",
+\"_comment\":\"Aviable values:\",
+\"_comment\":\"    no — do not show\",
+\"_comment\":\"    short — only show R if superuser\",
+\"_comment\":\"    full — show user name\",
+\"_comment\":\"Show user \",
+	\"show_user_name\": \"no\",
+
 \"_comment\":\"Ending field to not put comma every time\"
 }"),
             )
