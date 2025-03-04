@@ -130,6 +130,7 @@ augroup! ExNvimOptionsInComment
 delfunction HandleExNvimOptionsInComment
 delfunction HandleKeystroke
 delfunction IfOneWinDo
+delfunction IfNotOneWinDo
 delfunction InitPckr
 delcommand InvertPdf
 delfunction InvertPdf

@@ -1035,7 +1035,8 @@ function! Killbuffer()
 		endif
 	endif
 	if user_input ==# '' || IsYes(user_input)
-		call PleaseDoNotCloseIfNotOneWin('bdelete!')
+		call IfNotOneWinDo('let g:please_do_not_close += [win_getid()]')
+		bdelete!
 	elseif !IsNo(user_input)
 		echohl ErrorMsg
 		if g:language ==# 'russian'

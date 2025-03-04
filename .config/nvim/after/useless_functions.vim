@@ -23,3 +23,10 @@ execute "
 \\n		execute a:cmd
 \\n	endif
 \\nendfunction"
+execute "
+\function! IfNotOneWinDo(cmd)
+\\n".s:MACRO_IS_ONE_WIN."
+\\n	if s !=# 1
+\\n		execute a:cmd
+\\n	endif
+\\nendfunction"
