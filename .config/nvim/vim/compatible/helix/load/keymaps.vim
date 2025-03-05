@@ -562,14 +562,15 @@ nnoremap B <cmd>call N_DoBWhole()<cr>
 unmap <esc>
 function! N_DoV()
 	let g:pseudo_visual=v:false
+	normal! v
 	let g:rx=line('.')
 	let g:ry=col('.')
 	let g:lx=g:rx
 	let g:ly=g:ry
 	let g:visual_mode="char"
 endfunction
-nnoremap v v<cmd>call N_DoV()<cr>
-nnoremap gv v<cmd>call N_DoV()<cr>
+nnoremap v <cmd>call N_DoV()<cr>
+nnoremap gv <cmd>call N_DoV()<cr>
 function! N_DoVLine()
 	let result = ""
 	let result .= "v"
@@ -579,7 +580,7 @@ function! N_DoVLine()
 	return result
 endfunction
 nnoremap <expr> V N_DoVLine()
-nnoremap <c-v> <c-v><cmd>let g:pseudo_visual=v:false<cr><cmd>let g:rx=line('.')<bar>let g:ry=col('.')<bar>let g:lx=rx<bar>let g:ly=ry<cr><cmd>let g:visual_mode="block"<cr>
+nnoremap <c-v> <cmd>let g:pseudo_visual=v:false<cr><c-v><cmd>let g:rx=line('.')<bar>let g:ry=col('.')<bar>let g:lx=rx<bar>let g:ly=ry<cr><cmd>let g:visual_mode="block"<cr>
 function! V_DoV()
 	if v:false
 	elseif g:visual_mode ==# "no"
@@ -590,16 +591,15 @@ function! V_DoV()
 	\|| g:visual_mode ==# "char"
 	\|| g:visual_mode ==# "line"
 	\|| g:visual_mode ==# "block"
-		let g:pseudo_visual = g:pseudo_visual?v:false:v:true
-		Showtab
-		return ""
+		let g:pseudo_visual = !g:pseudo_visual
+		call SetModeToShow()
 	else
 		echohl ErrorMsg
 		echomsg "extra.nvim: hcm: V_DoV: Internal error: Wrong visual mode: ".g:visual_mode
 		echohl Normal
 	endif
 endfunction
-xnoremap <expr> v V_DoV()
+xnoremap v <cmd>call V_DoV()<cr>
 function! V_DoVLine()
 	if v:false
 	elseif g:visual_mode ==# "no"
@@ -610,8 +610,8 @@ function! V_DoVLine()
 	\|| g:visual_mode ==# "char"
 	\|| g:visual_mode ==# "line"
 	\|| g:visual_mode ==# "block"
-		let g:pseudo_visual = g:pseudo_visual?v:false:v:true
-		Showtab
+		let g:pseudo_visual = !g:pseudo_visual
+		call SetModeToShow()
 	else
 		echohl ErrorMsg
 		echomsg "extra.nvim: hcm: V_DoVLine: Internal error: Wrong visual mode: ".g:visual_mode
@@ -629,8 +629,8 @@ function! V_DoVBlock()
 	\|| g:visual_mode ==# "char"
 	\|| g:visual_mode ==# "line"
 	\|| g:visual_mode ==# "block"
-		let g:pseudo_visual = g:pseudo_visual?v:false:v:true
-		Showtab
+		let g:pseudo_visual = !g:pseudo_visual
+		call SetModeToShow()
 	else
 		echohl ErrorMsg
 		echomsg "extra.nvim: hcm: V_DoVBlock: Internal error: Wrong visual mode: ".g:visual_mode

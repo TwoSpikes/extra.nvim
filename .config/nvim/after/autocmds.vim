@@ -39,32 +39,24 @@ augroup colorscheme_manage
 			unlet g:updating_cursor_style_supported
 		endif
 	endfunction
-	augroup exnvim_colorscheme
-		autocmd!
-		autocmd ColorSchemePre * call ColorSchemeManagePre()
-	augroup END
+augroup END
+augroup exnvim_colorscheme
+	autocmd!
+	autocmd ColorSchemePre * call ColorSchemeManagePre()
 augroup END
 
-function! DefineAugroupVisual()
-	augroup Visual
-		autocmd!
-		if g:linenr
-			augroup exnvim_mode_changed_numbertoggle
-				autocmd!
-				execute "autocmd ModeChanged {\<c-v>*,[vV]*}:* call Numbertoggle(mode())"
-				execute "autocmd ModeChanged *:{\<c-v>*,[vV]*} call Numbertoggle('v')"
-			augroup END
-		else
-			autocmd! Visual
-		endif
-	augroup END
-endfunction
+augroup exnvim_numbertoggle
+	autocmd!
+	autocmd ModeChanged *:[vV\x16]* call Numbertoggle('v')
+	autocmd ModeChanged [vV\x16]*:* call Numbertoggle(mode())
+augroup END
 function! DefineAugroupNumbertoggle()
 	augroup numbertoggle
 		autocmd!
 		if g:linenr
 			autocmd InsertLeave * call Numbertoggle('')
 			autocmd InsertEnter * call Numbertoggle(v:insertmode)
+			autocmd ModeChanged *:Rv call AbsNu('v')
 			autocmd BufReadPost,BufEnter,BufLeave,WinLeave,WinEnter * call Numbertoggle()
 			autocmd FileType lazy,spectre_panel,man,pkgman call Numbertoggle()|call HandleBuftype(winnr())
 		else
@@ -72,13 +64,7 @@ function! DefineAugroupNumbertoggle()
 		endif
 	augroup END
 endfunction
-
-function! DefineAugroups()
-	call DefineAugroupVisual()
-	call DefineAugroupNumbertoggle()
-endfunction
-
-call DefineAugroups()
+call DefineAugroupNumbertoggle()
 
 augroup netrw
 	autocmd!

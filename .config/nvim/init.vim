@@ -178,6 +178,7 @@ function! LoadExNvimConfig(path, reload=v:false)
 		\'show_ascii_logo',
 		\'enable_scrollview',
 		\'show_user_name',
+		\'enable_beacon',
 	\]
 	if keys(g:exnvim_config) ==# ['_TYPE', '_VAL']
 		for item in g:exnvim_config['_VAL']
@@ -364,6 +365,9 @@ function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 	if !exists('g:show_user_name')
 		let g:show_user_name = "short"
 	endif
+	if !exists('g:enable_beacon')
+		let g:enable_beacon = v:true
+	endif
 endfunction
 call SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 
@@ -402,55 +406,14 @@ function! Update_CursorLine_Style()
 	endif
 endfunction
 
-function! SetGitBranch()
-	let g:gitbranch = split(system('git rev-parse --abbrev-ref HEAD 2> /dev/null'))
-	if len(g:gitbranch) > 0
-		let g:gitbranch = g:gitbranch[0]
-	else
-		let g:gitbranch = ''
-	endif
-endfunction
-call SetGitBranch()
-function! GetGitBranch()
-	return g:gitbranch
-endfunction
-
 let g:exnvim_fully_loaded = 0
 let g:specloading=" 50 "
 
 let s:custom_mode = ''
 let s:specmode = ''
-function! Showtab()
-	if v:false
-	elseif v:false
-	\|| &filetype ==# 'neo-tree'
-	\|| &filetype ==# 'musicplayer'
-		return bufname('')
-	endif
-	if g:compatible !~# "^helix_hard"
-		let stl_name = '%<%t'
-		let stl_name .= '%( %* %#StatusLinemod#%M%R%H%W%)%*'
-	else
-		let stl_name = '%* %<%t'
-		let stl_name .= '%( %#StatusLinemod#%M%R%H%W%)%*'
-	endif
-	if g:compatible !~# "^helix_hard"
-		if &columns ># 40
-			let stl_name .= '%( %#StatusLinemod#'
-			let stl_name .= &filetype
-			let stl_name .= '%)%*'
-		endif
-	endif
-	if g:compatible !~# "^helix_hard"
-		if &columns ># 45
-			let stl_name .= '%( %#Statuslinemod#'
-			let stl_name .= '%{GetGitBranch()}'
-			let stl_name .= '%)%*'
-		endif
-	endif
-	let mode = mode('lololol')
-	let strmode = ''
-	if mode == 'n'
+function! SetModeToShow()
+	let mode = mode(v:true)
+	if mode ==# 'n'
 		if g:compatible =~# '^helix'
 			if g:language ==# 'russian'
 				let strmode = '%#ModeNorm# НОР '
@@ -460,61 +423,69 @@ function! Showtab()
 		else
 			let strmode = '%#ModeNorm# '
 		endif
-	elseif mode == 'no'
+	elseif mode ==# 'no'
 		if g:language ==# 'russian'
 			let strmode = 'ЖДУ_ОПЕР '
 		else
 			let strmode = 'OP_PEND '
 		endif
-	elseif mode == 'nov'
+	elseif mode ==# 'nov'
 		if g:language ==# 'russian'
 			let strmode = 'визуал ЖДУ_ОПЕР '
 		else
 			let strmode = 'visu OP_PEND '
 		endif
-	elseif mode == 'noV'
+	elseif mode ==# 'noV'
 		if g:language ==# 'russian'
 			let strmode = 'виз_лин ЖДУ_ОПЕР '
 		else
 			let strmode = 'vis_line OP_PEND '
 		endif
-	elseif mode == 'noCTRL-v'
+	elseif mode ==# "no\<c-v>"
 		if g:language ==# 'russian'
 			let strmode = 'виз_блок ЖДУ_ОПЕР '
 		else
 			let strmode = 'vis_block OP_PEND '
 		endif
-	elseif mode == 'niI'
+	elseif mode ==# 'niI'
 		if g:language ==# 'russian'
-			let strmode = '^o ВСТ '
+			let strmode = '%#ModeNorm#^o %#ModeIns# ВСТ '
 		else
-			let strmode = '^o INS '
+			let strmode = '%#ModeNorm#^o %#ModeIns# INS '
 		endif
-	elseif mode == 'niR'
+	elseif mode ==# 'niR'
 		if g:language ==# 'russian'
-			let strmode = '^o ЗАМЕНА '
+			let strmode = '%#ModeNorm#^o %#ModeRepl# ЗАМЕНА '
 		else
-			let strmode = '^o REPL '
+			let strmode = '%#ModeNorm#^o %#ModeRepl# REPL '
 		endif
-	elseif mode == 'niV'
+	elseif mode ==# 'niV'
 		if g:language ==# 'russian'
-			let strmode = '^o визуал ЗАМЕНА '
+			let strmode = '%#ModeNorm#^o визуал ЗАМЕНА '
 		else
 			let strmode = '^o visu REPL '
 		endif
-	elseif mode == 'nt'
-		if g:language ==# 'russian'
-			let strmode = '%#ModeNorm# НОРМ %#StatuslinestatNormTerm#%#ModeTerm# '
+	elseif mode ==# 'nt'
+		if g:compatible ==# "helix"
+			if g:language ==# 'russian'
+				let strmode = '%#ModeNorm# НОРМ %#StatuslinestatNormTerm#%#ModeTerm# ТЕР '
+			else
+				let strmode = '%#ModeNorm# NORM %#StatuslinestatNormTerm#%#ModeTerm# TER '
+			endif
 		else
-			let strmode = '%#ModeNorm# NORM %#StatuslinestatNormTerm#%#ModeTerm# '
+			if g:language ==# 'russian'
+				let strmode = '%#ModeNorm# НОРМ %#StatuslinestatNormTerm#%#ModeTerm# '
+			else
+				let strmode = '%#ModeNorm# NORM %#StatuslinestatNormTerm#%#ModeTerm# '
+			endif
 		endif
-	elseif mode == 'ntT'
+	elseif mode ==# 'ntT'
 		if g:language ==# 'russian'
 			let strmode = '^\^o норм ТЕРМ '
 		else
 			let strmode = '^\^o norm TERM '
 		endif
-	elseif mode == 'v'
+	elseif mode ==# 'v'
 		if g:compatible =~# '^helix'
 			if g:pseudo_visual
 				if g:compatible !~# "^helix_hard"
@@ -540,57 +511,73 @@ function! Showtab()
 		else
 			let strmode = '%#ModeVisu# '
 		endif
-	elseif mode == 'V'
+	elseif mode ==# 'V'
 		if g:language ==# 'russian'
-			let strmode = 'ВИЗ_ЛИНИЯ '
+			let strmode = '%#ModeVisu# виз ЛИН '
 		else
-			let strmode = 'VIS_LINE '
+			let strmode = '%#ModeVisu# vis LIN '
 		endif
-	elseif mode == 'vs'
+	elseif mode ==# 'vs'
 		if g:language ==# 'russian'
-			let strmode = '^o визуал ВЫБ '
+			let strmode = '%#ModeNorm#^o %#ModeVisu# визуал %#ModeSel# ВЫБ '
 		else
-			let strmode = '^o visu SEL '
+			let strmode = '%#ModeNorm#^o %#ModeVisu# visu %#ModeSel# SEL '
 		endif
-	elseif mode == 'CTRL-V'
+	elseif mode ==# 's'
 		if g:language ==# 'russian'
-			let strmode = 'ВИЗ_БЛОК '
+			let strmode = '%#ModeSel# ВЫБ '
 		else
-			let strmode = 'VIS_BLOCK '
+			let strmode = '%#ModeSel# SEL '
 		endif
-	elseif mode == 'CTRL-Vs'
-		if g:language ==# 'russian'
-			let strmode = '^o виз_блок ВЫБ '
-		else
-			let strmode = '^o vis_block SEL '
-		endif
-	elseif mode == 's'
-		if g:language ==# 'russian'
-			let strmode = 'ВЫБ '
-		else
-			let strmode = 'SEL '
-		endif
-	elseif mode == 'S'
-		if g:language ==# 'russian'
-			let strmode = 'ВЫБ ЛИНИЯ'
-		else
-			let strmode = 'SEL LINE '
-		endif
-	elseif mode == "\<c-v>"
-		if g:language ==# 'russian'
-			if g:compatible =~# '^helix'
-				if g:pseudo_visual
-					let strmode = '%#ModeVisu#нор %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
-				else
-					let strmode = '%#ModeVisu#виз %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
-				endif
+	elseif mode ==# 'S'
+		if g:compatible =~# '^helix'
+			if g:language ==# 'russian'
+				let strmode = '%#ModeSel# выб ЛИН '
 			else
-				let strmode = '%#ModeVisu#визуал %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
+				let strmode = '%#ModeSel# sel LIN '
 			endif
 		else
-			let strmode = '%#ModeVisu#visu %#StatuslinestatVisuBlock#%#ModeBlock# BLOCK '
+			if g:language ==# 'russian'
+				let strmode = '%#ModeSel# выб ЛИНИЯ '
+			else
+				let strmode = '%#ModeSel# sel LINE '
+			endif
 		endif
-	elseif mode == 'i'
+	elseif mode ==# "\<c-s>"
+		if g:language ==# 'russian'
+			let strmode = '%#ModeSel#выб %#ModeSelToBlock#%#ModeBlock# БЛОК '
+		else
+			let strmode = '%#ModeSel#sel %#ModeSelToBlock#%#ModeBlock# BLOCK '
+		endif
+	elseif mode ==# "\<c-v>"
+		if g:compatible =~# '^helix'
+			if g:pseudo_visual
+				if g:language ==# 'russian'
+					let strmode = '%#ModeVisu#нор %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
+				else
+					let strmode = '%#ModeVisu#nor %#StatuslinestatVisuBlock#%#ModeBlock# BLOCK '
+				endif
+			else
+				if g:language ==# 'russian'
+					let strmode = '%#ModeVisu#виз %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
+				else
+					let strmode = '%#ModeVisu#vis %#StatuslinestatVisuBlock#%#ModeBlock# BLOCK '
+				endif
+			endif
+		else
+			if g:language ==# 'russian'
+				let strmode = '%#ModeVisu#визуал %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
+			else
+				let strmode = '%#ModeVisu#visual %#StatuslinestatVisuBlock#%#ModeBlock# BLOCK '
+			endif
+		endif
+	elseif mode ==# "\<c-v>s"
+		if g:language ==# 'russian'
+			let strmode = '%#ModeVisu#^o %#ModeSel# выб %#ModeSelToBlock#%#ModeBlock# БЛОК '
+		else
+			let strmode = '%#ModeVisu#^o %#ModeSel# sel %#ModeSelToBlock#%#ModeBlock# BLOCK '
+		endif
+	elseif mode ==# 'i'
 		if g:compatible =~# '^helix'
 			if g:language ==# 'russian'
 				let strmode = '%#ModeIns# ВСТ '
@@ -600,39 +587,39 @@ function! Showtab()
 		else
 			let strmode = '%#ModeIns# '
 		endif
-	elseif mode == 'ic'
+	elseif mode ==# 'ic'
 		if g:language ==# 'russian'
-			let strmode = 'дополн ВСТ '
+			let strmode = '%#ModeCom#дополн %#ModeIns# ВСТ '
 		else
-			let strmode = 'compl INS '
+			let strmode = '%#ModeCom#compl %#ModeIns# INS '
 		endif
-	elseif mode == 'ix'
+	elseif mode ==# 'ix'
 		if g:language ==# 'russian'
 			let strmode = '%#ModeCom#^x дополн%#ModeIns#ВСТ '
 		else
 			let strmode = '%#ModeCom#^x compl%#ModeIns#INS '
 		endif
-	elseif mode == 'R'
+	elseif mode ==# 'R'
 		let strmode = '%#ModeRepl# '
-	elseif mode == 'Rc'
+	elseif mode ==# 'Rc'
 		if g:language ==# 'russian'
 			let strmode = 'дополн ЗАМЕНА '
 		else
 			let strmode = 'compl REPL '
 		endif
-	elseif mode == 'Rx'
+	elseif mode ==# 'Rx'
 		let strmode = '^x compl REPL '
-	elseif mode == 'Rv'
+	elseif mode ==# 'Rv'
 		if g:language ==# 'russian'
 			let strmode = '%#ModeIns#визуал%*%#ModeRepl#ЗАМЕНА '
 		else
 			let strmode = '%#ModeIns#visu%*%#ModeRepl#REPL '
 		endif
-	elseif mode == 'Rvc'
+	elseif mode ==# 'Rvc'
 		let strmode = 'compl visu REPL '
-	elseif mode == 'Rvx'
+	elseif mode ==# 'Rvx'
 		let strmode = '^x compl visu REPL '
-	elseif mode == 'c'
+	elseif mode ==# 'c'
 		if s:specmode == 'b'
 			if g:language ==# 'russian'
 				let strmode = 'КОМ_БЛОК '
@@ -650,48 +637,97 @@ function! Showtab()
 				let strmode = '%#ModeCom# '
 			endif
 		endif
-	elseif mode == 'cv'
+	elseif mode ==# 'cv'
 		if g:language ==# 'russian'
-			let strmode = 'EX '
+			let strmode = '%#ModeCom# EX '
 		else
-			let strmode = 'EX '
+			let strmode = '%#ModeCom# EX '
 		endif
-	elseif mode == 'r'
+	elseif mode ==# 'r'
 		if g:language ==# 'russian'
 			let strmode = 'НАЖ_ВОЗВР '
 		else
 			let strmode = 'HIT_RET '
 		endif
-	elseif mode == 'rm'
+	elseif mode ==# 'rm'
 		if g:language ==# 'russian'
 			let strmode = 'ДАЛЕЕ '
 		else
 			let strmode = 'MORE '
 		endif
-	elseif mode == 'r?'
+	elseif mode ==# 'r?'
 		if g:language ==# 'russian'
 			let strmode = 'ПОДТВЕРД '
 		else
 			let strmode = 'CONFIRM '
 		endif
-	elseif mode == '!'
+	elseif mode ==# '!'
 		if g:language ==# 'russian'
 			let strmode = 'ОБОЛОЧ '
 		else
 			let strmode = 'SHELL '
 		endif
-	elseif mode == 't'
-		let strmode = '%#ModeTerm# '
+	elseif mode ==# 't'
+		if g:compatible =~# '^helix'
+			if g:language ==# 'russian'
+				let strmode = '%#ModeTerm# ТЕР '
+			else
+				let strmode = '%#ModeTerm# TER '
+			endif
+		else
+			let strmode = '%#ModeTerm# '
+		endif
 	else
 		echohl ErrorMsg
 		if g:language ==# 'russian'
-			echomsg "блядь: Неправильный режим: ".mode()
+			echomsg "блядь: Неправильный режим: ".mode
 		else
-			echomsg "error: Wrong mode: ".mode()
+			echomsg "error: Wrong mode: ".mode
 		endif
 		echohl Normal
+		let g:mode_to_show = '%#ErrorMsg# N/A '
+		let &stl=&stl
+		return
 	endif
-	"let stl_time = '%{strftime("%b,%d %H:%M:%S")}'
+	let g:mode_to_show=strmode
+	let &stl=&stl
+endfunction
+call SetModeToShow()
+augroup exnvim_setmodetoshow
+	autocmd!
+	autocmd ModeChanged *:* call SetModeToShow()
+augroup END
+
+function! Showtab()
+	if v:false
+	elseif v:false
+	\|| &filetype ==# 'neo-tree'
+	\|| &filetype ==# 'musicplayer'
+		return bufname('')
+	endif
+	if g:compatible !~# "^helix_hard"
+		let stl_name = '%<%t'
+		let stl_name .= '%( %* %#StatusLinemod#%M%R%H%W%)%*'
+	else
+		let stl_name = '%* %<%t'
+		let stl_name .= '%( %#StatusLinemod#%M%R%H%W%)%*'
+	endif
+	if g:compatible !~# "^helix_hard"
+		if &columns ># 40
+			let stl_name .= '%( %#StatusLinemod#'
+			let stl_name .= &filetype
+			let stl_name .= '%)%*'
+		endif
+	endif
+	if g:compatible !~# "^helix_hard"
+		if &columns ># 45
+			let stl_name .= '%( %#Statuslinemod#'
+			if exists('g:gitbranch')
+				let stl_name .= '%{g:gitbranch}'
+			endif
+			let stl_name .= '%)%*'
+		endif
+	endif
 	
 	let stl_pos = ''
 	let stl_pos .= '%l:%c'
@@ -705,7 +741,7 @@ function! Showtab()
 	endif
 	let stl_mode_to_put = ''
 	if &columns ># 20
-		let stl_mode_to_put .= strmode
+		let stl_mode_to_put .= g:mode_to_show
 		let stl_mode_to_put .= s:custom_mode?' '.s:custom_mode:''
 		let stl_mode_to_put .= ''
 	endif

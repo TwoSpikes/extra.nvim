@@ -34,7 +34,7 @@ local function bootstrap_lazy()
     vim.fn.system({
       'git',
       'clone',
-	  '--depth=1',
+      '--depth=1',
       "--filter=blob:none",
       'https://github.com/folke/lazy.nvim.git',
       lazy_path
@@ -113,6 +113,7 @@ local plugins = {
 	},
 	{
 		"folke/which-key.nvim",
+		enabled = vim.g.enable_which_key,
 	},
 	{
 		"kwkarlwang/bufresize.nvim",
@@ -520,6 +521,7 @@ local plugins = {
 	},
 	{
 		'danilamihailov/beacon.nvim',
+		enabled = vim.g.enable_beacon,
 	},
 	{
 		'm-demare/hlargs.nvim',

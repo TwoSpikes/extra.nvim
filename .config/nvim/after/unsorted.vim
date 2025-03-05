@@ -87,13 +87,24 @@ endfunction
 call OpenOnStart()
 mode
 
+function! SetGitBranch()
+	let g:gitbranch = split(system('git rev-parse --abbrev-ref HEAD 2> /dev/null'))
+	if len(g:gitbranch) > 0
+		let g:gitbranch = g:gitbranch[0]
+	else
+		let g:gitbranch = ''
+	endif
+endfunction
+call SetGitBranch()
+autocmd DirChanged * call SetGitBranch()
+
 if has('nvim')
 	let g:please_do_not_close = []
 	let g:please_do_not_close_always = v:false
 endif
 
 function! RelNu(winnr=winnr())
-	if mode() =~? 'v.*' || mode() ==# "\<c-v>"
+	if mode() =~? '^v' || mode() ==# "\<c-v>"
 		call CopyHighlightGroup('CursorLineNrVisu', 'CursorLineNr')
 		call CopyHighlightGroup('LineNrVisu', 'LineNr')
 		call CopyHighlightGroup("StatementVisu", "Statement")
@@ -136,7 +147,7 @@ function! AbsNu(actual_mode, winnr=winnr())
 		call CopyHighlightGroup('CursorLineNrNorm', 'CursorLineNr')
 		call CopyHighlightGroup('LineNrNorm', 'LineNr')
 		call CopyHighlightGroup("StatementNorm", "Statement")
-	elseif a:actual_mode =~? 'r'
+	elseif a:actual_mode =~? 'r' || a:actual_mode ==# 'v' && mode() ==# 'R'
 		call CopyHighlightGroup('CursorLineNrRepl', 'CursorLineNr')
 		call CopyHighlightGroup('LineNrRepl', 'LineNr')
 	elseif a:actual_mode =~? 'v' && getwinvar(a:winnr, '&modifiable')
@@ -1073,8 +1084,15 @@ let s:select_all_definition .= "
 \\n	mark y
 \\n	normal! gg
 \\n	let mode = mode()
-\\n	if mode !~# '^v'
-\\n		normal! v
+\\n	if mode !~# '^v'"
+if g:compatible =~# '^helix'
+let s:select_all_definition .= "
+\\n		noautocmd normal! v"
+else
+let s:select_all_definition .= "
+\\n		normal! v"
+endif
+let s:select_all_definition .= "
 \\n	else
 \\n		normal! o
 \\n	endif
@@ -1089,7 +1107,7 @@ if g:compatible =~# "^helix"
 let s:select_all_definition .= "
 \\n	if mode !~? '^v'
 \\n		let g:pseudo_visual = v:true
-\\n		Showtab
+\\n	    call SetModeToShow()
 \\n	endif
 \\n	let g:visual_mode = \"char\"
 \\n	let g:lx = 1

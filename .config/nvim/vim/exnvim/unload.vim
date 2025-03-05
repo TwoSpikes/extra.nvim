@@ -239,6 +239,9 @@ delcommand ShRun
 delfunction ShRun
 delcommand ShSource
 delfunction ShSource
+autocmd! exnvim_setmodetoshow *
+augroup! exnvim_setmodetoshow
+delfunction SetModeToShow
 delfunction Showtab
 delfunction StartsWith
 delfunction SynGroup

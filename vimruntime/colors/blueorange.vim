@@ -511,6 +511,8 @@ if &t_Co >= 256
     hi ModeNorm ctermfg=220 ctermbg=236 cterm=bold,reverse guifg=#ffdf00 guibg=#000000 gui=bold,reverse
     hi ModeIns ctermfg=15 ctermbg=39 cterm=bold guifg=#ffffff guibg=#00afff gui=bold
     hi ModeVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#ffffff guibg=#000087 gui=bold
+    hi ModeSel ctermfg=15 ctermbg=18 cterm=bold guifg=#000000 guibg=#ffefa0 gui=bold
+    hi ModeSelToBlock ctermfg=15 ctermbg=18 cterm=bold guifg=#ffefa0 guibg=#870000 gui=bold
     hi ModeCom ctermfg=16 ctermbg=220 cterm=bold guifg=#000000 guibg=#aaaaaa gui=bold
     hi ModeRepl ctermfg=15 ctermbg=128 cterm=bold guifg=#ffffff guibg=#af00df gui=bold
     hi ModeBlock ctermfg=15 ctermbg=88 cterm=bold guifg=#ffffff guibg=#870000 gui=bold
@@ -682,6 +684,8 @@ if &t_Co >= 256
     hi ModeNorm ctermfg=220 ctermbg=236 cterm=bold,reverse guifg=#ffdf00 guibg=#000000 gui=bold,reverse
     hi ModeIns ctermfg=15 ctermbg=39 cterm=bold guifg=#ffffff guibg=#00afff gui=bold
     hi ModeVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#ffffff guibg=#000087 gui=bold
+    hi ModeSel ctermfg=15 ctermbg=18 cterm=bold guifg=#000000 guibg=#ffefa0 gui=bold
+    hi ModeSelToBlock ctermfg=15 ctermbg=18 cterm=bold guifg=#ffefa0 guibg=#870000 gui=bold
     hi ModeCom ctermfg=16 ctermbg=220 cterm=bold guifg=#000000 guibg=#aaaaaa gui=bold
     hi ModeRepl ctermfg=15 ctermbg=128 cterm=bold guifg=#ffffff guibg=#af00df gui=bold
     hi ModeBlock ctermfg=15 ctermbg=88 cterm=bold guifg=#ffffff guibg=#870000 gui=bold
