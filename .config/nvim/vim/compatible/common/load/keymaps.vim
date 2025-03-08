@@ -141,9 +141,6 @@ xnoremap <leader>A <c-\><c-n><cmd>call RunAlphaIfNotAlphaRunning()<cr>
 " vnoremap <c-/> <esc>v:q:s/.*/# \0
 " vnoremap <c-?> <esc>:s/.*/\/\/ \0
 
-" Tab closers
-noremap <silent> q <cmd>quit<cr>
-noremap <silent> Q <cmd>quit!<cr>
 noremap <c-w><c-g> <cmd>echo "Quit"<cr>
 
 " Emacs-like keymaps

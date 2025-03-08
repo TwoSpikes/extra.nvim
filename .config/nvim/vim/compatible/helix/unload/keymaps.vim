@@ -54,6 +54,10 @@ nunmap gP
 xunmap gp
 xunmap gP
 nunmap c
+nunmap q
+nunmap Q
+xunmap q
+xunmap Q
 if !g:use_nvim_cmp && has('nvim')
 	noremap ySS <Plug>YSsurround
 	noremap ySs <Plug>YSsurround

@@ -207,47 +207,52 @@ function! ChangeVisModeBasedOnSelectedText()
 	endif
 endfunction
 function! SimulateCorrectPasteMode(cmd, register)
-	if v:false
-	elseif v:false
-	\|| g:yank_mode ==# 'char'
+	if g:pseudo_visual
 		if v:false
-		elseif a:cmd ==# '$'
-			if col('.') ==# col('$')
+		elseif v:false
+		\|| g:yank_mode ==# 'char'
+			if v:false
+			elseif a:cmd ==# '$'
+				if col('.') ==# col('$')
+					if line('.') ==# line('$')
+						call append(line('.'), '')
+					endif
+					let paste_cmd = 'j0P'
+				else
+					let paste_cmd = 'p'
+				endif
+			elseif a:cmd ==# '0'
+				let paste_cmd = 'P'
+			else
+				echohl ErrorMsg
+				echomsg "extra.nvim: hcm: SimulateCorrectPasteMode: Internal error: wrong a:cmd: ".a:cmd
+				echohl Normal
+			endif
+		elseif g:yank_mode ==# "line"
+			if v:false
+			elseif a:cmd ==# '$'
 				if line('.') ==# line('$')
 					call append(line('.'), '')
+					let paste_cmd = "jP\<bs>"
+				else
+					let paste_cmd = 'j0P'
 				endif
-				let paste_cmd = 'j0P'
+			elseif a:cmd ==# '0'
+				execute "normal! 0"
+				let paste_cmd = 'P'
 			else
-				let paste_cmd = 'p'
+				echohl ErrorMsg
+				echomsg "extra.nvim: hcm: SimulateCorrectPasteMode: Internal error: wrong a:cmd: ".a:cmd
+				echohl Normal
 			endif
-		elseif a:cmd ==# '0'
-			let paste_cmd = 'P'
 		else
 			echohl ErrorMsg
-			echomsg "extra.nvim: hcm: SimulateCorrectPasteMode: Internal error: wrong a:cmd: ".a:cmd
-			echohl Normal
-		endif
-	elseif g:yank_mode ==# "line"
-		if v:false
-		elseif a:cmd ==# '$'
-			if line('.') ==# line('$')
-				call append(line('.'), '')
-				let paste_cmd = "jP\<bs>"
-			else
-				let paste_cmd = 'j0P'
-			endif
-		elseif a:cmd ==# '0'
-			execute "normal! 0"
-			let paste_cmd = 'P'
-		else
-			echohl ErrorMsg
-			echomsg "extra.nvim: hcm: SimulateCorrectPasteMode: Internal error: wrong a:cmd: ".a:cmd
+			echomsg "extra.nvim: hcm: SimulateCorrectPasteMode: Internal error: wrong yank mode: ".g:yank_mode
 			echohl Normal
 		endif
 	else
-		echohl ErrorMsg
-		echomsg "extra.nvim: hcm: SimulateCorrectPasteMode: Internal error: wrong yank mode: ".g:yank_mode
-		echohl Normal
+		normal! gv"_d
+		let paste_cmd = 'P'
 	endif
 
 	let the_user_is_an_incredible_idiot_and_is_doing_some_crazy_stuff = g:yank_mode ==# "line" && a:cmd ==# '$' && line('.') + 1 ==# line('$')
@@ -275,6 +280,11 @@ nnoremap gP <cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCor
 xnoremap gp <esc><cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCorrectPasteMode('$', register)<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>exe"norm! o"<bar>if g:compatible=~#"^helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
 xnoremap gP <esc><cmd>if &modifiable<bar>let register=v:register<bar>call SimulateCorrectPasteMode('0', register)<bar>exe"norm! `[v"<bar>let g:visual_mode="char"<bar>exe"norm! `]"<bar>call ChangeVisModeBasedOnSelectedText()<bar>exe"norm! o"<bar>if g:compatible=~#"^helix_hard"<bar>let g:no_currently_selected_register = v:true<bar>endif<bar>let g:pseudo_visual=v:true<bar>exe"Showtab"<bar>endif<cr>
 nnoremap c <cmd>call Do_N_D(v:count1)<cr>i
+
+nnoremap q <cmd>quit<cr>
+nnoremap Q <cmd>quit!<cr>
+xnoremap q <c-\><c-n><cmd>if &modified<bar>call AddPseudoSelection()<bar>endif<bar>quit<cr>
+xnoremap Q <c-\><c-n><cmd>if &modified<bar>call AddPseudoSelection()<bar>endif<bar>quit!<cr>
 
 if len(maparg("y\<c-g>")) !=# 0
 	unmap y<c-g>
@@ -1009,8 +1019,8 @@ function! V_DoY()
 		echohl Normal
 	endif
 
-	execute "normal! gv"
 	let g:pseudo_visual = v:true
+	execute "normal! gv"
 
 	if mode() ==# "\<c-v>"
 		let g:visual_mode = "block"
