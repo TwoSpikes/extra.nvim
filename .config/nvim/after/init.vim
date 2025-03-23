@@ -1,4 +1,4 @@
-function! InitPckr()
+function! InitPlug()
 	execute "source ".g:CONFIG_PATH.'/vim/plugins/setup.vim'
 
 	if has('nvim')
@@ -8,7 +8,7 @@ endfunction
 
 function! OnStart()
 	set nolazyredraw
-	call InitPckr()
+	call InitPlug()
 
 	call SetExNvimConfigPath()
 	if has('nvim') && PluginInstalled("neo-tree") && g:automatically_open_neo_tree_instead_of_netrw
@@ -19,11 +19,11 @@ function! OnStart()
 		augroup END
 	endif
 	set termguicolors
-	if has('nvim')
-		execute printf("luafile %s", g:PLUGINS_SETUP_FILE_PATH)
-	endif
 	if filereadable(g:CONFIG_PATH.'/vim/init.vim')
 		execute 'source' g:CONFIG_PATH.'/vim/init.vim'
+		if has('nvim')
+			execute printf("luafile %s", g:PLUGINS_SETUP_FILE_PATH)
+		endif
 	else
 		echohl ErrorMsg
 		if g:language ==# 'russian'
@@ -35,7 +35,7 @@ function! OnStart()
 		call timer_srart(0, {->RedefineProcessGBut()})
 	endif
 	if has('nvim') && g:compatible !~# "^helix_hard" && PluginInstalled('notify')
-		call timer_start(0, {->execute(printf('luafile %s', fnamemodify(g:PLUGINS_SETUP_FILE_PATH, ':h').'/noice/setup.lua'))})
+		call timer_start(0, {->execute(printf('luafile %s', g:PLUGINS_SETUP_PATH.'/noice/setup.lua'))})
 	endif
 endfunction
 call OnStart()

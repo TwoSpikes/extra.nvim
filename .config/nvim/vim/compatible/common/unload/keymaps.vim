@@ -21,9 +21,6 @@ iunmap <c-e>
 
 cunmap <c-a>
 cunmap <c-g>
-if g:insert_exit_on_jk
-	cunmap jk
-endif
 cunmap <c-u>
 cunmap <c-b>
 
@@ -50,9 +47,6 @@ unmap <leader>l
 unmap <leader>h
 iunmap <c-l>
 iunmap <c-h>
-unmap <c-Y>
-unmap <ScrollWheelDown>
-unmap <ScrollWheelUp>
 
 if executable('rg')
 	unmap <leader>st
@@ -83,6 +77,7 @@ if v:false
 endif
 xunmap <up>
 
+unmap <leader>;
 unmap <leader>:
 unmap <leader>=
 unmap <leader>-
@@ -108,8 +103,6 @@ xunmap <leader>C
 nunmap <leader>A
 xunmap <leader>A
 
-unmap q
-unmap Q
 unmap <c-w><c-g>
 
 unmap <c-x><c-c>

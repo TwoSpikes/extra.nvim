@@ -59,7 +59,7 @@ function! ChangeLanguage_system_english()
 	let s:save_all_label = 'Save &all'
 	let s:save_as_label = 'Sa&ve as'
 	let s:save_as_and_edit_label = 'Save as and ed&it'
-	let s:lazy_plugin_manager_label = 'Lazy plugin manager'
+	let s:update_plugins_label = 'U&pdate plugins'
 	let s:update_coc_label = 'Update &coc servers'
 	let s:update_treesitter_label = 'Update &TreeSitter'
 	let s:download_plugins_label = 'Download pl&ugins'
@@ -187,7 +187,7 @@ function! ChangeLanguage_system_russian()
 	let s:save_all_label = '&a:Сохранить всё'
 	let s:save_as_label = '&v:Сохранить как'
 	let s:save_as_and_edit_label = '&i:Сохранить как и зайти'
-	let s:lazy_plugin_manager_label = 'Менеджер плагинов La&zy'
+	let s:update_plugins_label = '&p:Обновить плагины'
 	let s:update_coc_label = "Обновить &coc lsp'ы"
 	let s:update_treesitter_label = 'Обновить &TreeSitter'
 	let s:download_plugins_label = '&u:Скачать плагины'
@@ -361,7 +361,7 @@ function! RebindMenus_system()
 	endif
 	call quickui#menu#install(s:file_label, [
 				\ ["--", ''],
-				\ [(g:quickui_icons?"󰚰 ":"").s:lazy_plugin_manager_label."\tLEAD z", 'Lazy', 'Open "lazy.nvim" plugin manager'],
+				\ [(g:quickui_icons?"󰚰 ":"").s:update_plugins_label."\tLEAD up", 'PlugUpdate', 'Update plugins using "vim-plug"'],
 				\ [(g:quickui_icons?"󰚰 ":"").s:update_coc_label."\tLEAD uc", 'CocUpdate', 'Update coc.nvim installed language servers'],
 				\ [(g:quickui_icons?"󰚰 ":"").s:update_treesitter_label."\tLEAD ut", 'TSUpdate', 'Update installed TreeSitter parsers'],
 				\ ])

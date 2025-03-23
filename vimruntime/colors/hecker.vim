@@ -65,7 +65,7 @@ hi CursorNormal guifg=NONE guibg=#0050ff gui=NONE cterm=NONE
 hi CursorInsert guifg=NONE guibg=#00df00 gui=NONE cterm=NONE
 hi CursorReplace ctermfg=15 ctermbg=128 cterm=bold guifg=#ffffff guibg=#af00df gui=bold
 hi CursorVisual ctermfg=NONE ctermbg=18 cterm=NONE guifg=NONE guibg=#ffaf00 gui=bold
-hi CursorCommand ctermfg=16 ctermbg=220 cterm=bold guifg=#000000 guibg=#aaaaaa gui=bold
+hi CursorCommand ctermfg=16 ctermbg=220 cterm=bold guifg=NONE guibg=#ffff00 gui=bold
 hi Cursor guifg=NONE guibg=#ffaf00 gui=NONE cterm=NONE
 function! Update_Cursor_Style()
   if g:cursor_style ==# "block"

@@ -1,5 +1,5 @@
---- .local/share/nvim/lazy/beacon.nvim/lua/beacon.lua.old	2025-02-06 19:08:32.983481493 +0300
-+++ .local/share/nvim/lazy/beacon.nvim/lua/beacon.lua	2025-02-06 19:15:08.451481342 +0300
+--- .local/share/nvim/plugged/beacon.nvim/lua/beacon.lua.old	2025-02-06 19:08:32.983481493 +0300
++++ .local/share/nvim/plugged/beacon.nvim/lua/beacon.lua	2025-02-06 19:15:08.451481342 +0300
 @@ -44,6 +44,7 @@
      style = 'minimal',
      focusable = false,

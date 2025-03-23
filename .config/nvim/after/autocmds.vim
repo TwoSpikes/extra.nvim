@@ -58,7 +58,7 @@ function! DefineAugroupNumbertoggle()
 			autocmd InsertEnter * call Numbertoggle(v:insertmode)
 			autocmd ModeChanged *:Rv call AbsNu('v')
 			autocmd BufReadPost,BufEnter,BufLeave,WinLeave,WinEnter * call Numbertoggle()
-			autocmd FileType lazy,spectre_panel,man,pkgman call Numbertoggle()|call HandleBuftype(winnr())
+			autocmd FileType vim-plug,spectre_panel,man,pkgman call Numbertoggle()|call HandleBuftype(winnr())
 		else
 			autocmd! numbertoggle
 		endif
@@ -92,7 +92,7 @@ augroup visual
 		let pre_cursorline = !g:fullscreen
 		if exists('g:cursorline_style_supported') && g:cursorline_style_supported[g:cursorline_style] ==# "reverse"
 			let pre_cursorline = pre_cursorline && mode() !~# "[irco]"
-			let pre_cursorline = pre_cursorline && (buftype !=# 'nofile' || filetype ==# 'neo-tree') && filetype !=# 'TelescopePrompt' && filetype !=# 'spectre_panel' && filetype !=# 'lazy' && filetype !=# 'pkgman'
+			let pre_cursorline = pre_cursorline && (buftype !=# 'nofile' || filetype ==# 'neo-tree') && filetype !=# 'TelescopePrompt' && filetype !=# 'spectre_panel' && filetype !=# 'vim-plug' && filetype !=# 'pkgman'
 		endif
 		let pre_cursorline = pre_cursorline && buftype !=# 'terminal' && filetype !=# 'alpha' && filetype !=# "notify"
 		let pre_cursorline = pre_cursorline && g:cursorline

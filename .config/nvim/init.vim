@@ -56,15 +56,15 @@ function! SaveVars()
 	if v:false
 	\|| g:last_selected !=# ''
 	\|| g:last_open_term_program !=# ''
-		if !isdirectory(expand(stdpath("data")).'/extra.nvim')
-			call mkdir(expand(stdpath("data")).'/extra.nvim', 'p')
+		if !isdirectory(expand(g:LOCALSHAREPATH).'/extra.nvim')
+			call mkdir(expand(g:LOCALSHAREPATH).'/extra.nvim', 'p')
 		endif
 	endif
 	if g:last_selected !=# ''
-		call writefile([g:last_selected], expand(stdpath("data")).'/extra.nvim/last_selected.txt')
+		call writefile([g:last_selected], expand(g:LOCALSHAREPATH).'/extra.nvim/last_selected.txt')
 	endif
 	if g:last_open_term_program !=# ''
-		call writefile([g:last_open_term_program], expand(stdpath("data")).'/extra.nvim/last_open_term_program.txt')
+		call writefile([g:last_open_term_program], expand(g:LOCALSHAREPATH).'/extra.nvim/last_open_term_program.txt')
 	endif
 endfunction
 let g:termux_cursor_style = "bar"
@@ -919,12 +919,13 @@ if $PREFIX == ""
 endif
 
 if has('nvim')
-	execute "luafile ".expand(stdpath('config'))."/lua/lib/vim/plugins.lua"
+	execute "luafile ".expand(g:CONFIG_PATH)."/lua/lib/vim/plugins.lua"
 endif
 
 " NVIMRC FILE
 let g:PLUGINS_INSTALL_FILE_PATH = '~/.config/nvim/lua/packages/plugins.lua'
 let g:PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/plugins_setup.lua'
+let g:PLUGINS_SETUP_PATH = '~/.config/nvim/lua/packages'
 let g:LSP_PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/lsp/plugins.lua'
 
 let g:sneak#s_next = 1
@@ -982,10 +983,10 @@ endfunction
 call SetLocalSharePath()
 
 function! PluginDelete(name)
-	call delete(g:LOCALSHAREPATH."/lazy/".a:name, "rf")
+	call delete(g:LOCALSHAREPATH."/plugged/".a:name, "rf")
 endfunction
 function! PluginExists(name)
-	return isdirectory(g:LOCALSHAREPATH.'/lazy/'.a:name)
+	return isdirectory(g:LOCALSHAREPATH.'/plugged/'.a:name)
 endfunction
 if g:compatible =~# "^helix"
 	if PluginExists('vim-gitgutter')

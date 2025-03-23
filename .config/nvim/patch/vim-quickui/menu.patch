@@ -1,5 +1,5 @@
---- .local/share/nvim/lazy/vim-quickui/autoload/quickui/menu.vim	2025-03-02 16:15:10.146651010 +0300
-+++ .local/share/nvim/lazy/vim-quickui/autoload/quickui/menu.vim	2025-03-02 16:21:56.214650855 +0300
+--- .local/share/nvim/plugged/vim-quickui/autoload/quickui/menu.vim	2025-03-02 16:15:10.146651010 +0300
++++ .local/share/nvim/plugged/vim-quickui/autoload/quickui/menu.vim	2025-03-02 16:21:56.214650855 +0300
 @@ -724,7 +724,7 @@
  	let s:cmenu.hotkey = s:cmenu.inst.hotkey
  	let s:cmenu.state = 1

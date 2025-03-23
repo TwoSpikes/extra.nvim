@@ -1,5 +1,5 @@
---- .local/share/nvim/lazy/nvim-treesitter/lua/nvim-treesitter/install.lua	2025-02-11 16:58:29.366395344 +0300
-+++ .local/share/nvim/lazy/nvim-treesitter/lua/nvim-treesitter/install.lua	2025-02-11 17:03:19.086395234 +0300
+--- .local/share/nvim/plugged/nvim-treesitter/lua/nvim-treesitter/install.lua	2025-02-11 16:58:29.366395344 +0300
++++ .local/share/nvim/plugged/nvim-treesitter/lua/nvim-treesitter/install.lua	2025-02-11 17:03:19.086395234 +0300
 @@ -198,7 +198,9 @@
    end
    if i == #cmd_list + 1 then

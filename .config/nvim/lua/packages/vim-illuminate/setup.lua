@@ -17,7 +17,7 @@ require('illuminate').configure({
 		'dirvish',
 		'fugitive',
 		'TelescopePrompt',
-		'lazy',
+		'vim-plug',
 		'spectre_panel',
 		'pkgman',
 		'alpha',

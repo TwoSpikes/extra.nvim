@@ -124,5 +124,5 @@ if plugin_installed("mdmath") then
 end
 
 -- ExNvimOptionInComment LUA_REQUIRE_GOTO_PREFIX %CONFIG_PATH%/lua/%FILE%.lua
--- ExNvimOptionInComment LUA_REQUIRE_GOTO_PREFIX %LOCALSHAREPATH%/lazy/*/lua/%FILE%.lua
--- ExNvimOptionInComment LUA_REQUIRE_GOTO_PREFIX %LOCALSHAREPATH%/lazy/*/lua/%FILE%/init.lua
+-- ExNvimOptionInComment LUA_REQUIRE_GOTO_PREFIX %LOCALSHAREPATH%/plugged/*/lua/%FILE%.lua
+-- ExNvimOptionInComment LUA_REQUIRE_GOTO_PREFIX %LOCALSHAREPATH%/plugged/*/lua/%FILE%/init.lua

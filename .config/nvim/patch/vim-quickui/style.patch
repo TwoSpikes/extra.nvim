@@ -1,5 +1,5 @@
---- .local/share/nvim/lazy/vim-quickui/autoload/quickui/style.vim	2025-02-11 15:41:30.196138254 +0300
-+++ .local/share/nvim/lazy/vim-quickui/autoload/quickui/style.vim	2025-02-11 15:43:43.640138203 +0300
+--- .local/share/nvim/plugged/vim-quickui/autoload/quickui/style.vim	2025-02-11 15:41:30.196138254 +0300
++++ .local/share/nvim/plugged/vim-quickui/autoload/quickui/style.vim	2025-02-11 15:43:43.640138203 +0300
 @@ -12,7 +12,7 @@
  "----------------------------------------------------------------------
  let g:quickui#style#border = get(g:, 'quickui#style#border', 1)

@@ -20,9 +20,6 @@ inoremap <c-e> <end>
 
 cnoremap <c-a> <c-b>
 cnoremap <c-g> <c-e><c-u><cr>
-if g:insert_exit_on_jk
-	cnoremap jk <c-e><c-u><cr><cmd>echon ''<cr>
-endif
 cnoremap <c-u> <c-e><c-u>
 cnoremap <c-b> <S-left>
 
@@ -54,18 +51,6 @@ else
 	inoremap <c-l> <cmd>exe"norm! 10zl"<cr>
 	inoremap <c-h> <cmd>exe"norm! 10zh"<cr>
 endif
-
-let s:SCROLL_FACTOR = 2
-let s:SCROLL_UP_FACTOR = s:SCROLL_FACTOR
-let s:SCROLL_DOWN_FACTOR = s:SCROLL_FACTOR
-let s:SCROLL_C_E_FACTOR = s:SCROLL_UP_FACTOR
-let s:SCROLL_C_Y_FACTOR = s:SCROLL_DOWN_FACTOR
-let s:SCROLL_MOUSE_UP_FACTOR = s:SCROLL_UP_FACTOR
-let s:SCROLL_MOUSE_DOWN_FACTOR = s:SCROLL_DOWN_FACTOR
-execute printf("noremap <silent> <expr> <c-y> \"%s<c-y>\"", s:SCROLL_C_Y_FACTOR)
-let s:SCROLL_UPDATE_TIME = 1000
-execute printf("noremap <ScrollWheelDown> %s<c-e>", s:SCROLL_MOUSE_DOWN_FACTOR)
-execute printf("noremap <ScrollWheelUp> %s<c-y>", s:SCROLL_MOUSE_UP_FACTOR)
 
 if executable('rg')
 	noremap <silent> <leader>st <cmd>lua require('spectre').toggle()<cr><cmd>call Numbertoggle()<cr>
@@ -105,6 +90,7 @@ elseif g:open_cmd_on_up ==# "run"
 else
 	xnoremap <up> mz<esc>`z:
 endif
+noremap <leader>; :<c-u>'<,'>
 noremap <leader>: :<c-u>'<,'>
 noremap <leader>= :tabe 
 noremap <leader>- :e 

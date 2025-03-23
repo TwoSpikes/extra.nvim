@@ -59,8 +59,6 @@ delfunction ColorTable
 delfunction Contains
 delfunction CopyHighlightGroup
 delfunction DefineAugroupNumbertoggle
-delfunction DefineAugroupVisual
-delfunction DefineAugroups
 delfunction Defone
 delfunction DisablePagerMode
 delfunction DoCommentOutDefault
@@ -115,7 +113,6 @@ delfunction FuzzyFind
 delfunction GenerateExNvimConfig
 delfunction GenerateTemporaryAutocmd
 set stl=
-delfunction GetGitBranch
 delfunction GetRandomName
 delfunction GetVisualSelection
 delcommand GitClone
@@ -131,7 +128,7 @@ delfunction HandleExNvimOptionsInComment
 delfunction HandleKeystroke
 delfunction IfOneWinDo
 delfunction IfNotOneWinDo
-delfunction InitPckr
+delfunction InitPlug
 delcommand InvertPdf
 delfunction InvertPdf
 if exists('*IsHighlightGroupDefined')
@@ -162,12 +159,12 @@ delfunction N_UncommentOut
 delfunction N_UncommentOutDefault
 autocmd! numbertoggle *
 augroup! numbertoggle
-autocmd! exnvim_mode_changed_numbertoggle *
-augroup! exnvim_mode_changed_numbertoggle
 autocmd! neo-tree *
 augroup! neo-tree
 autocmd! netrw *
 augroup! netrw
+autocmd! exnvim_numbertoggle *
+augroup! exnvim_numbertoggle
 delfunction Numbertoggle
 delfunction NumbertoggleAll
 delfunction Numbertoggle_AbsNu
@@ -562,8 +559,15 @@ if PluginInstalled('null-ls')
 	delcommand NullLsInfo
 	delcommand NullLsLog
 endif
-if PluginInstalled('lazy')
-	delcommand Lazy
+if isdirectory(g:LOCALSHAREPATH.'/site/autoload/plug.vim')
+	delcommand Plug
+	delcommand PlugClean
+	delcommand PlugDiff
+	delcommand PlugInstall
+	delcommand PlugSnapshot
+	delcommand PlugStatus
+	delcommand PlugUpdate
+	delcommand PlugUpgrade
 endif
 if PluginInstalled('plenary')
 	delcommand PlenaryBustedDirectory
@@ -709,12 +713,6 @@ if PluginInstalled('hlargs')
 	autocmd! Hlargs *
 	augroup! Hlargs
 endif
-if PluginInstalled('lazy')
-	execute "lua package.loaded['lazy'] = nil"
-	autocmd! lazy_handler_event *
-	augroup! lazy_handler_event
-	unlet g:lazy_did_setup
-endif
 if PluginInstalled('beacon')
 	execute "lua package.loaded['beacon'] = nil"
 	autocmd! beacon_group *
@@ -734,4 +732,7 @@ if exists('g:already_patched')
 	unlet g:already_patched
 endif
 
+call timer_stopall()
+
+hi clear
 noremap z01 <cmd>execute 'source' stdpath('config').'/vim/exnvim/reload.vim'<cr>

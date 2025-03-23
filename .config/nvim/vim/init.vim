@@ -4,4 +4,5 @@ if filereadable(expand(g:CONFIG_PATH.'/vim/xterm-color-table.vim'))
 	exec printf('so %s', g:CONFIG_PATH.'/vim/xterm-color-table.vim')
 endif
 
+exec printf('so %s', g:CONFIG_PATH.'/vim/plugins/plugins.vim')
 exec printf('so %s', g:CONFIG_PATH.'/vim/compatible/init.vim')

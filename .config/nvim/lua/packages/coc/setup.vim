@@ -1,3 +1,7 @@
+if !exists('*CocActionAsync')
+	finish
+endif
+
 filetype plugin on
 
 augroup exnvim_coc_nvim

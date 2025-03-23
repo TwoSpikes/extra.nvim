@@ -49,43 +49,6 @@ function! OpenRanger(path)
 	augroup END
 	unlet TMPFILE
 endfunction
-function! OpenOnStart()
-	if g:open_menu_on_start
-		call RebindMenus()
-		autocmd User ExNvimLoaded call timer_start(50, {->quickui#menu#nvim_open_menu({"name": "system", "next": 1})})
-	endif
-
-	if argc() <= 0 && expand('%') == '' || isdirectory(expand('%'))
-		let to_open = 1
-		let to_open *= !g:DO_NOT_OPEN_ANYTHING
-		let to_open *= !g:PAGER_MODE
-		if to_open
-			if g:open_on_start ==# 'alpha' && has('nvim') && !isdirectory(expand('%')) && PluginInstalled('alpha')
-				Alpha
-			elseif g:open_on_start ==# "explorer" || (!has('nvim') && g:open_on_start ==# 'alpha')
-			\||executable('ranger') !=# 1
-				edit ./
-			elseif g:open_on_start ==# "ranger"
-				if argc() ># 0
-					call timer_start(0, {->OpenRanger(argv(0))})
-				else
-					call timer_start(0, {->OpenRanger("./")})
-				endif
-			endif
-		endif
-	endif
-endfunction
-
-function! JKWorkaroundAlpha()
-	noremap <buffer> j <cmd>call ProcessGBut('j')<cr>
-	noremap <buffer> k <cmd>call ProcessGBut('k')<cr>
-	if !g:open_cmd_on_up
-		noremap <buffer> <up> <cmd>call ProcessGBut('k')<cr>
-	endif
-	noremap <buffer> <down> <cmd>call ProcessGBut('j')<cr>
-endfunction
-call OpenOnStart()
-mode
 
 function! SetGitBranch()
 	let g:gitbranch = split(system('git rev-parse --abbrev-ref HEAD 2> /dev/null'))
@@ -125,7 +88,7 @@ function! NoNuAll()
 endfunction
 
 function! Numbertoggle_RelNu(winnr)
-	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'lazy' && &filetype !=# 'pkgman' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
+	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'vim-plug' && &filetype !=# 'pkgman' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
 		call RelNu(a:winnr)
 	else
 		call NoNu(a:winnr)
@@ -162,7 +125,7 @@ function! AbsNu(actual_mode, winnr=winnr())
 	call setwinvar(a:winnr, '&relativenumber', v:false)
 endfunction
 function! Numbertoggle_AbsNu(mode='', winnr=winnr())
-	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'lazy' && &filetype !=# 'pkgman' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
+	if &modifiable && &buftype !=# 'terminal' && &buftype !=# 'nofile' && &filetype !=# 'netrw' && &filetype !=# 'neo-tree' && &filetype !=# 'TelescopePrompt' && &filetype !=# 'vim-plug' && &filetype !=# 'pkgman' && &filetype !=# 'spectre_panel' && &filetype !=# 'alpha' && g:linenr
 		call AbsNu(a:mode, a:winnr)
 	else
 		call NoNu(a:winnr)
@@ -411,7 +374,7 @@ unlet s:dir_position_right
 unlet s:dir_position_current
 unlet s:dir_position_float
 
-let g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT = [g:LOCALSHAREPATH.'/lazy/*/lua/%FILE%.lua', g:LOCALSHAREPATH.'/lazy/*/lua/%FILE%/init.lua']
+let g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT = [g:LOCALSHAREPATH.'/plugged/*/lua/%FILE%.lua', g:LOCALSHAREPATH.'/plugged/*/lua/%FILE%/init.lua']
 let g:LUA_REQUIRE_GOTO_PREFIX = g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT
 function! Lua_Require_Goto_Workaround_Wincmd_f()
 	if !PluginExists('vim-quickui')
@@ -1362,6 +1325,12 @@ function! MyTabLabel(n)
 		else
 			let buf_name = '[NeoTree]'
 		endif
+	elseif filetype ==# "netrw"
+		if g:language ==# 'russian'
+			let buf_name = '[Файлы]'
+		else
+			let buf_name = '[Files]'
+		endif
 	elseif filetype ==# "TelescopePrompt"
 		if g:language ==# 'russian'
 			let buf_name = '[Телескоп]'
@@ -1375,8 +1344,12 @@ function! MyTabLabel(n)
 			let buf_name = '[Commit]'
 		endif
 	elseif v:false
-	\|| filetype ==# "lazy"
-		let buf_name = '[Lazy]'
+	\|| filetype ==# "vim-plug"
+		if g:language ==# 'russian'
+			let buf_name = '[Плагины]'
+		else
+			let buf_name = '[Plugins]'
+		endif
 	elseif buftype ==# "pkgman"
 		if g:language ==# 'russian'
 			let buf_name = '[ПакМенедж]'
@@ -1815,14 +1788,15 @@ function! OpenTerm(cmd, after=v:null, do_not_close=v:false, after_close=v:null, 
 		call win_gotoid(prevwinid)
 		wincmd p
 	endif
-	if a:cmd ==# ""
-		terminal
+	if has('nvim')
+		let command = 'terminal'
 	else
-		execute 'terminal' a:cmd
+		let command = 'terminal ++curwin'
 	endif
-	if !has('nvim')
-	  wincmd k
-	  wincmd c
+	if a:cmd ==# ""
+		execute command
+	else
+		execute command a:cmd
 	endif
 	let id = win_getid()
 	if a:do_not_close

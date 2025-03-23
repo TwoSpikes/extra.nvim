@@ -46,6 +46,7 @@ local function bootstrap_lazy()
   vim.opt.rtp:prepend(lazy_path)
 end
 
+goto exit
 bootstrap_lazy();
 
 local lazy = require('lazy');
@@ -152,7 +153,7 @@ local plugins = {
 		'voldikss/vim-floaterm',
 	},
 	{
-		'https://github.com/vim-utils/vim-man',
+		'vim-utils/vim-man',
 	},
 	{
 		'tpope/vim-surround',
@@ -346,16 +347,16 @@ local plugins = {
 		-- tag = "*"
 	},
 	{
-		'https://github.com/folke/yanky.nvim',
+		'folke/yanky.nvim',
 	},
 	{
-		'https://github.com/mfussenegger/nvim-lint',
+		'mfussenegger/nvim-lint',
 	},
 	{
 		'smartpde/telescope-recent-files',
 	},
 	{
-		'https://github.com/folke/noice.nvim',
+		'folke/noice.nvim',
 		dependencies = {
 			{
 				'MunifTanjim/nui.nvim',
@@ -367,7 +368,7 @@ local plugins = {
 		enabled = vim.fn.match(vim.g.compatible, '^helix_hard') == -1,
 	};
 	{
-		'https://github.com/folke/edgy.nvim',
+		'folke/edgy.nvim',
 		opts = {
 			bottom = {
 			  -- toggleterm / lazyterm at the bottom with a height of 40% of the screen
@@ -557,7 +558,7 @@ local plugins = {
 		},
 	},
 	{
-		'https://github.com/roobert/activate.nvim',
+		'roobert/activate.nvim',
 	},
 	{
 		'abecodes/tabout.nvim',
@@ -585,7 +586,7 @@ local plugins = {
         end,
 	},
 	{
-		'https://github.com/dstein64/nvim-scrollview',
+		'dstein64/nvim-scrollview',
 		enabled = vim.g.enable_scrollview,
 	},
 };
@@ -599,3 +600,4 @@ lazy.setup({
 		enabled = false,
 	},
 })
+::exit::
