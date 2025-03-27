@@ -8,6 +8,7 @@ set splitbelow
 set splitkeep=cursor
 set nosplitright
 set scrolloff=3
+set sidescrolloff=5
 set notildeop
 set errorfile=errors.err
 set eventignore=

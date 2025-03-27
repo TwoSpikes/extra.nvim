@@ -829,28 +829,25 @@ function! Showtab()
 		endif
 		let s:result .= ' '
 	endif
-	let username = $USER
-	if len(username) ==# 0
-		let username = $USERNAME
-	endif
-	if len(username) ==# 0
-		let username = trim(system('whoami'))
-	endif
-	if g:show_user_name ==# "short"
-		if username ==# "root"
-			let s:result .= '%#Error# R '
-		endif
-	elseif g:show_user_name ==# "full"
-		if username ==# "root"
-			let s:result .= '%#Error# root '
-		elseif len(username) !=# 0
-			let s:result .= '%#Statuslinestat1# '.username.' '
-		else
-			let s:result .= '%#Statuslinestat1# N/A '
+	if exists('g:username') 
+		if g:show_user_name ==# "short"
+			if g:username ==# "root"
+				let s:result .= '%#Error# R '
+			endif
+		elseif g:show_user_name ==# "full"
+			if g:username ==# "root"
+				let s:result .= '%#Error# root '
+			elseif len(g:username) !=# 0
+				let s:result .= '%#Statuslinestat1# '.g:username.' '
+			else
+				let s:result .= '%#Statuslinestat1# N/A '
+			endif
 		endif
 	endif
-	unlet username
-	if g:exnvim_fully_loaded !=# 3
+	if exists('g:exnvim_fully_loaded')
+		if g:exnvim_fully_loaded
+			unlet g:exnvim_fully_loaded
+		endif
 		let s:result .= '%#Loading#'.g:specloading
 	endif
 	return s:result
@@ -1016,14 +1013,23 @@ function! SetConfigPath()
 endfunction
 call SetConfigPath()
 
-let g:exnvim_fully_loaded = 0
+if !has('nvim')
+	if has('autocmd')
+		filetype plugin indent on
+	endif
+	if has('syntax') && !exists('g:syntax_on')
+	  syntax enable
+	endif
+endif
+
+let g:exnvim_fully_loaded = v:false
 if filereadable(g:CONFIG_PATH.'/after/init.vim')
 	autocmd VimEnter * call timer_start(0, {->execute('source '.g:CONFIG_PATH.'/after/init.vim')})
 	if v:vim_did_enter
 		doautocmd VimEnter
 	endif
 else
-	let g:exnvim_fully_loaded = 3
+	let g:exnvim_fully_loaded = v:true
 	let g:specloading = ' OK '
 	silent! doautocmd User ExNvimLoaded
 endif

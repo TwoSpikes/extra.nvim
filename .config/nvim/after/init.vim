@@ -44,3 +44,6 @@ execute "source" g:CONFIG_PATH."/after/useless_functions.vim"
 execute "source" g:CONFIG_PATH."/after/after_some_event.vim"
 execute "source" g:CONFIG_PATH."/after/unsorted.vim"
 execute "source" g:CONFIG_PATH."/after/autocmds.vim"
+
+let g:exnvim_fully_loaded = v:true
+silent! doautocmd User ExNvimLoaded

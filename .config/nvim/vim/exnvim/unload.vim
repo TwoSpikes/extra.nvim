@@ -1,7 +1,4 @@
-if !exists('g:exnvim_fully_loaded')
-	finish
-endif
-if g:exnvim_fully_loaded !=# 3
+if exists('g:exnvim_fully_loaded') && !g:exnvim_fully_loaded
 	finish
 endif
 
@@ -498,6 +495,7 @@ if PluginInstalled('lspconfig')
 	delcommand LspStop
 endif
 if PluginInstalled('LspUI')
+	autocmd! Lspui_lightbulb_*
 	delcommand LspUI
 endif
 if PluginInstalled('luasnip')
@@ -575,6 +573,14 @@ if PluginInstalled('plenary')
 endif
 if PluginExists('vim-quickui')
 	delcommand QuickUI
+	unlet g:quickui_version
+	unlet g:quickui_border_style
+	unlet g:quickui_color_scheme
+	unlet g:quickui_icons
+	if exists('g:quickui_show_tip')
+		unlet g:quickui_show_tip
+	endif
+	unlet g:quickui_highlight_tmp
 endif
 delcommand Rm
 delcommand SWrap
@@ -726,11 +732,22 @@ endif
 delfunction PluginExists
 
 unlet g:CONFIG_ALREADY_LOADED
-unlet g:exnvim_fully_loaded
+if exists('g:exnvim_fully_loaded')
+	unlet g:exnvim_fully_loaded
+endif
+unlet g:exnvim_config
+if exists('g:exnvim_sh_funcs')
+	unlet g:exnvim_sh_funcs
+endif
 unlet g:compatible
 if exists('g:already_patched')
 	unlet g:already_patched
 endif
+unlet g:CONFIG_PATH
+unlet g:LOCALSHAREPATH
+unlet g:PLUGINS_INSTALL_FILE_PATH
+unlet g:PLUGINS_SETUP_FILE_PATH
+unlet g:PLUGINS_SETUP_PATH
 
 call timer_stopall()
 

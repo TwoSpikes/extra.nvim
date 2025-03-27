@@ -4,4 +4,4 @@ execute 'source' stdpath('config').'/init.vim'
 
 call win_gotoid(old_winid)
 execute "Showtab"
-call SetGitBranch()
+call timer_start(0, {->SetGitBranch()})

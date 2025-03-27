@@ -13,11 +13,6 @@ augroup SaveFiletype
 	autocmd BufLeave * let g:prev_filetype=&filetype
 augroup END
 
-augroup ExNvimOptionsInComment
-	autocmd!
-	autocmd BufEnter * if v:vim_did_enter|call HandleExNvimOptionsInComment()|endif
-augroup END
-
 augroup on_resized
 	autocmd!
 	autocmd VimResized * mode
@@ -153,5 +148,3 @@ augroup exnvim_gitbranch
 	autocmd!
 	autocmd BufEnter,BufLeave * call SetGitBranch()
 augroup END
-
-let g:exnvim_fully_loaded += 1
