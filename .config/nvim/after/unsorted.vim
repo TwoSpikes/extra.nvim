@@ -1993,4 +1993,6 @@ function! TermuxSaveCursorStyle()
 endfunction
 call TermuxSaveCursorStyle()
 
-let g:username = trim(system('whoami'))
+if g:show_user_name !=# "no"
+	let g:username = trim(system('whoami'))
+endif

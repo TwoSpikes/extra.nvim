@@ -53,9 +53,6 @@ vim.api.nvim_create_user_command(
 	}) ]],
 	{ bang = true }
 )
-vim.keymap.set('n', '<leader>sld', [[
-    :lua =table_dump(vim.lsp.get_active_clients())
-]])
 
 vim.ui.select = require('lspactions').select
 vim.ui.input = require('lspactions').input

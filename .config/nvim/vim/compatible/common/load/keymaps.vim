@@ -82,8 +82,8 @@ endif
 
 " FAST COMMANDS
 if g:open_cmd_on_up ==# "insert"
-	nnoremap <up> :<up>
-	xnoremap <up> mz<esc>`z:<up>
+	nnoremap <up> <cmd>if !exists('g:Vm') <bar><bar> g:Vm['buffer'] ==# 0<bar>call feedkeys(":\<lt>c-u>\<lt>up>", 'n')<bar>else<bar>execute "normal! \<lt>up>"<bar>endif<cr>
+	xnoremap <up> <c-\><c-n><cmd>if !exists('g:Vm') <bar><bar> g:Vm['buffer'] ==# 0<bar>call AddPseudoSelection()<bar>call feedkeys(":\<lt>c-u>\<lt>up>", 'n')<bar>else<bar>execute "normal! gv\<lt>up>"<bar>endif<cr>
 elseif g:open_cmd_on_up ==# "run"
 	nnoremap <up> :<up><cr>
 	xnoremap <up> mz<esc>`z:<up><cr>

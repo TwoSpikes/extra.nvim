@@ -1063,7 +1063,16 @@ xnoremap o <esc>o
 xnoremap O <esc>O
 xnoremap <leader>xo o<cmd>call ReorderRightLeft()<cr>
 xnoremap <leader>xO O<cmd>call ReorderRightLeft()<cr>
-nnoremap C <c-v>j
+function! N_DoCBig()
+	let g:lx=line('.')
+	let g:ly=col('.')
+	execute "normal! \<c-v>j"
+	let g:pseudo_visual=v:false
+	let g:visual_mode="char"
+	let g:rx=line('.')
+	let g:ry=col('.')
+endfunction
+nnoremap C <cmd>call N_DoCBig()<cr>
 xnoremap C j
 nnoremap , <nop>
 xnoremap , <esc>

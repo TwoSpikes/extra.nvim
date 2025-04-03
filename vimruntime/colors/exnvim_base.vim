@@ -9,3 +9,6 @@ hi QuickTip ctermfg=202 ctermbg=85 cterm=bold guifg=#ffff9f guibg=#0f8fff gui=bo
 if !IsHighlightGroupDefined('Statuslinemod')
 	hi Statuslinemod guifg=#f0f0ff guibg=#0080a0 gui=bold
 endif
+if !IsHighlightGroupDefined('MultiCursor')
+	hi MultiCursor ctermfg=0 ctermbg=48 cterm=NONE guifg=#000000 guibg=#00ffaa gui=NONE
+endif

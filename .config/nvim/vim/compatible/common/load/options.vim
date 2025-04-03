@@ -101,7 +101,9 @@ set nomousemoveevent
 if has('nvim')
 	set mousescroll=ver:3,hor:6
 endif
-set mouseshape=i:beam,r:beam,s:updown,sd:cross,m:no,ml:up-arrow,v:rightup-arrow
+if !has('nvim-0.11.0')
+	set mouseshape=i:beam,r:beam,s:updown,sd:cross,m:no,ml:up-arrow,v:rightup-arrow
+endif
 set mousetime=400
 set startofline
 

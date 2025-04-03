@@ -8,6 +8,8 @@ let g:compatible = "common"
 execute 'source' stdpath('config').'/vim/compatible/common/unload/unload.vim'
 let g:compatible = "empty"
 
+call timer_stopall()
+
 autocmd! AlphaNvim_CinnamonNvim_JK_Workaround *
 augroup! AlphaNvim_CinnamonNvim_JK_Workaround
 if has('nvim')
@@ -29,7 +31,7 @@ if has('nvim')
 	delfunction ChangeLanguage
 	unmap <leader><leader>
 endif
-if PluginExists('coc.nvim')
+if PluginExists('coc.nvim') && !g:use_nvim_cmp
 	autocmd! exnvim_coc_nvim *
 	augroup! exnvim_coc_nvim
 	autocmd! coc_nvim *
@@ -119,9 +121,6 @@ augroup! exnvim_handle_buftype
 delfunction HandleBuftype
 delfunction HandleBuftypeAll
 delfunction HandleExNvimConfig
-autocmd! ExNvimOptionsInComment *
-augroup! ExNvimOptionsInComment
-delfunction HandleExNvimOptionsInComment
 delfunction HandleKeystroke
 delfunction IfOneWinDo
 delfunction IfNotOneWinDo
@@ -138,7 +137,6 @@ delfunction JKWorkaroundAlpha
 delfunction Killbuffer
 delfunction LoadExNvimConfig
 delfunction LoadVars
-delfunction Lua_Require_Goto_Workaround_Wincmd_f
 delfunction MakeThingsThatRequireBeDoneAfterPluginsLoaded
 if exists('*Mason_better')
 	delfunction Mason_better
@@ -224,7 +222,7 @@ augroup! exnvim_gitbranch
 delfunction SetGitBranch
 delfunction SetMouse
 delfunction SetTermuxConfigPath
-if PluginExists('coc.nvim')
+if PluginExists('coc.nvim') && !g:use_nvim_cmp
 	delfunction ShowDocumentation
 endif
 delcommand ShFunction
@@ -317,7 +315,7 @@ if PluginInstalled('cmp')
 	augroup! ___cmp___
 	delcommand CmpStatus
 endif
-if PluginExists('coc.nvim')
+if PluginExists('coc.nvim') && !g:use_nvim_cmp
 	delcommand CocCommand
 	delcommand CocConfig
 	delcommand CocDiagnostics
@@ -413,7 +411,7 @@ if PluginExists('vim-floaterm')
 	delcommand FloatermToggle
 	delcommand FloatermUpdate
 endif
-if PluginExists('coc.nvim')
+if PluginExists('coc.nvim') && !g:use_nvim_cmp
 	delcommand Fold
 	delcommand Format
 endif
@@ -495,8 +493,6 @@ if PluginInstalled('lspconfig')
 	delcommand LspStop
 endif
 if PluginInstalled('LspUI')
-	autocmd! Lspui_lightbulb_*
-	delcommand LspUI
 endif
 if PluginInstalled('luasnip')
 	autocmd! luasnip *
@@ -580,7 +576,9 @@ if PluginExists('vim-quickui')
 	if exists('g:quickui_show_tip')
 		unlet g:quickui_show_tip
 	endif
-	unlet g:quickui_highlight_tmp
+	if exists('g:quickui_highlight_tmp')
+		unlet g:quickui_highlight_tmp
+	endif
 endif
 delcommand Rm
 delcommand SWrap
@@ -749,7 +747,15 @@ unlet g:PLUGINS_INSTALL_FILE_PATH
 unlet g:PLUGINS_SETUP_FILE_PATH
 unlet g:PLUGINS_SETUP_PATH
 
-call timer_stopall()
+unmap <leader>?
+
+function! s:remove_buffer_mappings()
+	nunmap <buffer> <leader>
+endfunction
+tabdo windo call s:remove_buffer_mappings()
+delfunction s:remove_buffer_mappings
+
+unlet mapleader
 
 hi clear
 noremap z01 <cmd>execute 'source' stdpath('config').'/vim/exnvim/reload.vim'<cr>

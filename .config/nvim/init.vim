@@ -1002,7 +1002,7 @@ else
 endif
 
 function! SetConfigPath()
-	if !exists('g:CONFIG_PATH') || g:CONFIG_PATH ==# ""
+	if !exists('g:CONFIG_PATH') || len(g:CONFIG_PATH) ==# 0
 		if !exists('$VIM_CONFIG_PATH')
 			let g:CONFIG_PATH = expand('$HOME')."/.config/nvim"
 		else

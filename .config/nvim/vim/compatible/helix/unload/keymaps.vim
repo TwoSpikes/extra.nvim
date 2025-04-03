@@ -209,6 +209,7 @@ xunmap o
 xunmap O
 xunmap <leader>xo
 xunmap <leader>xO
+delfunction N_DoCBig
 nunmap C
 xunmap C
 nunmap ,
