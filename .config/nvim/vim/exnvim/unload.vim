@@ -314,6 +314,7 @@ if PluginInstalled('cmp')
 	autocmd! ___cmp___ *
 	augroup! ___cmp___
 	delcommand CmpStatus
+	execute "lua package.loaded['cmp'] = nil"
 endif
 if PluginExists('coc.nvim') && !g:use_nvim_cmp
 	delcommand CocCommand
@@ -499,6 +500,7 @@ if PluginInstalled('luasnip')
 	augroup! luasnip
 	delcommand LuaSnipListAvailable
 	delcommand LuaSnipUnlinkCurrent
+	sunmap <tab>
 endif
 if PluginExists('vim-man')
 	delcommand Man
@@ -540,7 +542,14 @@ if PluginInstalled('noice')
 	delcommand NoiceTelescope
 	delcommand NoiceViewstats
 	lua require('noice').disable()
+	lua require('noice').deactivate()
 	execute "lua package.loaded['noice'] = nil"
+	execute "lua package.loaded['noice.util'] = nil"
+	execute "lua package.loaded['noice.config'] = nil"
+	execute "lua package.loaded['noice.lsp'] = nil"
+	execute "lua package.loaded['noice.message'] = nil"
+	execute "lua package.loaded['noice.ui'] = nil"
+	execute "lua package.loaded['noice.view'] = nil"
 endif
 if PluginInstalled('notify')
 	delcommand Notifications
@@ -686,6 +695,8 @@ if PluginExists('vim-man')
 	delcommand Vman
 endif
 if PluginExists('vim-vsnip')
+	autocmd! vsnip *
+	augroup! vsnip
 	delcommand VsnipOpen
 	delcommand VsnipOpenEdit
 	delcommand VsnipOpenSplit
@@ -694,11 +705,16 @@ if PluginExists('vim-vsnip')
 endif
 if PluginInstalled('which-key')
 	execute "lua package.loaded['which-key'] = nil"
+	execute "lua package.loaded['which-key.state'] = nil"
 	autocmd! wk *
 	augroup! wk
 	delcommand WhichKey
+	ounmap z
 endif
 delcommand Write
+
+autocmd! RestoreCursor *
+augroup! RestoreCursor
 
 if PluginInstalled('edgy')
 	execute "lua package.loaded['edgy'] = nil"
@@ -749,11 +765,23 @@ unlet g:PLUGINS_SETUP_PATH
 
 unmap <leader>?
 
-function! s:remove_buffer_mappings()
-	nunmap <buffer> <leader>
+let old_winid = win_getid()
+function! Remove_excess_buffers()
+	if &filetype ==# "notify"
+		bwipeout!
+		return
+	endif
 endfunction
-tabdo windo call s:remove_buffer_mappings()
-delfunction s:remove_buffer_mappings
+tabdo windo call Remove_excess_buffers()
+call win_gotoid(old_winid)
+unlet old_winid
+function! Remove_excess_mappings()
+	silent! nunmap <buffer> <space>
+	silent! nunmap <buffer> \
+	silent! nunmap <buffer> z
+	silent! nunmap <buffer> z=
+endfunction
+call timer_start(100, {->execute('execute "bufdo! call Remove_excess_mappings()"|delfunction Remove_excess_mappings')})
 
 unlet mapleader
 

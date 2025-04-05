@@ -915,6 +915,18 @@ if $PREFIX == ""
 	call setenv('PREFIX', '/usr')
 endif
 
+function! SetConfigPath()
+	if !exists('g:CONFIG_PATH') || len(g:CONFIG_PATH) ==# 0
+		if !exists('$VIM_CONFIG_PATH')
+			let g:CONFIG_PATH = expand('$HOME')."/.config/nvim"
+		else
+			let g:CONFIG_PATH = $VIM_CONFIG_PATH
+		endif
+	endif
+	let g:CONFIG_PATH = expand(g:CONFIG_PATH)
+endfunction
+call SetConfigPath()
+
 if has('nvim')
 	execute "luafile ".expand(g:CONFIG_PATH)."/lua/lib/vim/plugins.lua"
 endif
@@ -1000,18 +1012,6 @@ else
 		return v:false
 	endfunction
 endif
-
-function! SetConfigPath()
-	if !exists('g:CONFIG_PATH') || len(g:CONFIG_PATH) ==# 0
-		if !exists('$VIM_CONFIG_PATH')
-			let g:CONFIG_PATH = expand('$HOME')."/.config/nvim"
-		else
-			let g:CONFIG_PATH = $VIM_CONFIG_PATH
-		endif
-	endif
-	let g:CONFIG_PATH = expand(g:CONFIG_PATH)
-endfunction
-call SetConfigPath()
 
 if !has('nvim')
 	if has('autocmd')

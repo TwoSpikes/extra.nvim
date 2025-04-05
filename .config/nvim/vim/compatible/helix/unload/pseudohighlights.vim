@@ -4,5 +4,5 @@ delfunction GoToPseudoSelection
 
 delfunction V_Do_Colon
 
-autocmd! hcm_go_to_main_pseudo_highlight *
-augroup! hcm_go_to_main_pseudo_highlight
+autocmd! go_to_main_pseudo_highlight *
+augroup! go_to_main_pseudo_highlight
