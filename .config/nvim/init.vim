@@ -968,7 +968,6 @@ endif
 function! FixShaDa()
 	let g:PAGER_MODE = 0
 	let g:DO_NOT_OPEN_ANYTHING = 0
-	let g:LUA_REQUIRE_GOTO_PREFIX = g:LUA_REQUIRE_GOTO_PREFIX_DEFAULT
 endfunction
 augroup exnvim_fix_sha_da
 	autocmd!
