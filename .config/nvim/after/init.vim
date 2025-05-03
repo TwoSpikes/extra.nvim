@@ -28,6 +28,8 @@ function! OnStart()
 		echohl ErrorMsg
 		if g:language ==# 'russian'
 			echomsg "блядь: не удалось найти файл инициализации"
+		elseif g:language ==# 'komi'
+			echomsg "ебать: эз вермы аддзыны инициализация файл"
 		else
 			echomsg "error: unable to find initialization file"
 		endif

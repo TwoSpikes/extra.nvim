@@ -135,6 +135,8 @@ if exists('*Pad')
 	function! Findfile()
 		if g:language ==# 'russian'
 			let find_file_label = 'Найти файл: '
+		elseif g:language ==# 'komi'
+			let find_file_label = 'Корсьны файл: '
 		else
 			let find_file_label = 'Find file: '
 		endif
@@ -161,6 +163,8 @@ if exists('*Pad')
 	function! Findfilebuffer()
 		if g:language ==# 'russian'
 			let find_file_label = 'Найти файл (открыть в буфере): '
+		elseif g:language ==# 'komi'
+			let find_file_label = 'Корсьны файл (восьтыны буферын): '
 		else
 			let find_file_label = 'Find file (open in buffer): '
 		endif
@@ -236,6 +240,8 @@ function! FarOrMc()
 		echohl ErrorMsg
 		if g:language ==# "russian"
 			echomsg "блядь: конфиг: неправильное значение опции \"prefer_far_or_mc\": ".g:prefer_far_or_mc
+		elseif g:language ==# "komi"
+			echomsg "ебать: конфиг: лӧсявтӧм значение вариант \"prefer_far_or_mc\": ".g:prefer_far_or_mc
 		else
 			echomsg "error: config: wrong option \"prefer_far_or_mc\" value: ".g:prefer_far_or_mc
 		endif
@@ -252,6 +258,8 @@ function! SelectPosition(cmd, positions, cd=v:null)
 			echohl Question
 			if g:language ==# 'russian'
 				let select_position_label = 'Выберите позицию %s: '
+			elseif g:language ==# 'komi'
+				let select_position_label = 'Бӧрйы позянлун %s: '
 			else
 				let select_position_label = 'Select position %s: '
 			endif
@@ -269,6 +277,8 @@ function! SelectPosition(cmd, positions, cd=v:null)
 
 			if g:language ==# 'russian'
 				let select_position_label = 'Выбор позиции'
+			elseif g:language ==# 'komi'
+				let select_position_label = 'Места бӧрйӧм'
 			else
 				let select_position_label = 'Select position'
 			endif
@@ -293,6 +303,8 @@ function! SelectPosition(cmd, positions, cd=v:null)
 			echohl ErrorMsg
 			if g:language ==# 'russian'
 				echomsg "Блядь: Неправильная позиция: ".position
+			elseif g:language ==# 'komi'
+				echomsg "Ебать: Öшыбка места: ".position
 			else
 				echomsg "Error: Wrong position: ".position
 			endif
@@ -321,6 +333,8 @@ else
 		\{cmd -> 'Explore'.cmd}
 	if g:language ==# 'russian'
 		let s:messagefloating_windows_are_not_supported_in_vim = 'блядь: Плавающие окна не поддерживаются в Vim''е'
+	elseif g:language ==# 'komi'
+		let s:messagefloating_windows_are_not_supported_in_vim = 'ебать: Vim оз лӧсяв лэбысь ӧшиньяслы'
 	else
 		let s:messagefloating_windows_are_not_supported_in_vim = 'error: Floating windows are not supported in Vim'
 	endif
@@ -329,46 +343,86 @@ else
 	unlet s:messagefloating_windows_are_not_supported_in_vim
 endif
 if g:language ==# 'russian'
-	let g:stdpos = {
-		\ 'h': {'button_label': '&s:ГорРаздел', 'command': {cmd -> 'split '.cmd}},
-		\ 'v': {'button_label': '&v:ВерРаздел', 'command': {cmd -> 'vsplit '.cmd}},
-		\ 'b': {'button_label': '&b:Буффер', 'command': {cmd -> 'e '.cmd}},
-		\ 't': {'button_label': '&t:НовВкладк', 'command': {cmd -> 'tabnew|e '.cmd}},
-	\ }
-	let g:dirpos = {
-		\ 'l': {'button_label': '&v:Слева', 'command': s:dir_position_left},
-		\ 'r': {'button_label': '&r:Справа', 'command': s:dir_position_right},
-		\ 'b': {'button_label': '&b:Буффер', 'command': s:dir_position_current},
-		\ 'f': {'button_label': '&f:Плавающее', 'command': s:dir_position_float},
-	\ }
-	let g:termpos = {
-		\ 'h': {'button_label': '&s:ГРазде', 'command': {cmd -> 'split|call OpenTerm("'.cmd.'")'}},
-		\ 'v': {'button_label': '&v:ВРазде', 'command': {cmd -> 'vsplit|call OpenTerm("'.cmd.'")'}},
-		\ 'b': {'button_label': '&b:Буффер', 'command': {cmd -> 'call OpenTerm("'.cmd.'")'}},
-		\ 't': {'button_label': '&t:НовВкл', 'command': {cmd -> 'tabnew|call OpenTerm("'.cmd.'")'}},
-		\ 'f': {'button_label': '&f:Плаваю', 'command': {cmd -> 'FloatermNew '.cmd}},
-	\ }
+	let stdpos_horizontal_division_label = '&s:ГорРаздел'
+	let stdpos_vertical_division_label = '&v:ВерРаздел'
+	let stdpos_buffer_label = '&b:Буффер'
+	let stdpos_newtab_label = '&t:НовВкладк'
+
+	let dirpos_left_label = '&v:Слева'
+	let dirpos_right_label = '&r:Справа' 
+	let dirpos_buffer_label = '&b:Буффер'
+	let dirpos_floating_window_label = '&f:Плавающее'
+	
+	let termpos_horizontal_division_label = '&s:ГРазде'
+	let termpos_vertical_division_label = '&v:ВРазде'
+	let termpos_buffer_label = '&b:Буффер'
+	let termpos_newtab_label = '&t:НовВкл'
+	let termpos_floating_window_label = '&f:Плаваю'
+elseif g:language ==# 'komi'
+	let stdpos_horizontal_division_label = '&s:ГоризЮкӧм'
+	let stdpos_vertical_division_label = '&v:ВерТоръял'
+	let stdpos_buffer_label = '&b:Буффер'
+	let stdpos_newtab_label = '&t:ВыльВклад'
+
+	let dirpos_left_label = '&v:Шуйгавыв'
+	let dirpos_right_label = '&r:Веськыдвылас'
+	let dirpos_buffer_label = '&b:Буффер'
+	let dirpos_floating_window_label = '&f:ЛэбыӦшинь'
+
+	let termpos_horizontal_division_label = '&s:ГоЮкöм'
+	let termpos_vertical_division_label = '&v:ВерТор'
+	let termpos_buffer_label = '&b:Буффер'
+	let termpos_newtab_label = '&t:ВыльВк'
+	let termpos_floating_window_label = '&f:ЛэбыӦш'
 else
-	let g:stdpos = {
-		\ 'h': {'button_label': '&Split', 'command': {cmd -> 'split '.cmd}},
-		\ 'v': {'button_label': '&Vsplit', 'command': {cmd -> 'vsplit '.cmd}},
-		\ 'b': {'button_label': '&Buffer', 'command': {cmd -> 'e '.cmd}},
-		\ 't': {'button_label': 'New &tab', 'command': {cmd -> 'tabnew|e '.cmd}},
-	\ }
-	let g:dirpos = {
-		\ 'l': {'button_label': '&v:Left', 'command': s:dir_position_left},
-		\ 'r': {'button_label': '&Right', 'command': s:dir_position_right},
-		\ 'b': {'button_label': '&Buffer', 'command': s:dir_position_current},
-		\ 'f': {'button_label': '&Floating', 'command': s:dir_position_float},
-	\ }
-	let g:termpos = {
-		\ 'h': {'button_label': '&Split', 'command': {cmd -> 'split|call OpenTerm("'.cmd.'")'}},
-		\ 'v': {'button_label': '&Vsplit', 'command': {cmd -> 'vsplit|call OpenTerm("'.cmd.'")'}},
-		\ 'b': {'button_label': '&Buffer', 'command': {cmd -> 'call OpenTerm("'.cmd.'")'}},
-		\ 't': {'button_label': 'New &tab', 'command': {cmd -> 'tabnew|call OpenTerm("'.cmd.'")'}},
-		\ 'f': {'button_label': '&Floating', 'command': {cmd -> 'FloatermNew '.cmd}},
-	\ }
+	let stdpos_horizontal_division_label = '&Split'
+	let stdpos_vertical_division_label = '&Vsplit'
+	let stdpos_buffer_label = '&Buffer'
+	let stdpos_newtab_label = 'New &tab'
+	
+	let dirpos_left_label = '&v:Left'
+	let dirpos_right_label = '&Right'
+	let dirpos_buffer_label = '&Buffer'
+	let dirpos_floating_window_label = '&Floating'
+	
+	let termpos_horizontal_division_label = '&Split'
+	let termpos_vertical_division_label = '&Vsplit'
+	let termpos_buffer_label = '&Buffer'
+	let termpos_newtab_label = 'New &tab'
+	let termpos_floating_window_label = '&Floating'
 endif
+let g:stdpos = {
+	\ 'h': {'button_label': stdpos_horizontal_division_label, 'command': {cmd -> 'split '.cmd}},
+	\ 'v': {'button_label': stdpos_vertical_division_label, 'command': {cmd -> 'vsplit '.cmd}},
+	\ 'b': {'button_label': stdpos_buffer_label, 'command': {cmd -> 'e '.cmd}},
+	\ 't': {'button_label': stdpos_newtab_label, 'command': {cmd -> 'tabnew|e '.cmd}},
+\ }
+let g:dirpos = {
+	\ 'l': {'button_label': dirpos_left_label, 'command': s:dir_position_left},
+	\ 'r': {'button_label': dirpos_right_label, 'command': s:dir_position_right},
+	\ 'b': {'button_label': dirpos_buffer_label, 'command': s:dir_position_current},
+	\ 'f': {'button_label': dirpos_floating_window_label, 'command': s:dir_position_float},
+\ }
+let g:termpos = {
+	\ 'h': {'button_label': termpos_horizontal_division_label, 'command': {cmd -> 'split|call OpenTerm("'.cmd.'")'}},
+	\ 'v': {'button_label': termpos_vertical_division_label, 'command': {cmd -> 'vsplit|call OpenTerm("'.cmd.'")'}},
+	\ 'b': {'button_label': termpos_buffer_label, 'command': {cmd -> 'call OpenTerm("'.cmd.'")'}},
+	\ 't': {'button_label': termpos_newtab_label, 'command': {cmd -> 'tabnew|call OpenTerm("'.cmd.'")'}},
+	\ 'f': {'button_label': termpos_floating_window_label, 'command': {cmd -> 'FloatermNew '.cmd}},
+\ }
+unlet stdpos_horizontal_division_label
+unlet stdpos_vertical_division_label
+unlet stdpos_buffer_label
+unlet stdpos_newtab_label
+unlet dirpos_left_label
+unlet dirpos_right_label
+unlet dirpos_buffer_label
+unlet dirpos_floating_window_label
+unlet termpos_horizontal_division_label
+unlet termpos_vertical_division_label
+unlet termpos_buffer_label
+unlet termpos_newtab_label
+unlet termpos_floating_window_label
 unlet s:dir_position_left
 unlet s:dir_position_right
 unlet s:dir_position_current
@@ -659,6 +713,8 @@ function! Killbuffer()
 	echohl Question
 	if g:language ==# 'russian'
 		let kill_buffer_label = 'Убить буфер'
+	elseif g:language ==# 'komi'
+		let kill_buffer_label = 'Кулӧм буфер'
 	else
 		let kill_buffer_label = 'Kill buffer'
 	endif
@@ -691,6 +747,17 @@ function! Killbuffer()
 			echon "нет"
 			echohl ErrorMsg
 			echon " или оставь бланк пустым"
+		if g:language ==# 'komi'
+			echo " "
+			echo "Ответьте пожалуйста "
+			echohl Title
+			echon "да"
+			echohl ErrorMsg
+			echon " или "
+			echohl Title
+			echon "ог"
+			echohl ErrorMsg
+			echon " либӧ кольны формасӧ тыртӧмӧн"
 		else
 			echo " "
 			echo "Please answer "
@@ -730,6 +797,8 @@ let s:select_all_definition .= "
 \\n	echohl MsgArea
 \\n	if g:language ==# 'russian'
 \\n		echomsg 'Предыдущая позиция отмечена как \"y\"'
+\\n	elseif g:language ==# 'russian'
+\\n		echomsg 'Воддза позянлуныс пасйӧма \"y\"'
 \\n	else
 \\n		echomsg 'Previous position marked as \"y\"'
 \\n	endif"
@@ -905,6 +974,8 @@ function! OpenRangerCheck()
 		echohl ErrorMsg
 		if g:language ==# 'russian'
 			echomsg "Блядь: Не открывается ranger: не установлен"
+		elseif g:language ==# 'komi'
+			echomsg "Ебать: ranger оз восьт: абу сувтöдöма"
 		else
 			echomsg "Error: Cannot open ranger: ranger not installed"
 		endif
@@ -918,6 +989,8 @@ function! RunAlphaIfNotAlphaRunning()
 		echohl ErrorMsg
 		if g:language ==# 'russian'
 			echomsg "Блядь: alpha-nvim не установлен"
+		elseif g:language ==# 'komi'
+			echomsg "Ебать: alpha-nvim абу сувтöдöма"
 		else
 			echomsg "Error: alpha-nvim is not installed"
 		endif
@@ -971,11 +1044,15 @@ function! MyTabLabel(n)
 	elseif buftype ==# "terminal"
 		if g:language ==# 'russian'
 			let buf_name = '[Терм]'
+		elseif g:language ==# 'komi'
+			let buf_name = '[Терм]'
 		else
 			let buf_name = '[Term]'
 		endif
 	elseif filetype ==# "alpha"
 		if g:language ==# 'russian'
+			let buf_name = '[Меню]'
+		elseif g:language ==# 'komi'
 			let buf_name = '[Меню]'
 		else
 			let buf_name = '[Menu]'
@@ -983,11 +1060,15 @@ function! MyTabLabel(n)
 	elseif filetype ==# "spectre_panel"
 		if g:language ==# 'russian'
 			let buf_name = '[Spectre]'
+		elseif g:language ==# 'komi'
+			let buf_name = '[Spectre]'
 		else
 			let buf_name = '[Spectre]'
 		endif
 	elseif filetype ==# "neo-tree"
 		if g:language ==# 'russian'
+			let buf_name = '[NeoTree]'
+		elseif g:language ==# 'komi'
 			let buf_name = '[NeoTree]'
 		else
 			let buf_name = '[NeoTree]'
@@ -995,11 +1076,15 @@ function! MyTabLabel(n)
 	elseif filetype ==# "netrw"
 		if g:language ==# 'russian'
 			let buf_name = '[Файлы]'
+		elseif g:language ==# 'komi'
+			let buf_name = '[Файлӧвӧй тэчасъяс]'
 		else
 			let buf_name = '[Files]'
 		endif
 	elseif filetype ==# "TelescopePrompt"
 		if g:language ==# 'russian'
+			let buf_name = '[Телескоп]'
+		elseif g:language ==# 'komi'
 			let buf_name = '[Телескоп]'
 		else
 			let buf_name = '[Telescope]'
@@ -1007,36 +1092,48 @@ function! MyTabLabel(n)
 	elseif filetype ==# "gitcommit"
 		if g:language ==# 'russian'
 			let buf_name = '[Коммит]'
+		elseif g:language ==# 'komi'
+			let buf_name = '[Коммит]'
 		else
 			let buf_name = '[Commit]'
 		endif
 	elseif filetype ==# "vim-plug"
 		if g:language ==# 'russian'
 			let buf_name = '[Плагины]'
+		elseif g:language ==# 'komi'
+			let buf_name = '[Плагинъяс]'
 		else
 			let buf_name = '[Plugins]'
 		endif
 	elseif buftype ==# "pkgman"
 		if g:language ==# 'russian'
 			let buf_name = '[ПакМенедж]'
+		elseif g:language ==# 'komi'
+			let buf_name = '[ПакВеськö]'
 		else
 			let buf_name = '[PkgManag]'
 		endif
 	elseif original_buf_name ==# "EXTRA.NVIM help"
 		if g:language ==# 'russian'
 			let buf_name = '[Помощь]'
+		elseif g:language ==# 'komi'
+			let buf_name = '[Отсöг]'
 		else
 			let buf_name = '[Help]'
 		endif
 	elseif buftype ==# "nofile"
 		if g:language ==# 'russian'
 			let buf_name = '[НеФайл]'
+		elseif g:language ==# 'komi'
+			let buf_name = '[АбуФайл]'
 		else
 			let buf_name = '[NoFile]'
 		endif
 	elseif original_buf_name ==# ''
 		if g:language ==# 'russian'
 			let buf_name = '[БезИмени]'
+		elseif g:language ==# 'komi'
+			let buf_name = '[НимАбу]'
 		else
 			let buf_name = '[NoName]'
 		endif
@@ -1426,6 +1523,8 @@ function! OnFirstTime()
 		if !PluginExists('vim-quickui')
 			if g:language ==# 'russian'
 				echomsg 'Чтобы посмотреть помощь, нажмите SPC-?. Вы больше не увидите это сообщение'
+			elseif g:language ==# 'komi'
+				echomsg 'Медым аддзыны отсӧг, шыбитӧй SPC-?. Тайӧ юӧрсӧ ті мӧдысь он аддзывны'
 			else
 				echomsg 'To see help, press SPC-?. You will not see this message again'
 			endif
@@ -1556,6 +1655,8 @@ function! CommentOutDefault_Define(mode)
 	\\n		echohl ErrorMsg
 	\\n		if g:language ==# 'russian'
 	\\n			echo \"Блядь: Комментарии недоступны\"
+	\\n		elseif g:language ==# 'komi'
+	\\n			echo \"Ебать: Комментарийяс абуӧсь\"
 	\\n		else
 	\\n			echo \"Error: Comments are not available\"
 	\\n		endif
@@ -1596,6 +1697,8 @@ function! UncommentOutDefault_Define(mode)
 	\\n		echohl ErrorMsg
 	\\n		if g:language ==# 'russian'
 	\\n			echomsg \"Блядь: Комментарии недоступны\"
+	\\n		elseif g:language ==# 'komi'
+	\\n			echo \"Ебать: Комментарийяс абуӧсь\"
 	\\n		else
 	\\n			echomsg \"Error: Comments are not available\"
 	\\n		endif

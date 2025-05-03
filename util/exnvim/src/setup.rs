@@ -289,7 +289,7 @@ pub fn setup(home: ::std::path::PathBuf) -> ::std::io::Result<()> {
                     + ",
 
 \"_comment\":\"Change the style of line numbers\",
-\"_comment\":\"Aviable: absolute, relative\",
+\"_comment\":\"Available: absolute, relative\",
 	\"linenr_style\": \"relative\",
 
 \"_comment\":\"Change style of cursorline\",
@@ -309,7 +309,7 @@ pub fn setup(home: ::std::path::PathBuf) -> ::std::io::Result<()> {
 	\"quickui_border_style\": \"4\",
 
 \"_comment\":\"Change quickui colorscheme\",
-\"_comment\":\"Aviable: borland, gruvbox, solarized, papercol dark, papercol light\",
+\"_comment\":\"Available: borland, gruvbox, solarized, papercol dark, papercol light\",
 \"_comment\":\"See them at https://github.com/skywind3000/vim-quickui/blob/master/MANUAL.md\",
 	\"quickui_color_scheme\": \"papercol dark\",
 
@@ -325,7 +325,7 @@ pub fn setup(home: ::std::path::PathBuf) -> ::std::io::Result<()> {
 	\"pad_amount_confirm_dialogue\": 30,
 
 \"_comment\":\"Change cursor style\",
-\"_comment\":\"Aviable styles:\",
+\"_comment\":\"Available styles:\",
 \"_comment\":\"  block (default)   █\",
 \"_comment\":\"  bar               ⎸\",
 \"_comment\":\"  underline         _\",
@@ -377,7 +377,7 @@ pub fn setup(home: ::std::path::PathBuf) -> ::std::io::Result<()> {
 	\"quickui_icons\": true,
 
 \"_comment\":\"Interface language\",
-\"_comment\":\"Aviable: auto (default), english, russian)\",
+\"_comment\":\"Available: auto (default), english, russian, komi)\",
 \"_comment\":\"This option does not change system locale and Vim interface language\",
 	\"language\": \"" + &options.language.to_string()
                     + "\",

@@ -380,6 +380,8 @@ function! HandleExNvimConfig()
 		echohl ErrorMsg
 		if g:language ==# 'russian'
 			echomsg "extra.nvim конфиг: блядь: неправильное значение заднего фона: ".g:background
+		elseif g:language ==# 'komi'
+			echomsg "extra.nvim конфиг: ебать: öшыбка фон значение: ".g:background
 		else
 			echomsg "extra.nvim config: Error: wrong background value: ".g:background
 		endif
@@ -392,6 +394,8 @@ function! HandleExNvimConfig()
 	if g:language ==# 'auto'
 		if $LANG ==# 'ru_RU.UTF-8' || $TERMUX_LANG ==# 'ru_RU.UTF-8'
 			let g:language = 'russian'
+		elseif $LANG ==# 'kv_RU.UTF-8' || $TERMUX_LANG ==# 'kv_RU.UTF-8'
+			let g:language = 'komi'
 		else
 			let g:language = 'english'
 		endif
@@ -417,6 +421,8 @@ function! SetModeToShow()
 		if g:compatible =~# '^helix'
 			if g:language ==# 'russian'
 				let strmode = '%#ModeNorm# НОР '
+			elseif g:language ==# 'komi'
+				let strmode = '%#ModeNorm# НОР '
 			else
 				let strmode = '%#ModeNorm# NOR '
 			endif
@@ -426,42 +432,56 @@ function! SetModeToShow()
 	elseif mode ==# 'no'
 		if g:language ==# 'russian'
 			let strmode = 'ЖДУ_ОПЕР '
+		elseif g:language ==# 'komi'
+			let strmode = 'ВИЧЧ_ОПЕР'
 		else
 			let strmode = 'OP_PEND '
 		endif
 	elseif mode ==# 'nov'
 		if g:language ==# 'russian'
 			let strmode = 'визуал ЖДУ_ОПЕР '
+		elseif g:language ==# 'komi'
+			let strmode = 'синмӧн ВИЧЧ_ОПЕР '
 		else
 			let strmode = 'visu OP_PEND '
 		endif
 	elseif mode ==# 'noV'
 		if g:language ==# 'russian'
 			let strmode = 'виз_лин ЖДУ_ОПЕР '
+		elseif g:language ==# 'komi'
+			let strmode = 'син_визь ВИЧЧ_ОПЕР '
 		else
 			let strmode = 'vis_line OP_PEND '
 		endif
 	elseif mode ==# "no\<c-v>"
 		if g:language ==# 'russian'
 			let strmode = 'виз_блок ЖДУ_ОПЕР '
+		elseif g:language ==# 'komi'
+			let strmode = 'син_блок ВИЧЧ_ОПЕР '
 		else
 			let strmode = 'vis_block OP_PEND '
 		endif
 	elseif mode ==# 'niI'
 		if g:language ==# 'russian'
 			let strmode = '%#ModeNorm#^o %#ModeIns# ВСТ '
+		elseif g:language ==# 'komi'
+			let strmode = '%#ModeNorm#^o %#ModeIns# ПЫР '
 		else
 			let strmode = '%#ModeNorm#^o %#ModeIns# INS '
 		endif
 	elseif mode ==# 'niR'
 		if g:language ==# 'russian'
 			let strmode = '%#ModeNorm#^o %#ModeRepl# ЗАМЕНА '
+		elseif g:language ==# 'komi'
+			let strmode = '%#ModeNorm#^o %#ModeRepl# ВЕЖÖМ '
 		else
 			let strmode = '%#ModeNorm#^o %#ModeRepl# REPL '
 		endif
 	elseif mode ==# 'niV'
 		if g:language ==# 'russian'
 			let strmode = '%#ModeNorm#^o визуал ЗАМЕНА '
+		elseif g:language ==# 'komi'
+			let strmode = '%#ModeNorm#^o синмӧн ВЕЖÖМ '
 		else
 			let strmode = '^o visu REPL '
 		endif
@@ -469,11 +489,15 @@ function! SetModeToShow()
 		if g:compatible ==# "helix"
 			if g:language ==# 'russian'
 				let strmode = '%#ModeNorm# НОРМ %#StatuslinestatNormTerm#%#ModeTerm# ТЕР '
+			elseif g:language ==# 'komi'
+				let strmode = '%#ModeNorm# НОРМ %#StatuslinestatNormTerm#%#ModeTerm# ТЕР '
 			else
 				let strmode = '%#ModeNorm# NORM %#StatuslinestatNormTerm#%#ModeTerm# TER '
 			endif
 		else
 			if g:language ==# 'russian'
+				let strmode = '%#ModeNorm# НОРМ %#StatuslinestatNormTerm#%#ModeTerm# '
+			elseif g:language ==# 'komi'
 				let strmode = '%#ModeNorm# НОРМ %#StatuslinestatNormTerm#%#ModeTerm# '
 			else
 				let strmode = '%#ModeNorm# NORM %#StatuslinestatNormTerm#%#ModeTerm# '
@@ -481,6 +505,8 @@ function! SetModeToShow()
 		endif
 	elseif mode ==# 'ntT'
 		if g:language ==# 'russian'
+			let strmode = '^\^o норм ТЕРМ '
+		elseif g:language ==# 'komi'
 			let strmode = '^\^o норм ТЕРМ '
 		else
 			let strmode = '^\^o norm TERM '
@@ -491,11 +517,15 @@ function! SetModeToShow()
 				if g:compatible !~# "^helix_hard"
 					if g:language ==# 'russian'
 						let strmode = '%#ModeVisu# НОР '
+					elseif g:language ==# 'komi'
+						let strmode = '%#ModeVisu# НОР '
 					else
 						let strmode = '%#ModeVisu# NOR '
 					endif
 				else
 					if g:language ==# 'russian'
+						let strmode = '%#ModeNorm# НОР '
+					elseif g:language ==# 'komi'
 						let strmode = '%#ModeNorm# НОР '
 					else
 						let strmode = '%#ModeNorm# NOR '
@@ -504,6 +534,8 @@ function! SetModeToShow()
 			else
 				if g:language ==# 'russian'
 					let strmode = '%#ModeVisu# ВЫБ '
+				elseif g:language ==# 'komi'
+					let strmode = '%#ModeVisu# БÖР '
 				else
 					let strmode = '%#ModeVisu# SEL '
 				endif
@@ -514,18 +546,24 @@ function! SetModeToShow()
 	elseif mode ==# 'V'
 		if g:language ==# 'russian'
 			let strmode = '%#ModeVisu# виз ЛИН '
+		elseif g:language ==# 'komi'
+			let strmode = '%#ModeVisu# син ВИЗ '
 		else
 			let strmode = '%#ModeVisu# vis LIN '
 		endif
 	elseif mode ==# 'vs'
 		if g:language ==# 'russian'
 			let strmode = '%#ModeNorm#^o %#ModeVisu# визуал %#ModeSel# ВЫБ '
+		elseif g:language ==# 'komi'
+			let strmode = '%#ModeNorm#^o %#ModeVisu# синмӧн %#ModeSel# БÖР '
 		else
 			let strmode = '%#ModeNorm#^o %#ModeVisu# visu %#ModeSel# SEL '
 		endif
 	elseif mode ==# 's'
 		if g:language ==# 'russian'
 			let strmode = '%#ModeSel# ВЫБ '
+		elseif g:language ==# 'komi'
+			let strmode = '%#ModeSel# БÖР '
 		else
 			let strmode = '%#ModeSel# SEL '
 		endif
@@ -533,12 +571,16 @@ function! SetModeToShow()
 		if g:compatible =~# '^helix'
 			if g:language ==# 'russian'
 				let strmode = '%#ModeSel# выб ЛИН '
+			elseif g:language ==# 'komi'
+				let strmode = '%#ModeSel# бöр ВИЗ '
 			else
 				let strmode = '%#ModeSel# sel LIN '
 			endif
 		else
 			if g:language ==# 'russian'
 				let strmode = '%#ModeSel# выб ЛИНИЯ '
+			elseif g:language ==# 'komi'
+				let strmode = '%#ModeSel# бöр ВИЗЬ '
 			else
 				let strmode = '%#ModeSel# sel LINE '
 			endif
@@ -546,6 +588,8 @@ function! SetModeToShow()
 	elseif mode ==# "\<c-s>"
 		if g:language ==# 'russian'
 			let strmode = '%#ModeSel#выб %#ModeSelToBlock#%#ModeBlock# БЛОК '
+		elseif g:language ==# 'komi'
+			let strmode = '%#ModeSel#бöр %#ModeSelToBlock#%#ModeBlock# БЛОК '
 		else
 			let strmode = '%#ModeSel#sel %#ModeSelToBlock#%#ModeBlock# BLOCK '
 		endif
@@ -554,12 +598,16 @@ function! SetModeToShow()
 			if g:pseudo_visual
 				if g:language ==# 'russian'
 					let strmode = '%#ModeVisu#нор %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
+				elseif g:language ==# 'komi'
+					let strmode = '%#ModeVisu#нор %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
 				else
 					let strmode = '%#ModeVisu#nor %#StatuslinestatVisuBlock#%#ModeBlock# BLOCK '
 				endif
 			else
 				if g:language ==# 'russian'
 					let strmode = '%#ModeVisu#виз %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
+				elseif g:language ==# 'komi'
+					let strmode = '%#ModeVisu#син %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
 				else
 					let strmode = '%#ModeVisu#vis %#StatuslinestatVisuBlock#%#ModeBlock# BLOCK '
 				endif
@@ -567,6 +615,8 @@ function! SetModeToShow()
 		else
 			if g:language ==# 'russian'
 				let strmode = '%#ModeVisu#визуал %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
+			elseif g:language ==# 'komi'
+				let strmode = '%#ModeVisu#синмӧн %#StatuslinestatVisuBlock#%#ModeBlock# БЛОК '
 			else
 				let strmode = '%#ModeVisu#visual %#StatuslinestatVisuBlock#%#ModeBlock# BLOCK '
 			endif
@@ -574,6 +624,8 @@ function! SetModeToShow()
 	elseif mode ==# "\<c-v>s"
 		if g:language ==# 'russian'
 			let strmode = '%#ModeVisu#^o %#ModeSel# выб %#ModeSelToBlock#%#ModeBlock# БЛОК '
+		elseif g:language ==# 'komi'
+			let strmode = '%#ModeVisu#^o %#ModeSel# бöр %#ModeSelToBlock#%#ModeBlock# БЛОК '
 		else
 			let strmode = '%#ModeVisu#^o %#ModeSel# sel %#ModeSelToBlock#%#ModeBlock# BLOCK '
 		endif
@@ -581,6 +633,8 @@ function! SetModeToShow()
 		if g:compatible =~# '^helix'
 			if g:language ==# 'russian'
 				let strmode = '%#ModeIns# ВСТ '
+			elseif g:language ==# 'komi'
+				let strmode = '%#ModeIns# ПЫР '
 			else
 				let strmode = '%#ModeIns# INS '
 			endif
@@ -590,12 +644,16 @@ function! SetModeToShow()
 	elseif mode ==# 'ic'
 		if g:language ==# 'russian'
 			let strmode = '%#ModeCom#дополн %#ModeIns# ВСТ '
+		elseif g:language ==# 'komi'
+			let strmode = '%#ModeCom#содтӧд %#ModeIns# ПЫР '
 		else
 			let strmode = '%#ModeCom#compl %#ModeIns# INS '
 		endif
 	elseif mode ==# 'ix'
 		if g:language ==# 'russian'
 			let strmode = '%#ModeCom#^x дополн%#ModeIns#ВСТ '
+		elseif g:language ==# 'komi'
+			let strmode = '%#ModeCom#^x содтöд%#ModeIns#ПЫР '
 		else
 			let strmode = '%#ModeCom#^x compl%#ModeIns#INS '
 		endif
@@ -604,6 +662,8 @@ function! SetModeToShow()
 	elseif mode ==# 'Rc'
 		if g:language ==# 'russian'
 			let strmode = 'дополн ЗАМЕНА '
+		elseif g:language ==# 'komi'
+			let strmode = 'содтöд ВЕЖÖМ '
 		else
 			let strmode = 'compl REPL '
 		endif
@@ -612,6 +672,8 @@ function! SetModeToShow()
 	elseif mode ==# 'Rv'
 		if g:language ==# 'russian'
 			let strmode = '%#ModeIns#визуал%*%#ModeRepl#ЗАМЕНА '
+		elseif g:language ==# 'komi'
+			let strmode = '%#ModeIns#синмӧн%*%#ModeRepl#ВЕЖÖМ '
 		else
 			let strmode = '%#ModeIns#visu%*%#ModeRepl#REPL '
 		endif
@@ -623,12 +685,16 @@ function! SetModeToShow()
 		if s:specmode == 'b'
 			if g:language ==# 'russian'
 				let strmode = 'КОМ_БЛОК '
+			elseif g:language ==# 'komi'
+				let strmode = 'КОМ_БЛОК '
 			else
 				let strmode = 'COM_BLOCK '
 			endif
 		else
 			if g:compatible =~# '^helix'
 				if g:language ==# 'russian'
+					let strmode = '%#ModeCom# КОМ '
+				elseif g:language ==# 'komi'
 					let strmode = '%#ModeCom# КОМ '
 				else
 					let strmode = '%#ModeCom# COM '
@@ -640,11 +706,15 @@ function! SetModeToShow()
 	elseif mode ==# 'cv'
 		if g:language ==# 'russian'
 			let strmode = '%#ModeCom# EX '
+		elseif g:language ==# 'komi'
+			let strmode = '%#ModeCom# EX '
 		else
 			let strmode = '%#ModeCom# EX '
 		endif
 	elseif mode ==# 'r'
 		if g:language ==# 'russian'
+			let strmode = 'НАЖ_ВОЗВР '
+		elseif g:language ==# 'komi'
 			let strmode = 'НАЖ_ВОЗВР '
 		else
 			let strmode = 'HIT_RET '
@@ -652,24 +722,32 @@ function! SetModeToShow()
 	elseif mode ==# 'rm'
 		if g:language ==# 'russian'
 			let strmode = 'ДАЛЕЕ '
+		elseif g:language ==# 'komi'
+			let strmode = 'ВОДЗÖ '
 		else
 			let strmode = 'MORE '
 		endif
 	elseif mode ==# 'r?'
 		if g:language ==# 'russian'
 			let strmode = 'ПОДТВЕРД '
+		elseif g:language ==# 'komi'
+			let strmode = 'ЭСКӦДНЫ '
 		else
 			let strmode = 'CONFIRM '
 		endif
 	elseif mode ==# '!'
 		if g:language ==# 'russian'
 			let strmode = 'ОБОЛОЧ '
+		elseif g:language ==# 'komi'
+			let strmode = 'КЫШ '
 		else
 			let strmode = 'SHELL '
 		endif
 	elseif mode ==# 't'
 		if g:compatible =~# '^helix'
 			if g:language ==# 'russian'
+				let strmode = '%#ModeTerm# ТЕР '
+			elseif g:language ==# 'komi'
 				let strmode = '%#ModeTerm# ТЕР '
 			else
 				let strmode = '%#ModeTerm# TER '
@@ -681,6 +759,8 @@ function! SetModeToShow()
 		echohl ErrorMsg
 		if g:language ==# 'russian'
 			echomsg "блядь: Неправильный режим: ".mode
+		elseif g:language ==# 'komi'
+			echomsg "ебать: Öшибка режим: ".mode
 		else
 			echomsg "error: Wrong mode: ".mode
 		endif
@@ -958,6 +1038,8 @@ endif
 if !reloading_config
 	if g:language ==# "russian"
 		let g:specloading=" ПОСЛЕ "
+	elseif g:language ==# "komi"
+		let g:specloading=" БÖРЫН "
 	else
 		let g:specloading=" AFTER "
 	endif

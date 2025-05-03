@@ -105,6 +105,8 @@ function! OpenWithXdg(filename)
 		echohl Question
 		if g:language ==# 'russian'
 			echon 'Открыть через xdg-open (y/N): '
+		elseif g:language ==# 'komi'
+			echon 'Восьтыны "xdg-open" программаӧн (y/N): '
 		else
 			echon 'Open with xdg-open (y/N): '
 		endif
@@ -112,7 +114,9 @@ function! OpenWithXdg(filename)
 		let choice = nr2char(getchar())
 	else
 		if g:language ==# 'russian'
-			let choice = quickui#confirm#open('Открыть через xdg-open?', "&Да\n&Отмена", 1, 'Confirm')
+			let choice = quickui#confirm#open('Открыть через xdg-open?', "&Да\n&Отмена", 1, 'Подтверждение')
+		elseif g:language ==# 'komi'
+			let choice = quickui#confirm#open('Восьтыны "xdg-open" программаӧн?', "&Да\n&Киритӧм", 1, 'Эскӧдны')
 		else
 			let choice = quickui#confirm#open('Open with xdg-open?', "&OK\n&Cancel", 1, 'Confirm')
 		endif
