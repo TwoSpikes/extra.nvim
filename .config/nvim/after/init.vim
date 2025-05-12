@@ -6,6 +6,8 @@ function! InitPlug()
 	endif
 endfunction
 
+execute "source" g:CONFIG_PATH."/after/languages.vim"
+
 function! OnStart()
 	set nolazyredraw
 	call InitPlug()

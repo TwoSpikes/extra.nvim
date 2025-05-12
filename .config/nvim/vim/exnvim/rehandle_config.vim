@@ -5,6 +5,7 @@ execute "Showtab"
 execute "source" stdpath('config')."/vim/compatible/init.vim"
 call RedefineProcessGBut()
 execute 'colorscheme' g:selected_colorscheme
+call ChangeLanguage()
 if has("nvim")
 	if PluginInstalled('alpha')
 		execute "lua package.loaded[\"packages.alpha.setup\"] = nil"
@@ -17,9 +18,6 @@ if has("nvim")
 	if PluginInstalled('endscroll')
 		execute "lua package.loaded[\"packages.endscroll.setup\"] = nil"
 		execute "lua require(\"packages.endscroll.setup\")"
-	endif
-	if PluginExists('vim-quickui')
-		call ChangeLanguageAll()
 	endif
 	if PluginInstalled('sneak')
 		execute "source" stdpath('config')."/lua/packages/sneak/keymaps.vim"

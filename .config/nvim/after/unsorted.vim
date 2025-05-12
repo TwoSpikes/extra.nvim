@@ -747,7 +747,7 @@ function! Killbuffer()
 			echon "нет"
 			echohl ErrorMsg
 			echon " или оставь бланк пустым"
-		if g:language ==# 'komi'
+		elseif g:language ==# 'komi'
 			echo " "
 			echo "Ответьте пожалуйста "
 			echohl Title

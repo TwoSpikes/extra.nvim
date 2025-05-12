@@ -10,6 +10,16 @@ if vim.g.language == 'russian' then
 	open_ranger_label = 'Открыть ranger'
 	update_plugins_label = 'Обновить плагины с помощью vim-plug'
 	quit_neovim_label = 'Выйти из NeoVim'
+elseif vim.g.language == 'komi' then
+	new_file_label = 'Выль файл'
+	find_file_label = 'Корсьны файл'
+	load_last_session_label = 'Восьтыны воддза сессия'
+	open_terminal_label = 'Восьса терминал'
+	recently_opened_files_label = 'Водзті восьтӧм файлӧвӧй тэчасъяс'
+	open_nerdtree_label = 'Восьтыны Neo-tree.nvim'
+	open_ranger_label = 'Восьтыны ranger'
+	update_plugins_label = 'Выльмӧдны плагинъяс vim-plug отсӧгӧн'
+	quit_neovim_label = 'Петны NeoVim\'ысь'
 else
 	new_file_label = 'New file'
 	find_file_label = 'Find file'

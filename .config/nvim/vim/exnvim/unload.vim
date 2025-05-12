@@ -25,10 +25,16 @@ if PluginExists('ani-cli.nvim')
 	endif
 endif
 if has('nvim')
-	delfunction ChangeLanguage_system_english
-	delfunction ChangeLanguage_system_russian
-	delfunction ChangeLanguage_system
-	delfunction ChangeLanguage
+	delfunction ChangeLanguageQuickuiMenu_system_english
+	delfunction ChangeLanguageQuickuiMenu_system_russian
+	delfunction ChangeLanguageQuickuiMenu_system_komi
+	delfunction ChangeLanguageQuickuiMenu_system
+	delfunction ChangeLanguageQuickuiMenu_extra_english
+	delfunction ChangeLanguageQuickuiMenu_extra_russian
+	delfunction ChangeLanguageQuickuiMenu_extra_komi
+	delfunction ChangeLanguageQuickuiMenu_extra
+	delfunction ChangeLanguageQuickuiMenu
+	delfunction ChangeLanguageQuickuiMenuAll
 	unmap <leader><leader>
 endif
 if PluginExists('coc.nvim') && !g:use_nvim_cmp
@@ -190,6 +196,7 @@ delfunction SaveAs
 delfunction SaveAsAndRename
 delfunction SaveAsBase
 delcommand Killbuffer
+delfunction SelectFallbackLanguage
 delfunction PrePad
 delfunction PreserveAndDo
 if PluginExists('vim-quickui')
