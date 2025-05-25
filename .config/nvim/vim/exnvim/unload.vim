@@ -35,6 +35,11 @@ if has('nvim')
 	delfunction ChangeLanguageQuickuiMenu_extra
 	delfunction ChangeLanguageQuickuiMenu
 	delfunction ChangeLanguageQuickuiMenuAll
+	delfunction ChangeLanguageQuickuiMenuCallProperFunction
+	delfunction ChangeLanguageQuickuiMenuCommon
+	delfunction ChangeLanguageQuickuiMenuCommon_english
+	delfunction ChangeLanguageQuickuiMenuCommon_russian
+	delfunction ChangeLanguage
 	unmap <leader><leader>
 endif
 if PluginExists('coc.nvim') && !g:use_nvim_cmp
@@ -790,6 +795,7 @@ function! Remove_excess_mappings()
 endfunction
 call timer_start(100, {->execute('execute "bufdo! call Remove_excess_mappings()"|delfunction Remove_excess_mappings')})
 
+unlet g:exnvim_mapleader
 unlet mapleader
 
 hi clear

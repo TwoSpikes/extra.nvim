@@ -2,6 +2,14 @@ if !has('nvim') || !PluginExists('vim-quickui')
 	finish
 endif
 
+function! ChangeLanguageQuickuiMenuCallProperFunction(function_name_base)
+	let language = SelectFallbackLanguage({
+		\ lang -> exists('*'.a:function_name_base.lang)
+		\ })
+	let function_name = a:function_name_base.language
+	call call(function_name, [])
+endfunction
+
 function! ChangeLanguageQuickuiMenu(namespace_name='system', language=g:language)
 	if !exists('*RebindMenus_'.a:namespace_name)
 		echohl ErrorMsg
@@ -17,15 +25,58 @@ function! ChangeLanguageQuickuiMenu(namespace_name='system', language=g:language
 	endif
 
 	let function_name_base .= '_'
-
-	let language = SelectFallbackLanguage({
-		\ lang -> exists('*'.function_name_base.lang)
-		\ })
-	echomsg "lang is: ".language
-	let function_name = function_name_base.language
+	call ChangeLanguageQuickuiMenuCallProperFunction(function_name_base)
 	unlet function_name_base
 
 	call call(function_name, [])
+endfunction
+
+function! ChangeLanguageQuickuiMenuCommon()
+	call ChangeLanguageQuickuiMenuCallProperFunction('ChangeLanguageQuickuiMenuCommon_')
+endfunction
+
+function! ChangeLanguageQuickuiMenuCommon_english()
+	if g:exnvim_mapleader ==# ' '
+		let s:leader_label = 'SPC '
+	elseif g:exnvim_mapleader ==# "\b"
+		let s:leader_label = 'BS '
+	elseif g:exnvim_mapleader ==# "\e"
+		let s:leader_label = 'ESC '
+	elseif g:exnvim_mapleader ==# "\f"
+		let s:leader_label = 'FF '
+	elseif g:exnvim_mapleader ==# "\n"
+		let s:leader_label = 'NL '
+	elseif g:exnvim_mapleader ==# "\r"
+		let s:leader_label = 'CR '
+	elseif g:exnvim_mapleader ==# "\t"
+		let s:leader_label = 'TAB '
+	elseif g:exnvim_mapleader ==# "\013"
+		let s:leader_label = 'VT '
+	else
+		let s:leader_label = g:exnvim_mapleader
+	endif
+endfunction
+
+function! ChangeLanguageQuickuiMenuCommon_russian()
+	if g:exnvim_mapleader ==# ' '
+		let s:leader_label = 'ПРБ '
+	elseif g:exnvim_mapleader ==# "\b"
+		let s:leader_label = 'БЭК '
+	elseif g:exnvim_mapleader ==# "\e"
+		let s:leader_label = 'ВЫХ '
+	elseif g:exnvim_mapleader ==# "\f"
+		let s:leader_label = 'ПФ '
+	elseif g:exnvim_mapleader ==# "\n"
+		let s:leader_label = 'НС '
+	elseif g:exnvim_mapleader ==# "\r"
+		let s:leader_label = 'ВК '
+	elseif g:exnvim_mapleader ==# "\t"
+		let s:leader_label = 'ТАБ '
+	elseif g:exnvim_mapleader ==# "\013"
+		let s:leader_label = 'ВТ '
+	else
+		let s:leader_label = g:exnvim_mapleader
+	endif
 endfunction
 
 function! ChangeLanguageQuickuiMenu_system()
@@ -201,7 +252,7 @@ function! ChangeLanguageQuickuiMenu_system_russian()
 	let s:select_buffer_label = '&s:Выбрать буффер'
 	let s:search_word_using_spectre_label = '&w:Искать слово в Spectre'
 	let s:open_file_in_tab_label = '&t:Открыть файл в нов.вкл.'
-	let s:open_file_in_buffer_label = '&b:Открыть файл а буффере'
+	let s:open_file_in_buffer_label = '&b:Открыть файл в буффере'
 	let s:toggle_file_tree_label = '&f:Переключ.дерево файлов'
 	let s:telescope_fuzzy_find_label = '&z:Поиск Telescope'
 	let s:open_file_using_ranger_label = '&r:Открыть файл в ranger'
@@ -217,7 +268,7 @@ function! ChangeLanguageQuickuiMenu_system_russian()
 	let s:open_in_current_file_dir_label = 'Откр.в дир&-и текущ.файла'
 	let s:cd_into_current_file_dir_label = 'c&d-шнуться в дир-ю тек. файла'
 	let s:open_far_mc_label = 'Открыть Far/M&c'
-	let s:open_lazygit_label = '&g:Открыть lazygit'
+	let s:open_lazygit_label = 'Открыть lazy&git'
 	let s:open_start_menu_label = '&a:Открыть главное меню'
 
 	let s:text_label = '&t:Текст'
@@ -325,28 +376,28 @@ function! ChangeLanguageQuickuiMenu_system_komi()
 	let s:exit_wo_confirm_label = '&m:Петны ставӧн'
 
 	let s:window_label = '&w:Öшинь'
-	let s:kill_buffer_label = '&u:Убить буффер'
-	let s:select_buffer_label = '&s:Выбрать буффер'
-	let s:search_word_using_spectre_label = '&w:Искать слово в Spectre'
-	let s:open_file_in_tab_label = '&t:Открыть файл в нов.вкл.'
-	let s:open_file_in_buffer_label = '&b:Открыть файл а буффере'
-	let s:toggle_file_tree_label = '&f:Переключ.дерево файлов'
-	let s:telescope_fuzzy_find_label = '&z:Поиск Telescope'
-	let s:open_file_using_ranger_label = '&r:Открыть файл в ranger'
-	let s:recently_opened_files_label = '&y:Недавно открытые файлы'
-	let s:make_window_only_label = '&m:Закрыть остальные окна'
-	let s:previous_window_label = '&p:Предыдущее окно'
-	let s:next_window_label = '&n:Следующее окно'
-	let s:horizontally_split_label = '&i:Горизонтальный сплит'
-	let s:vertically_split_label = '&v:Вертикальный сплит'
-	let s:open_terminal_label = '&o:Открыть терминал'
-	let s:open_terminal_in_current_file_dir_label = 'Терминал в директ&.текущ.файла'
-	let s:open_terminal_program_label = '&e:Откр.прог.в терминале'
-	let s:open_in_current_file_dir_label = 'Откр.в дир&-и текущ.файла'
-	let s:cd_into_current_file_dir_label = 'c&d-шнуться в дир-ю тек. файла'
-	let s:open_far_mc_label = 'Открыть Far/M&c'
-	let s:open_lazygit_label = '&g:Открыть lazygit'
-	let s:open_start_menu_label = '&a:Открыть главное меню'
+	let s:kill_buffer_label = '&u:Кулöм буфер'
+	let s:select_buffer_label = '&s:Бöрйы буфер'
+	let s:search_word_using_spectre_label = '&w:Корсьны кыв Spectre'
+	let s:open_file_in_tab_label = '&t:Восьтыны файл выль вкл.'
+	let s:open_file_in_buffer_label = '&b:Восьтыны буферын файл'
+	let s:toggle_file_tree_label = '&f:Переключатель файл пу'
+	let s:telescope_fuzzy_find_label = '&z:Корсьны Telescope''ын'
+	let s:open_file_using_ranger_label = '&r:Восьтыны файл ranger''ын'
+	let s:recently_opened_files_label = '&y:Неважӧн восьтӧм файлӧвӧй'
+	let s:make_window_only_label = '&m:Мукӧд ӧшиньяс ӧшӧдны'
+	let s:previous_window_label = '&p:Воддза ӧшинь'
+	let s:next_window_label = '&n:Мӧд ӧшинь'
+	let s:horizontally_split_label = '&i:Горизонтальнӧй юкӧм'
+	let s:vertically_split_label = '&v:Вертикальнӧй торъялӧм'
+	let s:open_terminal_label = '&o:Восьса терминал'
+	let s:open_terminal_in_current_file_dir_label = 'Терминал ӧнія файл катал&.'
+	let s:open_terminal_program_label = '&e:Восьтыны прогр.терминалын'
+	let s:open_in_current_file_dir_label = 'Восьтыны ӧнія файл кат&-ын'
+	let s:cd_into_current_file_dir_label = 'c&d каталогын ӧнія файл'
+	let s:open_far_mc_label = 'Восьса Far/M&c'
+	let s:open_lazygit_label = 'Восьса lazy&git'
+	let s:open_start_menu_label = '&a:Восьтыны шӧр меню'
 
 	let s:text_label = '&t:Текст'
 	let s:copy_line_label = '&y:Копировать строку'
@@ -478,31 +529,31 @@ function! RebindMenus_system()
 				\ ])
 	if exists(':SaveAs')
 		call quickui#menu#install(s:file_label, [
-					\ [(g:quickui_icons?"󰳻 ":"").s:save_as_label."\tLEAD Ctrl-s", 'call SaveAs()', 'Save current file as ...' ],
+					\ [(g:quickui_icons?"󰳻 ":"").s:save_as_label."\t".s:leader_label.'Ctrl-s', 'call SaveAs()', 'Save current file as ...' ],
 					\ ])
 	endif
 	if exists(':SaveAsAndRename')
 		call quickui#menu#install(s:file_label, [
-					\ [(g:quickui_icons?"󰳻 ":"").s:save_as_and_edit_label."\tLEAD Ctrl-r", 'call SaveAsAndRename()', 'Save current file as ... and edit it' ],
+					\ [(g:quickui_icons?"󰳻 ":"").s:save_as_and_edit_label."\t".s:leader_label.'Ctrl-r', 'call SaveAsAndRename()', 'Save current file as ... and edit it' ],
 					\ ])
 	endif
 	call quickui#menu#install(s:file_label, [
 				\ ["--", ''],
-				\ [(g:quickui_icons?"󰚰 ":"").s:update_plugins_label."\tLEAD up", 'PlugUpdate', 'Update plugins using "vim-plug"'],
-				\ [(g:quickui_icons?"󰚰 ":"").s:update_coc_label."\tLEAD uc", 'CocUpdate', 'Update coc.nvim installed language servers'],
-				\ [(g:quickui_icons?"󰚰 ":"").s:update_treesitter_label."\tLEAD ut", 'TSUpdate', 'Update installed TreeSitter parsers'],
+				\ [(g:quickui_icons?"󰚰 ":"").s:update_plugins_label."\t".s:leader_label.'up', 'PlugUpdate', 'Update plugins using "vim-plug"'],
+				\ [(g:quickui_icons?"󰚰 ":"").s:update_coc_label."\t".s:leader_label.'uc', 'CocUpdate', 'Update coc.nvim installed language servers'],
+				\ [(g:quickui_icons?"󰚰 ":"").s:update_treesitter_label."\t".s:leader_label.'ut', 'TSUpdate', 'Update installed TreeSitter parsers'],
 				\ ])
 	if PluginInstalled('activate')
 		call quickui#menu#install(s:file_label, [
-					\ [(g:quickui_icons?"󰇚 ":"").s:download_plugins_label."\tLEAD xp", 'lua require("activate").list_plugins()', 'List plugins for download'],
+					\ [(g:quickui_icons?"󰇚 ":"").s:download_plugins_label."\t".s:leader_label.'xp', 'lua require("activate").list_plugins()', 'List plugins for download'],
 					\ ])
 	endif
 	call quickui#menu#install(s:file_label, [
 				\ ["--", ''],
 				\ [(g:quickui_icons?" ":"").s:redraw_screen_label."\tCtrl-l", 'mode', 'Clear and redraw the screen'],
-				\ [(g:quickui_icons?" ":"").s:hide_highlightings_label."\tLEAD d", 'nohlsearch', 'Hide search highlightings'],
+				\ [(g:quickui_icons?" ":"").s:hide_highlightings_label."\t".s:leader_label.'d', 'nohlsearch', 'Hide search highlightings'],
 				\ [(g:quickui_icons?" ":"").s:esc_label."\tesc", s:esc_command, 'Stop searching'],
-				\ [(g:quickui_icons?"󰊓 ":"").s:toggle_fullscreen_label."\tLEAD Ctrl-f", 'ToggleFullscreen', 'Toggle fullscreen mode'],
+				\ [(g:quickui_icons?"󰊓 ":"").s:toggle_fullscreen_label."\t".s:leader_label.'Ctrl-f', 'ToggleFullscreen', 'Toggle fullscreen mode'],
 				\ ["--", ''],
 				\ [(g:quickui_icons?"󰅗 ":"").s:exit_label."\tCtrl-x Ctrl-c", 'confirm qall', 'Close Vim/NeoVim softly'],
 				\ [(g:quickui_icons?"󰅗 ":"").s:exit_wo_confirm_label."\tCtrl-x Ctrl-q", 'qall!', 'Close Vim/NeoVim without saving'],
@@ -510,11 +561,11 @@ function! RebindMenus_system()
 
 	call quickui#menu#install(s:window_label, [
 				\ [(g:quickui_icons?"󱂥 ":"").s:kill_buffer_label."\tCtrl-x k", 'Killbuffer', 'Completely removes the current buffer'],
-				\ [(g:quickui_icons?" ":"").s:select_buffer_label."\tLEAD b", 'call quickui#tools#list_buffer("e")', 'Select buffer to edit in current buffer'],
+				\ [(g:quickui_icons?" ":"").s:select_buffer_label."\t".s:leader_label.'b', 'call quickui#tools#list_buffer("e")', 'Select buffer to edit in current buffer'],
 				\ ])
 	if executable('rg')
 		call quickui#menu#install(s:window_label, [
-					\ [(g:quickui_icons?"󱎸 ":"").s:search_word_using_spectre_label."\tLEAD sw", 'exec "lua require(\"spectre\").open_visual({select_word = true})"', 'Select buffer to edit in current buffer'],
+					\ [(g:quickui_icons?"󱎸 ":"").s:search_word_using_spectre_label."\t".s:leader_label.'sw', 'exec "lua require(\"spectre\").open_visual({select_word = true})"', 'Select buffer to edit in current buffer'],
 					\ ])
 	endif
 	call quickui#menu#install(s:window_label, [
@@ -539,16 +590,16 @@ function! RebindMenus_system()
 	endif
 	if has('nvim') && PluginInstalled('telescope')
 		call quickui#menu#install(s:window_label, [
-					\ [(g:quickui_icons?"󰥨 ":"").s:telescope_fuzzy_find_label."\t".(g:compatible=~#"^helix"?"LEAD f":"LEAD ff"), 'call FuzzyFind()', 'Opens Telescope.nvim find file'],
+					\ [(g:quickui_icons?"󰥨 ":"").s:telescope_fuzzy_find_label."\t".s:leader_label.(g:compatible=~#'^helix'?'f':'f'), 'call FuzzyFind()', 'Opens Telescope.nvim find file'],
 					\ ])
 	endif
 	if executable('ranger')
 		call quickui#menu#install(s:window_label, [
-					\ [(g:quickui_icons?" ":"").s:open_file_using_ranger_label."\t".(g:compatible=~#"^helix"?"LEAD xr":"LEAD r"), 'call OpenRangerCheck()', 'Opens ranger to select file to open'],
+					\ [(g:quickui_icons?" ":"").s:open_file_using_ranger_label."\t".s:leader_label.(g:compatible=~#'^helix'?'xr':'r'), 'call OpenRangerCheck()', 'Opens ranger to select file to open'],
 					\ ])
 	endif
 	call quickui#menu#install(s:window_label, [
-				\ [(g:quickui_icons?"󰚰 ":"").s:recently_opened_files_label."\tLEAD fr", 'lua require("telescope").extensions.recent_files.pick()', 'Show menu to select file from recently opened'],
+				\ [(g:quickui_icons?"󰚰 ":"").s:recently_opened_files_label."\t".s:leader_label.'fr', 'lua require("telescope").extensions.recent_files.pick()', 'Show menu to select file from recently opened'],
 				\ ["--", ''],
 				\ [(g:quickui_icons?" ":"").s:make_window_only_label."\tCtrl-x 1", 'only', 'Hide all but current window'],
 				\ [(g:quickui_icons?" ":"").s:previous_window_label."\tCtrl-x o", 'exec "normal! \<c-w>w"', 'Go to previous window'],
@@ -556,11 +607,11 @@ function! RebindMenus_system()
 				\ [(g:quickui_icons?" ":"").s:horizontally_split_label."\tCtrl-x 2", 'split', 'Horizontally split current window'],
 				\ [(g:quickui_icons?" ":"").s:vertically_split_label."\tCtrl-x 3", 'vsplit', 'Vertically split current window'],
 				\ ["--", ''],
-				\ [(g:quickui_icons?" ":"").s:open_terminal_label."\tLEAD .", 'call SelectPosition("", g:termpos)', 'Opens a terminal'],
-				\ [(g:quickui_icons?" ":"").s:open_terminal_in_current_file_dir_label."\tLEAD %", 'call SelectPosition("", g:termpos, fnamemodify(expand("%:p"), ":h"))', 'Opens a terminal program in current file''s directory'],
-				\ [(g:quickui_icons?" ":"").s:open_terminal_program_label."\tLEAD x.", 'call OpenTermProgram()', 'Opens a terminal program'],
-				\ [(g:quickui_icons?" ":"").s:open_in_current_file_dir_label."\tLEAD x%", 'call OpenTermProgram(fnamemodify(expand("%:p"), ":h"))', 'Opens a terminal program in current file''s directory'],
-				\ [(g:quickui_icons?"󱧮 ":"").s:cd_into_current_file_dir_label."\tLEAD RT", 'call chdir(fnamemodify(expand("%:p"), ":h"))|pwd', 'Change directory to current file''s directory'],
+				\ [(g:quickui_icons?" ":"").s:open_terminal_label."\t".s:leader_label.'.', 'call SelectPosition("", g:termpos)', 'Opens a terminal'],
+				\ [(g:quickui_icons?" ":"").s:open_terminal_in_current_file_dir_label."\t".s:leader_label.'%', 'call SelectPosition("", g:termpos, fnamemodify(expand("%:p"), ":h"))', 'Opens a terminal program in current file''s directory'],
+				\ [(g:quickui_icons?" ":"").s:open_terminal_program_label."\t".s:leader_label.'x.', 'call OpenTermProgram()', 'Opens a terminal program'],
+				\ [(g:quickui_icons?" ":"").s:open_in_current_file_dir_label."\t".s:leader_label.'x%', 'call OpenTermProgram(fnamemodify(expand("%:p"), ":h"))', 'Opens a terminal program in current file''s directory'],
+				\ [(g:quickui_icons?"󱧮 ":"").s:cd_into_current_file_dir_label."\t".s:leader_label.'<R>', 'call chdir(fnamemodify(expand("%:p"), ":h"))|pwd', 'Change directory to current file''s directory'],
 				\ ])
 	if v:false
 	\|| executable('mc')
@@ -574,17 +625,17 @@ function! RebindMenus_system()
 	endif
 	if executable('mc') || executable('far') || executable('far2l')
 		call quickui#menu#install(s:window_label, [
-				\ [(g:quickui_icons?" ":"").s:open_far_mc_label."\tLEAD m", 'call SelectPosition(g:far_or_mc, g:termpos)', 'Opens Far or Midnight commander'],
+				\ [(g:quickui_icons?" ":"").s:open_far_mc_label."\t".s:leader_label.'m', 'call SelectPosition(g:far_or_mc, g:termpos)', 'Opens Far or Midnight commander'],
 				\ ])
 	endif
 	if executable('lazygit')
 		call quickui#menu#install(s:window_label, [
-				\ [(g:quickui_icons?" ":"").s:open_lazygit_label."\tLEAD xz", 'call SelectPosition("lazygit", g:termpos)', 'Opens Lazygit'],
+				\ [(g:quickui_icons?" ":"").s:open_lazygit_label."\t".s:leader_label.'xz', 'call SelectPosition("lazygit", g:termpos)', 'Opens Lazygit'],
 				\ ])
 	endif
 	if PluginInstalled('alpha')
 		call quickui#menu#install(s:window_label, [
-				\ [(g:quickui_icons?"󰍜 ":"").s:open_start_menu_label."\tLEAD A", 'call RunAlphaIfNotAlphaRunning()', 'Opens alpha-nvim menu'],
+				\ [(g:quickui_icons?"󰍜 ":"").s:open_start_menu_label."\t".s:leader_label.'A', 'call RunAlphaIfNotAlphaRunning()', 'Opens alpha-nvim menu'],
 				\ ])
 	endif
 
@@ -603,15 +654,15 @@ function! RebindMenus_system()
 				\ [(g:quickui_icons?" ":"").s:forward_find_word_label."\t".(g:compatible=~#"^helix_hard"?"ebg*":"g*"), 'normal! g*', 'Forwardly find word under cursor'],
 				\ [(g:quickui_icons?" ":"").s:backward_find_word_label."\t".(g:compatible=~#"^helix_hard"?"ebg#":"g#"), 'normal! g#', 'Backwardly find word under cursor'],
 				\ ["--", ''],
-				\ [(g:quickui_icons?"󰅺 ":"").s:comment_out_label."\tLEAD c", 'call '.(mode() =~# '^n'?'N':'X').'_CommentOutDefault()', 'Comment out line under cursor'],
-				\ [(g:quickui_icons?"󱗡 ":"").s:uncomment_out_label."\tLEAD C", 'call '.(mode() =~# '^n'?'N':'X').'_UncommentOutDefault()', 'Uncomment line under cursor'],
+				\ [(g:quickui_icons?"󰅺 ":"").s:comment_out_label."\t".s:leader_label.'c', 'call '.(mode() =~# '^n'?'N':'X').'_CommentOutDefault()', 'Comment out line under cursor'],
+				\ [(g:quickui_icons?"󱗡 ":"").s:uncomment_out_label."\t".s:leader_label.'C', 'call '.(mode() =~# '^n'?'N':'X').'_UncommentOutDefault()', 'Uncomment line under cursor'],
 				\ ["--", ''],
 				\ [(g:quickui_icons?"󰗧 ":"").s:go_to_multicursor_mode_label."\tCtrl-n", 'call vm#commands#ctrln(1)', 'Go to multicursor mode'],
 				\ [(g:quickui_icons?" ":"").s:show_hlgroup_label."", 'call SynGroup()', 'Show hlgroup name under cursor'],
 				\ [(g:quickui_icons?" ":"").s:whence_hlgroup_label, 'call WhenceGroup()', 'Show whence hlgroup under cursor came'],
 				\ [(g:quickui_icons?"󰒆 ":"").s:select_all_label."\t".(g:compatible=~#"^helix"?"%":"Ctrl-x h"), 'call SelectAll()', 'Paste copyied text after the cursor'],
 				\ [(g:quickui_icons?" ":"").s:toggle_tagbar_label."\tCtrl-t", 'TagbarToggle', 'Toggles tagbar'],
-				\ [(g:quickui_icons?" ":"").s:generate_annotation_label."\tLEAD n", 'Neogen', 'Generate Neogen annotation (:h neogen)'],
+				\ [(g:quickui_icons?" ":"").s:generate_annotation_label."\t".s:leader_label.'n', 'Neogen', 'Generate Neogen annotation (:h neogen)'],
 				\ ])
 
 	call quickui#menu#install(s:lsp_label, [
@@ -622,54 +673,54 @@ function! RebindMenus_system()
 				\ ["Go to &implementation\tgi", 'call CocActionAsync("jumpImplementation")', 'Jump to implementation'],
 				\ ["G&o to references\tgr", 'call CocActionAsync("jumpReferences")', 'Jump to references'],
 				\ ["--", '' ],
-				\ ["Code &actions selected\tLEAD a", 'call CocActionAsync("codeAction", visualmode())', 'Apply code actions for selected code'],
-				\ ["Code actions &cursor\tLEAD ac", 'call CocActionAsync("codeAction", "cursor")', 'Apply code actions for current cursor position'],
-				\ ["Code actions &buffer\tLEAD as", 'call CocActionAsync("codeAction", "", ["source"], v:true)', 'Apply code actions for current buffer'],
-				\ ["Fi&x current line\tLEAD qf", 'call CocActionAsync("doQuickfix")', 'Apply the most preferred quickfix action to fix diagnostic on the current line'],
+				\ ["Code &actions selected\t".s:leader_label.'a', 'call CocActionAsync("codeAction", visualmode())', 'Apply code actions for selected code'],
+				\ ["Code actions &cursor\t".s:leader_label.'ac', 'call CocActionAsync("codeAction", "cursor")', 'Apply code actions for current cursor position'],
+				\ ["Code actions &buffer\t".s:leader_label.'as', 'call CocActionAsync("codeAction", "", ["source"], v:true)', 'Apply code actions for current buffer'],
+				\ ["Fi&x current line\t".s:leader_label.'qf', 'call CocActionAsync("doQuickfix")', 'Apply the most preferred quickfix action to fix diagnostic on the current line'],
 				\ ["--", '' ],
-				\ ["&Refactor\tLEAD Re", 'call CocActionAsync("codeAction", "cursor", ["refactor"], v:true)', 'Codeaction refactor cursor'],
-				\ ["Refactor s&elected\tLEAD R", 'call CocActionAsync("codeAction", visualmode(), ["refactor"], v:true)', 'Codeaction refactor selected'],
+				\ ["&Refactor\t".s:leader_label.'Re', 'call CocActionAsync("codeAction", "cursor", ["refactor"], v:true)', 'Codeaction refactor cursor'],
+				\ ["Refactor s&elected\t".s:leader_label.'R', 'call CocActionAsync("codeAction", visualmode(), ["refactor"], v:true)', 'Codeaction refactor selected'],
 				\ ["--", '' ],
-				\ ["C&ode lens current line\tLEAD cl", 'call CocActionAsync("codeLensAction")', 'Run the Code Lens action on the current line'],
+				\ ["C&ode lens current line\t".s:leader_label.'cl', 'call CocActionAsync("codeLensAction")', 'Run the Code Lens action on the current line'],
 				\ ["&Show documentation\tK", 'call ShowDocumentation()', 'Show documentation in preview window'],
-				\ ["Rename s&ymbol\tLEAD rn", 'call CocActionAsync("rename")', 'Rename symbol under cursor'],
-				\ ["&Format selected\tLEAD f", 'call CocActionAsync("formatSelected", visualmode())', 'Format selected code'],
+				\ ["Rename s&ymbol\t".s:leader_label.'rn', 'call CocActionAsync("rename")', 'Rename symbol under cursor'],
+				\ ["&Format selected\t".s:leader_label.'f', 'call CocActionAsync("formatSelected", visualmode())', 'Format selected code'],
 				\ ["Fold c&urrent buffer\t:Fold", 'Fold', 'Make folds for current buffer'],
 				\ ])
 
 	if has('nvim') && PluginExists('vim-fugitive')
 		call quickui#menu#install(s:git_label, [
-				\ ["&Commit\tLEAD gc", 'Git commit --verbose', 'Commit using fugitive.vim'],
-				\ ["Commit &all\tLEAD ga", 'Git commit --verbose --all', 'Commit all using fugitive.vim'],
-				\ ["Commit a&mend\tLEAD gA", 'Git commit --verbose --amend', 'Amend commit using fugitive.vim'],
+				\ ["&Commit\t".s:leader_label.'gc', 'Git commit --verbose', 'Commit using fugitive.vim'],
+				\ ["Commit &all\t".s:leader_label.'ga', 'Git commit --verbose --all', 'Commit all using fugitive.vim'],
+				\ ["Commit a&mend\t".s:leader_label.'gA', 'Git commit --verbose --amend', 'Amend commit using fugitive.vim'],
 				\ ["--", ''],
-				\ ["P&ull\tLEAD gp", 'Git pull', 'Pull repository using fugitive.vim'],
-				\ ["&Push\tLEAD gP", 'Git push', 'Push repository using fugitive.vim'],
-				\ ["&Reset soft\tLEAD gr", 'Git reset --soft', 'Reset repository using fugitive.vim'],
-				\ ["Reset har&d\tLEAD gh", 'Git reset --hard', 'Hardly reset repository using fugitive.vim'],
-				\ ["Reset mi&xed\tLEAD gm", 'Git reset --mixed', 'Mixed reset repository using fugitive.vim'],
+				\ ["P&ull\t".s:leader_label.'gp', 'Git pull', 'Pull repository using fugitive.vim'],
+				\ ["&Push\t".s:leader_label.'gP', 'Git push', 'Push repository using fugitive.vim'],
+				\ ["&Reset soft\t".s:leader_label.'gr', 'Git reset --soft', 'Reset repository using fugitive.vim'],
+				\ ["Reset har&d\t".s:leader_label.'gh', 'Git reset --hard', 'Hardly reset repository using fugitive.vim'],
+				\ ["Reset mi&xed\t".s:leader_label.'gm', 'Git reset --mixed', 'Mixed reset repository using fugitive.vim'],
 				\ ["--", ''],
-				\ ["&Status\tLEAD gs", 'Git status', 'Show repository status using fugitive.vim'],
-				\ ["&Init\tLEAD gi", 'Git init', 'Initialize empty Git repository'],
+				\ ["&Status\t".s:leader_label.'gs', 'Git status', 'Show repository status using fugitive.vim'],
+				\ ["&Init\t".s:leader_label.'gi', 'Git init', 'Initialize empty Git repository'],
 				\ ])
 	endif
 	if has('nvim') && PluginExists('diffview.nvim')
 		call quickui#menu#install(s:git_label, [
-				\ ["&View diff\tLEAD gd", 'DiffviewOpen HEAD', 'Show diff'],
+				\ ["&View diff\t".s:leader_label.'gd', 'DiffviewOpen HEAD', 'Show diff'],
 				\ ])
 	endif
 	if has('nvim') && PluginExists('vim-fugitive')
 		call quickui#menu#install(s:git_label, [
 				\ ["--", ''],
-				\ ["Cl&one\tLEAD gC", 'GitClone', 'Clone a repository with specific URL'],
-				\ ["Clone depth=&1\tLEAD g1", 'GitClone --depth=1', 'Clone a repository with specific URL'],
-				\ ["Clone &recursively\tLEAD gR", 'GitClone --recursive', 'Clone a repository with specific URL'],
-				\ ["Clone r&ecursively depth=1\tLEAD g2", 'GitClone --depth=1 --recursive', 'Clone a repository with specific URL'],
+				\ ["Cl&one\t".s:leader_label.'gC', 'GitClone', 'Clone a repository with specific URL'],
+				\ ["Clone depth=&1\t".s:leader_label.'g1', 'GitClone --depth=1', 'Clone a repository with specific URL'],
+				\ ["Clone &recursively\t".s:leader_label.'gR', 'GitClone --recursive', 'Clone a repository with specific URL'],
+				\ ["Clone r&ecursively depth=1\t".s:leader_label.'g2', 'GitClone --depth=1 --recursive', 'Clone a repository with specific URL'],
 				\ ])
 	endif
 	if has('nvim') && PluginInstalled('telescope')
 		call quickui#menu#install(s:git_label, [
-			\ [s:show_git_modified_label."\tLEAD g*", 'Telescope git_status', 'Show git modified files'],
+			\ [s:show_git_modified_label."\t".s:leader_label.'g*', 'Telescope git_status', 'Show git modified files'],
 			\ ])
 	endif
 
@@ -692,27 +743,27 @@ function! RebindMenus_system()
 				\ ])
 
 	call quickui#menu#install(s:config_label, [
-			\ [s:open_init_vim."\tLEAD ve", 'call SelectPosition(stdpath("config")."/init.vim", g:stdpos)', 'Open '.stdpath('config').'/init.vim'],
-			\ [s:open_plugins_list."\tLEAD vi", 'call SelectPosition(g:PLUGINS_INSTALL_FILE_PATH, g:stdpos)', 'Open '.g:PLUGINS_INSTALL_FILE_PATH],
-			\ [s:open_plugins_setup."\tLEAD vs", 'call SelectPosition(g:PLUGINS_SETUP_FILE_PATH, g:stdpos)', 'Open '.g:PLUGINS_SETUP_FILE_PATH],
-			\ [s:open_lsp_settings."\tLEAD vl", 'call SelectPosition(g:LSP_PLUGINS_SETUP_FILE_PATH, g:stdpos)', 'Open '.g:LSP_PLUGINS_SETUP_FILE_PATH.' (deprecated due to coc.nvim)'],
-			\ [s:open_exnvim_config."\tLEAD vj", 'call SelectPosition(g:EXNVIM_CONFIG_PATH, g:stdpos)', 'Open '.g:EXNVIM_CONFIG_PATH],
-			\ [s:open_colorschemes_dir."\tLEAD vc", 'call SelectPosition($VIMRUNTIME."/colors", g:dirpos)', 'Open colorschemes directory'],
+			\ [s:open_init_vim."\t".s:leader_label.'ve', 'call SelectPosition(stdpath("config")."/init.vim", g:stdpos)', 'Open '.stdpath('config').'/init.vim'],
+			\ [s:open_plugins_list."\t".s:leader_label.'vi', 'call SelectPosition(g:PLUGINS_INSTALL_FILE_PATH, g:stdpos)', 'Open '.g:PLUGINS_INSTALL_FILE_PATH],
+			\ [s:open_plugins_setup."\t".s:leader_label.'vs', 'call SelectPosition(g:PLUGINS_SETUP_FILE_PATH, g:stdpos)', 'Open '.g:PLUGINS_SETUP_FILE_PATH],
+			\ [s:open_lsp_settings."\t".s:leader_label.'vl', 'call SelectPosition(g:LSP_PLUGINS_SETUP_FILE_PATH, g:stdpos)', 'Open '.g:LSP_PLUGINS_SETUP_FILE_PATH.' (deprecated due to coc.nvim)'],
+			\ [s:open_exnvim_config."\t".s:leader_label.'vj', 'call SelectPosition(g:EXNVIM_CONFIG_PATH, g:stdpos)', 'Open '.g:EXNVIM_CONFIG_PATH],
+			\ [s:open_colorschemes_dir."\t".s:leader_label.'vc', 'call SelectPosition($VIMRUNTIME."/colors", g:dirpos)', 'Open colorschemes directory'],
 			\ ["--", ''],
-			\ [s:reload_init_vim."\tLEAD se", 'execute "source" stdpath("config")."/vim/exnvim/reload.vim"', 'Reload Vim/NeoVim config'],
-			\ [s:reload_plugins_list."\tLEAD si", 'execute "source ".g:PLUGINS_INSTALL_FILE_PATH', 'Install plugins in '.g:PLUGINS_INSTALL_FILE_PATH],
-			\ [s:reload_plugins_setup."\tLEAD ss", 'execute "source ".g:PLUGINS_SETUP_FILE_PATH', 'Reconfigure plugins'],
-			\ [s:reload_lsp_setup."\tLEAD sl", 'execute "source ".g:LSP_PLUGINS_SETUP_FILE_PATH', 'Reconfigure LSP plugins (deprecated due to coc.nvim)'],
+			\ [s:reload_init_vim."\t".s:leader_label.'se', 'execute "source" stdpath("config")."/vim/exnvim/reload.vim"', 'Reload Vim/NeoVim config'],
+			\ [s:reload_plugins_list."\t".s:leader_label.'si', 'execute "source ".g:PLUGINS_INSTALL_FILE_PATH', 'Install plugins in '.g:PLUGINS_INSTALL_FILE_PATH],
+			\ [s:reload_plugins_setup."\t".s:leader_label.'ss', 'execute "source ".g:PLUGINS_SETUP_FILE_PATH', 'Reconfigure plugins'],
+			\ [s:reload_lsp_setup."\t".s:leader_label.'sl', 'execute "source ".g:LSP_PLUGINS_SETUP_FILE_PATH', 'Reconfigure LSP plugins (deprecated due to coc.nvim)'],
 			\ ["--", ''],
 			\ ])
 	if executable('exnvim')
 		call quickui#menu#install(s:config_label, [
-			\ [s:generate_exnvim_config."\tLEAD G", 'GenerateExNvimConfig', 'Regenerate extra.nvim config'],
+			\ [s:generate_exnvim_config."\t".s:leader_label.'G', 'GenerateExNvimConfig', 'Regenerate extra.nvim config'],
 			\ ])
 	endif
 	if filereadable(g:EXNVIM_CONFIG_PATH)
 		call quickui#menu#install(s:config_label, [
-					\ [s:reload_exnvim_config."\tLEAD sj", 'exec "source" stdpath("config")."/vim/exnvim/reload_config.vim"', 'Reload extra.nvim config'],
+					\ [s:reload_exnvim_config."\t".s:leader_label.'sj', 'exec "source" stdpath("config")."/vim/exnvim/reload_config.vim"', 'Reload extra.nvim config'],
 			\ ])
 	endif
 	if $TERMUX_VERSION !=# ""
@@ -725,7 +776,7 @@ function! RebindMenus_system()
 
 	call quickui#menu#install(s:help_label, [
 				\ [s:vim_cheatsheet, 'help index', ''],
-				\ [s:exnvim_cheatsheet."\tLEAD ?", 'ExNvimCheatSheet', 'extra.nvim cheatsheet'],
+				\ [s:exnvim_cheatsheet."\t".s:leader_label.'?', 'ExNvimCheatSheet', 'extra.nvim cheatsheet'],
 				\ [s:tips, 'help tips', ''],
 				\ ['--',''],
 				\ [s:tutorial, 'help tutor', ''],
@@ -739,14 +790,14 @@ endfunction
 
 function! RebindMenus_extra()
 	call quickui#menu#install(s:extra_label, [
-			\ [s:toggle_pager_mode_label."\tLEAD xP", 'TogglePagerMode', 'Toggle pager mode'],
+			\ [s:toggle_pager_mode_label."\t".s:leader_label.'xP', 'TogglePagerMode', 'Toggle pager mode'],
 			\ [s:toggle_soft_wrap_label."\t:SWrap", 'SWrap', 'Toggle soft text wrapping'],
 		  \ ])
 
 	call quickui#menu#install(s:tools_label, [
-			\ [s:search_anime_label."\tLEAD xA", 'execute "Ani" g:ani_cli_options', 'Search and watch anime'],
-			\ [s:watch_anime_from_history_label."\tLEAD xa", 'execute "Ani" "-c" g:ani_cli_options', 'Continue watching anime from history'],
-			\ [s:invert_pdf_label."\tLEAD xi", 'call InvertPdf(expand("%"))', 'Invert colors in current pdf file'],
+			\ [s:search_anime_label."\t".s:leader_label.'xA', 'execute "Ani" g:ani_cli_options', 'Search and watch anime'],
+			\ [s:watch_anime_from_history_label."\t".s:leader_label.'xa', 'execute "Ani" "-c" g:ani_cli_options', 'Continue watching anime from history'],
+			\ [s:invert_pdf_label."\t".s:leader_label.'xi', 'call InvertPdf(expand("%"))', 'Invert colors in current pdf file'],
 		  \ ])
 endfunction
 
@@ -754,6 +805,7 @@ endfunction
 let g:quickui_show_tip = 1
 
 function! ChangeLanguageQuickuiMenuAll()
+	call ChangeLanguageQuickuiMenuCommon()
 	call ChangeLanguageQuickuiMenu('system')
 	call ChangeLanguageQuickuiMenu('extra')
 endfunction

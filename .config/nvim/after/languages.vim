@@ -10,6 +10,8 @@ function! SelectFallbackLanguage(check_function)
 	return 'english'
 endfunction
 
+let g:exnvim_mapleader = mapleader
+
 function! ChangeLanguage()
 	call ChangeLanguageQuickuiMenuAll()
 endfunction
