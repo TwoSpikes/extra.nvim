@@ -27,8 +27,6 @@ function! ChangeLanguageQuickuiMenu(namespace_name='system', language=g:language
 	let function_name_base .= '_'
 	call ChangeLanguageQuickuiMenuCallProperFunction(function_name_base)
 	unlet function_name_base
-
-	call call(function_name, [])
 endfunction
 
 function! ChangeLanguageQuickuiMenuCommon()
@@ -640,6 +638,7 @@ function! RebindMenus_system()
 	endif
 
 	" items containing tips, tips will display in the cmdline
+	" (or in the statusline if the patch was applied)
 	call quickui#menu#install(s:text_label, [
 				\ [(g:quickui_icons?"󰆏 ":"").s:copy_line_label."\t".(g:compatible=~#"^helix"?"xy":"yy"), 'yank', 'Copy the line where cursor is located'],
 				\ [(g:quickui_icons?"󰆴 ":"").s:delete_line_label."\t".(g:compatible=~#"^helix"?"x\"_d":"sd"), 'delete x', 'Delete the line where cursor is located'],
