@@ -798,5 +798,8 @@ call timer_start(100, {->execute('execute "bufdo! call Remove_excess_mappings()"
 unlet g:exnvim_mapleader
 unlet mapleader
 
+delfunction ExNvimSource
+delfunction InvokeCriticalError
+
 hi clear
 noremap z01 <cmd>execute 'source' stdpath('config').'/vim/exnvim/reload.vim'<cr>

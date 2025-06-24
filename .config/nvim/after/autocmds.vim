@@ -80,7 +80,7 @@ augroup visual
 		let filetype = getwinvar(a:winnum, '&filetype', 'ERROR')
 		let buftype = getwinvar(a:winnum, '&buftype', 'ERROR')
 
-		let pre_cursorcolumn = (mode() !~# "[vVirco]" && mode() !~# "\<c-v>") && !g:fullscreen && filetype !=# 'netrw' && buftype !=# 'terminal' && filetype !=# 'neo-tree' && buftype !=# 'nofile'
+		let pre_cursorcolumn = (mode() !~# "[vVirco]" && mode() !~# "\<c-v>") && !g:fullscreen && filetype !=# 'netrw' && buftype !=# 'terminal' && filetype !=# 'neo-tree' && buftype !=# 'nofile' && filetype !=# 'CriticalError'
 		let pre_cursorcolumn = pre_cursorcolumn && g:cursorcolumn
 		call setwinvar(a:winnum, '&cursorcolumn', pre_cursorcolumn)
 
@@ -89,7 +89,7 @@ augroup visual
 			let pre_cursorline = pre_cursorline && mode() !~# "[irco]"
 			let pre_cursorline = pre_cursorline && (buftype !=# 'nofile' || filetype ==# 'neo-tree') && filetype !=# 'TelescopePrompt' && filetype !=# 'spectre_panel' && filetype !=# 'vim-plug' && filetype !=# 'pkgman'
 		endif
-		let pre_cursorline = pre_cursorline && buftype !=# 'terminal' && filetype !=# 'alpha' && filetype !=# "notify"
+		let pre_cursorline = pre_cursorline && buftype !=# 'terminal' && filetype !=# 'alpha' && filetype !=# "notify" && filetype !=# 'CriticalError'
 		let pre_cursorline = pre_cursorline && g:cursorline
 		call setwinvar(a:winnum, '&cursorline', pre_cursorline)
 	endfunction

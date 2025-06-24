@@ -47,7 +47,7 @@ endfunction
 augroup ExNvim_ColorScheme_After
 	autocmd!
 	autocmd ColorScheme * 
-	\	if expand('<amatch>') !=# "exnvim_base"
+	\	if expand('<amatch>') !=# "exnvim_base" && expand('<amatch>') !=# "exnvim_base_basic"
 	\|		runtime colors/exnvim_base.vim
 	\|	endif
 	\|	if !IsHighlightGroupDefined('StatementNorm')

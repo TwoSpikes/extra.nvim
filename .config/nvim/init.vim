@@ -113,6 +113,76 @@ function! SetTermuxConfigPath()
 endfunction
 call SetTermuxConfigPath()
 
+if has('nvim')
+	let g:EDITOR_NAME="NeoVim"
+else
+	let g:EDITOR_NAME="Vim"
+endif
+
+runtime colors/exnvim_base_basic.vim
+function! InvokeCriticalError(msg)
+	let prev_filetype=&filetype
+	noswapfile enew
+	setlocal buftype=nofile
+	file Critical Error
+	if has('nvim')
+		setlocal winhighlight=Normal:CriticalError
+	else
+		setlocal wincolor=CriticalError
+	endif
+	setlocal nocursorline
+	setlocal nocursorcolumn
+	setlocal nonumber
+	setlocal norelativenumber
+	setlocal filetype=CriticalError
+	setlocal wrap
+	setlocal linebreak
+	let g:CRITICAL_ERROR_OLDMOUSE=&mouse
+	set mouse=
+	let g:CRITICAL_ERROR_OLDEVENTIGNORE=&eventignore
+	set eventignore=all
+	let mediumline=winheight(0)/2
+	let mediumline=mediumline-3
+	let i=1
+	while i<mediumline
+		call setline(i, '')
+		let i=i+1
+	endwhile
+	unlet i
+	let mediumcolumn=winwidth(0)/2
+	call setline(mediumline, repeat(' ', mediumcolumn-7).'extra.nvim error ')
+	call matchadd('Reverse', ' extra.nvim error ')
+	call setline(mediumline+1, '')
+	let len=len(a:msg)
+	let i=0
+	while i<len
+		call setline(mediumline+2+i, "\t".a:msg[i])
+		let i=i+1
+	endwhile
+	call setline(mediumline+len+2, '')
+	call setline(mediumline+len+3, repeat(' ', mediumcolumn-11).'Press RETURN to continue')
+	setlocal nomodifiable
+	setlocal nomodified
+	let id=timer_start(100, {->execute('mode')}, {'repeat': -1})
+	while v:true
+		mode
+		let char=getchar()
+		if char==#13
+			call timer_stop(id)
+			unlet id
+			break
+		endif
+	endwhile
+	bwipeout!
+	let &eventignore=g:CRITICAL_ERROR_OLDEVENTIGNORE
+	unlet g:CRITICAL_ERROR_OLDEVENTIGNORE
+	let &mouse=g:CRITICAL_ERROR_OLDMOUSE
+	unlet g:CRITICAL_ERROR_OLDMOUSE
+	if prev_filetype==#"alpha"
+		Alpha
+	endif
+endfunction
+
 function! LoadExNvimConfig(path, reload=v:false)
 	if !filereadable(a:path)
 		echohl ErrorMsg
@@ -123,9 +193,7 @@ function! LoadExNvimConfig(path, reload=v:false)
 	let l:exnvim_config_str = join(readfile(a:path, ''), '')
 	silent! execute "let g:exnvim_config = json_decode(l:exnvim_config_str)"
 	if type(g:exnvim_config) !=# v:t_dict
-		echohl ErrorMsg
-		echomsg "error: failed to parse extra.nvim config"
-		echohl Normal
+		call InvokeCriticalError(["Failed to parse extra.nvim config.", "Default config is set instead."])
 		return 1
 	endif
 
@@ -1110,6 +1178,7 @@ if filereadable(g:CONFIG_PATH.'/after/init.vim')
 		doautocmd VimEnter
 	endif
 else
+	call InvokeCriticalError(['File "after/init.vim" not found.', 'Please download extra.nvim again.'])
 	let g:exnvim_fully_loaded = v:true
 	let g:specloading = ' OK '
 	silent! doautocmd User ExNvimLoaded

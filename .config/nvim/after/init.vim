@@ -6,7 +6,15 @@ function! InitPlug()
 	endif
 endfunction
 
-execute "source" g:CONFIG_PATH."/after/languages.vim"
+function! ExNvimSource(file)
+	if filereadable(a:file)
+		execute 'source' a:file
+	else
+		call InvokeCriticalError(["Missing file of extra.nvim:",a:file,"Please download extra.nvim again."])
+	endif
+endfunction
+
+call ExNvimSource(g:CONFIG_PATH.'/after/languages.vim')
 
 function! OnStart()
 	set nolazyredraw
@@ -44,10 +52,10 @@ function! OnStart()
 endfunction
 call OnStart()
 
-execute "source" g:CONFIG_PATH."/after/useless_functions.vim"
-execute "source" g:CONFIG_PATH."/after/after_some_event.vim"
-execute "source" g:CONFIG_PATH."/after/unsorted.vim"
-execute "source" g:CONFIG_PATH."/after/autocmds.vim"
+call ExNvimSource(g:CONFIG_PATH.'/after/useless_functions.vim')
+call ExNvimSource(g:CONFIG_PATH.'/after/after_some_event.vim')
+call ExNvimSource(g:CONFIG_PATH.'/after/unsorted.vim')
+call ExNvimSource(g:CONFIG_PATH.'/after/autocmds.vim')
 
 let g:exnvim_fully_loaded = v:true
 silent! doautocmd User ExNvimLoaded
