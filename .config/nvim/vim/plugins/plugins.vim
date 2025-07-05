@@ -2,12 +2,12 @@
 if has('nvim')
 	if !filereadable(g:LOCALSHAREPATH . '/site/autoload/plug.vim')
 		!curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs
-		\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+		\ https://raw.githubusercontent.com/TwoSpikes/plugnplay.vim/master/plug.vim
 	endif
 else
 	if !filereadable(expand('~/.vim/autoload/plug.vim'))
 		!curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-		\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+		\ https://raw.githubusercontent.com/TwoSpikes/plugnplay.vim/master/plug.vim
 	endif
 endif
 
@@ -60,6 +60,8 @@ function! JKWorkaroundAlpha()
 endfunction
 call OpenOnStart()
 mode
+
+let g:plug_patch_dir = $HOME.'/.config/nvim/patch'
 
 call plug#begin()
 
