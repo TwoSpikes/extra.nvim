@@ -165,6 +165,7 @@ fn commit(
             theme_path!("blueorange", vimruntime),
             theme_path!("hecker", vimruntime),
             theme_path!("exnvim_base", vimruntime),
+            theme_path!("exnvim_base_basic", vimruntime),
             theme_path!("exnvim_base_init", vimruntime),
             "./vimruntime/colors/",
         ]
