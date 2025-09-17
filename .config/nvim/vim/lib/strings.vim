@@ -1,9 +1,11 @@
 " Copied from StackOverflow: https://stackoverflow.com/questions/4478891/is-there-a-vimscript-equivalent-for-rubys-strip-strip-leading-and-trailing-s
+" Archived: https://drive.google.com/file/d/1yiGo2uVNeuSs8MAMrrEA-cvv5mrWRVrS/view
 function! Trim(string)
 	return substitute(a:string, '^\s*\(.\{-}\)\s*$', '\1', '')
 endfunction
 
 " Copied from StackOverflow: https://vi.stackexchange.com/questions/29062/how-to-check-if-a-string-starts-with-another-string-in-vimscript
+" Archived: https://drive.google.com/file/d/1VL-5zWYLgNyJ72EfcBj_Ezl0HWRntQRG/view
 fu! StartsWith(longer, shorter) abort
   return a:longer[0:len(a:shorter)-1] ==# a:shorter
 endfunction
@@ -15,6 +17,7 @@ fu! Contains(longer, shorter) abort
 endfunction
 
 " Copied from StackOverflow: https://stackoverflow.com/questions/4964772/string-formatting-padding-in-vim
+" Archived: https://drive.google.com/file/d/1yr2agbHdd_bfutC7-a0ApISpidoc4aRR/view
 function! Pad(s, amt)
     return a:s . repeat(' ', a:amt - len(a:s))
 endfunction

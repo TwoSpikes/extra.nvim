@@ -1,4 +1,5 @@
 " Copied from StackOverflow: https://stackoverflow.com/questions/59583931/vim-how-do-i-determine-the-status-of-a-process-within-a-terminal-tab
+" Archived: https://drive.google.com/file/d/1reiI0yOtbylaHbZTaaPfyEQFi5Q5gplH/view
 function! TermRunning(buf)
 	return getbufvar(a:buf, '&buftype') !=# 'terminal' ? 0 :
 		\ has('terminal') ? term_getstatus(a:buf) =~# 'running' :

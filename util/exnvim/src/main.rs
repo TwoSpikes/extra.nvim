@@ -51,6 +51,7 @@ macro_rules! run_as_superuser_if_needed {
 }
 
 // Copyied from StackOverflow: https://stackoverflow.com/questions/26958489/how-to-copy-a-folder-recursively-in-rust
+// Archived: https://drive.google.com/file/d/1m5JVCCNYz0B4fFp9CfGbtQQHM8YQKoVk/view
 fn copy_dir_all(
     src: impl AsRef<::std::path::Path> + ::std::convert::AsRef<::std::path::Path>,
     dst: impl AsRef<::std::path::Path> + ::std::convert::AsRef<::std::path::Path>,

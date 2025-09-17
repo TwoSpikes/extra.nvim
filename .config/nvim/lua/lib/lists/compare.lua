@@ -1,6 +1,7 @@
 if EXNVIM_LIB_LISTS_COMPARE_INCLUDED == nil then EXNVIM_LIB_LISTS_COMPARE_INCLUDED = true else os.exit(0) end
 
 -- Copyied from StackOverflow: https://stackoverflow.com/questions/20325332/how-to-check-if-two-tablesobjects-have-the-same-value-in-lua
+-- Archived: https://drive.google.com/file/d/1fw5SkVEIDAy05NY8MoM9PxKVxzyhmKC8/view
 ---@param o1 any|table First object to compare
 ---@param o2 any|table Second object to compare
 ---@param ignore_mt boolean True to ignore metatables (a recursive function to tests tables inside tables)
@@ -36,6 +37,7 @@ function equals(o1, o2, ignore_mt)
 end
 
 -- Copyied from StackOverflow: https://stackoverflow.com/questions/20325332/how-to-check-if-two-tablesobjects-have-the-same-value-in-lua
+-- Archived: https://drive.google.com/file/d/1fw5SkVEIDAy05NY8MoM9PxKVxzyhmKC8/view
 local function internalProtectedEquals(o1, o2, ignore_mt, callList)
     if o1 == o2 then return true end
     local o1Type = type(o1)

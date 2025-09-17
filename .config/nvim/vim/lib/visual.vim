@@ -1,4 +1,5 @@
 " Copied from StackOverflow: https://stackoverflow.com/questions/1533565/how-to-get-visually-selected-text-in-vimscript
+" Archived: https://drive.google.com/file/d/1cITVAH6ZgMCNGU2fyQhfdjOaPjIkytkv/view
 function! GetVisualSelection()
     " Why is this not a built-in Vim script function?!
     let [line_start, column_start] = getpos("'<")[1:2]
