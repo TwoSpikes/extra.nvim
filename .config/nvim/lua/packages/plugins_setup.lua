@@ -125,7 +125,3 @@ end
 if plugin_installed('lspconfig') then
 	require('packages.lspconfig.init')
 end
-
--- ExNvimOptionInComment LUA_REQUIRE_GOTO_PREFIX %CONFIG_PATH%/lua/%FILE%.lua
--- ExNvimOptionInComment LUA_REQUIRE_GOTO_PREFIX %LOCALSHAREPATH%/plugged/*/lua/%FILE%.lua
--- ExNvimOptionInComment LUA_REQUIRE_GOTO_PREFIX %LOCALSHAREPATH%/plugged/*/lua/%FILE%/init.lua
