@@ -119,10 +119,17 @@ else
 	let g:EDITOR_NAME="Vim"
 endif
 
+if exists('$VIM_RUNTIME_PATH')
+	set rtp=$VIM_RUNTIME_PATH,$VIMRUNTIME
+endif
+
+
+
 runtime colors/exnvim_base_basic.vim
 function! InvokeCriticalError(msg)
 	let prev_filetype=&filetype
 	noswapfile enew
+	let bufnr=bufnr()
 	setlocal buftype=nofile
 	file Critical Error
 	if has('nvim')
@@ -163,9 +170,9 @@ function! InvokeCriticalError(msg)
 	call setline(mediumline+len+3, repeat(' ', mediumcolumn-11).'Press RETURN to continue')
 	setlocal nomodifiable
 	setlocal nomodified
-	let id=timer_start(100, {->execute('mode')}, {'repeat': -1})
+	mode
+	let id=timer_start(100, {->execute(bufnr.'buffer|mode')}, {'repeat': -1})
 	while v:true
-		mode
 		let char=getchar()
 		if char==#13
 			call timer_stop(id)
@@ -1064,26 +1071,36 @@ if $PREFIX == ""
 endif
 
 function! SetConfigPath()
-	if !exists('g:CONFIG_PATH') || len(g:CONFIG_PATH) ==# 0
-		if !exists('$VIM_CONFIG_PATH')
+	if !exists('$VIM_CONFIG_PATH')
+		if !exists('g:CONFIG_PATH') || len(g:CONFIG_PATH) ==# 0
 			let g:CONFIG_PATH = expand('$HOME')."/.config/nvim"
-		else
-			let g:CONFIG_PATH = $VIM_CONFIG_PATH
 		endif
+	else
+		let g:CONFIG_PATH = $VIM_CONFIG_PATH
 	endif
 	let g:CONFIG_PATH = expand(g:CONFIG_PATH)
 endfunction
 call SetConfigPath()
 
-if has('nvim')
-	execute "luafile ".expand(g:CONFIG_PATH)."/lua/lib/vim/plugins.lua"
+if exists('$VIM_LUA_PACKAGE_PATH')
+	if has('nvim')
+		lua package.path = vim.env.VIM_LUA_PACKAGE_PATH .. "/?.lua;" .. vim.env.VIM_LUA_PACKAGE_PATH .. "/?/init.lua;" .. package.path
+	endif
+endif
+
+if exists('$VIM_WITHOUT_PLUGIN_MANAGER')
+	let g:without_plugin_manager = v:true
+endif
+
+if has('nvim') && !g:without_plugin_manager
+	execute "luafile ".g:CONFIG_PATH."/lua/lib/vim/plugins.lua"
 endif
 
 " NVIMRC FILE
-let g:PLUGINS_INSTALL_FILE_PATH = '~/.config/nvim/lua/packages/plugins.lua'
-let g:PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/plugins_setup.lua'
-let g:PLUGINS_SETUP_PATH = '~/.config/nvim/lua/packages'
-let g:LSP_PLUGINS_SETUP_FILE_PATH = '~/.config/nvim/lua/packages/lsp/plugins.lua'
+let g:PLUGINS_INSTALL_FILE_PATH = g:CONFIG_PATH.'/lua/packages/plugins.lua'
+let g:PLUGINS_SETUP_FILE_PATH = g:CONFIG_PATH.'/lua/packages/plugins_setup.lua'
+let g:PLUGINS_SETUP_PATH = g:CONFIG_PATH.'/lua/packages'
+let g:LSP_PLUGINS_SETUP_FILE_PATH = g:CONFIG_PATH.'/lua/packages/lsp/plugins.lua'
 
 let g:sneak#s_next = 1
 
