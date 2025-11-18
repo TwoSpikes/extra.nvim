@@ -1088,12 +1088,19 @@ if exists('$VIM_LUA_PACKAGE_PATH')
 	endif
 endif
 
-if exists('$VIM_WITHOUT_PLUGIN_MANAGER')
-	let g:without_plugin_manager = v:true
+if !exists('g:without_plugin_manager')
+	let g:without_plugin_manager = v:false
+	if exists('$VIM_WITHOUT_PLUGIN_MANAGER')
+		let g:without_plugin_manager = v:true
+	endif
 endif
 
-if has('nvim') && !g:without_plugin_manager
-	execute "luafile ".g:CONFIG_PATH."/lua/lib/vim/plugins.lua"
+if has('nvim')
+	if !g:without_plugin_manager
+		execute "luafile ".g:CONFIG_PATH."/lua/lib/vim/plugins.lua"
+	else
+		execute "luafile ".g:CONFIG_PATH."/lua/lib/vim/noplugins.lua"
+	endif
 endif
 
 " NVIMRC FILE
