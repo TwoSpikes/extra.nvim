@@ -1,8 +1,8 @@
 " Install vim-plug if not found
 if has('nvim')
 	if !filereadable(g:LOCALSHAREPATH . '/site/autoload/plug.vim')
-		!curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs
-		\ https://raw.githubusercontent.com/TwoSpikes/plugnplay.vim/master/plug.vim
+		execute "!curl -fLo ".g:LOCALSHAREPATH."/site/autoload/plug.vim --create-dirs "
+		\ ."https://raw.githubusercontent.com/TwoSpikes/plugnplay.vim/master/plug.vim"
 	endif
 else
 	if !filereadable(expand('~/.vim/autoload/plug.vim'))

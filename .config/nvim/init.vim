@@ -123,7 +123,9 @@ if exists('$VIM_RUNTIME_PATH')
 	set rtp=$VIM_RUNTIME_PATH,$VIMRUNTIME
 endif
 
-
+if has('nvim') && exists('$LUA_RUNTIME_PATH')
+	lua package.path = package.path .. ";" .. vim.env.LUA_RUNTIME_PATH
+endif
 
 runtime colors/exnvim_base_basic.vim
 function! InvokeCriticalError(msg)
