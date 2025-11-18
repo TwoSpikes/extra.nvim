@@ -107,17 +107,14 @@ fn install(
     with_coc_sh_crutch: bool,
 ) -> ::std::io::Result<()> {
     copy_dir_all("./.config/nvim", target.join(".config/nvim"))?;
+    let vimruntime = vimruntime.to_str().expect("Cannot convert path to str");
     _ = run_as_superuser_if_needed!(
         "cp",
         &[
             "-r",
-            "./vimruntime",
-            format!(
-                "{}{}",
-                vimruntime.to_str().expect("Cannot convert path to str"),
-                "/*",
-            )
-            .as_str(),
+            "./vimruntime/colors",
+            "./vimruntime/syntax",
+            vimruntime,
         ]
     );
 
