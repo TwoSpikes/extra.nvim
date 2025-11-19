@@ -308,4 +308,4 @@ noremap <leader><right> <cmd>call chdir(fnamemodify(expand('%:p'), ':h'))<bar>pw
 
 noremap <leader>z <cmd>Lazy<cr>
 
-noremap z00 <cmd>execute 'source' stdpath('config').'/vim/exnvim/unload.vim'<cr>
+noremap z00 <cmd>execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload.vim'<cr>

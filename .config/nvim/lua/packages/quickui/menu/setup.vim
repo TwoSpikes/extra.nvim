@@ -742,14 +742,14 @@ function! RebindMenus_system()
 				\ ])
 
 	call quickui#menu#install(s:config_label, [
-			\ [s:open_init_vim."\t".s:leader_label.'ve', 'call SelectPosition(stdpath("config")."/init.vim", g:stdpos)', 'Open '.stdpath('config').'/init.vim'],
+			\ [s:open_init_vim."\t".s:leader_label.'ve', 'call SelectPosition(stdpath("config")."/init.vim", g:stdpos)', 'Open '.g:CONFIG_PATH.'/init.vim'],
 			\ [s:open_plugins_list."\t".s:leader_label.'vi', 'call SelectPosition(g:PLUGINS_INSTALL_FILE_PATH, g:stdpos)', 'Open '.g:PLUGINS_INSTALL_FILE_PATH],
 			\ [s:open_plugins_setup."\t".s:leader_label.'vs', 'call SelectPosition(g:PLUGINS_SETUP_FILE_PATH, g:stdpos)', 'Open '.g:PLUGINS_SETUP_FILE_PATH],
 			\ [s:open_lsp_settings."\t".s:leader_label.'vl', 'call SelectPosition(g:LSP_PLUGINS_SETUP_FILE_PATH, g:stdpos)', 'Open '.g:LSP_PLUGINS_SETUP_FILE_PATH.' (deprecated due to coc.nvim)'],
 			\ [s:open_exnvim_config."\t".s:leader_label.'vj', 'call SelectPosition(g:EXNVIM_CONFIG_PATH, g:stdpos)', 'Open '.g:EXNVIM_CONFIG_PATH],
 			\ [s:open_colorschemes_dir."\t".s:leader_label.'vc', 'call SelectPosition($VIMRUNTIME."/colors", g:dirpos)', 'Open colorschemes directory'],
 			\ ["--", ''],
-			\ [s:reload_init_vim."\t".s:leader_label.'se', 'execute "source" stdpath("config")."/vim/exnvim/reload.vim"', 'Reload Vim/NeoVim config'],
+			\ [s:reload_init_vim."\t".s:leader_label.'se', 'execute "source" g:CONFIG_PATH."/vim/exnvim/reload.vim"', 'Reload Vim/NeoVim config'],
 			\ [s:reload_plugins_list."\t".s:leader_label.'si', 'execute "source ".g:PLUGINS_INSTALL_FILE_PATH', 'Install plugins in '.g:PLUGINS_INSTALL_FILE_PATH],
 			\ [s:reload_plugins_setup."\t".s:leader_label.'ss', 'execute "source ".g:PLUGINS_SETUP_FILE_PATH', 'Reconfigure plugins'],
 			\ [s:reload_lsp_setup."\t".s:leader_label.'sl', 'execute "source ".g:LSP_PLUGINS_SETUP_FILE_PATH', 'Reconfigure LSP plugins (deprecated due to coc.nvim)'],
@@ -762,7 +762,7 @@ function! RebindMenus_system()
 	endif
 	if filereadable(g:EXNVIM_CONFIG_PATH)
 		call quickui#menu#install(s:config_label, [
-					\ [s:reload_exnvim_config."\t".s:leader_label.'sj', 'exec "source" stdpath("config")."/vim/exnvim/reload_config.vim"', 'Reload extra.nvim config'],
+					\ [s:reload_exnvim_config."\t".s:leader_label.'sj', 'exec "source" g:CONFIG_PATH."/vim/exnvim/reload_config.vim"', 'Reload extra.nvim config'],
 			\ ])
 	endif
 	if $TERMUX_VERSION !=# ""

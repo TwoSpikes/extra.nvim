@@ -14,7 +14,7 @@ if vim.g.enable_which_key and plugin_installed("which-key") then
 	require('packages.which-key.init')
 end
 --require('packages.bufresize.init')
-vim.cmd('exec printf("so %s/lua/packages/mason.vim", stdpath("config"))')
+vim.cmd('exec printf("so %s/lua/packages/mason.vim", g:CONFIG_PATH)')
 if plugin_exists('vim-quickui') then
 	require('packages.quickui.menu.init')
 end

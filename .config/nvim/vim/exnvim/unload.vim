@@ -2,10 +2,10 @@ if exists('g:exnvim_fully_loaded') && !g:exnvim_fully_loaded
 	finish
 endif
 
-execute 'source' stdpath('config').'/vim/exnvim/unload_config.vim'
+execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload_config.vim'
 let g:compatible = "common"
 
-execute 'source' stdpath('config').'/vim/compatible/common/unload/unload.vim'
+execute 'source' g:CONFIG_PATH.'/vim/compatible/common/unload/unload.vim'
 let g:compatible = "empty"
 
 call timer_stopall()
@@ -408,7 +408,7 @@ if PluginExists('emmet-vim')
 endif
 delcommand ExNvimCheatSheet
 delcommand ExNvimCommit
-if filereadable(expand(stdpath('config').'/vim/xterm-color-table.vim'))
+if filereadable(g:CONFIG_PATH.'/vim/xterm-color-table.vim')
 	delcommand Exct
 	delcommand Oxct
 	delcommand Sxct
@@ -773,7 +773,6 @@ unlet g:compatible
 if exists('g:already_patched')
 	unlet g:already_patched
 endif
-unlet g:CONFIG_PATH
 unlet g:LOCALSHAREPATH
 unlet g:PLUGINS_INSTALL_FILE_PATH
 unlet g:PLUGINS_SETUP_FILE_PATH
@@ -806,4 +805,5 @@ delfunction ExNvimSource
 delfunction InvokeCriticalError
 
 hi clear
-noremap z01 <cmd>execute 'source' stdpath('config').'/vim/exnvim/reload.vim'<cr>
+execute "noremap z01 <cmd>let g:CONFIG_PATH=\"".g:CONFIG_PATH."\"<bar>execute \"source \".g:CONFIG_PATH.\"/vim/exnvim/reload.vim\"<cr>"
+unlet g:CONFIG_PATH

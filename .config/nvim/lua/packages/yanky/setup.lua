@@ -2,7 +2,7 @@ require('yanky').setup {
   ring = {
     history_length = 100,
     storage = "shada",
-    storage_path = vim.fn.stdpath("data") .. "/databases/yanky.db", -- Only for sqlite storage
+    storage_path = vim.g.LOCALSHAREPATH .. "/databases/yanky.db", -- Only for sqlite storage
     sync_with_numbered_registers = true,
     cancel_event = "update",
     ignore_registers = { "_" },

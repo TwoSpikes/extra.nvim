@@ -28,7 +28,7 @@ function unpatch_plugin(pluginname)
 end
 
 local function bootstrap_lazy()
-  local lazy_path = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+  local lazy_path = vim.g.LOCALSHAREPATH .. "/lazy/lazy.nvim"
 
   if not (vim.uv or vim.loop).fs_stat(lazy_path) then
     vim.fn.system({

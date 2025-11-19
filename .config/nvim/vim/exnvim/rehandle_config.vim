@@ -2,7 +2,7 @@ call HandleExNvimConfig()
 call RehandleExNvimConfig()
 call PreserveAndDo("call HandleBuftypeAll()")
 execute "Showtab"
-execute "source" stdpath('config')."/vim/compatible/init.vim"
+execute "source" g:CONFIG_PATH."/vim/compatible/init.vim"
 call RedefineProcessGBut()
 execute 'colorscheme' g:selected_colorscheme
 call ChangeLanguage()
@@ -20,7 +20,7 @@ if has("nvim")
 		execute "lua require(\"packages.endscroll.setup\")"
 	endif
 	if PluginInstalled('sneak')
-		execute "source" stdpath('config')."/lua/packages/sneak/keymaps.vim"
+		execute "source" g:CONFIG_PATH."/lua/packages/sneak/keymaps.vim"
 	endif
 endif
 call SetMouse()
