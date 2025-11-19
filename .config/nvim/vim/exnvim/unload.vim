@@ -144,7 +144,9 @@ endif
 delfunction IsNo
 delfunction IsYes
 delfunction JKWorkaround
-delfunction JKWorkaroundAlpha
+if exists('*JKWorkaroundAlpha')
+	delfunction JKWorkaroundAlpha
+endif
 delfunction Killbuffer
 delfunction LoadExNvimConfig
 delfunction LoadVars
@@ -397,7 +399,9 @@ if PluginInstalled('diffview')
 	delcommand DiffviewToggleFiles
 endif
 delcommand DotfilesCommit
-delcommand EnableHLChunk
+if PluginExists('hlchunk.nvim')
+	delcommand EnableHLChunk
+endif
 if PluginExists('emmet-vim')
 	delcommand Emmet
 	delcommand EmmetInstall
