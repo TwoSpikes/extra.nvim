@@ -127,6 +127,18 @@ if has('nvim') && exists('$LUA_RUNTIME_PATH')
 	lua package.path = package.path .. ";" .. vim.env.LUA_RUNTIME_PATH
 endif
 
+if !exists('g:live_mode')
+	let g:live_mode = v:false
+endif
+if exists('$EXNVIM_LIVE_MODE') && len($EXNVIM_LIVE_MODE) !=# 0
+	let g:live_mode = v:true
+	let g:without_plugin_manager = v:true
+	set rtp=$VIMRUNTIME,$EXNVIM_LIVE_MODE/vimruntime
+	if has('nvim')
+		lua package.path = package.path .. ";" .. vim.env.EXNVIM_LIVE_MODE .. "/.config/nvim/lua/?.lua"
+	endif
+endif
+
 runtime colors/exnvim_base_basic.vim
 function! InvokeCriticalError(msg)
 	let prev_filetype=&filetype
@@ -146,12 +158,11 @@ function! InvokeCriticalError(msg)
 	setlocal filetype=CriticalError
 	setlocal wrap
 	setlocal linebreak
-	let g:CRITICAL_ERROR_OLDMOUSE=&mouse
+	let OLDMOUSE=&mouse
 	set mouse=
-	let g:CRITICAL_ERROR_OLDEVENTIGNORE=&eventignore
+	let OLDEVENTIGNORE=&eventignore
 	set eventignore=all
-	let mediumline=winheight(0)/2
-	let mediumline=mediumline-3
+	let mediumline=winheight(0)/2-3
 	let i=1
 	while i<mediumline
 		call setline(i, '')
@@ -183,10 +194,10 @@ function! InvokeCriticalError(msg)
 		endif
 	endwhile
 	bwipeout!
-	let &eventignore=g:CRITICAL_ERROR_OLDEVENTIGNORE
-	unlet g:CRITICAL_ERROR_OLDEVENTIGNORE
-	let &mouse=g:CRITICAL_ERROR_OLDMOUSE
-	unlet g:CRITICAL_ERROR_OLDMOUSE
+	let &eventignore=OLDEVENTIGNORE
+	unlet OLDEVENTIGNORE
+	let &mouse=OLDMOUSE
+	unlet OLDMOUSE
 	if prev_filetype==#"alpha"
 		Alpha
 	endif
@@ -282,7 +293,9 @@ endfunction
 let reloading_config = exists('g:CONFIG_ALREADY_LOADED')
 let g:CONFIG_ALREADY_LOADED = v:true
 
-call LoadExNvimConfig(g:EXNVIM_CONFIG_PATH, reloading_config)
+if !g:live_mode
+	call LoadExNvimConfig(g:EXNVIM_CONFIG_PATH, reloading_config)
+endif
 
 function! SetDefaultValuesForStartupOptionsAndExNvimConfigOptions()
 	" Default values for startup options
@@ -1105,7 +1118,6 @@ if has('nvim')
 	endif
 endif
 
-" NVIMRC FILE
 let g:PLUGINS_INSTALL_FILE_PATH = g:CONFIG_PATH.'/lua/packages/plugins.lua'
 let g:PLUGINS_SETUP_FILE_PATH = g:CONFIG_PATH.'/lua/packages/plugins_setup.lua'
 let g:PLUGINS_SETUP_PATH = g:CONFIG_PATH.'/lua/packages'
@@ -1208,4 +1220,17 @@ else
 	let g:exnvim_fully_loaded = v:true
 	let g:specloading = ' OK '
 	silent! doautocmd User ExNvimLoaded
+endif
+if g:live_mode
+	if filereadable(g:CONFIG_PATH.'/vim/exnvim/live_mode_menu.vim')
+		autocmd VimEnter * call timer_start(0, {->execute('source '.g:CONFIG_PATH.'/vim/exnvim/live_mode_menu.vim')})
+		if v:vim_did_enter
+			doautocmd VimEnter
+		endif
+	else
+		call InvokeCriticalError(['File "vim/exnvim/live_mode_menu.vim" not found.', 'Please download extra.nvim again.'])
+		let g:exnvim_fully_loaded = v:true
+		let g:specloading = ' OK '
+		silent! doautocmd User ExNvimLoaded
+	endif
 endif
