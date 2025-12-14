@@ -285,7 +285,6 @@ else
       let g:terminal_color_{i} = g:terminal_ansi_colors[i]
     endfor
   endif
-  hi Normal guifg=#000000 guibg=#ffffff gui=NONE cterm=NONE
   hi Statusline guifg=#ffffff guibg=#000000 gui=bold cterm=bold
   hi StatuslineNC guifg=#ffffff guibg=#767676 gui=NONE cterm=NONE
   hi VertSplit guifg=#767676 guibg=#767676 gui=NONE cterm=NONE
@@ -653,34 +652,35 @@ if &t_Co >= 256
   else
     " Light background
     if exists('g:use_transparent_bg')
-      if g:use_transparent_bg ==# "always"
-      \||g:use_transparent_bg ==# "light"
-        hi Normal ctermfg=0 ctermbg=231 cterm=NONE guifg=#000000 guibg=NULL gui=NONE
-      else
-        hi Normal ctermfg=0 ctermbg=231 cterm=NONE guifg=#000000 guibg=#fff8f0 gui=NONE
-      endif
+    \&& (v:false
+      \|| g:use_transparent_bg ==# "always"
+      \|| g:use_transparent_bg ==# "light"
+    \|| v:false)
+      hi Normal ctermfg=0 ctermbg=231 cterm=NONE guifg=#000000 guibg=NULL gui=NONE
+    else
+      hi Normal ctermfg=0 ctermbg=231 cterm=NONE guifg=#000000 guibg=#f8f8ff gui=NONE
     endif
     call CopyHighlightGroup("Normal", "NotifyBackground")
     hi NotifyBackground ctermbg=18 guibg=#505050
     hi MsgArea ctermfg=0 ctermbg=NONE cterm=NONE guifg=#ffffff guibg=#505050 gui=reverse
     " hi Statusline ctermfg=231 ctermbg=16 cterm=bold
-    hi Statusline ctermfg=255 ctermbg=20 cterm=bold guifg=#ffffff guibg=#aaaaaa gui=NONE
+    hi Statusline ctermfg=255 ctermbg=20 cterm=bold guifg=#000000 guibg=#88ff88 gui=NONE
     hi Statuslinemod ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#fff070 guibg=#000000 gui=reverse
     hi Statuslinevenv ctermfg=57 ctermbg=155 cterm=bold guifg=#ffff00 guibg=#00a0ff gui=bold
     hi Statuslinemac ctermfg=155 ctermbg=57 cterm=bold guifg=#ffffd0 guibg=#f00000 gui=bold
     hi Statuslinemacvenv ctermfg=57 ctermbg=155 cterm=bold guifg=#00a0ff guibg=#f00000 gui=bold
-    hi Statusline0mac ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#f00000 guibg=#aaaaaa gui=NONE
-    hi Statusline0venv ctermfg=57 ctermbg=155 cterm=bold guifg=#aaaaaa guibg=#aaaaaa gui=NONE
+    hi Statusline0mac ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#f00000 guibg=#88ff88 gui=NONE
+    hi Statusline0venv ctermfg=57 ctermbg=155 cterm=bold guifg=#88ff88 guibg=#88ff88 gui=NONE
     hi Statuslinevenv1 ctermfg=57 ctermbg=155 cterm=bold guifg=#00ff00 guibg=#00a0ff gui=NONE
     hi Statuslinemac1 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#00ff00 guibg=#f00000 gui=NONE
     hi Statuslinestat1 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#000000 guibg=#00ff00 gui=bold
-    hi Statuslinestat01 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#00ff00 guibg=#aaaaaa gui=NONE
-    hi Statuslinestat12 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#aaaaaa guibg=#00ff00 gui=NONE
-    hi Statuslinestat2 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#ffffff guibg=#aaaaaa gui=NONE
+    hi Statuslinestat01 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#00ff00 guibg=#88ff88 gui=NONE
+    hi Statuslinestat12 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#88ff88 guibg=#00ff00 gui=NONE
+    hi Statuslinestat2 ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#ffffff guibg=#88ff88 gui=NONE
     hi StatuslinestatNormTerm ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#5f0000 guibg=#0000ff gui=reverse
     hi StatuslinestatVisuBlock ctermfg=57 ctermbg=155 cterm=bold,reverse guifg=#00ff00 guibg=#870000 gui=NONE
     " hi StatuslineNC ctermfg=231 ctermbg=243 cterm=NONE
-    hi StatuslineNC ctermfg=17 ctermbg=19 cterm=bold guifg=#ff0000 guibg=#aaaaaa gui=bold
+    hi StatuslineNC ctermfg=17 ctermbg=19 cterm=bold guifg=#ff0000 guibg=#88ff88 gui=bold
     hi ModeNorm ctermfg=220 ctermbg=236 cterm=bold,reverse guifg=#ffffff guibg=#0000ff gui=bold
     hi ModeIns ctermfg=15 ctermbg=39 cterm=bold guifg=#000000 guibg=#00ff00 gui=bold
     hi ModeVisu ctermfg=15 ctermbg=18 cterm=bold guifg=#000000 guibg=#ffa000 gui=bold
@@ -695,17 +695,16 @@ if &t_Co >= 256
     " hi TabLineFill ctermfg=NONE ctermbg=243 cterm=NONE
     " hi TabLineSel ctermfg=231 ctermbg=16 cterm=bold,reverse
     " hi TabLine ctermfg=195 ctermbg=18 cterm=NONE guifg=#f03000 guibg=#00005f gui=NONE
-    hi TabLine ctermfg=195 ctermbg=18 cterm=NONE guifg=#ffffff guibg=#00b060 gui=NONE
+    hi TabLine ctermfg=195 ctermbg=18 cterm=NONE guifg=#eeeeee guibg=#108810 gui=NONE
     " hi TabLineSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#50f000 guibg=#20005f gui=NONE
     hi TabLineSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#f0f000 guibg=#0020bf gui=NONE
-    " hi TabLineFill ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#101050 gui=NONE
-    hi TabLineFill ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#e0dcd4 gui=NONE
+    hi TabLineFill ctermfg=NONE ctermbg=237 cterm=NONE guifg=NONE guibg=#e0f0e0 gui=NONE
     " hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#0050cf guibg=#ffffff gui=reverse
-    hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#000000 guibg=#00ff00 gui=bold
-    hi TabLineToSel ctermfg=222 ctermbg=18 cterm=NONE guifg=#00b060 guibg=#00ff00 gui=NONE
-    hi TabLineFromSel ctermfg=222 ctermbg=18 cterm=NONE guifg=#00ff00 guibg=#00b060 gui=NONE
-    hi TabLineToSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#00b060 guibg=#0020bf gui=NONE
-    hi TabLineFromSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#0020bf guibg=#00b060 gui=NONE
+    hi TabLineSel ctermfg=194 ctermbg=18 cterm=bold,reverse guifg=#000000 guibg=#50ff50 gui=NONE
+    hi TabLineToSel ctermfg=222 ctermbg=18 cterm=NONE guifg=#108810 guibg=#00ff00 gui=NONE
+    hi TabLineFromSel ctermfg=222 ctermbg=18 cterm=NONE guifg=#00ff00 guibg=#108810 gui=NONE
+    hi TabLineToSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#108810 guibg=#0020bf gui=NONE
+    hi TabLineFromSec ctermfg=222 ctermbg=18 cterm=NONE guifg=#0020bf guibg=#108810 gui=NONE
     hi ToolbarLine ctermfg=NONE ctermbg=NONE cterm=NONE
     hi ToolbarButton ctermfg=231 ctermbg=16 cterm=NONE
     hi KeywordNorm ctermfg=220 ctermbg=NONE cterm=NONE guifg=#efaf00 guibg=NONE gui=NONE
@@ -739,7 +738,7 @@ if &t_Co >= 256
     hi Error ctermfg=NONE ctermbg=NONE cterm=strikethrough guifg=#ffffff guibg=#ff0000 gui=strikethrough guisp=red
 "    hi ErrorMsg ctermfg=231 ctermbg=160 cterm=NONE
     hi ErrorMsg ctermfg=NONE ctermbg=NONE cterm=strikethrough guifg=#ffffff guibg=#ff0000 gui=NONE guisp=red
-    hi ModeMsg ctermfg=222 ctermbg=16 cterm=reverse
+    hi ModeMsg ctermfg=222 ctermbg=16 cterm=reverse guifg=#ffee80 guibg=#000000 gui=reverse
     hi MoreMsg ctermfg=28 ctermbg=NONE cterm=bold
     hi Question ctermfg=127 ctermbg=NONE cterm=bold
     hi WarningMsg ctermfg=160 ctermbg=NONE cterm=bold
@@ -761,7 +760,7 @@ if &t_Co >= 256
       let g:cursorline_style = "dim"
     endif
     if g:cursorline_style ==# "dim"
-      hi CursorLine ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=#eeeeee gui=NONE
+      hi CursorLine ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=#eaeaf8 gui=NONE
     elseif g:cursorline_style ==# "reverse"
       hi CursorLine ctermfg=NONE ctermbg=NONE cterm=reverse guifg=NONE guibg=NONE gui=reverse
     elseif g:cursorline_style ==# "underline"
@@ -775,13 +774,14 @@ if &t_Co >= 256
     hi SpellLocal ctermfg=28 ctermbg=NONE cterm=underline
     hi SpellRare ctermfg=133 ctermbg=NONE cterm=underline
     hi Comment ctermfg=26 ctermbg=NONE cterm=NONE
-    hi Constant ctermfg=127 ctermbg=NONE cterm=NONE
-    hi String ctermfg=130 ctermbg=NONE cterm=NONE
+    hi Constant ctermfg=127 ctermbg=NONE cterm=NONE guifg=#8040ff gui=NONE
+    hi String ctermfg=130 ctermbg=NONE cterm=NONE guifg=#d57510
     hi Identifier ctermfg=NONE ctermbg=NONE cterm=NONE
     hi Type ctermfg=28 ctermbg=NONE cterm=NONE guifg=#ffaa00 guibg=NONE gui=NONE
     hi PreProc ctermfg=23 ctermbg=NONE cterm=NONE
     hi Special ctermfg=30 ctermbg=NONE cterm=NONE
     hi Underlined ctermfg=NONE ctermbg=NONE cterm=underline
+    hi Function ctermfg=220 ctermbg=NONE guifg=#4a8a7a guibg=NONE gui=NONE
     hi Directory ctermfg=26 ctermbg=NONE cterm=bold
     hi Conceal ctermfg=NONE ctermbg=NONE cterm=NONE
     hi Ignore ctermfg=NONE ctermbg=NONE cterm=NONE
