@@ -550,7 +550,7 @@ function! ExNvimCheatSheet()
 	\\n    g. - See :h g;
 	\\n    gw - See :h sneak|50
 	\\n  ABOUT:
-	\\n    Author: TwoSpikes (2023 - 2025)
+	\\n    Author: TwoSpikes (2023 - 2026)
 	\\n    Github repository: https://github.com/TwoSpikes/extra.nvim
 	\\n    Also see: https://github.com/TwoSpikes/dotfiles
 	\\n    (Press `gx` to open links)
