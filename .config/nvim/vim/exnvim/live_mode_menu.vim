@@ -1,4 +1,4 @@
-function! ShowASelectionWindow(title, options)
+function! ShowASelectionWindow(title, options, callback)
 	let prev_filetype=&filetype
 	noswapfile enew
 	let bufnr=bufnr()
@@ -48,30 +48,16 @@ function! ShowASelectionWindow(title, options)
 	setlocal nomodified
 	mode
 	execute "let id=timer_start(100, {->execute('".bufnr."buffer|mode')}, {'repeat': -1})"
-	while v:true
-		let char=getchar()
-		if char==#49
-			execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload.vim'
-			break
-		endif
-		if char==#50
-			break
-		endif
-		if char==#51
-			call OnQuit()
-			normal ZZ
-		endif
-	endwhile
+	execute "while v:true|let char=getchar()|".a:callback."|endwhile"
 	call timer_stop(id)
 	unlet id
-	unlet char
 	bwipeout!
 	let &eventignore=OLDEVENTIGNORE
 	unlet OLDEVENTIGNORE
 	let &mouse=OLDMOUSE
 	unlet OLDMOUSE
 	if prev_filetype==#"alpha"
-		Alpha
+		exe "Alpha"
 	endif
 endfunction
-call ShowASelectionWindow('Live mode menu', ['Unload extra.nvim','Close this menu','Exit '.g:EDITOR_NAME])
+call ShowASelectionWindow('Live mode menu', ['Unload extra.nvim','Close this menu','Exit '.g:EDITOR_NAME], "if char==#49|execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload.vim'|break|endif|if char==#50|break|endif|if char==#51|if exists('*OnQuit')|call OnQuit()|endif|execute 'normal ZZ'|endif")

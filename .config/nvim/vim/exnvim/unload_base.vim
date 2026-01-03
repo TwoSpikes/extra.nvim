@@ -1,11 +1,13 @@
-if exists('g:exnvim_fully_loaded') && !g:exnvim_fully_loaded
+if !exists('g:exnvim_fully_loaded')
 	finish
 endif
 
 execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload_config.vim'
 let g:compatible = "common"
 
-execute 'source' g:CONFIG_PATH.'/vim/compatible/common/unload/unload.vim'
+if g:exnvim_fully_loaded
+	execute 'source' g:CONFIG_PATH.'/vim/compatible/common/unload/unload.vim'
+endif
 let g:compatible = "empty"
 
 call timer_stopall()
@@ -17,7 +19,7 @@ if has('nvim')
 	augroup! exnvim_term_closed
 endif
 delfunction AfterSomeEvent
-if has('nvim')
+if has('nvim') && g:exnvim_fully_loaded
 	delfunction ChangeLanguageQuickuiMenu_system_english
 	delfunction ChangeLanguageQuickuiMenu_system_russian
 	delfunction ChangeLanguageQuickuiMenu_system_komi
@@ -124,7 +126,9 @@ augroup! exnvim_vim_leave
 delfunction OnQuit
 delfunction OnQuitDisable
 delfunction OnStart
-delfunction OpenOnStart
+if g:exnvim_fully_loaded
+	delfunction OpenOnStart
+endif
 delfunction OpenRanger
 delfunction OpenRangerCheck
 delfunction OpenTerm
@@ -147,7 +151,7 @@ delcommand Killbuffer
 delfunction SelectFallbackLanguage
 delfunction PrePad
 delfunction PreserveAndDo
-if PluginExists('vim-quickui')
+if PluginExists('vim-quickui') && g:exnvim_fully_loaded
 	delfunction RebindMenus_system
 	delfunction RebindMenus
 endif
@@ -242,10 +246,10 @@ delfunction PluginInstalled
 delfunction PluginExists
 
 unlet g:CONFIG_ALREADY_LOADED
-if exists('g:exnvim_fully_loaded')
-	unlet g:exnvim_fully_loaded
+if g:exnvim_fully_loaded
+	unlet g:exnvim_config
 endif
-unlet g:exnvim_config
+unlet g:exnvim_fully_loaded
 if exists('g:exnvim_sh_funcs')
 	unlet g:exnvim_sh_funcs
 endif

@@ -1015,9 +1015,6 @@ function! Showtab()
 		endif
 	endif
 	if exists('g:exnvim_fully_loaded')
-		if g:exnvim_fully_loaded
-			unlet g:exnvim_fully_loaded
-		endif
 		let s:result .= '%#Loading#'.g:specloading
 	endif
 	return s:result
