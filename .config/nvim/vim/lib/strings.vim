@@ -29,6 +29,9 @@ function! PrePad(s, amt, ...)
     endif
     return repeat(char, a:amt - len(a:s)) . a:s
 endfunction
+function! CenterAString(s, nr=0)
+	return PrePad(a:s, (winwidth(a:nr)+len(a:s))/2)
+endfunction
 
 function! Repr_Vim_Grep(string)
 	let result = ''

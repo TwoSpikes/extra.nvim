@@ -37,6 +37,7 @@ if has('nvim')
 endif
 autocmd! exnvim_colorscheme *
 augroup! exnvim_colorscheme
+delfunction CenterAString
 delfunction ColorSchemeManagePre
 delfunction ColorTable
 delfunction Contains
