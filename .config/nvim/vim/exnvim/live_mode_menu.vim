@@ -60,4 +60,4 @@ function! ShowASelectionWindow(title, options, callback)
 		exe "Alpha"
 	endif
 endfunction
-call ShowASelectionWindow('Live mode menu', ['Unload extra.nvim','Close this menu','Exit '.g:EDITOR_NAME], "if char==#49|execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload.vim'|break|endif|if char==#50|break|endif|if char==#51|if exists('*OnQuit')|call OnQuit()|endif|execute 'normal ZZ'|endif")
+call ShowASelectionWindow('Live mode menu', ['Unload extra.nvim','Close this menu','Exit '.g:EDITOR_NAME], "if char==#49|call timer_start(0, {->execute('source '.g:CONFIG_PATH.'/vim/exnvim/unload.vim')})|break|endif|if char==#50|break|endif|if char==#51|if exists('*OnQuit')|call OnQuit()|endif|execute 'normal ZZ'|endif")

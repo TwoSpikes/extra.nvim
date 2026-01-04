@@ -500,7 +500,7 @@ function! Update_CursorLine_Style()
 	endif
 endfunction
 
-let g:exnvim_fully_loaded = 0
+let g:exnvim_fully_loaded = v:false
 let g:specloading=" 50 "
 
 let s:custom_mode = ''
@@ -1206,7 +1206,6 @@ if !has('nvim')
 	endif
 endif
 
-let g:exnvim_fully_loaded = v:false
 if filereadable(g:CONFIG_PATH.'/after/init.vim')
 	autocmd VimEnter * call timer_start(0, {->execute('source '.g:CONFIG_PATH.'/after/init.vim')})
 	if v:vim_did_enter

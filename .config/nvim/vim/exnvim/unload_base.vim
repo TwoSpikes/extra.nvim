@@ -6,7 +6,7 @@ execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload_config.vim'
 let g:compatible = "common"
 
 if g:exnvim_fully_loaded
-	execute 'source' g:CONFIG_PATH.'/vim/compatible/common/unload/unload.vim'
+	execute 'source' g:CONFIG_PATH.'/vim/compatible/unload.vim'
 endif
 let g:compatible = "empty"
 
@@ -20,22 +20,7 @@ if has('nvim')
 endif
 delfunction AfterSomeEvent
 if has('nvim') && g:exnvim_fully_loaded
-	delfunction ChangeLanguageQuickuiMenu_system_english
-	delfunction ChangeLanguageQuickuiMenu_system_russian
-	delfunction ChangeLanguageQuickuiMenu_system_komi
-	delfunction ChangeLanguageQuickuiMenu_system
-	delfunction ChangeLanguageQuickuiMenu_extra_english
-	delfunction ChangeLanguageQuickuiMenu_extra_russian
-	delfunction ChangeLanguageQuickuiMenu_extra_komi
-	delfunction ChangeLanguageQuickuiMenu_extra
-	delfunction ChangeLanguageQuickuiMenu
-	delfunction ChangeLanguageQuickuiMenuAll
-	delfunction ChangeLanguageQuickuiMenuCallProperFunction
-	delfunction ChangeLanguageQuickuiMenuCommon
-	delfunction ChangeLanguageQuickuiMenuCommon_english
-	delfunction ChangeLanguageQuickuiMenuCommon_russian
 	delfunction ChangeLanguage
-	unmap <leader><leader>
 endif
 autocmd! exnvim_colorscheme *
 augroup! exnvim_colorscheme
@@ -126,9 +111,6 @@ augroup! exnvim_vim_leave
 delfunction OnQuit
 delfunction OnQuitDisable
 delfunction OnStart
-if g:exnvim_fully_loaded
-	delfunction OpenOnStart
-endif
 delfunction OpenRanger
 delfunction OpenRangerCheck
 delfunction OpenTerm
@@ -151,10 +133,6 @@ delcommand Killbuffer
 delfunction SelectFallbackLanguage
 delfunction PrePad
 delfunction PreserveAndDo
-if PluginExists('vim-quickui') && g:exnvim_fully_loaded
-	delfunction RebindMenus_system
-	delfunction RebindMenus
-endif
 delfunction RedefineProcessGBut
 delfunction RehandleExNvimConfig
 delfunction Remove
@@ -246,7 +224,7 @@ delfunction PluginInstalled
 delfunction PluginExists
 
 unlet g:CONFIG_ALREADY_LOADED
-if g:exnvim_fully_loaded
+if exists('g:exnvim_config')
 	unlet g:exnvim_config
 endif
 unlet g:exnvim_fully_loaded

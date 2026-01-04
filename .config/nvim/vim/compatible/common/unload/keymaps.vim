@@ -1,6 +1,5 @@
 nunmap <leader>G
 
-nunmap dd
 nunmap -
 nunmap +
 

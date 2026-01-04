@@ -1,1 +1,1 @@
-exec "source" g:CONFIG_PATH."/vim/compatible/unload.vim"
+"exec "source" g:CONFIG_PATH."/vim/compatible/unload.vim"

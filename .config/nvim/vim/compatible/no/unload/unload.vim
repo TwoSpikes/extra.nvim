@@ -17,5 +17,5 @@ nunmap <leader>fb
 nunmap <leader>fh
 nunmap <leader>fr
 
-noremap q <cmd>quit<cr>
-noremap Q <cmd>quit!<cr>
+nunmap q
+nunmap Q

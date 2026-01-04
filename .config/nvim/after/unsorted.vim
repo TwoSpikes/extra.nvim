@@ -1343,13 +1343,13 @@ endfunction
 command! -nargs=0 ExNvimCommit call ExNvimCommit()
 
 function! GenerateExNvimConfig()
-	tabnew
 	if !executable('exnvim')
 		echohl ErrorMsg
 		echomsg "error: exnvim not installed"
 		echohl Normal
 		return
 	endif
+	tabnew
 	call OpenTerm('exnvim setup')
 endfunction
 command! -nargs=0 GenerateExNvimConfig call GenerateExNvimConfig()

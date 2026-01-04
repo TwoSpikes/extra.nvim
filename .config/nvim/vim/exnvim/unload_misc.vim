@@ -5,6 +5,25 @@ if PluginExists('ani-cli.nvim')
 		unlet g:ANI_CLI_TO_EXIT
 	endif
 endif
+if PluginExists('vim-quickui')
+	delfunction ChangeLanguageQuickuiMenu_system_english
+	delfunction ChangeLanguageQuickuiMenu_system_russian
+	delfunction ChangeLanguageQuickuiMenu_system_komi
+	delfunction ChangeLanguageQuickuiMenu_system
+	delfunction ChangeLanguageQuickuiMenu_extra_english
+	delfunction ChangeLanguageQuickuiMenu_extra_russian
+	delfunction ChangeLanguageQuickuiMenu_extra_komi
+	delfunction ChangeLanguageQuickuiMenu_extra
+	delfunction ChangeLanguageQuickuiMenu
+	delfunction ChangeLanguageQuickuiMenuAll
+	delfunction ChangeLanguageQuickuiMenuCallProperFunction
+	delfunction ChangeLanguageQuickuiMenuCommon
+	delfunction ChangeLanguageQuickuiMenuCommon_english
+	delfunction ChangeLanguageQuickuiMenuCommon_russian
+	delfunction RebindMenus_system
+	delfunction RebindMenus
+	unmap <leader><leader>
+endif
 if PluginExists('coc.nvim') && !g:use_nvim_cmp
 	autocmd! exnvim_coc_nvim *
 	augroup! exnvim_coc_nvim
@@ -345,6 +364,7 @@ if PluginInstalled('null-ls')
 	delcommand NullLsInfo
 	delcommand NullLsLog
 endif
+delfunction OpenOnStart
 if isdirectory(g:LOCALSHAREPATH.'/site/autoload/plug.vim')
 	delcommand Plug
 	delcommand PlugClean
