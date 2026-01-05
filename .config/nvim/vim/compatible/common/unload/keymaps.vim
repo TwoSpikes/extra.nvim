@@ -69,13 +69,6 @@ if filereadable(expand("~/.dotfiles-script.sh"))
 	unmap <leader>vb
 endif
 
-if v:false
-\|| g:open_cmd_on_up ==# "insert"
-\|| g:open_cmd_on_up ==# "run"
-	nunmap <up>
-endif
-xunmap <up>
-
 unmap <leader>;
 unmap <leader>:
 unmap <leader>=
@@ -160,7 +153,7 @@ unmap <f9>
 nunmap <leader>b
 
 if executable('lazygit')
-	unmap <leader>z
+	unmap <leader>xz
 endif
 if v:false
 \|| executable('far')
@@ -267,6 +260,13 @@ unmap <leader>xP
 
 if PluginInstalled('activate')
 	unmap <leader>xp
+endif
+
+unmap <leader><right>
+
+" TODO: remove
+if PluginInstalled('lazy')
+	unmap <leader>z
 endif
 
 unmap z00

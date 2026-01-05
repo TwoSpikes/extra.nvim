@@ -532,9 +532,6 @@ function! ExNvimCheatSheet()
 	\\n   CTRL-x CTRL-c - Exit
 	\\n   CTRL-x CTRL-q - Exit without confirmation
 	\\n   CTRL-x CTRL-b - \"List buffers\" dialogue
-	\\n QUOTES AROUND (deprecated, use surround.vim):
-	\\n   LEAD \" - Put \'\"\' around word
-	\\n   LEAD \' - Put \"\'\" around word
 	\\n  TELESCOPE plugin:
 	\\n    LEAD ff - Find files
 	\\n    LEAD fg - Live grep

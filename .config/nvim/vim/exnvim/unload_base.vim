@@ -3,7 +3,6 @@ if !exists('g:exnvim_fully_loaded')
 endif
 
 execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload_config.vim'
-let g:compatible = "common"
 
 if g:exnvim_fully_loaded
 	execute 'source' g:CONFIG_PATH.'/vim/compatible/unload.vim'
@@ -52,7 +51,6 @@ endif
 autocmd! exnvim_fix_sha_da *
 augroup! exnvim_fix_sha_da
 delfunction FixShaDa
-delfunction FuzzyFind
 delfunction GenerateExNvimConfig
 delfunction GenerateTemporaryAutocmd
 set stl=
@@ -111,6 +109,7 @@ augroup! exnvim_vim_leave
 delfunction OnQuit
 delfunction OnQuitDisable
 delfunction OnStart
+nunmap <leader>r
 delfunction OpenRanger
 delfunction OpenRangerCheck
 delfunction OpenTerm
@@ -124,11 +123,15 @@ if exists('*Pad_middle')
 endif
 delfunction PluginDelete
 delfunction SelectPosition
+
+unmap <leader><c-s>
 delcommand SaveAs
-delcommand SaveAsAndRename
 delfunction SaveAs
+unmap <leader><c-r>
+delcommand SaveAsAndRename
 delfunction SaveAsAndRename
 delfunction SaveAsBase
+
 delcommand Killbuffer
 delfunction SelectFallbackLanguage
 delfunction PrePad
@@ -144,9 +147,21 @@ delfunction RunAlphaIfNotAlphaRunning
 delfunction AbsNu
 delfunction NoNu
 delfunction NoNuAll
-nunmap k
-ounmap k
-vunmap k
+unmap k
+if g:open_cmd_on_up ==# "no"
+	unmap <up>
+endif
+if !PluginInstalled('endscroll')
+	unmap j
+	if g:open_cmd_on_up ==# "no"
+		unmap <down>
+	endif
+endif
+if v:false
+\|| g:open_cmd_on_up ==# "insert"
+\|| g:open_cmd_on_up ==# "run"
+	nunmap <up>
+endif
 delfunction ProcessGBut
 delfunction RelNu
 delfunction SaveVars

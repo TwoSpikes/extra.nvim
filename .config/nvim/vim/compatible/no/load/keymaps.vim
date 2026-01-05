@@ -11,11 +11,13 @@ xnoremap ~ <c-\><c-n><cmd>call Do_V_Tilde()<cr>
 
 noremap <silent> <leader>d <cmd>nohlsearch<cr>
 
-nnoremap <silent> <leader>ff <cmd>call FuzzyFind()<cr>
-nnoremap <silent> <leader>fg :lua require('telescope.builtin').live_grep(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
-nnoremap <silent> <leader>fb :lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
-nnoremap <silent> <leader>fh :lua require('telescope.builtin').help_tags(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
-nnoremap <silent> <leader>fr <cmd>lua require('telescope').extensions.recent_files.pick()<CR>
+if PluginInstalled('telescope')
+	nnoremap <silent> <leader>ff <cmd>call FuzzyFind()<cr>
+	nnoremap <silent> <leader>fg :lua require('telescope.builtin').live_grep(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
+	nnoremap <silent> <leader>fb :lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
+	nnoremap <silent> <leader>fh :lua require('telescope.builtin').help_tags(require('telescope.themes').get_dropdown({winblend = 0 }))<cr>
+	nnoremap <silent> <leader>fr <cmd>lua require('telescope').extensions.recent_files.pick()<CR>
+endif
 
 noremap q <cmd>quit<cr>
 noremap Q <cmd>quit!<cr>

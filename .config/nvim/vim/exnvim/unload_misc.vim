@@ -450,6 +450,8 @@ if PluginInstalled('todo-comments')
 	delcommand TodoTelescope
 endif
 if PluginInstalled('telescope')
+	delfunction FuzzyFind
+	nunmap <space>fr
 	delcommand Telescope
 endif
 if PluginExists('vim-terminator')

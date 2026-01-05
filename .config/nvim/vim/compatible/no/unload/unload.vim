@@ -11,11 +11,13 @@ xunmap ~
 
 unmap <leader>d
 
-nunmap <leader>ff
-nunmap <leader>fg
-nunmap <leader>fb
-nunmap <leader>fh
-nunmap <leader>fr
+if PluginInstalled('telescope')
+	nunmap <leader>ff
+	nunmap <leader>fg
+	nunmap <leader>fb
+	nunmap <leader>fh
+	nunmap <leader>fr
+endif
 
 nunmap q
 nunmap Q

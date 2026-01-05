@@ -96,12 +96,6 @@ noremap <leader>= :tabe
 noremap <leader>- :e 
 noremap <leader>1 :!
 
-" QUOTES AROUND (DEPRECATED BECAUSE OF surround.vim)
-nnoremap <leader>" viw<esc>a"<esc>bi"<esc>
-nnoremap <leader>' viw<esc>a'<esc>bi'<esc>
-vnoremap <leader>" iw<esc>a"<esc>bi"<esc>v
-vnoremap <leader>' iw<esc>a'<esc>bi'<esc>v
-
 " SPECIAL
 nnoremap <silent> <esc> <cmd>let @/ = ""<bar>nohlsearch<cr>
 inoremap <c-c> <c-c><cmd>call Numbertoggle()<cr>
@@ -306,6 +300,9 @@ endif
 
 noremap <leader><right> <cmd>call chdir(fnamemodify(expand('%:p'), ':h'))<bar>pwd<cr>
 
-noremap <leader>z <cmd>Lazy<cr>
+" TODO: remove
+if PluginInstalled('lazy')
+	noremap <leader>z <cmd>Lazy<cr>
+endif
 
 noremap z00 <cmd>execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload_config.vim'<cr>
