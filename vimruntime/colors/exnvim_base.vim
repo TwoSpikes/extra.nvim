@@ -7,7 +7,6 @@ if g:show_ascii_logo
 else
 	hi ExNvimLogo gui=bold,italic
 endif
-hi ExNvimLogoReverse ctermfg=0 ctermbg=214 cterm=NONE guifg=NONE guibg=#ffaa00
 hi QuickTip ctermfg=202 ctermbg=85 cterm=bold guifg=#ffff9f guibg=#0f8fff gui=bold
 if !IsHighlightGroupDefined('Statuslinemod')
 	hi Statuslinemod guifg=#f0f0ff guibg=#0080a0 gui=bold
