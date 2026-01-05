@@ -280,7 +280,7 @@ unlet g:exnvim_mapleader
 unlet mapleader
 
 delfunction ExNvimReadFile
-call timer_start(0,{->delfunction ExNvimSource})
+call timer_start(0,{->execute('delfunction ExNvimSource')})
 delfunction ExNvimSourceAsync
 delfunction InvokeCriticalError
 
