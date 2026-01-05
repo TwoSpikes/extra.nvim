@@ -5,3 +5,5 @@ execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload_base.vim'
 if !g:without_plugin_manager
 	execute 'source' g:CONFIG_PATH.'/vim/exnvim/unload_misc.vim'
 endif
+mode
+redraw

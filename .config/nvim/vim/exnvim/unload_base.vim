@@ -279,7 +279,9 @@ call timer_start(100, {->execute('execute "bufdo! call Remove_excess_mappings()"
 unlet g:exnvim_mapleader
 unlet mapleader
 
+delfunction ExNvimReadFile
 delfunction ExNvimSource
+delfunction ExNvimSourceAsync
 delfunction InvokeCriticalError
 
 hi clear

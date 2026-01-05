@@ -14,6 +14,14 @@ function! ExNvimSource(file)
 	endif
 endfunction
 
+function! ExNvimSourceAsync(file)
+	if filereadable(a:file)
+		call timer_start(0, {->execute('source '.a:file)})
+	else
+		call InvokeCriticalError(["Missing file of extra.nvim:",a:file,"Please download extra.nvim again."])
+	endif
+endfunction
+
 call ExNvimSource(g:CONFIG_PATH.'/after/languages.vim')
 
 function! OnStart()

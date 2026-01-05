@@ -51,6 +51,16 @@ function! OpenRanger(path)
 	unlet TMPFILE
 endfunction
 
+function! ExNvimReadFile(filename)
+	try
+		let file = readfile(a:filename)
+		return file
+	catch
+		call InvokeCriticalError(['Cannot read file: '.a:filename])
+		return []
+	endtry
+endfunction
+
 function! SetGitBranch()
 	let g:gitbranch = split(system('git rev-parse --abbrev-ref HEAD 2> /dev/null'))
 	if len(g:gitbranch) > 0
