@@ -127,18 +127,6 @@ if has('nvim') && exists('$LUA_RUNTIME_PATH')
 	lua package.path = package.path .. ";" .. vim.env.LUA_RUNTIME_PATH
 endif
 
-if !exists('g:live_mode')
-	let g:live_mode = v:false
-endif
-if exists('$EXNVIM_LIVE_MODE') && len($EXNVIM_LIVE_MODE) !=# 0
-	let g:live_mode = v:true
-	let g:without_plugin_manager = v:true
-	set rtp=$VIMRUNTIME,$EXNVIM_LIVE_MODE/vimruntime
-	if has('nvim')
-		lua package.path = package.path .. ";" .. vim.env.EXNVIM_LIVE_MODE .. "/.config/nvim/lua/?.lua"
-	endif
-endif
-
 runtime colors/exnvim_base_basic.vim
 function! InvokeCriticalError(msg)
 	let prev_filetype=&filetype
@@ -202,6 +190,45 @@ function! InvokeCriticalError(msg)
 		Alpha
 	endif
 endfunction
+
+function! SetConfigPath()
+	if !exists('$VIM_CONFIG_PATH')
+		if !exists('g:CONFIG_PATH') || len(g:CONFIG_PATH) ==# 0
+			if isdirectory(expand('$HOME')."/.config/nvim")
+				let g:live_mode = v:false
+				let g:CONFIG_PATH = expand('$HOME')."/.config/nvim"
+			elseif isdirectory(expand('$HOME')."/extra.nvim/.config/nvim")
+				call InvokeCriticalError([g:EDITOR_NAME.' config found in '.expand('$HOME').'/extra.nvim/.config/nvim','Enabling live mode...','Note that no history will be read or written in live mode for technical reasons'])
+				let g:live_mode = v:true
+				let g:CONFIG_PATH = expand('$HOME')."/extra.nvim/.config/nvim"
+			else
+				let g:CONFIG_PATH = input(g:EDITOR_NAME.' config not found. Plase enter its full path manually: ')
+				let g:live_mode = v:true
+			endif
+		endif
+	else
+		let g:CONFIG_PATH = $VIM_CONFIG_PATH
+	endif
+	let g:CONFIG_PATH = expand(g:CONFIG_PATH)
+endfunction
+call SetConfigPath()
+
+if exists('$EXNVIM_LIVE_MODE') && len($EXNVIM_LIVE_MODE) !=# 0 || g:live_mode
+	let &shadafile = "NONE"
+	let g:live_mode = v:true
+	let g:without_plugin_manager = v:true
+	if exists('$EXNVIM_LIVE_MODE') && len($EXNVIM_LIVE_MODE) !=# 0
+		set rtp=$VIMRUNTIME,$EXNVIM_LIVE_MODE/vimruntime
+		if has('nvim')
+			lua package.path = package.path .. ";" .. vim.env.EXNVIM_LIVE_MODE .. "/.config/nvim/lua/?.lua"
+		endif
+	else
+		set rtp=$VIMRUNTIME,$HOME/extra.nvim/vimruntime
+		if has('nvim')
+			lua package.path = package.path .. ";" .. vim.env.HOME .. "/extra.nvim/.config/nvim/lua/?.lua"
+		endif
+	endif
+endif
 
 function! LoadExNvimConfig(path, reload=v:false)
 	if !filereadable(a:path)
@@ -1082,18 +1109,6 @@ if $PREFIX == ""
 	call setenv('PREFIX', '/usr')
 endif
 
-function! SetConfigPath()
-	if !exists('$VIM_CONFIG_PATH')
-		if !exists('g:CONFIG_PATH') || len(g:CONFIG_PATH) ==# 0
-			let g:CONFIG_PATH = expand('$HOME')."/.config/nvim"
-		endif
-	else
-		let g:CONFIG_PATH = $VIM_CONFIG_PATH
-	endif
-	let g:CONFIG_PATH = expand(g:CONFIG_PATH)
-endfunction
-call SetConfigPath()
-
 if exists('$VIM_LUA_PACKAGE_PATH')
 	if has('nvim')
 		lua package.path = vim.env.VIM_LUA_PACKAGE_PATH .. "/?.lua;" .. vim.env.VIM_LUA_PACKAGE_PATH .. "/?/init.lua;" .. package.path
@@ -1153,6 +1168,8 @@ endif
 function! FixShaDa()
 	let g:PAGER_MODE = 0
 	let g:DO_NOT_OPEN_ANYTHING = 0
+	let g:CONFIG_PATH = $HOME.'/.config/nvim'
+	let g:live_mode = v:false
 endfunction
 augroup exnvim_fix_sha_da
 	autocmd!
