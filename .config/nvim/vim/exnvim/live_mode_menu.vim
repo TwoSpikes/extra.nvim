@@ -11,7 +11,21 @@ function! s:ctoidx(c)
 	" TODO: Implement letters also
 	return -1
 endfunction
-function! ShowASelectionWindow(title, options, logo, actions)
+function! ExNvimLogoAnimation(bufnr)
+	let g:stage += 1
+	call nvim_buf_clear_namespace(a:bufnr, g:ns_id, 0, line('$'))
+	let i = 0
+	let currentoptlen = g:exnvim_live_menu_currentoptlen
+	let curi = g:exnvim_live_menu_currentidx
+	let lb = g:exnvim_live_menu_lines_before
+	let cb = g:exnvim_live_menu_columns_before
+	while i <# currentoptlen
+		call nvim_buf_add_highlight(a:bufnr, g:ns_id, 'ExNvimLogoAnimation'.(g:stage+i)%11, lb+curi, cb+i, cb+i+1)
+		let i = i+1
+	endwhile
+	mode
+endfunction
+function! ShowASelectionWindow(title, options, logo, actions, action_highlights)
 	let prev_filetype=&filetype
 	noswapfile enew
 	let bufnr=bufnr()
@@ -41,7 +55,6 @@ function! ShowASelectionWindow(title, options, logo, actions)
 	endwhile
 	unlet currentoptionlength
 	let padding = repeat(' ',mediumcolumn-g:maxoptionlength/2)
-	unlet g:maxoptionlength
 	let additional_lines = 1
 	if type(a:logo) !=# 7
 		let logo = ExNvimReadFile(a:logo)
@@ -82,7 +95,6 @@ function! ShowASelectionWindow(title, options, logo, actions)
 		let additional_lines=additional_lines+logolen
 		unlet logo
 		unlet g:maxlogolength
-		unlet ns_id
 		unlet padding_2
 		unlet winwidth
 	endif
@@ -94,29 +106,87 @@ function! ShowASelectionWindow(title, options, logo, actions)
 		call setline(mediumline+i+additional_lines, padding.(i+1).'. '.a:options[i])
 		let i=i+1
 	endwhile
-	unlet i
 	unlet padding
-	unlet additional_lines
 	setlocal nomodifiable
 	setlocal nomodified
 	mode
-	execute "let id=timer_start(100, {->execute('".bufnr."buffer|mode')}, {'repeat': -1})"
+	let g:ns_id = nvim_create_namespace('live-mode-menu-logo-animation')
+	let g:stage = 0
+	execute "let id=timer_start(100, {->ExNvimLogoAnimation(".bufnr.")},{'repeat':-1})"
 	let maxidx = len(a:actions)-1
+	let g:exnvim_live_menu_currentidx = 0
+	let g:exnvim_live_menu_lines_before = mediumline+additional_lines-1
+	let g:exnvim_live_menu_columns_before = mediumcolumn-g:maxoptionlength/2
+	let g:exnvim_live_menu_currentoptlen = len(a:options[0])+3
+	unlet g:maxoptionlength
+	unlet additional_lines
 	while v:true
-		let idx=s:ctoidx(getchar())
-		if idx==#-1|continue|endif
-		if idx>#maxidx|continue|endif
-		let action = a:actions[idx]
-		if type(action) ==# 7
-			"null means break
+		let c=getchar()
+		let idx=s:ctoidx(c)
+		let action = v:null
+		let currentidx_changed = v:true
+		if idx==#-1
+			if c==#"\<down>"
+				let g:exnvim_live_menu_currentidx = g:exnvim_live_menu_currentidx + 1
+				if g:exnvim_live_menu_currentidx>#maxidx
+					let g:exnvim_live_menu_currentidx=0
+				endif
+			elseif c==#"\<up>"
+				let g:exnvim_live_menu_currentidx = g:exnvim_live_menu_currentidx - 1
+				if g:exnvim_live_menu_currentidx<#0
+					let g:exnvim_live_menu_currentidx=maxidx
+				endif
+			elseif c==#13
+				let action = a:actions[g:exnvim_live_menu_currentidx]
+				let currentidx_changed = v:false
+			endif
 		else
-			call timer_start(0,{->execute(action)})
+			if idx>#maxidx
+				let currentidx_changed = v:false
+				continue
+			endif
+			let action = a:actions[idx]
 		endif
-		break
+		if currentidx_changed
+			let r = str2nr(a:action_highlights[g:exnvim_live_menu_currentidx][0][0:1], 16)
+			let g = str2nr(a:action_highlights[g:exnvim_live_menu_currentidx][0][2:3], 16)
+			let b = str2nr(a:action_highlights[g:exnvim_live_menu_currentidx][0][4:5], 16)
+			let r2 = str2nr(a:action_highlights[g:exnvim_live_menu_currentidx][1][0:1], 16)
+			let g2 = str2nr(a:action_highlights[g:exnvim_live_menu_currentidx][1][2:3], 16)
+			let b2 = str2nr(a:action_highlights[g:exnvim_live_menu_currentidx][1][4:5], 16)
+			let rd = (r2-r)/10
+			let gd = (g2-g)/10
+			let bd = (b2-b)/10
+			let i = 0
+			while i <=# 10
+				let r3 = r+rd*i
+				let g3 = g+gd*i
+				let b3 = b+bd*i
+				execute 'hi ExNvimLogoAnimation'.i.' guibg=#'.printf('%x', r3).printf('%x', g3).printf('%x', b3).' guifg=#'.a:action_highlights[g:exnvim_live_menu_currentidx][2]
+				let i = i+1
+			endwhile
+			let g:exnvim_live_menu_currentoptlen = len(a:options[g:exnvim_live_menu_currentidx])+len(string(g:exnvim_live_menu_currentidx+1))+2
+
+		endif
+		if type(action) !=# 7
+			if len(action) ># 0
+				call timer_start(0,{->execute(action)})
+			endif
+			break
+		endif
 	endwhile
 	unlet idx
+	unlet c
+	unlet g:exnvim_live_menu_currentidx
+	unlet g:exnvim_live_menu_lines_before
+	unlet g:exnvim_live_menu_columns_before
+	unlet g:exnvim_live_menu_ns_id
+	unlet i
+	unlet currentidx_changed
 	call timer_stop(id)
 	unlet id
+	call nvim_buf_clear_namespace(bufnr, ns_id, 0, line('$')-1)
+	unlet ns_id
 	bwipeout!
 	let &eventignore=OLDEVENTIGNORE
 	unlet OLDEVENTIGNORE
@@ -126,4 +196,4 @@ function! ShowASelectionWindow(title, options, logo, actions)
 		exe "Alpha"
 	endif
 endfunction
-call ShowASelectionWindow('Live mode menu', ['Configure extra.nvim & maybe install','Unload extra.nvim','Close this menu','Exit '.g:EDITOR_NAME], g:CONFIG_PATH.'/logo/logo.txt', ["call ExNvimSource(g:CONFIG_PATH.'/vim/exnvim/install.vim')", "call ExNvimSource(g:CONFIG_PATH.'/vim/exnvim/unload.vim')",v:null,"if exists('*OnQuit')|call OnQuit()|endif|execute 'normal ZZ'"])
+call ShowASelectionWindow('Live mode menu', ['Install extra.nvim','Unload extra.nvim','Close this menu','Exit '.g:EDITOR_NAME], g:CONFIG_PATH.'/logo/logo.txt', ["call ExNvimSource(g:CONFIG_PATH.'/vim/exnvim/install.vim')", "call ExNvimSource(g:CONFIG_PATH.'/vim/exnvim/unload.vim')","","if exists('*OnQuit')|call OnQuit()|endif|execute 'normal ZZ'"], [['ffffff', 'aaaaaa', '000000'],['ffffff', 'aaaaaa', '000000'],['ffffff', 'aaaaaa', '000000'],['ffffff', 'aaaaaa', '000000']])
