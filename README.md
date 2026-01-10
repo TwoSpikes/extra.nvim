@@ -80,13 +80,25 @@ Installation
 
 ## Installation
 
+### Normal method (recommended)
+
 ```console
-$ git clone https://github.com/TwoSpikes/extra.nvim extra.nvim
+$ git clone https://github.com/TwoSpikes/extra.nvim
 $ cd extra.nvim
 $ cargo install --path util/exnvim
 $ exnvim install
 $ exnvim setup
 ```
+
+### Experimental method
+
+```console
+$ git clone https://github.com/TwoSpikes/extra.nvim
+$ cd extra.nvim
+$ nvim -i NONE --cmd "set tgc" -c "source ./.config/nvim/init.vim"
+```
+
+After that, press "install extra.nvim" and follow the instructions on the screen.
 
 ### Extra step for Vim
 

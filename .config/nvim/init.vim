@@ -191,6 +191,10 @@ function! InvokeCriticalError(msg)
 	endif
 endfunction
 
+if exists('$EXNVIM_LIVE_MODE') && len($EXNVIM_LIVE_MODE) !=# 0
+	let &shadafile = "NONE"
+endif
+
 function! SetConfigPath()
 	if !exists('$VIM_CONFIG_PATH')
 		if !exists('g:CONFIG_PATH') || len(g:CONFIG_PATH) ==# 0
@@ -1168,8 +1172,6 @@ endif
 function! FixShaDa()
 	let g:PAGER_MODE = 0
 	let g:DO_NOT_OPEN_ANYTHING = 0
-	let g:CONFIG_PATH = $HOME.'/.config/nvim'
-	let g:live_mode = v:false
 endfunction
 augroup exnvim_fix_sha_da
 	autocmd!

@@ -11,16 +11,16 @@ function! s:ctoidx(c)
 	" TODO: Implement letters also
 	return -1
 endfunction
-function! ExNvimLogoAnimation(bufnr)
-	let g:stage += 1
-	call nvim_buf_clear_namespace(a:bufnr, g:ns_id, 0, line('$'))
+function! ExNvimLogoAnimation(bufnr, ns_id)
+	let g:exnvim_live_menu_animation_stage += 1
+	call nvim_buf_clear_namespace(a:bufnr, a:ns_id, 0, line('$'))
 	let i = 0
 	let currentoptlen = g:exnvim_live_menu_currentoptlen
 	let curi = g:exnvim_live_menu_currentidx
 	let lb = g:exnvim_live_menu_lines_before
 	let cb = g:exnvim_live_menu_columns_before
 	while i <# currentoptlen
-		call nvim_buf_add_highlight(a:bufnr, g:ns_id, 'ExNvimLogoAnimation'.float2nr(sin((g:stage+i)/1.5)*5+5), lb+curi, cb+i, cb+i+1)
+		call nvim_buf_add_highlight(a:bufnr, a:ns_id, 'ExNvimLogoAnimation'.float2nr(sin((g:exnvim_live_menu_animation_stage+i)/1.5)*5+5), lb+curi, cb+i, cb+i+1)
 		let i = i+1
 	endwhile
 	mode
@@ -110,9 +110,9 @@ function! ShowASelectionWindow(title, options, logo, actions, action_highlights)
 	setlocal nomodifiable
 	setlocal nomodified
 	mode
-	let g:ns_id = nvim_create_namespace('live-mode-menu-logo-animation')
-	let g:stage = 0
-	execute "let id=timer_start(50, {->ExNvimLogoAnimation(".bufnr.")},{'repeat':-1})"
+	let ns_id_animation = nvim_create_namespace('live-mode-menu-logo-animation')
+	let g:exnvim_live_menu_animation_stage = 0
+	execute "let id=timer_start(50, {->ExNvimLogoAnimation(".bufnr.", ".ns_id_animation.")},{'repeat':-1})"
 	let maxidx = len(a:actions)-1
 	let g:exnvim_live_menu_currentidx = 0
 	let g:exnvim_live_menu_lines_before = mediumline+additional_lines-1
@@ -189,6 +189,7 @@ function! ShowASelectionWindow(title, options, logo, actions, action_highlights)
 		call nvim_buf_clear_namespace(bufnr, ns_id, 0, line('$')-1)
 		unlet ns_id
 	endif
+	unlet ns_id_animation
 	bwipeout!
 	let &eventignore=OLDEVENTIGNORE
 	unlet OLDEVENTIGNORE
