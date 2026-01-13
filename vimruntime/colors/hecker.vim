@@ -18,10 +18,6 @@ let g:cursorline_style_supported = ["dim", "reverse", "underline"]
 let g:updating_cursorline_supported = v:true
 let g:updating_cursor_style_supported = v:true
 
-if !exists("CONFIG_PATH")
-  let g:CONFIG_PATH = "$HOME/.config/nvim"
-endif
-
 function! ReturnHighlightTerm(group, term)
    " Store output of group to variable
    let output = execute('hi ' . a:group)

@@ -62,7 +62,12 @@ function! ExNvimReadFile(filename)
 endfunction
 
 function! SetGitBranch()
-	let g:gitbranch = split(system('git rev-parse --abbrev-ref HEAD 2> /dev/null'))
+	let shell = fnamemodify(&shell, ':t')
+	if shell ==# 'nu'
+		let g:gitbranch = split(system('git rev-parse --abbrev-ref HEAD err> /dev/null'))
+	else
+		let g:gitbranch = split(system('git rev-parse --abbrev-ref HEAD 2> /dev/null'))
+	endif
 	if len(g:gitbranch) > 0
 		let g:gitbranch = g:gitbranch[0]
 	else

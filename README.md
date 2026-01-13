@@ -25,12 +25,10 @@ Screenshots
 
 </details>
 
-## Minimal requirements (approximate)
+## Requirements
 
-- Free RAM: 60 MiB (minimal), 128 MiB (recommended)
-- Free disk space: 278,1 MiB (minimal, including all plugins)
 - Internet connection (to download plugins)
-- [Nerd Fonts](https://www.nerdfonts.com) (or some symbols will look like squares ("not found" symbol))
+- [Nerd Fonts](https://www.nerdfonts.com) (or some symbols will look incorrectly)
 
 ## Dependencies
 
@@ -46,12 +44,6 @@ Screenshots
 - `lazygit` (Optional)
 - `mc`, `far` or `far2l` (Optional)
 - `ctags` (Optional)
-
-> [!Warning]
-> First run may be longer
-
-> [!Warning]
-> It works better in NeoVim, and lazy.nvim does not work in version of Vim/NeoVim without Lua.
 
 > [!Note]
 > Press `SPACE ?` to see help
@@ -115,7 +107,6 @@ Config for extra.nvim
 ### Where is it?
 
 ```console
-$ mkdir -p ~/.config/exnvim/
 $ nvim ~/.config/exnvim/config.json
 ```
 
@@ -126,10 +117,10 @@ $ EXNVIM_CONFIG_PATH=your_path nvim
 
 Like
 ```console
-$ EXNVIM_CONFIG_PATH=~/dnsjajsbdn/exnvim/ nvim
+$ alias nvim='EXNVIM_CONFIG_PATH=~/dnsjajsbdn/exnvim/ nvim'
 ```
 
-> Warning: if installing to Vim, remove all non-unique keys
+> Warning: if installing to Vim, remove all non-unique keys from config.json
 
 </details>
 
@@ -165,11 +156,8 @@ You can you these commands, for example, to activate and deactivate [Python](htt
 
 ```
 :cd django_project
-:e venv/bin/activate
-:ShSo
-:echo "You activated pyvenv"
+:ShS venv/bin/activate
 :ShR deactivate
-:echo "You deactivated pyvenv"
 ```
 
 # Contribution
@@ -201,9 +189,6 @@ $ exnvim commit -o
 ```console
 $ exnvim version
 ```
-
-> [!Warning]
-> Do not delete code that seems strange, maybe you will break something
 
 > [!Warning]
 > Due to version is built in `exnvim` binary, you should recompile it every time `.exnvim-version` changes
