@@ -1,3 +1,4 @@
+" TODO: figure out what is this and implement it or remove it
 function! Update_Cursor_Style_wrapper()
 	if exists('g:updating_cursor_style_supported')
 		call Update_Cursor_Style()

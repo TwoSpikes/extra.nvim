@@ -1120,17 +1120,14 @@ if exists('$VIM_LUA_PACKAGE_PATH')
 endif
 
 if !exists('g:without_plugin_manager')
-	let g:without_plugin_manager = v:false
-	if exists('$VIM_WITHOUT_PLUGIN_MANAGER')
-		let g:without_plugin_manager = v:true
-	endif
+	let g:without_plugin_manager = exists('$VIM_WITHOUT_PLUGIN_MANAGER')
 endif
 
 if has('nvim')
 	if !g:without_plugin_manager
-		execute "luafile ".g:CONFIG_PATH."/lua/lib/vim/plugins.lua"
+		execute 'luafile' g:CONFIG_PATH.'/lua/lib/vim/plugins.lua'
 	else
-		execute "luafile ".g:CONFIG_PATH."/lua/lib/vim/noplugins.lua"
+		execute 'luafile' g:CONFIG_PATH.'/lua/lib/vim/noplugins.lua'
 	endif
 endif
 
@@ -1221,7 +1218,7 @@ if !has('nvim')
 		filetype plugin indent on
 	endif
 	if has('syntax') && !exists('g:syntax_on')
-	  syntax enable
+		syntax enable
 	endif
 endif
 

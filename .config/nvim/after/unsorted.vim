@@ -125,7 +125,7 @@ function! AbsNu(actual_mode, winnr=winnr())
 	if a:actual_mode ==# '' || a:actual_mode =~? 'n'
 		call CopyHighlightGroup('CursorLineNrNorm', 'CursorLineNr')
 		call CopyHighlightGroup('LineNrNorm', 'LineNr')
-		call CopyHighlightGroup("StatementNorm", "Statement")
+		call CopyHighlightGroup('StatementNorm', 'Statement')
 	elseif a:actual_mode =~? 'r' || a:actual_mode ==# 'v' && mode() ==# 'R'
 		call CopyHighlightGroup('CursorLineNrRepl', 'CursorLineNr')
 		call CopyHighlightGroup('LineNrRepl', 'LineNr')
@@ -135,7 +135,7 @@ function! AbsNu(actual_mode, winnr=winnr())
 	else
 		call CopyHighlightGroup('CursorLineNrIns', 'CursorLineNr')
 		call CopyHighlightGroup('LineNrIns', 'LineNr')
-		call CopyHighlightGroup("StatementIns", "Statement")
+		call CopyHighlightGroup('StatementIns', 'Statement')
 	endif
 	call setwinvar(a:winnr, '&number', v:true)
 	call setwinvar(a:winnr, '&relativenumber', v:false)
@@ -157,7 +157,7 @@ if exists('*Pad')
 			let find_file_label = 'Find file: '
 		endif
 		echohl Question
-		let filename = input(find_file_label, fnamemodify(expand("%:p"), ":~:.:h").'/', "file")
+		let filename = input(find_file_label, fnamemodify(expand('%:p'), ':~:.:h').'/', 'file')
 		echohl Normal
 
 		if len(filename) ==# 0
@@ -169,9 +169,9 @@ if exists('*Pad')
 
 		if has('nvim') && PluginInstalled("neo-tree") && isdirectory(expand(filename))
 			tabedit
-			execute "Neotree" "position=current" filename
+			execute 'Neotree' 'position=current' filename
 		else
-			execute "tabedit" filename
+			execute 'tabedit' filename
 		endif
 	endfunction
 	command! -nargs=0 Findfile call Findfile()
@@ -195,10 +195,10 @@ if exists('*Pad')
 			return
 		endif
 
-		if has('nvim') && PluginInstalled("neo-tree") && isdirectory(expand(filename))
-			execute "Neotree" "position=current" filename
+		if has('nvim') && PluginInstalled('neo-tree') && isdirectory(expand(filename))
+			execute 'Neotree' 'position=current' filename
 		else
-			execute "edit" filename
+			execute 'edit' filename
 		endif
 	endfunction
 	command! -nargs=0 Findfilebuffer call Findfilebuffer()
@@ -215,15 +215,15 @@ if exists('*Pad')
 		endif
 		if filename !=# ''
 			set lazyredraw
-			execute a:command(filename)
+			execute printf(a:command, filename)
 			set nolazyredraw
 		endif
 	endfunction
 	function! SaveAs()
-		call SaveAsBase({filename -> "w ".filename}, 'Save as: ')
+		call SaveAsBase('w %s', 'Save as: ')
 	endfunction
 	function! SaveAsAndRename()
-		call SaveAsBase({filename -> "saveas ".filename}, 'Save as and edit: ')
+		call SaveAsBase('saveas %s', 'Save as and edit: ')
 	endfunction
 	command! -nargs=0 SaveAs call SaveAs()
 	command! -nargs=0 SaveAsAndRename call SaveAsAndRename()
@@ -236,32 +236,31 @@ else
 endif
 
 function! FarOrMc()
-	if g:prefer_far_or_mc ==# "far"
-		if executable("far")
+	if g:prefer_far_or_mc ==# 'far'
+		if executable('far')
 			let g:far_or_mc = 'far'
-		elseif executable("far2l")
+		elseif executable('far2l')
 			let g:far_or_mc = 'far2l'
 		else
 			let g:far_or_mc = 'mc'
 		endif
-	elseif g:prefer_far_or_mc ==# "mc"
-		if executable("mc")
+	elseif g:prefer_far_or_mc ==# 'mc'
+		if executable('mc')
 			let g:far_or_mc = 'far'
-		elseif executable("far")
+		elseif executable('far')
 			let g:far_or_mc = 'far'
 		else
 			let g:far_or_mc = 'far2l'
 		endif
 	else
-		echohl ErrorMsg
-		if g:language ==# "russian"
-			echomsg "блядь: конфиг: неправильное значение опции \"prefer_far_or_mc\": ".g:prefer_far_or_mc
-		elseif g:language ==# "komi"
-			echomsg "ебать: конфиг: лӧсявтӧм значение вариант \"prefer_far_or_mc\": ".g:prefer_far_or_mc
+		if g:language ==# 'russian'
+			let msg = 'блядь: конфиг: неправильное значение опции "prefer_far_or_mc": '.g:prefer_far_or_mc
+		elseif g:language ==# 'komi'
+			let msg = 'ебать: конфиг: лӧсявтӧм значение вариант "prefer_far_or_mc": '.g:prefer_far_or_mc
 		else
-			echomsg "error: config: wrong option \"prefer_far_or_mc\" value: ".g:prefer_far_or_mc
+			let msg = 'error: config: the option "prefer_far_or_mc" if set to a wrong value: '.g:prefer_far_or_mc
 		endif
-		echohl Normal
+		call InvokeCriticalError([msg])
 		let g:prefer_far_or_mc = 'far'
 		call FarOrMc()
 	endif
@@ -318,11 +317,11 @@ function! SelectPosition(cmd, positions, cd=v:null)
 		else
 			echohl ErrorMsg
 			if g:language ==# 'russian'
-				echomsg "Блядь: Неправильная позиция: ".position
+				echomsg 'Блядь: Неправильная позиция: '.position
 			elseif g:language ==# 'komi'
-				echomsg "Ебать: Öшыбка места: ".position
+				echomsg 'Ебать: Öшыбка места: '.position
 			else
-				echomsg "Error: Wrong position: ".position
+				echomsg 'Error: Wrong position: '.position
 			endif
 			echohl Normal
 			return 1
@@ -575,8 +574,8 @@ function! ExNvimCheatSheet()
 	setlocal undolevels=-1
 	call Numbertoggle('n')
 	let prev_filetype = g:prev_filetype
-	execute "noremap <buffer> q <cmd>execute bufnr().\"bwipeout!\"<bar>".(prev_filetype==#"alpha"?"Alpha":old_bufnr."buffer")."<cr>"
-	execute "noremap <buffer> <leader>? <cmd>execute bufnr().\"bwipeout!\"<bar>".(prev_filetype==#"alpha"?"Alpha":old_bufnr."buffer")."<cr>"
+	execute "noremap <buffer> q <cmd>execute bufnr().'bwipeout!'<bar>".(prev_filetype==#'alpha'?'Alpha':old_bufnr.'buffer').'<cr>'
+	execute "noremap <buffer> <leader>? <cmd>execute bufnr().'bwipeout!'<bar>".(prev_filetype==#'alpha'?'Alpha':old_bufnr.'buffer').'<cr>'
 endfunction
 command! -nargs=0 ExNvimCheatSheet call ExNvimCheatSheet()
 noremap <silent> <leader>? <cmd>ExNvimCheatSheet<cr>
@@ -794,13 +793,16 @@ let s:select_all_definition .= "
 \\n	mark y
 \\n	normal! gg
 \\n	let mode = mode()
-\\n	if mode !~# '^v'"
+\\n	if mode !~# '^v'
+\"
 if g:compatible =~# '^helix'
 let s:select_all_definition .= "
-\\n		noautocmd normal! v"
+\\n		noautocmd normal! v
+\"
 else
 let s:select_all_definition .= "
-\\n		normal! v"
+\\n		normal! v
+\"
 endif
 let s:select_all_definition .= "
 \\n	else
@@ -814,7 +816,8 @@ let s:select_all_definition .= "
 \\n		echomsg 'Воддза позянлуныс пасйӧма \"y\"'
 \\n	else
 \\n		echomsg 'Previous position marked as \"y\"'
-\\n	endif"
+\\n	endif
+\"
 if g:compatible =~# "^helix"
 let s:select_all_definition .= "
 \\n	if mode !~? '^v'
@@ -827,10 +830,12 @@ let s:select_all_definition .= "
 \\n	let l:l = line('$')
 \\n	let g:rx = l:l
 \\n	let g:ry = len(getline(l:l))
-\\n	call ReorderRightLeft()"
+\\n	call ReorderRightLeft()
+\"
 endif
 let s:select_all_definition .= "
-\\nendfunction"
+\\nendfunction
+\"
 exec s:select_all_definition
 unlet s:select_all_definition
 
@@ -1337,7 +1342,7 @@ function! MyTabLine()
 
   return s
 endfunction
-if g:compatible !~# "^helix_hard"
+if g:compatible !~# '^helix_hard'
 	set tabline=%!MyTabLine()
 endif
 
@@ -1421,7 +1426,8 @@ endif
 if has('nvim')
 let process_g_but_function_expression .= "
 \\n	execute \"lua << EOF
-\\\nlocal button ="
+\\\nlocal button =
+\"
 if v:false
 \|| (v:true
 \&& g:do_not_save_previous_column_position_when_going_up_or_down
@@ -1681,7 +1687,7 @@ call CommentOutDefault_Define('N')
 call CommentOutDefault_Define('X')
 delfunction CommentOutDefault_Define
 function! DoCommentOutDefault()
-	execute "normal! ".CommentOutDefault()
+	execute 'normal!' CommentOutDefault()
 endfunction
 function! N_UncommentOut(comment_string)
 	let l=line('.')
@@ -1733,26 +1739,10 @@ function! FuzzyFind()
 endfunction
 
 function! IsYes(string)
-	return v:false
-	\|| a:string =~? '^y *!* *$'
-	\|| a:string =~? '^yes *!* *$'
-	\|| a:string =~? '^yea *!* *$'
-	\|| a:string =~? '^yeah *!* *$'
-	\|| a:string =~? '^yep *!* *$'
-	\|| a:string =~? '^yup *!* *$'
-	\|| a:string =~? '^of *course *!* *$'
-	\|| a:string =~? '^\%(сука*\)* *\%(бля*\%(дь\)\?\)* *\%(кон\%(\%(еч\)\|\%(че\)\)но\? *\)*\%(да* *\)*!* *$'
-	\|| a:string =~? '^\%(сука*\)* *\%(бля*\%(дь\)\?\)* *\%(дыа\? *\)\+!* *$'
-	\|| a:string =~? '^\%(сука*\)* *\%(бля*\%(дь\)\?\)* *офк *!* *$'
-	\|| a:string =~? '^\%(сука*\)* *\%(бля*\%(дь\)\?\)* *офкорз *!* *$'
+	return a:string ==? 'y' || a:string ==? 'yes'
 endfunction
 function! IsNo(string)
-	return v:false
-	\|| a:string =~? '^n *!* *$'
-	\|| a:string =~? '^no *!* *$'
-	\|| a:string =~? '^nope *!* *$'
-	\|| a:string =~? '^of *course *not\? *!* *$'
-	\|| a:string =~? '^\%(сука *\)*\%(блядь *\)*\%(кон\%(\%(че\)\|\%(еч\)\)но\? *\)*\%(да *\)*нет\? *!* *$'
+	return a:string ==? 'n' || a:string ==? 'no'
 endfunction
 
 let g:floaterm_width = 1.0
@@ -2109,6 +2099,6 @@ function! TermuxSaveCursorStyle()
 endfunction
 call TermuxSaveCursorStyle()
 
-if g:show_user_name !=# "no"
+if g:show_user_name !=# 'no'
 	let g:username = trim(system('whoami'))
 endif
