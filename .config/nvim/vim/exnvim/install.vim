@@ -13,7 +13,7 @@ function! ExNvimInstallPre()
 		return 1
 	endtry
 	if v:shell_error!=#0
-		call InvokeCriticalError("mkdir failed with exit code ".v:shell_error])
+		call InvokeCriticalError(["mkdir failed with exit code ".v:shell_error])
 		return v:shell_error
 	endif
 	return 0
