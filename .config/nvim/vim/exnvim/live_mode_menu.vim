@@ -11,6 +11,7 @@ function! s:ctoidx(c)
 	" TODO: Implement letters also
 	return -1
 endfunction
+
 function! ExNvimLogoAnimation(bufnr, ns_id)
 	let g:exnvim_live_menu_animation_stage += 1
 	call nvim_buf_clear_namespace(a:bufnr, a:ns_id, 0, line('$'))
@@ -23,12 +24,27 @@ function! ExNvimLogoAnimation(bufnr, ns_id)
 		call nvim_buf_add_highlight(a:bufnr, a:ns_id, 'ExNvimLogoAnimation'.float2nr(sin((g:exnvim_live_menu_animation_stage+i)/1.5)*5+5), lb+curi, cb+i, cb+i+1)
 		let i = i+1
 	endwhile
+endfunction
+function! ExNvimRerenderAProgressbarWindow(bufnr, ns_id)
+	let g:exnvim_installation_animation_stage += 1
+	call nvim_buf_clear_namespace(a:bufnr, a:ns_id, 0, line('$'))
+	let g:exnvim_installation_percent = float2nr(g:exnvim_installation_count*100/g:exnvim_installation_total)
+	let i = g:exnvim_installation_pbarstart
+	let end = g:exnvim_installation_pbarstart+float2nr(g:exnvim_installation_pbarlen*g:exnvim_installation_percent/100)
+	let lb = g:exnvim_installation_lines_before
+	let cb = i
+
+	"call nvim_buf_add_highlight(a:bufnr, nvim_create_namespace('aaabbb'), 'ExNvimLogoAnimation3', 19, 1, 5)
+	"return
+
+	while i <# end
+		call nvim_buf_add_highlight(a:bufnr, a:ns_id, 'ExNvimInstallAnimation'.float2nr(sin((g:exnvim_installation_animation_stage+i)/1.5)*5+5), lb-2, i, i+1)
+		let i = i+1
+	endwhile
 	mode
 endfunction
-function! ShowASelectionWindow(title, options, logo, actions, action_highlights, progressbar_action)
-	if type(a:progressbar_action) !=# 7
-		call timer_start(0, {->execute(a:progressbar_action)})
-	endif
+
+function! ShowASelectionWindow(title, options, logo, actions, action_highlights)
 	let prev_filetype=&filetype
 	noswapfile enew
 	let bufnr=bufnr()
@@ -118,12 +134,12 @@ function! ShowASelectionWindow(title, options, logo, actions, action_highlights,
 	if lenoptions>#0
 		let ns_id_animation = nvim_create_namespace('live-mode-menu-logo-animation')
 		let g:exnvim_live_menu_animation_stage = 0
-		execute "let id=timer_start(50, {->ExNvimLogoAnimation(".bufnr.", ".ns_id_animation.")},{'repeat':-1})"
-		let maxidx = len(a:actions)-1
 		let g:exnvim_live_menu_currentidx = 0
 		let g:exnvim_live_menu_lines_before = mediumline+additional_lines-1
 		let g:exnvim_live_menu_columns_before = mediumcolumn-g:maxoptionlength/2
 		let g:exnvim_live_menu_currentoptlen = len(a:options[0])+3
+		execute "let id=timer_start(50, {->execute('call ExNvimLogoAnimation(".bufnr.", ".ns_id_animation.")|mode')},{'repeat':-1})"
+		let maxidx = len(a:actions)-1
 	endif
 	unlet g:maxoptionlength
 	unlet additional_lines
@@ -154,7 +170,7 @@ function! ShowASelectionWindow(title, options, logo, actions, action_highlights,
 
 			endif
 		endif
-		let c=getchar()
+		let c=getchar(-1,{'cursor':'hide'})
 		if lenoptions>#0
 			let idx=s:ctoidx(c)
 			let action = v:null
@@ -216,4 +232,133 @@ function! ShowASelectionWindow(title, options, logo, actions, action_highlights,
 		exe "Alpha"
 	endif
 endfunction
-call ShowASelectionWindow('extra.nvim'.(' '.(executable('exnvim')?trim(system('exnvim version')):'')), ['Install extra.nvim','Unload extra.nvim','Close this menu','Exit '.g:EDITOR_NAME], g:CONFIG_PATH.'/logo/logo.txt', ["call ExNvimSource(g:CONFIG_PATH.'/vim/exnvim/install.vim')", "call ExNvimSource(g:CONFIG_PATH.'/vim/exnvim/unload.vim')","","if exists('*OnQuit')|call OnQuit()|endif|execute 'normal ZZ'"], [['ffaa00', '0050ff'],['aaaaaa', '0000aa'],['ffffff', 'aaaaaa'],['ffaa00', 'ff0000']],v:null)
+
+function! ShowAProgressbarWindow()
+	let prev_filetype=&filetype
+	noswapfile enew
+	let bufnr=bufnr()
+	setlocal buftype=nofile
+	if has('nvim')
+		" For cybersecurity reasons
+		call nvim_buf_set_name(bufnr, g:exnvim_installation_state)
+	else
+		execute 'file' g:exnvim_installation_state
+	endif
+	setlocal nocursorline
+	setlocal nocursorcolumn
+	setlocal nonumber
+	setlocal norelativenumber
+	setlocal filetype=livemenu
+	setlocal wrap
+	setlocal linebreak
+	let OLDMOUSE=&mouse
+	set mouse=
+	let OLDEVENTIGNORE=&eventignore
+	set eventignore=all
+	let mediumcolumn=winwidth(0)/2
+	let additional_lines = 3
+
+	let mediumline=winheight(0)/2+1
+	let i=1
+	while i<#mediumline
+		call setline(i, '')
+		let i=i+1
+	endwhile
+	call setline(mediumline, CenterAString(g:exnvim_installation_state))
+	call setline(mediumline+1, '')
+
+	call setline(mediumline+2, '')
+
+	call setline(mediumline+additional_lines, '')
+	let additional_lines=additional_lines+1
+	let g:exnvim_installation_animation_stage = 0
+	let g:exnvim_installation_lines_before = mediumline+additional_lines-1
+	call setline(g:exnvim_installation_lines_before-1, repeat(' ', winwidth(0)))
+	setlocal nomodifiable
+	setlocal nomodified
+	mode
+	unlet additional_lines
+	return bufnr
+endfunction
+function! ShowAProgressbarWindowRerender(options, actions, action_highlights)
+	if lenoptions>#0
+		let r = str2nr(a:action_highlights[g:exnvim_live_menu_currentidx][0][0:1], 16)
+		let g = str2nr(a:action_highlights[g:exnvim_live_menu_currentidx][0][2:3], 16)
+		let b = str2nr(a:action_highlights[g:exnvim_live_menu_currentidx][0][4:5], 16)
+		let r2 = str2nr(a:action_highlights[g:exnvim_live_menu_currentidx][1][0:1], 16)
+		let g2 = str2nr(a:action_highlights[g:exnvim_live_menu_currentidx][1][2:3], 16)
+		let b2 = str2nr(a:action_highlights[g:exnvim_live_menu_currentidx][1][4:5], 16)
+		let rd = (r2-r)/10
+		let gd = (g2-g)/10
+		let bd = (b2-b)/10
+		let i = 0
+		while i <=# 10
+			let r3 = r+rd*i
+			let g3 = g+gd*i
+			let b3 = b+bd*i
+			execute 'hi ExNvimLogoAnimation'.i.' guibg=#'.printf('%02x', r3).printf('%02x', g3).printf('%02x', b3).' guifg=#'.printf('%02x', 255-r3).printf('%02x', 255-g3).printf('%02x', 255-b3)
+			let i = i+1
+		endwhile
+		let g:exnvim_live_menu_currentoptlen = len(a:options[g:exnvim_live_menu_currentidx])+len(string(g:exnvim_live_menu_currentidx+1))+2
+	endif
+	let c=getchar(-1,{'cursor':'hide'})
+	if exists('g:exnvim_installation_ended')|break|endif
+	if lenoptions>#0
+		let idx=s:ctoidx(c)
+		let action = v:null
+		let currentidx_changed = v:true
+		if idx==#-1
+			if c==#"\<down>"
+				let g:exnvim_live_menu_currentidx = g:exnvim_live_menu_currentidx + 1
+				if g:exnvim_live_menu_currentidx>#maxidx
+					let g:exnvim_live_menu_currentidx=0
+				endif
+			elseif c==#"\<up>"
+				let g:exnvim_live_menu_currentidx = g:exnvim_live_menu_currentidx - 1
+				if g:exnvim_live_menu_currentidx<#0
+					let g:exnvim_live_menu_currentidx=maxidx
+				endif
+			elseif c==#13
+				let action = a:actions[g:exnvim_live_menu_currentidx]
+				let currentidx_changed = v:false
+			endif
+		else
+			if idx>#maxidx
+				let currentidx_changed = v:false
+				continue
+			endif
+			let action = a:actions[idx]
+		endif
+		if type(action) !=# 7
+			if len(action) ># 0
+				call timer_start(0,{->execute(action)})
+			endif
+			break
+		endif
+	else
+		if c==#13|break|endif
+	endif
+	if lenoptions>#0
+		unlet g:exnvim_live_menu_currentidx
+		unlet g:exnvim_live_menu_lines_before
+		unlet g:exnvim_live_menu_columns_before
+		unlet currentidx_changed
+		call timer_stop(id)
+		unlet id
+		if exists('ns_id')
+			call nvim_buf_clear_namespace(bufnr, ns_id, 0, line('$')-1)
+			unlet ns_id
+		endif
+		unlet ns_id_animation
+	endif
+	bwipeout!
+	let &eventignore=OLDEVENTIGNORE
+	unlet OLDEVENTIGNORE
+	let &mouse=OLDMOUSE
+	unlet OLDMOUSE
+	if prev_filetype==#"alpha"
+		exe "Alpha"
+	endif
+endfunction
+
+call ShowASelectionWindow('extra.nvim'.(' '.(executable('exnvim')?trim(system('exnvim version')):'')), ['Install extra.nvim','Unload extra.nvim','Close this menu','Exit '.g:EDITOR_NAME], g:CONFIG_PATH.'/logo/logo.txt', ["call ExNvimSource(g:CONFIG_PATH.'/vim/exnvim/install.vim')", "call ExNvimSource(g:CONFIG_PATH.'/vim/exnvim/unload.vim')","","if exists('*OnQuit')|call OnQuit()|endif|execute 'normal ZZ'"], [['ffaa00', '0050ff'],['aaaaaa', '0000aa'],['ffffff', 'aaaaaa'],['ffaa00', 'ff0000']])

@@ -30,7 +30,6 @@ function! ExNvimCopyDirAll(dir, dest, cb_file)
 		else
 			call system(['cp', a:dir.'/'.i, a:dest.'/'.a:dir.'/'])
 			execute a:cb_file
-			mode
 		endif
 	endfor
 endfunction
